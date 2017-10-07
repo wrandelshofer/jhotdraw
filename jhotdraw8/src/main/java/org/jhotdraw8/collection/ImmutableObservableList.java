@@ -112,7 +112,7 @@ public final class ImmutableObservableList<E> extends AbstractList<E> implements
     }
 
     public static <T> ImmutableObservableList<T> add(Collection<T> collection, T item) {
-        if (collection.isEmpty()) {
+        if (collection==null||collection.isEmpty()) {
             return ImmutableObservableList.of(item);
         }
         Object[] a = new Object[collection.size() + 1];
@@ -122,7 +122,7 @@ public final class ImmutableObservableList<E> extends AbstractList<E> implements
     }
 
     public static <T> ImmutableObservableList<T> add(Collection<T> collection, int index, T item) {
-        if (collection.isEmpty() && index == 0) {
+        if (collection==null||collection.isEmpty() && index == 0) {
             return ImmutableObservableList.of(item);
         }
         Object[] a = new Object[collection.size()];
@@ -147,7 +147,7 @@ public final class ImmutableObservableList<E> extends AbstractList<E> implements
     }
 
     public static <T> ImmutableObservableList<T> remove(Collection<T> collection, int index) {
-        if (collection.size() == 1 && index == 0) {
+        if (collection==null||collection.size() == 1 && index == 0) {
             return ImmutableObservableList.emptyList();
         }
         Object[] a = new Object[collection.size()];
@@ -159,7 +159,7 @@ public final class ImmutableObservableList<E> extends AbstractList<E> implements
     }
 
     public static <T> ImmutableObservableList<T> remove(Collection<T> collection, T item) {
-        if (collection.size() == 1 && collection.contains(item)) {
+        if (collection==null||collection.size() == 1 && collection.contains(item)) {
             return ImmutableObservableList.emptyList();
         }
         if (collection instanceof List) {

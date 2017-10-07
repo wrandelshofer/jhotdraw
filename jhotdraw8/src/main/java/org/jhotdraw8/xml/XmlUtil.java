@@ -12,20 +12,18 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -39,7 +37,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.ext.Attributes2Impl;
+import org.xml.sax.helpers.XMLFilterImpl;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * XmlUtil.
@@ -100,7 +102,10 @@ public class XmlUtil {
     public static Document read(Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.read(inputSource, namespaceAware);
-
+    }
+    public static Document readWithLocations(Path in, boolean namespaceAware) throws IOException {
+        InputSource inputSource = new InputSource(in.toUri().toASCIIString());
+        return XmlUtil.readWithLocations(inputSource, namespaceAware);
     }
 
     public static Document read(InputSource inputSource, boolean namespaceAware) throws IOException {
@@ -114,6 +119,69 @@ public class XmlUtil {
             return doc;
         } catch (SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
+        }
+    }
+
+    /**
+     * Reds the specified input into a document. Each Node contains a "location" attribute
+     * specifying the file, the line number and the column number of the node.
+     * 
+     * References:
+     * <a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">
+     * Stackoverflow</a>.
+     */
+    public static Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
+        try {
+            // Create transformer SAX source that adds current element position to
+            // the element as attributes.
+            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+            LocationFilter locationFilter = new LocationFilter(xmlReader);
+
+            SAXSource saxSource = new SAXSource(locationFilter, inputSource);
+
+            // Perform an empty transformation from SAX source to DOM result.
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMResult domResult = new DOMResult();
+            transformer.transform(saxSource, domResult);
+            Node root = domResult.getNode();
+            return (Document) root;
+        } catch (TransformerException | SAXException ex) {
+            throw new IOException(ex);
+        }
+    }
+    public static final String SYSTEM_ID_ATTRIBUTE = "systemId";
+    public static final String LINE_NUMBER_ATTRIBUTE = "line";
+    public static final String COLUMN_NUMBER_ATTRIBUTE = "column";
+    private static final String QUALIFIED_SYSTEM_ID_ATTRIBUTE = "xmlutil:systemId";
+    private static final String QUALIFIED_LINE_ATTRIBUTE = "xmlutil:line";
+    private static final String QUALIFIED_COLUMN_ATTRIBUTE = "xmlutil:column";
+
+    public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
+
+    private static class LocationFilter extends XMLFilterImpl {
+
+        LocationFilter(XMLReader xmlReader) {
+            super(xmlReader);
+        }
+
+        private Locator locator = null;
+
+        @Override
+        public void setDocumentLocator(Locator locator) {
+            super.setDocumentLocator(locator);
+            this.locator = locator;
+        }
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+
+            // Add extra attribute to elements to hold location
+            Attributes2Impl attrs = new Attributes2Impl(attributes);
+            attrs.addAttribute(LOCATION_NAMESPACE, SYSTEM_ID_ATTRIBUTE, QUALIFIED_SYSTEM_ID_ATTRIBUTE, "CDATA", locator.getSystemId());
+            attrs.addAttribute(LOCATION_NAMESPACE, LINE_NUMBER_ATTRIBUTE, QUALIFIED_LINE_ATTRIBUTE, "CDATA",Integer.toString( locator.getLineNumber()));
+            attrs.addAttribute(LOCATION_NAMESPACE, COLUMN_NUMBER_ATTRIBUTE, QUALIFIED_COLUMN_ATTRIBUTE, "CDATA", Integer.toString(locator.getColumnNumber()));
+            super.startElement(uri, localName, qName, attrs);
         }
     }
 
@@ -142,7 +210,10 @@ public class XmlUtil {
                     = factory.newSchema(schemaUri.toURL());
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(new File(xmlUri)));
+        } catch (SAXParseException e) {
+            throw new IOException("Invalid XML file: "+e.getSystemId()+"\nError in line: "+e.getLineNumber()+", column: "+e.getColumnNumber()+".",e);
         } catch (SAXException e) {
+            
             throw new IOException("Invalid XML file: " + xmlUri, e);
         }
     }
@@ -151,6 +222,7 @@ public class XmlUtil {
         StreamResult result = new StreamResult(out);
         write(result, doc);
     }
+
     public static void write(Writer out, Document doc) throws IOException {
         StreamResult result = new StreamResult(out);
         write(result, doc);

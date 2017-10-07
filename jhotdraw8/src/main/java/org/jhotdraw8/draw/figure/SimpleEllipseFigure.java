@@ -44,7 +44,7 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
     public final static String TYPE_SELECTOR = "Ellipse";
 
     public SimpleEllipseFigure() {
-        this(0, 0, 1, 1);
+        this(0, 0, 2, 2);// the values must correspond to the default values of the property keys
     }
 
     public SimpleEllipseFigure(double x, double y, double width, double height) {
