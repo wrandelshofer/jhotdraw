@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A figure which groups child figures, so that they can be edited by the user
@@ -42,6 +43,17 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
         // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = transform;
+        //Transform localTransform = transform.createConcatenation(getParentToLocal());
+        for (Figure child : getChildren()) {
+            child.reshapeInParent(localTransform);
+        }
+    }
+    
+    @Override
+    public void reshapeInLocal(double x, double y, double width, double height) {
+        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
+        flattenTransforms();
+        Transform localTransform = Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height);
         //Transform localTransform = transform.createConcatenation(getParentToLocal());
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);

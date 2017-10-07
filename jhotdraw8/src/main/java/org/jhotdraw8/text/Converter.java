@@ -89,7 +89,7 @@ public interface Converter<T> {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
         if (buf.remaining() != 0 && !buf.toString().trim().isEmpty()) {
-            throw new ParseException(buf.remaining() + " remaining character(s) not consumed." + " remaining:" + buf.toString(), buf.position());
+            throw new ParseException(buf.remaining() + " remaining character(s) not consumed." + " remaining: \"" + buf.toString()+"\".", buf.position());
         }
         return value;
     }

@@ -55,7 +55,7 @@ import org.jhotdraw8.draw.action.SendToBackAction;
 import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
-import org.jhotdraw8.draw.figure.ConcatenatedPathFigure;
+import org.jhotdraw8.draw.figure.SimpleConcatenatedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.SimpleEllipseFigure;
 import org.jhotdraw8.draw.figure.Figure;
@@ -242,7 +242,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 VIEWTOGGLE_PROPERTIES,
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels"), detailsVisible));
         map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(SimpleGroupFigure::new)));
-        map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(ConcatenatedPathFigure::new)));
+        map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(SimpleConcatenatedPathFigure::new)));
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
         map.put(AddToGroupAction.ID, new AddToGroupAction(getApplication(), editor));
         map.put(RemoveFromGroupAction.ID, new RemoveFromGroupAction(getApplication(), editor));

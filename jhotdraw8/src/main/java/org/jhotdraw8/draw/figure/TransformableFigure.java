@@ -386,6 +386,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * @param width
      * @param hight 
      */
+    @Override
     default void reshapeInLocal(double x, double y, double width, double height) {
         throw new UnsupportedOperationException("this method must be overriden");
     }

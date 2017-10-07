@@ -1,4 +1,4 @@
-/* @(#)ConcatenatedPathFigure.java
+/* @(#)SimpleConcatenatedPathFigure.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -38,7 +38,7 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ConcatenatedPathFigure extends AbstractCompositeFigure
+public class SimpleConcatenatedPathFigure extends AbstractCompositeFigure
         implements StrokeableFigure, FillableFigure, Grouping,
         ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure,
@@ -165,6 +165,16 @@ public class ConcatenatedPathFigure extends AbstractCompositeFigure
         // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = transform;
+        //Transform localTransform = transform.createConcatenation(getParentToLocal());
+        for (Figure child : getChildren()) {
+            child.reshapeInParent(localTransform);
+        }
+    }
+    @Override
+    public void reshapeInLocal(double x, double y, double width, double height) {
+        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
+        flattenTransforms();
+        Transform localTransform = Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height);
         //Transform localTransform = transform.createConcatenation(getParentToLocal());
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);

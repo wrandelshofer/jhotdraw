@@ -76,10 +76,25 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         Ellipse shape=new Ellipse();
-       shape.setCenterX(get(CENTER_X));
-        shape.setCenterY(get(CENTER_Y));
-        shape.setRadiusX(get(RADIUS_X));
-        shape.setRadiusY(get(RADIUS_Y));
+       shape.setCenterX(getStyled(CENTER_X));
+        shape.setCenterY(getStyled(CENTER_Y));
+        
+        double strokeWidth=getStyled(STROKE_WIDTH);
+        double offset;
+        switch (getStyled(STROKE_TYPE)) {
+            case CENTERED:
+            default:
+                offset=0;
+                break;
+            case INSIDE:
+                offset=-strokeWidth*0.5;
+                break;
+            case OUTSIDE:
+                offset=strokeWidth*0.5;
+                break;
+        }
+        shape.setRadiusX(getStyled(RADIUS_X)+offset);
+        shape.setRadiusY(getStyled(RADIUS_Y)+offset);
        return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 

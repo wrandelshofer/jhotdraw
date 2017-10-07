@@ -37,7 +37,7 @@ import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
-import org.jhotdraw8.draw.figure.ConcatenatedPathFigure;
+import org.jhotdraw8.draw.figure.SimpleConcatenatedPathFigure;
 import org.jhotdraw8.draw.figure.LabelAutorotate;
 import org.jhotdraw8.draw.figure.SimpleImageFigure;
 import org.jhotdraw8.draw.figure.SimpleEllipseFigure;
@@ -110,7 +110,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Polyline", SimplePolylineFigure.class);
         addFigureKeysAndNames("Polygon", SimplePolygonFigure.class);
         addFigureKeysAndNames("Page", SimplePageFigure.class);
-        addFigureKeysAndNames("CombinedPath", ConcatenatedPathFigure.class);
+        addFigureKeysAndNames("CombinedPath", SimpleConcatenatedPathFigure.class);
 
         {
             Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(SimpleDrawing.class));
@@ -161,7 +161,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(CssColor.class, new XmlCColorConverter(true));
         addConverterForType(Boolean.class, new XmlBooleanConverter());
         addConverterForType(TextAlignment.class, new XmlEnumConverter<>(TextAlignment.class));
-        addConverterForType(ConcatenatedPathFigure.CagOperation.class, new XmlEnumConverter<ConcatenatedPathFigure.CagOperation>(ConcatenatedPathFigure.CagOperation.class));
+        addConverterForType(SimpleConcatenatedPathFigure.CagOperation.class, new XmlEnumConverter<SimpleConcatenatedPathFigure.CagOperation>(SimpleConcatenatedPathFigure.CagOperation.class));
         addConverterForType(VPos.class, new XmlEnumConverter<>(VPos.class));
         addConverterForType(HPos.class, new XmlEnumConverter<>(HPos.class));
         addConverterForType(CssFont.class, new XmlFFontConverter());
