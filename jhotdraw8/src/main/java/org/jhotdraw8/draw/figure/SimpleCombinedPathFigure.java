@@ -1,4 +1,4 @@
-/* @(#)SimpleConcatenatedPathFigure.java
+/* @(#)SimpleCombinedPathFigure.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -38,7 +38,7 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleConcatenatedPathFigure extends AbstractCompositeFigure
+public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         implements StrokeableFigure, FillableFigure, Grouping,
         ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure,
