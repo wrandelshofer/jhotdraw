@@ -115,8 +115,10 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         }
         List<PathIterator> iterators = new ArrayList<>();
         for (Figure child : getChildren()) {
-            final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
-            iterators.add(childPathIterator);
+            if (child instanceof PathIterableFigure) {
+                final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
+                iterators.add(childPathIterator);
+            }
         }
         return new ConcatenatedPathIterator(getStyled(FILL_RULE), iterators);
 
@@ -170,6 +172,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
             child.reshapeInParent(localTransform);
         }
     }
+
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
         // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!

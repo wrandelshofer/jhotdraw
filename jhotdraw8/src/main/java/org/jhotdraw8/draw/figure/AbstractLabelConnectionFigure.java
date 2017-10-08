@@ -244,7 +244,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         final double labelOffsetY = getStyled(LABEL_OFFSET_Y).getConvertedValue();
         Point2D origin = labeledLoc
                 .add(perp.multiply(-labelOffsetY))
-                .add(-perp.getY() * (labelOffsetX + tx), perp.getX() * (labelOffsetX + tx));
+                .add(tangent.multiply(labelOffsetX));
+        
+        // FIXME add tx in angle of rotated label!
+        origin=origin.add(tx,0);
 
         Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
         origin = origin.add(labelTranslation);

@@ -249,37 +249,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
     }
 
-    protected void updatePathNodeOld(RenderContext ctx, Path node) {
-        applyFillableFigureProperties(node);
-        applyStrokeableFigureProperties(node);
-
-        String content = getStyled(SHAPE);
-        if (content == null || content.trim().isEmpty()) {
-            content = SVG_SQUARE;
-        }
-        Bounds b = getBoundsInLocal();
-
-        try {
-            AWTPathBuilder builder = new AWTPathBuilder();
-            Shapes.buildFromSvgString(builder, content);
-            Path2D.Double path = builder.get();
-
-            FXPathBuilder builder2 = new FXPathBuilder();
-
-            Transform tx = Transforms.createReshapeTransform(Geom.getBounds(path), b);
-            AffineTransform at = Transforms.toAWT(tx);
-
-            Shapes.buildFromPathIterator(builder2, path.getPathIterator(at));
-            List<PathElement> elements = builder2.getElements();
-            node.getElements().setAll(elements);
-
-            node.setVisible(true);
-        } catch (IOException ex) {
-            node.setVisible(false);
-            return;
-        }
-    }
-
     protected void updateTextNode(RenderContext ctx, Text tn) {
         tn.setText(getText(ctx));
         tn.setX(get(ORIGIN_X));
