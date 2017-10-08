@@ -1,4 +1,4 @@
-/* @(#)FillableFigure.java
+/* @(#)MarkerFillableFigure.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -25,33 +25,33 @@ import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface FillableFigure extends Figure {
+public interface MarkerFillableFigure extends Figure {
 
     /**
      * Defines the paint used for filling the interior of the figure.
      * <p>
      * Default value: {@code Color.WHITE}.
      */
-    public static PaintableStyleableFigureKey FILL = new PaintableStyleableFigureKey("fill", new CssColor("white", Color.WHITE));
+    public static PaintableStyleableFigureKey MARKER_FILL = new PaintableStyleableFigureKey("marker-fill", new CssColor("white", Color.WHITE));
     /**
      * Defines the fill-rule used for filling the interior of the figure..
      * <p>
      * Default value: {@code StrokeType.NON_ZERO}.
      */
-    public static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fill-rule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false,FillRule.NON_ZERO);
+    public static EnumStyleableFigureKey<FillRule> MARKER_FILL_RULE = new EnumStyleableFigureKey<>("marker-fill-rule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false,FillRule.NON_ZERO);
 
     /**
      * Updates a shape node.
      *
      * @param shape a shape node
      */
-    default void applyFillableFigureProperties(Shape shape) {
-        Paint p = Paintable.getPaint(getStyled(FILL));
+    default void applyMarkerFillableFigureProperties(Shape shape) {
+        Paint p = Paintable.getPaint(getStyled(MARKER_FILL));
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);
         }
         if (shape instanceof Path) {
-            ((Path)shape).setFillRule(getStyled(FILL_RULE));
+            ((Path)shape).setFillRule(getStyled(MARKER_FILL_RULE));
         }
     }
 
