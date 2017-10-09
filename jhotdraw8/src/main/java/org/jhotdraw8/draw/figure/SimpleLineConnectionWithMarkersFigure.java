@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  */
 public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure, 
-        LockableFigure, CompositableFigure, FillableFigure, StrokeableFigure, StartAndEndMarkerableFigure, StrokeCuttableFigure {
+        LockableFigure, CompositableFigure, MarkerFillableFigure, StrokeableFigure, StartAndEndMarkerableFigure, StrokeCuttableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -36,7 +36,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
 
     public SimpleLineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
-        set(FILL, new CssColor("black", Color.BLACK));
+        set(MARKER_FILL, new CssColor("black", Color.BLACK));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     @Override
     protected void updateEndMarkerNode(RenderContext ctx, SVGPath node) {
         super.updateEndMarkerNode(ctx, node); 
-        applyFillableFigureProperties(node);
+        applyMarkerFillableFigureProperties(node);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     @Override
     protected void updateStartMarkerNode(RenderContext ctx, SVGPath node) {
         super.updateStartMarkerNode(ctx, node); 
-        applyFillableFigureProperties(node);
+        applyMarkerFillableFigureProperties(node);
     }    
 
     @Override

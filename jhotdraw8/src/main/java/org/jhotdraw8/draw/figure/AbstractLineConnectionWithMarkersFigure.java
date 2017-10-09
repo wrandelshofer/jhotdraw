@@ -65,7 +65,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
      * @param node the node
      */
     protected void updateStartMarkerNode(RenderContext ctx, SVGPath node) {
-
+            // empty
     }
 
     /**
@@ -76,7 +76,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
      * @param node the node
      */
     protected void updateEndMarkerNode(RenderContext ctx, SVGPath node) {
-
+            // empty
     }
 
     @Override
