@@ -14,7 +14,7 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
-import org.jetbrains.annotations.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.annotation.NotNull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
