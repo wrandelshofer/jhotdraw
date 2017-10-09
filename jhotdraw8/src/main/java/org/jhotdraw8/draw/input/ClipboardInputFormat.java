@@ -9,6 +9,8 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.Set;
 import javafx.scene.input.Clipboard;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
 import org.jhotdraw8.draw.model.DrawingModel;
 
 /**
@@ -35,5 +37,6 @@ public interface ClipboardInputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException;
+    @Nonnull
+    Set<Figure> read(@Nonnull Clipboard clipboard, @Nonnull DrawingModel model, @Nonnull Drawing drawing, @Nullable Layer layer) throws IOException;
 }

@@ -7,6 +7,7 @@ import javafx.beans.Observable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -55,8 +56,8 @@ public interface Constrainer extends Observable {
      * @param f The figure for which the point is to be constrained.
      * @param p A point on the drawing.
      * @return Returns the constrained point.
-     */
-    default Point2D constrainPoint(Figure f, Point2D p) {
+     */@Nonnull 
+    default Point2D constrainPoint(@Nonnull Figure f, @Nonnull Point2D p) {
         return translatePoint(f, p, DIRECTION_NEAREST);
     }
 
@@ -71,8 +72,8 @@ public interface Constrainer extends Observable {
      * @param dir A direction vector. If the vector length is zero, then the
      * nearest constrained location is used.
      * @return Returns the constrained point.
-     */
-    public Point2D translatePoint(Figure f, Point2D p, Point2D dir);
+     */@Nonnull 
+    public Point2D translatePoint(@Nonnull Figure f, @Nonnull Point2D p, @Nonnull Point2D dir);
 
     /**
      * Constrains the placement of a rectangle towards the closest constraint in
@@ -84,8 +85,8 @@ public interface Constrainer extends Observable {
      * @param f The figure for which the rectangle is to be constrained.
      * @param r A rectangle on the drawing.
      * @return Returns the constrained rectangle.
-     */
-    default Rectangle2D constrainRectangle(Figure f, Rectangle2D r) {
+     */@Nonnull 
+    default Rectangle2D constrainRectangle(@Nonnull Figure f, @Nonnull Rectangle2D r) {
         return translateRectangle(f, r, DIRECTION_NEAREST);
     }
 
@@ -101,8 +102,8 @@ public interface Constrainer extends Observable {
      * @param dir A direction vector. If the vector length is zero, then the
      * nearest constrained location is used.
      * @return Returns the constrained rectangle.
-     */
-    public Rectangle2D translateRectangle(Figure f, Rectangle2D r, Point2D dir);
+     */@Nonnull 
+    public Rectangle2D translateRectangle(@Nonnull Figure f, @Nonnull Rectangle2D r,@Nonnull  Point2D dir);
 
     /**
      * Constrains the given angle (in degrees). This method changes the angle
@@ -112,7 +113,7 @@ public interface Constrainer extends Observable {
      * @param angle The angle (in degrees).
      * @return The closest constrained angle (in radians).
      */
-    default double constrainAngle(Figure f, double angle) {
+    default double constrainAngle(@Nonnull Figure f, double angle) {
         return translateAngle(f, angle, 0);
     }
 
@@ -127,7 +128,7 @@ public interface Constrainer extends Observable {
      * @return The closest constrained angle (in radians) in the specified
      * direction.
      */
-    public double translateAngle(Figure f, double angle, double dir);
+    public double translateAngle(@Nonnull Figure f, double angle, double dir);
 
     /**
      * Returns a node that renders the grid in view coordinates.
@@ -141,5 +142,5 @@ public interface Constrainer extends Observable {
      *
      * @param drawingView the drawing view
      */
-    public void updateNode(DrawingView drawingView);
+    public void updateNode(@Nonnull DrawingView drawingView);
 }

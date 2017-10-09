@@ -11,6 +11,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
 import java.util.List;
 import javafx.scene.paint.Color;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.CssColorStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -124,7 +125,7 @@ public interface Drawing extends Figure {
      */
     public final static String TYPE_SELECTOR = "Drawing";
 
-    @Override
+    @Override @Nonnull 
     default String getTypeSelector() {
         return TYPE_SELECTOR;
     }
@@ -134,6 +135,7 @@ public interface Drawing extends Figure {
      *
      * @return the style manager
      */
+    @Nonnull 
     StylesheetsManager<Figure> getStyleManager();
     
     /**

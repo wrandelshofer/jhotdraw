@@ -1,10 +1,11 @@
 /* @(#)ConnectableFigure.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 
 /**
@@ -19,15 +20,15 @@ public interface ConnectableFigure extends Figure {
      * Gets a connector for this figure at the given location.
      *
      * @param pointInLocal the location of the connector in local coordinates.
-     * @param connectingFigure The connecting figure or null if
-     * unknown. This allows for specific connectors for different connection
-     * figures.
+     * @param connectingFigure The connecting figure or null if unknown. This
+     * allows for specific connectors for different connection figures.
      * @return Returns the connector. Returns null if there is no connector at
      * the given location.
      */
-    Connector findConnector(Point2D pointInLocal, Figure connectingFigure);
+    @Nullable
+    Connector findConnector(@Nonnull Point2D pointInLocal, @Nonnull Figure connectingFigure);
 
-       /**
+    /**
      * Gets a connector for this figure at the given location.
      *
      * @param x the location of the connector in local coordinates.
@@ -38,9 +39,9 @@ public interface ConnectableFigure extends Figure {
      * @return Returns the connector. Returns null if there is no connector at
      * the given location.
      */
-    default Connector findConnector(double x, double y, Figure prototype) {
-        return findConnector(new Point2D(x,y),prototype);
+    @Nullable
+    default Connector findConnector(double x, double y, @Nullable Figure prototype) {
+        return findConnector(new Point2D(x, y), prototype);
     }
-
 
 }

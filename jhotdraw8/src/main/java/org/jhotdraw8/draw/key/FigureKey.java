@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.key;
 
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -16,6 +17,6 @@ import org.jhotdraw8.collection.MapAccessor;
  * @version $Id$
  */
 public interface FigureKey<T> extends Key<T> {
-
+@Nonnull 
     DirtyMask getDirtyMask();
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -66,16 +67,17 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.jhotdraw8.draw.io.InternalExternalUriMixin;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.SvgTransformListConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
@@ -91,9 +93,13 @@ import org.w3c.dom.Element;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SvgExporter implements InternalExternalUriMixin {
+public class SvgExporter {
 
     public final static DataFormat SVG_FORMAT;
+
+    private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
+    private final static String XLINK_Q = "xlink";
+    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 
     static {
         DataFormat fmt = DataFormat.lookupMimeType("image/svg+xml");
@@ -102,15 +108,9 @@ public class SvgExporter implements InternalExternalUriMixin {
         }
         SVG_FORMAT = fmt;
     }
-
-    private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
-    private final static String XLINK_Q = "xlink";
-    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
     private final String SVG_NS = "http://www.w3.org/2000/svg";
-    private URI externalHome;
     private IdFactory idFactory = new SimpleIdFactory();
     private final Object imageUriKey;
-    private URI internalHome;
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
@@ -118,6 +118,8 @@ public class SvgExporter implements InternalExternalUriMixin {
     private boolean skipInvisibleNodes = true;
     private final Object skipKey;
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
+    @Nonnull
+    private Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     /**
      *
@@ -135,28 +137,13 @@ public class SvgExporter implements InternalExternalUriMixin {
         return null;
     }
 
-    public URI getExternalHome() {
-        return externalHome;
+    @Nonnull
+    public Function<URI, URI> getUriResolver() {
+        return uriResolver;
     }
 
-    /**
-     * Must be a directory and not a file.
-     */
-    public void setExternalHome(URI uri) {
-        externalHome = uri;
-    }
-
-    public URI getInternalHome() {
-        return internalHome;
-    }
-
-    /**
-     * Must be a directory and not a file.
-     *
-     * @param uri the uri
-     */
-    public void setInternalHome(URI uri) {
-        internalHome = uri;
+    public void setUriResolver(@Nonnull Function<URI, URI> uriResolver) {
+        this.uriResolver = uriResolver;
     }
 
     private void initIdFactoryRecursively(javafx.scene.Node node) throws IOException {
@@ -473,7 +460,7 @@ public class SvgExporter implements InternalExternalUriMixin {
         URI uri = (URI) node.getProperties().get(imageUriKey);
         String href = null;
         if (uri != null) {
-            href = toExternal(uri).toString();
+            href = uriResolver.apply(uri).toString();
         } else {
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();

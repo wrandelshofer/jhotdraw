@@ -162,6 +162,12 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         return TYPE_SELECTOR;
     }
 
+    /** Always returns true. */
+    @Override
+    public boolean isLayoutable() {
+        return true;
+    }
+
     @Override
     public void reshapeInLocal(Transform transform) {
         // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!

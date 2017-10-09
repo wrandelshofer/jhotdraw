@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * PathIterableFigure.
@@ -14,5 +16,5 @@ import java.awt.geom.PathIterator;
  * @version $Id$
  */
 public interface PathIterableFigure extends Figure {
-PathIterator getPathIterator(AffineTransform tx);
+@Nonnull PathIterator getPathIterator(@Nullable AffineTransform tx);
 }

@@ -13,6 +13,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -55,6 +57,7 @@ public interface PropertyBean {
      *
      * @return the map
      */
+    @Nonnull
     ObservableMap<Key<?>, Object> getProperties();
 
     // ---
@@ -68,7 +71,8 @@ public interface PropertyBean {
      * @param newValue the value
      * @return the old value
      */
-    default <T> T set(MapAccessor<T> key, T newValue) {
+    @Nullable
+    default <T> T set(@Nonnull MapAccessor<T> key, @Nullable T newValue) {
         return key.put(getProperties(), newValue);
     }
 
@@ -79,7 +83,8 @@ public interface PropertyBean {
      * @param key the key
      * @return the value
      */
-    default <T> T get(MapAccessor<T> key) {
+    @Nullable
+    default <T> T get(@Nonnull MapAccessor<T> key) {
         return key.get(getProperties());
     }
 
@@ -90,7 +95,8 @@ public interface PropertyBean {
      * @param key the key
      * @return the removed value
      */
-    default <T> T remove(Key<T> key) {
+    @Nullable
+    default <T> T remove(@Nonnull Key<T> key) {
         @SuppressWarnings("unchecked")
         T removedValue = (T) getProperties().remove(key);
         return removedValue;
@@ -102,7 +108,8 @@ public interface PropertyBean {
      * @param keys the desired keys
      * @return the map
      */
-    default Map<Key<?>, Object> getAll(Key<?>... keys) {
+    @Nonnull
+    default Map<Key<?>, Object> getAll(@Nonnull Key<?>... keys) {
         return getAll(Arrays.asList(keys));
     }
 
@@ -112,7 +119,8 @@ public interface PropertyBean {
      * @param keys the desired keys
      * @return the map
      */
-    default Map<Key<?>, Object> getAll(List<Key<?>> keys) {
+    @Nonnull
+    default Map<Key<?>, Object> getAll(@Nonnull List<Key<?>> keys) {
         Map<Key<?>, Object> map = getProperties();
         Map<Key<?>, Object> result = new LinkedHashMap<>();
         for (Key<?> k : keys) {
@@ -121,12 +129,14 @@ public interface PropertyBean {
         return result;
     }
 
-    default <T> ObjectProperty<T> propertyAt(Key<T> key) {
+    @Nonnull
+    default <T> ObjectProperty<T> propertyAt(@Nonnull Key<T> key) {
         return new MapEntryProperty<Key<?>, Object, T>(getProperties(), key, key.getValueType());
     }
 
     @SuppressWarnings("unchecked")
-    default <T> ObservableValue<T> valueAt(Key<T> key) {
+    @Nonnull
+    default <T> ObservableValue<T> valueAt(@Nonnull Key<T> key) {
         return (ObservableValue<T>) (ObservableValue<Object>) Bindings.valueAt(getProperties(), key);
     }
 }

@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
@@ -33,7 +35,7 @@ public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
      *
      * @param app the application
      */
-    public PrintFileAction(Application app) {
+    public PrintFileAction(@Nonnull Application app) {
         this(app, null);
     }
 
@@ -43,13 +45,13 @@ public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction(Application app, DocumentProject view) {
+    public PrintFileAction(@Nonnull Application app, @Nullable DocumentProject view) {
         super(app, view, DocumentProject.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, DocumentProject project) {
+    protected void handleActionPerformed(@Nonnull ActionEvent event,@Nonnull DocumentProject project) {
         project.addDisabler(this);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(project.getNode().getScene().getWindow())) {

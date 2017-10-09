@@ -8,6 +8,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Window;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * {@code URIChooser} provides a mechanism for the user to choose an URI.
@@ -27,7 +29,8 @@ public interface URIChooser {
      * see {@code showDialog} for details
      * @return the selected URIs if a selection has been made.
      */
-    public URI showDialog(Window parent);
+    @Nullable
+    public URI showDialog(@Nullable Window parent);
 
     /**
      * Pops up an URI chooser dialog.
@@ -36,7 +39,8 @@ public interface URIChooser {
      * {@code showDialog} for details
      * @return the selected URIs or an empty list if no selection has been made.
      */
-    default public URI showDialog(Node node) {
+    @Nullable
+    default public URI showDialog(@Nullable Node node) {
         Scene scene = node == null ? null : node.getScene();
         return showDialog(scene == null ? null : scene.getWindow());
     }
@@ -47,6 +51,7 @@ public interface URIChooser {
      * @return data format, or null if the user did not explicitly select a
      * format
      */
+    @Nullable
     default DataFormat getDataFormat() {
         return null;
     }

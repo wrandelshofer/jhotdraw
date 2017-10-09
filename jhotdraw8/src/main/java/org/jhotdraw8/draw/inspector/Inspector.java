@@ -4,6 +4,8 @@
 package org.jhotdraw8.draw.inspector;
 
 import javafx.scene.Node;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 
 /**
@@ -13,7 +15,8 @@ import org.jhotdraw8.draw.DrawingView;
  */
 public interface Inspector {
 
-    public void setDrawingView(DrawingView view);
+    public void setDrawingView(@Nullable DrawingView view);
 
+    @Nonnull
     public Node getNode();
 }

@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.tool;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.BooleanKey;
@@ -108,6 +110,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the drawingView property, with {@code getBean()} returning this
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
+    @Nonnull
     ObjectProperty<DrawingView> drawingViewProperty();
 
     /**
@@ -117,6 +120,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the drawingView property, with {@code getBean()} returning this
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
+    @Nonnull
     ObjectProperty<DrawingEditor> drawingEditorProperty();
 
     // ---
@@ -127,6 +131,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return a node
      */
+    @Nonnull
     Node getNode();
 
     /**
@@ -167,14 +172,14 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @param l a listener
      */
-    void addToolListener(Listener<ToolEvent> l);
+    void addToolListener(@Nonnull Listener<ToolEvent> l);
 
     /**
      * Removes a listener for this tool.
      *
      * @param l a previously added listener
      */
-    void removeToolListener(Listener<ToolEvent> l);
+    void removeToolListener(@Nonnull Listener<ToolEvent> l);
 
     // ---
     // Convenience Methods
@@ -184,6 +189,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return The name
      */
+    @Nonnull
     default public String getLabel() {
         return get(LABEL);
     }
@@ -193,6 +199,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return The instance
      */
+    @Nonnull
     default public String getName() {
         return get(NAME);
     }
@@ -202,6 +209,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return a drawing view
      */
+    @Nullable
     default DrawingView getDrawingView() {
         return drawingViewProperty().get();
     }
@@ -214,7 +222,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @param drawingView a drawing view
      */
-    default void setDrawingView(DrawingView drawingView) {
+    default void setDrawingView(@Nullable DrawingView drawingView) {
         drawingViewProperty().set(drawingView);
     }
 
@@ -224,7 +232,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @param editor the editor
      */
-    public void deactivate(SimpleDrawingEditor editor);
+    public void deactivate(@Nullable DrawingEditor editor);
 
     /**
      * Activates the tool for the given editor. This method is called whenever
@@ -232,13 +240,14 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @param editor the editor
      */
-    public void activate(SimpleDrawingEditor editor);
+    public void activate(@Nonnull DrawingEditor editor);
 
+    @Nullable
     default DrawingEditor getDrawingEditor() {
         return drawingEditorProperty().get();
     }
 
-    default void setDrawingEditor(DrawingEditor newValue) {
+    default void setDrawingEditor(@Nullable DrawingEditor newValue) {
         drawingEditorProperty().set(newValue);
     }
 }

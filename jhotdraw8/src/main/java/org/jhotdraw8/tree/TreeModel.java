@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.beans.ObservableMixin;
 import org.jhotdraw8.event.Listener;
 
@@ -49,7 +50,7 @@ public interface TreeModel<E> extends ObservableMixin {
      *
      * @param l the listener
      */
-    default void addTreeModelListener(Listener<TreeModelEvent<E>> l) {
+    default void addTreeModelListener(@Nonnull Listener<TreeModelEvent<E>> l) {
         getTreeModelListeners().add(l);
     }
 
@@ -58,7 +59,7 @@ public interface TreeModel<E> extends ObservableMixin {
      *
      * @param l the listener
      */
-    default void removeTreeModelListener(Listener<TreeModelEvent<E>> l) {
+    default void removeTreeModelListener(@Nonnull Listener<TreeModelEvent<E>> l) {
         getTreeModelListeners().remove(l);
     }
 
@@ -66,7 +67,7 @@ public interface TreeModel<E> extends ObservableMixin {
      * Gets the root of the tree.
      *
      * @return the drawing
-     */
+     */@Nonnull 
     default E getRoot() {
         return rootProperty().get();
     }
@@ -77,7 +78,7 @@ public interface TreeModel<E> extends ObservableMixin {
      *
      * @param root the new root
      */
-    default void setRoot(E root) {
+    default void setRoot(@Nonnull E root) {
         rootProperty().set(root);
     }
 
@@ -86,8 +87,8 @@ public interface TreeModel<E> extends ObservableMixin {
      *
      * @param node the node.
      * @return the getChildren.
-     */
-    List<E> getChildren(E node);
+     */@Nonnull 
+    List<E> getChildren(@Nonnull E node);
 
     /**
      * Gets the child count of the specified figure.
@@ -95,7 +96,7 @@ public interface TreeModel<E> extends ObservableMixin {
      * @param node the parent.
      * @return the number of getChildren
      */
-    int getChildCount(E node);
+    int getChildCount(@Nonnull E node);
 
     /**
      * Gets the child at the given index from the parent.
@@ -103,8 +104,8 @@ public interface TreeModel<E> extends ObservableMixin {
      * @param parent the parent.
      * @param index the index.
      * @return the child
-     */
-    E getChildAt(E parent, int index);
+     */@Nonnull 
+    E getChildAt(@Nonnull E parent, int index);
 
     /**
      * Removes the specified child from its parent and fires appropriate
@@ -112,7 +113,7 @@ public interface TreeModel<E> extends ObservableMixin {
      *
      * @param child the child
      */
-    void removeFromParent(E child);
+    void removeFromParent(@Nonnull E child);
 
     /**
      * Adds the specified child to a parent and fires appropriate
@@ -122,7 +123,7 @@ public interface TreeModel<E> extends ObservableMixin {
      * @param parent the parent.
      * @param index the index
      */
-    void insertChildAt(E child, E parent, int index);
+    void insertChildAt(@Nonnull E child, @Nonnull E parent, int index);
 
     /**
      * Adds the specified child to a parent and fires appropriate
@@ -131,7 +132,7 @@ public interface TreeModel<E> extends ObservableMixin {
      * @param child the new child
      * @param parent the parent.
      */
-    default void addChildTo(E child, E parent) {
+    default void addChildTo(@Nonnull E child, @Nonnull E parent) {
         insertChildAt(child, parent, getChildCount(parent));
     }
 
@@ -140,7 +141,7 @@ public interface TreeModel<E> extends ObservableMixin {
      *
      * @param event the event
      */
-    default void fireTreeModelEvent(TreeModelEvent<E> event) {
+    default void fireTreeModelEvent(@Nonnull TreeModelEvent<E> event) {
        for (Listener<TreeModelEvent<E>> l : getTreeModelListeners()) {
            l.handle(event);
        }
@@ -154,7 +155,7 @@ public interface TreeModel<E> extends ObservableMixin {
      *
      * @param f the figure
      */
-    default void fireNodeInvalidated(E f) {
+    default void fireNodeInvalidated(@Nonnull E f) {
         fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, f));
     }
 

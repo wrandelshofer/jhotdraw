@@ -5,6 +5,7 @@ package org.jhotdraw8.graph;
 
 import java.util.Iterator;
 import java.util.function.Function;
+import javax.annotation.Nonnull;
 
 /**
  * Defines a facade for a directed graph.
@@ -27,6 +28,7 @@ public interface DirectedGraph<V> {
      *
      * @return a dump of the directed graph
      */
+    @Nonnull
     default String dump() {
         return dump(Object::toString);
     }
@@ -37,7 +39,8 @@ public interface DirectedGraph<V> {
      * @param toStringFunction a function which converts a vertex to a string
      * @return the dumped graph
      */
-    default String dump(Function<V, String> toStringFunction) {
+    @Nonnull
+    default String dump(@Nonnull Function<V, String> toStringFunction) {
         StringBuilder buf = new StringBuilder();
         buf.append("DirectedGraph:");
         for (int ii = 0, nn = getVertexCount(); ii < nn; ii++) {
@@ -68,7 +71,8 @@ public interface DirectedGraph<V> {
      * @param i index of next vertex
      * @return the i-th next vertex of v
      */
-    V getNext(V vertex, int i);
+    @Nonnull
+    V getNext(@Nonnull V vertex, int i);
 
     /**
      * Returns the number of next vertices of v.
@@ -76,7 +80,7 @@ public interface DirectedGraph<V> {
      * @param vertex a vertex
      * @return the number of next vertices of v.
      */
-    int getNextCount(V vertex);
+    int getNextCount(@Nonnull V vertex);
 
     /**
      * Returns the next vertices after the specified vertex.
@@ -84,7 +88,8 @@ public interface DirectedGraph<V> {
      * @param vertex a vertex
      * @return an iterable for the next vertices after vertex
      */
-    default Iterable<V> getNextVertices(V vertex) {
+    @Nonnull
+    default Iterable<V> getNextVertices(@Nonnull V vertex) {
         class NextVertexIterator implements Iterator<V> {
 
             private int index;

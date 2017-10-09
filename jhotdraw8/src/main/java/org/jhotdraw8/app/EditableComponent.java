@@ -4,6 +4,7 @@
 package org.jhotdraw8.app;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javax.annotation.Nonnull;
 
 /**
  * EditableComponent.
@@ -45,7 +46,7 @@ public interface EditableComponent {
      *
      * @return true if empty
      */
-    ReadOnlyBooleanProperty selectionEmptyProperty();
+@Nonnull     ReadOnlyBooleanProperty selectionEmptyProperty();
 
     // ---
     // edit actions on selection

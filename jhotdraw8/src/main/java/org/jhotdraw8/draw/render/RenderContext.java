@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.render;
 
 import org.jhotdraw8.draw.figure.Figure;
 import javafx.scene.Node;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -50,6 +51,6 @@ public interface RenderContext extends PropertyBean {
      * @param f The figure
      * @return The JavaFX node associated to the figure
      */
-    Node getNode(Figure f);
+    @Nonnull Node getNode(@Nonnull Figure f);
 
 }

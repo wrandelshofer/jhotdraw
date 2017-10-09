@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
 import org.jhotdraw8.geom.Transforms;
@@ -21,7 +22,7 @@ import org.jhotdraw8.geom.Transforms;
  */
 public interface TransformCacheableFigure extends CacheableFigure {
 
-    @Override
+    @Override @Nullable
     default Transform getParentToWorld() {
         Transform t = CACHE ? getCachedValue(PARENT_TO_WORLD) : null;
         if (t == null) {
@@ -33,7 +34,7 @@ public interface TransformCacheableFigure extends CacheableFigure {
         return t == IDENTITY_TRANSFORM ? null : t;
     }
 
-    @Override
+    @Override @Nullable
     default Transform getLocalToWorld() {
         Transform t = CACHE ? getCachedValue(LOCAL_TO_WORLD) : null;
         if (t == null) {
@@ -46,7 +47,7 @@ public interface TransformCacheableFigure extends CacheableFigure {
         return t == IDENTITY_TRANSFORM ? null : t;
     }
 
-    @Override
+    @Override @Nullable
     default Transform getWorldToLocal() {
         Transform t = getCachedValue(WORLD_TO_LOCAL);
         if (t == null) {
@@ -57,7 +58,7 @@ public interface TransformCacheableFigure extends CacheableFigure {
         return t == IDENTITY_TRANSFORM ? null : t;
     }
 
-    @Override
+    @Override @Nullable
     default Transform getWorldToParent() {
         Transform t = CACHE ? getCachedValue(WORLD_TO_PARENT) : null;
         if (t == null) {

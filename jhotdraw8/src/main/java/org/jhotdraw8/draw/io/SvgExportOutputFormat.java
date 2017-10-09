@@ -3,11 +3,9 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.svg.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,29 +23,32 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.render.RenderingIntent;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.draw.figure.SimpleImageFigure;
 import org.jhotdraw8.draw.figure.SimplePageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.io.UriResolver;
+import org.jhotdraw8.svg.SvgExporter;
+import org.jhotdraw8.svg.TransformFlattener;
 import org.jhotdraw8.text.CssSize;
 import org.jhotdraw8.text.CssSizeConverter;
 import org.jhotdraw8.text.CssTransformListConverter;
+import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.SvgTransformListConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
-import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.XmlSizeListConverter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.jhotdraw8.draw.figure.Page;
 
 /**
  * Exports a JavaFX scene graph to SVG.
@@ -61,6 +62,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     public final static DataFormat SVG_FORMAT;
 
+    private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
+    private final static String XLINK_Q = "xlink";
+    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+
     static {
         DataFormat fmt = DataFormat.lookupMimeType("image/svg+xml");
         if (fmt == null) {
@@ -68,10 +73,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         }
         SVG_FORMAT = fmt;
     }
-
-    private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
-    private final static String XLINK_Q = "xlink";
-    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 
     private final String SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -88,8 +89,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     private SvgExporter createExporter() {
         SvgExporter exporter = new SvgExporter(SimpleImageFigure.IMAGE_URI, SKIP_KEY);
-        exporter.setExternalHome(getExternalHome());
-        exporter.setInternalHome(getInternalHome());
+        exporter.setUriResolver(getUriResolver());
         return exporter;
     }
 
@@ -135,8 +135,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     @Override
     public void write(Map<DataFormat, Object> clipboard, Drawing drawing, Collection<Figure> selection) throws IOException {
-        setExternalHome(null);
-        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), null));
         StringWriter out = new StringWriter();
         Document doc = toDocument(drawing, selection);
         try {

@@ -4,6 +4,8 @@
 package org.jhotdraw8.io;
 
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * IdFactory.
@@ -13,7 +15,6 @@ import java.util.Objects;
  */
 public interface IdFactory {
 
-
     /**
      * Creates an id for the specified object. If the object already has an id,
      * then that id is returned.
@@ -21,7 +22,8 @@ public interface IdFactory {
      * @param object the object
      * @return the id
      */
-    default String createId(Object object) {
+    @Nonnull
+    default String createId(@Nonnull Object object) {
         String id = createId(object, "");
         return id;
     }
@@ -34,26 +36,30 @@ public interface IdFactory {
      * @param prefix the desired prefix for the id
      * @return the id
      */
-    public String createId(Object object, String prefix);
+    public String createId(@Nonnull Object object, @Nullable String prefix);
+
     /**
      * Creates an id for the specified object. If the object already has an id,
      * then that id is returned.
      *
      * @param object the object
-     * @param prefix the prefix used to create a new id, if the desired id is taken
+     * @param prefix the prefix used to create a new id, if the desired id is
+     * taken
      * @param id the desired id
      * @return the id
      */
-    public String createId(Object object, String prefix, String id);
+    public String createId(@Nonnull Object object, @Nullable String prefix, @Nonnull String id);
 
-     /**
+    /**
      * Gets an id for the specified object. Returns null if the object has no
      * id.
      *
      * @param object the object
      * @return the id
      */
-    public String getId(Object object);
+    @Nullable
+    public String getId(@Nonnull Object object);
+
     /**
      * Gets the object for the specified id. Returns null if the id has no
      * object.
@@ -61,7 +67,9 @@ public interface IdFactory {
      * @param id the id
      * @return the object
      */
-    public Object getObject(String id);
+    @Nullable
+    public Object getObject(@Nonnull String id);
+
     /**
      * Puts an id for the specified object. If the object already has an id, the
      * old id is replaced.
@@ -69,7 +77,8 @@ public interface IdFactory {
      * @param id the id
      * @param object the object
      */
-    public void putId(String id, Object object);
+    public void putId(@Nonnull String id, @Nullable Object object);
+
     /**
      * Clears all ids.
      */

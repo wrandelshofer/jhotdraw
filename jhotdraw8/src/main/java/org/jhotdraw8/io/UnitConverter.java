@@ -4,6 +4,8 @@
 package org.jhotdraw8.io;
 
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
 import org.jhotdraw8.text.CssSize;
 
 /**
@@ -42,7 +44,7 @@ public interface UnitConverter {
         return 100.0;
     }
 
-    default double getFactor(String unit) {
+    default double getFactor(@Nullable String unit) {
         double factor = 1.0;
         if (unit != null) {
             switch (unit) {
@@ -104,7 +106,7 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert(double value, String inputUnit, String outputUnit) {
+    default double convert(double value, @Nullable String inputUnit, @Nullable String outputUnit) {
         if (value == 0.0 || Objects.equals(inputUnit, outputUnit)) {
             return value;
         }
@@ -119,7 +121,7 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert(CssSize value, String outputUnit) {
+    default double convert(@Nonnull CssSize value, @Nullable String outputUnit) {
         return convert(value.getValue(), value.getUnits(), outputUnit);
     }
 }

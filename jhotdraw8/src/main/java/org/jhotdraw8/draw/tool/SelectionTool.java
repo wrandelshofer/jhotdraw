@@ -10,6 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -151,7 +152,7 @@ public class SelectionTool extends AbstractTool {
         }
 
         if (tracker == null) {
-        // Mouse event not captured by handle tracker => Process mouse event on our own.
+            // Mouse event not captured by handle tracker => Process mouse event on our own.
             if (event.isControlDown()) {
                 SelectAreaTracker t = getSelectAreaTracker();
                 setTracker(t);
@@ -164,9 +165,10 @@ public class SelectionTool extends AbstractTool {
                     Figure firstFigure = null;
                     boolean selectionFound = false;
                     for (Figure f : view.findFigures(vx, vy, false)) {
-                        if (f.isVisible())
-                        if (firstFigure == null) {
-                            firstFigure = f;
+                        if (f.isVisible()) {
+                            if (firstFigure == null) {
+                                firstFigure = f;
+                            }
                         }
                         if (view.selectedFiguresProperty().contains(f)) {
                             selectionFound = true;
@@ -385,7 +387,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    public void activate(SimpleDrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         for (DrawingView view : editor.getDrawingViews()) {
             view.setHandleType(handleType);
             view.setAnchorHandleType(anchorHandleType);

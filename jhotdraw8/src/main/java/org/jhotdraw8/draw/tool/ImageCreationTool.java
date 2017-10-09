@@ -7,10 +7,10 @@ import java.net.URI;
 import java.util.function.Supplier;
 import javafx.stage.FileChooser;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.figure.SimpleImageFigure;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
@@ -35,7 +35,7 @@ public class ImageCreationTool extends CreationTool {
     }
 
     @Override
-    public void activate(SimpleDrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         super.activate(editor);
 
         uri = chooseFile();

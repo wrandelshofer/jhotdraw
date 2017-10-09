@@ -17,11 +17,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.css.StyleOrigin;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Drawing;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -71,7 +73,6 @@ import org.w3c.dom.ProcessingInstruction;
  * @version $Id$
  */
 public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMixin, XmlInputFormatMixin, ClipboardOutputFormat, ClipboardInputFormat {
-
     /**
      * Comments which appear inside an XML element, that can not be associated
      * to as a head comment.
@@ -91,11 +92,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     protected List<String> comments;
     private URI externalHome;
     protected FigureFactory figureFactory;
-    protected IdFactory idFactory;
     protected HashMap<Figure, Element> figureToElementMap = new HashMap<>();
+    protected IdFactory idFactory;
     private URI internalHome;
     protected String namespaceQualifier;
     protected String namespaceURI;
+    private @Nonnull Function<URI,URI> uriResolver;
 
     public SimpleXmlIO(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -138,11 +140,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return internal;
     }
 
-    protected boolean isClipping(Element elem) throws IOException {
-        Figure probe = readNode(elem);
-        return probe instanceof Clipping;
-
-    }
 
     public Figure fromDocument(Document doc, Drawing oldDrawing) throws IOException {
         idFactory.reset();
@@ -158,136 +155,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return readDrawingOrClippingFromDocument(doc, oldDrawing);
     }
 
-    /**
-     * Reads drawing or clipping starting from the specified node. The idFactory
-     * must have been initialized before this method is called.
-     *
-     * @param doc the document
-     * @param oldDrawing the drawing
-     * @return a figure
-     * @throws IOException in case of failure
-     */
-    protected Figure readDrawingOrClippingFromDocument(Document doc, Drawing oldDrawing) throws IOException {
-
-        figureToElementMap.clear();
-        Drawing external = null;
-        Clipping clipping = null;
-        NodeList list = doc.getChildNodes();
-        comments = new ArrayList<>();
-        for (int i = 0, n = list.getLength(); i < n; i++) {
-            Node node = list.item(i);
-            switch (node.getNodeType()) {
-                case Node.COMMENT_NODE:
-                    comments.add(((Comment) node).getTextContent());
-                    break;
-                case Node.ELEMENT_NODE:
-                    Figure f = readNodesRecursively(node);
-                    if (f instanceof Drawing) {
-                        external = (Drawing) f;
-                    } else if (f instanceof Clipping) {
-                        clipping = (Clipping) f;
-                    }
-            }
-        }
-        if (external != null) {
-            for (int i = 0; i < list.getLength(); i++) {
-                Node node = list.item(i);
-                switch (node.getNodeType()) {
-                    case Node.PROCESSING_INSTRUCTION_NODE:
-                        readProcessingInstruction(doc.getOwnerDocument(), (ProcessingInstruction) node, external);
-                        break;
-                }
-            }
-        }
-        if (external == null && clipping == null) {
-            if (namespaceURI == null) {
-                throw new IOException("The document does not contain a drawing.");
-            } else {
-                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
-            }
-        }
-        if (external != null) {
-            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
-            external.set(XML_EPILOG_COMMENT_KEY, comments);
-        }
-        try {
-            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
-                readElementAttributes(entry.getKey(), entry.getValue());
-                readElementNodeList(entry.getKey(), entry.getValue());
-            }
-        } finally {
-            figureToElementMap.clear();
-        }
-        comments = null;
-        if (external != null) {
-            Drawing internal = figureFactory.fromExternalDrawing(external);
-            internal.updateCss();
-            return internal;
-        } else {
-            return clipping;
-        }
-    }
-
-    /**
-     * Reads drawing or clipping starting from the specified node. The idFactory
-     * must have been initialized before this method is called.
-     *
-     * @param drawingElement the drawing element
-     * @param oldDrawing a drawing or null
-     * @return the figure
-     * @throws IOException in case of failure
-     */
-    protected Figure readDrawingOrClipping(Element drawingElement, Drawing oldDrawing) throws IOException {
-
-        figureToElementMap.clear();
-        Drawing external = null;
-        Clipping clipping = null;
-        NodeList list = drawingElement.getChildNodes();
-        comments = new ArrayList<>();
-        Figure f = readNodesRecursively(drawingElement);
-        if (f instanceof Drawing) {
-            external = (Drawing) f;
-        } else if (f instanceof Clipping) {
-            clipping = (Clipping) f;
-        }
-        if (external != null) {
-            for (int i = 0; i < list.getLength(); i++) {
-                Node node = list.item(i);
-                switch (node.getNodeType()) {
-                    case Node.PROCESSING_INSTRUCTION_NODE:
-                        readProcessingInstruction(drawingElement.getOwnerDocument(), (ProcessingInstruction) node, external);
-                        break;
-                }
-            }
-        }
-        if (external == null && clipping == null) {
-            if (namespaceURI == null) {
-                throw new IOException("The document does not contain a drawing.");
-            } else {
-                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
-            }
-        }
-        if (external != null) {
-            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
-            external.set(XML_EPILOG_COMMENT_KEY, comments);
-        }
-        try {
-            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
-                readElementAttributes(entry.getKey(), entry.getValue());
-                readElementNodeList(entry.getKey(), entry.getValue());
-            }
-        } finally {
-            figureToElementMap.clear();
-        }
-        comments = null;
-        if (external != null) {
-            Drawing internal = figureFactory.fromExternalDrawing(external);
-            internal.updateCss();
-            return internal;
-        } else {
-            return clipping;
-        }
-    }
 
     private String getAttribute(Element elem, String unqualifiedName) {
         if (namespaceURI == null) {
@@ -320,9 +187,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         externalHome = uri;
     }
 
-    public void setFigureFactory(FigureFactory figureFactory) {
-        this.figureFactory = figureFactory;
-    }
 
     public Figure getFigure(String id) throws IOException {
         Figure f = (Figure) idFactory.getObject(id);
@@ -330,6 +194,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         throw new IOException("no figure for id:" + id);
         }*/
         return f;
+    }
+    public void setFigureFactory(FigureFactory figureFactory) {
+        this.figureFactory = figureFactory;
     }
 
     public URI getInternalHome() {
@@ -345,6 +212,14 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     public void setNamespaceURI(String namespaceURI) {
         this.namespaceURI = namespaceURI;
+    }
+
+    public Function<URI, URI> getUriResolver() {
+        return uriResolver;
+    }
+
+    public void setUriResolver(Function<URI, URI> uriResolver) {
+        this.uriResolver = uriResolver;
     }
 
     /**
@@ -364,6 +239,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             external = externalHome.relativize(external);
         }
         return external;
+    }
+    protected boolean isClipping(Element elem) throws IOException {
+        Figure probe = readNode(elem);
+        return probe instanceof Clipping;
+        
     }
 
     @Override
@@ -425,6 +305,135 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     @Override
     public Figure read(InputStream in, Drawing drawing) throws IOException {
         return XmlInputFormatMixin.super.read(in, drawing);
+    }
+    /**
+     * Reads drawing or clipping starting from the specified node. The idFactory
+     * must have been initialized before this method is called.
+     *
+     * @param drawingElement the drawing element
+     * @param oldDrawing a drawing or null
+     * @return the figure
+     * @throws IOException in case of failure
+     */
+    protected Figure readDrawingOrClipping(Element drawingElement, Drawing oldDrawing) throws IOException {
+        
+        figureToElementMap.clear();
+        Drawing external = null;
+        Clipping clipping = null;
+        NodeList list = drawingElement.getChildNodes();
+        comments = new ArrayList<>();
+        Figure f = readNodesRecursively(drawingElement);
+        if (f instanceof Drawing) {
+            external = (Drawing) f;
+        } else if (f instanceof Clipping) {
+            clipping = (Clipping) f;
+        }
+        if (external != null) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                switch (node.getNodeType()) {
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        readProcessingInstruction(drawingElement.getOwnerDocument(), (ProcessingInstruction) node, external);
+                        break;
+                }
+            }
+        }
+        if (external == null && clipping == null) {
+            if (namespaceURI == null) {
+                throw new IOException("The document does not contain a drawing.");
+            } else {
+                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
+            }
+        }
+        if (external != null) {
+            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
+            external.set(XML_EPILOG_COMMENT_KEY, comments);
+        }
+        try {
+            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
+                readElementAttributes(entry.getKey(), entry.getValue());
+                readElementNodeList(entry.getKey(), entry.getValue());
+            }
+        } finally {
+            figureToElementMap.clear();
+        }
+        comments = null;
+        if (external != null) {
+            Drawing internal = figureFactory.fromExternalDrawing(external);
+            internal.updateCss();
+            return internal;
+        } else {
+            return clipping;
+        }
+    }
+    /**
+     * Reads drawing or clipping starting from the specified node. The idFactory
+     * must have been initialized before this method is called.
+     *
+     * @param doc the document
+     * @param oldDrawing the drawing
+     * @return a figure
+     * @throws IOException in case of failure
+     */
+    protected Figure readDrawingOrClippingFromDocument(Document doc, Drawing oldDrawing) throws IOException {
+        
+        figureToElementMap.clear();
+        Drawing external = null;
+        Clipping clipping = null;
+        NodeList list = doc.getChildNodes();
+        comments = new ArrayList<>();
+        for (int i = 0, n = list.getLength(); i < n; i++) {
+            Node node = list.item(i);
+            switch (node.getNodeType()) {
+                case Node.COMMENT_NODE:
+                    comments.add(((Comment) node).getTextContent());
+                    break;
+                case Node.ELEMENT_NODE:
+                    Figure f = readNodesRecursively(node);
+                    if (f instanceof Drawing) {
+                        external = (Drawing) f;
+                    } else if (f instanceof Clipping) {
+                        clipping = (Clipping) f;
+                    }
+            }
+        }
+        if (external != null) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                switch (node.getNodeType()) {
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        readProcessingInstruction(doc.getOwnerDocument(), (ProcessingInstruction) node, external);
+                        break;
+                }
+            }
+        }
+        if (external == null && clipping == null) {
+            if (namespaceURI == null) {
+                throw new IOException("The document does not contain a drawing.");
+            } else {
+                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
+            }
+        }
+        if (external != null) {
+            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
+            external.set(XML_EPILOG_COMMENT_KEY, comments);
+        }
+        try {
+            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
+                readElementAttributes(entry.getKey(), entry.getValue());
+                readElementNodeList(entry.getKey(), entry.getValue());
+            }
+        } finally {
+            figureToElementMap.clear();
+        }
+        comments = null;
+        if (external != null) {
+            Drawing internal = figureFactory.fromExternalDrawing(external);
+            internal.updateCss();
+            return internal;
+        } else {
+            return clipping;
+        }
     }
 
     /**

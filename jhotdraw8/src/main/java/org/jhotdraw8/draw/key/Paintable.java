@@ -4,6 +4,8 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.scene.paint.Paint;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Paintable.
@@ -13,9 +15,11 @@ import javafx.scene.paint.Paint;
  */
 public interface Paintable {
 
+    @Nullable
     public Paint getPaint();
 
-    public static Paint getPaint(Paintable p) {
+    @Nullable
+    public static Paint getPaint(@Nullable Paintable p) {
         return p == null ? null : p.getPaint();
     }
 }

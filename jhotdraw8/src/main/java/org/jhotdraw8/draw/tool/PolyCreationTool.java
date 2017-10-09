@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import javafx.scene.Cursor;
 import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.util.Resources;
@@ -136,7 +137,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
 
 
     @Override
-    public void activate(SimpleDrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         requestFocus();
         createdFigure = null;
     }

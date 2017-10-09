@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.beans.PropertyBean;
@@ -83,7 +84,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * The localized name of the action for use in controls.
      *
      * @return The name
-     */
+     */@Nonnull 
     default String getLabel() {
         return get(LABEL);
     }
@@ -92,7 +93,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * The name of the action for use in action maps and for resource bundles.
      *
      * @return The instance
-     */
+     */@Nonnull 
     default String getId() {
         return get(ID_KEY);
     }
@@ -102,7 +103,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * typically used only for actions that have a meaningful selection state.
      * @return the property
      */
-    BooleanProperty selectedProperty();
+    @Nonnull BooleanProperty selectedProperty();
 
     default void setSelected(boolean newValue) {
         selectedProperty().set(newValue);

@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CompletionStage;
 import java.util.prefs.Preferences;
 import javafx.scene.control.MenuBar;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
@@ -32,10 +33,12 @@ public interface ApplicationModel {
      *
      * @return a new instance
      */
+    @Nonnull
     default CompletionStage<Project> createProjectAsync() {
         return FXWorker.supply(this::createProject);
     }
 
+    @Nonnull
     public Project createProject();
     // URI choosers
 
@@ -44,6 +47,7 @@ public interface ApplicationModel {
      *
      * @return chooser
      */
+    @Nonnull
     public URIChooser createOpenChooser();
 
     /**
@@ -51,6 +55,7 @@ public interface ApplicationModel {
      *
      * @return chooser
      */
+    @Nonnull
     public URIChooser createSaveChooser();
 
     /**
@@ -58,6 +63,7 @@ public interface ApplicationModel {
      *
      * @return chooser
      */
+    @Nonnull
     public URIChooser createExportChooser();
 
     /**
@@ -65,6 +71,7 @@ public interface ApplicationModel {
      *
      * @return chooser
      */
+    @Nonnull
     public URIChooser createImportChooser();
 
     // Copyright information
@@ -73,6 +80,7 @@ public interface ApplicationModel {
      *
      * @return name
      */
+    @Nonnull
     public String getName();
 
     /**
@@ -80,6 +88,7 @@ public interface ApplicationModel {
      *
      * @return version
      */
+    @Nonnull
     public String getVersion();
 
     /**
@@ -87,6 +96,7 @@ public interface ApplicationModel {
      *
      * @return copyright
      */
+    @Nonnull
     public String getCopyright();
 
     /**
@@ -104,9 +114,11 @@ public interface ApplicationModel {
      *
      * @return a menu bar
      */
+    @Nonnull
     default CompletionStage<MenuBar> createMenuBarAsync() {
         return FXWorker.supply(this::createMenuBar);
-    }    
+    }
+
     MenuBar createMenuBar();
 
     /**
@@ -114,6 +126,7 @@ public interface ApplicationModel {
      *
      * @return the resource bundle
      */
+    @Nonnull
     ResourceBundle getResources();
 
     /**
@@ -122,9 +135,14 @@ public interface ApplicationModel {
      * @param app The application
      * @return the application map
      */
-    HierarchicalMap<String, Action> createApplicationActionMap(Application app);
+    @Nonnull
+    HierarchicalMap<String, Action> createApplicationActionMap(@Nonnull Application app);
 
-    /** Gets the preferences of the application.
-     * @return the preferences */
+    /**
+     * Gets the preferences of the application.
+     *
+     * @return the preferences
+     */
+    @Nonnull
     Preferences getPreferences();
 }

@@ -4,15 +4,10 @@
 package org.jhotdraw8.css;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * StylesheetsManager.

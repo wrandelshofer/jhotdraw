@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
+import javax.annotation.Nonnull;
 
 /**
  * PathBuilder.
@@ -183,10 +184,10 @@ public interface PathBuilder {
 
     void curveTo(double x1, double y1, double x2, double y2, double x, double y);
 
-    default void curveTo(Point2D c1, Point2D c2, Point2D p) {
+    default void curveTo(@Nonnull Point2D c1, @Nonnull Point2D c2, @Nonnull Point2D p) {
         curveTo(c1.getX(), c1.getY(), c2.getX(), c2.getY(), p.getX(), p.getY());
     }
-    default void smoothCurveTo(Point2D c2, Point2D p) {
+    default void smoothCurveTo(@Nonnull Point2D c2, @Nonnull Point2D p) {
         smoothCurveTo( c2.getX(), c2.getY(), p.getX(), p.getY());
     }
 
@@ -201,13 +202,13 @@ public interface PathBuilder {
     double getLastCX();
 
     double getLastCY();
-    default void lineTo(Point2D p) {
+    default void lineTo(@Nonnull Point2D p) {
         lineTo(p.getX(), p.getY());
     }
 
     void lineTo(double x, double y);
 
-    default void moveTo(Point2D p) {
+    default void moveTo(@Nonnull Point2D p) {
         moveTo(p.getX(), p.getY());
     }
 
@@ -215,7 +216,7 @@ public interface PathBuilder {
 
     void quadTo(double x1, double y1, double x, double y);
 
-    default void quadTo(Point2D p1, Point2D p2) {
+    default void quadTo(@Nonnull Point2D p1, @Nonnull Point2D p2) {
         quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
@@ -223,7 +224,7 @@ public interface PathBuilder {
         curveTo(getLastX()-getLastCX()+getLastX(), getLastY()-getLastCY()+getLastY(),x2,y2, x, y);
     }
 
-    default void smoothQuadTo(Point2D p) {
+    default void smoothQuadTo(@Nonnull Point2D p) {
         smoothQuadTo(p.getX(),p.getY());
     }
     default void smoothQuadTo(double x, double y) {

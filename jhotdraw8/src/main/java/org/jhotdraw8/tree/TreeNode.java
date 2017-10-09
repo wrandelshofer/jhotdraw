@@ -10,6 +10,8 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a node of a tree structure.
@@ -45,7 +47,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * ancesters up to the root.
      *
      * @return the iterable
-     */
+     */@Nonnull 
     default Iterable<T> ancestorIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.AncestorIterator<>((T) this);
@@ -57,7 +59,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * descendants in breadth first sequence.
      *
      * @return the iterable
-     */
+     */@Nonnull 
     default public Iterable<T> breadthFirstIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.BreadthFirstIterator<>((T) this);
@@ -82,7 +84,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @param depth the indentation depth
      * @throws java.io.IOException from appendable
      */
-    default void dumpTree(Appendable out, int depth) throws IOException {
+    default void dumpTree(@Nonnull Appendable out, int depth) throws IOException {
         for (int i = 0; i < depth; i++) {
             out.append('.');
         }
@@ -101,8 +103,8 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @return Nearest ancestor of type {@literal <T>} or null if no ancestor of
      * this type is present. Returns {@code this} if this object is of type
      * {@literal <T>}.
-     */
-    default <TT> TT getAncestor(Class<TT> ancestorType) {
+     */@Nullable
+    default <TT> TT getAncestor(@Nonnull Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
         while (ancestor != null && !ancestorType.isAssignableFrom(ancestor.getClass())) {
@@ -118,7 +120,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @param index the index
      * @return the child
-     */
+     */@Nonnull 
     default T getChild(int index) {
         return getChildren().get(index);
     }
@@ -129,8 +131,8 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @param index the index
      * @param newChild the new child
      * @return the old child
-     */
-    default T setChild(int index, T newChild) {
+     */@Nonnull 
+    default T setChild(int index,@Nonnull  T newChild) {
         return getChildren().set(index, newChild);
     }
 
@@ -149,14 +151,14 @@ public interface TreeNode<T extends TreeNode<T>> {
      * </ul>
      *
      * @return the children
-     */
+     */@Nonnull 
     List<T> getChildren();
 
     /**
      * Gets the first child.
      *
      * @return The first child. Returns null if the figure has no getChildren.
-     */
+     */@Nullable
     default T getFirstChild() {
         return getChildren().isEmpty() //
                 ? null//
@@ -167,7 +169,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * Gets the last child.
      *
      * @return The last child. Returns null if the figure has no getChildren.
-     */
+     */@Nullable
     default T getLastChild() {
         return getChildren().isEmpty() ? null : getChildren().get(0);
     }
@@ -179,14 +181,14 @@ public interface TreeNode<T extends TreeNode<T>> {
      * parent tree node.
      *
      * @return the parent. Returns null if the tree node has no parent.
-     */
+     */@Nullable
     T getParent();
 
     /**
      * Returns the path to this node.
      *
      * @return path including this node
-     */
+     */@Nonnull 
     @SuppressWarnings("unchecked")
     default List<T> getPath() {
         LinkedList<T> path = new LinkedList<>();
@@ -201,7 +203,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * descendants in postorder sequence.
      *
      * @return the iterable
-     */
+     */@Nonnull 
     default public Iterable<T> postorderIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.PostorderIterator<>((T) this);
@@ -213,7 +215,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * descendants in preorder sequence.
      *
      * @return the iterable
-     */
+     */@Nonnull 
     default public Iterable<T> preorderIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.PreorderIterator<>((T) this);

@@ -10,6 +10,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.Map;
 import javafx.scene.input.DataFormat;
+import javax.annotation.Nonnull;
 
 /**
  * OutputFormat for clipboard.
@@ -29,7 +30,7 @@ public interface ClipboardOutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(Map<DataFormat, Object> out, Drawing drawing) throws IOException {
+    default void write(@Nonnull Map<DataFormat, Object> out, @Nonnull Drawing drawing) throws IOException {
         write(out, drawing, Collections.singleton(drawing));
     }
 
@@ -42,5 +43,5 @@ public interface ClipboardOutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException;
+    void write(@Nonnull Map<DataFormat, Object> out, @Nonnull Drawing drawing, @Nonnull Collection<Figure> selection) throws IOException;
 }

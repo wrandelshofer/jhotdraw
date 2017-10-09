@@ -10,6 +10,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static java.lang.Math.*;
 import javafx.scene.Cursor;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.figure.SimpleLayer;
@@ -158,7 +159,7 @@ private double defaultHeight=10;
      * This implementation is empty.
      */
     @Override
-    public void activate(SimpleDrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         requestFocus();
     }
 

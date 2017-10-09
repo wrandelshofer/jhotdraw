@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.Key;
@@ -363,14 +364,14 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * This implementation is empty.
      */
     @Override
-    public void activate(SimpleDrawingEditor editor) {
+    public void activate(@Nonnull DrawingEditor editor) {
     }
 
     /**
      * This implementation is empty.
      */
     @Override
-    public void deactivate(SimpleDrawingEditor editor) {
+    public void deactivate(@Nonnull DrawingEditor editor) {
     }
 
     // ---

@@ -6,6 +6,7 @@ package org.jhotdraw8.tree;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.TreeItem;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.event.Listener;
 
@@ -28,16 +29,16 @@ public interface TreePresentationModel<N>  {
     public final static String MODEL_PROPERTY = "model";
 
   
-
+@Nonnull 
     default TreeModel<N> getTreeModel() {
         return treeModelProperty().get();
     }
 
-    default void setTreeModel(TreeModel<N> newValue) {
+    default void setTreeModel(@Nonnull TreeModel<N> newValue) {
          treeModelProperty().set(newValue);
     }
-
+@Nonnull 
     NonnullProperty<TreeModel<N>> treeModelProperty();
-
+@Nonnull 
      TreeItem<N> getRoot();
 }

@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -21,6 +22,7 @@ public interface StartAndEndMarkerableFigure extends Figure {
     public final static DoubleStyleableFigureKey MARKER_START_SCALE_FACTOR = new DoubleStyleableFigureKey("marker-start-scale-factor", DirtyMask.of(DirtyBits.NODE), 1.0);
     public final static DoubleStyleableFigureKey MARKER_END_SCALE_FACTOR = new DoubleStyleableFigureKey("marker-end-scale-factor", DirtyMask.of(DirtyBits.NODE), 1.0);
 
+    @Nullable
     default String getMarkerStartShape() {
         return getStyled(MARKER_START_SHAPE);
     }
@@ -29,6 +31,7 @@ public interface StartAndEndMarkerableFigure extends Figure {
         return getStyled(MARKER_START_SCALE_FACTOR);
     }
 
+    @Nullable
     default String getMarkerEndShape() {
         return getStyled(MARKER_END_SHAPE);
     }

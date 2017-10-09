@@ -4,6 +4,7 @@
 package org.jhotdraw8.css;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 /**
  * CssTokenizerInterface.
@@ -99,10 +100,12 @@ public interface CssTokenizerInterface {
         }
     }
 
+    @Nullable
     Number currentNumericValue();
 
     /** Returns the current string value.
      * @return  the current string value */
+    @Nullable
     String currentStringValue();
     
     /** Returns the current token id.

@@ -11,10 +11,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
@@ -26,6 +29,7 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.io.UriResolver;
 
 /**
  * AbstractExportOutputFormat.
@@ -33,7 +37,7 @@ import org.jhotdraw8.draw.figure.Page;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractExportOutputFormat implements ExportOutputFormat, InternalExternalUriMixin {
+public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
     protected double drawingDpi = 72.0;
     private boolean exportDrawing = true;
@@ -41,33 +45,16 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
     private boolean exportSlices = false;
     private boolean exportSlices2x = false;
     private boolean exportSlices3x = false;
-    private URI externalHome;
-    private URI internalHome;
     protected double pagesDpi = 72.0;
     protected double slicesDpi = 72.0;
 
     protected abstract String getExtension();
 
-    public URI getExternalHome() {
-        return externalHome;
-    }
+        @Nonnull 
+    private  Function<URI,URI> uriResolver = new UriResolver(null,null);
 
     @Override
-    public void setExternalHome(URI uri) {
-        externalHome = uri;
-    }
-
-    public URI getInternalHome() {
-        return internalHome;
-    }
-
-    @Override
-    public void setInternalHome(URI uri) {
-        internalHome = uri;
-    }
-
-    @Override
-    public void setOptions(Map<? super Key<?>, Object> options) {
+    public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
         if (options != null) {
             exportDrawing = EXPORT_DRAWING_KEY.get(options);
             exportPages = EXPORT_PAGES_KEY.get(options);
@@ -78,6 +65,15 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
             pagesDpi = EXPORT_PAGES_DPI_KEY.get(options);
             slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
         }
+    }
+
+    @Nonnull
+    public Function<URI,URI> getUriResolver() {
+        return uriResolver;
+    }
+
+    public void setUriResolver(@Nonnull Function<URI,URI>  uriResolver) {
+        this.uriResolver = uriResolver;
     }
 
     public boolean isExportDrawing() {
@@ -115,8 +111,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
     protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
     protected void writePages(File dir, String basename, Drawing drawing) throws IOException {
-        setExternalHome(dir == null ? null : dir.toURI());
-        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Page) {
@@ -141,8 +136,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
      * @throws java.io.IOException in case of failure
      */
     protected void writePages(File dir, String basename, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
-        setExternalHome(dir == null ? null : dir.toURI());
-        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
         for (Page page : pages) {
@@ -207,8 +201,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
     protected abstract boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
 
     protected void writeSlices(File dir, Drawing drawing) throws IOException {
-        setExternalHome(dir == null ? null : dir.toURI());
-        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Slice) {

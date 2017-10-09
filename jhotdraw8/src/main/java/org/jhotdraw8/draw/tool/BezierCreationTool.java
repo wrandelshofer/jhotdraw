@@ -11,6 +11,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.figure.Figure;
@@ -61,7 +62,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
      * This implementation is empty.
      */
     @Override
-    public void activate(SimpleDrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         requestFocus();
         createdFigure = null;
     }

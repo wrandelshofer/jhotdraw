@@ -6,6 +6,8 @@ package org.jhotdraw8.collection;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A type safe accessor for maps.
@@ -25,17 +27,18 @@ public interface MapAccessor<T> extends Serializable {
 
     /**
      * Whether the map contains all keys required by this map accessor.
-     * 
-    * @param map a map
+     *
+     * @param map a map
      * @return true if map contains all keys required by this map accessor.
      */
-    boolean containsKey(Map<Key<?>, Object> map);
+    boolean containsKey(@Nonnull Map<Key<?>, Object> map);
 
     /**
      * Returns the name string.
      *
      * @return name string.
      */
+    @Nonnull
     String getName();
 
     /**
@@ -44,7 +47,8 @@ public interface MapAccessor<T> extends Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    T get(Map<? super Key<?>, Object> a);
+    @Nullable
+    T get(@Nonnull Map<? super Key<?>, Object> a);
 
     /**
      * Puts the value of the attribute denoted by this accessor from a Map.
@@ -53,7 +57,8 @@ public interface MapAccessor<T> extends Serializable {
      * @param value The new value.
      * @return The old value.
      */
-    T put(Map<? super Key<?>, Object> a, T value);
+    @Nullable
+    T put(@Nonnull Map<? super Key<?>, Object> a, @Nullable T value);
 
     /**
      * Removes the value of the attribute denoted by this accessor from a Map.
@@ -61,13 +66,15 @@ public interface MapAccessor<T> extends Serializable {
      * @param a A map.
      * @return The old value.
      */
-    T remove(Map<? super Key<?>, Object> a);
+    @Nullable
+    T remove(@Nonnull Map<? super Key<?>, Object> a);
 
     /**
      * Returns the value type.
      *
      * @return the value type
      */
+    @Nonnull
     Class<T> getValueType();
 
     /**
@@ -75,6 +82,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return an unmodifiable list with the type parameters
      */
+    @Nonnull
     List<Class<?>> getValueTypeParameters();
 
     /**
@@ -82,6 +90,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return the default value
      */
+    @Nullable
     T getDefaultValue();
 
     /**
@@ -90,6 +99,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return the class name of the value type including type parameters
      */
+    @Nonnull
     String getFullValueType();
 
     /**

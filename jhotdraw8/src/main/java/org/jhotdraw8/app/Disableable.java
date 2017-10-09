@@ -5,6 +5,7 @@ package org.jhotdraw8.app;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableSet;
+import javax.annotation.Nonnull;
 
 /**
  * A disableable object is disabled when it has one or more disablers.
@@ -32,6 +33,7 @@ public interface Disableable {
      *
      * @return the disabled property.
      */
+    @Nonnull
     ReadOnlyBooleanProperty disabledProperty();
 
     /**
@@ -39,6 +41,7 @@ public interface Disableable {
      *
      * @return The disablers.
      */
+    @Nonnull
     ObservableSet<Object> disablers();
 
     // Convenience method
@@ -51,7 +54,7 @@ public interface Disableable {
      *
      * @param disabler a new disabler
      */
-    default void addDisabler(Object disabler) {
+    default void addDisabler(@Nonnull Object disabler) {
         disablers().add(disabler);
     }
 
@@ -60,7 +63,7 @@ public interface Disableable {
      *
      * @param disabler an object which does not disable anymore
      */
-    default void removeDisabler(Object disabler) {
+    default void removeDisabler(@Nonnull Object disabler) {
         disablers().remove(disabler);
     }
 }

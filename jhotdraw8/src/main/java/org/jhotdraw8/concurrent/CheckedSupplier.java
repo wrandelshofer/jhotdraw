@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.concurrent;
 
+import javax.annotation.Nullable;
+
 /**
  * A Supplier which can throw a checked exception.
  *
@@ -11,6 +13,6 @@ package org.jhotdraw8.concurrent;
  * @version $Id$
  */
 public interface CheckedSupplier<T> {
-
+@Nullable
     T supply() throws Exception;
 }

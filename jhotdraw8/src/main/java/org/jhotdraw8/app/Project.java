@@ -8,12 +8,14 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code Project} provides a user interface for a resource which is identified
- * by an URI.
+ * A {@code Project} provides a user interface for a resource which is
+ * identified by an URI.
  * <p>
  * The life-cycle of a project object is managed by an application. See the
  * class comment of {@link Application} on how to launch an application.
@@ -71,6 +73,7 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return the property
      */
+    @Nonnull
     public ObjectProperty<Application> applicationProperty();
 
     /**
@@ -78,6 +81,7 @@ public interface Project extends Disableable, PropertyBean {
      */
     public void deactivate();
 
+    @Nonnull
     public IntegerProperty disambiguationProperty();
 
     /**
@@ -90,13 +94,15 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return the action map
      */
+    @Nonnull
     public HierarchicalMap<String, Action> getActionMap();
 
+    @Nullable
     default public Application getApplication() {
         return applicationProperty().get();
     }
 
-    default public void setApplication(Application newValue) {
+    default public void setApplication(@Nullable Application newValue) {
         applicationProperty().set(newValue);
     }
 
@@ -113,14 +119,16 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return The node.
      */
+    @Nonnull
     public Node getNode();
 
     // convenience method
+    @Nullable
     default public String getTitle() {
         return titleProperty().get();
     }
 
-    default public void setTitle(String newValue) {
+    default public void setTitle(@Nullable String newValue) {
         titleProperty().set(newValue);
     }
 
@@ -145,6 +153,7 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return The title property.
      */
+    @Nonnull
     public StringProperty titleProperty();
 
 }

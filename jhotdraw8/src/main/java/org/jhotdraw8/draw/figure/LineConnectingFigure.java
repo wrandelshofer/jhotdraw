@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -65,6 +66,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
     default boolean isEndConnected() {
         return get(END_CONNECTOR)!=null&&get(END_TARGET)!=null;
     }
+    @Nullable
     default Point2D getStartTargetPoint() {
         if (isStartConnected()) {
         return worldToLocal(get(START_CONNECTOR).getPositionInWorld(this, get(START_TARGET)));
@@ -72,6 +74,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
             return get(START);
         }
     }
+    @Nullable
     default Point2D getEndTargetPoint() {
         if (isEndConnected()) {
         return worldToLocal(get(END_CONNECTOR).getPositionInWorld(this, get(END_TARGET)));

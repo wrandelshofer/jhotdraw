@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import java.net.URI;
+import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -34,7 +35,7 @@ public interface Clipping extends Figure {
         return false;
     }
 
-    @Override
+    @Override @NotNull
     default String getTypeSelector() {
         return TYPE_SELECTOR;
     }

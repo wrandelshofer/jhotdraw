@@ -6,6 +6,8 @@ package org.jhotdraw8.draw;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.tool.Tool;
 
 /**
@@ -52,6 +54,7 @@ public interface DrawingEditor {
      *
      * @return the property
      */
+    @Nonnull
     ReadOnlySetProperty<DrawingView> drawingViewsProperty();
 
     /**
@@ -59,6 +62,7 @@ public interface DrawingEditor {
      *
      * @return the property
      */
+    @Nonnull
     ObjectProperty<DrawingView> activeDrawingViewProperty();
 
     /**
@@ -66,6 +70,7 @@ public interface DrawingEditor {
      *
      * @return the property
      */
+    @Nonnull
     ObjectProperty<Tool> activeToolProperty();
 
     /**
@@ -74,6 +79,7 @@ public interface DrawingEditor {
      *
      * @return the property
      */
+    @Nonnull
     ObjectProperty<Tool> defaultToolProperty();
 
     // ---
@@ -84,7 +90,7 @@ public interface DrawingEditor {
      *
      * @param drawingView the drawing view
      */
-    default void addDrawingView(DrawingView drawingView) {
+    default void addDrawingView(@Nonnull DrawingView drawingView) {
         drawingViewsProperty().add(drawingView);
     }
 
@@ -93,7 +99,7 @@ public interface DrawingEditor {
      *
      * @param drawingView the drawing view
      */
-    default void removeDrawingView(DrawingView drawingView) {
+    default void removeDrawingView(@Nonnull DrawingView drawingView) {
         drawingViewsProperty().remove(drawingView);
     }
 
@@ -102,6 +108,7 @@ public interface DrawingEditor {
      *
      * @return the active drawing view or empty
      */
+    @Nullable
     default DrawingView getActiveDrawingView() {
         return activeDrawingViewProperty().get();
     }
@@ -111,6 +118,7 @@ public interface DrawingEditor {
      *
      * @return the active drawing view or empty
      */
+    @Nonnull
     default ObservableSet<DrawingView> getDrawingViews() {
         return drawingViewsProperty().get();
     }
@@ -120,7 +128,7 @@ public interface DrawingEditor {
      *
      * @param drawingView the drawing view or null if none is active
      */
-    default void setActiveDrawingView(DrawingView drawingView) {
+    default void setActiveDrawingView(@Nullable DrawingView drawingView) {
         activeDrawingViewProperty().set(drawingView);
     }
 
@@ -129,6 +137,7 @@ public interface DrawingEditor {
      *
      * @return the active tool or null
      */
+    @Nullable
     default Tool getActiveTool() {
         return activeToolProperty().get();
     }
@@ -138,7 +147,7 @@ public interface DrawingEditor {
      *
      * @param tool the active tool or null if none is active
      */
-    default void setActiveTool(Tool tool) {
+    default void setActiveTool(@Nullable Tool tool) {
         activeToolProperty().set(tool);
     }
 
@@ -147,6 +156,7 @@ public interface DrawingEditor {
      *
      * @return the default tool or null
      */
+    @Nullable
     default Tool getDefaultTool() {
         return defaultToolProperty().get();
     }
@@ -156,7 +166,7 @@ public interface DrawingEditor {
      *
      * @param tool the default tool or null if no default tool is desired
      */
-    default void setDefaultTool(Tool tool) {
+    default void setDefaultTool(@Nullable Tool tool) {
         defaultToolProperty().set(tool);
     }
 

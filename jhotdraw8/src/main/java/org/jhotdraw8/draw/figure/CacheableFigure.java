@@ -4,6 +4,8 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
 import org.jhotdraw8.collection.Key;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
 import org.jhotdraw8.geom.Transforms;
@@ -17,8 +19,8 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public interface CacheableFigure extends Figure {
-
-     <T>T setCachedValue(Key<T> key, T value);
-     <T>T getCachedValue(Key<T> key);
+@Nullable
+     <T>T setCachedValue(@Nonnull Key<T> key,@Nullable T value);
+     @Nullable <T>T getCachedValue(@Nonnull Key<T> key);
 
 }
