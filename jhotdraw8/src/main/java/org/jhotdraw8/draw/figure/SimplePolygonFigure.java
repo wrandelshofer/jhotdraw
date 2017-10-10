@@ -25,6 +25,7 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A figure which draws a closed polygon.
@@ -88,6 +89,11 @@ public class SimplePolygonFigure extends AbstractLeafFigure
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Polygon();
+    }
+
+    @Override
+    public void reshapeInLocal(double x, double y, double width, double height) {
+        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
     }
 
     @Override

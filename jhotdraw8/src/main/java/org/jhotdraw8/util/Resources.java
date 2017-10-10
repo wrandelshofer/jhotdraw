@@ -221,11 +221,12 @@ public class Resources extends ResourceBundle implements Serializable {
             if (parentBaseName != null && !Objects.equals(baseName, parentBaseName)) {
                 potentialParent = new Resources(parentBaseName, locale);
             }
+                // FIXME use logger for this
             if (potentialParent == null) {
                 System.err.println("Can't find parent resource bundle. =" + PARENT_RESOURCE_KEY + "=" + parentBaseName);
             } else {
                 if (isVerbose) {
-                    System.out.println("Found parent resource bundle. " + PARENT_RESOURCE_KEY + "=" + parentBaseName);
+                   // System.out.println("Found parent resource bundle. " + PARENT_RESOURCE_KEY + "=" + parentBaseName);
                 }
             }
         } catch (MissingResourceException e) {

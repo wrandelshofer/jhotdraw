@@ -385,6 +385,13 @@ public interface TransformableFigure extends TransformCacheableFigure {
     
     /**
      * Throws unsupported operation exception.
+     * <p>
+     * If subclass overrides {@link #reshapeInLocal(javafx.scene.transform.Transform) then the
+     * implementation of this method is most likely as follows:
+     * <pre>
+     *         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
+     * </pre>
+     * 
      * @param x
      * @param y
      * @param width
@@ -392,7 +399,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     @Override
     default void reshapeInLocal(double x, double y, double width, double height) {
-        throw new UnsupportedOperationException("this method must be overriden");
+        throw new UnsupportedOperationException("this method must be overriden in class "+getClass());
     }
 
     @Override
