@@ -6,6 +6,8 @@ package org.jhotdraw8.collection;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
@@ -64,7 +66,7 @@ public class ObjectKey<T> implements Key<T> {
      * @param name The name of the key.
      * @param clazz The type of the value.
      */
-    public ObjectKey(String name, Class<T> clazz) {
+    public ObjectKey(@Nonnull String name, @Nonnull Class<T> clazz) {
         this(name, clazz, null, null);
     }
 
@@ -76,7 +78,7 @@ public class ObjectKey<T> implements Key<T> {
      * @param clazz The type of the value.
      * @param defaultValue The default value.
      */
-    public ObjectKey(String name, Class<T> clazz, T defaultValue) {
+    public ObjectKey(@Nonnull String name, @Nonnull Class<T> clazz,@Nonnull  T defaultValue) {
         this(name, clazz, null, defaultValue);
     }
 
@@ -90,7 +92,7 @@ public class ObjectKey<T> implements Key<T> {
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, T defaultValue) {
+    public ObjectKey(@Nonnull String name, @Nonnull Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
         this(name, clazz, typeParameters, true, defaultValue);
     }
 

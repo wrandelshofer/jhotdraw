@@ -4,6 +4,8 @@
 package org.jhotdraw8.collection;
 
 import java.util.HashMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * HierarchicalMap.
@@ -15,13 +17,14 @@ import java.util.HashMap;
 public class HierarchicalMap<K, V> extends HashMap<K, V> {
 
     private final static long serialVersionUID = 1L;
-
+    @Nullable
     private HierarchicalMap<K, V> parent = null;
 
-    public void setParent(HierarchicalMap<K, V> newValue) {
-        parent = newValue;
+    public void setParent(@Nullable HierarchicalMap<K, V> parent) {
+        this.parent = parent;
     }
 
+    @Nullable
     public HierarchicalMap<K, V> getParent() {
         return parent;
     }
@@ -32,12 +35,12 @@ public class HierarchicalMap<K, V> extends HashMap<K, V> {
      * @param key the key
      * @return the value or null
      */
-    @Override
-    public V get(Object key) {
+    @Override @Nullable
+    public V get(@Nullable Object key) {
         if (containsKey(key)) {
             return super.get(key);
         } else {
-            return (parent != null) ? parent.get(key) : null;
+            return (parent == null) ? null : parent.get(key);
         }
     }
 }

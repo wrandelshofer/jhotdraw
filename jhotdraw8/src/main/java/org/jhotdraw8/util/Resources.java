@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.app.action.Action;
 import java.util.ResourceBundle;
+import javax.annotation.Nullable;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a
@@ -196,6 +197,7 @@ public class Resources extends ResourceBundle implements Serializable {
     /**
      * The parent resources object.
      */
+    @Nullable
     private final Resources parent;
     /**
      * The wrapped resource bundle.

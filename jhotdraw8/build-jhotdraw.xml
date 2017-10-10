@@ -66,6 +66,22 @@
     <property name="src.test.java" value="${src}/test/java"/>
     <property name="src.doc.xsl" value="${src}/doc/xsl"/>
 
+    <!-- CheckerFramework-->
+      <property environment="env"/>
+      <!--property name="checkerframework" value="${env.CHECKERFRAMEWORK}" /-->
+      <property name="checkerframework" value="${lib.compile}/checker-framework-2.2.1" />
+    <!-- On Mac/Linux, use the javac shell script; on Windows, use javac.bat -->
+    <condition property="cfJavac" value="javac.bat" else="javac">
+        <os family="windows" />
+    </condition>
+    <presetdef name="jsr308.javac">
+    <javac fork="yes" executable="${checkerframework}/checker/bin/${cfJavac}" >
+      <!-- JSR-308-related compiler arguments -->
+      <compilerarg value="-version"/>
+      <compilerarg value="-implicit:class"/>
+    </javac>
+  </presetdef>
+    
     <target name="init">
         <echo message="version: ${version}"/>
     </target>
@@ -83,6 +99,31 @@
         <delete dir="${build}"/>
         <delete dir="${dist}"/>
     </target>
+    
+      <target name="do-check-nullness"
+          description="Check for null pointer dereferences"
+          depends="init">
+        <mkdir dir="${build.main.classes}"/>
+    <!-- use jsr308.javac instead of javac -->
+    <jsr308.javac  source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.main.classes}"
+               debug="true"
+        >
+      <compilerarg line="-processor org.checkerframework.checker.nullness.NullnessChecker"/>
+      <!-- optional, to not check uses of library methods:
+        <compilerarg value="-AskipUses=^(java\.awt\.|javax\.swing\.)"/>
+      -->
+      <compilerarg line="-Xmaxerrs 100"/>
+     <src path="${src.main.java}"/>
+            <classpath>
+                <fileset dir="${lib.compile}" />
+                <fileset file="${java.home}/../lib/tools.jar" />
+            </classpath>
+            <compilerarg value="-version"/>
+    </jsr308.javac>
+  </target>
+
+    
+    
     <target name="do-compile.main" depends="init">
         <mkdir dir="${build.main.classes}"/>
         <javac executable="${jdk}/bin/javac" fork="yes"

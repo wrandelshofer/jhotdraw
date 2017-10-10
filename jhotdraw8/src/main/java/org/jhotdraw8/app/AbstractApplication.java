@@ -21,9 +21,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import javax.annotation.Nonnull;
 import static org.jhotdraw8.app.Disableable.DISABLED_PROPERTY;
 import org.jhotdraw8.collection.Key;
-import javax.annotation.Nonnull;
+
 /**
  * AbstractApplication.
  *
@@ -40,8 +41,10 @@ public abstract class AbstractApplication extends javafx.application.Application
      * Holds the disablers.
      */
     private final ObservableSet<Object> disablers = FXCollections.observableSet();
-    /** Holds the model.*/
-    private final ObjectProperty<ApplicationModel> model=new SimpleObjectProperty<>(this,MODEL_PROPERTY,null);
+    /**
+     * Holds the model.
+     */
+    private final ObjectProperty<ApplicationModel> model = new SimpleObjectProperty<>(this, MODEL_PROPERTY, null);
 
     /**
      * Holds the max number of recent URIs.
@@ -66,20 +69,24 @@ public abstract class AbstractApplication extends javafx.application.Application
     {
         ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
         robw.bind(Bindings.isNotEmpty(disablers));
-        disabled = robw.getReadOnlyProperty();
+        final ReadOnlyBooleanProperty readOnlyProperty = robw.getReadOnlyProperty();
+        disabled = readOnlyProperty;
     }
 
-    @Override @Nonnull
+    @Override
+    @Nonnull
     public ReadOnlyBooleanProperty disabledProperty() {
         return disabled;
     }
 
-    @Override @Nonnull
+    @Override
+    @Nonnull
     public ObservableSet<Object> disablers() {
         return disablers;
     }
 
-    @Override @Nonnull
+    @Override
+    @Nonnull
     public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties = FXCollections.observableMap(new IdentityHashMap<>());
@@ -125,17 +132,20 @@ public abstract class AbstractApplication extends javafx.application.Application
         });
     }
 
-    @Override  @Nonnull
+    @Override
+    @Nonnull
     public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
     }
 
-    @Override @Nonnull
+    @Override
+    @Nonnull
     public ObjectProperty<ApplicationModel> modelProperty() {
         return model;
     }
 
-    @Override @Nonnull
+    @Override
+    @Nonnull
     public ReadOnlySetProperty<URI> recentUrisProperty() {
         return recentUris;
     }

@@ -4,6 +4,7 @@
 package org.jhotdraw8.collection;
 
 import java.util.Map;
+import java.util.Objects;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.MapExpression;
@@ -178,8 +179,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return True if assignable.
      */
     default boolean isDefault(@Nullable Object value) {
-        return (getDefaultValue() == null)
-                ? value == null : getDefaultValue().equals(value);
+        return Objects.equals(getDefaultValue(),value);
     }
 
     /**

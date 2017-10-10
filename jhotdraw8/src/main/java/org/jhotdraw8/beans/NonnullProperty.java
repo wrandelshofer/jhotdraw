@@ -4,6 +4,7 @@
 package org.jhotdraw8.beans;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javax.annotation.Nonnull;
 
 /**
  * A {@code NonnullProperty} throws an {@code IllegalArgumentException} when
@@ -11,6 +12,7 @@ import javafx.beans.property.SimpleObjectProperty;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <T> the value type
  */
 public class NonnullProperty<T> extends SimpleObjectProperty<T> {
 
@@ -21,7 +23,7 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
      * @param name The name of the property
      * @param initialValue The initial value. Nonnull.
      */
-    public NonnullProperty(Object bean, String name, T initialValue) {
+    public NonnullProperty(@Nonnull Object bean, @Nonnull String name,@Nonnull T initialValue) {
         super(bean, name, initialValue);
     }
 
@@ -31,6 +33,15 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
             throw new NullPointerException("newValue is null");
         }
         super.fireValueChangedEvent();
+    }
+
+    @Nonnull
+    public T getNonnull() {
+        return super.get();
+    }
+
+    public void setNonnull(@Nonnull T newValue) {
+        super.set(newValue);
     }
 
 }
