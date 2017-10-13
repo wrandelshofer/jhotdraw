@@ -46,7 +46,7 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doFinish() {
         doEndMarker();
-        out.finish();
+        out.pathDone();
     }
 
     @Override

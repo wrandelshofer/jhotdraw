@@ -68,12 +68,12 @@ public class FXPathBuilder extends AbstractPathBuilder {
     }
 
     public Path get() {
-        finish();
+        pathDone();
         return new Path(elements);
     }
 
     public List<PathElement> getElements() {
-        finish();
+        pathDone();
         return elements;
     }
 }

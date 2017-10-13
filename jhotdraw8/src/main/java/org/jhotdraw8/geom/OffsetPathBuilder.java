@@ -109,6 +109,6 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
             needsMoveTo = false;
         }
         flush();
-        target.finish();
+        target.pathDone();
     }
 }

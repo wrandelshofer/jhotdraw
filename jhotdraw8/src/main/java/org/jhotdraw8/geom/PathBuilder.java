@@ -18,15 +18,21 @@ import javax.annotation.Nonnull;
 public interface PathBuilder {
 
     /**
-     * ArcTo. Adds an elliptical arc, defined by two radii, an angle from the
-     * x-axis, a flag to choose the large arc or not, a flag to indicate if we
-     * increase or decrease the angles and the final point of the arc.
+     * Adds an elliptical arc to the path which goes to the specified end point
+     * using the specified parameters.
+     * <p>
+     * The elliptical arc is defined by two radii, an angle from the x-axis, a
+     * flag to choose the large arc or not, a flag to indicate if we increase or
+     * decrease the angles and the final point of the arc.
      * <p>
      * As specified in
      * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
      * <p>
-     * The implementation of this method has been derived from Apache Batik
-     * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc
+     * The default implementation of this method has been derived from Apache Batik
+     * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc.
+     * The default implementation decomposes the arc into segments and
+     * invokes corresponding {@code curveTo} methods.
+     * 
      *
      * @param radiusX the x radius of the ellipse
      * @param radiusY the y radius of the ellipse
@@ -42,8 +48,8 @@ public interface PathBuilder {
      * sweeps through decreasing angles otherwise it sweeps through increasing
      * angles
      *
-     * @param x the absolute x coordinate of the final point of the arc.
-     * @param y the absolute y coordinate of the final point of the arc.
+     * @param x the x coordinate of the end point
+     * @param y the y coordinate of the end point
      */
     default void arcTo(double radiusX, double radiusY,
             double xAxisRotation,
@@ -180,59 +186,215 @@ public interface PathBuilder {
         }
     }
 
+    /**
+     * Closes the path by adding a straight line back to the last
+     * {@link #moveTo} point.
+     * <p>
+     * If the path is already closed, then this method has no effect.
+     */
     void closePath();
 
+    /**
+     * Adds a cubic curve going to the specified end point coordinate using the
+     * specified control points.
+     *
+     * @param x1 the x coordinate of control point 1
+     * @param y1 the y coordinate of control point 1
+     * @param x2 the x coordinate of control point 2
+     * @param y2 the y coordinate of control point 2
+     * @param x the x coordinate of the end point
+     * @param y the y coordinate of the end point
+     */
     void curveTo(double x1, double y1, double x2, double y2, double x, double y);
 
+    /**
+     * Adds a cubic curve going to the specified point coordinate using the
+     * specified control points.
+     * <p>
+     * The default implementation of this method calls {@link #curveTo(double, double, double, double, double, double)
+     * }.
+     *
+     * @param c1 the control point 1
+     * @param c2 the control point 2
+     * @param p the end point
+     */
     default void curveTo(@Nonnull Point2D c1, @Nonnull Point2D c2, @Nonnull Point2D p) {
         curveTo(c1.getX(), c1.getY(), c2.getX(), c2.getY(), p.getX(), p.getY());
     }
-    default void smoothCurveTo(@Nonnull Point2D c2, @Nonnull Point2D p) {
-        smoothCurveTo( c2.getX(), c2.getY(), p.getX(), p.getY());
-    }
 
+    /**
+     * Getter.
+     *
+     * @return x coordinate of the last control point.
+     */
+    double getLastCX();
+
+    /**
+     * Getter.
+     *
+     * @return y coordinate of the last control point.
+     */
+    double getLastCY();
+
+    /**
+     * Getter.
+     *
+     * @return the last end point.
+     */
     default Point2D getLastPoint() {
         return new Point2D(getLastX(), getLastY());
     }
 
+    /**
+     * Getter.
+     *
+     * @return x coordinate of the last end point.
+     */
     double getLastX();
 
+    /**
+     * Getter.
+     *
+     * @return y coordinate of the last control point.
+     */
     double getLastY();
 
-    double getLastCX();
-
-    double getLastCY();
+    /**
+     * Adds a straight line to the path going to the specified end point.
+     * <p>
+     * The default implementation of this method calls
+     * {@link #lineTo(double, double)}.
+     *
+     * @param p the end point
+     */
     default void lineTo(@Nonnull Point2D p) {
         lineTo(p.getX(), p.getY());
     }
 
+    /**
+     * Adds a straight line to the path going to the specified end point.
+     *
+     * @param x the x coordinate of the end point
+     * @param y the y coordinate of the end point
+     */
     void lineTo(double x, double y);
 
+    /**
+     * Adds a point to the path by moving to the specified end point.
+     * <p>
+     * The default implementation of this method calls
+     * {@link #moveTo(double, double)}.
+     *
+     * @param p the end point
+     */
     default void moveTo(@Nonnull Point2D p) {
         moveTo(p.getX(), p.getY());
     }
 
+    /**
+     * Adds a point to the path by moving to the specified point coordinates.
+     *
+     * @param x the x coordinate of the end point
+     * @param y the y coordinate of the end point
+     */
     void moveTo(double x, double y);
 
+    /**
+     * Performs path processing after all the path segments have been added to
+     * the builder.
+     */
+    default void pathDone() {
+
+    }
+
+    /**
+     * Adds a quadratic curve going to the specified point coordinate using the
+     * specified control point.
+     * <p>
+     * The default implementation of this method calls {@link #quadTo(double, double, double, double)
+     * }.
+     *
+     * @param x1 the x coordinate of the control point
+     * @param y1 the y coordinate of the control point
+     * @param x the x coordinate of the end point
+     * @param y the y coordinate of the end point
+     */
     void quadTo(double x1, double y1, double x, double y);
 
-    default void quadTo(@Nonnull Point2D p1, @Nonnull Point2D p2) {
-        quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    /**
+     * Adds a quadratic curve going to the specified point coordinate using the
+     * specified control point.
+     * <p>
+     * The default implementation of this method calls {@link #quadTo(double, double, double, double)
+     * }.
+     *
+     * @param c the control point
+     * @param p the end point
+     */
+    default void quadTo(@Nonnull Point2D c, @Nonnull Point2D p) {
+        quadTo(c.getX(), c.getY(), p.getX(), p.getY());
     }
 
+    /**
+     * Adds a smooth cubic curve going to the specified end point coordinate
+     * using the specified control point.
+     * <p>
+     * The coordinates of control point 1 is the coordinate of the last control
+     * point mirrored along the last end point.
+     * <p>
+     * The default implementation of this method calls {@link #smoothCurveTo(double, double, double, double)
+     * }.
+     *
+     * @param c2 the control point 2
+     * @param p the end point
+     */
+    default void smoothCurveTo(@Nonnull Point2D c2, @Nonnull Point2D p) {
+        smoothCurveTo(c2.getX(), c2.getY(), p.getX(), p.getY());
+    }
+
+    /**
+     * Adds a smooth cubic curve going to the specified end point coordinate
+     * using the specified control point.
+     * <p>
+     * The coordinates of control point 1 is the coordinate of the last control
+     * point mirrored along the last end point.
+     *
+     * @param x2 the x coordinate of control point 2
+     * @param y2 the y coordinate of control point 2
+     * @param x the x coordinate of the end point
+     * @param y the y coordinate of the end point
+     */
     default void smoothCurveTo(double x2, double y2, double x, double y) {
-        curveTo(getLastX()-getLastCX()+getLastX(), getLastY()-getLastCY()+getLastY(),x2,y2, x, y);
+        curveTo(getLastX() - getLastCX() + getLastX(), getLastY() - getLastCY() + getLastY(), x2, y2, x, y);
     }
 
+    /**
+     * Adds a smooth quadratic curve going to the specified end point
+     * coordinate.
+     * <p>
+     * The coordinates of the control point is the coordinate of the last
+     * control point mirrored along the last end point.
+     * <p>
+     * The default implementation of this method calls {@link #smoothQuadTo(double, double)
+     * }.
+     *
+     * @param p the end point
+     */
     default void smoothQuadTo(@Nonnull Point2D p) {
-        smoothQuadTo(p.getX(),p.getY());
-    }
-    default void smoothQuadTo(double x, double y) {
-        quadTo(getLastX()-getLastCX()+getLastX(), getLastY()-getLastCY()+getLastY(), x, y);
-    }
-    
-    default void finish() {
-        
+        smoothQuadTo(p.getX(), p.getY());
     }
 
+    /**
+     * Adds a smooth quadratic curve going to the specified end point
+     * coordinate.
+     * <p>
+     * The coordinates of the control point is the coordinate of the last
+     * control point mirrored along the last end point.
+     *
+     * @param x the x coordinate of the end point
+     * @param y the y coordinate of the end point
+     */
+    default void smoothQuadTo(double x, double y) {
+        quadTo(getLastX() - getLastCX() + getLastX(), getLastY() - getLastCY() + getLastY(), x, y);
+    }
 }

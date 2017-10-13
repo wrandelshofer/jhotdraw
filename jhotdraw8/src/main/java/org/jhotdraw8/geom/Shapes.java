@@ -262,7 +262,7 @@ public class Shapes {
                 builder.closePath();
             }
         }
-        builder.finish();
+        builder.pathDone();
         return builder;
     }
 
@@ -371,7 +371,7 @@ public class Shapes {
                     throw new InternalError("unsupported segment type:" + iter.currentSegment(coords));
             }
         }
-        builder.finish();
+        builder.pathDone();
         return builder;
     }
 
@@ -780,7 +780,7 @@ public class Shapes {
             throw new IOException(e);
         }
         
-        builder.finish();
+        builder.pathDone();
         return builder;
     }
 

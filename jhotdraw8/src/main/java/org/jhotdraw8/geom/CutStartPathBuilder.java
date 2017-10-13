@@ -60,7 +60,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doFinish() {
         done = true;
-        out.finish();
+        out.pathDone();
     }
 
     @Override

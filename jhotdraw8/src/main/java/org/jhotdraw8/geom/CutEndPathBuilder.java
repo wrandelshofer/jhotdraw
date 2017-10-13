@@ -121,7 +121,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
 
             path = null;
         }
-        out.finish();
+        out.pathDone();
     }
 
     @Override

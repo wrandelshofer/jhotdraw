@@ -122,7 +122,7 @@ public class MarginPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doFinish() {
         doEnd();
-       target.finish();
+       target.pathDone();
     }
 
 

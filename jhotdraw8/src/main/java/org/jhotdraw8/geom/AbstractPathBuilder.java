@@ -64,7 +64,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
     }
 
     @Override
-    public void finish() {
+    public void pathDone() {
         doFinish();
     }
 

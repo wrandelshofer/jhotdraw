@@ -40,7 +40,7 @@ public class TransformPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doFinish() {
-       target.finish();
+       target.pathDone();
     }
 
     @Override
