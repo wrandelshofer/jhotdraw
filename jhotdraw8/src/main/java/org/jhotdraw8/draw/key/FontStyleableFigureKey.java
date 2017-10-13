@@ -22,7 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class FontStyleableFigureKey extends SimpleFigureKey<CssFont> implements WriteableStyleableMapAccessor<CssFont> {
+public class FontStyleableFigureKey extends AbstractStyleableFigureKey<CssFont> implements WriteableStyleableMapAccessor<CssFont> {
 
     private final static long serialVersionUID = 1L;
 

@@ -12,6 +12,7 @@ import java.util.Set;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -22,6 +23,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractStyleableFigureMapAccessor<T> implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
 
+    private final String cssName;
     private static final long serialVersionUID = 1L;
 
     /**
@@ -95,11 +97,12 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
             }
         }
         dirtyMask = m;
+        cssName = ReadOnlyStyleableMapAccessor.toCssName(name);
     }
 
     @Override
     public boolean containsKey(Map<Key<?>, Object> map) {
-        return CompositeMapAccessor.super.containsKey(map); 
+        return CompositeMapAccessor.super.containsKey(map);
     }
 
     /**
@@ -177,4 +180,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
         return false;
     }
 
+    public String getCssName() {
+        return cssName;
+    }
 }

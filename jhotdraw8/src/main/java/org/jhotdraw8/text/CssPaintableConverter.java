@@ -63,6 +63,11 @@ public class CssPaintableConverter implements Converter<Paintable> {
     public Paintable fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
 
+        if ("none".equals(str)) {
+            buf.position(buf.length());
+            return null;
+        }
+
         int pos = buf.position();
         ParseException pe = null;
         try {

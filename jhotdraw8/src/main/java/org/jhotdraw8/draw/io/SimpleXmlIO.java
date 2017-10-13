@@ -458,7 +458,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             MapAccessor<Object> key = (MapAccessor<Object>) figureFactory.nameToKey(figure, attr.getLocalName());
             if (key != null && figureFactory.figureAttributeKeys(figure).contains(key)) {
                 Object value = null;
-                if (Figure.class.isAssignableFrom(key.getValueType())) {
+                
+                if (keyValueTypeIsFigure.computeIfAbsent(key, k->Figure.class.isAssignableFrom(k.getValueType()))) {
                     value = getFigure(attr.getValue());
                 } else {
                     value = figureFactory.stringToValue(key, attr.getValue());
@@ -473,6 +474,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
+    /** This is a cache which checks if  Figure.class is assignable from the value type of a map accessor. */
+    Map<MapAccessor<Object>,Boolean> keyValueTypeIsFigure=new HashMap<>();
+    
     /**
      * Reads the children of the specified element as a node list.
      *

@@ -48,9 +48,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return name string.
      */@Nonnull 
-    default String getCssName() {
-        return toCssName(getName());
-    }
+    String getCssName();
 
     /**
      * Returns the CSS name string.

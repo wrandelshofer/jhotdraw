@@ -22,7 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SvgPathStyleableFigureKey extends SimpleFigureKey<String> implements WriteableStyleableMapAccessor<String> {
+public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String> implements WriteableStyleableMapAccessor<String> {
 
     private final static long serialVersionUID = 1L;
 

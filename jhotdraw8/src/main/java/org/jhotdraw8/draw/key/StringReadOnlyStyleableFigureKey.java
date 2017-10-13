@@ -21,7 +21,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringReadOnlyStyleableFigureKey extends SimpleFigureKey<String> implements ReadOnlyStyleableMapAccessor<String> {
+public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, String> cssMetaData;

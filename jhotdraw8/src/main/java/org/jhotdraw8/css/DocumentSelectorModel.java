@@ -303,5 +303,4 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
                 throw new UnsupportedOperationException("unsupported origin:" + origin);
         }
     }
-
 }

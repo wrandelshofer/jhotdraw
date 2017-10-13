@@ -23,7 +23,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableList<Transform>> implements WriteableStyleableMapAccessor<ImmutableList<Transform>> {
+public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<Transform>> implements WriteableStyleableMapAccessor<ImmutableList<Transform>> {
 
     private final static long serialVersionUID = 1L;
 

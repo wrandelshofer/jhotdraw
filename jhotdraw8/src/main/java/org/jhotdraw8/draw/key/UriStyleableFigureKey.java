@@ -22,7 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements WriteableStyleableMapAccessor<URI> {
+public class UriStyleableFigureKey extends AbstractStyleableFigureKey<URI> implements WriteableStyleableMapAccessor<URI> {
 
     private final static long serialVersionUID = 1L;
 

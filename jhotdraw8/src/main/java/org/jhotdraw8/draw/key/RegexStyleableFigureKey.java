@@ -24,7 +24,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RegexStyleableFigureKey extends SimpleFigureKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
+public class RegexStyleableFigureKey extends AbstractStyleableFigureKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
 
     final static long serialVersionUID = 1L;
     private final CssRegexConverter converter;

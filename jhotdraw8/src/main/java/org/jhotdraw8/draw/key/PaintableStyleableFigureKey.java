@@ -21,7 +21,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> implements WriteableStyleableMapAccessor<Paintable> {
+public class PaintableStyleableFigureKey extends AbstractStyleableFigureKey<Paintable> implements WriteableStyleableMapAccessor<Paintable> {
 
     private final static long serialVersionUID = 1L;
 

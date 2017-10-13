@@ -18,7 +18,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BooleanStyleableFigureKey extends SimpleFigureKey<Boolean> implements WriteableStyleableMapAccessor<Boolean> {
+public class BooleanStyleableFigureKey extends AbstractStyleableFigureKey<Boolean> implements WriteableStyleableMapAccessor<Boolean> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Boolean> cssMetaData;

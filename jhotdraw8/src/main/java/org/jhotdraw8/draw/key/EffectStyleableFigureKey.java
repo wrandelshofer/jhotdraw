@@ -19,7 +19,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements WriteableStyleableMapAccessor<Effect> {
+public class EffectStyleableFigureKey extends AbstractStyleableFigureKey<Effect> implements WriteableStyleableMapAccessor<Effect> {
 
     final static long serialVersionUID = 1L;
     private final CssEffectConverter converter = new CssEffectConverter();

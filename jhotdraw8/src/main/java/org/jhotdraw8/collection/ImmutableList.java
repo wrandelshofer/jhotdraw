@@ -60,7 +60,12 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
     public void copyInto(Object[] out, int offset) {
         System.arraycopy(array, 0, out, offset, array.length);
     }
-
+    @Override
+    public boolean contains(Object o) {
+        for (int i=0,n=array.length;i<n;i++)
+            if (array[i].equals(o))return true;
+        return false;
+    }
     @Override
     public E get(int index) {
         @SuppressWarnings("unchecked")

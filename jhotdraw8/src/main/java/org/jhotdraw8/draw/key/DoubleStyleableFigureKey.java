@@ -10,6 +10,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssDoubleConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
@@ -21,8 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements WriteableStyleableMapAccessor<Double> {
-
+public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double> implements WriteableStyleableMapAccessor<Double> {
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Double> cssMetaData;
 

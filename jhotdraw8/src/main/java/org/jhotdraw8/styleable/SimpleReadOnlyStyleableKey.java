@@ -14,7 +14,7 @@ import org.jhotdraw8.text.Converter;
  * @version $Id$
  */
 public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadOnlyStyleableMapAccessor<T> {
-
+private final String cssName;
     private final static long serialVersionUID = 1L;
 
     private  CssMetaData<?, T> cssMetaData;
@@ -63,6 +63,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
         super(key, clazz, typeParameters, defaultValue);
         this.converter = converter;
         this.cssMetaData = metaData;
+        this.cssName=ReadOnlyStyleableMapAccessor.toCssName(key);
     }
 
     @Override
@@ -87,6 +88,10 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      */
     public void setConverter(Converter<T> converter) {
         this.converter = converter;
+    }
+
+    public String getCssName() {
+        return cssName;
     }
 
 }

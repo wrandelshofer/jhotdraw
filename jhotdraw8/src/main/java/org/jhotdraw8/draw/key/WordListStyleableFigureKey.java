@@ -22,7 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class WordListStyleableFigureKey extends SimpleFigureKey<ImmutableList<String>> implements WriteableStyleableMapAccessor<ImmutableList<String>> {
+public class WordListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<String>> implements WriteableStyleableMapAccessor<ImmutableList<String>> {
 
     private final static long serialVersionUID = 1L;
 

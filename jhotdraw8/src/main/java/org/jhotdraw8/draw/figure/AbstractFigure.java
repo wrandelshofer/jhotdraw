@@ -19,6 +19,8 @@ import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -51,6 +53,14 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     };
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
+
+    /** This method calls {@link #doAddNotify}.*/
+    @Override
+    final
+    public void addNotify(Drawing drawing) {
+        this.drawing=drawing;
+        doAddNotify(drawing);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -86,6 +96,22 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         }
         return list;
     }
+
+    @Override
+    final
+    public Drawing getDrawing() {
+        return drawing;
+    }
+    
+   /** This method is called by {@link #addNotify}. The implementation of this class is empty. */
+   protected void doAddNotify(@Nonnull Drawing drawing) {
+       
+   }
+   /** This method is called by {@link #removeNotify}. The implementation of this class is empty. */
+   protected void doRemoveNotify(@Nonnull Drawing drawing) {
+       
+   }
+    
 
     @Override
     public final ObservableSet<Figure> getLayoutObservers() {
@@ -192,6 +218,20 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         // empty
     }
 
+    /** This method calls {@link #doAddNotify}.*/
+    @Override
+    final
+    public void removeNotify(Drawing drawing) {
+       this.drawing=null;
+       doRemoveNotify(drawing);
+    }
+    
+    
+    @Nullable
+    private Drawing drawing;
+    
+    
+
     @Override
     public <T> T setCachedValue(Key<T> key, T value) {
         return key.put(cachedValues, value);
@@ -204,9 +244,10 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         if (d != null) {
             StylesheetsManager<Figure> styleManager = d.getStyleManager();
             styleManager.applyStylesheetsTo(this);
+            /*
             for (Figure child : getChildren()) {
                 child.updateCss();// should not recurse, because style manager knows better if it is worthwile?
-            }
+            }*/
         }
         invalidateTransforms();
     }

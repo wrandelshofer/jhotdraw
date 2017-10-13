@@ -23,7 +23,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableList<Point2D>> implements WriteableStyleableMapAccessor<ImmutableList<Point2D>> {
+public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<Point2D>> implements WriteableStyleableMapAccessor<ImmutableList<Point2D>> {
 
     private final static long serialVersionUID = 1L;
 

@@ -22,7 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements WriteableStyleableMapAccessor<Insets> {
+public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets> implements WriteableStyleableMapAccessor<Insets> {
 
     private final static long serialVersionUID = 1L;
 

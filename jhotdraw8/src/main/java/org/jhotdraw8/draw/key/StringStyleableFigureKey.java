@@ -21,7 +21,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringStyleableFigureKey extends SimpleFigureKey<String> implements WriteableStyleableMapAccessor<String> {
+public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String> implements WriteableStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, String> cssMetaData;

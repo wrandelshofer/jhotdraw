@@ -189,7 +189,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     default Transform getLocalToParent(boolean styled) {
-        Transform l2p = CACHE && styled ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
+        Transform l2p = CACHE && styled ? getCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
         if (l2p == null) {
             Point2D center = getCenterInLocal();
 
@@ -219,7 +219,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 l2p = IDENTITY_TRANSFORM;
             }
             if (CACHE && styled) {
-                set(FigureImplementationDetails.LOCAL_TO_PARENT, l2p);
+                setCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT, l2p);
             }
         }
         return l2p;
@@ -271,7 +271,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     @Nullable
     default Transform getParentToLocal(boolean styled) {
-        Transform p2l = CACHE ? get(FigureImplementationDetails.PARENT_TO_LOCAL) : null;
+        Transform p2l = CACHE ? getCachedValue(FigureImplementationDetails.PARENT_TO_LOCAL) : null;
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
@@ -302,7 +302,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 //p2l = IDENTITY_TRANSFORM;
             }
             if (CACHE) {
-                set(FigureImplementationDetails.PARENT_TO_LOCAL, p2l);
+                setCachedValue(FigureImplementationDetails.PARENT_TO_LOCAL, p2l);
             }
         }
         return p2l;
@@ -356,8 +356,8 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
         // intentional use ofCollection long-circuit or-expressions!!
         return TransformCacheableFigure.super.invalidateTransforms()
-                | null != set(FigureImplementationDetails.PARENT_TO_LOCAL, null)
-                | null != set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
+                | null != setCachedValue(FigureImplementationDetails.PARENT_TO_LOCAL, null)
+                | null != setCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }
 
     @Override

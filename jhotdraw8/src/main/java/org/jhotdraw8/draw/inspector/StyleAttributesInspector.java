@@ -336,7 +336,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             Drawing d = drawingView.getDrawing();
             DrawingModel m = drawingView.getModel();
             ObservableMap<String, Set<Figure>> pseudoStyles = FXCollections.observableHashMap();
-            HashSet<Figure> fs = new HashSet<>(drawingView.getSelectedFigures());
+            Set<Figure> fs = new HashSet<>(drawingView.getSelectedFigures());
 
             // handling of emptyness must be consistent with code in
             // handleSelectionChanged() method
@@ -377,7 +377,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             Drawing d = drawingView.getDrawing();
             DrawingModel m = drawingView.getModel();
             ObservableMap<String, Set<Figure>> pseudoStyles = FXCollections.observableHashMap();
-            HashSet<Figure> fs = new HashSet<>(drawingView.getSelectedFigures());
+            Set<Figure> fs = new HashSet<>(drawingView.getSelectedFigures());
 
             // handling of emptyness must be consistent with code in
             // handleSelectionChanged() method

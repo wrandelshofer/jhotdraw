@@ -22,7 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> implements WriteableStyleableMapAccessor<Rectangle2D> {
+public class Rectangle2DStyleableFigureKey extends AbstractStyleableFigureKey<Rectangle2D> implements WriteableStyleableMapAccessor<Rectangle2D> {
 
     private final static long serialVersionUID = 1L;
 

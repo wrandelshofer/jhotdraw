@@ -89,6 +89,11 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     }
 
     @Override
+    public boolean contains(Object o) {
+        return backingSet.contains(o);
+    }
+
+    @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
             private final Iterator<? extends E> i = backingSet.iterator();

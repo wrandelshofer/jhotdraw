@@ -24,7 +24,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableList<BezierNode>> implements WriteableStyleableMapAccessor<ImmutableList<BezierNode>> {
+public class BezierNodeListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<BezierNode>> implements WriteableStyleableMapAccessor<ImmutableList<BezierNode>> {
 
     private final static long serialVersionUID = 1L;
 

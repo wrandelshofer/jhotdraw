@@ -562,16 +562,9 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     public void clearNonUserValues() {
         for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
             Entry<K, StyledValue> e = i.next();
-            K key = e.getKey();
             StyledValue sv = e.getValue();
             sv.removeValue(StyleOrigin.INLINE);
             sv.removeValue(StyleOrigin.AUTHOR);
-           // sv.removeValue(StyleOrigin.USER_AGENT);
-            // We do not remove empty values because the values will be
-            // probably set right again after the map was cleared.
-            /*if (sv.isEmpty()) {
-             i.remove();
-             }*/
         }
     }
 

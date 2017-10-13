@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -296,14 +297,21 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         WriteableStyleableMapAccessor<Object> k = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         return k == null ? null : k.getConverter();
     }
+    private Map<Class<? extends Figure>, Map<String, WriteableStyleableMapAccessor<Object>>> figureToMetaMap = new HashMap<>();
 
-    private HashMap<String, WriteableStyleableMapAccessor<Object>> getMetaMap(Figure elem) {
-        HashMap<String, WriteableStyleableMapAccessor<Object>> metaMap = new HashMap<>();
-        for (MapAccessor<?> k : elem.getSupportedKeys()) {
-            if (k instanceof WriteableStyleableMapAccessor) {
-                @SuppressWarnings("unchecked")
-                WriteableStyleableMapAccessor<Object> sk = (WriteableStyleableMapAccessor<Object>) k;
-                metaMap.put(sk.getCssName(), sk);
+    private Map<String, WriteableStyleableMapAccessor<Object>> getMetaMap(Figure elem) {
+
+        Map<String, WriteableStyleableMapAccessor<Object>> metaMap = figureToMetaMap.get(elem.getClass());
+        if (metaMap == null) {
+            metaMap = new HashMap<>();
+            figureToMetaMap.put(elem.getClass(), metaMap);
+
+            for (MapAccessor<?> k : elem.getSupportedKeys()) {
+                if (k instanceof WriteableStyleableMapAccessor) {
+                    @SuppressWarnings("unchecked")
+                    WriteableStyleableMapAccessor<Object> sk = (WriteableStyleableMapAccessor<Object>) k;
+                    metaMap.put(sk.getCssName(), sk);
+                }
             }
         }
         return metaMap;
@@ -311,7 +319,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public void setAttribute(Figure elem, StyleOrigin origin, String name, String value) {
-        HashMap<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
+        Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 
         WriteableStyleableMapAccessor<Object> k = metaMap.get(name);
         if (k != null) {
@@ -330,5 +338,4 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             }
         }
     }
-
 }

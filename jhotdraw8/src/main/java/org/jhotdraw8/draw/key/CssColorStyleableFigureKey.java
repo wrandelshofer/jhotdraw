@@ -21,7 +21,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements WriteableStyleableMapAccessor<CssColor> {
+public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssColor> implements WriteableStyleableMapAccessor<CssColor> {
 
     private final static long serialVersionUID = 1L;
 
