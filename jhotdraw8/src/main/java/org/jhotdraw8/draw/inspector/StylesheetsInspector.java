@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
 import javafx.collections.ObservableList;
@@ -28,6 +27,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
 import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
@@ -87,7 +87,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             addButton.addEventHandler(ActionEvent.ACTION, this::onAddAction);
             removeButton.addEventHandler(ActionEvent.ACTION, this::onRemoveAction);
             removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
-            refreshButton.addEventHandler(ActionEvent.ACTION, o -> getDrawingModel().fireStyleInvalidated(getDrawing()));
+            refreshButton.addEventHandler(ActionEvent.ACTION, this::onRefreshAction);
 
             listView.setEditable(true);
             listView.setFixedCellSize(24.0);
@@ -168,6 +168,9 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
     private void onListChanged() {
         drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, new ArrayList<>(listView.getItems()));
+        for (Figure f : getDrawing().preorderIterable()) {
+            getDrawingModel().fireStyleInvalidated(f);
+        }
     }
 
     @Override
@@ -188,4 +191,9 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css"));
     }
 
+    private void onRefreshAction(ActionEvent event) {
+        for (Figure f : getDrawing().preorderIterable()) {
+            getDrawingModel().fireStyleInvalidated(f);
+        }
+    }
 }

@@ -333,8 +333,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void updateCss(Figure f) {
-        f.stylesheetNotify();
+    public void updateCss(Figure figure) {
+        figure.stylesheetNotify();
     }
 
     private void transitivelyCollectDependentFigures(Collection<Figure> todo, Set<Figure> done) {
