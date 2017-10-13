@@ -30,14 +30,14 @@ private boolean isStartDone;
         if (!isStartDone) {
             startX=getLastX();
             startY=getLastY();
-            startTangentX=x1-startX;
-            startTangentY=y1-startY;
+            startTangentX=startX-x1;
+            startTangentY=startY-y1;
             isStartDone=true;
         }
         endX=x3;
         endY=y3;
-        endTangentX=x2-x3;
-        endTangentY=y2-y3;
+        endTangentX=x3-x2;
+        endTangentY=y3-y2;
     }
 
     @Override
@@ -50,14 +50,14 @@ private boolean isStartDone;
         if (!isStartDone) {
             startX=getLastX();
             startY=getLastY();
-            startTangentX=x-startX;
-            startTangentY=y-startY;
+            startTangentX=startX-x;
+            startTangentY=startY-y;
             isStartDone=true;
         }
         endX=x;
         endY=y;
-        endTangentX=getLastX()-x;
-        endTangentY=getLastY()-y;
+        endTangentX=x-getLastX();
+        endTangentY=y-getLastY();
     }
 
     @Override
@@ -70,14 +70,14 @@ private boolean isStartDone;
         if (!isStartDone) {
             startX=getLastX();
             startY=getLastY();
-            startTangentX=x1-startX;
-            startTangentY=y1-startY;
+            startTangentX=startX-x1;
+            startTangentY=startY-y1;
             isStartDone=true;
         }
         endX=x2;
         endY=y2;
-        endTangentX=x1-x2;
-        endTangentY=y1-y2;
+        endTangentX=x2-x1;
+        endTangentY=y2-y1;
     }
 
     public double getEndTangentX() {
