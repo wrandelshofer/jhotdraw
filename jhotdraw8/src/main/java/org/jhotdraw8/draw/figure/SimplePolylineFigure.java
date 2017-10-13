@@ -1,5 +1,5 @@
 /* @(#)LineFigure.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -13,7 +13,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -37,7 +37,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure{
 
-    public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
+    public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -48,12 +48,12 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     }
 
     public SimplePolylineFigure(double startX, double startY, double endX, double endY) {
-        set(POINTS, ImmutableObservableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
+        set(POINTS, ImmutableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
         set(FILL, null);
     }
 
     public SimplePolylineFigure(Point2D... points) {
-        set(POINTS, ImmutableObservableList.of(points));
+        set(POINTS, ImmutableList.of(points));
         set(FILL, null);
     }
 
@@ -113,7 +113,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
-        set(POINTS, new ImmutableObservableList<>(newP));
+        set(POINTS,  ImmutableList.ofCollection(newP));
     }
 
     @Override
@@ -125,7 +125,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         applyFillableFigureProperties(lineNode);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(lineNode);
-        final ImmutableObservableList<Point2D> points = getStyled(POINTS);
+        final ImmutableList<Point2D> points = getStyled(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {
             list.add(p.getX());
@@ -135,7 +135,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    public static double[] toPointArray(Figure f,MapAccessor<ImmutableObservableList<Point2D>> key) {
+    public static double[] toPointArray(Figure f,MapAccessor<ImmutableList<Point2D>> key) {
         List<Point2D> points = f.get(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {

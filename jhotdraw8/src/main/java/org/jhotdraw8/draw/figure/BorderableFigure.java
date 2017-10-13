@@ -1,5 +1,5 @@
 /* @(#)BorderableFigure.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -12,7 +12,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
@@ -123,7 +123,7 @@ public interface BorderableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleListStyleableFigureKey BORDER_STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("border-stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableObservableList.emptyList());
+    public static DoubleListStyleableFigureKey BORDER_STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("border-stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableList.emptyList());
 
     default void applyBorderStrokeCapAndJoinProperties(@Nonnull Shape shape) {
         double d;

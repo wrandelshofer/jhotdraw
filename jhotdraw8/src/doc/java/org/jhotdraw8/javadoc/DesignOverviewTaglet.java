@@ -34,6 +34,7 @@ import java.util.TreeMap;
  * @author Werner Randelshofer
  * @version $Id$
  */
+@SuppressWarnings("deprecation")
 public class DesignOverviewTaglet implements Taglet {
 
     private static final String NAME = "design.overview";

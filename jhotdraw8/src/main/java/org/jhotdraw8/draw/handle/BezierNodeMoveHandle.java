@@ -1,5 +1,5 @@
 /* @(#)BezierNodeMoveHandle.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.handle;
 
@@ -25,7 +25,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -63,14 +63,14 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     private Point2D oldPoint;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
+    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
     private final String styleclass;
 
-    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
         this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_MOVE);
     }
 
-    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
+    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -94,7 +94,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }
@@ -128,7 +128,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         }
 
         if (event.isMetaDown()) {
-            // meta snaps the location of the handle to the grid
+            // meta snaps the location ofCollection the handle to the grid
             Point2D loc = getLocation();
             oldPoint = owner.getLocalToWorld().transform(loc);
         }
@@ -187,7 +187,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         pickLocation = p = t == null ? p : t.transform(p);
 
         // The node is centered around the location.
-        // (The value 5.5 is half of the node size, which is 11,11.
+        // (The value 5.5 is half ofCollection the node size, which is 11,11.
         // 0.5 is subtracted from 5.5 so that the node snaps between pixels
         // so that we get sharp lines.
         node.relocate(p.getX() - 5, p.getY() - 5);
@@ -207,8 +207,8 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     /**
-     * Translates the specified figure, given the old and new position of a
-     * point.
+     * Translates the specified figure, given the old and new position ofCollection a
+ point.
      *
      * @param f the figure to be translated
      * @param oldPoint oldPoint in world coordinates

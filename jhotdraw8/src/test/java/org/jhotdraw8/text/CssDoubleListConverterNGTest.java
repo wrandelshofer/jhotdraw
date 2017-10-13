@@ -1,5 +1,5 @@
 /* @(#)CssDoubleListConverterNGTest.java
- * Copyright (c) 2016 by the authors and contributors of JHotDraw.
+ * Copyright (c) 2016 by the authors and contributors ofCollection JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 
@@ -9,7 +9,7 @@ import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.io.IdFactory;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
@@ -27,7 +27,7 @@ public class CssDoubleListConverterNGTest {
     }
 
     /**
-     * Test of toString method, of class CssDoubleListConverter.
+     * Test ofCollection toString method, ofCollection class CssDoubleListConverter.
      */
     @Test(dataProvider = "toStringData")
     public void testToString( List<Double> value, String expected ) throws Exception {
@@ -35,7 +35,7 @@ public class CssDoubleListConverterNGTest {
         StringBuilder out =new StringBuilder();
         IdFactory idFactory = null;
         CssDoubleListConverter instance = new CssDoubleListConverter();
-        instance.toString(out, idFactory, value==null?null:new ImmutableObservableList<>(value));
+        instance.toString(out, idFactory, value==null?null:new ImmutableList<>(value));
         String actual = out.toString();
          System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -43,7 +43,7 @@ public class CssDoubleListConverterNGTest {
     }
 
     /**
-     * Test of fromString method, of class CssDoubleListConverter.
+     * Test ofCollection fromString method, ofCollection class CssDoubleListConverter.
      */
     @Test(dataProvider = "fromStringData")
     public void testFromString(List<Double> expected, String string) throws Exception {
@@ -58,7 +58,7 @@ public class CssDoubleListConverterNGTest {
     }
 
     /**
-     * Test of getDefaultValue method, of class CssDoubleListConverter.
+     * Test ofCollection getDefaultValue method, ofCollection class CssDoubleListConverter.
      */
     @Test
     public void testGetDefaultValue() {

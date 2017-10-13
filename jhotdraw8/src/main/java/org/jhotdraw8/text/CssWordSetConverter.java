@@ -11,16 +11,16 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import javafx.collections.FXCollections;
-import org.jhotdraw8.collection.ImmutableObservableSet;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.io.IdFactory;
 
 /**
  * WordSetConverter converts an ImmutableObservableSet of Strings into a
  * String.
  * <p>
- * The word list is actually a "set of space separated tokens", as specified in
- * HTML 5 and in XML Schema Part 2.
- * <p>
+ The word list is actually a "set of space separated tokens", as specified in
+ HTML 5 and in XML Schema Part 2.
+ <p>
  * The word list converter coalesces duplicate entries if they have the same
  * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
  * <p>
@@ -37,7 +37,7 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssWordSetConverter implements Converter<ImmutableObservableSet<String>> {
+public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
 
@@ -46,7 +46,7 @@ public class CssWordSetConverter implements Converter<ImmutableObservableSet<Str
                     Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableSet<String> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableSet<String> value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];
@@ -56,15 +56,15 @@ public class CssWordSetConverter implements Converter<ImmutableObservableSet<Str
     }
 
     @Override
-    public ImmutableObservableSet<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ImmutableObservableSet<String> l = new ImmutableObservableSet<>(v,1,(int)v[0]);
+        ImmutableSet<String> l =  ImmutableSet.ofArray(v,1,(int)v[0]);
         return l;
     }
 
     @Override
-    public ImmutableObservableSet<String> getDefaultValue() {
-        return ImmutableObservableSet.emptySet();
+    public ImmutableSet<String> getDefaultValue() {
+        return ImmutableSet.emptySet();
     }
 
 }

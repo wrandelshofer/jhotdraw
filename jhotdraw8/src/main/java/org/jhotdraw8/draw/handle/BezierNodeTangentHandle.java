@@ -1,5 +1,5 @@
 /* @(#)BezierNodeEditHandle.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.handle;
 
@@ -14,7 +14,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -23,7 +23,7 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * Handle for the point of a figure.
+ * Handle for the point ofCollection a figure.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -36,14 +36,14 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
+    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
     private final String styleclass;
 
-    public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
         this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE);
     }
 
-    public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
+    public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -61,7 +61,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }
@@ -94,7 +94,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableObservableList<BezierNode> list = f.get(pointKey);
+        ImmutableList<BezierNode> list = f.get(pointKey);
         if (pointIndex >= list.size()) {
             return;
         }

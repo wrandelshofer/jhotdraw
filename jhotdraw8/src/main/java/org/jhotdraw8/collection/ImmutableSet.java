@@ -1,4 +1,4 @@
-/* @(#)ImmutableObservableSet.java
+/* @(#)ImmutableSet.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -13,19 +13,20 @@ import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import static org.jhotdraw8.collection.ImmutableList.emptyList;
 
 /**
- * ImmutableObservableSet.
+ * ImmutableSet.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public final class ImmutableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
+public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private final static ImmutableObservableSet<Object> EMPTY = new ImmutableObservableSet<>(Collections.emptySet());
+    private final static ImmutableSet<Object> EMPTY = new ImmutableSet<>(Collections.emptySet());
     private final Set<E> backingSet;
 
-    public ImmutableObservableSet(Collection<E> copyMe) {
+    private ImmutableSet(Collection<E> copyMe) {
         switch (copyMe.size()) {
             case 0:
                 backingSet = Collections.emptySet();
@@ -38,12 +39,12 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
         }
     }
 
-    public ImmutableObservableSet(Object[] array) {
+    private ImmutableSet(Object[] array) {
         this(array, 0, array.length);
     }
 
     @SuppressWarnings("unchecked")
-    public ImmutableObservableSet(Object[] a, int offset, int length) {
+    private ImmutableSet(Object[] a, int offset, int length) {
         switch (length) {
             case 0:
                 backingSet = Collections.emptySet();
@@ -52,7 +53,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
                 backingSet = Collections.singleton((E) a[offset]);
                 break;
             default:
-                this.backingSet = new HashSet<>(Math.max(2 * length, 11));
+                this.backingSet = new LinkedHashSet<>(Math.max(2 * length, 11));
                 for (int i = offset, n = offset + length; i < n; i++) {
                     backingSet.add((E) a[i]);
                 }
@@ -60,7 +61,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
 
     }
 
-    private ImmutableObservableSet(boolean privateConstructor, Set<E> backingSet) {
+    private ImmutableSet(boolean privateConstructor, Set<E> backingSet) {
         this.backingSet = backingSet;
     }
 
@@ -143,26 +144,34 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
         }
     }
 
-    public static <T> ImmutableObservableSet<T> add(Collection<T> collection, T item) {
+    public static <T> ImmutableSet<T> add(Collection<T> collection, T item) {
         Set<T> a = new HashSet<T>(collection);
         a.add(item);
-        return new ImmutableObservableSet<T>(true, a);
+        return new ImmutableSet<T>(true, a);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ImmutableObservableSet<T> emptySet() {
-        return (ImmutableObservableSet<T>) EMPTY;
+    public static <T> ImmutableSet<T> emptySet() {
+        return (ImmutableSet<T>) EMPTY;
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> ImmutableObservableSet<T> of(T... items) {
-        return items.length == 0 ? emptySet() : new ImmutableObservableSet<T>(items);
+    public static <T> ImmutableSet<T> of(T... items) {
+        return items.length == 0 ? emptySet() : new ImmutableSet<T>(items);
     }
 
-    public static <T> ImmutableObservableSet<T> remove(Collection<T> collection, T item) {
+    public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
+        return collection.isEmpty() ? emptySet() : new ImmutableSet<T>(collection);
+    }
+    public static <T> ImmutableSet<T> ofArray(  Object[] a, int offset, int length) {
+        return length==0?emptySet():new ImmutableSet<>(a,offset,length);
+    }
+
+
+    public static <T> ImmutableSet<T> remove(Collection<T> collection, T item) {
         Set<T> a = new HashSet<T>(collection);
         a.remove(item);
-        return new ImmutableObservableSet<T>(true, a);
+        return new ImmutableSet<T>(true, a);
     }
 }

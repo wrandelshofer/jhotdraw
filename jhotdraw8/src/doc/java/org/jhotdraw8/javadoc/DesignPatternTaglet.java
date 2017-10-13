@@ -55,6 +55,7 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @version $Id$
  */
+@SuppressWarnings("deprecation")
 public class DesignPatternTaglet implements Taglet {
 
     public static final String NAME = "design.pattern";
@@ -336,7 +337,6 @@ public class DesignPatternTaglet implements Taglet {
         return name.substring(name.lastIndexOf('.')+1);
                 
     }
-
 
     private Tag[] lookupDescription(Tag[] tags) {
         if (tags.length > 0 && NAME.equals(tags[0].kind())) {

@@ -1,12 +1,12 @@
 /* @(#)BezierNodePathBuilder.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
 
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 
 /**
  * BezierNodePathBuilder.
@@ -73,8 +73,8 @@ public class BezierNodePathBuilder extends AbstractPathBuilder {
         nodes.set(nodes.size() - 1, newValue);
     }
 
-    public ImmutableObservableList<BezierNode> getNodes() {
-        return new ImmutableObservableList<>(nodes);
+    public ImmutableList<BezierNode> getNodes() {
+        return  ImmutableList.ofCollection(nodes);
     }
     @Override
     protected void doFinish() {

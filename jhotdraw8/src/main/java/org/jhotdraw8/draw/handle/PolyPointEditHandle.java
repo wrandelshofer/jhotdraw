@@ -1,5 +1,5 @@
 /* @(#)PolyPointEditHandle.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.handle;
 
@@ -15,7 +15,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -25,7 +25,7 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * Handle for the point of a figure.
+ * Handle for the point ofCollection a figure.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -39,14 +39,14 @@ public class PolyPointEditHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableObservableList<Point2D>> pointKey;
+    private final MapAccessor<ImmutableList<Point2D>> pointKey;
     private final String styleclass;
 
-    public PolyPointEditHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex) {
+    public PolyPointEditHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
         this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_POINT);
     }
 
-    public PolyPointEditHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex, String styleclass) {
+    public PolyPointEditHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -87,7 +87,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
-                dv.getModel().set(owner, pointKey, ImmutableObservableList.remove(owner.get(pointKey), pointIndex));
+                dv.getModel().set(owner, pointKey, ImmutableList.remove(owner.get(pointKey), pointIndex));
                 dv.recreateHandles();
             }
         }
@@ -102,8 +102,8 @@ public class PolyPointEditHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
 
-        ImmutableObservableList<Point2D> list = owner.get(pointKey);
-        view.getModel().set(getOwner(), pointKey, ImmutableObservableList.set(list, pointIndex, getOwner().worldToLocal(newPoint)));
+        ImmutableList<Point2D> list = owner.get(pointKey);
+        view.getModel().set(getOwner(), pointKey, ImmutableList.set(list, pointIndex, getOwner().worldToLocal(newPoint)));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableObservableList<Point2D> list = f.get(pointKey);
+        ImmutableList<Point2D> list = f.get(pointKey);
         Point2D p = list.get(pointIndex);
         pickLocation = p = t == null ? p : t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);

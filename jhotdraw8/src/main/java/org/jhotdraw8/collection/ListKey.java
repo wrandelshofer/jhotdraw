@@ -1,5 +1,5 @@
 /* @(#)DoubleKey.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
@@ -9,15 +9,15 @@ package org.jhotdraw8.collection;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ListKey<E> extends ObjectKey<ImmutableObservableList<E>> {
+public class ListKey<E> extends ObjectKey<ImmutableList<E>> {
 
     private final static long serialVersionUID = 1L;
 
     public ListKey(String key, Class<E> elemClass) {
-        super(key, ImmutableObservableList.class, new Class<?>[]{elemClass},ImmutableObservableList.emptyList());
+        super(key, ImmutableList.class, new Class<?>[]{elemClass},ImmutableList.emptyList());
     }
 
-    public ListKey(String key, Class<E> elemClass, ImmutableObservableList<E> defaultValue) {
-        super(key, ImmutableObservableList.class, new Class<?>[]{elemClass},defaultValue);
+    public ListKey(String key, Class<E> elemClass, ImmutableList<E> defaultValue) {
+        super(key, ImmutableList.class, new Class<?>[]{elemClass},defaultValue);
     }
 }

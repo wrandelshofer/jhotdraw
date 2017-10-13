@@ -1,5 +1,5 @@
 /* @(#)CssSizeListConverter.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
 
@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.DefaultUnitConverter;
@@ -19,18 +19,18 @@ import org.jhotdraw8.io.UnitConverter;
 /**
  * CssSizeListConverter.
  * <p>
- * Parses a list of sizes.
+ Parses a list ofCollection sizes.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssPoint2DListConverter implements Converter<ImmutableObservableList<Point2D>> {
+public class CssPoint2DListConverter implements Converter<ImmutableList<Point2D>> {
 
     private CssDoubleConverter doubleConverter = new CssDoubleConverter();
     private UnitConverter unitConverter = DefaultUnitConverter.getInstance();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Point2D> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableList<Point2D> value) throws IOException {
         toStringFromCollection(out, idFactory, value);
     }
 
@@ -53,13 +53,13 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
     }
 
     @Override
-    public ImmutableObservableList<Point2D> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Point2D> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         ArrayList<Point2D> l = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
             tt.skipWhitespace();
-            return new ImmutableObservableList<>(l);
+            return ImmutableList.ofCollection(l);
         } else {
             tt.pushBack();
         }
@@ -78,7 +78,7 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
             }
         }
         tt.skipWhitespace();
-        return new ImmutableObservableList<>(l);
+        return ImmutableList.ofCollection(l);
     }
 
     private double readCoordinate(CssTokenizerInterface tt, IdFactory idFactory) throws ParseException, IOException {
@@ -124,8 +124,8 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
     }
 
     @Override
-    public ImmutableObservableList<Point2D> getDefaultValue() {
-        return ImmutableObservableList.emptyList();
+    public ImmutableList<Point2D> getDefaultValue() {
+        return ImmutableList.emptyList();
     }
 
     public String toStringFromCollection(Collection<Point2D> value) {

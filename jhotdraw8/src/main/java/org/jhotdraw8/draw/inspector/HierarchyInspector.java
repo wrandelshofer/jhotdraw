@@ -1,5 +1,5 @@
 /* @(#)HierarchyInspector.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.inspector;
 
@@ -31,8 +31,8 @@ import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.tree.ExpandedTreeItemIterator;
-import org.jhotdraw8.collection.ImmutableObservableList;
-import org.jhotdraw8.collection.ImmutableObservableSet;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -58,9 +58,9 @@ import org.jhotdraw8.tree.SimpleTreePresentationModel;
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     @FXML
-    private TreeTableColumn<Figure, ImmutableObservableList<String>> styleClassesColumn;
+    private TreeTableColumn<Figure, ImmutableList<String>> styleClassesColumn;
     @FXML
-    private TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>> pseudoClassesColumn;
+    private TreeTableColumn<Figure, ImmutableSet<PseudoClass>> pseudoClassesColumn;
     private final CachingCollator collator = new CachingCollator(new OSXCollator());
 
     private DrawingView drawingView;
@@ -139,28 +139,26 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), LockableFigure.LOCKED)
         );
-        styleClassesColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>((DrawingModel) model.getTreeModel(),
+        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
             @Override
             @SuppressWarnings("unchecked")
-            public ImmutableObservableList<String> getValue() {
-                return figure == null ? null : new ImmutableObservableList<>(figure.getStyleClass());
+            public ImmutableList<String> getValue() {
+                return figure == null ? null :  ImmutableList.ofCollection(figure.getStyleClass());
             }
         }
         );
-        pseudoClassesColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<ImmutableObservableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
+        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
             @Override
             @SuppressWarnings("unchecked")
-            public ImmutableObservableSet<PseudoClass> getValue() {
-                return figure == null ? null : new ImmutableObservableSet<>(figure.getPseudoClassStates());
+            public ImmutableSet<PseudoClass> getValue() {
+                return figure == null ? null : ImmutableSet.ofCollection(figure.getPseudoClassStates());
             }
         }
         );
 
-        // This cell factory ensures that only styleable figures support editing of ids.
+        // This cell factory ensures that only styleable figures support editing ofCollection ids.
         // And it ensures, that the users sees the computed id, and not the one that he entered. 
         idColumn.setCellFactory(
                 new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
@@ -203,14 +201,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
 
         });
-        // This cell factory ensures that only styleable figures support editing of style classes.
+        // This cell factory ensures that only styleable figures support editing ofCollection style classes.
         // And it ensures, that the users sees the computed style classes, and not the ones that he entered. 
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
-        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableList<String>>, TreeTableCell<Figure, ImmutableObservableList<String>>>() {
+        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
 
             @Override
-            public TreeTableCell<Figure, ImmutableObservableList<String>> call(TreeTableColumn<Figure, ImmutableObservableList<String>> paramTableColumn) {
-                return new TextFieldTreeTableCell<Figure, ImmutableObservableList<String>>() {
+            public TreeTableCell<Figure, ImmutableList<String>> call(TreeTableColumn<Figure, ImmutableList<String>> paramTableColumn) {
+                return new TextFieldTreeTableCell<Figure, ImmutableList<String>>() {
                     {
                         setConverter(new StringConverterAdapter<>(wordListConverter));
                     }
@@ -225,10 +223,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void commitEdit(ImmutableObservableList<String> newValue) {
+                    public void commitEdit(ImmutableList<String> newValue) {
                         LinkedHashSet<String> newValueSet = new LinkedHashSet<>(newValue);
                         newValueSet.removeAll(syntheticClasses);
-                        super.commitEdit(new ImmutableObservableList<>(newValueSet));
+                        super.commitEdit(ImmutableList.ofCollection(newValueSet));
                     }
 
                     @Override
@@ -242,7 +240,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void updateItem(ImmutableObservableList<String> t, boolean empty) {
+                    public void updateItem(ImmutableList<String> t, boolean empty) {
                         super.updateItem(t, empty);
                         TreeTableRow<Figure> row = getTreeTableRow();
                         boolean isEditable = false;
@@ -254,7 +252,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             }
                             // show the computed  classes! 
                             if (figure != null) {
-                                setText(wordListConverter.toString(new ImmutableObservableList<>(figure.getStyleClass())));
+                                setText(wordListConverter.toString(ImmutableList.ofCollection(figure.getStyleClass())));
                             }
                         }
                         if (isEditable) {
@@ -269,10 +267,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         });
         CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>();
-        pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableObservableSet<PseudoClass>>>() {
+        pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableSet<PseudoClass>>>() {
             @Override
-            public TreeTableCell<Figure, ImmutableObservableSet<PseudoClass>> call(TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>> paramTableColumn) {
-                return new TextFieldTreeTableCell<Figure, ImmutableObservableSet<PseudoClass>>() {
+            public TreeTableCell<Figure, ImmutableSet<PseudoClass>> call(TreeTableColumn<Figure, ImmutableSet<PseudoClass>> paramTableColumn) {
+                return new TextFieldTreeTableCell<Figure, ImmutableSet<PseudoClass>>() {
                     {
                         setConverter(new StringConverterAdapter<>(pseudoClassConverter));
                     }

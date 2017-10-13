@@ -1,5 +1,5 @@
 /* @(#)TransformHandleKit.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.handle;
 
@@ -25,15 +25,15 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * A set of utility methods to create handles which transform a Figure by using
- * its {@code transform} method, if the Figure is transformable.
+ * A set ofCollection utility methods to create handles which transform a Figure by using
+ its {@code transform} method, if the Figure is transformable.
  * <p>
  * FIXME implement me
  *
@@ -54,8 +54,8 @@ public class TransformHandleKit {
     }
 
     /**
-     * Creates handles for each corner of a figure and adds them to the provided
-     * collection.
+     * Creates handles for each corner ofCollection a figure and adds them to the provided
+ collection.
      *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
@@ -69,7 +69,7 @@ public class TransformHandleKit {
 
     /**
      * Fills the given collection with handles at each the north, south, east,
-     * and west of the figure.
+ and west ofCollection the figure.
      *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
@@ -83,7 +83,7 @@ public class TransformHandleKit {
 
     /**
      * Fills the given collection with handles at each the north, south, east,
-     * and west of the figure.
+ and west ofCollection the figure.
      *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
@@ -183,7 +183,7 @@ public class TransformHandleKit {
 
         @Override
         public void handleMousePressed(MouseEvent event, DrawingView view) {
-            super.handleMousePressed(event, view); //To change body of generated methods, choose Tools | Templates.
+            super.handleMousePressed(event, view); //To change body ofCollection generated methods, choose Tools | Templates.
             startTransforms = owner.get(TRANSFORMS);
         }
 
@@ -207,11 +207,11 @@ public class TransformHandleKit {
             }
             switch (oldTransforms.size()) {
                 case 0:
-                    model.set(owner, TRANSFORMS, ImmutableObservableList.of(transform));
+                    model.set(owner, TRANSFORMS, ImmutableList.of(transform));
                     break;
                 default:
                     int last = oldTransforms.size() - 1;
-                    model.set(owner, TRANSFORMS, ImmutableObservableList.set(oldTransforms, last, Transforms.concat(oldTransforms.get(last),transform)));
+                    model.set(owner, TRANSFORMS, ImmutableList.set(oldTransforms, last, Transforms.concat(oldTransforms.get(last),transform)));
                     break;
             }
         }

@@ -1,5 +1,5 @@
 /* @(#)SimplePageFigure.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -25,7 +25,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -155,7 +155,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
     @Override
     public Node createPageNode(int internalPageNumber) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -313,7 +313,7 @@ private Bounds getContentBounds(int internalPageNumber) {
     @Override
     public void layout() {
         int currentPage = 0;
-        ImmutableObservableList<Transform> transforms = ImmutableObservableList.of(getPageTransform(currentPage));
+        ImmutableList<Transform> transforms = ImmutableList.of(getPageTransform(currentPage));
 
         for (Figure child : getChildren()) {
             child.set(TRANSFORMS, transforms);

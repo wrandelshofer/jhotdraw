@@ -9,15 +9,15 @@ package org.jhotdraw8.collection;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SetKey<E> extends ObjectKey<ImmutableObservableSet<E>> {
+public class SetKey<E> extends ObjectKey<ImmutableSet<E>> {
 
     private final static long serialVersionUID = 1L;
 
     public SetKey(String key, Class<E> elemClass) {
-        super(key, ImmutableObservableSet.class, new Class<?>[]{elemClass},ImmutableObservableSet.emptySet());
+        super(key, ImmutableSet.class, new Class<?>[]{elemClass},ImmutableSet.emptySet());
     }
 
-    public SetKey(String key, Class<E> elemClass, ImmutableObservableSet<E> defaultValue) {
-        super(key, ImmutableObservableList.class, new Class<?>[]{elemClass},defaultValue);
+    public SetKey(String key, Class<E> elemClass, ImmutableSet<E> defaultValue) {
+        super(key, ImmutableList.class, new Class<?>[]{elemClass},defaultValue);
     }
 }

@@ -11,16 +11,16 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javafx.css.PseudoClass;
-import org.jhotdraw8.collection.ImmutableObservableSet;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.io.IdFactory;
 
 /**
  * WordSetConverter converts an ImmutableObservableSet of Strings into a
  * String.
  * <p>
- * The word list is actually a "set of space separated tokens", as specified in
- * HTML 5 and in XML Schema Part 2.
- * <p>
+ The word list is actually a "set of space separated tokens", as specified in
+ HTML 5 and in XML Schema Part 2.
+ <p>
  * The word list converter coalesces duplicate entries if they have the same
  * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
  * <p>
@@ -37,7 +37,7 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssPseudoClassConverter implements Converter<ImmutableObservableSet<PseudoClass>> {
+public class CssPseudoClassConverter implements Converter<ImmutableSet<PseudoClass>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
 
@@ -46,7 +46,7 @@ public class CssPseudoClassConverter implements Converter<ImmutableObservableSet
                     Normalizer.normalize(o2.getPseudoClassName(), Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableSet<PseudoClass> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableSet<PseudoClass> value) throws IOException {
         Set<PseudoClass> tokens = new LinkedHashSet<>();
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];
@@ -56,15 +56,15 @@ public class CssPseudoClassConverter implements Converter<ImmutableObservableSet
     }
 
     @Override
-    public ImmutableObservableSet<PseudoClass> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<PseudoClass> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ImmutableObservableSet<PseudoClass> l =  new ImmutableObservableSet<>(v,1,(int)v[0]);
+        ImmutableSet<PseudoClass> l =  ImmutableSet.ofArray(v,1,(int)v[0]);
         return l;
     }
 
     @Override
-    public ImmutableObservableSet<PseudoClass> getDefaultValue() {
-        return ImmutableObservableSet.emptySet();
+    public ImmutableSet<PseudoClass> getDefaultValue() {
+        return ImmutableSet.emptySet();
     }
 
 }

@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -24,11 +24,11 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<BezierNode>> implements WriteableStyleableMapAccessor<ImmutableObservableList<BezierNode>> {
+public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableList<BezierNode>> implements WriteableStyleableMapAccessor<ImmutableList<BezierNode>> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, ImmutableObservableList<BezierNode>> cssMetaData;
+    private final CssMetaData<?, ImmutableList<BezierNode>> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -46,7 +46,7 @@ public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableO
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public BezierNodeListStyleableFigureKey(String name, ImmutableObservableList<BezierNode> defaultValue) {
+    public BezierNodeListStyleableFigureKey(String name, ImmutableList<BezierNode> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -57,32 +57,32 @@ public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableO
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public BezierNodeListStyleableFigureKey(String name, DirtyMask mask, ImmutableObservableList<BezierNode> defaultValue) {
-        super(name, ImmutableObservableList.class, new Class<?>[]{BezierNode.class}, mask, defaultValue);
+    public BezierNodeListStyleableFigureKey(String name, DirtyMask mask, ImmutableList<BezierNode> defaultValue) {
+        super(name, ImmutableList.class, new Class<?>[]{BezierNode.class}, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<ImmutableObservableList<BezierNode>>> function = s -> {
+        Function<Styleable, StyleableProperty<ImmutableList<BezierNode>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, ImmutableObservableList<BezierNode>> converter
-                = new StyleConverterAdapter<ImmutableObservableList<BezierNode>>(getConverter());
-        CssMetaData<Styleable, ImmutableObservableList<BezierNode>> md
-                = new SimpleCssMetaData<Styleable, ImmutableObservableList<BezierNode>>(property, function,
+        final StyleConverter<String, ImmutableList<BezierNode>> converter
+                = new StyleConverterAdapter<ImmutableList<BezierNode>>(getConverter());
+        CssMetaData<Styleable, ImmutableList<BezierNode>> md
+                = new SimpleCssMetaData<Styleable, ImmutableList<BezierNode>>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?, ImmutableObservableList<BezierNode>> getCssMetaData() {
+    public CssMetaData<?, ImmutableList<BezierNode>> getCssMetaData() {
         return cssMetaData;
     }
 
-    private Converter<ImmutableObservableList<BezierNode>> converter;
+    private Converter<ImmutableList<BezierNode>> converter;
 
     @Override
-    public Converter<ImmutableObservableList<BezierNode>> getConverter() {
+    public Converter<ImmutableList<BezierNode>> getConverter() {
         if (converter == null) {
             converter = new CssBezierNodeListConverter(true);
         }

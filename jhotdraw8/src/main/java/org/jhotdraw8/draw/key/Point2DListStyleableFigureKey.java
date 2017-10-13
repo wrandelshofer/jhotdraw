@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -23,11 +23,11 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Point2D>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Point2D>> {
+public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableList<Point2D>> implements WriteableStyleableMapAccessor<ImmutableList<Point2D>> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, ImmutableObservableList<Point2D>> cssMetaData;
+    private final CssMetaData<?, ImmutableList<Point2D>> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -45,7 +45,7 @@ public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableObse
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableFigureKey(String name, ImmutableObservableList<Point2D> defaultValue) {
+    public Point2DListStyleableFigureKey(String name, ImmutableList<Point2D> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -56,32 +56,32 @@ public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableObse
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableFigureKey(String name, DirtyMask mask, ImmutableObservableList<Point2D> defaultValue) {
-        super(name, ImmutableObservableList.class, new Class<?>[]{Point2D.class}, mask, defaultValue);
+    public Point2DListStyleableFigureKey(String name, DirtyMask mask, ImmutableList<Point2D> defaultValue) {
+        super(name, ImmutableList.class, new Class<?>[]{Point2D.class}, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<ImmutableObservableList<Point2D>>> function = s -> {
+        Function<Styleable, StyleableProperty<ImmutableList<Point2D>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, ImmutableObservableList<Point2D>> converter
-                = new StyleConverterAdapter<ImmutableObservableList<Point2D>>(new CssPoint2DListConverter());
-        CssMetaData<Styleable, ImmutableObservableList<Point2D>> md
-                = new SimpleCssMetaData<Styleable, ImmutableObservableList<Point2D>>(property, function,
+        final StyleConverter<String, ImmutableList<Point2D>> converter
+                = new StyleConverterAdapter<ImmutableList<Point2D>>(new CssPoint2DListConverter());
+        CssMetaData<Styleable, ImmutableList<Point2D>> md
+                = new SimpleCssMetaData<Styleable, ImmutableList<Point2D>>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?, ImmutableObservableList<Point2D>> getCssMetaData() {
+    public CssMetaData<?, ImmutableList<Point2D>> getCssMetaData() {
         return cssMetaData;
     }
 
-    private Converter<ImmutableObservableList<Point2D>> converter;
+    private Converter<ImmutableList<Point2D>> converter;
 
     @Override
-    public Converter<ImmutableObservableList<Point2D>> getConverter() {
+    public Converter<ImmutableList<Point2D>> getConverter() {
         if (converter == null) {
             converter = new CssPoint2DListConverter();
         }

@@ -15,6 +15,7 @@ import com.sun.javadoc.Tag;
  * @author Werner Randelshofer
  * @version $Id$
  */
+@SuppressWarnings("deprecation")
 public class TextTag implements Tag {
 
     private final Doc holder;

@@ -10,6 +10,7 @@ package org.jhotdraw8.sysdoc;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
+@SuppressWarnings("deprecation")
 public class Reference {
 
     private final Fragment fragment;

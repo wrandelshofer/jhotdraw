@@ -1,5 +1,5 @@
 /* @(#)PolyCreationTool.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.tool;
 
@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import java.util.ArrayList;
 import java.util.Objects;
 import javafx.scene.Cursor;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.figure.SimpleLayer;
@@ -80,7 +80,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
         } else {
             points.add(c);
         }
-        dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+        dm.set(createdFigure, key, ImmutableList.ofCollection(points));
 
         event.consume();
     }
@@ -105,7 +105,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
             Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, c2);
-            dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+            dm.set(createdFigure, key,  ImmutableList.ofCollection(points));
         }
         event.consume();
     }
@@ -123,7 +123,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+                    dm.set(createdFigure, key,  ImmutableList.ofCollection(points));
                     dv.getSelectedFigures().clear();
                     dv.setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);

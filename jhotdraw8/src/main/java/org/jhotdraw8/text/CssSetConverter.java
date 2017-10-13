@@ -6,7 +6,7 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import org.jhotdraw8.collection.ImmutableObservableSet;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -15,10 +15,10 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSetConverter<E> implements Converter<ImmutableObservableSet<E>> {
+public class CssSetConverter<E> implements Converter<ImmutableSet<E>> {
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableSet<E> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableSet<E> value) throws IOException {
         if (value == null) {
             return;
         }
@@ -33,12 +33,12 @@ public class CssSetConverter<E> implements Converter<ImmutableObservableSet<E>> 
     }
 
     @Override
-    public ImmutableObservableSet<E> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        return ImmutableObservableSet.emptySet();
+    public ImmutableSet<E> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        return ImmutableSet.emptySet();
     }
 
     @Override
-    public ImmutableObservableSet<E> getDefaultValue() {
-        return ImmutableObservableSet.emptySet();
+    public ImmutableSet<E> getDefaultValue() {
+        return ImmutableSet.emptySet();
     }
 }

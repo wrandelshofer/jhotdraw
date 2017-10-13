@@ -1,5 +1,5 @@
 /* @(#)Figure.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -23,7 +23,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
@@ -38,15 +38,15 @@ import org.jhotdraw8.geom.Transforms;
  * <p>
  * The following transformations are supported:
  * <ul>
- * <li>Translation of the local bounds of the figure.</li>
- * <li>Rotation around the center of the untransformed local bounds of the
- * figure.</li>
- * <li>Scaling around the center of the untransformed local bounds of the
- * figure.</li>
- * <li>Arbitrary sequence of affine transformations of the figure.</li>
+ * <li>Translation ofCollection the local bounds ofCollection the figure.</li>
+ * <li>Rotation around the center ofCollection the untransformed local bounds ofCollection the
+ figure.</li>
+ * <li>Scaling around the center ofCollection the untransformed local bounds ofCollection the
+ figure.</li>
+ * <li>Arbitrary sequence ofCollection affine transformations ofCollection the figure.</li>
  * </ul>
- * Note that transformation matrices computed from the Rotation and Scaling must
- * be recomputed every time when the local bounds of the figure change.
+ Note that transformation matrices computed from the Rotation and Scaling must
+ be recomputed every time when the local bounds ofCollection the figure change.
  *
  * @design.pattern Figure Mixin, Traits.
  *
@@ -84,10 +84,10 @@ public interface TransformableFigure extends TransformCacheableFigure {
     public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the axes
-     * about the center of the figure.
+ about the center ofCollection the figure.
      */
     public static Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
-    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
+    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -104,7 +104,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), 0.0);
     /**
-     * Defines the translation on the axes about the center of the figure.
+     * Defines the translation on the axes about the center ofCollection the figure.
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
@@ -148,7 +148,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         set(ROTATE, 0.0);
         set(TRANSLATE_X, 0.0);
         set(TRANSLATE_Y, 0.0);
-        set(TRANSFORMS, ImmutableObservableList.of());
+        set(TRANSFORMS, ImmutableList.of());
     }
 
     default void flattenTransforms() {
@@ -159,9 +159,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
         set(TRANSLATE_X, 0.0);
         set(TRANSLATE_Y, 0.0);
         if (p2l.isIdentity()) {
-            set(TRANSFORMS, ImmutableObservableList.emptyList());
+            set(TRANSFORMS, ImmutableList.emptyList());
         } else {
-            set(TRANSFORMS, ImmutableObservableList.of(p2l));
+            set(TRANSFORMS, ImmutableList.of(p2l));
         }
     }
 
@@ -330,9 +330,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     default void setTransforms(@Nonnull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, ImmutableObservableList.emptyList());
+            set(TRANSFORMS, ImmutableList.emptyList());
         } else {
-            set(TRANSFORMS, new ImmutableObservableList<>(transforms));
+            set(TRANSFORMS,  ImmutableList.of(transforms));
         }
     }
 
@@ -354,7 +354,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (!CACHE) {
             return false;
         }
-        // intentional use of long-circuit or-expressions!!
+        // intentional use ofCollection long-circuit or-expressions!!
         return TransformCacheableFigure.super.invalidateTransforms()
                 | null != set(FigureImplementationDetails.PARENT_TO_LOCAL, null)
                 | null != set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
@@ -365,14 +365,14 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
             List<Transform> ts = get(TRANSFORMS);
             if (ts.isEmpty()) {
-                set(TRANSFORMS, ImmutableObservableList.of(transform));
+                set(TRANSFORMS, ImmutableList.of(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = Transforms.concat(ts.get(last), transform);
                 if (concatenatedWithLast instanceof Affine) {
-                    set(TRANSFORMS, ImmutableObservableList.add(ts, transform));
+                    set(TRANSFORMS, ImmutableList.add(ts, transform));
                 } else {
-                    set(TRANSFORMS, ImmutableObservableList.set(ts, last, concatenatedWithLast));
+                    set(TRANSFORMS, ImmutableList.set(ts, last, concatenatedWithLast));
                 }
             }
             return;
@@ -387,8 +387,8 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * Throws unsupported operation exception.
      * <p>
      * If subclass overrides {@link #reshapeInLocal(javafx.scene.transform.Transform) then the
-     * implementation of this method is most likely as follows:
-     * <pre>
+ implementation ofCollection this method is most likely as follows:
+ <pre>
      *         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
      * </pre>
      * 
@@ -424,9 +424,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 flattenTransforms();
                 List<Transform> transforms = get(TRANSFORMS);
                 if (transforms.isEmpty()) {
-                    set(TRANSFORMS, ImmutableObservableList.of(transform));
+                    set(TRANSFORMS, ImmutableList.of(transform));
                 } else {
-                    set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, transform));
+                    set(TRANSFORMS, ImmutableList.add(transforms, 0, transform));
                 }
             }
         } else {
@@ -439,9 +439,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
         flattenTransforms();
         List<Transform> transforms = get(TRANSFORMS);
         if (transforms.isEmpty()) {
-            set(TRANSFORMS, ImmutableObservableList.of(t));
+            set(TRANSFORMS, ImmutableList.of(t));
         } else {
-            set(TRANSFORMS, ImmutableObservableList.add(transforms, t));
+            set(TRANSFORMS, ImmutableList.add(transforms, t));
         }
     }
 
@@ -459,9 +459,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
             flattenTransforms();
             List<Transform> transforms = new ArrayList<>(get(TRANSFORMS));
             if (transforms.isEmpty()) {
-                set(TRANSFORMS, ImmutableObservableList.of(t));
+                set(TRANSFORMS, ImmutableList.of(t));
             } else {
-                set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, t));
+                set(TRANSFORMS, ImmutableList.add(transforms, 0, t));
             }
         }
     }

@@ -1,5 +1,5 @@
-/* @(#)ImmutableObservableList.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+/* @(#)ImmutableList.java
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
@@ -18,26 +18,26 @@ import javafx.collections.ObservableList;
  * @version $Id$
  * @param <E> element type
  */
-public final class ImmutableObservableList<E> extends AbstractList<E> implements ObservableList<E> {
+public final class ImmutableList<E> extends AbstractList<E> implements ObservableList<E> {
 
-    private final static ImmutableObservableList<Object> EMPTY = new ImmutableObservableList<Object>(true, new Object[0]);
+    private final static ImmutableList<Object> EMPTY = new ImmutableList<Object>(true, new Object[0]);
 
     private final Object[] array;
 
-    public ImmutableObservableList(Collection<E> copyItems) {
-        this.array = copyItems == null ? new Object[0] : copyItems.toArray();
+    private ImmutableList(Collection<E> copyItems) {
+        this.array = copyItems == null||copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
     }
 
-    public ImmutableObservableList(Object[] array) {
+    private ImmutableList(Object[] array) {
         this(array, 0, array.length);
     }
 
-    public ImmutableObservableList(Object[] a, int offset, int length) {
+    private ImmutableList(Object[] a, int offset, int length) {
         this.array = new Object[length];
         System.arraycopy(a, offset, array, 0, length);
     }
 
-    private ImmutableObservableList(boolean privateMethod, Object[] array) {
+    private ImmutableList(boolean privateMethod, Object[] array) {
         this.array = array;
     }
 
@@ -111,19 +111,19 @@ public final class ImmutableObservableList<E> extends AbstractList<E> implements
         return array.length;
     }
 
-    public static <T> ImmutableObservableList<T> add(Collection<T> collection, T item) {
+    public static <T> ImmutableList<T> add(Collection<T> collection, T item) {
         if (collection==null||collection.isEmpty()) {
-            return ImmutableObservableList.of(item);
+            return ImmutableList.of(item);
         }
         Object[] a = new Object[collection.size() + 1];
         a = collection.toArray(a);
         a[a.length - 1] = item;
-        return new ImmutableObservableList<>(true, a);
+        return new ImmutableList<>(true, a);
     }
 
-    public static <T> ImmutableObservableList<T> add(Collection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> add(Collection<T> collection, int index, T item) {
         if (collection==null||collection.isEmpty() && index == 0) {
-            return ImmutableObservableList.of(item);
+            return ImmutableList.of(item);
         }
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
@@ -131,36 +131,44 @@ public final class ImmutableObservableList<E> extends AbstractList<E> implements
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index, b, index + 1, a.length - index);
         b[index] = item;
-        return new ImmutableObservableList<>(true, b);
+        return new ImmutableList<>(true, b);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ImmutableObservableList<T> emptyList() {
-        return (ImmutableObservableList<T>) EMPTY;
+    public static <T> ImmutableList<T> emptyList() {
+        return (ImmutableList<T>) EMPTY;
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> ImmutableObservableList<T> of(T... items) {
+    public static <T> ImmutableList<T> of(T... items) {
         // FIXME we should copy the items array, because caller might keep reference on mutable items array
-        return items.length == 0 ? emptyList() : new ImmutableObservableList<>(true, items);
+        return items.length == 0 ? emptyList() : new ImmutableList<>(true, items);
     }
 
-    public static <T> ImmutableObservableList<T> remove(Collection<T> collection, int index) {
+    public static <T> ImmutableList<T> ofCollection(Collection<T> collection) {
+        return collection.isEmpty() ? emptyList() : new ImmutableList<>(collection);
+    }
+    
+    public static <T> ImmutableList<T> ofArray(  Object[] a, int offset, int length) {
+        return length==0?emptyList():new ImmutableList<>(a,offset,length);
+    }
+
+    public static <T> ImmutableList<T> remove(Collection<T> collection, int index) {
         if (collection==null||collection.size() == 1 && index == 0) {
-            return ImmutableObservableList.emptyList();
+            return ImmutableList.emptyList();
         }
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         Object[] b = new Object[a.length - 1];
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index + 1, b, index, b.length - index);
-        return new ImmutableObservableList<>(true, b);
+        return new ImmutableList<>(true, b);
     }
 
-    public static <T> ImmutableObservableList<T> remove(Collection<T> collection, T item) {
+    public static <T> ImmutableList<T> remove(Collection<T> collection, T item) {
         if (collection==null||collection.size() == 1 && collection.contains(item)) {
-            return ImmutableObservableList.emptyList();
+            return ImmutableList.emptyList();
         }
         if (collection instanceof List) {
             @SuppressWarnings("unchecked")
@@ -169,14 +177,14 @@ public final class ImmutableObservableList<E> extends AbstractList<E> implements
         } else {
             List<T> a = new ArrayList<T>(collection);// linear
             a.remove(item);// linear
-            return new ImmutableObservableList<>(a);// linear
+            return new ImmutableList<>(a);// linear
         }
     }
 
-    public static <T> ImmutableObservableList<T> set(Collection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> set(Collection<T> collection, int index, T item) {
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         a[index] = item;
-        return new ImmutableObservableList<>(true, a);
+        return new ImmutableList<>(true, a);
     }
 }

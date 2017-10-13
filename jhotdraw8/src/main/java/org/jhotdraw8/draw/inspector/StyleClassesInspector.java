@@ -1,5 +1,5 @@
 /* @(#)StyleClassesInspector.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.inspector;
 
@@ -23,7 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -100,7 +100,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
+                        getDrawingModel().set(f, tagsKey,  ImmutableList.ofCollection(newTags));
                     }
                 }
                 updateList();
@@ -182,7 +182,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
+                        getDrawingModel().set(f, tagsKey, ImmutableList.ofCollection(newTags));
                     }
                 }
                 updateList();

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 
 /**
  * ObservableWordListStyleableFigureKey.
@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.ImmutableObservableList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ObservableWordListFigureKey extends SimpleFigureKey<ImmutableObservableList<String>> {
+public class ObservableWordListFigureKey extends SimpleFigureKey<ImmutableList<String>> {
 
     private final static long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class ObservableWordListFigureKey extends SimpleFigureKey<ImmutableObserv
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public ObservableWordListFigureKey(String name, ImmutableObservableList<String> defaultValue) {
+    public ObservableWordListFigureKey(String name, ImmutableList<String> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -42,7 +42,7 @@ public class ObservableWordListFigureKey extends SimpleFigureKey<ImmutableObserv
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public ObservableWordListFigureKey(String name, DirtyMask mask, ImmutableObservableList<String> defaultValue) {
-        super(name, ImmutableObservableList.class, new Class<?>[]{String.class}, mask, defaultValue);
+    public ObservableWordListFigureKey(String name, DirtyMask mask, ImmutableList<String> defaultValue) {
+        super(name, ImmutableList.class, new Class<?>[]{String.class}, mask, defaultValue);
     }
 }

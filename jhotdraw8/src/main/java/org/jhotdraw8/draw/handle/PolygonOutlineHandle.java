@@ -1,5 +1,5 @@
 /* @(#)BoundsInLocalHandle.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.handle;
 
@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingView;
@@ -25,7 +25,7 @@ import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * Draws the {@code wireframe} of a {@code PolygonFigure}.
+ * Draws the {@code wireframe} ofCollection a {@code PolygonFigure}.
  * <p>
  * The user can insert a new point by double clicking the line.
  *
@@ -35,16 +35,16 @@ import org.jhotdraw8.geom.Transforms;
 public class PolygonOutlineHandle extends AbstractHandle {
 
     private boolean editable;
-    private final MapAccessor<ImmutableObservableList<Point2D>> key;
+    private final MapAccessor<ImmutableList<Point2D>> key;
 
     private Polygon node;
     private String styleclass;
 
-    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key) {
+    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> key) {
         this(figure, key, true, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
-    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key, boolean editable, String styleclass) {
+    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> key, boolean editable, String styleclass) {
         super(figure);
         this.key = key;
         this.editable = editable;
@@ -95,7 +95,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
                 }
             }
             if (insertAt != -1 && insertLocation != null) {
-                dv.getModel().set(owner, key, ImmutableObservableList.add(owner.get(key), insertAt, insertLocation));
+                dv.getModel().set(owner, key, ImmutableList.add(owner.get(key), insertAt, insertLocation));
                 dv.recreateHandles();
             }
         }

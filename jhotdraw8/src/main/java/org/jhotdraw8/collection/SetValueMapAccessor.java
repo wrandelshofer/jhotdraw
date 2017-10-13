@@ -16,13 +16,13 @@ import java.util.Set;
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 private final static long serialVersionUID=1L;
-    private final MapAccessor<ImmutableObservableSet<E>> setAccessor;
+    private final MapAccessor<ImmutableSet<E>> setAccessor;
     private final E value;
     private boolean defaultValue;
     private final String name;
     private final boolean isTransient;
 
-    public SetValueMapAccessor(String name, boolean isTransient, MapAccessor<ImmutableObservableSet<E>> setAccessor, E value, boolean defaultValue) {
+    public SetValueMapAccessor(String name, boolean isTransient, MapAccessor<ImmutableSet<E>> setAccessor, E value, boolean defaultValue) {
         if (value == null) {
             throw new IllegalArgumentException("value is null");
         }
@@ -33,7 +33,7 @@ private final static long serialVersionUID=1L;
         this.isTransient = isTransient;
     }
 
-    public SetValueMapAccessor(String name, MapAccessor<ImmutableObservableSet<E>> setAccessor, E value) {
+    public SetValueMapAccessor(String name, MapAccessor<ImmutableSet<E>> setAccessor, E value) {
         this(name, false, setAccessor, value, false);
     }
 
@@ -79,12 +79,12 @@ private final static long serialVersionUID=1L;
 
     @Override
     public Boolean put(Map<? super Key<?>, Object> a, Boolean value) {
-        ImmutableObservableSet<E> set = setAccessor.get(a);
+        ImmutableSet<E> set = setAccessor.get(a);
         boolean oldValue = set.contains(this.value);
         if (value != null && value.booleanValue()) {
-            set = ImmutableObservableSet.add(set, this.value);
+            set = ImmutableSet.add(set, this.value);
         } else {
-            set = ImmutableObservableSet.remove(set, this.value);
+            set = ImmutableSet.remove(set, this.value);
         }
         setAccessor.put(a, set);
         return oldValue;

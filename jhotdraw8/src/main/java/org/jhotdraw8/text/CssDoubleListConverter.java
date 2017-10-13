@@ -1,5 +1,5 @@
 /* @(#)CssDoubleListConverter.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
 
@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.DefaultUnitConverter;
@@ -19,25 +19,25 @@ import org.jhotdraw8.io.UnitConverter;
 /**
  * CssDoubleListConverter.
  * <p>
- * Parses a list of sizes.
+ Parses a list ofCollection sizes.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDoubleListConverter implements Converter<ImmutableObservableList<Double>> {
+public class CssDoubleListConverter implements Converter<ImmutableList<Double>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,number}|[ ]+}}", new CssConverterFactory());
     private UnitConverter unitConverter = DefaultUnitConverter.getInstance();
 
 
     @Override
-    public ImmutableObservableList<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         ArrayList<Double> l = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
             tt.skipWhitespace();
-            return new ImmutableObservableList<>(l);
+            return  ImmutableList.ofCollection(l);
         } else {
             tt.pushBack();
         }
@@ -83,15 +83,15 @@ public class CssDoubleListConverter implements Converter<ImmutableObservableList
             }
         }
         tt.skipWhitespace();
-        return new ImmutableObservableList<>(l);
+        return  ImmutableList.ofCollection(l);
     }
 
     @Override
-    public ImmutableObservableList<Double> getDefaultValue() {
-        return ImmutableObservableList.emptyList();
+    public ImmutableList<Double> getDefaultValue() {
+        return ImmutableList.emptyList();
     }
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Double> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableList<Double> value) throws IOException {
       toStringFromCollection(out, idFactory, value);
     }
     public void toStringFromCollection(Appendable out, IdFactory idFactory, Collection<Double> value) throws IOException {

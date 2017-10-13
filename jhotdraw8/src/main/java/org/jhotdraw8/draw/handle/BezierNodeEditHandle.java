@@ -1,5 +1,5 @@
 /* @(#)BezierNodeEditHandle.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.handle;
 
@@ -22,7 +22,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -33,7 +33,7 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * Handle for the point of a figure.
+ * Handle for the point ofCollection a figure.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -57,14 +57,14 @@ public class BezierNodeEditHandle extends AbstractHandle {
     private final Region node;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
+    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
     private final String styleclass;
 
-    public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
         this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_POINT);
     }
 
-    public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
+    public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -87,7 +87,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }
@@ -115,7 +115,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
-                dv.getModel().set(owner, pointKey, ImmutableObservableList.remove(owner.get(pointKey), pointIndex));
+                dv.getModel().set(owner, pointKey, ImmutableList.remove(owner.get(pointKey), pointIndex));
                 dv.recreateHandles();
             }
         }
@@ -130,13 +130,13 @@ public class BezierNodeEditHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
 
-        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         if (pointIndex >= list.size()) {
             return;
         }
         BezierNode p = list.get(pointIndex);
         view.getModel().set(getOwner(), pointKey,
-                ImmutableObservableList.set(list, pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
+                ImmutableList.set(list, pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
     }
 
     @Override
@@ -156,7 +156,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableObservableList<BezierNode> list = f.get(pointKey);
+        ImmutableList<BezierNode> list = f.get(pointKey);
         if (pointIndex >= list.size()) {
             return;
         }

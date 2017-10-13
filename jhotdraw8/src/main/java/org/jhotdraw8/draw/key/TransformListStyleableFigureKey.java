@@ -13,7 +13,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.text.CssTransformListConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -23,11 +23,11 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Transform>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Transform>> {
+public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableList<Transform>> implements WriteableStyleableMapAccessor<ImmutableList<Transform>> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, ImmutableObservableList<Transform>> cssMetaData;
+    private final CssMetaData<?, ImmutableList<Transform>> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -45,7 +45,7 @@ public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableOb
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public TransformListStyleableFigureKey(String name, ImmutableObservableList<Transform> defaultValue) {
+    public TransformListStyleableFigureKey(String name, ImmutableList<Transform> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -56,32 +56,32 @@ public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableOb
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public TransformListStyleableFigureKey(String name, DirtyMask mask, ImmutableObservableList<Transform> defaultValue) {
-        super(name, ImmutableObservableList.class, new Class<?>[]{Transform.class}, mask, defaultValue);
+    public TransformListStyleableFigureKey(String name, DirtyMask mask, ImmutableList<Transform> defaultValue) {
+        super(name, ImmutableList.class, new Class<?>[]{Transform.class}, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<ImmutableObservableList<Transform>>> function = s -> {
+        Function<Styleable, StyleableProperty<ImmutableList<Transform>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, ImmutableObservableList<Transform>> converter
-                = new StyleConverterAdapter<ImmutableObservableList<Transform>>(new CssTransformListConverter());
-        CssMetaData<Styleable, ImmutableObservableList<Transform>> md
-                = new SimpleCssMetaData<Styleable, ImmutableObservableList<Transform>>(property, function,
+        final StyleConverter<String, ImmutableList<Transform>> converter
+                = new StyleConverterAdapter<ImmutableList<Transform>>(new CssTransformListConverter());
+        CssMetaData<Styleable, ImmutableList<Transform>> md
+                = new SimpleCssMetaData<Styleable, ImmutableList<Transform>>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?, ImmutableObservableList<Transform>> getCssMetaData() {
+    public CssMetaData<?, ImmutableList<Transform>> getCssMetaData() {
         return cssMetaData;
     }
 
-    private Converter<ImmutableObservableList<Transform>> converter;
+    private Converter<ImmutableList<Transform>> converter;
 
     @Override
-    public Converter<ImmutableObservableList<Transform>> getConverter() {
+    public Converter<ImmutableList<Transform>> getConverter() {
         if (converter == null) {
             converter = new CssTransformListConverter();
         }

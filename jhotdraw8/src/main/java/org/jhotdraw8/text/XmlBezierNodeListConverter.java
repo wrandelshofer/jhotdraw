@@ -1,5 +1,5 @@
 /* @(#)BezierNodeList.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.shape.SVGPath;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
@@ -24,7 +24,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class XmlBezierNodeListConverter implements Converter<ImmutableObservableList<BezierNode>> {
+public class XmlBezierNodeListConverter implements Converter<ImmutableList<BezierNode>> {
 
     private final boolean nullable;
 
@@ -33,11 +33,11 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableObservable
     }
 
     @Override
-    public ImmutableObservableList<BezierNode> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<BezierNode> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String input = buf.toString();
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
-        ImmutableObservableList<BezierNode> p = null;
+        ImmutableList<BezierNode> p = null;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if (!nullable) {
                 throw new ParseException("String expected. " + tt.currentToken(), buf.position());
@@ -59,7 +59,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableObservable
 
     @Override
     public void toString(Appendable out, IdFactory idFactory,
-             ImmutableObservableList<BezierNode> value) throws IOException {
+             ImmutableList<BezierNode> value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is null");
@@ -73,7 +73,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableObservable
     }
 
     @Override
-    public ImmutableObservableList<BezierNode> getDefaultValue() {
-        return ImmutableObservableList.emptyList();
+    public ImmutableList<BezierNode> getDefaultValue() {
+        return ImmutableList.emptyList();
     }
 }

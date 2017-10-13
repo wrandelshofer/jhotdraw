@@ -1,5 +1,5 @@
 /* @(#)StrokedShapeFigure.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -14,7 +14,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
@@ -126,7 +126,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleListStyleableFigureKey STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableObservableList.emptyList());
+    public static DoubleListStyleableFigureKey STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableList.emptyList());
 
     default void applyStrokeCapAndJoinProperties(@Nonnull Shape shape) {
         double d;
@@ -208,7 +208,7 @@ public interface StrokeableFigure extends Figure {
                 basicCap = BasicStroke.CAP_SQUARE;
                 break;
         }
-        final ImmutableObservableList<Double> dashlist = getStyled(STROKE_DASH_ARRAY);
+        final ImmutableList<Double> dashlist = getStyled(STROKE_DASH_ARRAY);
         float[] dasharray;
         if (dashlist.isEmpty()) {
             dasharray = null;

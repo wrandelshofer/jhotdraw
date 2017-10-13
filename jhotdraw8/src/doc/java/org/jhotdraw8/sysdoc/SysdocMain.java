@@ -33,6 +33,7 @@ import java.util.List;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
+@SuppressWarnings("deprecation")
 public class SysdocMain {
 
     private final static String USAGE = " -destdir dir -docdir dir {-docdir dir} {-srcdir dir} {-tstdir dir}";

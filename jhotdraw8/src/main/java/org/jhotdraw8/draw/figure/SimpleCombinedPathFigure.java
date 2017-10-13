@@ -1,5 +1,5 @@
 /* @(#)SimpleCombinedPathFigure.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -17,7 +17,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -58,7 +58,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
 
     @Override
     public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
     private PathIterator getStyledPathIteratorInParent(PathIterableFigure f, AffineTransform tx) {
@@ -80,7 +80,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
                 double strokeWidth = f.getStyled(STROKE_WIDTH);
                 if (strokeWidth > 0.0) {
                     BasicStroke basicStroke;
-                    final ImmutableObservableList<Double> dashArray = f.getStyled(STROKE_DASH_ARRAY);
+                    final ImmutableList<Double> dashArray = f.getStyled(STROKE_DASH_ARRAY);
                     if (dashArray != null && !dashArray.isEmpty()) {
                         double dashOffset = f.getStyled(STROKE_DASH_OFFSET);
                         float[] dash = new float[dashArray.size()];
@@ -170,7 +170,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
 
     @Override
     public void reshapeInLocal(Transform transform) {
-        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
+        // XXX if one ofCollection the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = transform;
         //Transform localTransform = transform.createConcatenation(getParentToLocal());
@@ -181,7 +181,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
+        // XXX if one ofCollection the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height);
         //Transform localTransform = transform.createConcatenation(getParentToLocal());

@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingView;
@@ -33,16 +33,16 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class BezierOutlineHandle extends AbstractHandle {
 
-    private final MapAccessor<ImmutableObservableList<BezierNode>> key;
+    private final MapAccessor<ImmutableList<BezierNode>> key;
 
     private Path node;
     private String styleclass;
 
-    public BezierOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> key) {
+    public BezierOutlineHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> key) {
         this(figure, key, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
-    public BezierOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> key, String styleclass) {
+    public BezierOutlineHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> key, String styleclass) {
         super(figure);
         this.key = key;
         node = new Path();
@@ -77,7 +77,7 @@ public class BezierOutlineHandle extends AbstractHandle {
             Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
             pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
             Point2D pInLocal = owner.worldToLocal(pInDrawing);
-            //dv.getModel().set(owner, key, ImmutableObservableList.addChild(owner.get(key), insertAt, pInLocal));
+            //dv.getModel().set(owner, key, ImmutableList.addChild(owner.get(key), insertAt, pInLocal));
             dv.recreateHandles();
         }
     }
@@ -98,7 +98,7 @@ public class BezierOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        final ImmutableObservableList<BezierNode> nodes = f.getStyled(key);
+        final ImmutableList<BezierNode> nodes = f.getStyled(key);
         final BezierNodePath bnp = new BezierNodePath(nodes);
         List<PathElement> elements = Shapes.fxPathElementsFromAWT(bnp.getPathIterator(Transforms.toAWT(t)));
         node.getElements().setAll(elements);

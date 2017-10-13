@@ -1,5 +1,5 @@
 /* @(#)WordListConverter.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
 
@@ -8,16 +8,16 @@ import java.nio.CharBuffer;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.Comparator;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.io.IdFactory;
 
 /**
  * WordListConverter converts an ImmutableObservableList of Strings into a
  * String.
  * <p>
- * The word list is actually a "set of space separated tokens", as specified in
- * HTML 5 and in XML Schema Part 2.
- * <p>
+ The word list is actually a "set ofCollection space separated tokens", as specified in
+ HTML 5 and in XML Schema Part 2.
+ <p>
  * The word list converter coalesces duplicate entries if they have the same
  * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
  * <p>
@@ -34,7 +34,7 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssWordListConverter implements Converter<ImmutableObservableList<String>> {
+public class CssWordListConverter implements Converter<ImmutableList<String>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
 
@@ -43,7 +43,7 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
                     Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableList<String> value) throws IOException {
         if (value == null) {
             return;
         }
@@ -54,14 +54,14 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
     }
 
     @Override
-    public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ImmutableObservableList<String> l = new ImmutableObservableList<>(v, 1, (int) v[0]);
+        ImmutableList<String> l =  ImmutableList.ofArray(v, 1, (int) v[0]);
         return l;
     }
 
     @Override
-    public ImmutableObservableList<String> getDefaultValue() {
-        return ImmutableObservableList.emptyList();
+    public ImmutableList<String> getDefaultValue() {
+        return ImmutableList.emptyList();
     }
 }

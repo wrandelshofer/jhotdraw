@@ -1,5 +1,5 @@
 /* @(#)LineFigure.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -13,7 +13,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.Handle;
@@ -50,11 +50,11 @@ public class SimplePolygonFigure extends AbstractLeafFigure
     }
 
     public SimplePolygonFigure(double startX, double startY, double endX, double endY) {
-        set(POINTS, ImmutableObservableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
+        set(POINTS, ImmutableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
     }
 
     public SimplePolygonFigure(Point2D... points) {
-        set(POINTS, ImmutableObservableList.of(points));
+        set(POINTS, ImmutableList.of(points));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
-        set(POINTS, new ImmutableObservableList<>(newP));
+        set(POINTS, ImmutableList.ofCollection(newP));
     }
 
     @Override
@@ -105,7 +105,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         applyStrokeableFigureProperties(lineNode);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(lineNode);
-        final ImmutableObservableList<Point2D> points = getStyled(POINTS);
+        final ImmutableList<Point2D> points = getStyled(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {
             if (p != null) {

@@ -1,5 +1,5 @@
 /* @(#)CssTransformListConverter.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
 
@@ -19,7 +19,7 @@ import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Affine;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenizerInterface;
 
 /**
@@ -64,12 +64,12 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssTransformListConverter implements Converter<ImmutableObservableList<Transform>> {
+public class CssTransformListConverter implements Converter<ImmutableList<Transform>> {
 
     private final CssDoubleConverter nb = new CssDoubleConverter();
 
     @Override
-    public void toString(Appendable buf, IdFactory idFactory, ImmutableObservableList<Transform> txs) throws IOException {
+    public void toString(Appendable buf, IdFactory idFactory, ImmutableList<Transform> txs) throws IOException {
         if (txs.isEmpty()) {
             buf.append("none");
             return;
@@ -207,13 +207,13 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
     }
 
     @Override
-    public ImmutableObservableList<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && tt.currentStringValue().equals("none")) {
             in.position(in.limit());
-            return ImmutableObservableList.emptyList();
+            return ImmutableList.emptyList();
         } else {
             tt.pushBack();
         }
@@ -431,12 +431,12 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
         }
 
         in.position(in.limit());
-        return new ImmutableObservableList<>(txs);
+        return  ImmutableList.ofCollection(txs);
     }
 
     @Override
-    public ImmutableObservableList<Transform> getDefaultValue() {
-        return ImmutableObservableList.emptyList();
+    public ImmutableList<Transform> getDefaultValue() {
+        return ImmutableList.emptyList();
     }
 
     @Override

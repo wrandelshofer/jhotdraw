@@ -1,5 +1,5 @@
 /* @(#)BezierCreationTool.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.tool;
 
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
@@ -37,8 +37,8 @@ import org.jhotdraw8.util.Resources;
 public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
     /**
-     * Remembers the number of points that we had, when the user started to drag
-     * the mouse.
+     * Remembers the number ofCollection points that we had, when the user started to drag
+ the mouse.
      */
     private int dragStartIndex;
 
@@ -80,7 +80,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+                    dm.set(createdFigure, key,  ImmutableList.ofCollection(points));
                     dv.getSelectedFigures().clear();
                     dv.setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);
@@ -105,7 +105,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             } else {
                 points.add(new BezierNode(c2));
             }
-            dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+            dm.set(createdFigure, key, ImmutableList.ofCollection(points));
         }
         event.consume();
     }
@@ -119,7 +119,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, new BezierNode(c2));
-            dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+            dm.set(createdFigure, key, ImmutableList.ofCollection(points));
         }
         event.consume();
     }
@@ -146,7 +146,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         } else {
             points.add(new BezierNode(c));
         }
-        dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+        dm.set(createdFigure, key, ImmutableList.ofCollection(points));
 
         dragStartIndex = -1;
         event.consume();
@@ -167,7 +167,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             BezierNodePathBuilder builder = new BezierNodePathBuilder();
             double error = 5 / dv.getZoomFactor();
             BezierFit.fitBezierPath(builder, digitized, error);
-            final ImmutableObservableList<BezierNode> built = builder.getNodes();
+            final ImmutableList<BezierNode> built = builder.getNodes();
             ArrayList<BezierNode> newList = new ArrayList<>(dragStartIndex + built.size());
             for (int i = 0; i < dragStartIndex; i++) {
                 newList.add(points.get(i));
@@ -184,7 +184,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             points = newList;
 
             DrawingModel dm = dv.getModel();
-            dm.set(createdFigure, key, new ImmutableObservableList<>(points));
+            dm.set(createdFigure, key, ImmutableList.ofCollection(points));
         }
         dragStartIndex = -1;
     }
