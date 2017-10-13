@@ -210,7 +210,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void removeFromParent(Figure child) {
-        Drawing oldDrawing = child.getDrawing();
+        Figure oldRoot = child.getRoot();
         Figure parent = child.getParent();
         if (parent != null) {
             int index = parent.getChildren().indexOf(child);
@@ -220,16 +220,16 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, parent));
             }
         }
-        Drawing newDrawing = child.getDrawing();
-        if (oldDrawing != newDrawing) {
-            if (oldDrawing != null) {
+        Figure newRoot = child.getRoot();
+        if (oldRoot != newRoot) {
+            if (oldRoot != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldRoot, f));
                 }
             }
-            if (newDrawing != null) { // must be null!!!
+            if (newRoot != null) { // must be null!!!
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newRoot, f));
                 }
             }
         }
@@ -237,7 +237,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
-        Drawing oldDrawing = child.getDrawing();
+        Figure oldRoot = child.getRoot();
         Figure oldParent = child.getParent();
         if (oldParent != null) {
             int oldChildIndex = oldParent.getChildren().indexOf(child);
@@ -246,16 +246,16 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, oldParent));
         }
         parent.getChildren().add(index, child);
-        Drawing newDrawing = child.getDrawing();
-        if (oldDrawing != newDrawing) {
-            if (oldDrawing != null) {
+        Figure newRoot = child.getRoot();
+        if (oldRoot != newRoot) {
+            if (oldRoot != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldRoot, f));
                 }
             }
-            if (newDrawing != null) {
+            if (newRoot != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newRoot, f));
                 }
             }
         }
@@ -552,9 +552,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 invalidate();
                 break;
             case NODE_ADDED_TO_TREE:
+                if (event.getRoot() instanceof Drawing)
                 figure.addNotify((Drawing) event.getRoot());
                 break;
             case NODE_REMOVED_FROM_TREE:
+                if (event.getRoot() instanceof Drawing)
                 figure.removeNotify((Drawing) event.getRoot());
                 removeDirty(figure);
                 break;
