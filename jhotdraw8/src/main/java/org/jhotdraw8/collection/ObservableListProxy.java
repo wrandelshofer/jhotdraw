@@ -32,6 +32,12 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
     public int getSourceIndex(int index) {
         return index;
     }
+    
+    // XXX mark as override in Java 9
+    //@Override
+    public int getViewIndex(int index) {
+        return index;
+    }
 
     @Override
     public E get(int index) {

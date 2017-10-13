@@ -16,6 +16,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -134,9 +136,8 @@ public class XmlUtil {
         try {
             // Create transformer SAX source that adds current element position to
             // the element as attributes.
-            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+            XMLReader xmlReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
             LocationFilter locationFilter = new LocationFilter(xmlReader);
-
             SAXSource saxSource = new SAXSource(locationFilter, inputSource);
 
             // Perform an empty transformation from SAX source to DOM result.
@@ -146,7 +147,7 @@ public class XmlUtil {
             transformer.transform(saxSource, domResult);
             Node root = domResult.getNode();
             return (Document) root;
-        } catch (TransformerException | SAXException ex) {
+        } catch (TransformerException | SAXException|ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }

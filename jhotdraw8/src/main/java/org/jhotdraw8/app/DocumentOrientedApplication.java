@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.app;
 
-import com.sun.javafx.menu.MenuBase;
-import com.sun.javafx.scene.control.GlobalMenuAdapter;
-import com.sun.javafx.tk.Toolkit;
 import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -414,7 +411,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
+            isSystemMenuSupported = false; //Toolkit.getToolkit().getSystemMenu().isSupported();
         } catch (IllegalAccessError e) {
             System.err.println("Warning: can not access com.sun.javafx.tk.Toolkit");
         }
@@ -422,6 +419,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
         actionMap = model.createApplicationActionMap(this);
         loadRecentUris(model.getName());
         if (isSystemMenuSupported) {
+            /*
             Platform.setImplicitExit(false);
             systemMenus = new ArrayList<>();
             ArrayList<MenuBase> menus = new ArrayList<>();
@@ -431,6 +429,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                 menus.add(GlobalMenuAdapter.adapt(m));
             }
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
+*/
         }
 
         final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");

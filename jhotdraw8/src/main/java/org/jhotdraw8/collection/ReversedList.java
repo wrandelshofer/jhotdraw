@@ -66,6 +66,9 @@ public class ReversedList<E> extends TransformationList<E, E> {
     public int getSourceIndex(int index) {
         return size - 1 - index;
     }
+    public int getViewIndex(int index) {
+        return size - 1 - index;
+    }
 
     @Override
     public E get(int index) {

@@ -400,13 +400,13 @@ public class NumberConverter implements Converter<Number> {
                     if (factor != 1.0) {
                         v = (float) (v / factor);
                     }
-                    value = new Float(v);
+                    value = Float.valueOf(v);
                 } else if (valueClass == Double.class) {
                     double v = Double.parseDouble(text);
                     if (factor != 1.0) {
                         v = (v / factor);
                     }
-                    value = new Double(v);
+                    value = Double.valueOf(v);
                 } else if (valueClass == Byte.class) {
                     byte v = Byte.parseByte(text);
                     if (factor != 1.0) {

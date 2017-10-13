@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import com.sun.javafx.scene.DirtyBits;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -305,6 +304,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
         // XXX for some reason, textArea is never updated
         //     here we force the scene to update it.
+        /*
         try {
             Method m = Node.class.getDeclaredMethod("impl_markDirty", DirtyBits.class);
             m.setAccessible(true);
@@ -314,7 +314,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         } catch (NoSuchMethodException | IllegalAccessException | IllegalAccessError | InvocationTargetException e) {
             System.out.println("StylesAttributesInspector e:" + e);
         }
-
+        */
         textArea.setText(buf.toString());
         int rows = 1;
         for (int i = 0; i < buf.length(); i++) {

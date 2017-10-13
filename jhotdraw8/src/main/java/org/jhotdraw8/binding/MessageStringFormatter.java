@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.binding;
 
-import com.sun.javafx.binding.StringConstant;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public abstract class MessageStringFormatter extends StringBinding {
             throw new NullPointerException("Format cannot be null.");
         }
         if (extractDependencies(args).length == 0) {
-            return StringConstant.valueOf(String.format(format, args));
+            return ConstantStringExpression.of(String.format(format, args));
         }
         final MessageStringFormatter formatter = new MessageStringFormatter() {
             {

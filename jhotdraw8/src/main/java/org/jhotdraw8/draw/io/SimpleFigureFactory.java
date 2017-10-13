@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.io.SimpleIdFactory;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -138,8 +139,8 @@ public class SimpleFigureFactory implements FigureFactory {
         }
         nameToFigure.put(name, () -> {
             try {
-                return figureClass.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
+                return figureClass.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException |NoSuchMethodException|InvocationTargetException e) {
                 throw new InternalError("Couldn't instantiate " + figureClass, e);
             }
         });
