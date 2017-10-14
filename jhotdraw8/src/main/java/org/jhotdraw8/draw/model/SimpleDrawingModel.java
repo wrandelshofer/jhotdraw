@@ -131,16 +131,19 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
     private Set<Figure> layoutSubjectChange = new HashSet<>();
 
+    /**
+     * XXX I am not sure why we need this complicated handling of layout subject
+     * changes.
+     */
     @SuppressWarnings("unchecked")
-    private void onPropertyChanged(FigurePropertyChangeEvent event) {
+    private void onPropertyChangedOLD(FigurePropertyChangeEvent event) {
         if (event.getType() == FigurePropertyChangeEvent.EventType.WILL_CHANGE) {
             Key<?> k = event.getKey();
             if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
                 layoutSubjectChange.clear();
                 layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
             }
-        }
-        if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
+        } else if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     (Key<Object>) event.getKey(), event.getOldValue(),
                     event.getNewValue()));
@@ -163,8 +166,12 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
     }
 
+    /**
+     * XXX I am not sure why we need this complicated handling of layout subject
+     * changes.
+     */
     @SuppressWarnings("unchecked")
-    private <T> void onPropertyChanged(Figure figure, Key<T> key, T oldValue, T newValue) {
+    private <T> void onPropertyChangedOLD(Figure figure, Key<T> key, T oldValue, T newValue) {
         {
             if (key instanceof FigureKey && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
                 layoutSubjectChange.clear();
@@ -183,6 +190,21 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 layoutSubjectChange.clear();
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void onPropertyChanged(FigurePropertyChangeEvent event) {
+        if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
+            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
+                    (Key<Object>) event.getKey(), event.getOldValue(),
+                    event.getNewValue()));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void onPropertyChanged(Figure figure, Key<T> key, T oldValue, T newValue) {
+        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
+                (Key<Object>) key, oldValue, newValue));
     }
 
     private void markDirty(Figure figure, DirtyBits... bits) {
@@ -375,7 +397,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // all figures with dirty bit "STYLE"
             // invoke stylesheetNotify
             // induce a dirty bit "TRANSFORM", "NODE" and "LAYOUT
-            final Set<Figure> visited = new HashSet<>((int)(dirties.size()*1.4));
+            final Set<Figure> visited = new HashSet<>((int) (dirties.size() * 1.4));
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
@@ -412,11 +434,29 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     f.transformNotify();
                 }
             }
+            // for all figures with dirty bit "LAYOUT" we must also update the node of their layoutable parents
+            DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmLayout)) {
+                    for (Figure p : f.ancestorIterable()) {
+                        if (p == f) {
+                            continue;
+                        }
+                        if (p.isLayoutable()) {
+                            markDirty(p, DirtyBits.LAYOUT, DirtyBits.NODE);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
 
             // all figures with dirty bit "LAYOUT" must be laid out
             // all observers of figures with dirty bit "LAYOUT_OBBSERVERS" must be laid out.
+            // all layoutable parents must be laid out.
             visited.clear();
-            DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
             DirtyMask dmLayoutObservers = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS);
             Set<Figure> todo = new LinkedHashSet<>(dirties.size()); // FIXME will probably be more than dirties.size!
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -552,12 +592,14 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 invalidate();
                 break;
             case NODE_ADDED_TO_TREE:
-                if (event.getRoot() instanceof Drawing)
-                figure.addNotify((Drawing) event.getRoot());
+                if (event.getRoot() instanceof Drawing) {
+                    figure.addNotify((Drawing) event.getRoot());
+                }
                 break;
             case NODE_REMOVED_FROM_TREE:
-                if (event.getRoot() instanceof Drawing)
-                figure.removeNotify((Drawing) event.getRoot());
+                if (event.getRoot() instanceof Drawing) {
+                    figure.removeNotify((Drawing) event.getRoot());
+                }
                 removeDirty(figure);
                 break;
             case NODE_REMOVED_FROM_PARENT:
