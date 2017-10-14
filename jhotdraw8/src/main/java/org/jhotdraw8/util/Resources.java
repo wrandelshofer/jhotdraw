@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.app.action.Action;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 /**
@@ -72,6 +73,7 @@ import javax.annotation.Nullable;
  * @version $Id$
  */
 public class Resources extends ResourceBundle implements Serializable {
+private final static Logger LOG = Logger.getLogger(Resources.class.getName());
 
     final static public String PARENT_RESOURCE_KEY = "$parent";
 
@@ -303,7 +305,7 @@ public class Resources extends ResourceBundle implements Serializable {
             return parent.containsKey(key);
         }
         if (isVerbose) {
-            System.out.println("Can't find resource for bundle " + baseName + " key not found: " + key);
+            LOG.warning("Can't find resource for bundle " + baseName + " key not found: " + key);
         }
         return false;
     }
@@ -570,7 +572,7 @@ public class Resources extends ResourceBundle implements Serializable {
         Object obj = handleGetObjectRecursively(key);
         if (obj == null) {
             obj = "";
-            System.err.println("Can't find resource for bundle " + baseName + ", key " + key);
+            LOG.warning("Can't find resource for bundle " + baseName + ", key " + key);
         }
 
         if (obj instanceof String) {
