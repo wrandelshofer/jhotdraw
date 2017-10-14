@@ -109,6 +109,10 @@ public interface Key<T> extends MapAccessor<T> {
     @Nonnull
     @Override
     default T put(@Nonnull Map<? super Key<?>, Object> a, @Nullable T value) {
+        if (isDefault(value) && !a.containsKey(this)) {
+            return value;
+        }
+
         @SuppressWarnings("unchecked")
         T oldValue = (T) a.put(this, value);
         return oldValue;
@@ -179,7 +183,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return True if assignable.
      */
     default boolean isDefault(@Nullable Object value) {
-        return Objects.equals(getDefaultValue(),value);
+        return Objects.equals(getDefaultValue(), value);
     }
 
     /**

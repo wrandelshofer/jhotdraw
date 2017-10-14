@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import javafx.beans.property.ObjectProperty;
@@ -194,7 +195,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @SuppressWarnings("unchecked")
     private void onPropertyChanged(FigurePropertyChangeEvent event) {
-        if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
+        if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED
+                && !Objects.equals(event.getOldValue(),event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     (Key<Object>) event.getKey(), event.getOldValue(),
                     event.getNewValue()));
@@ -203,6 +205,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @SuppressWarnings("unchecked")
     private <T> void onPropertyChanged(Figure figure, Key<T> key, T oldValue, T newValue) {
+        if (!Objects.equals(oldValue,newValue)) 
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                 (Key<Object>) key, oldValue, newValue));
     }

@@ -19,7 +19,13 @@ import javafx.scene.input.DataFormat;
  */
 public abstract class AbstractDocumentProject extends AbstractProject implements DocumentProject {
 
-    protected final BooleanProperty modified = new SimpleBooleanProperty();
+    protected final BooleanProperty modified = new SimpleBooleanProperty() {
+        @Override
+        public void set(boolean newValue) {
+            super.set(newValue); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+    };
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
     protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>();
 

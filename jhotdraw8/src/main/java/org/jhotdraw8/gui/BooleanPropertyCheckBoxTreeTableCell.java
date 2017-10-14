@@ -5,13 +5,10 @@ package org.jhotdraw8.gui;
 
 import javafx.beans.Observable;
 import javafx.beans.property.Property;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.util.Callback;
-import org.jhotdraw8.beans.PropertyBean;
-import org.jhotdraw8.collection.Key;
 
 /**
  * BooleanPropertyCheckBoxTreeTableCell.
