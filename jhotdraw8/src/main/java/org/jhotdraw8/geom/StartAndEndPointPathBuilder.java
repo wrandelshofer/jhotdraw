@@ -41,7 +41,7 @@ private boolean isStartDone;
     }
 
     @Override
-    protected void doFinish() {
+    protected void doPathDone() {
     //empty
     }
 

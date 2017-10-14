@@ -120,7 +120,7 @@ public class MarginPathBuilder extends AbstractPathBuilder {
         MoveTo, LineTo, CurveTo, QuadTo, ClosePath
     }
     @Override
-    protected void doFinish() {
+    protected void doPathDone() {
         doEnd();
        target.pathDone();
     }

@@ -77,7 +77,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder {
         return  ImmutableList.ofCollection(nodes);
     }
     @Override
-    protected void doFinish() {
+    protected void doPathDone() {
       // 
     }
 

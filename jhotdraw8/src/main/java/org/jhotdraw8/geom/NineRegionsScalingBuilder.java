@@ -173,7 +173,7 @@ public class NineRegionsScalingBuilder extends AbstractPathBuilder {
     }
 
     @Override
-    protected void doFinish() {
+    protected void doPathDone() {
         target.pathDone();
     }
 

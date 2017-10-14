@@ -80,7 +80,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder {
     }
 
     @Override
-    protected void doFinish() {
+    protected void doPathDone() {
         // empty
     }
 

@@ -39,7 +39,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     }
 
     @Override
-    protected void doFinish() {
+    protected void doPathDone() {
         if (path != null) {
             Point2D currentPoint = path.getCurrentPoint();
             cx = currentPoint.getX();

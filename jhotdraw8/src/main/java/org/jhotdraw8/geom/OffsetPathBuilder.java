@@ -103,7 +103,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     }
 
     @Override
-    protected void doFinish() {
+    protected void doPathDone() {
         if (needsMoveTo) {
             target.moveTo(getLastX(), getLastY());
             needsMoveTo = false;

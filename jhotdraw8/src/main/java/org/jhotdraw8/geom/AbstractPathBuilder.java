@@ -45,7 +45,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     protected abstract void doClosePath();
 
-    protected abstract void doFinish();
+    protected abstract void doPathDone();
 
     protected abstract void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3);
 
@@ -65,7 +65,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     @Override
     public void pathDone() {
-        doFinish();
+        doPathDone();
     }
 
     public Point2D getLastPoint() {
