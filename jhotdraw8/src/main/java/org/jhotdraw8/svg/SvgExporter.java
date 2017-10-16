@@ -44,6 +44,7 @@ import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
@@ -114,7 +115,7 @@ public class SvgExporter {
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
-    private final SvgPaintConverter paint = new SvgPaintConverter();
+    private final SvgPaintConverter paintConverter = new SvgPaintConverter();
     private boolean skipInvisibleNodes = true;
     private final Object skipKey;
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
@@ -430,13 +431,33 @@ public class SvgExporter {
         if (id != null) {
             elem.setAttribute("fill", "url(#" + id + ")");
         } else {
-            elem.setAttribute("fill", paint.toString(fill));
+            elem.setAttribute("fill", paintConverter.toString(fill));
             if (fill instanceof Color) {
                 Color c = (Color) fill;
                 if (!c.isOpaque()) {
                     elem.setAttribute("fill-opacity", nb.toString(c.getOpacity()));
                 }
             }
+        }
+        
+        
+       final FillRule fillRule;
+        if (node instanceof Path) {
+            Path path=(Path)node;
+            fillRule = path.getFillRule();
+        } else if (node instanceof SVGPath) {
+            SVGPath path=(SVGPath)node;
+            fillRule = path.getFillRule();
+        }else{
+            fillRule=FillRule.NON_ZERO;
+        }
+        switch (fillRule) {
+            case EVEN_ODD:
+            elem.setAttribute("fill-rule", "evenodd");
+                break;
+            case NON_ZERO:
+            default:
+                break;
         }
     }
 
@@ -583,7 +604,7 @@ public class SvgExporter {
                     Element stopElem = doc.createElement("stop");
                     stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
                     Color c = s.getColor();
-                    stopElem.setAttribute("stop-color", this.paint.toString(c));
+                    stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
                     if (!c.isOpaque()) {
                         stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
                     }
@@ -629,7 +650,7 @@ public class SvgExporter {
                     Element stopElem = doc.createElement("stop");
                     stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
                     Color c = s.getColor();
-                    stopElem.setAttribute("stop-color", this.paint.toString(c));
+                    stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
                     if (!c.isOpaque()) {
                         stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
                     }
@@ -961,7 +982,7 @@ public class SvgExporter {
             if (id != null) {
                 elem.setAttribute("stroke", "url(#" + id + ")");
             } else {
-                elem.setAttribute("stroke", paint.toString(stroke));
+                elem.setAttribute("stroke", paintConverter.toString(stroke));
                 if (stroke instanceof Color) {
                     Color c = (Color) stroke;
                     if (!c.isOpaque()) {
@@ -1009,7 +1030,7 @@ public class SvgExporter {
 
     private void writeStrokeAttributes(Element elem, BorderStroke shape) {
         if (shape.getTopStroke() != null) {
-            elem.setAttribute("stroke", paint.toString(shape.getTopStroke()));
+            elem.setAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
         }
         if (shape.getWidths().getTop() != 1) {
             elem.setAttribute("stroke-width", nb.toString(shape.getWidths().getTop()));
