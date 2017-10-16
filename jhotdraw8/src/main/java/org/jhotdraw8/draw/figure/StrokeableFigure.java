@@ -192,7 +192,7 @@ public interface StrokeableFigure extends Figure {
     }
 
     @Nonnull
-    default BasicStroke strokeableFigureToBasicStroke() {
+    default BasicStroke getStyledStroke() {
         final double width = getStyled(STROKE_WIDTH);
         final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);
         final int basicCap;
