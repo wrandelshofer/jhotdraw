@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -122,7 +123,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean attributeValueEquals(Figure element, String attributeName, String requestedValue) {
         String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
-        return stringValue != null && requestedValue.equals(stringValue);
+        return Objects.equals(stringValue, requestedValue);
     }
 
     @Override
@@ -333,7 +334,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                     convertedValue = converter.fromString(value);
                     elem.setStyled(origin, k, convertedValue);
                 } catch (ParseException | IOException ex) {
-                    ex.printStackTrace();
+                    //FIXME we should mark this as an error somewhere in the GUI
+                    //ex.printStackTrace();
                 }
             }
         }
