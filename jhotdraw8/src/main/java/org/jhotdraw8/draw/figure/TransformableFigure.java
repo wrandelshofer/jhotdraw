@@ -39,14 +39,16 @@ import org.jhotdraw8.geom.Transforms;
  * The following transformations are supported:
  * <ul>
  * <li>Translation ofCollection the local bounds ofCollection the figure.</li>
- * <li>Rotation around the center ofCollection the untransformed local bounds ofCollection the
- figure.</li>
- * <li>Scaling around the center ofCollection the untransformed local bounds ofCollection the
- figure.</li>
- * <li>Arbitrary sequence ofCollection affine transformations ofCollection the figure.</li>
+ * <li>Rotation around the center ofCollection the untransformed local bounds
+ * ofCollection the figure.</li>
+ * <li>Scaling around the center ofCollection the untransformed local bounds
+ * ofCollection the figure.</li>
+ * <li>Arbitrary sequence ofCollection affine transformations ofCollection the
+ * figure.</li>
  * </ul>
- Note that transformation matrices computed from the Rotation and Scaling must
- be recomputed every time when the local bounds ofCollection the figure change.
+ * Note that transformation matrices computed from the Rotation and Scaling must
+ * be recomputed every time when the local bounds ofCollection the figure
+ * change.
  *
  * @design.pattern Figure Mixin, Traits.
  *
@@ -84,7 +86,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the axes
- about the center ofCollection the figure.
+     * about the center ofCollection the figure.
      */
     public static Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
@@ -104,7 +106,8 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), 0.0);
     /**
-     * Defines the translation on the axes about the center ofCollection the figure.
+     * Defines the translation on the axes about the center ofCollection the
+     * figure.
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
@@ -258,7 +261,8 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     /**
      * Returns null if identity.
-     */@Nullable
+     */
+    @Nullable
     default Transform getParentToLocal() {
         return getParentToLocal(true);
     }
@@ -307,7 +311,8 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
         return p2l;
     }
-@Nullable
+
+    @Nullable
     default Transform getTransform() {
         List<Transform> list = getStyled(TRANSFORMS);
         Transform t;
@@ -332,7 +337,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
             set(TRANSFORMS, ImmutableList.emptyList());
         } else {
-            set(TRANSFORMS,  ImmutableList.of(transforms));
+            set(TRANSFORMS, ImmutableList.of(transforms));
         }
     }
 
@@ -382,24 +387,24 @@ public interface TransformableFigure extends TransformCacheableFigure {
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
-    
+
     /**
      * Throws unsupported operation exception.
      * <p>
-     * If subclass overrides {@link #reshapeInLocal(javafx.scene.transform.Transform) then the
- implementation ofCollection this method is most likely as follows:
- <pre>
+     * If subclass overrides {@link #reshapeInLocal(javafx.scene.transform.Transform) } then the
+     * implementation ofCollection this method is most likely as follows:
+     * <pre>
      *         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
      * </pre>
-     * 
+     *
      * @param x
      * @param y
      * @param width
-     * @param hight 
+     * @param height
      */
     @Override
     default void reshapeInLocal(double x, double y, double width, double height) {
-        throw new UnsupportedOperationException("this method must be overriden in class "+getClass());
+        throw new UnsupportedOperationException("this method must be overriden in class " + getClass());
     }
 
     @Override
