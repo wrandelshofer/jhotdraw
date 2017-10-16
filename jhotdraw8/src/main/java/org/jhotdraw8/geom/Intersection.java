@@ -1311,7 +1311,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
      *
      * @param point the point
      * @param center the center of the circle
-     * @param r the radius of the circle
+     * @param radius the radius of the circle
      * @return computed intersection
      */
     public static Intersection intersectPointCircle(Point2D point, Point2D center, double radius) {

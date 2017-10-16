@@ -5,7 +5,7 @@ package org.jhotdraw8.io;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * IdFactory.

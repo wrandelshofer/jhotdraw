@@ -7,7 +7,8 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javax.annotation.Nonnull;
 
 /**
- * EditableComponent.
+ * EditableComponent defines an API for objects which can perform clipboard operations
+ * and have a selection.
  *
  * @design.pattern EditableComponent Adapter, Adapter. Provides a common API for
  * GUI components which support editing.
@@ -17,7 +18,7 @@ import javax.annotation.Nonnull;
  */
 public interface EditableComponent {
 
-    /** Since subclassing of a JavaFX component is not convenient, when the component is
+    /** Since sub-classing of a JavaFX component is not convenient, when the component is
      * defined in a FXML file, an editable component can be provided for a JavaFX node by
      * setting the property EDITABLE_COMPONENT.
      */

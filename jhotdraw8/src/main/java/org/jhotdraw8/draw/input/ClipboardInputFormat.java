@@ -10,7 +10,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import java.util.Set;
 import javafx.scene.input.Clipboard;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.model.DrawingModel;
 
 /**

@@ -18,7 +18,7 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 
 /**
- * A {@code DocumentVIew} is a specialization of {@link Project} for document
+ * A {@code DocumentProject} is a specialization of {@link Project} for document
  * oriented applications.
  *
  * @author Werner Randelshofer
