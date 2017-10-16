@@ -543,7 +543,7 @@
         <call-saxon destdir="${build.doc}/chunk/srs"
                     srcfile="${build.doc.doc}/srs/Book.xml"
                     srcdir="${build.doc.doc}/srs"
-                    destfile="${build.docl}/chunk/srs/JHotDraw8SRS.xhtml"
+                    destfile="${build.doc}/chunk/srs/JHotDraw8SRS.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
         />
     </target>
