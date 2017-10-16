@@ -549,7 +549,7 @@
     </target>
     <target name="do-docbook.transform.saxon.epub3" depends="init,do-docbook.crossreference" description="uses saxon">
         <call-saxon destdir="${build.doc}/epub3/handbook"
-                    srcfile="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"
+                    srcfile="${build.doc.doc}/handbook/Book.xml"
                     srcdir="${build.doc.doc}/handbook"
                     destfile="${build.doc.html}/epub3/JHotDraw8Handbook.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
@@ -557,7 +557,7 @@
         />
         
         <call-saxon destdir="${build.doc}/epub3/srs"
-                    srcfile="${build.doc.doc}/srs/JHotDraw8SRS.xml"
+                    srcfile="${build.doc.doc}/srs/Book.xml"
                     srcdir="${build.doc.doc}/srs"
                     destfile="${build.doc.html}/epub3/srs/JHotDraw8SRS.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
