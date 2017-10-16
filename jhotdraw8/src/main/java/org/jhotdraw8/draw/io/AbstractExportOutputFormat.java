@@ -17,18 +17,18 @@ import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
-import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.io.UriResolver;
 
 /**

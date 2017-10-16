@@ -9,7 +9,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.xml.XmlUtil;

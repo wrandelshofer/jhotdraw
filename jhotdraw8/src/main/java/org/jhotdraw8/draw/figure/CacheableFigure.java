@@ -3,12 +3,9 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
-import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Provides a cache for computed values.
