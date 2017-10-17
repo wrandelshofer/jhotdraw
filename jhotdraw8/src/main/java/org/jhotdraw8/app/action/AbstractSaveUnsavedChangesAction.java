@@ -221,7 +221,6 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 }
             } else {
                 v.setURI(uri);
-                v.setDataFormat(dataFormat);
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
                 app.addRecentURI(dataFormat == null ? uri : UriUtil.addQuery(uri, "mimeType", dataFormat.getIdentifiers().iterator().next()));

@@ -281,7 +281,6 @@ public class ExitAction extends AbstractApplicationAction {
                 }
             } else {
                 v.setURI(uri);
-                v.setDataFormat(format);
                 v.clearModified();
                 app.addRecentURI(format==null?uri:UriUtil.addQuery(uri, "mimeType", format.getIdentifiers().iterator().next()));
             }
@@ -312,7 +311,6 @@ public class ExitAction extends AbstractApplicationAction {
                 }
             } else {
                 v.setURI(uri);
-                v.setDataFormat(format);
                 v.clearModified();
                 reviewNext();
             }

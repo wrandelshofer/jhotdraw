@@ -74,8 +74,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
     @Override
     protected void handleSucceded(DocumentProject v, URI uri, DataFormat format) {
         v.setURI(uri);
-        v.setDataFormat(format);
-        v.clearModified();
+       v.clearModified();
         v.setTitle(UriUtil.getName(uri));
         app.addRecentURI(format == null ? uri : UriUtil.addQuery(uri, "mimeType", format.getIdentifiers().iterator().next()));
     }

@@ -128,12 +128,11 @@ public class OpenFileAction extends AbstractApplicationAction {
                 v.removeDisabler(this);
             } else {
                 v.setURI(uri);
-                v.setDataFormat(dataFormat);
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
 
-                String mimeType = (chooser.getDataFormat() == null) ? null
-                        : chooser.getDataFormat().getIdentifiers().iterator().next();
+                String mimeType = (dataFormat == null) ? null
+                        : dataFormat.getIdentifiers().iterator().next();
                 getApplication().addRecentURI(UriUtil.addQuery(uri, "mimeType", mimeType));
                 v.removeDisabler(this);
             }

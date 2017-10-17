@@ -132,7 +132,6 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     handleException(v, exception);
                 } else {
                     v.setURI(u);
-                    v.setDataFormat(format);
                     v.clearModified();
                     v.setTitle(UriUtil.getName(uri));
                     v.removeDisabler(this);
