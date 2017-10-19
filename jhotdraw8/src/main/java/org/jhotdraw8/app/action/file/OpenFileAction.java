@@ -112,6 +112,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         app.removeDisabler(this);
         v.addDisabler(this);
         final DataFormat dataFormat = chooser.getDataFormat();
+        v.setDataFormat(dataFormat);
 
         // Open the file
         v.read(uri, chooser == null ? null : dataFormat, null, false).whenComplete((result, exception) -> {
