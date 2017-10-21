@@ -19,7 +19,7 @@ import java.util.Set;
 public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGraph {
 
     private final static int EDGES_NUM_FIELDS = 2;
-    private final static int EDGES_POINTER_FIELD = 1;
+    private final static int EDGES_NEXT_FIELD = 1;
     private final static int EDGES_VERTEX_FIELD = 0;
     private final static int LASTEDGE_COUNT_FIELD = 0;
     private final static int LASTEDGE_NUM_FIELDS = 2;
@@ -30,19 +30,19 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
     /**
      * Table of edges.
      * <p>
-     * {@code edges[i * 2} contains the index of the vertex of the i-th edge.
+     * {@code edges[i * EDGES_NUM_FIELDS+EDGES_VERTEX_FIELD} contains the index of the vertex of the i-th edge.
      * <p>
-     * {@code edges[i * 2 + 1} contains the index of the next edge.
+     * {@code edges[i * EDGES_NUM_FIELDS+EDGES_NEXT_FIELD} contains the index of the next edge.
      */
     private int[] edges;
 
     /**
      * Table of last edges.
      * <p>
-     * {@code lastEdge[i * 2+1} contains the index of the last edge of the i-th
+     * {@code lastEdge[i * LASTEDGE_NUM_FIELDS+LASTEDGE_POINTER_FIELD} contains the index of the last edge of the i-th
      * vertex.
      * <p>
-     * {@code lastEdge[i * 2} contains the number of edges of the i-th vertex.
+     * {@code lastEdge[i * LASTEDGE_NUM_FIELDS+LASTEDGE_COUNT_FIELD} contains the number of edges of the i-th vertex.
      */
     private int[] lastEdge;
     private int vertexCount;
@@ -141,7 +141,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
 
         int newLastEdgeIdOfA = edgeCount;
         edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD] = b;
-        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_POINTER_FIELD] = lastEdgeIdOfA ;
+        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD] = lastEdgeIdOfA ;
 
         lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD] = edgeCountOfA + 1;
         lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] = newLastEdgeIdOfA;
@@ -166,7 +166,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
         }
         int edgeId = lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
         for (int j = i - 1; j >= 0; j--) {
-            edgeId = edges[edgeId * EDGES_NUM_FIELDS + EDGES_POINTER_FIELD];
+            edgeId = edges[edgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD];
         }
         return edges[edgeId * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD];
     }
