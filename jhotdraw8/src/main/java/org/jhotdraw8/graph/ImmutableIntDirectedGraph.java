@@ -3,7 +3,9 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,12 +19,12 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
     /**
      * Holds the edges.
      */
-    private final int[] edges;
+    protected final int[] edges;
 
     /**
      * Holds offsets into the edges table for each vertex.
      */
-    private final int[] vertices;
+    protected final int[] vertices;
 
     /**
      * Creates a new instance from the specified graph.
@@ -38,10 +40,10 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
         this.edges = new int[edgeCapacity];
         this.vertices = new int[vertexCapacity];
 
-        for (int a = 0; a < vertexCapacity; a++) {
-            vertices[a] = edgeCount;
-            for (int i = 0, n = graph.getNextCount(a); i < n; i++) {
-                edges[edgeCount++] = graph.getNext(a, i);
+        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
+            vertices[vIndex] = edgeCount;
+            for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
+                edges[edgeCount++] = graph.getNext(vIndex, i);
             }
         }
     }
@@ -53,7 +55,6 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
      * @param graph a graph
      */
     public <V> ImmutableIntDirectedGraph(DirectedGraph<V> graph) {
-        int edgeCount = 0;
 
         final int edgeCapacity = graph.getEdgeCount();
         final int vertexCapacity = graph.getVertexCount();
@@ -61,18 +62,26 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
         this.edges = new int[edgeCapacity];
         this.vertices = new int[vertexCapacity];
 
-        Map<V, Integer> vertexMap = new HashMap<>(vertexCapacity);
-        for (int a = 0; a < vertexCapacity; a++) {
-            vertexMap.put(graph.getVertex(a), a);
+        Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
+        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
+            V vObject = graph.getVertex(vIndex);
+            vertexToIndexMap.put(vObject, vIndex);
         }
 
-        for (int a = 0; a < vertexCapacity; a++) {
-            V va = graph.getVertex(a);
-            vertices[a] = edgeCount;
-            for (int i = 0, n = graph.getNextCount(va); i < n; i++) {
-                edges[edgeCount++] = vertexMap.get(graph.getNext(va, i));
+        int edgeCount = 0;
+        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
+            V vObject = graph.getVertex(vIndex);
+
+            vertices[vIndex] = edgeCount;
+            for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
+                edges[edgeCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
             }
         }
+    }
+
+    protected ImmutableIntDirectedGraph(int vertexCount, int edgeCount) {
+        this.edges = new int[edgeCount];
+        this.vertices = new int[vertexCount];
     }
 
     @Override

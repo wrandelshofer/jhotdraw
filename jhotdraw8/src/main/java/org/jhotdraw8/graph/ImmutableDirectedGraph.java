@@ -3,7 +3,9 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,26 +15,17 @@ import java.util.Map;
  * @version $Id$
  * @param <V> the vertex type
  */
-public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
+public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
+        implements DirectedGraph<V> {
 
     /**
-     * Holds the number of edges.
+     * Maps a vertex index to a vertex object.
      */
-    private final int edgeCount;
-
+    private final List<V> indexToVertexMap;
     /**
-     * Holds the edges.
-     * <p>
-     * Contains no entry if a vertex has no edges. Contains a vertex if the
-     * vertex has only one edge, contains an array if a vertex has one or more
-     * edges.
+     * Maps a vertex object to a vertex index.
      */
-    private final Map<V, Object> edges;
-
-    /**
-     * Holds the vertices.
-     */
-    private final Object[] vertices;
+    private final Map<V, Integer> vertexToIndexMap;
 
     /**
      * Creates a new instance from the specified graph.
@@ -40,69 +33,41 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
      * @param graph a graph
      */
     public ImmutableDirectedGraph(DirectedGraph<V> graph) {
-        edgeCount = graph.getEdgeCount();
-        final int vertexCapacity = graph.getVertexCount();
+        super(graph.getVertexCount(), graph.getEdgeCount());
+        int vertexCapacity = graph.getVertexCount();
 
-        this.vertices = new Object[vertexCapacity];
-        this.edges = new HashMap<>(vertexCapacity);
+        indexToVertexMap = new ArrayList<>(vertexCapacity);
+        vertexToIndexMap = new HashMap<>(vertexCapacity);
 
-        for (int a = 0; a < vertexCapacity; a++) {
-            V va = graph.getVertex(a);
-            vertices[a] = va;
-            final int nextCount = graph.getNextCount(va);
-            if (nextCount == 1) {
-                edges.put(va, graph.getNext(va, 0));
-            } else if (nextCount > 1) {
-                Object[] edgeList = new Object[nextCount];
-                for (int i = 0; i < nextCount; i++) {
-                    edgeList[i] = graph.getNext(va, i);
-                }
-                edges.put(va, edgeList);
+        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
+            V vObject = graph.getVertex(vIndex);
+            vertexToIndexMap.put(vObject, vIndex);
+            indexToVertexMap.add(vObject);
+        }
+
+        int edgeCount = 0;
+        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
+            V vObject = indexToVertexMap.get(vIndex);
+
+            vertices[vIndex] = edgeCount;
+            for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
+                edges[edgeCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
             }
         }
     }
 
     @Override
-    public int getEdgeCount() {
-        return edgeCount;
+    public V getNext(V vertex, int i) {
+        return indexToVertexMap.get(getNext(vertexToIndexMap.get(vertex), i));
     }
 
     @Override
-    public V getNext(V v, int i) {
-        Object edgeListOrVertex = edges.get(v);
-        if (edgeListOrVertex instanceof Object[]) {
-            final Object[] edgeList = (Object[]) edgeListOrVertex;
-            @SuppressWarnings("unchecked")
-            final V next = (V) edgeList[i];
-            return next;
-        }
-        if (edgeListOrVertex == null) {
-            throw new IllegalArgumentException("vertex v(" + v + ") has no edges.");
-        }
-        @SuppressWarnings("unchecked")
-        final V next = (V) edgeListOrVertex;
-        return next;
-    }
-
-    @Override
-    public int getNextCount(V v) {
-        Object edgeListOrVertex = edges.get(v);
-        if (edgeListOrVertex instanceof Object[]) {
-            final Object[] edgeList = (Object[]) edgeListOrVertex;
-            return edgeList.length;
-        }
-        return edgeListOrVertex == null ? 0 : 1;
+    public int getNextCount(V vertex) {
+        return getNextCount(vertexToIndexMap.get(vertex));
     }
 
     @Override
     public V getVertex(int indexOfVertex) {
-        @SuppressWarnings("unchecked")
-        final V v = (V) vertices[indexOfVertex];
-        return v;
-    }
-
-    @Override
-    public int getVertexCount() {
-        return vertices.length;
+        return indexToVertexMap.get(indexOfVertex);
     }
 }

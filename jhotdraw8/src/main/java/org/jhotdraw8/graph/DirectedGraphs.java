@@ -24,97 +24,6 @@ public class DirectedGraphs {
     private DirectedGraphs() {
     }
 
-    /**
-     * Sorts the specified directed graph topologically.
-     *
-     * @param <V> the vertex type
-     * @param m the graph
-     * @return the sorted list of vertices
-     */
-    public static <V> List<V> sortTopologically(DirectedGraph<V> m) {
-        final IntDirectedGraph im;
-        if (!(m instanceof IntDirectedGraph)) {
-            im = DirectedGraphBuilder.ofDirectedGraph(m);
-        } else {
-            im = (IntDirectedGraph) m;
-        }
-        int[] a = sortTopologicallyInt(im);
-        List<V> result = new ArrayList<>(a.length);
-        for (int i = 0; i < a.length; i++) {
-            result.add(m.getVertex(a[i]));
-        }
-        return result;
-    }
-
-    /**
-     * Sorts the specified directed graph topologically.
-     *
-     * @param model the graph
-     * @return the sorted list of vertices
-     */
-    public static int[] sortTopologicallyInt(IntDirectedGraph model) {
-        final int n = model.getVertexCount();
-        int[] result = new int[n];// result array
-        int[] deg = new int[n]; // number of unprocessed incoming edges on vertex
-        int[] queue = new int[n]; // todo queue
-        int first = 0, last = 0; // first and last indices in queue
-
-        // Step 1: compute number of incoming edges for each vertex
-        for (int i = 0; i < n; i++) {
-            final int m = model.getNextCount(i);
-            for (int j = 0; j < m; j++) {
-                int v = model.getNext(i, j);
-                deg[v]++;
-            }
-        }
-
-        // Step 2: put all vertices with degree zero into queue
-        for (int i = 0; i < n; i++) {
-            if (deg[i] == 0) {
-                queue[last++] = i;
-            }
-        }
-
-        // Step 3: Repeat until all vertices have been processed or a loop has been detected
-        int done = 0;
-        BitSet doneSet = null;
-        while (done < n) {
-            for (; done < n; done++) {
-                if (first == last) {
-                    // => the graph has a loop!
-                    break;
-                }
-                int v = queue[first++];
-                final int m = model.getNextCount(v);
-                for (int j = 0; j < m; j++) {
-                    int u = model.getNext(v, j);
-                    if (--deg[u] == 0) {
-                        queue[last++] = u;
-                    }
-                }
-                result[done] = v;
-            }
-
-            if (done < n) {
-                if (doneSet == null) {
-                    doneSet = new BitSet();
-                }
-                for (int i = doneSet.size(); i < done; i++) {
-                    doneSet.set(result[i]);
-                }
-                for (int i = 0; i < n; i++) {
-                    if (!doneSet.get(i)) {
-                        deg[i] = 0;
-                        queue[last++] = i;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
     public static <T> String dump(DirectedGraph<T> g) {
         StringBuilder b = new StringBuilder();
 
@@ -232,5 +141,96 @@ public class DirectedGraphs {
             }
         }
         return disjointSets;
+    }
+
+    /**
+     * Sorts the specified directed graph topologically.
+     *
+     * @param <V> the vertex type
+     * @param m the graph
+     * @return the sorted list of vertices
+     */
+    public static <V> List<V> sortTopologically(DirectedGraph<V> m) {
+        final IntDirectedGraph im;
+        if (!(m instanceof IntDirectedGraph)) {
+            im = DirectedGraphBuilder.ofDirectedGraph(m);
+        } else {
+            im = (IntDirectedGraph) m;
+        }
+        int[] a = sortTopologicallyInt(im);
+        List<V> result = new ArrayList<>(a.length);
+        for (int i = 0; i < a.length; i++) {
+            result.add(m.getVertex(a[i]));
+        }
+        return result;
+    }
+
+    /**
+     * Sorts the specified directed graph topologically.
+     *
+     * @param model the graph
+     * @return the sorted list of vertices
+     */
+    public static int[] sortTopologicallyInt(IntDirectedGraph model) {
+        final int n = model.getVertexCount();
+        int[] result = new int[n];// result array
+        int[] deg = new int[n]; // number of unprocessed incoming edges on vertex
+        int[] queue = new int[n]; // todo queue
+        int first = 0, last = 0; // first and last indices in queue
+
+        // Step 1: compute number of incoming edges for each vertex
+        for (int i = 0; i < n; i++) {
+            final int m = model.getNextCount(i);
+            for (int j = 0; j < m; j++) {
+                int v = model.getNext(i, j);
+                deg[v]++;
+            }
+        }
+
+        // Step 2: put all vertices with degree zero into queue
+        for (int i = 0; i < n; i++) {
+            if (deg[i] == 0) {
+                queue[last++] = i;
+            }
+        }
+
+        // Step 3: Repeat until all vertices have been processed or a loop has been detected
+        int done = 0;
+        BitSet doneSet = null;
+        while (done < n) {
+            for (; done < n; done++) {
+                if (first == last) {
+                    // => the graph has a loop!
+                    break;
+                }
+                int v = queue[first++];
+                final int m = model.getNextCount(v);
+                for (int j = 0; j < m; j++) {
+                    int u = model.getNext(v, j);
+                    if (--deg[u] == 0) {
+                        queue[last++] = u;
+                    }
+                }
+                result[done] = v;
+            }
+
+            if (done < n) {
+                if (doneSet == null) {
+                    doneSet = new BitSet();
+                }
+                for (int i = doneSet.size(); i < done; i++) {
+                    doneSet.set(result[i]);
+                }
+                for (int i = 0; i < n; i++) {
+                    if (!doneSet.get(i)) {
+                        deg[i] = 0;
+                        queue[last++] = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }
