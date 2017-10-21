@@ -173,12 +173,9 @@ public class DirectedGraphs {
      */
     public static int[] sortTopologicallyInt(IntDirectedGraph model) {
         final int n = model.getVertexCount();
-        int[] result = new int[n];// result array
-        int[] deg = new int[n]; // number of unprocessed incoming edges on vertex
-        int[] queue = new int[n]; // todo queue
-        int first = 0, last = 0; // first and last indices in queue
 
         // Step 1: compute number of incoming edges for each vertex
+        final int[] deg = new int[n]; // number of unprocessed incoming edges on vertex
         for (int i = 0; i < n; i++) {
             final int m = model.getNextCount(i);
             for (int j = 0; j < m; j++) {
@@ -188,6 +185,8 @@ public class DirectedGraphs {
         }
 
         // Step 2: put all vertices with degree zero into queue
+        final int[] queue = new int[n]; // todo queue
+        int first = 0, last = 0; // first and last indices in queue
         for (int i = 0; i < n; i++) {
             if (deg[i] == 0) {
                 queue[last++] = i;
@@ -195,6 +194,7 @@ public class DirectedGraphs {
         }
 
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
+        final int[] result = new int[n];// result array
         int done = 0;
         BitSet doneSet = null;
         while (done < n) {
