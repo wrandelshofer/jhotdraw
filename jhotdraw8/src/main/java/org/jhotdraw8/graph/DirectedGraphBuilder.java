@@ -51,7 +51,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
      */
     private final Map<V, Integer> vertexMap;
     /**
-     * Maps a vertex index to a vertex.
+     * Maps a vertex index to a vertex object.
      */
     private final List<V> vertices;
 
@@ -161,6 +161,9 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
 
     @Override
     public int getNext(int vi, int i) {
+        if (i < 0 ||i >= getNextCount(vi)) {
+            throw new IllegalArgumentException("0 <= i("+i+") <= "+getNextCount(vi));
+        }
         int edgeId = lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
         for (int j = i - 1; j >= 0; j--) {
             edgeId = edges[edgeId * EDGES_NUM_FIELDS + EDGES_POINTER_FIELD];
