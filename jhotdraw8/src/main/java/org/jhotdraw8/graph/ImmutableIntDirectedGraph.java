@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ImmutableIntDirectedGraph implements IntDirectedGraph {
+public class ImmutableIntDirectedGraph implements DirectedGraphInt {
 
     /**
      * Holds the edges.
@@ -31,7 +31,7 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
      *
      * @param graph a graph
      */
-    public ImmutableIntDirectedGraph(IntDirectedGraph graph) {
+    public ImmutableIntDirectedGraph(DirectedGraphInt graph) {
         int edgeCount = 0;
 
         final int edgeCapacity = graph.getEdgeCount();

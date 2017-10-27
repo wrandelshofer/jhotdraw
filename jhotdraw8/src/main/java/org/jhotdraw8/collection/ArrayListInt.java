@@ -1,4 +1,4 @@
-/* @(#)IntArrayList.java
+/* @(#)ArrayListInt.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntArrayList {
+public class ArrayListInt {
 
     /**
      * Holds the size of the list. Invariant: size >= 0.
@@ -26,14 +26,14 @@ public class IntArrayList {
     /**
      * Creates a new empty instance with 0 initial capacity.
      */
-    public IntArrayList() {
+    public ArrayListInt() {
     }
 
     /**
      * Creates a new empty instance with the specified initial capacity.
      * @param initialCapacity the initial capacity
      */
-    public IntArrayList(int initialCapacity) {
+    public ArrayListInt(int initialCapacity) {
         increaseCapacity(initialCapacity);
     }
 
@@ -42,7 +42,7 @@ public class IntArrayList {
      *
      * @param that another list
      */
-    public void addAll(IntArrayList that) {
+    public void addAll(ArrayListInt that) {
         if (that.isEmpty()) {
             return;
         }
@@ -207,5 +207,21 @@ public class IntArrayList {
      */
     public IntStream stream() {
         return (size == 0) ? Arrays.stream(new int[0], 0, 0) : Arrays.stream(items, 0, size);
+    }
+    
+    
+    /** Sets the size of this list. If the new size is greater than the current size,
+     * new {@code 0} items are added to the end of the list. If the new size is
+     * is less than the current size, all items at indices greater or equal  {@code newSize}
+     * are discarded.
+     * 
+     * @param newSize 
+     */
+    public void setSize(int newSize) {
+        increaseCapacity(newSize);
+        if (newSize>size) {
+            Arrays.fill(items, size,newSize,0);
+        }
+        size = newSize;
     }
 }

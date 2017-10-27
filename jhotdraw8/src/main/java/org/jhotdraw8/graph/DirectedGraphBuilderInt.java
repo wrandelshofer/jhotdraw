@@ -1,4 +1,4 @@
-/* @(#)IntDirectedGraphBuilder.java
+/* @(#)DirectedGraphBuilderInt.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -6,12 +6,12 @@ package org.jhotdraw8.graph;
 import java.util.Set;
 
 /**
- * IntDirectedGraphBuilder.
+ * DirectedGraphBuilderInt.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphBuilder implements IntDirectedGraph {
+public class DirectedGraphBuilderInt implements DirectedGraphInt {
 
     private final static int EDGES_NUM_FIELDS = 2;
     private final static int EDGES_POINTER_FIELD = 1;
@@ -43,11 +43,11 @@ public class IntDirectedGraphBuilder implements IntDirectedGraph {
     private int[] lastEdge;
     private int vertexCount;
 
-    public IntDirectedGraphBuilder() {
+    public DirectedGraphBuilderInt() {
         this(16, 16);
     }
 
-    public IntDirectedGraphBuilder(int vertexCapacity, int edgeCapacity) {
+    public DirectedGraphBuilderInt(int vertexCapacity, int edgeCapacity) {
         if (vertexCapacity < 1) {
             throw new IllegalArgumentException("vertexCapacity: " + vertexCapacity);
         }
@@ -211,10 +211,10 @@ public class IntDirectedGraphBuilder implements IntDirectedGraph {
      * @param graph a graph
      * @return a new graph with inverted edges
      */
-    public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
+    public static DirectedGraphBuilderInt inverseOfIntDirectedGraph(DirectedGraphInt graph) {
         int edgeCount = graph.getEdgeCount();
 
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
+        DirectedGraphBuilderInt b = new DirectedGraphBuilderInt(graph.getVertexCount(), edgeCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             int v = i;
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
@@ -224,10 +224,10 @@ public class IntDirectedGraphBuilder implements IntDirectedGraph {
         return b;
     }
 
-    public static IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
+    public static DirectedGraphBuilderInt ofIntDirectedGraph(DirectedGraphInt graph) {
         int edgeCount = graph.getEdgeCount();
 
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
+        DirectedGraphBuilderInt b = new DirectedGraphBuilderInt(graph.getVertexCount(), edgeCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             int v = i;
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {

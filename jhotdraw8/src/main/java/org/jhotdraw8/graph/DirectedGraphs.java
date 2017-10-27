@@ -3,15 +3,20 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Set;
-import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.ArrayListInt;
 
 /**
  * Provides algorithms for directed graphs.
@@ -103,17 +108,17 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static List<Set<Integer>> findDisjointSets(IntDirectedGraph g) {
-        final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
+    public static List<Set<Integer>> findDisjointSets(DirectedGraphInt g) {
+        final List<ArrayListInt> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
-            final IntArrayList initialSet = new IntArrayList(1);
+            final ArrayListInt initialSet = new ArrayListInt(1);
             initialSet.add(v);
             sets.add(initialSet);
         }
         for (int u = 0, n = g.getVertexCount(); u < n; u++) {
             for (int v = 0, m = g.getNextCount(u); v < m; v++) {
-                final IntArrayList uset = sets.get(u);
-                final IntArrayList vset = sets.get(v);
+                final ArrayListInt uset = sets.get(u);
+                final ArrayListInt vset = sets.get(v);
                 if (uset != vset) {
                     if (uset.size() < vset.size()) {
                         for (int i = 0, usize = uset.size(); i < usize; i++) {
@@ -132,9 +137,9 @@ public class DirectedGraphs {
             }
         }
 
-        final Map<IntArrayList, Object> setMap = new IdentityHashMap<IntArrayList, Object>();
+        final Map<ArrayListInt, Object> setMap = new IdentityHashMap<ArrayListInt, Object>();
         final List<Set<Integer>> disjointSets = new ArrayList<>();
-        for (IntArrayList set : sets) {
+        for (ArrayListInt set : sets) {
             if (!setMap.containsKey(set)) {
                 setMap.put(set, set);
                 disjointSets.add(set.addAllInto(new LinkedHashSet<Integer>()));
@@ -151,11 +156,11 @@ public class DirectedGraphs {
      * @return the sorted list of vertices
      */
     public static <V> List<V> sortTopologically(DirectedGraph<V> m) {
-        final IntDirectedGraph im;
-        if (!(m instanceof IntDirectedGraph)) {
+        final DirectedGraphInt im;
+        if (!(m instanceof DirectedGraphInt)) {
             im = DirectedGraphBuilder.ofDirectedGraph(m);
         } else {
-            im = (IntDirectedGraph) m;
+            im = (DirectedGraphInt) m;
         }
         int[] a = sortTopologicallyInt(im);
         List<V> result = new ArrayList<>(a.length);
@@ -171,7 +176,7 @@ public class DirectedGraphs {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static int[] sortTopologicallyInt(IntDirectedGraph model) {
+    public static int[] sortTopologicallyInt(DirectedGraphInt model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming edges for each vertex
@@ -215,8 +220,9 @@ public class DirectedGraphs {
             }
 
             if (done < n) {
+                // Break loop in graph by removing an arbitrary edege.
                 if (doneSet == null) {
-                    doneSet = new BitSet();
+                    doneSet = new BitSet(n);
                 }
                 for (int i = doneSet.size(); i < done; i++) {
                     doneSet.set(result[i]);
@@ -232,5 +238,212 @@ public class DirectedGraphs {
         }
 
         return result;
+    }
+
+    private static class BackLink<VV> {
+
+        final BackLink<VV> parent;
+        final VV vertex;
+
+        public BackLink(VV vertex, BackLink<VV> parent) {
+            this.vertex = vertex;
+            this.parent = parent;
+        }
+
+    }
+
+    /**
+     * Breadth-first-search.
+     *
+     * @param <V> the vertex type
+     * @param graph a graph
+     * @param root the starting point of the search
+     * @param goal the goal of the search
+     * @param pathElements Adds the resulting path to the provided list of path
+     * elements. Does not add the root element.
+     * @return true on success
+     */
+    public static <V> boolean breadthFirstSearch(DirectedGraph<V> graph, V root, V goal, List<V> pathElements) {
+        Set<V> visited = new HashSet<>(graph.getVertexCount()); // bad performance
+        Queue<BackLink<V>> queue = new ArrayDeque<>(graph.getEdgeCount());
+        BackLink<V> rootBackLink = new BackLink<>(root, null);// temporaly allocated objects garbage
+        visited.add(root);
+        queue.add(rootBackLink);
+        BackLink<V> current = null;
+        while (!queue.isEmpty()) {
+            current = queue.remove();
+            if (current.vertex == goal) {
+                break;
+            }
+            for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
+                V next = graph.getNext(current.vertex, i);
+                if (visited.add(next)) {
+                    BackLink<V> backLink = new BackLink<>(next, current);
+                    queue.add(backLink);
+                }
+            }
+        }
+        if (current == null || current.vertex != goal) {
+            return false;
+        }
+        for (BackLink<V> i = current; i.vertex != root; i = i.parent) {
+            pathElements.add(null);
+        }
+        int insertionPoint = pathElements.size();
+        for (BackLink<V> i = current; i.vertex != root; i = i.parent) {
+            pathElements.set(--insertionPoint, i.vertex);
+        }
+        return true;
+    }
+
+    /**
+     * Queue with back links.
+     * <p>
+     * The back links are stored in the same data structure as the queue and can
+     * be retrieved by index even after they have been removed from the queue.
+     */
+    private static class QueueWithBackLinks {
+
+        final static int Q_NUM_FIELDS = 2;
+        final static int Q_PARENT_INDEX = 1;
+        final static int Q_VERTEX = 0;
+        /**
+         * Index at which the next element will be removed from the queue.
+         */
+        private int first = 0;
+        /**
+         * Index at which the next element will be added to the queue.
+         */
+        private int last = 0;
+        
+        private final int[] queue;
+
+        public QueueWithBackLinks(int capacity) {
+            this.queue = new int[capacity];
+        }
+
+        /**
+         * Adds an element to the end of the queue queue.
+         *
+         * @param vertex the value of the vertex property of the element
+         * @param parentIndex the value of the parent index property of the
+         * element
+         * @throws IndexOutOfBoundsException if not enough capacity
+         */
+        public void add(int vertex, int parentIndex) {
+            queue[last * Q_NUM_FIELDS + Q_VERTEX] = vertex;
+            queue[last * Q_NUM_FIELDS + Q_PARENT_INDEX] = parentIndex;
+            ++last;
+        }
+
+        /**
+         * Gets the index of the last removed element.
+         *
+         * @return index or SENTINEL if no element has ever been removed
+         */
+        public int getIndexOfRemoved() {
+            return first;
+        }
+
+        /**
+         * Gets the value of the parent index property of the specified element.
+         *
+         * @param index the index of an element
+         * @return parent index (can be SENTINEL)
+         * @throws IndexOutOfBoundsException if index is outside of bounds
+         */
+        public int getParentIndex(int index) {
+            if (index >= last) {
+                throw new IndexOutOfBoundsException("index(" + index + ") >= last(" + last + ")");
+            }
+            return queue[index * Q_NUM_FIELDS + Q_PARENT_INDEX];
+        }
+
+        /**
+         * Gets the value of the vertex property of the specified element.
+         *
+         * @param index the index of an element
+         * @return vertex
+         * @throws IndexOutOfBoundsException if index is outside of bounds
+         */
+        public int getVertex(int index) {
+            if (index >= last) {
+                throw new IndexOutOfBoundsException("index(" + index + ") >= last(" + last + ")");
+            }
+            return queue[index * Q_NUM_FIELDS + Q_VERTEX];
+        }
+
+        /**
+         * Tests if the queue is empty.
+         *
+         * @return true if empty.
+         */
+        public boolean isEmpty() {
+            return last == first;
+        }
+
+        /**
+         * Removes an element from the beginning of the queue.
+         *
+         * @return the index of the removed back link.
+         * @throws NoSuchElementException if the queue is empty
+         */
+        public int remove() {
+            if (isEmpty()) {
+                throw new NoSuchElementException();
+            }
+            int vertex = queue[first * Q_NUM_FIELDS + Q_VERTEX];
+            ++first;
+            return vertex;
+        }
+    }
+
+    private final static int SENTINEL = -1;
+
+    /**
+     * Breadth-first-search for DirectedGraphInt.
+     *
+     * @param graph a graph
+     * @param root the starting point of the search
+     * @param goal the goal of the search
+     * @param pathElements Adds the resulting path to the provided list of path
+     * elements. Does not add the root element.
+     * @return true on success
+     */
+    public static boolean breadthFirstSearchInt(DirectedGraphInt graph, int root, int goal, ArrayListInt pathElements) {
+        BitSet visited = new BitSet(graph.getVertexCount());
+        QueueWithBackLinks queue = new QueueWithBackLinks(graph.getEdgeCount());
+        queue.add(root, SENTINEL);
+        visited.set(root);
+        int current = SENTINEL;
+        while (!queue.isEmpty()) {
+            current = queue.remove();
+            if (current == goal) {
+                break;
+            }
+            for (int i = 0, n = graph.getNextCount(current); i < n; i++) {
+                int next = graph.getNext(current, i);
+                if (!visited.get(next)) {
+                    visited.set(next);
+                    queue.add(next, current);
+                }
+            }
+        }
+        if (current == SENTINEL) {
+            return false;
+        }
+        
+        // Add the path to the pathElements list.
+        // Part 1. Make room for the path elements.
+        int insertionPoint=pathElements.size();
+        for (int i = queue.getIndexOfRemoved(); queue.getVertex(i) != root; i = queue.getParentIndex(i)) {
+            ++insertionPoint;
+        }
+        pathElements.setSize(insertionPoint);
+        // Part 2. Add the path elements.
+        for (int i = queue.getIndexOfRemoved(); queue.getVertex(i) != root; i = queue.getParentIndex(i)) {
+            pathElements.set(--insertionPoint, queue.getVertex(i));
+        }
+        return true;
     }
 }

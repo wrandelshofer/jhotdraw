@@ -10,7 +10,7 @@ package org.jhotdraw8.graph;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface IntDirectedGraph {
+public interface DirectedGraphInt {
 
     /**
      * Returns the number of edges.
