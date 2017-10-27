@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * BreadthFirstIterator.
@@ -23,14 +24,36 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
 
     private final DirectedGraph<V> graph;
     private final Queue<V> queue;
-    private final Set<V> visited;
+    private final Predicate<V> visited;
 
+    /**
+     * Creates a new instance.
+     * 
+     * @param graph the graph
+     * @param root the root vertex
+     */
     public BreadthFirstIterator(DirectedGraph<V> graph, V root) {
         this.graph = graph;
         queue = new ArrayDeque<>(graph.getEdgeCount());
-        visited = new HashSet<>(graph.getVertexCount());
+        Set<V> vset = new HashSet<>(graph.getVertexCount());
+        visited=vset::add;
         queue.add(root);
-        visited.add(root);
+        visited.test(root);
+    }
+    /**
+     * Creates a new instance.
+     * 
+     * @param graph the graph
+     * @param root the root vertex
+     * @param visited a function which returns true if the specified vertex has been visited, and marks
+     * the specified vertex as visited.
+     */
+    public BreadthFirstIterator(DirectedGraph<V> graph, V root, Predicate<V> visited) {
+        this.graph = graph;
+        queue = new ArrayDeque<>(graph.getEdgeCount());
+        this.visited = visited;
+        queue.add(root);
+        visited.test(root);
     }
 
     @Override
@@ -42,7 +65,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
     public V next() {
         V current = queue.remove();
         for (V next : graph.getNextVertices(current)) {
-            if (visited.add(next)) {
+            if (visited.test(next)) {
                 queue.add(next);
             }
         }

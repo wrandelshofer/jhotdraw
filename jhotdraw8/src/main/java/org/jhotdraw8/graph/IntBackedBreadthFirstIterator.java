@@ -5,10 +5,9 @@ package org.jhotdraw8.graph;
 
 import java.util.ArrayDeque;
 import java.util.BitSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.Set;
+import java.util.function.IntFunction;
 
 /**
  * BreadthFirstIterator.
@@ -17,14 +16,16 @@ import java.util.Set;
  * @version $$Id$$
  * @param <V> the vertex type
  */
-public class BreadthFirstIteratorInt implements Iterator<Integer> {
+public class IntBackedBreadthFirstIterator<V> implements Iterator<V> {
 
-    private final DirectedGraphInt graph;
+    private final IntDirectedGraph graph;
+    private final IntFunction<V> intToV;
     private final Queue<Integer> queue;// FIXME should be ArrayQueueInt.
     private final BitSet visited;
 
-    public BreadthFirstIteratorInt(DirectedGraphInt graph, int root) {
+    public IntBackedBreadthFirstIterator(IntDirectedGraph graph, IntFunction<V> intToV, int root) {
         this.graph = graph;
+        this.intToV=intToV;
         queue = new ArrayDeque<>(graph.getEdgeCount());
         visited = new BitSet(graph.getVertexCount());
         queue.add(root);
@@ -37,7 +38,7 @@ public class BreadthFirstIteratorInt implements Iterator<Integer> {
     }
 
     @Override
-    public Integer next() {
+    public V next() {
         Integer current = queue.remove();
         for (int i=0,n=graph.getNextCount(current);i<n;i++) {
             int next=graph.getNext(current, i);
@@ -46,7 +47,7 @@ public class BreadthFirstIteratorInt implements Iterator<Integer> {
                 queue.add(next);
             }
         }
-        return current;
+        return intToV.apply(current);
     }
 
 }

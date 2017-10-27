@@ -111,7 +111,7 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static List<Set<Integer>> findDisjointSets(DirectedGraphInt g) {
+    public static List<Set<Integer>> findDisjointSets(IntDirectedGraph g) {
         // Create initial forest.
         final List<ArrayListInt> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
@@ -161,11 +161,11 @@ public class DirectedGraphs {
      * @return the sorted list of vertices
      */
     public static <V> List<V> sortTopologically(DirectedGraph<V> m) {
-        final DirectedGraphInt im;
-        if (!(m instanceof DirectedGraphInt)) {
+        final IntDirectedGraph im;
+        if (!(m instanceof IntDirectedGraph)) {
             im = DirectedGraphBuilder.ofDirectedGraph(m);
         } else {
-            im = (DirectedGraphInt) m;
+            im = (IntDirectedGraph) m;
         }
         int[] a = sortTopologicallyInt(im);
         List<V> result = new ArrayList<>(a.length);
@@ -181,7 +181,7 @@ public class DirectedGraphs {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static int[] sortTopologicallyInt(DirectedGraphInt model) {
+    public static int[] sortTopologicallyInt(IntDirectedGraph model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming edges for each vertex
@@ -406,7 +406,7 @@ public class DirectedGraphs {
     private final static int SENTINEL = -1;
 
     /**
-     * Breadth-first-search for DirectedGraphInt.
+     * Breadth-first-search for IntDirectedGraph.
      *
      * @param graph a graph
      * @param root the starting point of the search
@@ -415,7 +415,7 @@ public class DirectedGraphs {
      * elements. Does not add the root element.
      * @return true on success
      */
-    public static boolean breadthFirstSearchInt(DirectedGraphInt graph, int root, int goal, ArrayListInt pathElements) {
+    public static boolean breadthFirstSearchInt(IntDirectedGraph graph, int root, int goal, ArrayListInt pathElements) {
         BitSet visited = new BitSet(graph.getVertexCount());
         QueueWithBackLinks queue = new QueueWithBackLinks(graph.getEdgeCount());
         queue.add(root, SENTINEL);

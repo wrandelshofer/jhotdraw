@@ -16,7 +16,7 @@ import java.util.Set;
  * @version $Id$
  * @param <V> the vertex type
  */
-public class DirectedGraphBuilder<V> implements DirectedGraph<V>, DirectedGraphInt {
+public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGraph {
 
     private final static int EDGES_NEXT_FIELD = 1;
     private final static int EDGES_NUM_FIELDS = 2;
