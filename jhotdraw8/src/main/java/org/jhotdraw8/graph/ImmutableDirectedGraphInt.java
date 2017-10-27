@@ -1,4 +1,4 @@
-/* @(#)ImmutableIntDirectedGraph.java
+/* @(#)ImmutableDirectedGraphInt.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ImmutableIntDirectedGraph.
+ * ImmutableDirectedGraphInt.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ImmutableIntDirectedGraph implements DirectedGraphInt {
+public class ImmutableDirectedGraphInt implements DirectedGraphInt {
 
     /**
      * Holds the edges.
@@ -31,7 +31,7 @@ public class ImmutableIntDirectedGraph implements DirectedGraphInt {
      *
      * @param graph a graph
      */
-    public ImmutableIntDirectedGraph(DirectedGraphInt graph) {
+    public ImmutableDirectedGraphInt(DirectedGraphInt graph) {
         int edgeCount = 0;
 
         final int edgeCapacity = graph.getEdgeCount();
@@ -54,7 +54,7 @@ public class ImmutableIntDirectedGraph implements DirectedGraphInt {
      * @param <V> the vertex type
      * @param graph a graph
      */
-    public <V> ImmutableIntDirectedGraph(DirectedGraph<V> graph) {
+    public <V> ImmutableDirectedGraphInt(DirectedGraph<V> graph) {
 
         final int edgeCapacity = graph.getEdgeCount();
         final int vertexCapacity = graph.getVertexCount();
@@ -79,7 +79,7 @@ public class ImmutableIntDirectedGraph implements DirectedGraphInt {
         }
     }
 
-    protected ImmutableIntDirectedGraph(int vertexCount, int edgeCount) {
+    protected ImmutableDirectedGraphInt(int vertexCount, int edgeCount) {
         this.edges = new int[edgeCount];
         this.vertices = new int[vertexCount];
     }

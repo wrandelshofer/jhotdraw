@@ -60,6 +60,7 @@ public class DirectedGraphs {
      * @return the disjoint sets.
      */
     public static <V> List<Set<V>> findDisjointSets(DirectedGraph<V> g) {
+        // Create initial forest.
         Map<V, List<V>> sets = new LinkedHashMap<>();
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
             final V v = g.getVertex(i);
@@ -67,6 +68,7 @@ public class DirectedGraphs {
             initialSet.add(v);
             sets.put(v, initialSet);
         }
+        // Merge sets.
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
             V u = g.getVertex(i);
             for (int j = 0, m = g.getNextCount(u); j < m; j++) {
@@ -90,6 +92,7 @@ public class DirectedGraphs {
             }
         }
 
+        // Create final forest.
         Map<List<V>, Object> setMap = new IdentityHashMap<>();
         List<Set<V>> disjointSets = new ArrayList<>();
         for (List<V> set : sets.values()) {
@@ -109,12 +112,14 @@ public class DirectedGraphs {
      * @return the disjoint sets.
      */
     public static List<Set<Integer>> findDisjointSets(DirectedGraphInt g) {
+        // Create initial forest.
         final List<ArrayListInt> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
             final ArrayListInt initialSet = new ArrayListInt(1);
             initialSet.add(v);
             sets.add(initialSet);
         }
+        // Merge sets.
         for (int u = 0, n = g.getVertexCount(); u < n; u++) {
             for (int v = 0, m = g.getNextCount(u); v < m; v++) {
                 final ArrayListInt uset = sets.get(u);
@@ -136,7 +141,7 @@ public class DirectedGraphs {
                 }
             }
         }
-
+        // Create final forest.
         final Map<ArrayListInt, Object> setMap = new IdentityHashMap<ArrayListInt, Object>();
         final List<Set<Integer>> disjointSets = new ArrayList<>();
         for (ArrayListInt set : sets) {
@@ -264,9 +269,9 @@ public class DirectedGraphs {
      * @return true on success
      */
     public static <V> boolean breadthFirstSearch(DirectedGraph<V> graph, V root, V goal, List<V> pathElements) {
-        Set<V> visited = new HashSet<>(graph.getVertexCount()); // bad performance
+        Set<V> visited = new HashSet<>(graph.getVertexCount()); // bad performance due to hashing
         Queue<BackLink<V>> queue = new ArrayDeque<>(graph.getEdgeCount());
-        BackLink<V> rootBackLink = new BackLink<>(root, null);// temporaly allocated objects garbage
+        BackLink<V> rootBackLink = new BackLink<>(root, null);// temporaly allocated objects producing lots of garbage
         visited.add(root);
         queue.add(rootBackLink);
         BackLink<V> current = null;

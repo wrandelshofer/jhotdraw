@@ -94,8 +94,8 @@ public class DirectedGraphBuilderInt implements DirectedGraphInt {
         setVertexCount(vertexCount + 1);
     }
 
-    public ImmutableIntDirectedGraph build() {
-        return new ImmutableIntDirectedGraph(this);
+    public ImmutableDirectedGraphInt build() {
+        return new ImmutableDirectedGraphInt(this);
     }
 
     @Override

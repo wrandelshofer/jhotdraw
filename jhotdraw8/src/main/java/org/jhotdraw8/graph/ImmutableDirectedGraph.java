@@ -15,7 +15,7 @@ import java.util.Map;
  * @version $Id$
  * @param <V> the vertex type
  */
-public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
+public class ImmutableDirectedGraph<V> extends ImmutableDirectedGraphInt
         implements DirectedGraph<V> {
 
     /**
