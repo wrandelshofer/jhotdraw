@@ -198,9 +198,12 @@ public class DirectedGraphs {
         if (current == null || current.vertex != goal) {
             return false;
         }
+        // Add the path to the pathElements list.
+        // Part 1. Make room for the path elements.
         for (BackLink<V> i = current; i.vertex != root; i = i.parent) {
             pathElements.add(null);
         }
+        // Part 2. Add the path elements.
         int insertionPoint = pathElements.size();
         for (BackLink<V> i = current; i.vertex != root; i = i.parent) {
             pathElements.set(--insertionPoint, i.vertex);
