@@ -65,7 +65,7 @@ public interface DirectedGraph<V> {
     int getEdgeCount();
 
     /**
-     * Returns the i-th next vertex of v.
+     * Returns the i-th next successor vertex of v.
      *
      * @param vertex a vertex
      * @param i index of next vertex
@@ -75,7 +75,7 @@ public interface DirectedGraph<V> {
     V getNext(@Nonnull V vertex, int i);
 
     /**
-     * Returns the number of next vertices of v.
+     * Returns the number of next successor vertices of v.
      *
      * @param vertex a vertex
      * @return the number of next vertices of v.
@@ -83,7 +83,7 @@ public interface DirectedGraph<V> {
     int getNextCount(@Nonnull V vertex);
 
     /**
-     * Returns the next vertices after the specified vertex.
+     * Returns the next successor vertices after the specified vertex.
      *
      * @param vertex a vertex
      * @return an iterable for the next vertices after vertex

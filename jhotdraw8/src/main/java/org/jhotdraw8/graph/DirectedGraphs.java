@@ -29,6 +29,13 @@ public class DirectedGraphs {
     private DirectedGraphs() {
     }
 
+    /**
+     * Dumps a directed graph into a String which can be rendered with the "dot" tool.
+     * 
+     * @param <T> the vertex type
+     * @param g the graph
+     * @return a "dot" String.
+     */
     public static <T> String dump(DirectedGraph<T> g) {
         StringBuilder b = new StringBuilder();
 
