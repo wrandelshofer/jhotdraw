@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Predicate;
 import org.jhotdraw8.collection.ArrayListInt;
 
 /**
@@ -276,10 +277,26 @@ public class DirectedGraphs {
      * @return true on success
      */
     public static <V> boolean breadthFirstSearch(DirectedGraph<V> graph, V root, V goal, List<V> pathElements) {
-        Set<V> visited = new HashSet<>(graph.getVertexCount()); // bad performance due to hashing
+        Set<V> visitedSet = new HashSet<>(graph.getVertexCount());// HashSet has a large O(1) cost.
+        return breadthFirstSearch(graph, root, goal, pathElements, visitedSet::add);
+    }
+    /**
+     * Breadth-first-search.
+     *
+     * @param <V> the vertex type
+     * @param graph a graph
+     * @param root the starting point of the search
+     * @param goal the goal of the search
+     * @param pathElements Adds the resulting path to the provided list of path
+     * elements. Does not add the root element.
+     * @param visited a predicate with side effect. The predicate returns true if the specified vertex has been visited, and marks
+     * the specified vertex as visited.
+     * @return true on success
+     */
+    public static <V> boolean breadthFirstSearch(DirectedGraph<V> graph, V root, V goal, List<V> pathElements, Predicate<V> visited) {
         Queue<BackLink<V>> queue = new ArrayDeque<>(max(1,min(graph.getVertexCount(),graph.getEdgeCount())));
         BackLink<V> rootBackLink = new BackLink<>(root, null);// temporaly allocated objects producing lots of garbage
-        visited.add(root);
+        visited.test(root);
         queue.add(rootBackLink);
         BackLink<V> current = null;
         while (!queue.isEmpty()) {
@@ -289,7 +306,7 @@ public class DirectedGraphs {
             }
             for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
                 V next = graph.getNext(current.vertex, i);
-                if (visited.add(next)) {
+                if (visited.test(next)) {
                     BackLink<V> backLink = new BackLink<>(next, current);
                     queue.add(backLink);
                 }
@@ -309,7 +326,7 @@ public class DirectedGraphs {
     }
 
     /**
-     * Queue with back links.
+     * Queue with back link store.
      * <p>
      * The back links are stored in the same data structure as the queue and can
      * be retrieved by index even after they have been removed from the queue.

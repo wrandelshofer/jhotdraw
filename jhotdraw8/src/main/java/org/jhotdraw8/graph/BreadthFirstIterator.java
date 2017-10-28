@@ -45,7 +45,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      * 
      * @param graph the graph
      * @param root the root vertex
-     * @param visited a function which returns true if the specified vertex has been visited, and marks
+     * @param visited a predicate with side effect. The predicate returns true if the specified vertex has been visited, and marks
      * the specified vertex as visited.
      */
     public BreadthFirstIterator(DirectedGraph<V> graph, V root, Predicate<V> visited) {
