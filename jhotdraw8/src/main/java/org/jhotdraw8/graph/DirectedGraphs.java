@@ -3,10 +3,10 @@
  */
 package org.jhotdraw8.graph;
 
+import static java.lang.Math.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
@@ -270,7 +270,7 @@ public class DirectedGraphs {
      */
     public static <V> boolean breadthFirstSearch(DirectedGraph<V> graph, V root, V goal, List<V> pathElements) {
         Set<V> visited = new HashSet<>(graph.getVertexCount()); // bad performance due to hashing
-        Queue<BackLink<V>> queue = new ArrayDeque<>(graph.getEdgeCount());
+        Queue<BackLink<V>> queue = new ArrayDeque<>(max(1,min(graph.getVertexCount(),graph.getEdgeCount())));
         BackLink<V> rootBackLink = new BackLink<>(root, null);// temporaly allocated objects producing lots of garbage
         visited.add(root);
         queue.add(rootBackLink);
@@ -417,7 +417,7 @@ public class DirectedGraphs {
      */
     public static boolean breadthFirstSearchInt(IntDirectedGraph graph, int root, int goal, ArrayListInt pathElements) {
         BitSet visited = new BitSet(graph.getVertexCount());
-        QueueWithBackLinks queue = new QueueWithBackLinks(graph.getEdgeCount());
+        QueueWithBackLinks queue = new QueueWithBackLinks(max(1,min(graph.getVertexCount(),graph.getEdgeCount())));
         queue.add(root, SENTINEL);
         visited.set(root);
         int current = SENTINEL;
