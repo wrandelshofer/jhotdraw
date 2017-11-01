@@ -4,7 +4,7 @@
 package org.jhotdraw8.io;
 
 import java.io.*;
-import org.jhotdraw8.collection.ArrayListInt;
+import org.jhotdraw8.collection.IntArrayList;
 
 /**
  * This extension of <code>StreamTokenizer</code> keeps track of the position of
@@ -30,7 +30,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Start and end position of the current token. rlw
      */
     private int startpos = -1, endpos = -1;
-    private ArrayListInt unread = new ArrayListInt();
+    private IntArrayList unread = new IntArrayList();
 
     private char buf[] = new char[20];
 

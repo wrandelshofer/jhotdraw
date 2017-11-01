@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.AbstractCollection;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
@@ -116,10 +118,10 @@ public interface DirectedGraph<V> {
     }
 
     /**
-     * Returns Vertex vi.
+     * Returns the specified Vertex.
      *
      * @param indexOfVertex index of vertex
-     * @return vertex vi
+     * @return vertex
      */
     V getVertex(int indexOfVertex);
 
@@ -137,7 +139,7 @@ public interface DirectedGraph<V> {
      *
      * @return an iterable for all vertice
      */
-    default Iterable<V> getVertices() {
+    default Collection<V> getVertices() {
         class VertexIterator implements Iterator<V> {
 
             private int index;
@@ -158,7 +160,18 @@ public interface DirectedGraph<V> {
             }
 
         }
-        return () -> new VertexIterator();
+        return new AbstractCollection<V>() {
+            @Override
+            public Iterator<V> iterator() {
+                return new VertexIterator();
+            }
+
+            @Override
+            public int size() {
+                return getVertexCount();
+            }
+
+        };
     }
 
 }

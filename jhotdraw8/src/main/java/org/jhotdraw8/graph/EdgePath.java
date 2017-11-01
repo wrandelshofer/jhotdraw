@@ -11,19 +11,19 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Represents a vertex path through a graph.
+ * Represents an edge path through a graph.
  * <p>
- * Path elements are vertices.
+ Path elements are edges.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class VertexPath<V> {
+public class EdgePath<E> {
 
-    private final List<V> vertices;
+    private final List<E> edges;
 
-    public VertexPath(Collection<V> elements) {
-        this.vertices = Collections.unmodifiableList(new ArrayList<>(elements));
+    public EdgePath(Collection<E> elements) {
+        this.edges = Collections.unmodifiableList(new ArrayList<>(elements));
     }
 
     @Override
@@ -37,8 +37,8 @@ public class VertexPath<V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final VertexPath<?> other = (VertexPath<?>) obj;
-        if (!Objects.equals(this.vertices, other.vertices)) {
+        final EdgePath<?> other = (EdgePath<?>) obj;
+        if (!Objects.equals(this.edges, other.edges)) {
             return false;
         }
         return true;
@@ -47,29 +47,22 @@ public class VertexPath<V> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.vertices);
+        hash = 53 * hash + Objects.hashCode(this.edges);
         return hash;
     }
     
-    /**
-     * Creates a new VertexPath with the specified vertices.
-     * 
-     * @param <VV> the vertex type
-     * @param vertices the vertices
-     * @return the vertex path
-     */
     @SafeVarargs @SuppressWarnings("varargs")
-    public static<VV> VertexPath<VV> of(VV... vertices) {
-        return new VertexPath<>(Arrays.asList(vertices));
+    public static<VV> EdgePath<VV> of(VV... vertices) {
+        return new EdgePath<>(Arrays.asList(vertices));
     }
 
-    public List<V> getVertices() {
-        return vertices;
+    public List<E> getEdges() {
+        return edges;
     }
 
     @Override
     public String toString() {
-        return "VertexPath{" + vertices + '}';
+        return "EdgePath{" + edges + '}';
     }
 
 

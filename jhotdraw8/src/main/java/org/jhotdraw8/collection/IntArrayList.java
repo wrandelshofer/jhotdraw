@@ -1,4 +1,4 @@
-/* @(#)ArrayListInt.java
+/* @(#)IntArrayList.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ArrayListInt {
+public class IntArrayList {
 
     /**
      * Holds the size of the list. Invariant: size >= 0.
@@ -26,14 +26,14 @@ public class ArrayListInt {
     /**
      * Creates a new empty instance with 0 initial capacity.
      */
-    public ArrayListInt() {
+    public IntArrayList() {
     }
 
     /**
      * Creates a new empty instance with the specified initial capacity.
      * @param initialCapacity the initial capacity
      */
-    public ArrayListInt(int initialCapacity) {
+    public IntArrayList(int initialCapacity) {
         increaseCapacity(initialCapacity);
     }
 
@@ -42,7 +42,7 @@ public class ArrayListInt {
      *
      * @param that another list
      */
-    public void addAll(ArrayListInt that) {
+    public void addAll(IntArrayList that) {
         if (that.isEmpty()) {
             return;
         }
