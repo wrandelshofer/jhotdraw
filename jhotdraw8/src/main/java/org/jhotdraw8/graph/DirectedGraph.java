@@ -123,7 +123,7 @@ public interface DirectedGraph<V> {
      * @param indexOfVertex index of vertex
      * @return vertex
      */
-    V getVertex(int indexOfVertex);
+    @Nonnull V getVertex(int indexOfVertex);
 
     /**
      * Returns the number of vertices {@code V}.
@@ -139,6 +139,7 @@ public interface DirectedGraph<V> {
      *
      * @return an iterable for all vertice
      */
+    @Nonnull 
     default Collection<V> getVertices() {
         class VertexIterator implements Iterator<V> {
 
@@ -174,4 +175,30 @@ public interface DirectedGraph<V> {
         };
     }
 
+    /**
+     * Returns the index of vertex b.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return index of vertex b. Returns -1 if b is not next index of a.
+     */
+    default int indexOfNext(@Nonnull V a, @Nonnull V b) {
+        for (int i = 0, n = getNextCount(a); i < n; i++) {
+            if (b.equals(getNext(a, i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Returns true if b is next of a.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return true if b is next of a.
+     */
+    default boolean isNext(@Nonnull V a, @Nonnull V b) {
+        return indexOfNext(a, b) != -1;
+    }
 }

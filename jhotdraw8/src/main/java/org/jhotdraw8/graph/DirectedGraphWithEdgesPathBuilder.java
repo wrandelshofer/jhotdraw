@@ -6,8 +6,8 @@ package org.jhotdraw8.graph;
 import static java.lang.Math.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
@@ -149,30 +149,31 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         PriorityQueue< NodeWithCost<V,E>> frontier = new PriorityQueue<>();
         frontier.add(node);
         Set<V> explored = new HashSet<>(graph.getVertexCount());
-        Map<NodeWithCost<V,E>, NodeWithCost<V,E>> frontierMap = new LinkedHashMap<>(graph.getVertexCount());
+        Map<V, NodeWithCost<V,E>> frontierMap = new HashMap<>(graph.getVertexCount());
         while (true) {
             if (frontier.isEmpty()) {
                 return null;
             }
             node = frontier.poll();
-            frontierMap.remove(node);
-            if (node.getVertex() == goal) {
+            final V vertex = node.vertex;
+            frontierMap.remove(vertex);
+            if (vertex== goal) {
                 break;
             }
             explored.add(node.getVertex());
-            for (int i = 0, count = graph.getNextCount(node.vertex); i < count; i++) {
-                V next = graph.getNext(node.vertex, i);
-                final E edge = graph.getEdge(node.vertex, i);
+            for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
+                V next = graph.getNext(vertex, i);
+                final E edge = graph.getEdge(vertex, i);
                 double cost = node.cost + costf.applyAsDouble(edge);
                 NodeWithCost<V,E> nwc = new NodeWithCost<>(next, cost, node, edge);
                
-                boolean isInFrontier = frontierMap.containsKey(nwc);
+                boolean isInFrontier = frontierMap.containsKey(next);
                 if (!explored.contains(next) && !isInFrontier) {
                     frontier.add(nwc);
-                    frontierMap.put(nwc,nwc);
+                    frontierMap.put(next,nwc);
                 } else if (isInFrontier) {
-                    NodeWithCost<V,E> nwcInFrontier = frontierMap.put(nwc, nwc);
-                    if (nwcInFrontier.cost > nwc.cost) {
+                    NodeWithCost<V,E> nwcInFrontier = frontierMap.put(next, nwc);
+                    if (nwcInFrontier.cost > cost) {
                         frontier.remove(nwcInFrontier);
                         frontier.add(nwc);
                     }

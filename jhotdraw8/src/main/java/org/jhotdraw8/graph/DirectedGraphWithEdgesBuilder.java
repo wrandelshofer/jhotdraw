@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import javax.annotation.Nonnull;
 
 /**
  * DirectedGraphBuilder.
@@ -17,7 +17,8 @@ import java.util.Set;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class DirectedGraphWithEdgesBuilder<V,E> extends AbstractDirectedGraphBuilder implements DirectedGraphWithEdges<V,E> {
+public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBuilder implements DirectedGraphWithEdges<V, E> {
+
     /**
      * Maps a vertex to a vertex index.
      */
@@ -28,16 +29,16 @@ public class DirectedGraphWithEdgesBuilder<V,E> extends AbstractDirectedGraphBui
     private final List<V> vertices;
 
     private final List<E> edgeData;
-    
+
     public DirectedGraphWithEdgesBuilder() {
         this(16, 16);
     }
 
     public DirectedGraphWithEdgesBuilder(int vertexCapacity, int edgeCapacity) {
-        super(vertexCapacity,edgeCapacity);
-        this.vertexMap = new HashMap<>(vertexCapacity + vertexCapacity * 40 / 100, 0.75f);
+        super(vertexCapacity, edgeCapacity);
+        this.vertexMap = new HashMap<>(vertexCapacity );
         this.vertices = new ArrayList<>(vertexCapacity);
-        this.edgeData =new ArrayList<>();
+        this.edgeData = new ArrayList<>();
     }
 
     /**
@@ -47,7 +48,7 @@ public class DirectedGraphWithEdgesBuilder<V,E> extends AbstractDirectedGraphBui
      * @param vb vertex b
      * @param edge the edge
      */
-    public void addEdge(V va, V vb, E edge) {
+    public void addEdge(@Nonnull V va, @Nonnull V vb, @Nonnull E edge) {
         if (va == null) {
             throw new IllegalArgumentException("va=null");
         }
@@ -60,17 +61,18 @@ public class DirectedGraphWithEdgesBuilder<V,E> extends AbstractDirectedGraphBui
 
         edgeData.add(edge);
     }
+
     /**
-     * Builder-method: adds two edges (arrow from va to vb
-     * and arrow from vb to va).
+     * Builder-method: adds two edges (arrow from va to vb and arrow from vb to
+     * va).
      *
      * @param va vertex a
      * @param vb vertex b
      * @param edge the edge
      */
-    public void addBidiEdge(V va, V vb, E edge) {
-        addEdge(va,vb,edge);
-        addEdge(vb,va,edge);
+    public void addBidiEdge(@Nonnull V va, @Nonnull V vb, @Nonnull E edge) {
+        addEdge(va, vb, edge);
+        addEdge(vb, va, edge);
     }
 
     /**
@@ -78,7 +80,7 @@ public class DirectedGraphWithEdgesBuilder<V,E> extends AbstractDirectedGraphBui
      *
      * @param v vertex
      */
-    public void addVertex(V v) {
+    public void addVertex(@Nonnull V v) {
         if (v == null) {
             throw new IllegalArgumentException("v=null");
         }
@@ -89,36 +91,38 @@ public class DirectedGraphWithEdgesBuilder<V,E> extends AbstractDirectedGraphBui
         });
     }
 
-
     @Override
     public E getEdge(int indexOfEdge) {
         return edgeData.get(indexOfEdge);
     }
 
     @Override
-    public E getEdge(V vertex, int i) {
-        int edgeId=getIndexOfEdge(getIndexOfVertex(vertex), i);
+    public E getEdge(@Nonnull V vertex, int i) {
+        int edgeId = getIndexOfEdge(getIndexOfVertex(vertex), i);
         return edgeData.get(edgeId);
     }
-        @Override
+
+    @Override
+    @Nonnull 
     public V getVertex(int vi) {
         if (vertices.get(vi) == null) {
             System.err.println("DIrectedGraphBuilder is broken");
         }
         return vertices.get(vi);
     }
+
     @Override
-    public int getNextCount(V v) {
+    public int getNextCount(@Nonnull V v) {
         return getNextCount(getIndexOfVertex(v));
     }
+
     @Override
-    public V getNext(V v, int i) {
+    public V getNext(@Nonnull V v, int i) {
         return getVertex(getNext(getIndexOfVertex(v), i));
     }
-    protected int getIndexOfVertex(V v) {
+
+    protected int getIndexOfVertex(@Nonnull V v) {
         return vertexMap.get(v);
     }
 
-
-    
 }
