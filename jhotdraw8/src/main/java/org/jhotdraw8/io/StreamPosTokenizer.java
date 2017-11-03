@@ -170,9 +170,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      */
     public StreamPosTokenizer(Reader r) {
         this();
-        if (r == null) {
-            throw new NullPointerException();
-        }
         reader = r;
     }
 
