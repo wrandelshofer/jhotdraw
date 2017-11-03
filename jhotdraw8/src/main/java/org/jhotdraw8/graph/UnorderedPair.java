@@ -49,13 +49,13 @@ public class UnorderedPair<V> implements Pair<V> {
             return false;
         }
         @SuppressWarnings("unchecked") final UnorderedPair<V> other = (UnorderedPair) obj;
-        if (!Objects.equals(this.a, other.a) && !Objects.equals(this.a, other.b)) {
-            return false;
+        if (Objects.equals(this.a, other.a) && Objects.equals(this.b, other.b)) {
+            return true;
         }
-        if (!Objects.equals(this.b, other.b) && !Objects.equals(this.b, other.a)) {
-            return false;
+        if (Objects.equals(this.b, other.a) && Objects.equals(this.a, other.b)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -64,6 +64,11 @@ public class UnorderedPair<V> implements Pair<V> {
                 + a.hashCode()
                 + b.hashCode();
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "UnorderedPair{" + "a=" + a + ", b=" + b + '}';
     }
 
 }
