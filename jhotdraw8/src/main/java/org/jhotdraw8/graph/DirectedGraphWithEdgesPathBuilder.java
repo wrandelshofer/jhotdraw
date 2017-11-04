@@ -377,6 +377,7 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
                     frontier.add(nwc);
                     frontierMap[next]= nwc;
                 } else if (isInFrontier) {
+                    @SuppressWarnings("unchecked")
                     IntNodeWithCost<E> nwcInFrontier = frontierMap[next];
                     if (nwcInFrontier.cost > cost) {
                         frontier.remove(nwcInFrontier);
