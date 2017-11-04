@@ -16,9 +16,12 @@ import javafx.beans.Observable;
  */
 public class AbstractObservable implements ObservableMixin {
 
-    private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<InvalidationListener> invalidationListeners;
 
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
+        if (invalidationListeners == null) {
+            invalidationListeners = new CopyOnWriteArrayList<>();
+        }
         return invalidationListeners;
     }
 
