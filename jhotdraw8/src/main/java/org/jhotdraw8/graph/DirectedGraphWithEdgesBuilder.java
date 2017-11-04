@@ -17,7 +17,8 @@ import javax.annotation.Nonnull;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBuilder implements DirectedGraphWithEdges<V, E> {
+public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBuilder
+        implements DirectedGraphWithEdges<V, E>, IntDirectedGraphWithEdges<E> {
 
     /**
      * Maps a vertex to a vertex index.
@@ -97,8 +98,14 @@ public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBu
     }
 
     @Override
-    public E getEdge(@Nonnull V vertex, int i) {
+    public E getNextEdge(@Nonnull V vertex, int i) {
         int edgeId = getIndexOfEdge(getIndexOfVertex(vertex), i);
+        return edgeData.get(edgeId);
+    }
+
+    @Override
+    public E getNextEdge(int vertex, int index) {
+        int edgeId = getIndexOfEdge(vertex, index);
         return edgeData.get(edgeId);
     }
 

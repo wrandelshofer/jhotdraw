@@ -10,10 +10,9 @@ import javax.annotation.Nonnull;
  *
  * @author Werner Randelshofer
  * @version $$Id$$
- * @param <V> the vertex type
  * @param <E> the edge type
  */
-public interface DirectedGraphWithEdges<V, E> extends DirectedGraph<V> {
+public interface IntDirectedGraphWithEdges< E> extends IntDirectedGraph {
 
     /**
      * Returns the specified edge.
@@ -32,7 +31,7 @@ public interface DirectedGraphWithEdges<V, E> extends DirectedGraph<V> {
      * @return the specified edge
      */
     @Nonnull
-    E getNextEdge(@Nonnull V vertex, int index);
+    E getNextEdge(int vertex, int index);
 
     /**
      * Returns the edge if b is next of a.
@@ -42,7 +41,7 @@ public interface DirectedGraphWithEdges<V, E> extends DirectedGraph<V> {
      * @return the edge or null if b is not next of a
      */
     @Nonnull
-    default E findEdge(@Nonnull V a, @Nonnull V b) {
+    default E findEdge(int a, int b) {
         int index = findIndexOfNext(a, b);
         return index == -1 ? null : getNextEdge(a, index);
     }

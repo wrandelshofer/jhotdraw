@@ -182,7 +182,7 @@ public interface DirectedGraph<V> {
      * @param b another vertex
      * @return index of vertex b. Returns -1 if b is not next index of a.
      */
-    default int indexOfNext(@Nonnull V a, @Nonnull V b) {
+    default int findIndexOfNext(@Nonnull V a, @Nonnull V b) {
         for (int i = 0, n = getNextCount(a); i < n; i++) {
             if (b.equals(getNext(a, i))) {
                 return i;
@@ -199,6 +199,6 @@ public interface DirectedGraph<V> {
      * @return true if b is next of a.
      */
     default boolean isNext(@Nonnull V a, @Nonnull V b) {
-        return indexOfNext(a, b) != -1;
+        return findIndexOfNext(a, b) != -1;
     }
 }

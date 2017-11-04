@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import javax.annotation.Nonnull;
+
 /**
  * A facade for a directed graph where the vertices are integers from {@code 0}
  * to {@code vertexCount - 1}.
@@ -43,4 +45,20 @@ public interface IntDirectedGraph {
      */
     int getVertexCount();
 
+    
+        /**
+     * Returns the index of vertex b.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return index of vertex b. Returns -1 if b is not next index of a.
+     */
+    default int findIndexOfNext(int a, int b) {
+        for (int i = 0, n = getNextCount(a); i < n; i++) {
+            if (b==getNext(a, i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
