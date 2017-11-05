@@ -8,6 +8,7 @@ package org.jhotdraw8.draw.figure;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -41,30 +42,47 @@ public class SimpleLayer extends AbstractCompositeFigure
         if (!isVisible()) {
             return;
         }
+        applyStyleableFigureProperties(ctx, n);
 
-        if (getChildren().size() > 5000 && ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
-            if (n.getChildren().size() != 1 || (n.getChildren().get(0) instanceof Text)) {
-                Text text = new Text();
-                text.setText("Layer " + getId() + " has too many children.");
-                text.setFill(Color.RED);
-                text.setX(20);
-                if (getParent() != null) {
-                    text.setY(20 + 20 * getParent().getChildren().indexOf(this));
-                } else {
-                    text.setY(20);
+        List<Node> childNodes = new ArrayList<>(getChildren().size());
+        
+        int maxNodesPerLayer = ctx.get(RenderContext.MAX_NODES_PER_LAYER);
+        Bounds clipBounds= ctx.get(RenderContext.CLIP_BOUNDS) ;
+        if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
+                &&clipBounds!=null
+                && getChildren().size() > maxNodesPerLayer) {
+
+            
+            for (Figure child : getChildren()) {
+                Node childNode=ctx.getNode(child);
+                if (childNode.getBoundsInParent().intersects(clipBounds)){
+                    childNodes.add(childNode);
+                    if (childNodes.size()>maxNodesPerLayer)break;
                 }
-                n.getChildren().setAll(text);
+            }
+            
+            
+            if (childNodes.size()>maxNodesPerLayer) {
+                Text text = new Text();
+                text.setText("Layer \"" + getId() + "\" has too many children: " + getChildren().size());
+                text.setFill(Color.RED);
+                text.setX(clipBounds.getMinX()+20);
+                if (getParent() != null) {
+                    text.setY(clipBounds.getMinY()+20  * getParent().getChildren().indexOf(this));
+                } else {
+                    text.setY(clipBounds.getMinY()+20);
+                }
+                childNodes.clear();childNodes.add(text);
             }
         } else {
-            applyStyleableFigureProperties(ctx, n);
-            List<Node> nodes = new ArrayList<>(getChildren().size());
             for (Figure child : getChildren()) {
-                nodes.add(ctx.getNode(child));
+                childNodes.add(ctx.getNode(child));
             }
-            ObservableList<Node> group = n.getChildren();
-            if (!group.equals(nodes)) {
-                group.setAll(nodes);
-            }
+        }
+
+        ObservableList<Node> groupChildren = n.getChildren();
+        if (!groupChildren.equals(childNodes)) {
+            groupChildren.setAll(childNodes);
         }
     }
 

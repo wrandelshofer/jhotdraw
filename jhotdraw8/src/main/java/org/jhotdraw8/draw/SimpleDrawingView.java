@@ -67,6 +67,7 @@ import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.PROPERTY_VALU
 import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.STYLE_CHANGED;
 import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.TRANSFORM_CHANGED;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.Geom;
@@ -167,23 +168,23 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         public void handle(DrawingModelEvent event) {
             Figure f = event.getNode();
             switch (event.getEventType()) {
-            case LAYOUT_CHANGED:
-                if (f == getDrawing()) {
-                    invalidateConstrainerNode();
-                    invalidateWorldViewTransforms();
+                case LAYOUT_CHANGED:
+                    if (f == getDrawing()) {
+                        invalidateConstrainerNode();
+                        invalidateWorldViewTransforms();
+                        repaint();
+                    }
+                    break;
+                case STYLE_CHANGED:
                     repaint();
-                }
-                break;
-            case STYLE_CHANGED:
-                repaint();
-                break;
-            case PROPERTY_VALUE_CHANGED:
-            case LAYOUT_SUBJECT_CHANGED:
-            case TRANSFORM_CHANGED:
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + " not supported");
+                    break;
+                case PROPERTY_VALUE_CHANGED:
+                case LAYOUT_SUBJECT_CHANGED:
+                case TRANSFORM_CHANGED:
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + " not supported");
             }
         }
 
@@ -191,36 +192,36 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private final Listener<TreeModelEvent<Figure>> treeModelHandler = (TreeModelEvent<Figure> event) -> {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-            handleFigureAdded(f);
-            break;
-        case NODE_REMOVED_FROM_PARENT:
-            handleFigureRemoved(f);
-            break;
-        case NODE_ADDED_TO_TREE:
-            handleFigureRemovedFromDrawing(f);
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            for (Figure d : f.preorderIterable()) {
-                getSelectedFigures().remove(d);
-            }
-            repaint();
-            break;
-        case NODE_CHANGED:
-            handleNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            handleDrawingChanged();
-            updateLayout();
-            repaint();
-            break;
-        case SUBTREE_NODES_CHANGED:
-            handleSubtreeNodesChanged(f);
-            repaint();
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+            case NODE_ADDED_TO_PARENT:
+                handleFigureAdded(f);
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                handleFigureRemoved(f);
+                break;
+            case NODE_ADDED_TO_TREE:
+                handleFigureRemovedFromDrawing(f);
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                for (Figure d : f.preorderIterable()) {
+                    getSelectedFigures().remove(d);
+                }
+                repaint();
+                break;
+            case NODE_CHANGED:
+                handleNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                handleDrawingChanged();
+                updateLayout();
+                repaint();
+                break;
+            case SUBTREE_NODES_CHANGED:
+                handleSubtreeNodesChanged(f);
+                repaint();
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     };
     private final InvalidationListener modelInvalidationListener = o -> repaint();
@@ -348,21 +349,21 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
             double widthFactor;
             switch (shape.getStrokeType()) {
-            case CENTERED:
-            default:
-                widthFactor = 0.5;
-                break;
-            case INSIDE:
-                widthFactor = 0;
-                break;
-            case OUTSIDE:
-                widthFactor = 1;
-                break;
+                case CENTERED:
+                default:
+                    widthFactor = 0.5;
+                    break;
+                case INSIDE:
+                    widthFactor = 0;
+                    break;
+                case OUTSIDE:
+                    widthFactor = 1;
+                    break;
             }
-            if (Geom.grow(shape.getBoundsInParent(),tolerance,tolerance).contains(point)) {
-            return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()),
-                    shape.getStrokeWidth() * widthFactor + toleranceInLocal);
-            }else{
+            if (Geom.grow(shape.getBoundsInParent(), tolerance, tolerance).contains(point)) {
+                return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()),
+                        shape.getStrokeWidth() * widthFactor + toleranceInLocal);
+            } else {
                 return false;
             }
         } else if (node instanceof Rectangle) {
@@ -930,11 +931,18 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     private void handleVisibleRectChanged(Observable o) {
         invalidateConstrainerNode();
+        invalidateLayerNodes();
         repaint();
     }
 
     private void invalidateConstrainerNode() {
         constrainerNodeValid = false;
+    }
+
+    private void invalidateLayerNodes() {
+        for (Figure f : getDrawing().getChildren()) {
+            dirtyFigureNodes.add(f);
+        }
     }
 
     private void invalidateFigureNode(Figure f) {
@@ -1187,7 +1195,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         previousScaledBounds = scaledBounds;
 
-        
         if (d != null) {
             canvasPane.setTranslateX(max(0, -x));
             canvasPane.setTranslateY(max(0, -y));
@@ -1222,6 +1229,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void updateNodes() {
+        set(RenderContext.CLIP_BOUNDS, getVisibleRect());
         if (!renderIntoImage) {
             // create copies of the lists to allow for concurrent modification
             Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
@@ -1372,8 +1380,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     /**
      * The top, right, bottom, and left margin around the drawing.
-     * 
-     * @return The margin. The default value is: {@code new Insets(20, 20, 20, 20)}.
+     *
+     * @return The margin. The default value is:
+     * {@code new Insets(20, 20, 20, 20)}.
      */
     public ObjectProperty<Insets> marginProperty() {
         return margin;

@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.render;
 
+import javafx.geometry.Bounds;
 import org.jhotdraw8.draw.figure.Figure;
 import javafx.scene.Node;
 import javax.annotation.Nonnull;
@@ -36,7 +37,15 @@ public interface RenderContext extends PropertyBean {
      * The dots per inch of the rendering device.
      */
     Key<Double> DPI = new ObjectKey<>("dpi", Double.class, 72.0);
-
+    /**
+     * Contains a non-null value if the rendering is clipped.
+     */
+    Key<Bounds> CLIP_BOUNDS = new ObjectKey<>("clipBounds", Bounds.class, null);
+    /**
+     * Number of nodes that can be rendered per layer in the drawing editor..
+     */
+    Key<Integer> MAX_NODES_PER_LAYER = new ObjectKey<>("maxNodesPerLayer", Integer.class, 5000);
+    
     Key<Page> RENDER_PAGE = new ObjectKey<>("renderPage", Page.class, null);
     Key<Integer> RENDER_PAGE_NUMBER = new ObjectKey<>("renderPageNumber", Integer.class, 0);
     Key<Integer> RENDER_NUMBER_OF_PAGES = new ObjectKey<>("renderNumberOfPages", Integer.class, 1);
