@@ -10,10 +10,13 @@ import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.render.RenderingIntent;
 
 /**
  * SimpleLayer.
@@ -32,17 +35,36 @@ public class SimpleLayer extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node n) {
+    public void updateNode(RenderContext ctx, Node node) {
+        Group n = (Group) node;
         applyHideableFigureProperties(n);
-        applyStyleableFigureProperties(ctx, n);
-
-        List<Node> nodes = new ArrayList<Node>(getChildren().size());
-        for (Figure child : getChildren()) {
-            nodes.add(ctx.getNode(child));
+        if (!isVisible()) {
+            return;
         }
-        ObservableList<Node> group = ((Group) n).getChildren();
-        if (!group.equals(nodes)) {
-            group.setAll(nodes);
+
+        if (getChildren().size() > 5000 && ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
+            if (n.getChildren().size() != 1 || (n.getChildren().get(0) instanceof Text)) {
+                Text text = new Text();
+                text.setText("Layer " + getId() + " has too many children.");
+                text.setFill(Color.RED);
+                text.setX(20);
+                if (getParent() != null) {
+                    text.setY(20 + 20 * getParent().getChildren().indexOf(this));
+                } else {
+                    text.setY(20);
+                }
+                n.getChildren().setAll(text);
+            }
+        } else {
+            applyStyleableFigureProperties(ctx, n);
+            List<Node> nodes = new ArrayList<>(getChildren().size());
+            for (Figure child : getChildren()) {
+                nodes.add(ctx.getNode(child));
+            }
+            ObservableList<Node> group = n.getChildren();
+            if (!group.equals(nodes)) {
+                group.setAll(nodes);
+            }
         }
     }
 
@@ -59,7 +81,7 @@ public class SimpleLayer extends AbstractCompositeFigure
      * @param newValue the desired parent
      */
     protected void checkNewParent(Figure newValue) {
-        if (newValue != null && !(newValue instanceof Drawing)&& !(newValue instanceof Clipping)) {
+        if (newValue != null && !(newValue instanceof Drawing) && !(newValue instanceof Clipping)) {
             throw new IllegalArgumentException("A Layer can only be added as a child to a Drawing. Illegal parent: "
                     + newValue);
         }

@@ -194,6 +194,7 @@ is divided into following sections:
         <condition property="have.tests">
             <or>
                 <available file="${test.java.dir}"/>
+                <available file="${test.ferro.dir}"/>
             </or>
         </condition>
         <condition property="have.sources">
@@ -313,6 +314,7 @@ is divided into following sections:
         <fail unless="src.java.dir">Must set src.java.dir</fail>
         <fail unless="src.java2.dir">Must set src.java2.dir</fail>
         <fail unless="test.java.dir">Must set test.java.dir</fail>
+        <fail unless="test.ferro.dir">Must set test.ferro.dir</fail>
         <fail unless="build.dir">Must set build.dir</fail>
         <fail unless="dist.dir">Must set dist.dir</fail>
         <fail unless="build.classes.dir">Must set build.classes.dir</fail>
@@ -614,6 +616,9 @@ is divided into following sections:
                             <fileset dir="${test.java.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
                                 <filename name="@{testincludes}"/>
                             </fileset>
+                            <fileset dir="${test.ferro.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
+                                <filename name="@{testincludes}"/>
+                            </fileset>
                             <fileset dir="${build.test.classes.dir}" excludes="@{excludes},${excludes},${test.binaryexcludes}" includes="${test.binaryincludes}">
                                 <filename name="${test.binarytestincludes}"/>
                             </fileset>
@@ -638,6 +643,9 @@ is divided into following sections:
                 </condition>
                 <union id="test.set">
                     <fileset dir="${test.java.dir}" excludes="@{excludes},**/*.xml,${excludes}" includes="@{includes}">
+                        <filename name="@{testincludes}"/>
+                    </fileset>
+                    <fileset dir="${test.ferro.dir}" excludes="@{excludes},**/*.xml,${excludes}" includes="@{includes}">
                         <filename name="@{testincludes}"/>
                     </fileset>
                 </union>
@@ -1588,14 +1596,14 @@ is divided into following sections:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="-init-source-module-properties" if="named.module.internal" name="-init-test-javac-module-properties-with-module">
-        <j2seproject3:modulename property="test.module.name" sourcepath="${test.java.dir}"/>
-        <condition else="${empty.dir}" property="javac.test.sourcepath" value="${test.java.dir}">
+        <j2seproject3:modulename property="test.module.name" sourcepath="${test.java.dir}:${test.ferro.dir}"/>
+        <condition else="${empty.dir}" property="javac.test.sourcepath" value="${test.java.dir}:${test.ferro.dir}">
             <and>
                 <isset property="test.module.name"/>
                 <length length="0" string="${test.module.name}" when="greater"/>
             </and>
         </condition>
-        <condition else="--patch-module ${module.name}=${test.java.dir} --add-reads ${module.name}=ALL-UNNAMED" property="javac.test.compilerargs" value="--add-reads ${test.module.name}=ALL-UNNAMED">
+        <condition else="--patch-module ${module.name}=${test.java.dir}:${test.ferro.dir} --add-reads ${module.name}=ALL-UNNAMED" property="javac.test.compilerargs" value="--add-reads ${test.module.name}=ALL-UNNAMED">
             <and>
                 <isset property="test.module.name"/>
                 <length length="0" string="${test.module.name}" when="greater"/>
@@ -1636,16 +1644,17 @@ is divided into following sections:
     </target>
     <target depends="-init-test-javac-module-properties-with-module,-init-test-module-properties-without-module" name="-init-test-module-properties"/>
     <target if="do.depend.true" name="-compile-test-depend">
-        <j2seproject3:depend classpath="${javac.test.classpath}" destdir="${build.test.classes.dir}" srcdir="${test.java.dir}"/>
+        <j2seproject3:depend classpath="${javac.test.classpath}" destdir="${build.test.classes.dir}" srcdir="${test.java.dir}:${test.ferro.dir}"/>
     </target>
     <target depends="init,deps-jar,compile,-init-test-module-properties,-pre-pre-compile-test,-pre-compile-test,-compile-test-depend" if="have.tests" name="-do-compile-test">
-        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${javac.test.sourcepath}" srcdir="${test.java.dir}">
+        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${javac.test.sourcepath}" srcdir="${test.java.dir}:${test.ferro.dir}">
             <customize>
                 <compilerarg line="${javac.test.compilerargs}"/>
             </customize>
         </j2seproject3:javac>
         <copy todir="${build.test.classes.dir}">
             <fileset dir="${test.java.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${test.ferro.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target name="-post-compile-test">
@@ -1660,13 +1669,14 @@ is divided into following sections:
     <target depends="init,deps-jar,compile,-init-test-module-properties,-pre-pre-compile-test,-pre-compile-test-single" if="have.tests" name="-do-compile-test-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
         <j2seproject3:force-recompile destdir="${build.test.classes.dir}"/>
-        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}, module-info.java" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${test.java.dir}" srcdir="${test.java.dir}">
+        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}, module-info.java" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${test.java.dir}:${test.ferro.dir}" srcdir="${test.java.dir}:${test.ferro.dir}">
             <customize>
                 <compilerarg line="${javac.test.compilerargs}"/>
             </customize>
         </j2seproject3:javac>
         <copy todir="${build.test.classes.dir}">
             <fileset dir="${test.java.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${test.ferro.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target name="-post-compile-test-single">

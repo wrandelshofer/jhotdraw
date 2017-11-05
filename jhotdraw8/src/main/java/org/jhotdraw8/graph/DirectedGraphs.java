@@ -3,22 +3,17 @@
  */
 package org.jhotdraw8.graph;
 
-import static java.lang.Math.*;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
-import java.util.function.Predicate;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -295,7 +290,7 @@ public class DirectedGraphs {
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
         final int[] result = new int[n];// result array
         int done = 0;
-        BitSet doneSet = null;
+        Random random=null;
         while (done < n) {
             for (; done < n; done++) {
                 if (first == last) {
@@ -314,20 +309,17 @@ public class DirectedGraphs {
             }
 
             if (done < n) {
-                // Break loop in graph by removing an arbitrary edege.
-                if (doneSet == null) {
-                    doneSet = new BitSet(n);
+                // Break loop in graph by removing an arbitrary edge.
+                if (random == null) {
+                    random=new Random(0);
                 }
-                for (int i = doneSet.size(); i < done; i++) {
-                    doneSet.set(result[i]);
+                int i;
+                do {
+                    i=random.nextInt(n);
                 }
-                for (int i = 0; i < n; i++) {
-                    if (!doneSet.get(i)) {
-                        deg[i] = 0;
-                        queue[last++] = i;
-                        break;
-                    }
-                }
+                while (deg[i]<=0);
+                        deg[i] = 0;// this can actually remove more than one edge
+                        queue[last++]=i;
             }
         }
 

@@ -24,6 +24,7 @@
             </source-roots>
             <test-roots>
                 <root id="test.java.dir"/>
+                <root id="test.ferro.dir"/>
             </test-roots>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">

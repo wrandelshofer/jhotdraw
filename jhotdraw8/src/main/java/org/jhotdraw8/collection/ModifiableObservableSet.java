@@ -35,6 +35,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     public ModifiableObservableSet() {
         backingSet = new LinkedHashSet<>();
     }
+    
 
     @Override
     public boolean add(E e) {
@@ -91,6 +92,16 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         }
     }
 
+    @Override
+    public boolean contains(Object o) {
+        return backingSet.contains(o);
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return backingSet.containsAll(c);
+    }
+
     private void fireAdded(E e) {
         if (e instanceof Observable) {
             ((Observable) e).addListener(itemHandler);
@@ -131,6 +142,11 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
      * The default implementation is empty.
      */
     protected void invalidated() {
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return backingSet.isEmpty();
     }
 
     private void itemInvalidated(Observable o) {

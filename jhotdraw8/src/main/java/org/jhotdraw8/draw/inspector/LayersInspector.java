@@ -36,9 +36,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ReversedList;
-import org.jhotdraw8.collection.TransientKey;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -49,7 +47,6 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.util.Resources;
 
 /**
  * FXML Controller class

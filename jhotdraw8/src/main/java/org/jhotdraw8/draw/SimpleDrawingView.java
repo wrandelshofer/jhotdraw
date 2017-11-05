@@ -359,8 +359,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 widthFactor = 1;
                 break;
             }
+            if (Geom.grow(shape.getBoundsInParent(),tolerance,tolerance).contains(point)) {
             return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()),
                     shape.getStrokeWidth() * widthFactor + toleranceInLocal);
+            }else{
+                return false;
+            }
         } else if (node instanceof Rectangle) {
             return Geom.contains(node.getBoundsInLocal(), point, toleranceInLocal);
         } else if (node instanceof Group) {
