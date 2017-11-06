@@ -95,11 +95,12 @@ public class DirectedGraphPathBuilder<V> {
     @Nonnull
     public VertexPath<V> buildAnyVertexPath(@Nonnull DirectedGraph<V> graph, @Nonnull Collection<V> waypoints) throws PathBuilderException {
         Iterator<V> i = waypoints.iterator();
-        Deque<V> pathElements = new ArrayDeque<>(graph.getVertexCount());
+        List<V> pathElements = new ArrayList<>(graph.getVertexCount());
         if (!i.hasNext()) {
             throw new PathBuilderException("No waypoints provided");
         }
         V start = i.next();
+        pathElements.add(start);
         while (i.hasNext()) {
             V goal = i.next();
             BackLink<V> back = breadthFirstSearch(graph, start, goal);
@@ -107,8 +108,12 @@ public class DirectedGraphPathBuilder<V> {
                 throw new PathBuilderException("Breadh first search stalled at vertex: " + goal
                         + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
             }else{
-                for (;back!=null;back=back.parent) {
-                    pathElements.addFirst(back.vertex);
+                for (BackLink<V> b=back;b.vertex!=start;b=b.parent) {
+                    pathElements.add(null);
+                }
+                int index=pathElements.size();
+                for (BackLink<V> b=back;b.vertex!=start;b=b.parent) {
+                    pathElements.set(--index,b.vertex);
                 }
             }
             
