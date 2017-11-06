@@ -32,6 +32,29 @@ import javax.annotation.Nullable;
  */
 public class DirectedGraphWithEdgesPathBuilder<V, E> {
 
+    private @Nonnull
+    ToDoubleFunction<E> costFunction;
+
+    public DirectedGraphWithEdgesPathBuilder(ToDoubleFunction<E> costFunction) {
+        this.costFunction = costFunction;
+    }
+
+    public DirectedGraphWithEdgesPathBuilder() {
+        this.costFunction = edge -> 1.0;
+    }
+
+    @Nullable
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
+            @Nonnull V start, @Nonnull V goal) {
+        return findShortestVertexPath(graph, start, goal, costFunction);
+    }
+
+    @Nullable
+    public EdgePath<E> findShortestEdgePath(@Nonnull DirectedGraphWithEdges<V, E> graph,
+            @Nonnull V start, @Nonnull V goal) {
+        return findShortestEdgePath(graph, start, goal, costFunction);
+    }
+
     @Nullable
     private EdgePath<E> doFindShortestEdgePath(@Nonnull DirectedGraphWithEdges<V, E> graph,
             @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
@@ -147,7 +170,7 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         BitSet explored = new BitSet(graph.getVertexCount());
         @SuppressWarnings({"unchecked", "rawtypes"})
         IntNodeWithCost[] frontierMap = new IntNodeWithCost[graph.getVertexCount()];
-        
+
         IntNodeWithCost<E> node = new IntNodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
