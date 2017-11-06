@@ -359,7 +359,7 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
             }
             return new VertexPath<V>(elements);
         } else {
-            return findShortestVertexPath(graph, start, goal, costf);
+            return doFindShortestVertexPath(graph, start, goal, costf);
         }
     }
 
