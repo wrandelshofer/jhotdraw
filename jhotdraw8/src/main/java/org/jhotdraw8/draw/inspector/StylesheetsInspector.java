@@ -164,6 +164,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 listView.getItems().setAll(stylesheets);
             }
         }
+        counter=0;
     }
 
     private void onListChanged() {
