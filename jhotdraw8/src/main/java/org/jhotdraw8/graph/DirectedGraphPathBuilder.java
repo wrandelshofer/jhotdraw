@@ -65,16 +65,16 @@ public class DirectedGraphPathBuilder<V> {
      */
     @Nullable
     public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V> graph,
-            @Nonnull V start,@Nonnull  V goal)  {
-                Deque<V> pathElements = new ArrayDeque<>(graph.getVertexCount());
-            BackLink<V> back = breadthFirstSearch(graph, start, goal);
-            if (back==null) {
-                return null;
-            }else{
-                for (;back!=null;back=back.parent) {
-                    pathElements.addFirst( back.vertex);
-                }
+            @Nonnull V start, @Nonnull V goal) {
+        Deque<V> pathElements = new ArrayDeque<>(graph.getVertexCount());
+        BackLink<V> back = breadthFirstSearch(graph, start, goal);
+        if (back == null) {
+            return null;
+        } else {
+            for (; back != null; back = back.parent) {
+                pathElements.addFirst(back.vertex);
             }
+        }
         return new VertexPath<>(pathElements);
     }
 
@@ -104,19 +104,19 @@ public class DirectedGraphPathBuilder<V> {
         while (i.hasNext()) {
             V goal = i.next();
             BackLink<V> back = breadthFirstSearch(graph, start, goal);
-            if (back==null) {
+            if (back == null) {
                 throw new PathBuilderException("Breadh first search stalled at vertex: " + goal
                         + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
-            }else{
-                for (BackLink<V> b=back;b.vertex!=start;b=b.parent) {
+            } else {
+                for (BackLink<V> b = back; b.vertex != start; b = b.parent) {
                     pathElements.add(null);
                 }
-                int index=pathElements.size();
-                for (BackLink<V> b=back;b.vertex!=start;b=b.parent) {
-                    pathElements.set(--index,b.vertex);
+                int index = pathElements.size();
+                for (BackLink<V> b = back; b.vertex != start; b = b.parent) {
+                    pathElements.set(--index, b.vertex);
                 }
             }
-            
+
             start = goal;
         }
         return new VertexPath<>(pathElements);
@@ -146,11 +146,11 @@ public class DirectedGraphPathBuilder<V> {
         while (i.hasNext()) {
             V goal = i.next();
             BackLink<V> back = breadthFirstSearch(graph, start, goal);
-            if (back==null) {
+            if (back == null) {
                 return null;
-            }else{
-                int index=pathElements.size();
-                for (;back!=null;back=back.parent) {
+            } else {
+                int index = pathElements.size();
+                for (; back != null; back = back.parent) {
                     pathElements.add(index, back.vertex);
                 }
             }
@@ -158,7 +158,7 @@ public class DirectedGraphPathBuilder<V> {
         }
         return new VertexPath<>(pathElements);
     }
-    
+
     /**
      * Breadth-first-search.
      *
@@ -211,12 +211,12 @@ public class DirectedGraphPathBuilder<V> {
         return current;
     }
 
-        private static class BackLink<VV> {
+    private static class BackLink<VV> {
 
         final BackLink<VV> parent;
         final VV vertex;
 
-        public BackLink(VV vertex, BackLink<VV> parent) {
+        BackLink(VV vertex, BackLink<VV> parent) {
             this.vertex = vertex;
             this.parent = parent;
         }
