@@ -26,7 +26,7 @@ import org.jhotdraw8.collection.IntArrayList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphPathBuilder{
+public class IntDirectedGraphPathBuilder {
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start
@@ -68,22 +68,20 @@ public class IntDirectedGraphPathBuilder{
      */
     @Nullable
     public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph graph,
-            @Nonnull int start,@Nonnull  int goal) throws PathBuilderException {
+            @Nonnull int start, @Nonnull int goal) throws PathBuilderException {
         IntArrayList pathElements = new IntArrayList(graph.getVertexCount());
         pathElements.add(start);
-            boolean success = breadthFirstSearchInt(graph, start, goal, pathElements);
-            if (!success) {
-                return null;
-            }else{
-                ArrayList<Integer> vertices=new ArrayList<>(pathElements.size());
-                for (int i=0,n=pathElements.size();i<n;i++) {
-                    vertices.add(pathElements.get(i));
-                }
-        return new VertexPath<>(vertices);
+        boolean success = breadthFirstSearchInt(graph, start, goal, pathElements);
+        if (!success) {
+            return null;
+        } else {
+            ArrayList<Integer> vertices = new ArrayList<>(pathElements.size());
+            for (int i = 0, n = pathElements.size(); i < n; i++) {
+                vertices.add(pathElements.get(i));
             }
+            return new VertexPath<>(vertices);
+        }
     }
-
-
 
     /**
      * Builds a VertexPath through the graph which traverses the specified
@@ -111,13 +109,14 @@ public class IntDirectedGraphPathBuilder{
         while (i.hasNext()) {
             int goal = i.next();
             boolean back = breadthFirstSearchInt(graph, start, goal, pathElements);
-            if (back==false) {
+            if (back == false) {
                 return null;
             }
             start = goal;
         }
         return new VertexPath<>(pathElements.addAllInto(new ArrayList<>(pathElements.size())));
     }
+
     /**
      * Breadth-first-search for IntDirectedGraph.
      *
@@ -164,8 +163,7 @@ public class IntDirectedGraphPathBuilder{
         }
         return true;
     }
-    
-    
+
     /**
      * Queue with back link store.
      * <p>
@@ -189,7 +187,7 @@ public class IntDirectedGraphPathBuilder{
         private final int[] queue;
 
         public QueueWithBackLinks(int capacity) {
-            this.queue = new int[capacity*Q_NUM_FIELDS];
+            this.queue = new int[capacity * Q_NUM_FIELDS];
         }
 
         /**
@@ -212,7 +210,7 @@ public class IntDirectedGraphPathBuilder{
          * @return index or SENTINEL if no element has ever been removed
          */
         public int getIndexOfRemoved() {
-            return first-1;
+            return first - 1;
         }
 
         /**
@@ -267,6 +265,6 @@ public class IntDirectedGraphPathBuilder{
             return vertex;
         }
     }
-private final static int SENTINEL = -1;
+    private final static int SENTINEL = -1;
 
 }
