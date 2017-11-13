@@ -37,6 +37,20 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
+    protected String createErrorMessage(Throwable t) {
+        StringBuilder buf = new StringBuilder();
+        if ((t instanceof CompletionException) && t.getCause() != null) {
+            t = t.getCause();
+        }
+
+        final String msg = t.getLocalizedMessage();
+        if (buf.length() != 0) {
+            buf.append('\n');
+        }
+        buf.append(msg == null ? t.toString() : msg);
+        return buf.toString();
+    }
+
     public final Application getApplication() {
         return app;
     }
@@ -54,20 +68,5 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      * @param app the applicatoin
      */
     protected abstract void handleActionPerformed(ActionEvent event, Application app);
-
-    protected String createErrorMessage(Throwable t) {
-        StringBuilder buf = new StringBuilder();
-        for (; t != null; t = t.getCause()) {
-            if ((t instanceof CompletionException) && t.getCause() != null) {
-                continue;
-            }
-            if (buf.length() != 0) {
-                buf.append('\n');
-            }
-            final String msg = t.getLocalizedMessage();
-            buf.append(msg == null ? t.toString() : msg);
-        }
-        return buf.toString();
-    }
 
 }
