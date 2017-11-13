@@ -43,6 +43,36 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         this.costFunction = edge -> 1.0;
     }
 
+    private VertexPath<V> doFindIntShortestVertexPath(DirectedGraphWithEdges<V, E> graph, V start, V goal, ToDoubleFunction<E> costf) {
+        @SuppressWarnings("unchecked")
+        IntDirectedGraphWithEdges<E> intGraph = (IntDirectedGraphWithEdges<E>) graph;
+        int startIndex = -1, goalIndex = -1;
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            V v = graph.getVertex(i);
+            if (v == start) {
+                startIndex = i;
+                if (goalIndex != -1) {
+                    break;
+                }
+            }
+            if (v == goal) {
+                goalIndex = i;
+                if (startIndex != -1) {
+                    break;
+                }
+            }
+        }
+        VertexPath<Integer> intPath = findIntShortestVertexPath(intGraph, startIndex, goalIndex, costf);
+        if (intPath == null) {
+            return null;
+        }
+        ArrayList<V> elements = new ArrayList<V>();
+        for (Integer vi : intPath.getVertices()) {
+            elements.add(graph.getVertex(vi));
+        }
+        return new VertexPath<V>(elements);
+    }
+
     @Nullable
     public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
             @Nonnull V start, @Nonnull V goal) {
@@ -334,30 +364,7 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
     public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
             @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
         if (graph instanceof IntDirectedGraphWithEdges) {
-            @SuppressWarnings("unchecked")
-            IntDirectedGraphWithEdges<E> intGraph = (IntDirectedGraphWithEdges<E>) graph;
-            int startIndex = -1, goalIndex = -1;
-            for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-                V v = graph.getVertex(i);
-                if (v == start) {
-                    startIndex = i;
-                    if (goalIndex != -1) {
-                        break;
-                    }
-                }
-                if (v == goal) {
-                    goalIndex = i;
-                    if (startIndex != -1) {
-                        break;
-                    }
-                }
-            }
-            VertexPath<Integer> intPath = findIntShortestVertexPath(intGraph, startIndex, goalIndex, costf);
-            ArrayList<V> elements = new ArrayList<V>();
-            for (Integer vi : intPath.getVertices()) {
-                elements.add(graph.getVertex(vi));
-            }
-            return new VertexPath<V>(elements);
+            return doFindIntShortestVertexPath(graph, start, goal, costf);
         } else {
             return doFindShortestVertexPath(graph, start, goal, costf);
         }

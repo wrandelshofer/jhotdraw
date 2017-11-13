@@ -37,9 +37,28 @@ public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBu
 
     public DirectedGraphWithEdgesBuilder(int vertexCapacity, int edgeCapacity) {
         super(vertexCapacity, edgeCapacity);
-        this.vertexMap = new HashMap<>(vertexCapacity );
+        this.vertexMap = new HashMap<>(vertexCapacity);
         this.vertices = new ArrayList<>(vertexCapacity);
         this.edgeData = new ArrayList<>();
+    }
+
+    public DirectedGraphWithEdgesBuilder(DirectedGraphWithEdges<V, E> graph) {
+        super(graph.getVertexCount(), graph.getEdgeCount());
+        final int vcount = graph.getVertexCount();
+        this.vertexMap = new HashMap<>(vcount);
+        this.vertices = new ArrayList<>(vcount);
+        final int ecount = graph.getEdgeCount();
+        this.edgeData = new ArrayList<>(ecount);
+
+        for (int i = 0; i < vcount; i++) {
+            addVertex(graph.getVertex(i));
+        }
+        for (int i = 0; i < vcount; i++) {
+            V v = graph.getVertex(i);
+            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
+                addEdge(v, graph.getNext(v, j), graph.getNextEdge(v, j));
+            }
+        }
     }
 
     /**
@@ -110,7 +129,7 @@ public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBu
     }
 
     @Override
-    @Nonnull 
+    @Nonnull
     public V getVertex(int vi) {
         if (vertices.get(vi) == null) {
             System.err.println("DIrectedGraphBuilder is broken");
