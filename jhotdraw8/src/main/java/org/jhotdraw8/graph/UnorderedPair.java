@@ -33,8 +33,8 @@ public class UnorderedPair<V> implements Pair<V> {
         return b;
     }
 
-    public boolean isIntersectionEmpty() {
-        return !Objects.equals(a, b);
+    public boolean isStartEqualsEnd() {
+        return Objects.equals(a, b);
     }
 
     @Override
