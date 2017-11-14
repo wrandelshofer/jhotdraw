@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 import static java.lang.Math.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
@@ -43,6 +44,46 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         this.costFunction = edge -> 1.0;
     }
 
+    private IntNodeWithCost<E> doFindIntShortestPath(int start, PriorityQueue<IntNodeWithCost<E>> frontier, IntNodeWithCost[] frontierMap, int goal, BitSet explored, IntDirectedGraphWithEdges<E> graph, ToDoubleFunction<E> costf) {
+        IntNodeWithCost<E> node = new IntNodeWithCost<>(start, 0.0, null, null);
+        frontier.add(node);
+        while (true) {
+            if (frontier.isEmpty()) {
+                return null;
+            }
+            node = frontier.poll();
+            final int vertex = node.vertex;
+            frontierMap[vertex] = null;
+            if (vertex == goal) {
+                break;
+            }
+            explored.set(node.getVertex());
+            for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
+                int next = graph.getNext(vertex, i);
+                final E edge = graph.getNextEdge(vertex, i);
+                double cost = node.cost + costf.applyAsDouble(edge);
+
+                @SuppressWarnings("unchecked")
+                IntNodeWithCost<E> nwcInFrontier = frontierMap[next];
+                if (!explored.get(next) && nwcInFrontier == null) {
+                    IntNodeWithCost<E> nwc = new IntNodeWithCost<>(next, cost, node, edge);
+                    frontier.add(nwc);
+                    frontierMap[next] = nwc;
+                } else if (nwcInFrontier != null) {
+                    if (nwcInFrontier.cost > cost) {
+                        frontier.remove(nwcInFrontier);
+                        nwcInFrontier.cost = cost;
+                        nwcInFrontier.parent = node;
+                        nwcInFrontier.edge = edge;
+                        frontier.add(nwcInFrontier);
+                    }
+                }
+            }
+        }
+
+        return node;
+    }
+
     private VertexPath<V> doFindIntShortestVertexPath(DirectedGraphWithEdges<V, E> graph, V start, V goal, ToDoubleFunction<E> costf) {
         @SuppressWarnings("unchecked")
         IntDirectedGraphWithEdges<E> intGraph = (IntDirectedGraphWithEdges<E>) graph;
@@ -71,6 +112,46 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
             elements.add(graph.getVertex(vi));
         }
         return new VertexPath<V>(elements);
+    }
+
+    private NodeWithCost<V, E> doFindShortestPath(V start, PriorityQueue<NodeWithCost<V, E>> frontier, Map<V, NodeWithCost<V, E>> frontierMap, V goal, Set<V> explored, DirectedGraphWithEdges<V, E> graph, ToDoubleFunction<E> costf) {
+        NodeWithCost<V, E> node = new NodeWithCost<>(start, 0.0, null, null);
+        frontier.add(node);
+        while (true) {
+            if (frontier.isEmpty()) {
+                return null;
+            }
+            node = frontier.poll();
+            final V vertex = node.vertex;
+            frontierMap.remove(vertex);
+            if (vertex == goal) {
+                break;
+            }
+            explored.add(node.getVertex());
+            for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
+                V next = graph.getNext(vertex, i);
+                final E edge = graph.getNextEdge(vertex, i);
+                double cost = node.cost + costf.applyAsDouble(edge);
+
+                boolean isInFrontier = frontierMap.containsKey(next);
+                if (!explored.contains(next) && !isInFrontier) {
+                    NodeWithCost<V, E> nwc = new NodeWithCost<>(next, cost, node, edge);
+                    frontier.add(nwc);
+                    frontierMap.put(next, nwc);
+                } else if (isInFrontier) {
+                    NodeWithCost<V, E> nwcInFrontier = frontierMap.get(next);
+                    if (nwcInFrontier.cost > cost) {
+                        frontier.remove(nwcInFrontier);
+                        nwcInFrontier.cost = cost;
+                        nwcInFrontier.parent = node;
+                        nwcInFrontier.edge = edge;
+                        frontier.add(nwcInFrontier);
+                    }
+                }
+            }
+        }
+
+        return node;
     }
 
     @Nullable
@@ -193,51 +274,33 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         return new EdgePath<>(edges);
     }
 
+    private PriorityQueue< IntNodeWithCost<E>> intFrontier;
+    private BitSet intExplored;
+    private IntNodeWithCost[] intFrontierMap;
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     private IntNodeWithCost<E> findIntShortestPath(@Nonnull IntDirectedGraphWithEdges< E> graph,
             @Nonnull int start, @Nonnull int goal, @Nonnull ToDoubleFunction<E> costf) {
-        PriorityQueue< IntNodeWithCost<E>> frontier = new PriorityQueue<>();
-        BitSet explored = new BitSet(graph.getVertexCount());
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        IntNodeWithCost[] frontierMap = new IntNodeWithCost[graph.getVertexCount()];
-
-        IntNodeWithCost<E> node = new IntNodeWithCost<>(start, 0.0, null, null);
-        frontier.add(node);
-        while (true) {
-            if (frontier.isEmpty()) {
-                return null;
-            }
-            node = frontier.poll();
-            final int vertex = node.vertex;
-            frontierMap[vertex] = null;
-            if (vertex == goal) {
-                break;
-            }
-            explored.set(node.getVertex());
-            for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
-                int next = graph.getNext(vertex, i);
-                final E edge = graph.getNextEdge(vertex, i);
-                double cost = node.cost + costf.applyAsDouble(edge);
-
-                @SuppressWarnings("unchecked")
-                IntNodeWithCost<E> nwcInFrontier = frontierMap[next];
-                if (!explored.get(next) && nwcInFrontier == null) {
-                    IntNodeWithCost<E> nwc = new IntNodeWithCost<>(next, cost, node, edge);
-                    frontier.add(nwc);
-                    frontierMap[next] = nwc;
-                } else if (nwcInFrontier != null) {
-                    if (nwcInFrontier.cost > cost) {
-                        frontier.remove(nwcInFrontier);
-                        nwcInFrontier.cost = cost;
-                        nwcInFrontier.parent = node;
-                        nwcInFrontier.edge = edge;
-                        frontier.add(nwcInFrontier);
-                    }
-                }
-            }
+        if (intFrontier == null) {
+            intFrontier = new PriorityQueue<>();
+        } else {
+            intFrontier.clear();
         }
 
-        return node;
+        final int vertexCount = graph.getVertexCount();
+        if (intExplored == null || intExplored.cardinality() < vertexCount) {
+            intExplored = new BitSet(vertexCount);
+        } else {
+            intExplored.clear();
+        }
+        if (intFrontierMap == null || intFrontierMap.length < vertexCount) {
+            intFrontierMap = new IntNodeWithCost[vertexCount];
+        } else {
+            Arrays.fill(intFrontierMap, null);
+        }
+
+        return doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
     }
 
     @Nullable
@@ -304,46 +367,10 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
     @Nullable
     private NodeWithCost<V, E> findShortestPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
             @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
-        NodeWithCost<V, E> node = new NodeWithCost<>(start, 0.0, null, null);
         PriorityQueue< NodeWithCost<V, E>> frontier = new PriorityQueue<>();
-        frontier.add(node);
         Set<V> explored = new HashSet<>(graph.getVertexCount());
         Map<V, NodeWithCost<V, E>> frontierMap = new HashMap<>(graph.getVertexCount());
-        while (true) {
-            if (frontier.isEmpty()) {
-                return null;
-            }
-            node = frontier.poll();
-            final V vertex = node.vertex;
-            frontierMap.remove(vertex);
-            if (vertex == goal) {
-                break;
-            }
-            explored.add(node.getVertex());
-            for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
-                V next = graph.getNext(vertex, i);
-                final E edge = graph.getNextEdge(vertex, i);
-                double cost = node.cost + costf.applyAsDouble(edge);
-
-                boolean isInFrontier = frontierMap.containsKey(next);
-                if (!explored.contains(next) && !isInFrontier) {
-                    NodeWithCost<V, E> nwc = new NodeWithCost<>(next, cost, node, edge);
-                    frontier.add(nwc);
-                    frontierMap.put(next, nwc);
-                } else if (isInFrontier) {
-                    NodeWithCost<V, E> nwcInFrontier = frontierMap.get(next);
-                    if (nwcInFrontier.cost > cost) {
-                        frontier.remove(nwcInFrontier);
-                        nwcInFrontier.cost = cost;
-                        nwcInFrontier.parent=node;
-                        nwcInFrontier.edge=edge;
-                        frontier.add(nwcInFrontier);
-                    }
-                }
-            }
-        }
-
-        return node;
+        return doFindShortestPath(start, frontier, frontierMap, goal, explored, graph, costf);
     }
 
     /**
