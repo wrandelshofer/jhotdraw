@@ -218,18 +218,20 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
                 int next = graph.getNext(vertex, i);
                 final E edge = graph.getNextEdge(vertex, i);
                 double cost = node.cost + costf.applyAsDouble(edge);
-                IntNodeWithCost<E> nwc = new IntNodeWithCost<>(next, cost, node, edge);
 
                 @SuppressWarnings("unchecked")
                 IntNodeWithCost<E> nwcInFrontier = frontierMap[next];
                 if (!explored.get(next) && nwcInFrontier == null) {
+                    IntNodeWithCost<E> nwc = new IntNodeWithCost<>(next, cost, node, edge);
                     frontier.add(nwc);
                     frontierMap[next] = nwc;
                 } else if (nwcInFrontier != null) {
                     if (nwcInFrontier.cost > cost) {
                         frontier.remove(nwcInFrontier);
-                        frontier.add(nwc);
-                        frontierMap[next] = nwc;
+                        nwcInFrontier.cost = cost;
+                        nwcInFrontier.parent = node;
+                        nwcInFrontier.edge = edge;
+                        frontier.add(nwcInFrontier);
                     }
                 }
             }
@@ -322,18 +324,20 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
                 V next = graph.getNext(vertex, i);
                 final E edge = graph.getNextEdge(vertex, i);
                 double cost = node.cost + costf.applyAsDouble(edge);
-                NodeWithCost<V, E> nwc = new NodeWithCost<>(next, cost, node, edge);
 
                 boolean isInFrontier = frontierMap.containsKey(next);
                 if (!explored.contains(next) && !isInFrontier) {
+                    NodeWithCost<V, E> nwc = new NodeWithCost<>(next, cost, node, edge);
                     frontier.add(nwc);
                     frontierMap.put(next, nwc);
                 } else if (isInFrontier) {
                     NodeWithCost<V, E> nwcInFrontier = frontierMap.get(next);
                     if (nwcInFrontier.cost > cost) {
                         frontier.remove(nwcInFrontier);
-                        frontier.add(nwc);
-                        frontierMap.put(next, nwc);
+                        nwcInFrontier.cost = cost;
+                        nwcInFrontier.parent=node;
+                        nwcInFrontier.edge=edge;
+                        frontier.add(nwcInFrontier);
                     }
                 }
             }
