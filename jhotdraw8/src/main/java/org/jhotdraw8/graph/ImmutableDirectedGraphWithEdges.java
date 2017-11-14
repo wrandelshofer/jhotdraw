@@ -14,9 +14,10 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the vertex type
+ * @param <E> the edge type
  */
-public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
-        implements DirectedGraph<V> {
+public class ImmutableDirectedGraphWithEdges<V, E> extends ImmutableIntDirectedGraph
+        implements DirectedGraphWithEdges<V, E>, IntDirectedGraphWithEdges<E> {
 
     /**
      * Maps a vertex index to a vertex object.
@@ -27,12 +28,14 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
      */
     private final Map<V, Integer> vertexToIndexMap;
 
+    private Object[] edgeData;
+
     /**
      * Creates a new instance from the specified graph.
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraph(DirectedGraph<V> graph) {
+    public ImmutableDirectedGraphWithEdges(DirectedGraphWithEdges<V, E> graph) {
         super(graph.getVertexCount(), graph.getEdgeCount());
         int vertexCapacity = graph.getVertexCount();
 
@@ -45,15 +48,24 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
             indexToVertexMap.add(vObject);
         }
 
+        edgeData = new Object[graph.getEdgeCount()];
         int edgeCount = 0;
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             V vObject = indexToVertexMap.get(vIndex);
 
             vertices[vIndex] = edgeCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                edges[edgeCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                edges[edgeCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                edgeData[edgeCount] = graph.getNextEdge(vObject, i);
+                ++edgeCount;
             }
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public E getEdge(int indexOfEdge) {
+        return (E) edgeData[indexOfEdge];
     }
 
     @Override
@@ -64,6 +76,17 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
     @Override
     public int getNextCount(V vertex) {
         return getNextCount(vertexToIndexMap.get(vertex));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public E getNextEdge(V vertex, int index) {
+        return (E) edgeData[getEdgeIndex(vertexToIndexMap.get(vertex), index)];
+    }
+
+    @Override
+    public E getNextEdge(int vertex, int index) {
+        return (E) edgeData[getEdgeIndex(vertex, index)];
     }
 
     @Override

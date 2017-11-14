@@ -56,8 +56,8 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
         buildAddVertex();
     }
 
-    public IntImmutableDirectedGraph build() {
-        return new IntImmutableDirectedGraph(this);
+    public ImmutableIntDirectedGraph build() {
+        return new ImmutableIntDirectedGraph(this);
     }
 
 

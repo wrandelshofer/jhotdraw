@@ -11,9 +11,7 @@ import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
@@ -44,6 +42,7 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         this.costFunction = edge -> 1.0;
     }
 
+    @SuppressWarnings("rawtypes")
     private IntNodeWithCost<E> doFindIntShortestPath(int start, PriorityQueue<IntNodeWithCost<E>> frontier, IntNodeWithCost[] frontierMap, int goal, BitSet explored, IntDirectedGraphWithEdges<E> graph, ToDoubleFunction<E> costf) {
         IntNodeWithCost<E> node = new IntNodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
@@ -107,11 +106,11 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         if (intPath == null) {
             return null;
         }
-        ArrayList<V> elements = new ArrayList<V>();
+        ArrayList<V> elements = new ArrayList<>(intPath.getVertices().size());
         for (Integer vi : intPath.getVertices()) {
             elements.add(graph.getVertex(vi));
         }
-        return new VertexPath<V>(elements);
+        return new VertexPath<>(elements);
     }
 
     private NodeWithCost<V, E> doFindShortestPath(V start, PriorityQueue<NodeWithCost<V, E>> frontier, Map<V, NodeWithCost<V, E>> frontierMap, V goal, Set<V> explored, DirectedGraphWithEdges<V, E> graph, ToDoubleFunction<E> costf) {
@@ -276,31 +275,25 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
 
     private PriorityQueue< IntNodeWithCost<E>> intFrontier;
     private BitSet intExplored;
+    @SuppressWarnings({"rawtypes"})
     private IntNodeWithCost[] intFrontierMap;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     private IntNodeWithCost<E> findIntShortestPath(@Nonnull IntDirectedGraphWithEdges< E> graph,
             @Nonnull int start, @Nonnull int goal, @Nonnull ToDoubleFunction<E> costf) {
-        if (intFrontier == null) {
-            intFrontier = new PriorityQueue<>();
-        } else {
-            intFrontier.clear();
-        }
-
         final int vertexCount = graph.getVertexCount();
-        if (intExplored == null || intExplored.cardinality() < vertexCount) {
-            intExplored = new BitSet(vertexCount);
-        } else {
-            intExplored.clear();
-        }
         if (intFrontierMap == null || intFrontierMap.length < vertexCount) {
             intFrontierMap = new IntNodeWithCost[vertexCount];
-        } else {
-            Arrays.fill(intFrontierMap, null);
+            intExplored = new BitSet(vertexCount);
+            intFrontier = new PriorityQueue<>();
         }
 
-        return doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
+        IntNodeWithCost<E> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
+        intFrontier.clear();
+        intExplored.clear();
+        clear(intFrontierMap);
+        return result;
     }
 
     @Nullable
@@ -399,11 +392,23 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         }
     }
 
+    @SuppressWarnings({"unchecked","rawtypes"})
+    private static void clear(IntNodeWithCost[] array) {
+        int len = array.length;
+        if (len > 0) {
+            array[0] = null;
+        }
+        for (int i = 1; i < len; i += i) {
+            System.arraycopy(array, 0, array, i,
+                    ((len - i) < i) ? (len - i) : i);
+        }
+    }
+
     private static class BackLinkWithEdge<VV, EE> {
 
-        final EE edge;
         final BackLinkWithEdge<VV, EE> parent;
         final VV vertex;
+        final EE edge;
 
         public BackLinkWithEdge(VV vertex, BackLinkWithEdge<VV, EE> parent, EE edge) {
             this.vertex = vertex;
@@ -480,8 +485,8 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
 
         private NodeWithCost<V, E> parent;
         private final V vertex;
-        private double cost;
         private E edge;
+        private double cost;
 
         public NodeWithCost(V node, double cost, NodeWithCost<V, E> parent, E edge) {
             this.vertex = node;
