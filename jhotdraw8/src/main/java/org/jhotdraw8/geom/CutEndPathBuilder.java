@@ -47,7 +47,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
             double[] seg = new double[6];
             double x = 0, y = 0;
             Loop:
-            for (PathIterator i = path.getPathIterator(null); i.isDone(); i.next()) {
+            for (PathIterator i = path.getPathIterator(null); !i.isDone(); i.next()) {
                 switch (i.currentSegment(seg)) {
                     case PathIterator.SEG_CLOSE:
                         out.closePath();
@@ -55,63 +55,61 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                     case PathIterator.SEG_CUBICTO: {
                         Intersection isect = Intersection.intersectBezier3Circle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            break Loop;
+                           // break Loop;
                         }else         if (isect.isEmpty()) {
                             out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
-                            x = seg[4];
-                            y = seg[5];
                         } else {
                             Geom.splitCubicCurve(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLastT(),
                                     out::curveTo, null);
-                            break Loop;
+                          //  break Loop;
                         } 
+                            x = seg[4];
+                            y = seg[5];
                         break;
                     }
                     case PathIterator.SEG_LINETO: {
                         Intersection isect = Intersection.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            break Loop;
+                   //         break Loop;
                         }else if (isect.isEmpty()) {
                             out.lineTo(seg[0], seg[1]);
-                            x = seg[0];
-                            y = seg[1];
                         } else {
                             Geom.splitLine(x, y, seg[0], seg[1], isect.getLastT(),
                                     out::lineTo, null);
+                         //   break Loop;
+                        }
                             x = seg[0];
                             y = seg[1];
-                            break Loop;
-                        }
                         break;
                     }
                     case PathIterator.SEG_MOVETO: {
                         Intersection isect = Intersection.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            break Loop;
+                //            break Loop;
                         }else if (isect.isEmpty()) {
                             out.moveTo(seg[0], seg[1]);
-                            x = seg[0];
-                            y = seg[1];
                         } else {
                             Geom.splitLine(x, y, seg[0], seg[1], isect.getLastT(),
                                     out::moveTo, null);
-                            break Loop;
+                         //   break Loop;
                         }
+                            x = seg[0];
+                            y = seg[1];
                         break;
                     }
                     case PathIterator.SEG_QUADTO: {
                         Intersection isect = Intersection.intersectBezier2Circle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            break Loop;
+             //               break Loop;
                         }else if (isect.isEmpty()) {
                             out.quadTo(seg[0], seg[1], seg[2], seg[3]);
-                            x = seg[2];
-                            y = seg[3];
                         } else {
                             Geom.splitQuadCurve(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLastT(),
                                     out::quadTo, null);
-                            break Loop;
+                         //   break Loop;
                         }
+                            x = seg[2];
+                            y = seg[3];
                         break;
                     }
                     default:
