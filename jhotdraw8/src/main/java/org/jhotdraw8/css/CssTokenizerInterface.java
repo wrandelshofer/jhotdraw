@@ -44,6 +44,7 @@ public interface CssTokenizerInterface {
 
     /** Returns the current value converted to a string.
      * The returned value can be used for String comparisons of the value.
+     * @return the current value
      */
     default String currentValue() {
         switch (currentToken()) {

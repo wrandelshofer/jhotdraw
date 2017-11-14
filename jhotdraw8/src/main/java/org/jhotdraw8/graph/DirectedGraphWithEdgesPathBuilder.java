@@ -361,8 +361,6 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
      * @param goal the goal vertex
      * @param costf the cost function
      * @return a VertexPath if traversal is possible
-     * @throws org.jhotdraw8.graph.PathBuilderException if traversal is not
-     * possible
      */
     @Nullable
     public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,

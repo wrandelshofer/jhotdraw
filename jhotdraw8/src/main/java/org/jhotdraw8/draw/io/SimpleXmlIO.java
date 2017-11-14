@@ -201,6 +201,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Must be a directory and not a file.
+     * @param uri the URI
      */
     public void setInternalHome(URI uri) {
         internalHome = uri;

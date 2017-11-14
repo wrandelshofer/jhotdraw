@@ -130,6 +130,10 @@ public class XmlUtil {
      * References:
      * <a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">
      * Stackoverflow</a>.
+     * @param inputSource the input source
+     * @param namespaceAware whether to be name space aware
+     * @return the document
+     * @throws java.io.IOException in case of failure
      */
     public static Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {

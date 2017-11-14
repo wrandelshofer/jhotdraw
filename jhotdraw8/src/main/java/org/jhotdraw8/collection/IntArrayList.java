@@ -215,7 +215,7 @@ public class IntArrayList {
      * is less than the current size, all items at indices greater or equal  {@code newSize}
      * are discarded.
      * 
-     * @param newSize 
+     * @param newSize the new size
      */
     public void setSize(int newSize) {
         increaseCapacity(newSize);

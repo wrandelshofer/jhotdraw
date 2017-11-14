@@ -217,6 +217,7 @@ public class DirectedGraphs {
      * @param vertices the list of vertices
      * @param orderedEdges list of edges sorted by cost in ascending order
      * (lowest cost first, highest cost last)
+     * @param includedEdges optional, all included edges are added to this list, if it is provided.
      * @param rejectedEdges optional, all excluded edges are added to this list,
      * if it is provided.
      * @return the graph builder

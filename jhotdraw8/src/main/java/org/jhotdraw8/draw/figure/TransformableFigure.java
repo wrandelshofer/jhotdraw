@@ -397,10 +397,10 @@ public interface TransformableFigure extends TransformCacheableFigure {
      *         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
      * </pre>
      *
-     * @param x
-     * @param y
-     * @param width
-     * @param height
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param width the width
+     * @param height the height
      */
     @Override
     default void reshapeInLocal(double x, double y, double width, double height) {

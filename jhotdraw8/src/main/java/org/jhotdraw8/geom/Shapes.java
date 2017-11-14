@@ -383,6 +383,7 @@ public class Shapes {
      *
      * @param builder the builder
      * @param str the SVG path
+     * @return the path builder
      * @throws java.io.IOException if the String is not a valid path
      */
     public static PathBuilder buildFromSvgString(PathBuilder builder, String str) throws IOException {

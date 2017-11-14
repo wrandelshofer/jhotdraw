@@ -102,7 +102,7 @@ public class CssSizeInsets {
      * insets
      * @param height the height for computing percentages for top and bottom
      * insets
-     * @return
+     * @return the converted value
      */
     public Insets getConvertedValue(double width, double height) {
         final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);

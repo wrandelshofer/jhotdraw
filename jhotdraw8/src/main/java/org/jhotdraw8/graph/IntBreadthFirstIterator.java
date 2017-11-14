@@ -5,17 +5,14 @@ package org.jhotdraw8.graph;
 
 import java.util.ArrayDeque;
 import java.util.BitSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.Set;
 
 /**
  * BreadthFirstIterator.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
- * @param <V> the vertex type
  */
 public class IntBreadthFirstIterator implements Iterator<Integer> {
 

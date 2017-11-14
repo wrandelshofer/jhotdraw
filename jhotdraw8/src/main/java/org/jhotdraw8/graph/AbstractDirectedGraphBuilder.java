@@ -8,7 +8,6 @@ package org.jhotdraw8.graph;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <V> the vertex type
  */
 public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
@@ -64,10 +63,6 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
     /**
      * Builder-method: adds a directed edge from 'a' to 'b'.
-     * <p>
-     * Before you may call this method, you must have called {@link #buildSetVertexCount(int)
-     * }
-     * and {@link #buildSetEdgeCount(int) }.
      *
      * @param a vertex a
      * @param b vertex b
@@ -94,8 +89,6 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
     /**
      * Builder-method: adds a vertex.
-     *
-     * @param v vertex
      */
     protected void buildAddVertex() {
         vertexCount++;

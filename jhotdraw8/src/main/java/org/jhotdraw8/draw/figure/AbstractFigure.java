@@ -103,11 +103,15 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         return drawing;
     }
     
-   /** This method is called by {@link #addNotify}. The implementation of this class is empty. */
+   /** This method is called by {@link #addNotify}. The implementation of this class is empty.
+     * @param drawing the drawing
+     */
    protected void doAddNotify(@Nonnull Drawing drawing) {
        
    }
-   /** This method is called by {@link #removeNotify}. The implementation of this class is empty. */
+   /** This method is called by {@link #removeNotify}. The implementation of this class is empty.
+     * @param drawing the drawing
+     */
    protected void doRemoveNotify(@Nonnull Drawing drawing) {
        
    }
