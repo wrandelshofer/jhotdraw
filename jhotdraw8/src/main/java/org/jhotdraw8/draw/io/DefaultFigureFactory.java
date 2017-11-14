@@ -36,6 +36,7 @@ import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.figure.BorderableFigure;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.SimpleCombinedPathFigure;
 import org.jhotdraw8.draw.figure.LabelAutorotate;
@@ -188,6 +189,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(TransformableFigure.TRANSFORMS, new XmlTransformListConverter());
         addConverter(SimplePolylineFigure.POINTS, new CssPoint2DListConverter());
         addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));
+        addConverter(BorderableFigure.BORDER_STROKE_DASH_ARRAY, new CssDoubleListConverter());
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
