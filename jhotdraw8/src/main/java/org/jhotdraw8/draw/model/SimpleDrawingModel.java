@@ -478,7 +478,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // build a graph which includes all figures that must be laid out and all their observers
             // transitively
             visited.clear();
-            DirectedGraphBuilder<Figure> graphBuilder = new DirectedGraphBuilder<>();
+            DirectedGraphBuilder<Figure,Figure> graphBuilder = new DirectedGraphBuilder<>();
             while (!todo.isEmpty()) {
                 Figure f = todo.iterator().next();
                 todo.remove(f);
@@ -486,7 +486,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     graphBuilder.addVertex(f);
                     for (Figure obs : f.getLayoutObservers()) {
                         graphBuilder.addVertex(obs);
-                        graphBuilder.addArrow(f, obs);
+                        graphBuilder.addArrow(f, obs,f);
                         todo.add(obs);
                     }
                 }

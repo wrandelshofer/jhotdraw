@@ -16,14 +16,14 @@ import java.util.function.IntFunction;
  * @version $$Id$$
  * @param <V> the vertex type
  */
-public class IntBackedBreadthFirstIterator<V> implements Iterator<V> {
+public class IntBackedBreadthFirstIterator<V,A> implements Iterator<V> {
 
-    private final IntDirectedGraph graph;
+    private final IntDirectedGraph<A> graph;
     private final IntFunction<V> intToV;
     private final Queue<Integer> queue;// FIXME should be ArrayQueueInt.
     private final BitSet visited;
 
-    public IntBackedBreadthFirstIterator(IntDirectedGraph graph, IntFunction<V> intToV, int root) {
+    public IntBackedBreadthFirstIterator(IntDirectedGraph<A> graph, IntFunction<V> intToV, int root) {
         this.graph = graph;
         this.intToV=intToV;
         queue = new ArrayDeque<>(graph.getArrowCount());

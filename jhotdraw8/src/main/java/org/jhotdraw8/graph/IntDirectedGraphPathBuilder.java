@@ -19,7 +19,7 @@ import org.jhotdraw8.collection.IntArrayList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphPathBuilder {
+public class IntDirectedGraphPathBuilder<A> {
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start
@@ -36,7 +36,7 @@ public class IntDirectedGraphPathBuilder {
      * possible
      */
     @Nonnull
-    public VertexPath<Integer> buildAnyVertexPath(@Nonnull IntDirectedGraph graph,
+    public VertexPath<Integer> buildAnyVertexPath(@Nonnull IntDirectedGraph<A> graph,
             @Nonnull int start, @Nonnull int goal) throws PathBuilderException {
         VertexPath<Integer> pathElements = IntDirectedGraphPathBuilder.this.findAnyVertexPath(graph, start, goal);
         if (pathElements == null) {
@@ -60,7 +60,7 @@ public class IntDirectedGraphPathBuilder {
      * possible
      */
     @Nullable
-    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph graph,
+    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph<A> graph,
             @Nonnull int start, @Nonnull int goal) throws PathBuilderException {
         IntArrayList pathElements = new IntArrayList(graph.getVertexCount());
         pathElements.add(start);
@@ -91,7 +91,7 @@ public class IntDirectedGraphPathBuilder {
      * possible
      */
     @Nullable
-    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph graph, @Nonnull Collection<Integer> waypoints) throws PathBuilderException {
+    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph<A> graph, @Nonnull Collection<Integer> waypoints) throws PathBuilderException {
         Iterator<Integer> i = waypoints.iterator();
         IntArrayList pathElements = new IntArrayList();
         if (!i.hasNext()) {
@@ -120,7 +120,7 @@ public class IntDirectedGraphPathBuilder {
      * elements. Does not add the root element.
      * @return true on success
      */
-    private static boolean breadthFirstSearchInt(IntDirectedGraph graph, int start, int goal, IntArrayList pathElements) {
+    private static <A> boolean breadthFirstSearchInt(IntDirectedGraph<A> graph, int start, int goal, IntArrayList pathElements) {
         BitSet visited = new BitSet(graph.getVertexCount());
         QueueWithBackLinks queue = new QueueWithBackLinks(max(1, min(graph.getVertexCount(), graph.getArrowCount())));
         queue.add(start, SENTINEL);

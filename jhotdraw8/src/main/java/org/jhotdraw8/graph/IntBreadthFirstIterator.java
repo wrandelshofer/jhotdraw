@@ -14,13 +14,13 @@ import java.util.Queue;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class IntBreadthFirstIterator implements Iterator<Integer> {
+public class IntBreadthFirstIterator<A> implements Iterator<Integer> {
 
-    private final IntDirectedGraph graph;
+    private final IntDirectedGraph<A> graph;
     private final Queue<Integer> queue;// FIXME should be ArrayQueueInt.
     private final BitSet visited;
 
-    public IntBreadthFirstIterator(IntDirectedGraph graph, int root) {
+    public IntBreadthFirstIterator(IntDirectedGraph<A> graph, int root) {
         this.graph = graph;
         queue = new ArrayDeque<>(graph.getArrowCount());
         visited = new BitSet(graph.getVertexCount());

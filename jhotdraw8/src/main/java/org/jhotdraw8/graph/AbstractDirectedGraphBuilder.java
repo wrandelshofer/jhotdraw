@@ -8,8 +8,9 @@ package org.jhotdraw8.graph;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <A> arrow type
  */
-public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
+public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGraph<A> {
 
     private final static int ARROWS_NEXT_FIELD = 1;
     private final static int ARROWS_NUM_FIELDS = 2;
@@ -29,7 +30,7 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD} contains the index of
      * the next arrow.
      */
-    private int[] arrows;
+    private int[] arrowHeads;
 
     /**
      * Table of last arrows.
@@ -41,6 +42,9 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * the number of arrows of the i-th vertex.
      */
     private int[] lastArrow;
+    
+    
+    private Object[] arrows;
     /**
      * The vertex count.
      */
@@ -57,8 +61,9 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         if (arrowCapacity < 0) {
             throw new IllegalArgumentException("arrowCapacity: " + arrowCapacity);
         }
-        this.arrows = new int[arrowCapacity * ARROWS_NUM_FIELDS];
+        this.arrowHeads = new int[arrowCapacity * ARROWS_NUM_FIELDS];
         this.lastArrow = new int[vertexCapacity * LASTARROW_NUM_FIELDS];
+        this.arrows = new Object[arrowCapacity];
     }
 
     /**
@@ -67,23 +72,25 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * @param a vertex a
      * @param b vertex b
      */
-    protected void buildAddArrow(int a, int b) {
-        if (arrows.length <= arrowCount * ARROWS_NUM_FIELDS) {
-            int[] tmp = arrows;
-            arrows = new int[arrows.length * ARROWS_NUM_FIELDS];
-            System.arraycopy(tmp, 0, arrows, 0, tmp.length);
+    protected void buildAddArrow(int a, int b, A arrow) {
+        if (arrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {
+            int[] tmp = arrowHeads;
+            arrowHeads = new int[arrowHeads.length * ARROWS_NUM_FIELDS];
+            System.arraycopy(tmp, 0, arrowHeads, 0, tmp.length);
         }
 
         int arrowCountOfA = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
         int lastArrowIdOfA = arrowCountOfA == 0 ? SENTINEL : lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
 
         int newLastArrowIdOfA = arrowCount;
-        arrows[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = b;
-        arrows[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = lastArrowIdOfA;
+        arrowHeads[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = b;
+        arrowHeads[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = lastArrowIdOfA;
 
         lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] = arrowCountOfA + 1;
         lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = newLastArrowIdOfA;
 
+        arrows[newLastArrowIdOfA]=arrow;
+        
         arrowCount++;
     }
 
@@ -97,6 +104,19 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
             lastArrow = new int[lastArrow.length * 2 * LASTARROW_NUM_FIELDS];
             System.arraycopy(tmp, 0, lastArrow, 0, tmp.length);
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int index) {
+        return (A)arrows[index];
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int vi, int i) {
+        int arrowId = getArrowIndex(vi, i);
+        return (A)arrows[arrowId];
     }
 
     @Override
@@ -138,15 +158,15 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         int arrowId = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
         for (int j = i - 1; j >= 0; j--) {
             prevArrowId = arrowId;
-            arrowId = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            arrowId = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
 
         if (prevArrowId == SENTINEL) {
             // if there is no previous arrowId => make the point from lastArrow point to the arrow after arrowId.
-            lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         } else {
             // if there is a previous arrowId => make the pointer from prevArrowId point to the arrow after arrowId.
-            arrows[prevArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            arrowHeads[prevArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
         // Decrease number of arrows for vertex vi
         lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD]--;
@@ -157,8 +177,8 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         int moveArrowId = arrowCount;
         if (arrowId != moveArrowId) {
             // move moveArrowId to arrowId
-            arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = arrows[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
-            arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrows[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = arrowHeads[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+            arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowHeads[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
             // if there is a pointer in lastArrows to moveArrowId, make it point to arrowId. 
             boolean fixed = false;
             for (int v = 0; v < vertexCount; v++) {
@@ -172,8 +192,8 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
             // if there is a pointer in arrows to moveArrowId, make it point to arrowId. 
             if (!fixed) {
                 for (int e = 0; e < arrowCount; e++) {
-                    if (arrows[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] == moveArrowId) {
-                        arrows[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowId;
+                    if (arrowHeads[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] == moveArrowId) {
+                        arrowHeads[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowId;
                         fixed = true;
                         break;
                     }
@@ -182,22 +202,22 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         }
     }
 
-    protected int getIndexOfArrow(int vi, int i) {
+    protected int getArrowIndex(int vi, int i) {
         if (i < 0 || i >= getNextCount(vi)) {
             throw new IllegalArgumentException("0 <= i(" + i + ") <= " + getNextCount(vi));
         }
         int arrowId = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
         int nextCount = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
         for (int j = nextCount - 1; j > i; j--) {
-            arrowId = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            arrowId = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
         return arrowId;
     }
 
     @Override
     public int getNext(int vi, int i) {
-        int arrowId = getIndexOfArrow(vi, i);
-        return arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+        int arrowId = getArrowIndex(vi, i);
+        return arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
     }
 
     @Override

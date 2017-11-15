@@ -29,7 +29,7 @@ public class DirectedGraphs {
     }
 
 
-    private static <V> Map<V, List<V>> createForest(DirectedGraph<V> g) {
+    private static <V,A> Map<V, List<V>> createForest(DirectedGraph<V,A> g) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(g.getVertexCount());
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
@@ -56,15 +56,15 @@ public class DirectedGraphs {
      * Dumps a directed graph into a String which can be rendered with the "dot"
      * tool.
      *
-     * @param <T> the vertex type
+     * @param <V> the vertex type
      * @param g the graph
      * @return a "dot" String.
      */
-    public static <T> String dump(DirectedGraph<T> g) {
+    public static <V,A> String dump(DirectedGraph<V,A> g) {
         StringBuilder b = new StringBuilder();
 
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
-            T v = g.getVertex(i);
+            V v = g.getVertex(i);
             if (g.getNextCount(v) == 0) {
                 b.append(v)
                         .append('\n');
@@ -90,7 +90,7 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static <V> List<Set<V>> findDisjointSets(DirectedGraph<V> g) {
+    public static <V,A> List<Set<V>> findDisjointSets(DirectedGraph<V,A> g) {
         // Create initial forest
         Map<V, List<V>> forest = createForest(g);
         // Merge sets.
@@ -125,7 +125,7 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static List<Set<Integer>> findDisjointSets(IntDirectedGraph g) {
+    public static <A> List<Set<Integer>> findDisjointSets(IntDirectedGraph<A> g) {
         // Create initial forest.
         final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
@@ -222,12 +222,12 @@ public class DirectedGraphs {
      * if it is provided.
      * @return the graph builder
      */
-    public static <V, E extends Pair<V>> DirectedGraphWithArrowsBuilder<V,E> findMinimumSpanningTreeGraph(Collection<V> vertices, List<E> orderedArrows, List<E> includedArrows, List<E> rejectedArrows) {
+    public static <V, E extends Pair<V>> DirectedGraphBuilder<V,E> findMinimumSpanningTreeGraph(Collection<V> vertices, List<E> orderedArrows, List<E> includedArrows, List<E> rejectedArrows) {
         List<E> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);
         }
-        DirectedGraphWithArrowsBuilder<V,E> builder = new DirectedGraphWithArrowsBuilder<>();
+        DirectedGraphBuilder<V,E> builder = new DirectedGraphBuilder<>();
         for (V v : vertices) {
             builder.addVertex(v);
         }
@@ -245,12 +245,13 @@ public class DirectedGraphs {
      * @param m the graph
      * @return the sorted list of vertices
      */
-    public static <V> List<V> sortTopologically(DirectedGraph<V> m) {
-        final IntDirectedGraph im;
+    @SuppressWarnings("unchecked")
+    public static <V,A> List<V> sortTopologically(DirectedGraph<V,A> m) {
+        final IntDirectedGraph<A> im;
         if (!(m instanceof IntDirectedGraph)) {
-            im = DirectedGraphBuilder.ofDirectedGraph(m);
+            im =new DirectedGraphBuilder<>(m);
         } else {
-            im = (IntDirectedGraph) m;
+            im = (IntDirectedGraph<A>) m;
         }
         int[] a = sortTopologicallyInt(im);
         List<V> result = new ArrayList<>(a.length);
@@ -266,7 +267,7 @@ public class DirectedGraphs {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static int[] sortTopologicallyInt(IntDirectedGraph model) {
+    public static<A> int[] sortTopologicallyInt(IntDirectedGraph<A> model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex

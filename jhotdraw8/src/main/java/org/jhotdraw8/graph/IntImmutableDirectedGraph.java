@@ -14,15 +14,19 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntImmutableDirectedGraph implements IntDirectedGraph {
+public class IntImmutableDirectedGraph<A> implements IntDirectedGraph<A> {
 
+    /**
+     * Holds the arrow heads.
+     */
+    protected final int[] arrowHeads;
     /**
      * Holds the arrows.
      */
-    protected final int[] arrows;
+    protected final Object[] arrows;
 
     /**
-     * Holds offsets into the arrows table for each vertex.
+     * Holds offsets into the arrowHeads table for each vertex.
      */
     protected final int[] vertices;
 
@@ -31,19 +35,22 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
      *
      * @param graph a graph
      */
-    public IntImmutableDirectedGraph(IntDirectedGraph graph) {
+    public IntImmutableDirectedGraph(IntDirectedGraph<A> graph) {
         int arrowCount = 0;
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
-        this.arrows = new int[arrowCapacity];
+        this.arrowHeads = new int[arrowCapacity];
+        this.arrows = new Object[arrowCapacity];
         this.vertices = new int[vertexCapacity];
 
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
-                arrows[arrowCount++] = graph.getNext(vIndex, i);
+                arrowHeads[arrowCount] = graph.getNext(vIndex, i);
+                arrows[arrowCount] = graph.getArrow(vIndex, i);
+                arrowCount++;
             }
         }
     }
@@ -54,12 +61,13 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
      * @param <V> the vertex type
      * @param graph a graph
      */
-    public <V> IntImmutableDirectedGraph(DirectedGraph<V> graph) {
+    public <V,A> IntImmutableDirectedGraph(DirectedGraph<V,A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
-        this.arrows = new int[arrowCapacity];
+        this.arrowHeads = new int[arrowCapacity];
+        this.arrows = new Object[arrowCapacity];
         this.vertices = new int[vertexCapacity];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
@@ -74,19 +82,32 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
 
             vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                arrows[arrowCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrows[arrowCount] = graph.getArrow(vObject, i);
+                arrowCount++;
             }
         }
     }
 
-    protected IntImmutableDirectedGraph(int vertexCount, int arrowCount) {
-        this.arrows = new int[arrowCount];
-        this.vertices = new int[vertexCount];
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int index) {
+       return (A) arrows[index];
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int vi, int i) {
+        if (i < 0 || i >= getNextCount(vi)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNext(vi, i));
+        }
+        return (A)arrows[vertices[vi] + i];
+    }
+
+
+    @Override
     public int getArrowCount() {
-        return arrows.length;
+        return arrowHeads.length;
     }
 
     @Override
@@ -94,7 +115,7 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
         if (i < 0 || i >= getNextCount(vi)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNext(vi, i));
         }
-        return arrows[vertices[vi] + i];
+        return arrowHeads[vertices[vi] + i];
     }
 
     @Override
@@ -104,7 +125,7 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
             throw new IllegalArgumentException("vi(" + vi + ") < 0 || vi >= " + vertexCount);
         }
         final int offset = vertices[vi];
-        final int nextOffset = (vi == vertexCount - 1) ? arrows.length : vertices[vi + 1];
+        final int nextOffset = (vi == vertexCount - 1) ? arrowHeads.length : vertices[vi + 1];
         return nextOffset - offset;
     }
 

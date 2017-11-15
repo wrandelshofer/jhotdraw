@@ -20,9 +20,9 @@ import java.util.function.Predicate;
  * @version $$Id$$
  * @param <V> the vertex type
  */
-public class BreadthFirstIterator<V> implements Iterator<V> {
+public class BreadthFirstIterator<V,A> implements Iterator<V> {
 
-    private final DirectedGraph<V> graph;
+    private final DirectedGraph<V,A> graph;
     private final Queue<V> queue;
     private final Predicate<V> visited;
 
@@ -32,7 +32,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      * @param graph the graph
      * @param root the root vertex
      */
-    public BreadthFirstIterator(DirectedGraph<V> graph, V root) {
+    public BreadthFirstIterator(DirectedGraph<V,A> graph, V root) {
         this.graph = graph;
         queue = new ArrayDeque<>(graph.getArrowCount());
         Set<V> vset = new HashSet<>(graph.getVertexCount());
@@ -48,7 +48,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      * @param visited a predicate with side effect. The predicate returns true if the specified vertex has been visited, and marks
      * the specified vertex as visited.
      */
-    public BreadthFirstIterator(DirectedGraph<V> graph, V root, Predicate<V> visited) {
+    public BreadthFirstIterator(DirectedGraph<V,A> graph, V root, Predicate<V> visited) {
         this.graph = graph;
         queue = new ArrayDeque<>(graph.getArrowCount());
         this.visited = visited;

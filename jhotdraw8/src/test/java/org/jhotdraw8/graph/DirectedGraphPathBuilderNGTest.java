@@ -22,7 +22,7 @@ public class DirectedGraphPathBuilderNGTest {
     }
     
     private DirectedGraph<Integer>createGraph() {
-        DirectedGraphWithArrowsBuilder<Integer,Double> builder=new DirectedGraphWithArrowsBuilder<>();
+        DirectedGraphBuilder<Integer,Double> builder=new DirectedGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
         builder.addVertex(3);

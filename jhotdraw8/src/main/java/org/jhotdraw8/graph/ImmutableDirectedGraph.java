@@ -14,9 +14,10 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the vertex type
+ * @param <A> the arrow type
  */
-public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
-        implements DirectedGraph<V> {
+public class ImmutableDirectedGraph<V, A> extends ImmutableIntDirectedGraph<A>
+        implements DirectedGraph<V, A>, IntDirectedGraph<A> {
 
     /**
      * Maps a vertex index to a vertex object.
@@ -27,12 +28,14 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
      */
     private final Map<V, Integer> vertexToIndexMap;
 
+    private Object[] arrowData;
+
     /**
      * Creates a new instance from the specified graph.
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraph(DirectedGraph<V> graph) {
+    public ImmutableDirectedGraph(DirectedGraph<V, A> graph) {
         super(graph.getVertexCount(), graph.getArrowCount());
         int vertexCapacity = graph.getVertexCount();
 
@@ -45,15 +48,24 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
             indexToVertexMap.add(vObject);
         }
 
+        arrowData = new Object[graph.getArrowCount()];
         int arrowCount = 0;
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             V vObject = indexToVertexMap.get(vIndex);
 
             vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                arrows[arrowCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrowData[arrowCount] = graph.getArrow(vObject, i);
+                ++arrowCount;
             }
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int indexOfArrow) {
+        return (A) arrowData[indexOfArrow];
     }
 
     @Override
@@ -64,6 +76,18 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
     @Override
     public int getNextCount(V vertex) {
         return getNextCount(vertexToIndexMap.get(vertex));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(V vertex, int index) {
+        return (A) arrowData[getArrowIndex(vertexToIndexMap.get(vertex), index)];
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int vertex, int index) {
+        return (A) arrowData[getArrowIndex(vertex, index)];
     }
 
     @Override

@@ -1,5 +1,5 @@
 /* @(#)DirectedGraph.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
 
@@ -10,20 +10,14 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 
 /**
- * Defines a facade for a directed graph, consisting of vertices "V" and arrows "A".
- * <p>
- * A directed graph {@code G} is defined as a tuple {@code G = (V, A)}.
- * <p>
- * The graph is composed of set of vertices {@code V = (v_1, ..., v_n) }, and a
- * set of arrows {@code A = (a_1, ..., a_n)}.
- * <p>
- * An arrow is an ordered (directed) pair of two vertices {@code a=(v_i, v_j)}.
+ * DirectedGraph.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $$Id$$
  * @param <V> the vertex type
+ * @param <A> the arrow type
  */
-public interface DirectedGraph<V> {
+public interface DirectedGraph<V, A> {
 
     /**
      * Dumps the graph for debugging purposes.
@@ -58,6 +52,54 @@ public interface DirectedGraph<V> {
         }
         return buf.toString();
     }
+
+    /**
+     * Returns the arrow if b is successor of a.
+     *
+     * @param a a vertex
+     * @param b a vertex
+     * @return the arrow or null if b is not next of a
+     */
+    @Nonnull
+    default A findArrow(@Nonnull V a, @Nonnull V b) {
+        int index = findIndexOfNext(a, b);
+        return index == -1 ? null : getArrow(a, index);
+    }
+
+    /**
+     * Returns the index of vertex b.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return index of vertex b. Returns -1 if b is not next index of a.
+     */
+    default int findIndexOfNext(@Nonnull V a, @Nonnull V b) {
+        for (int i = 0, n = getNextCount(a); i < n; i++) {
+            if (b.equals(getNext(a, i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Returns the specified arrow.
+     *
+     * @param index index of arrow
+     * @return arrow
+     */
+    @Nonnull
+    A getArrow(int index);
+
+    /**
+     * Returns the specified successor (next) arrow of the specified vertex.
+     *
+     * @param vertex a vertex
+     * @param index index of next arrow
+     * @return the specified arrow
+     */
+    @Nonnull
+    A getArrow(@Nonnull V vertex, int index);
 
     /**
      * Returns the number of arrows.
@@ -123,7 +165,8 @@ public interface DirectedGraph<V> {
      * @param indexOfVertex index of vertex
      * @return vertex
      */
-    @Nonnull V getVertex(int indexOfVertex);
+    @Nonnull
+    V getVertex(int indexOfVertex);
 
     /**
      * Returns the number of vertices {@code V}.
@@ -139,7 +182,7 @@ public interface DirectedGraph<V> {
      *
      * @return an iterable for all vertice
      */
-    @Nonnull 
+    @Nonnull
     default Collection<V> getVertices() {
         class VertexIterator implements Iterator<V> {
 
@@ -176,22 +219,6 @@ public interface DirectedGraph<V> {
     }
 
     /**
-     * Returns the index of vertex b.
-     *
-     * @param a a vertex
-     * @param b another vertex
-     * @return index of vertex b. Returns -1 if b is not next index of a.
-     */
-    default int findIndexOfNext(@Nonnull V a, @Nonnull V b) {
-        for (int i = 0, n = getNextCount(a); i < n; i++) {
-            if (b.equals(getNext(a, i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
      * Returns true if b is next of a.
      *
      * @param a a vertex
@@ -201,4 +228,5 @@ public interface DirectedGraph<V> {
     default boolean isNext(@Nonnull V a, @Nonnull V b) {
         return findIndexOfNext(a, b) != -1;
     }
+
 }

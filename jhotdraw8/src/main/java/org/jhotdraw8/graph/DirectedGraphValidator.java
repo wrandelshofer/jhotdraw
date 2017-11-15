@@ -13,11 +13,11 @@ import java.util.Set;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class DirectedGraphValidator<V> {
+public class DirectedGraphValidator<V,A> {
 
     public DirectedGraphValidator() {
     }
-    public boolean validate(DirectedGraph<V> graph) {
+    public boolean validate(DirectedGraph<V,A> graph) {
         Set<V> vertices=new LinkedHashSet<>();
         for (int i=0,n=graph.getVertexCount();i<n;i++) {
             if (!vertices.add(graph.getVertex(i))) {
