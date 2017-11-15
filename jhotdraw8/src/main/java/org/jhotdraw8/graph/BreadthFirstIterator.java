@@ -34,7 +34,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      */
     public BreadthFirstIterator(DirectedGraph<V> graph, V root) {
         this.graph = graph;
-        queue = new ArrayDeque<>(graph.getEdgeCount());
+        queue = new ArrayDeque<>(graph.getArrowCount());
         Set<V> vset = new HashSet<>(graph.getVertexCount());
         visited=vset::add;
         queue.add(root);
@@ -50,7 +50,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      */
     public BreadthFirstIterator(DirectedGraph<V> graph, V root, Predicate<V> visited) {
         this.graph = graph;
-        queue = new ArrayDeque<>(graph.getEdgeCount());
+        queue = new ArrayDeque<>(graph.getArrowCount());
         this.visited = visited;
         queue.add(root);
         visited.test(root);

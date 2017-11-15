@@ -22,22 +22,22 @@ public class DirectedGraphPathBuilderNGTest {
     }
     
     private DirectedGraph<Integer>createGraph() {
-        DirectedGraphWithEdgesBuilder<Integer,Double> builder=new DirectedGraphWithEdgesBuilder<>();
+        DirectedGraphWithArrowsBuilder<Integer,Double> builder=new DirectedGraphWithArrowsBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
         builder.addVertex(3);
         builder.addVertex(4);
         builder.addVertex(5);
         builder.addVertex(6);
-        builder.addBidiEdge(1, 2, 7.0);
-        builder.addBidiEdge(1, 3, 9.0);
-        builder.addBidiEdge(1, 6, 14.0);
-        builder.addBidiEdge(2, 3, 10.0);
-        builder.addBidiEdge(2, 4, 15.0);
-        builder.addBidiEdge(3, 4, 11.0);
-        builder.addBidiEdge(3, 6, 2.0);
-        builder.addBidiEdge(4, 5, 6.0);
-        builder.addBidiEdge(5, 6, 9.0);
+        builder.addBidiArrow(1, 2, 7.0);
+        builder.addBidiArrow(1, 3, 9.0);
+        builder.addBidiArrow(1, 6, 14.0);
+        builder.addBidiArrow(2, 3, 10.0);
+        builder.addBidiArrow(2, 4, 15.0);
+        builder.addBidiArrow(3, 4, 11.0);
+        builder.addBidiArrow(3, 6, 2.0);
+        builder.addBidiArrow(4, 5, 6.0);
+        builder.addBidiArrow(5, 6, 9.0);
         return builder;
     }
     
@@ -52,7 +52,7 @@ public class DirectedGraphPathBuilderNGTest {
     
 
     /**
-     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithEdges.
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
     @Test(dataProvider = "anyPathProvider")
     public void testFindAnyPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {

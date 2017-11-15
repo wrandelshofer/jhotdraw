@@ -11,36 +11,36 @@ package org.jhotdraw8.graph;
  */
 public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
-    private final static int EDGES_NEXT_FIELD = 1;
-    private final static int EDGES_NUM_FIELDS = 2;
-    private final static int EDGES_VERTEX_FIELD = 0;
-    private final static int LASTEDGE_COUNT_FIELD = 0;
-    private final static int LASTEDGE_NUM_FIELDS = 2;
-    private final static int LASTEDGE_POINTER_FIELD = 1;
+    private final static int ARROWS_NEXT_FIELD = 1;
+    private final static int ARROWS_NUM_FIELDS = 2;
+    private final static int ARROWS_VERTEX_FIELD = 0;
+    private final static int LASTARROW_COUNT_FIELD = 0;
+    private final static int LASTARROW_NUM_FIELDS = 2;
+    private final static int LASTARROW_POINTER_FIELD = 1;
     private final static int SENTINEL = -1;
 
-    private int edgeCount;
+    private int arrowCount;
     /**
-     * Table of edges.
+     * Table of arrows.
      * <p>
-     * {@code edges[i * EDGES_NUM_FIELDS+EDGES_VERTEX_FIELD} contains the index
-     * of the vertex of the i-th edge.
+     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_VERTEX_FIELD} contains the index
+     * of the vertex of the i-th arrow.
      * <p>
-     * {@code edges[i * EDGES_NUM_FIELDS+EDGES_NEXT_FIELD} contains the index of
-     * the next edge.
+     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD} contains the index of
+     * the next arrow.
      */
-    private int[] edges;
+    private int[] arrows;
 
     /**
-     * Table of last edges.
+     * Table of last arrows.
      * <p>
-     * {@code lastEdge[i * LASTEDGE_NUM_FIELDS+LASTEDGE_POINTER_FIELD} contains
-     * the index of the last edge of the i-th vertex.
+     * {@code lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_POINTER_FIELD} contains
+     * the index of the last arrow of the i-th vertex.
      * <p>
-     * {@code lastEdge[i * LASTEDGE_NUM_FIELDS+LASTEDGE_COUNT_FIELD} contains
-     * the number of edges of the i-th vertex.
+     * {@code lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_COUNT_FIELD} contains
+     * the number of arrows of the i-th vertex.
      */
-    private int[] lastEdge;
+    private int[] lastArrow;
     /**
      * The vertex count.
      */
@@ -50,41 +50,41 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         this(16, 16);
     }
 
-    public AbstractDirectedGraphBuilder(int vertexCapacity, int edgeCapacity) {
+    public AbstractDirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
         if (vertexCapacity < 0) {
             throw new IllegalArgumentException("vertexCapacity: " + vertexCapacity);
         }
-        if (edgeCapacity < 0) {
-            throw new IllegalArgumentException("edgeCapacity: " + edgeCapacity);
+        if (arrowCapacity < 0) {
+            throw new IllegalArgumentException("arrowCapacity: " + arrowCapacity);
         }
-        this.edges = new int[edgeCapacity * EDGES_NUM_FIELDS];
-        this.lastEdge = new int[vertexCapacity * LASTEDGE_NUM_FIELDS];
+        this.arrows = new int[arrowCapacity * ARROWS_NUM_FIELDS];
+        this.lastArrow = new int[vertexCapacity * LASTARROW_NUM_FIELDS];
     }
 
     /**
-     * Builder-method: adds a directed edge from 'a' to 'b'.
+     * Builder-method: adds a directed arrow from 'a' to 'b'.
      *
      * @param a vertex a
      * @param b vertex b
      */
-    protected void buildAddEdge(int a, int b) {
-        if (edges.length <= edgeCount * EDGES_NUM_FIELDS) {
-            int[] tmp = edges;
-            edges = new int[edges.length * EDGES_NUM_FIELDS];
-            System.arraycopy(tmp, 0, edges, 0, tmp.length);
+    protected void buildAddArrow(int a, int b) {
+        if (arrows.length <= arrowCount * ARROWS_NUM_FIELDS) {
+            int[] tmp = arrows;
+            arrows = new int[arrows.length * ARROWS_NUM_FIELDS];
+            System.arraycopy(tmp, 0, arrows, 0, tmp.length);
         }
 
-        int edgeCountOfA = lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD];
-        int lastEdgeIdOfA = edgeCountOfA == 0 ? SENTINEL : lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
+        int arrowCountOfA = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
+        int lastArrowIdOfA = arrowCountOfA == 0 ? SENTINEL : lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
 
-        int newLastEdgeIdOfA = edgeCount;
-        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD] = b;
-        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD] = lastEdgeIdOfA;
+        int newLastArrowIdOfA = arrowCount;
+        arrows[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = b;
+        arrows[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = lastArrowIdOfA;
 
-        lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD] = edgeCountOfA + 1;
-        lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] = newLastEdgeIdOfA;
+        lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] = arrowCountOfA + 1;
+        lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = newLastArrowIdOfA;
 
-        edgeCount++;
+        arrowCount++;
     }
 
     /**
@@ -92,16 +92,16 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      */
     protected void buildAddVertex() {
         vertexCount++;
-        if (lastEdge.length < vertexCount * LASTEDGE_NUM_FIELDS) {
-            int[] tmp = lastEdge;
-            lastEdge = new int[lastEdge.length * 2 * LASTEDGE_NUM_FIELDS];
-            System.arraycopy(tmp, 0, lastEdge, 0, tmp.length);
+        if (lastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
+            int[] tmp = lastArrow;
+            lastArrow = new int[lastArrow.length * 2 * LASTARROW_NUM_FIELDS];
+            System.arraycopy(tmp, 0, lastArrow, 0, tmp.length);
         }
     }
 
     @Override
-    public int getEdgeCount() {
-        return edgeCount;
+    public int getArrowCount() {
+        return arrowCount;
     }
 
     protected void buildSetVertexCount(int newValue) {
@@ -109,23 +109,23 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
             throw new IllegalArgumentException("can only add vertices:" + newValue);
         }
         vertexCount = newValue;
-        if (lastEdge.length < vertexCount * LASTEDGE_NUM_FIELDS) {
-            int[] tmp = lastEdge;
-            lastEdge = new int[lastEdge.length * LASTEDGE_NUM_FIELDS];
-            System.arraycopy(tmp, 0, lastEdge, 0, tmp.length);
+        if (lastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
+            int[] tmp = lastArrow;
+            lastArrow = new int[lastArrow.length * LASTARROW_NUM_FIELDS];
+            System.arraycopy(tmp, 0, lastArrow, 0, tmp.length);
         }
         
     }
     
     /**
-     * Removes the i-th edge of vertex vi.
+     * Removes the i-th arrow of vertex vi.
      * <p>
-     * This implementation has a time complexity of O(V+E).
+     * This implementation has a time complexity of O(|V|+|A|).
      *
      * @param vi a vertex
-     * @param i the i-th edge of vertex vi
+     * @param i the i-th arrow of vertex vi
      */
-    protected void buildRemoveEdge(int vi, int i) {
+    protected void buildRemoveArrow(int vi, int i) {
         if (vi < 0 || vi >= getVertexCount()) {
             throw new IllegalArgumentException("vi:" + i);
         }
@@ -133,47 +133,47 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
             throw new IllegalArgumentException("i:" + i);
         }
 
-        // find the edgeId and the previous edgeId
-        int prevEdgeId = SENTINEL;
-        int edgeId = lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
+        // find the arrowId and the previous arrowId
+        int prevArrowId = SENTINEL;
+        int arrowId = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
         for (int j = i - 1; j >= 0; j--) {
-            prevEdgeId = edgeId;
-            edgeId = edges[edgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD];
+            prevArrowId = arrowId;
+            arrowId = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
 
-        if (prevEdgeId == SENTINEL) {
-            // if there is no previous edgeId => make the point from lastEdge point to the edge after edgeId.
-            lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] = edges[edgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD];
+        if (prevArrowId == SENTINEL) {
+            // if there is no previous arrowId => make the point from lastArrow point to the arrow after arrowId.
+            lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         } else {
-            // if there is a previous edgeId => make the pointer from prevEdgeId point to the edge after edgeId.
-            edges[prevEdgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD] = edges[edgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD];
+            // if there is a previous arrowId => make the pointer from prevArrowId point to the arrow after arrowId.
+            arrows[prevArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
-        // Decrease number of edges for vertex vi
-        lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD]--;
+        // Decrease number of arrows for vertex vi
+        lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD]--;
 
-        // Decrease total number of edges
-        edgeCount--;
+        // Decrease total number of arrows
+        arrowCount--;
 
-        int moveEdgeId = edgeCount;
-        if (edgeId != moveEdgeId) {
-            // move moveEdgeId to edgeId
-            edges[edgeId * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD] = edges[moveEdgeId * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD];
-            edges[edgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD] = edges[moveEdgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD];
-            // if there is a pointer in lastEdges to moveEdgeId, make it point to edgeId. 
+        int moveArrowId = arrowCount;
+        if (arrowId != moveArrowId) {
+            // move moveArrowId to arrowId
+            arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = arrows[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+            arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrows[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            // if there is a pointer in lastArrows to moveArrowId, make it point to arrowId. 
             boolean fixed = false;
             for (int v = 0; v < vertexCount; v++) {
-                if (lastEdge[v * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD] > 0
-                        && lastEdge[v * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] == moveEdgeId) {
-                    lastEdge[v * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] = edgeId;
+                if (lastArrow[v * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] > 0
+                        && lastArrow[v * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] == moveArrowId) {
+                    lastArrow[v * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowId;
                     fixed = true;
                     break;
                 }
             }
-            // if there is a pointer in edges to moveEdgeId, make it point to edgeId. 
+            // if there is a pointer in arrows to moveArrowId, make it point to arrowId. 
             if (!fixed) {
-                for (int e = 0; e < edgeCount; e++) {
-                    if (edges[e * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD] == moveEdgeId) {
-                        edges[e * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD] = edgeId;
+                for (int e = 0; e < arrowCount; e++) {
+                    if (arrows[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] == moveArrowId) {
+                        arrows[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowId;
                         fixed = true;
                         break;
                     }
@@ -182,27 +182,27 @@ public class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         }
     }
 
-    protected int getIndexOfEdge(int vi, int i) {
+    protected int getIndexOfArrow(int vi, int i) {
         if (i < 0 || i >= getNextCount(vi)) {
             throw new IllegalArgumentException("0 <= i(" + i + ") <= " + getNextCount(vi));
         }
-        int edgeId = lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
-        int nextCount = lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD];
+        int arrowId = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
+        int nextCount = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
         for (int j = nextCount - 1; j > i; j--) {
-            edgeId = edges[edgeId * EDGES_NUM_FIELDS + EDGES_NEXT_FIELD];
+            arrowId = arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
-        return edgeId;
+        return arrowId;
     }
 
     @Override
     public int getNext(int vi, int i) {
-        int edgeId = getIndexOfEdge(vi, i);
-        return edges[edgeId * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD];
+        int arrowId = getIndexOfArrow(vi, i);
+        return arrows[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
     }
 
     @Override
     public int getNextCount(int vi) {
-        return lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD];
+        return lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
     }
 
     @Override

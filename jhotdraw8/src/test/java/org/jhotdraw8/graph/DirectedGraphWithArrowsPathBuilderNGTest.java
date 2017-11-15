@@ -1,4 +1,4 @@
-/* @(#)DirectedGraphWithEdgesPathBuilderNGTest.java
+/* @(#)DirectedGraphWithArrowsPathBuilderNGTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 
@@ -10,33 +10,33 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * DirectedGraphWithEdgesPathBuilderNGTest.
+ * DirectedGraphWithArrowsPathBuilderNGTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class DirectedGraphWithEdgesPathBuilderNGTest {
+public class DirectedGraphWithArrowsPathBuilderNGTest {
 
-    public DirectedGraphWithEdgesPathBuilderNGTest() {
+    public DirectedGraphWithArrowsPathBuilderNGTest() {
     }
 
-    private DirectedGraphWithEdges<Integer,Double>createGraph() {
-        DirectedGraphWithEdgesBuilder<Integer,Double> builder=new DirectedGraphWithEdgesBuilder<>();
+    private DirectedGraphWithArrows<Integer,Double>createGraph() {
+        DirectedGraphWithArrowsBuilder<Integer,Double> builder=new DirectedGraphWithArrowsBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
         builder.addVertex(3);
         builder.addVertex(4);
         builder.addVertex(5);
         builder.addVertex(6);
-        builder.addBidiEdge(1, 2, 7.0);
-        builder.addBidiEdge(1, 3, 9.0);
-        builder.addBidiEdge(1, 6, 14.0);
-        builder.addBidiEdge(2, 3, 10.0);
-        builder.addBidiEdge(2, 4, 15.0);
-        builder.addBidiEdge(3, 4, 11.0);
-        builder.addBidiEdge(3, 6, 2.0);
-        builder.addBidiEdge(4, 5, 6.0);
-        builder.addBidiEdge(5, 6, 9.0);
+        builder.addBidiArrow(1, 2, 7.0);
+        builder.addBidiArrow(1, 3, 9.0);
+        builder.addBidiArrow(1, 6, 14.0);
+        builder.addBidiArrow(2, 3, 10.0);
+        builder.addBidiArrow(2, 4, 15.0);
+        builder.addBidiArrow(3, 4, 11.0);
+        builder.addBidiArrow(3, 6, 2.0);
+        builder.addBidiArrow(4, 5, 6.0);
+        builder.addBidiArrow(5, 6, 9.0);
         return builder;
     }
     
@@ -58,27 +58,27 @@ public class DirectedGraphWithEdgesPathBuilderNGTest {
     }
     
     /**
-     * Test of findAnyPath method, of class DirectedGraphWithEdgesPathBuilder.
+     * Test of findAnyPath method, of class DirectedGraphWithArrowsPathBuilder.
      */
     @Test(dataProvider = "shortestVertexPathProvider")
     public void testFindShortestVertexPath(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
         System.out.println("findShortestPath");
-        DirectedGraphWithEdges<Integer, Double> graph = createGraph();
+        DirectedGraphWithArrows<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphWithEdgesPathBuilder<Integer,Double> instance = new DirectedGraphWithEdgesPathBuilder<>();
+        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
         VertexPath<Integer> result = instance.findShortestVertexPath(graph, start, goal, costf);
         assertEquals(result, expResult);
     }
     /**
-     * Test of findAnyPath method, of class DirectedGraphWithEdgesPathBuilder.
+     * Test of findAnyPath method, of class DirectedGraphWithArrowsPathBuilder.
      */
     @Test(dataProvider = "shortestEdgePathProvider")
     public void testFindShortestEdgePath(Integer start, Integer goal, EdgePath<Double> expResult ) throws Exception {
         System.out.println("findShortestPath");
-        DirectedGraphWithEdges<Integer, Double> graph = createGraph();
+        DirectedGraphWithArrows<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphWithEdgesPathBuilder<Integer,Double> instance = new DirectedGraphWithEdgesPathBuilder<>();
-        EdgePath<Double> result = instance.findShortestEdgePath(graph, start, goal, costf);
+        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
+        EdgePath<Double> result = instance.findShortestArrowPath(graph, start, goal, costf);
         assertEquals(result, expResult);
     }
     @DataProvider
@@ -92,13 +92,13 @@ public class DirectedGraphWithEdgesPathBuilderNGTest {
     
 
     /**
-     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithEdges.
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
     @Test(dataProvider = "anyVertexPathProvider")
     public void testFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
         System.out.println("findAnyVertexPath");
-        DirectedGraphWithEdges<Integer,Double> graph = createGraph();
-        DirectedGraphWithEdgesPathBuilder<Integer,Double> instance = new DirectedGraphWithEdgesPathBuilder<>();
+        DirectedGraphWithArrows<Integer,Double> graph = createGraph();
+        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
         VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
         assertEquals(result, expResult);
     }
@@ -113,14 +113,14 @@ public class DirectedGraphWithEdgesPathBuilderNGTest {
     
 
     /**
-     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithEdges.
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
     @Test(dataProvider = "anyEdgePathProvider")
     public void testFindAnyEdgePath_3args(Integer start, Integer goal, EdgePath<Double> expResult ) throws Exception {
         System.out.println("findAnyVertexPath");
-        DirectedGraphWithEdges<Integer,Double> graph = createGraph();
-        DirectedGraphWithEdgesPathBuilder<Integer,Double> instance = new DirectedGraphWithEdgesPathBuilder<>();
-        EdgePath<Double> result = instance.findAnyEdgePath(graph, start, goal);
+        DirectedGraphWithArrows<Integer,Double> graph = createGraph();
+        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
+        EdgePath<Double> result = instance.findAnyArrowPath(graph, start, goal);
         assertEquals(result, expResult);
     }
 

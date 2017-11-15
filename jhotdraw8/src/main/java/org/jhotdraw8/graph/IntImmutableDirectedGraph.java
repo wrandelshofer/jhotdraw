@@ -17,12 +17,12 @@ import java.util.Map;
 public class IntImmutableDirectedGraph implements IntDirectedGraph {
 
     /**
-     * Holds the edges.
+     * Holds the arrows.
      */
-    protected final int[] edges;
+    protected final int[] arrows;
 
     /**
-     * Holds offsets into the edges table for each vertex.
+     * Holds offsets into the arrows table for each vertex.
      */
     protected final int[] vertices;
 
@@ -32,18 +32,18 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
      * @param graph a graph
      */
     public IntImmutableDirectedGraph(IntDirectedGraph graph) {
-        int edgeCount = 0;
+        int arrowCount = 0;
 
-        final int edgeCapacity = graph.getEdgeCount();
+        final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
-        this.edges = new int[edgeCapacity];
+        this.arrows = new int[arrowCapacity];
         this.vertices = new int[vertexCapacity];
 
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            vertices[vIndex] = edgeCount;
+            vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
-                edges[edgeCount++] = graph.getNext(vIndex, i);
+                arrows[arrowCount++] = graph.getNext(vIndex, i);
             }
         }
     }
@@ -56,10 +56,10 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
      */
     public <V> IntImmutableDirectedGraph(DirectedGraph<V> graph) {
 
-        final int edgeCapacity = graph.getEdgeCount();
+        final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
-        this.edges = new int[edgeCapacity];
+        this.arrows = new int[arrowCapacity];
         this.vertices = new int[vertexCapacity];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
@@ -68,25 +68,25 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
             vertexToIndexMap.put(vObject, vIndex);
         }
 
-        int edgeCount = 0;
+        int arrowCount = 0;
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             V vObject = graph.getVertex(vIndex);
 
-            vertices[vIndex] = edgeCount;
+            vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                edges[edgeCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrows[arrowCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
             }
         }
     }
 
-    protected IntImmutableDirectedGraph(int vertexCount, int edgeCount) {
-        this.edges = new int[edgeCount];
+    protected IntImmutableDirectedGraph(int vertexCount, int arrowCount) {
+        this.arrows = new int[arrowCount];
         this.vertices = new int[vertexCount];
     }
 
     @Override
-    public int getEdgeCount() {
-        return edges.length;
+    public int getArrowCount() {
+        return arrows.length;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
         if (i < 0 || i >= getNextCount(vi)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNext(vi, i));
         }
-        return edges[vertices[vi] + i];
+        return arrows[vertices[vi] + i];
     }
 
     @Override
@@ -104,7 +104,7 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
             throw new IllegalArgumentException("vi(" + vi + ") < 0 || vi >= " + vertexCount);
         }
         final int offset = vertices[vi];
-        final int nextOffset = (vi == vertexCount - 1) ? edges.length : vertices[vi + 1];
+        final int nextOffset = (vi == vertexCount - 1) ? arrows.length : vertices[vi + 1];
         return nextOffset - offset;
     }
 

@@ -33,7 +33,7 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
      * @param graph a graph
      */
     public ImmutableDirectedGraph(DirectedGraph<V> graph) {
-        super(graph.getVertexCount(), graph.getEdgeCount());
+        super(graph.getVertexCount(), graph.getArrowCount());
         int vertexCapacity = graph.getVertexCount();
 
         indexToVertexMap = new ArrayList<>(vertexCapacity);
@@ -45,13 +45,13 @@ public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
             indexToVertexMap.add(vObject);
         }
 
-        int edgeCount = 0;
+        int arrowCount = 0;
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             V vObject = indexToVertexMap.get(vIndex);
 
-            vertices[vIndex] = edgeCount;
+            vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                edges[edgeCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrows[arrowCount++] = vertexToIndexMap.get(graph.getNext(vObject, i));
             }
         }
     }

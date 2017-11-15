@@ -15,10 +15,10 @@ import javax.annotation.Nonnull;
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the vertex type
- * @param <E> the edge type
+ * @param <A> the arrow type
  */
-public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBuilder
-        implements DirectedGraphWithEdges<V, E>, IntDirectedGraphWithEdges<E> {
+public class DirectedGraphWithArrowsBuilder<V, A> extends AbstractDirectedGraphBuilder
+        implements DirectedGraphWithArrows<V, A>, IntDirectedGraphWithArrows<A> {
 
     /**
      * Maps a vertex to a vertex index.
@@ -29,26 +29,26 @@ public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBu
      */
     private final List<V> vertices;
 
-    private final List<E> edgeData;
+    private final List<A> arrowData;
 
-    public DirectedGraphWithEdgesBuilder() {
+    public DirectedGraphWithArrowsBuilder() {
         this(16, 16);
     }
 
-    public DirectedGraphWithEdgesBuilder(int vertexCapacity, int edgeCapacity) {
-        super(vertexCapacity, edgeCapacity);
+    public DirectedGraphWithArrowsBuilder(int vertexCapacity, int arrowCapacity) {
+        super(vertexCapacity, arrowCapacity);
         this.vertexMap = new HashMap<>(vertexCapacity);
         this.vertices = new ArrayList<>(vertexCapacity);
-        this.edgeData = new ArrayList<>();
+        this.arrowData = new ArrayList<>();
     }
 
-    public DirectedGraphWithEdgesBuilder(DirectedGraphWithEdges<V, E> graph) {
-        super(graph.getVertexCount(), graph.getEdgeCount());
+    public DirectedGraphWithArrowsBuilder(DirectedGraphWithArrows<V, A> graph) {
+        super(graph.getVertexCount(), graph.getArrowCount());
         final int vcount = graph.getVertexCount();
         this.vertexMap = new HashMap<>(vcount);
         this.vertices = new ArrayList<>(vcount);
-        final int ecount = graph.getEdgeCount();
-        this.edgeData = new ArrayList<>(ecount);
+        final int ecount = graph.getArrowCount();
+        this.arrowData = new ArrayList<>(ecount);
 
         for (int i = 0; i < vcount; i++) {
             addVertex(graph.getVertex(i));
@@ -56,19 +56,19 @@ public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBu
         for (int i = 0; i < vcount; i++) {
             V v = graph.getVertex(i);
             for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
-                addEdge(v, graph.getNext(v, j), graph.getNextEdge(v, j));
+                addArrow(v, graph.getNext(v, j), graph.getArrow(v, j));
             }
         }
     }
 
     /**
-     * Builder-method: adds a directed edge (arrow from va to vb).
+     * Builder-method: adds a directed arrow (arrow from va to vb).
      *
      * @param va vertex a
      * @param vb vertex b
-     * @param edge the edge
+     * @param arrow the arrow
      */
-    public void addEdge(@Nonnull V va, @Nonnull V vb, @Nonnull E edge) {
+    public void addArrow(@Nonnull V va, @Nonnull V vb, @Nonnull A arrow) {
         if (va == null) {
             throw new IllegalArgumentException("va=null");
         }
@@ -77,22 +77,22 @@ public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBu
         }
         int a = vertexMap.get(va);
         int b = vertexMap.get(vb);
-        buildAddEdge(a, b);
+        buildAddArrow(a, b);
 
-        edgeData.add(edge);
+        arrowData.add(arrow);
     }
 
     /**
-     * Builder-method: adds two edges (arrow from va to vb and arrow from vb to
+     * Builder-method: adds two arrows (arrow from va to vb and arrow from vb to
      * va).
      *
      * @param va vertex a
      * @param vb vertex b
-     * @param edge the edge
+     * @param arrow the arrow
      */
-    public void addBidiEdge(@Nonnull V va, @Nonnull V vb, @Nonnull E edge) {
-        addEdge(va, vb, edge);
-        addEdge(vb, va, edge);
+    public void addBidiArrow(@Nonnull V va, @Nonnull V vb, @Nonnull A arrow) {
+        addArrow(va, vb, arrow);
+        addArrow(vb, va, arrow);
     }
 
     /**
@@ -112,20 +112,20 @@ public class DirectedGraphWithEdgesBuilder<V, E> extends AbstractDirectedGraphBu
     }
 
     @Override
-    public E getEdge(int indexOfEdge) {
-        return edgeData.get(indexOfEdge);
+    public A getArrow(int indexOfArrow) {
+        return arrowData.get(indexOfArrow);
     }
 
     @Override
-    public E getNextEdge(@Nonnull V vertex, int i) {
-        int edgeId = getIndexOfEdge(getIndexOfVertex(vertex), i);
-        return edgeData.get(edgeId);
+    public A getArrow(@Nonnull V vertex, int i) {
+        int arrowId = getIndexOfArrow(getIndexOfVertex(vertex), i);
+        return arrowData.get(arrowId);
     }
 
     @Override
-    public E getNextEdge(int vertex, int index) {
-        int edgeId = getIndexOfEdge(vertex, index);
-        return edgeData.get(edgeId);
+    public A getArrow(int vertex, int index) {
+        int arrowId = getIndexOfArrow(vertex, index);
+        return arrowData.get(arrowId);
     }
 
     @Override

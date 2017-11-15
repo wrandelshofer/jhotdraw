@@ -24,15 +24,15 @@ public class IntDirectedGraphPathBuilderNGTest {
     private IntDirectedGraph createGraph() {
         IntDirectedGraphBuilder builder=new IntDirectedGraphBuilder();
         builder.setVertexCount(6);
-        builder.addBidiEdge(0, 1);
-        builder.addBidiEdge(0, 2);
-        builder.addBidiEdge(0, 5);
-        builder.addBidiEdge(1, 2);
-        builder.addBidiEdge(1, 3);
-        builder.addBidiEdge(2, 3);
-        builder.addBidiEdge(2, 5);
-        builder.addBidiEdge(3, 4);
-        builder.addBidiEdge(4, 5);
+        builder.addBidiArrow(0, 1);
+        builder.addBidiArrow(0, 2);
+        builder.addBidiArrow(0, 5);
+        builder.addBidiArrow(1, 2);
+        builder.addBidiArrow(1, 3);
+        builder.addBidiArrow(2, 3);
+        builder.addBidiArrow(2, 5);
+        builder.addBidiArrow(3, 4);
+        builder.addBidiArrow(4, 5);
         return builder;
     }
     
@@ -47,7 +47,7 @@ public class IntDirectedGraphPathBuilderNGTest {
     
 
     /**
-     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithEdges.
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
     @Test(dataProvider = "anyPathProvider")
     public void testFindAnyPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {

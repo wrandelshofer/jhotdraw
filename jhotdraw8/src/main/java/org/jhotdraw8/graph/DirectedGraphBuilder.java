@@ -31,19 +31,19 @@ public class DirectedGraphBuilder<V> extends AbstractDirectedGraphBuilder
         this(16, 16);
     }
 
-    public DirectedGraphBuilder(int vertexCapacity, int edgeCapacity) {
-        super(vertexCapacity, edgeCapacity);
+    public DirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
+        super(vertexCapacity, arrowCapacity);
         this.vertexMap = new HashMap<>(vertexCapacity + vertexCapacity * 40 / 100, 0.75f);
         this.vertices = new ArrayList<>(vertexCapacity);
     }
 
     /**
-     * Builder-method: adds an edge.
+     * Builder-method: adds an arrow.
      *
      * @param va vertex a
      * @param vb vertex b
      */
-    public void addEdge(V va, V vb) {
+    public void addArrow(V va, V vb) {
         if (va == null) {
             throw new IllegalArgumentException("va=null");
         }
@@ -52,7 +52,7 @@ public class DirectedGraphBuilder<V> extends AbstractDirectedGraphBuilder
         }
         int a = vertexMap.get(va);
         int b = vertexMap.get(vb);
-        buildAddEdge(a, b);
+        buildAddArrow(a, b);
     }
 
     /**
@@ -72,16 +72,16 @@ public void addVertex(V v) {
     }
 
     /**
-     * Creates a graph with all edges inverted.
+     * Creates a graph with all arrows inverted.
      *
      * @param <X> the vertex type
      * @param graph a graph
-     * @return a new graph with inverted edges
+     * @return a new graph with inverted arrows
      */
     public static <X> DirectedGraphBuilder<X> inverseOfDirectedGraph(DirectedGraph<X> graph) {
-        final int edgeCount = graph.getEdgeCount();
+        final int arrowCount = graph.getArrowCount();
 
-        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>(graph.getVertexCount(), edgeCount);
+        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>(graph.getVertexCount(), arrowCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             X v = graph.getVertex(i);
             b.addVertex(v);
@@ -89,7 +89,7 @@ public void addVertex(V v) {
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             X v = graph.getVertex(i);
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addEdge(graph.getNext(v, j), v);
+                b.addArrow(graph.getNext(v, j), v);
             }
         }
         return b;
@@ -101,14 +101,14 @@ public void addVertex(V v) {
             X v = model.getVertex(i);
             b.addVertex(v);
             for (int j = 0, m = model.getNextCount(v); j < m; j++) {
-                b.addEdge(v, model.getNext(v, j));
+                b.addArrow(v, model.getNext(v, j));
             }
         }
         return b;
     }
 
     /**
-     * Creates a builder which contains the specified vertices, and only edges
+     * Creates a builder which contains the specified vertices, and only arrows
      * from the directed graph, for the specified vertices.
      *
      * @param <X> the vertex type
@@ -125,7 +125,7 @@ public void addVertex(V v) {
             for (int j = 0, m = model.getNextCount(v); j < m; j++) {
                 final X u = model.getNext(v, j);
                 if (vertices.contains(u)) {
-                    b.addEdge(v, u);
+                    b.addArrow(v, u);
                 }
             }
         }

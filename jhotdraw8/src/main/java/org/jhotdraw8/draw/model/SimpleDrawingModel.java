@@ -486,7 +486,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     graphBuilder.addVertex(f);
                     for (Figure obs : f.getLayoutObservers()) {
                         graphBuilder.addVertex(obs);
-                        graphBuilder.addEdge(f, obs);
+                        graphBuilder.addArrow(f, obs);
                         todo.add(obs);
                     }
                 }

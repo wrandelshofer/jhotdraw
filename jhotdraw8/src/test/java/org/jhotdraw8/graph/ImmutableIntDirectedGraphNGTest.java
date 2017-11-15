@@ -19,11 +19,11 @@ public class ImmutableIntDirectedGraphNGTest {
     }
 
     /**
-     * Test of buildAddEdge method, of class ImmutableIntDirectedGraph.
+     * Test of buildAddArrow method, of class ImmutableIntDirectedGraph.
      */
     @Test
-    public void testBuildAddEdge() {
-        System.out.println("buildAddEdge");
+    public void testBuildAddArrow() {
+        System.out.println("buildAddArrow");
         int a = 0;
         int b = 1;
         int c = 1;
@@ -32,22 +32,22 @@ public class ImmutableIntDirectedGraphNGTest {
         
         ImmutableIntDirectedGraph instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 0, "edge count");
+        assertEquals(instance.getArrowCount(), 0, "edge count");
         
-        builder.addEdge(a,b);
+        builder.addArrow(a,b);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 1, "edge count");
+        assertEquals(instance.getArrowCount(), 1, "edge count");
         assertEquals(instance.getNextCount(a),1,"edge count of "+a);
         assertEquals(instance.getNext(a,0),b,"next edge of "+a);
     }
 
     /**
-     * Test of getEdgeCount method, of class ImmutableIntDirectedGraph.
+     * Test of getArrowCount method, of class ImmutableIntDirectedGraph.
      */
     @Test
-    public void testGetEdgeCount() {
-        System.out.println("getEdgeCount");
+    public void testGetArrowCount() {
+        System.out.println("getArrowCount");
         int a = 0;
         int b = 1;
         int c = 1;
@@ -56,12 +56,12 @@ public class ImmutableIntDirectedGraphNGTest {
         
         ImmutableIntDirectedGraph instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 0, "edge count");
+        assertEquals(instance.getArrowCount(), 0, "edge count");
         
-        builder.addEdge(a,b);
+        builder.addArrow(a,b);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 1, "edge count");
+        assertEquals(instance.getArrowCount(), 1, "edge count");
         assertEquals(instance.getNextCount(a),1,"edge count of "+a);
         assertEquals(instance.getNext(a,0),b,"next edge of "+a);
     }
@@ -80,12 +80,12 @@ public class ImmutableIntDirectedGraphNGTest {
         
         ImmutableIntDirectedGraph instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 0, "edge count");
+        assertEquals(instance.getArrowCount(), 0, "edge count");
         
-        builder.addEdge(a,b);
+        builder.addArrow(a,b);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 1, "edge count");
+        assertEquals(instance.getArrowCount(), 1, "edge count");
         assertEquals(instance.getNextCount(a),1,"edge count of "+a);
         assertEquals(instance.getNext(a,0),b,"next edge of "+a);
     }
@@ -104,24 +104,24 @@ public class ImmutableIntDirectedGraphNGTest {
         
         ImmutableIntDirectedGraph instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 0, "edge count");
+        assertEquals(instance.getArrowCount(), 0, "edge count");
         assertEquals(instance.getNextCount(a),0,"edge count of "+a);
         assertEquals(instance.getNextCount(b),0,"edge count of "+b);
         assertEquals(instance.getNextCount(c),0,"edge count of "+c);
         
-        builder.addEdge(a,b);
+        builder.addArrow(a,b);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 1, "edge count");
+        assertEquals(instance.getArrowCount(), 1, "edge count");
         assertEquals(instance.getNextCount(a),1,"edge count of "+a);
         assertEquals(instance.getNext(a,0),b,"next edge of "+a);
         assertEquals(instance.getNextCount(b),0,"edge count of "+b);
         assertEquals(instance.getNextCount(c),0,"edge count of "+c);
         
-        builder.addEdge(b,c);
+        builder.addArrow(b,c);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 2, "edge count");
+        assertEquals(instance.getArrowCount(), 2, "edge count");
         assertEquals(instance.getNextCount(a),1,"edge count of "+a);
         assertEquals(instance.getNext(a,0),b,"next edge of "+a);
         assertEquals(instance.getNextCount(b),1,"edge count of "+b);
@@ -143,12 +143,12 @@ public class ImmutableIntDirectedGraphNGTest {
         
         ImmutableIntDirectedGraph instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 0, "edge count");
+        assertEquals(instance.getArrowCount(), 0, "edge count");
         
-        builder.addEdge(a,b);
+        builder.addArrow(a,b);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
-        assertEquals(instance.getEdgeCount(), 1, "edge count");
+        assertEquals(instance.getArrowCount(), 1, "edge count");
         assertEquals(instance.getNextCount(a),1,"edge count of "+a);
         assertEquals(instance.getNext(a,0),b,"next edge of "+a);
     }

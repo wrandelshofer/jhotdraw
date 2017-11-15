@@ -15,11 +15,11 @@ import javax.annotation.Nonnull;
 public interface IntDirectedGraph {
 
     /**
-     * Returns the number of edges.
+     * Returns the number of arrows.
      *
-     * @return edge count
+     * @return arrow count
      */
-    int getEdgeCount();
+    int getArrowCount();
 
     /**
      * Returns the i-th next vertex of v.

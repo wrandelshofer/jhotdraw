@@ -1,4 +1,4 @@
-/* @(#)ImmutableDirectedGraph.java
+/* @(#)ImmutableDirectedGraphWithArrows.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ImmutableDirectedGraph.
+ * ImmutableDirectedGraphWithArrows.
  *
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the vertex type
- * @param <E> the edge type
+ * @param <E> the arrow type
  */
-public class ImmutableDirectedGraphWithEdges<V, E> extends ImmutableIntDirectedGraph
-        implements DirectedGraphWithEdges<V, E>, IntDirectedGraphWithEdges<E> {
+public class ImmutableDirectedGraphWithArrows<V, E> extends ImmutableIntDirectedGraph
+        implements DirectedGraphWithArrows<V, E>, IntDirectedGraphWithArrows<E> {
 
     /**
      * Maps a vertex index to a vertex object.
@@ -28,15 +28,15 @@ public class ImmutableDirectedGraphWithEdges<V, E> extends ImmutableIntDirectedG
      */
     private final Map<V, Integer> vertexToIndexMap;
 
-    private Object[] edgeData;
+    private Object[] arrowData;
 
     /**
      * Creates a new instance from the specified graph.
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraphWithEdges(DirectedGraphWithEdges<V, E> graph) {
-        super(graph.getVertexCount(), graph.getEdgeCount());
+    public ImmutableDirectedGraphWithArrows(DirectedGraphWithArrows<V, E> graph) {
+        super(graph.getVertexCount(), graph.getArrowCount());
         int vertexCapacity = graph.getVertexCount();
 
         indexToVertexMap = new ArrayList<>(vertexCapacity);
@@ -48,24 +48,24 @@ public class ImmutableDirectedGraphWithEdges<V, E> extends ImmutableIntDirectedG
             indexToVertexMap.add(vObject);
         }
 
-        edgeData = new Object[graph.getEdgeCount()];
-        int edgeCount = 0;
+        arrowData = new Object[graph.getArrowCount()];
+        int arrowCount = 0;
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             V vObject = indexToVertexMap.get(vIndex);
 
-            vertices[vIndex] = edgeCount;
+            vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                edges[edgeCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
-                edgeData[edgeCount] = graph.getNextEdge(vObject, i);
-                ++edgeCount;
+                arrows[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrowData[arrowCount] = graph.getArrow(vObject, i);
+                ++arrowCount;
             }
         }
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public E getEdge(int indexOfEdge) {
-        return (E) edgeData[indexOfEdge];
+    public E getArrow(int indexOfArrow) {
+        return (E) arrowData[indexOfArrow];
     }
 
     @Override
@@ -80,13 +80,14 @@ public class ImmutableDirectedGraphWithEdges<V, E> extends ImmutableIntDirectedG
 
     @Override
     @SuppressWarnings("unchecked")
-    public E getNextEdge(V vertex, int index) {
-        return (E) edgeData[getEdgeIndex(vertexToIndexMap.get(vertex), index)];
+    public E getArrow(V vertex, int index) {
+        return (E) arrowData[getArrowIndex(vertexToIndexMap.get(vertex), index)];
     }
 
     @Override
-    public E getNextEdge(int vertex, int index) {
-        return (E) edgeData[getEdgeIndex(vertex, index)];
+    @SuppressWarnings("unchecked")
+    public E getArrow(int vertex, int index) {
+        return (E) arrowData[getArrowIndex(vertex, index)];
     }
 
     @Override

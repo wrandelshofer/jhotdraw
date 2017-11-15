@@ -187,7 +187,7 @@ public class DirectedGraphPathBuilder<V> {
      * @return true on success
      */
     private static <V> BackLink<V> breadthFirstSearch(DirectedGraph<V> graph, V root, V goal, Predicate<V> visited) {
-        Queue<BackLink<V>> queue = new ArrayDeque<>(max(1, min(graph.getVertexCount(), graph.getEdgeCount())));
+        Queue<BackLink<V>> queue = new ArrayDeque<>(max(1, min(graph.getVertexCount(), graph.getArrowCount())));
         BackLink<V> rootBackLink = new BackLink<>(root, null);// temporaly allocated objects producing lots of garbage
         visited.test(root);
         queue.add(rootBackLink);

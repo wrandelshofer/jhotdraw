@@ -10,14 +10,14 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 
 /**
- * Defines a facade for a directed graph.
+ * Defines a facade for a directed graph, consisting of vertices "V" and arrows "A".
  * <p>
- * A directed graph {@code G} is defined as a tuple {@code G = (V, E)}.
+ * A directed graph {@code G} is defined as a tuple {@code G = (V, A)}.
  * <p>
  * The graph is composed of set of vertices {@code V = (v_1, ..., v_n) }, and a
- * set of edges {@code E = (e_1, ..., e_n)}.
+ * set of arrows {@code A = (a_1, ..., a_n)}.
  * <p>
- * An edge is an ordered (directed) pair of two vertices {@code e=(v_i, v_j)}.
+ * An arrow is an ordered (directed) pair of two vertices {@code a=(v_i, v_j)}.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -60,14 +60,14 @@ public interface DirectedGraph<V> {
     }
 
     /**
-     * Returns the number of edges.
+     * Returns the number of arrows.
      *
-     * @return edge count
+     * @return arrow count
      */
-    int getEdgeCount();
+    int getArrowCount();
 
     /**
-     * Returns the i-th next successor vertex of v.
+     * Returns the i-th direct successor vertex of v.
      *
      * @param vertex a vertex
      * @param i index of next vertex
@@ -77,7 +77,7 @@ public interface DirectedGraph<V> {
     V getNext(@Nonnull V vertex, int i);
 
     /**
-     * Returns the number of next successor vertices of v.
+     * Returns the number of direct successor vertices of v.
      *
      * @param vertex a vertex
      * @return the number of next vertices of v.

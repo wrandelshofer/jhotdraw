@@ -13,17 +13,17 @@ import java.util.Objects;
 /**
  * Represents an edge path through a graph.
  * <p>
- Path elements are edges.
+ * Path elements are directed edges (arrows) or undirected edges (arcs).
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class EdgePath<E> {
 
-    private final List<E> edges;
+    private final List<E> arrows;
 
     public EdgePath(Collection<E> elements) {
-        this.edges = Collections.unmodifiableList(new ArrayList<>(elements));
+        this.arrows = Collections.unmodifiableList(new ArrayList<>(elements));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class EdgePath<E> {
             return false;
         }
         final EdgePath<?> other = (EdgePath<?>) obj;
-        if (!Objects.equals(this.edges, other.edges)) {
+        if (!Objects.equals(this.arrows, other.arrows)) {
             return false;
         }
         return true;
@@ -47,7 +47,7 @@ public class EdgePath<E> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.edges);
+        hash = 53 * hash + Objects.hashCode(this.arrows);
         return hash;
     }
     
@@ -56,13 +56,13 @@ public class EdgePath<E> {
         return new EdgePath<>(Arrays.asList(vertices));
     }
 
-    public List<E> getEdges() {
-        return edges;
+    public List<E> getArrows() {
+        return arrows;
     }
 
     @Override
     public String toString() {
-        return "EdgePath{" + edges + '}';
+        return "ArrowPath{" + arrows + '}';
     }
 
 

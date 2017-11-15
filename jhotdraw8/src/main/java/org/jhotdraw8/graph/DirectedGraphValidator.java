@@ -27,7 +27,7 @@ public class DirectedGraphValidator<V> {
         for (V v:vertices) {
             for (int j=0,m=graph.getNextCount(v);j<m;j++) {
                 if (!vertices.contains(graph.getNext(v, j))) {
-                    return false;// edge points to vertex which is nit part of graph
+                    return false;// arrow points to vertex which is nit part of graph
                 }
             }
         }

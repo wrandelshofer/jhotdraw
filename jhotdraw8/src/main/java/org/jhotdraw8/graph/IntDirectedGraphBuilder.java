@@ -16,12 +16,12 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
         this(16, 16);
     }
 
-    public IntDirectedGraphBuilder(int vertexCapacity, int edgeCapacity) {
-        super(vertexCapacity,edgeCapacity);
+    public IntDirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
+        super(vertexCapacity,arrowCapacity);
     }
 
     /**
-     * Adds a directed edge from 'a' to 'b' and another edge
+     * Adds a directed arrow from 'a' to 'b' and another arrow
      * from 'b' to 'a'.
      * <p>
      * Before you may call this method, you must have called
@@ -30,14 +30,14 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * @param a vertex a
      * @param b vertex b
      */
-    public void addBidiEdge(int a, int b) {
-        addEdge(a, b);
-        addEdge(b, a);
+    public void addBidiArrow(int a, int b) {
+        addArrow(a, b);
+        addArrow(b, a);
 
     }
 
     /**
-     * Builder-method: adds a directed edge from 'a' to 'b'.
+     * Builder-method: adds a directed arrow from 'a' to 'b'.
      * <p>
      * Before you may call this method, you must have called
      * {@link #setVertexCount(int)}.
@@ -45,8 +45,8 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * @param a vertex a
      * @param b vertex b
      */
-    public void addEdge(int a, int b) {
-        buildAddEdge(a,b);
+    public void addArrow(int a, int b) {
+        buildAddArrow(a,b);
     }
 
     /**
@@ -64,36 +64,36 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
     public void setVertexCount(int newValue) {
         buildSetVertexCount(newValue);
     }
-public void removeEdge(int vi, int i) {
-    buildRemoveEdge(vi,i);
+public void removeArrow(int vi, int i) {
+    buildRemoveArrow(vi,i);
 }
     /**
-     * Creates a graph with all edges inverted.
+     * Creates a graph with all arrows inverted.
      *
      * @param graph a graph
-     * @return a new graph with inverted edges
+     * @return a new graph with inverted arrows
      */
     public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
-        int edgeCount = graph.getEdgeCount();
+        int arrowCount = graph.getArrowCount();
 
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             int v = i;
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addEdge(graph.getNext(v, j), v);
+                b.addArrow(graph.getNext(v, j), v);
             }
         }
         return b;
     }
 
     public static IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
-        int edgeCount = graph.getEdgeCount();
+        int arrowCount = graph.getArrowCount();
 
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             int v = i;
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addEdge(v, graph.getNext(v, j));
+                b.addArrow(v, graph.getNext(v, j));
             }
         }
         return b;

@@ -122,7 +122,7 @@ public class IntDirectedGraphPathBuilder {
      */
     private static boolean breadthFirstSearchInt(IntDirectedGraph graph, int start, int goal, IntArrayList pathElements) {
         BitSet visited = new BitSet(graph.getVertexCount());
-        QueueWithBackLinks queue = new QueueWithBackLinks(max(1, min(graph.getVertexCount(), graph.getEdgeCount())));
+        QueueWithBackLinks queue = new QueueWithBackLinks(max(1, min(graph.getVertexCount(), graph.getArrowCount())));
         queue.add(start, SENTINEL);
         visited.set(start);
         int current = SENTINEL;

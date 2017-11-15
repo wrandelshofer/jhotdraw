@@ -1,4 +1,4 @@
-/* @(#)DirectedGraphPathBuilder.java
+/* @(#)DirectedGraphWithArrowsPathBuilder.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -23,28 +23,28 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * DirectedGraphPathBuilder.
+ * DirectedGraphWithArrowsPathBuilder.
  *
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the vertex type
  */
-public class DirectedGraphWithEdgesPathBuilder<V, E> {
+public class DirectedGraphWithArrowsPathBuilder<V, A> {
 
     private @Nonnull
-    ToDoubleFunction<E> costFunction;
+    ToDoubleFunction<A> costFunction;
 
-    public DirectedGraphWithEdgesPathBuilder(ToDoubleFunction<E> costFunction) {
+    public DirectedGraphWithArrowsPathBuilder(ToDoubleFunction<A> costFunction) {
         this.costFunction = costFunction;
     }
 
-    public DirectedGraphWithEdgesPathBuilder() {
-        this.costFunction = edge -> 1.0;
+    public DirectedGraphWithArrowsPathBuilder() {
+        this.costFunction = arrow -> 1.0;
     }
 
     @SuppressWarnings("rawtypes")
-    private IntNodeWithCost<E> doFindIntShortestPath(int start, PriorityQueue<IntNodeWithCost<E>> frontier, IntNodeWithCost[] frontierMap, int goal, BitSet explored, IntDirectedGraphWithEdges<E> graph, ToDoubleFunction<E> costf) {
-        IntNodeWithCost<E> node = new IntNodeWithCost<>(start, 0.0, null, null);
+    private IntNodeWithCost<A> doFindIntShortestPath(int start, PriorityQueue<IntNodeWithCost<A>> frontier, IntNodeWithCost[] frontierMap, int goal, BitSet explored, IntDirectedGraphWithArrows<A> graph, ToDoubleFunction<A> costf) {
+        IntNodeWithCost<A> node = new IntNodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
             if (frontier.isEmpty()) {
@@ -59,13 +59,13 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
             explored.set(node.getVertex());
             for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
                 int next = graph.getNext(vertex, i);
-                final E edge = graph.getNextEdge(vertex, i);
-                double cost = node.cost + costf.applyAsDouble(edge);
+                final A arrow = graph.getArrow(vertex, i);
+                double cost = node.cost + costf.applyAsDouble(arrow);
 
                 @SuppressWarnings("unchecked")
-                IntNodeWithCost<E> nwcInFrontier = frontierMap[next];
+                IntNodeWithCost<A> nwcInFrontier = frontierMap[next];
                 if (!explored.get(next) && nwcInFrontier == null) {
-                    IntNodeWithCost<E> nwc = new IntNodeWithCost<>(next, cost, node, edge);
+                    IntNodeWithCost<A> nwc = new IntNodeWithCost<>(next, cost, node, arrow);
                     frontier.add(nwc);
                     frontierMap[next] = nwc;
                 } else if (nwcInFrontier != null) {
@@ -73,7 +73,7 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
                         frontier.remove(nwcInFrontier);
                         nwcInFrontier.cost = cost;
                         nwcInFrontier.parent = node;
-                        nwcInFrontier.edge = edge;
+                        nwcInFrontier.arrow = arrow;
                         frontier.add(nwcInFrontier);
                     }
                 }
@@ -83,9 +83,9 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         return node;
     }
 
-    private VertexPath<V> doFindIntShortestVertexPath(DirectedGraphWithEdges<V, E> graph, V start, V goal, ToDoubleFunction<E> costf) {
+    private VertexPath<V> doFindIntShortestVertexPath(DirectedGraphWithArrows<V, A> graph, V start, V goal, ToDoubleFunction<A> costf) {
         @SuppressWarnings("unchecked")
-        IntDirectedGraphWithEdges<E> intGraph = (IntDirectedGraphWithEdges<E>) graph;
+        IntDirectedGraphWithArrows<A> intGraph = (IntDirectedGraphWithArrows<A>) graph;
         int startIndex = -1, goalIndex = -1;
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             V v = graph.getVertex(i);
@@ -113,8 +113,8 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         return new VertexPath<>(elements);
     }
 
-    private NodeWithCost<V, E> doFindShortestPath(V start, PriorityQueue<NodeWithCost<V, E>> frontier, Map<V, NodeWithCost<V, E>> frontierMap, V goal, Set<V> explored, DirectedGraphWithEdges<V, E> graph, ToDoubleFunction<E> costf) {
-        NodeWithCost<V, E> node = new NodeWithCost<>(start, 0.0, null, null);
+    private NodeWithCost<V, A> doFindShortestPath(V start, PriorityQueue<NodeWithCost<V, A>> frontier, Map<V, NodeWithCost<V, A>> frontierMap, V goal, Set<V> explored, DirectedGraphWithArrows<V, A> graph, ToDoubleFunction<A> costf) {
+        NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
             if (frontier.isEmpty()) {
@@ -129,21 +129,21 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
             explored.add(node.getVertex());
             for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
                 V next = graph.getNext(vertex, i);
-                final E edge = graph.getNextEdge(vertex, i);
-                double cost = node.cost + costf.applyAsDouble(edge);
+                final A arrow = graph.getArrow(vertex, i);
+                double cost = node.cost + costf.applyAsDouble(arrow);
 
                 boolean isInFrontier = frontierMap.containsKey(next);
                 if (!explored.contains(next) && !isInFrontier) {
-                    NodeWithCost<V, E> nwc = new NodeWithCost<>(next, cost, node, edge);
+                    NodeWithCost<V, A> nwc = new NodeWithCost<>(next, cost, node, arrow);
                     frontier.add(nwc);
                     frontierMap.put(next, nwc);
                 } else if (isInFrontier) {
-                    NodeWithCost<V, E> nwcInFrontier = frontierMap.get(next);
+                    NodeWithCost<V, A> nwcInFrontier = frontierMap.get(next);
                     if (nwcInFrontier.cost > cost) {
                         frontier.remove(nwcInFrontier);
                         nwcInFrontier.cost = cost;
                         nwcInFrontier.parent = node;
-                        nwcInFrontier.edge = edge;
+                        nwcInFrontier.arrow = arrow;
                         frontier.add(nwcInFrontier);
                     }
                 }
@@ -154,44 +154,44 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
     }
 
     @Nullable
-    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
             @Nonnull V start, @Nonnull V goal) {
         return findShortestVertexPath(graph, start, goal, costFunction);
     }
 
     @Nullable
-    public EdgePath<E> findShortestEdgePath(@Nonnull DirectedGraphWithEdges<V, E> graph,
+    public EdgePath<A> findShortestArrowPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
             @Nonnull V start, @Nonnull V goal) {
-        return findShortestEdgePath(graph, start, goal, costFunction);
+        return findShortestArrowPath(graph, start, goal, costFunction);
     }
 
     @Nullable
-    private EdgePath<E> doFindShortestEdgePath(@Nonnull DirectedGraphWithEdges<V, E> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
+    private EdgePath<A> doFindShortestArrowPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
+            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
 
-        NodeWithCost<V, E> node = findShortestPath(graph, start, goal, costf);
+        NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
         if (node == null) {
             return null;
         }
         //
-        LinkedList<E> edges = new LinkedList<>();
-        for (NodeWithCost<V, E> parent = node; parent != null && parent.edge != null; parent = parent.parent) {
-            edges.addFirst(parent.edge);
+        LinkedList<A> arrows = new LinkedList<>();
+        for (NodeWithCost<V, A> parent = node; parent != null && parent.arrow != null; parent = parent.parent) {
+            arrows.addFirst(parent.arrow);
         }
-        return new EdgePath<>(edges);
+        return new EdgePath<>(arrows);
     }
 
     @Nullable
-    private VertexPath<V> doFindShortestVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
+    private VertexPath<V> doFindShortestVertexPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
+            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
 
-        NodeWithCost<V, E> node = findShortestPath(graph, start, goal, costf);
+        NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
         if (node == null) {
             return null;
         }
         // 
         LinkedList<V> vertices = new LinkedList<>();
-        for (NodeWithCost<V, E> parent = node; parent != null; parent = parent.parent) {
+        for (NodeWithCost<V, A> parent = node; parent != null; parent = parent.parent) {
             vertices.addFirst(parent.vertex);
         }
         return new VertexPath<>(vertices);
@@ -214,17 +214,17 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
-    public EdgePath<E> findAnyEdgePath(@Nonnull DirectedGraphWithEdges<V, E> graph,
+    public EdgePath<A> findAnyArrowPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
             @Nonnull V start, @Nonnull V goal) {
-        Deque<E> edges = new ArrayDeque<>();
-        BackLinkWithEdge<V, E> current = breadthFirstSearchWithEdges(graph, start, goal);
+        Deque<A> arrows = new ArrayDeque<>();
+        BackLinkWithArrow<V, A> current = breadthFirstSearchWithArrows(graph, start, goal);
         if (current == null) {
             return null;
         }
-        for (BackLinkWithEdge<V, E> i = current; i.edge != null; i = i.parent) {
-            edges.addFirst(i.edge);
+        for (BackLinkWithArrow<V, A> i = current; i.arrow != null; i = i.parent) {
+            arrows.addFirst(i.arrow);
         }
-        return new EdgePath<>(edges);
+        return new EdgePath<>(arrows);
     }
 
     /**
@@ -244,44 +244,44 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
+    public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
             @Nonnull V start, @Nonnull V goal) {
         Deque<V> vertices = new ArrayDeque<>();
-        BackLinkWithEdge<V, E> current = breadthFirstSearchWithEdges(graph, start, goal);
+        BackLinkWithArrow<V, A> current = breadthFirstSearchWithArrows(graph, start, goal);
         if (current == null) {
             return null;
         }
-        for (BackLinkWithEdge<V, E> i = current; i != null; i = i.parent) {
+        for (BackLinkWithArrow<V, A> i = current; i != null; i = i.parent) {
             vertices.addFirst(i.vertex);
         }
         return new VertexPath<>(vertices);
     }
 
     @Nullable
-    public EdgePath<E> findIntShortestEdgePath(@Nonnull IntDirectedGraphWithEdges<E> graph,
-            int start, int goal, @Nonnull ToDoubleFunction<E> costf) {
+    public EdgePath<A> findIntShortestArrowPath(@Nonnull IntDirectedGraphWithArrows<A> graph,
+            int start, int goal, @Nonnull ToDoubleFunction<A> costf) {
 
-        IntNodeWithCost<E> node = findIntShortestPath(graph, start, goal, costf);
+        IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
         if (node == null) {
             return null;
         }
         // 
-        LinkedList<E> edges = new LinkedList<>();
-        for (IntNodeWithCost<E> parent = node; parent != null && parent.edge != null; parent = parent.parent) {
-            edges.addFirst(parent.edge);
+        LinkedList<A> arrows = new LinkedList<>();
+        for (IntNodeWithCost<A> parent = node; parent != null && parent.arrow != null; parent = parent.parent) {
+            arrows.addFirst(parent.arrow);
         }
-        return new EdgePath<>(edges);
+        return new EdgePath<>(arrows);
     }
 
-    private PriorityQueue< IntNodeWithCost<E>> intFrontier;
+    private PriorityQueue< IntNodeWithCost<A>> intFrontier;
     private BitSet intExplored;
     @SuppressWarnings({"rawtypes"})
     private IntNodeWithCost[] intFrontierMap;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
-    private IntNodeWithCost<E> findIntShortestPath(@Nonnull IntDirectedGraphWithEdges< E> graph,
-            @Nonnull int start, @Nonnull int goal, @Nonnull ToDoubleFunction<E> costf) {
+    private IntNodeWithCost<A> findIntShortestPath(@Nonnull IntDirectedGraphWithArrows< A> graph,
+            @Nonnull int start, @Nonnull int goal, @Nonnull ToDoubleFunction<A> costf) {
         final int vertexCount = graph.getVertexCount();
         if (intFrontierMap == null || intFrontierMap.length < vertexCount) {
             intFrontierMap = new IntNodeWithCost[vertexCount];
@@ -289,7 +289,7 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
             intFrontier = new PriorityQueue<>();
         }
 
-        IntNodeWithCost<E> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
+        IntNodeWithCost<A> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
         intFrontier.clear();
         intExplored.clear();
         clear(intFrontierMap);
@@ -297,16 +297,16 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
     }
 
     @Nullable
-    public VertexPath<Integer> findIntShortestVertexPath(@Nonnull IntDirectedGraphWithEdges<E> graph,
-            int start, int goal, @Nonnull ToDoubleFunction<E> costf) {
+    public VertexPath<Integer> findIntShortestVertexPath(@Nonnull IntDirectedGraphWithArrows<A> graph,
+            int start, int goal, @Nonnull ToDoubleFunction<A> costf) {
 
-        IntNodeWithCost<E> node = findIntShortestPath(graph, start, goal, costf);
+        IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
         if (node == null) {
             return null;
         }
         //
         LinkedList<Integer> vertices = new LinkedList<>();
-        for (IntNodeWithCost<E> parent = node; parent != null; parent = parent.parent) {
+        for (IntNodeWithCost<A> parent = node; parent != null; parent = parent.parent) {
             vertices.addFirst(parent.vertex);
         }
         return new VertexPath<>(vertices);
@@ -329,12 +329,12 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public EdgePath<E> findShortestEdgePath(@Nonnull DirectedGraphWithEdges<V, E> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
+    public EdgePath<A> findShortestArrowPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
+            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
 
-        if (graph instanceof IntDirectedGraphWithEdges) {
+        if (graph instanceof IntDirectedGraphWithArrows) {
             @SuppressWarnings("unchecked")
-            IntDirectedGraphWithEdges<E> intGraph = (IntDirectedGraphWithEdges<E>) graph;
+            IntDirectedGraphWithArrows<A> intGraph = (IntDirectedGraphWithArrows<A>) graph;
             int startIndex = -1, goalIndex = -1;
             for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
                 V v = graph.getVertex(i);
@@ -351,18 +351,18 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
                     }
                 }
             }
-            return findIntShortestEdgePath(intGraph, startIndex, goalIndex, costf);
+            return findIntShortestArrowPath(intGraph, startIndex, goalIndex, costf);
         } else {
-            return doFindShortestEdgePath(graph, start, goal, costf);
+            return doFindShortestArrowPath(graph, start, goal, costf);
         }
     }
 
     @Nullable
-    private NodeWithCost<V, E> findShortestPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
-        PriorityQueue< NodeWithCost<V, E>> frontier = new PriorityQueue<>();
+    private NodeWithCost<V, A> findShortestPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
+            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+        PriorityQueue< NodeWithCost<V, A>> frontier = new PriorityQueue<>();
         Set<V> explored = new HashSet<>(graph.getVertexCount());
-        Map<V, NodeWithCost<V, E>> frontierMap = new HashMap<>(graph.getVertexCount());
+        Map<V, NodeWithCost<V, A>> frontierMap = new HashMap<>(graph.getVertexCount());
         return doFindShortestPath(start, frontier, frontierMap, goal, explored, graph, costf);
     }
 
@@ -383,9 +383,9 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithEdges<V, E> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<E> costf) {
-        if (graph instanceof IntDirectedGraphWithEdges) {
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraphWithArrows<V, A> graph,
+            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+        if (graph instanceof IntDirectedGraphWithArrows) {
             return doFindIntShortestVertexPath(graph, start, goal, costf);
         } else {
             return doFindShortestVertexPath(graph, start, goal, costf);
@@ -404,16 +404,16 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         }
     }
 
-    private static class BackLinkWithEdge<VV, EE> {
+    private static class BackLinkWithArrow<VV, EE> {
 
-        final BackLinkWithEdge<VV, EE> parent;
+        final BackLinkWithArrow<VV, EE> parent;
         final VV vertex;
-        final EE edge;
+        final EE arrow;
 
-        public BackLinkWithEdge(VV vertex, BackLinkWithEdge<VV, EE> parent, EE edge) {
+        public BackLinkWithArrow(VV vertex, BackLinkWithArrow<VV, EE> parent, EE arrow) {
             this.vertex = vertex;
             this.parent = parent;
-            this.edge = edge;
+            this.arrow = arrow;
         }
 
     }
@@ -423,13 +423,13 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
         private IntNodeWithCost<E> parent;
         private final int vertex;
         private double cost;
-        private E edge;
+        private E arrow;
 
-        public IntNodeWithCost(int node, double cost, IntNodeWithCost<E> parent, E edge) {
+        public IntNodeWithCost(int node, double cost, IntNodeWithCost<E> parent, E arrow) {
             this.vertex = node;
             this.cost = cost;
             this.parent = parent;
-            this.edge = edge;
+            this.arrow = arrow;
         }
 
         @Override
@@ -485,14 +485,14 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
 
         private NodeWithCost<V, E> parent;
         private final V vertex;
-        private E edge;
+        private E arrow;
         private double cost;
 
-        public NodeWithCost(V node, double cost, NodeWithCost<V, E> parent, E edge) {
+        public NodeWithCost(V node, double cost, NodeWithCost<V, E> parent, E arrow) {
             this.vertex = node;
             this.cost = cost;
             this.parent = parent;
-            this.edge = edge;
+            this.arrow = arrow;
         }
 
         @Override
@@ -558,12 +558,12 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
      * as visited.
      * @return a back link on success, null on failure
      */
-    private static <V, E> BackLinkWithEdge<V, E> breadthFirstSearchWithEdges(DirectedGraphWithEdges<V, E> graph, V root, V goal, Predicate<V> visited) {
-        Queue<BackLinkWithEdge<V, E>> queue = new ArrayDeque<>(max(1, min(graph.getVertexCount(), graph.getEdgeCount())));
-        BackLinkWithEdge<V, E> rootBackLink = new BackLinkWithEdge<>(root, null, null);// temporaly allocated objects producing lots of garbage
+    private static <V, E> BackLinkWithArrow<V, E> breadthFirstSearchWithArrows(DirectedGraphWithArrows<V, E> graph, V root, V goal, Predicate<V> visited) {
+        Queue<BackLinkWithArrow<V, E>> queue = new ArrayDeque<>(max(1, min(graph.getVertexCount(), graph.getArrowCount())));
+        BackLinkWithArrow<V, E> rootBackLink = new BackLinkWithArrow<>(root, null, null);// temporaly allocated objects producing lots of garbage
         visited.test(root);
         queue.add(rootBackLink);
-        BackLinkWithEdge<V, E> current = null;
+        BackLinkWithArrow<V, E> current = null;
         while (!queue.isEmpty()) {
             current = queue.remove();
             if (current.vertex == goal) {
@@ -571,9 +571,9 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
             }
             for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
                 V next = graph.getNext(current.vertex, i);
-                E edge = graph.getNextEdge(current.vertex, i);
+                E arrow = graph.getArrow(current.vertex, i);
                 if (visited.test(next)) {
-                    BackLinkWithEdge<V, E> backLink = new BackLinkWithEdge<>(next, current, edge);
+                    BackLinkWithArrow<V, E> backLink = new BackLinkWithArrow<>(next, current, arrow);
                     queue.add(backLink);
                 }
             }
@@ -594,9 +594,9 @@ public class DirectedGraphWithEdgesPathBuilder<V, E> {
      * @return the path elements. Returns an empty list if there is no path. The
      * list is mutable.
      */
-    private static <V, E> BackLinkWithEdge<V, E> breadthFirstSearchWithEdges(DirectedGraphWithEdges<V, E> graph, V root, V goal) {
+    private static <V, E> BackLinkWithArrow<V, E> breadthFirstSearchWithArrows(DirectedGraphWithArrows<V, E> graph, V root, V goal) {
         Set<V> visitedSet = new HashSet<>(graph.getVertexCount());// HashSet has a large O(1) cost.
-        return breadthFirstSearchWithEdges(graph, root, goal, visitedSet::add);
+        return breadthFirstSearchWithArrows(graph, root, goal, visitedSet::add);
     }
 
 }

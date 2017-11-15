@@ -168,38 +168,38 @@ public class DirectedGraphs {
     }
 
     /**
-     * Given a set of vertices and a list of edges ordered by cost, returns the
+     * Given a set of vertices and a list of arrows ordered by cost, returns the
      * minimum spanning tree.
      * <p>
      * Uses Kruskal's algorithm.
      *
      * @param <V> the vertex type
-     * @param <E> the edge type
+     * @param <E> the arrow type
      * @param vertices a directed graph
-     * @param orderedEdges list of edges sorted by cost in ascending order
+     * @param orderedArrows list of arrows sorted by cost in ascending order
      * (lowest cost first, highest cost last).
-     * @param rejectedEdges optional, all excluded edges are added to this list,
+     * @param rejectedArrows optional, all excluded arrows are added to this list,
      * if it is provided.
-     * @return the edges that are part of the minimum spanning tree.
+     * @return the arrows that are part of the minimum spanning tree.
      */
-    public static <V, E extends Pair<V>> List<E> findMinimumSpanningTree(Collection<V> vertices, List<E> orderedEdges, List<E> rejectedEdges) {
-        List<E> minimumSpanningTree = new ArrayList<>(orderedEdges.size());
-        if (rejectedEdges == null) {
-            rejectedEdges = new ArrayList<>(orderedEdges.size());
+    public static <V, E extends Pair<V>> List<E> findMinimumSpanningTree(Collection<V> vertices, List<E> orderedArrows, List<E> rejectedArrows) {
+        List<E> minimumSpanningTree = new ArrayList<>(orderedArrows.size());
+        if (rejectedArrows == null) {
+            rejectedArrows = new ArrayList<>(orderedArrows.size());
         }
 
         // Create initial forest
         Map<V, List<V>> forest = createForest(vertices);
 
-        // Process edges from lowest cost to highest cost
-        for (E edge : orderedEdges) {
-            List<V> uset = forest.get(edge.getStart());
-            List<V> vset = forest.get(edge.getEnd());
+        // Process arrows from lowest cost to highest cost
+        for (E arrow : orderedArrows) {
+            List<V> uset = forest.get(arrow.getStart());
+            List<V> vset = forest.get(arrow.getEnd());
             if (uset != vset) {
                 union(uset, vset, forest);
-                minimumSpanningTree.add(edge);
+                minimumSpanningTree.add(arrow);
             } else {
-                rejectedEdges.add(edge);
+                rejectedArrows.add(arrow);
             }
         }
 
@@ -207,33 +207,33 @@ public class DirectedGraphs {
     }
 
     /**
-     * Given a set of vertices and a list of edges ordered by cost, returns a
+     * Given a set of vertices and a list of arrows ordered by cost, returns a
      * builder with the minimum spanning tree. This is an undirected graph with
-     * an edge in each direction.
+     * an arrow in each direction.
      * <p>
      *
      * @param <V> the vertex type
-     * @param <E> the edge type
+     * @param <E> the arrow type
      * @param vertices the list of vertices
-     * @param orderedEdges list of edges sorted by cost in ascending order
+     * @param orderedArrows list of arrows sorted by cost in ascending order
      * (lowest cost first, highest cost last)
-     * @param includedEdges optional, all included edges are added to this list, if it is provided.
-     * @param rejectedEdges optional, all excluded edges are added to this list,
+     * @param includedArrows optional, all included arrows are added to this list, if it is provided.
+     * @param rejectedArrows optional, all excluded arrows are added to this list,
      * if it is provided.
      * @return the graph builder
      */
-    public static <V, E extends Pair<V>> DirectedGraphWithEdgesBuilder<V,E> findMinimumSpanningTreeGraph(Collection<V> vertices, List<E> orderedEdges, List<E> includedEdges, List<E> rejectedEdges) {
-        List<E> includedEdgeList = findMinimumSpanningTree(vertices, orderedEdges, rejectedEdges);
-        if (includedEdges != null) {
-            includedEdges.addAll(includedEdgeList);
+    public static <V, E extends Pair<V>> DirectedGraphWithArrowsBuilder<V,E> findMinimumSpanningTreeGraph(Collection<V> vertices, List<E> orderedArrows, List<E> includedArrows, List<E> rejectedArrows) {
+        List<E> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
+        if (includedArrows != null) {
+            includedArrows.addAll(includedArrowList);
         }
-        DirectedGraphWithEdgesBuilder<V,E> builder = new DirectedGraphWithEdgesBuilder<>();
+        DirectedGraphWithArrowsBuilder<V,E> builder = new DirectedGraphWithArrowsBuilder<>();
         for (V v : vertices) {
             builder.addVertex(v);
         }
-        for (E e : includedEdgeList) {
-            builder.addEdge(e.getStart(), e.getEnd(),e);
-            builder.addEdge(e.getEnd(), e.getStart(),e);
+        for (E e : includedArrowList) {
+            builder.addArrow(e.getStart(), e.getEnd(),e);
+            builder.addArrow(e.getEnd(), e.getStart(),e);
         }
         return builder;
     }
@@ -269,8 +269,8 @@ public class DirectedGraphs {
     public static int[] sortTopologicallyInt(IntDirectedGraph model) {
         final int n = model.getVertexCount();
 
-        // Step 1: compute number of incoming edges for each vertex
-        final int[] deg = new int[n]; // number of unprocessed incoming edges on vertex
+        // Step 1: compute number of incoming arrows for each vertex
+        final int[] deg = new int[n]; // number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
             final int m = model.getNextCount(i);
             for (int j = 0; j < m; j++) {
@@ -310,7 +310,7 @@ public class DirectedGraphs {
             }
 
             if (done < n) {
-                // Break loop in graph by removing an arbitrary edge.
+                // Break loop in graph by removing an arbitrary arrow.
                 if (random == null) {
                     random=new Random(0);
                 }
@@ -319,7 +319,7 @@ public class DirectedGraphs {
                     i=random.nextInt(n);
                 }
                 while (deg[i]<=0);
-                        deg[i] = 0;// this can actually remove more than one edge
+                        deg[i] = 0;// this can actually remove more than one arrow
                         queue[last++]=i;
             }
         }
