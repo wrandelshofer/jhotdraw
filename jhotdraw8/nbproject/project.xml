@@ -15,20 +15,17 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>jhotdraw8</name>
             <source-roots>
-                <root id="src.java3.dir"/>
-                <root id="src.java4.dir"/>
                 <root id="src.editorold.dir"/>
                 <root id="src.ferro.dir"/>
+                <root id="src.gen.dir"/>
+                <root id="src.graphlayout.dir"/>
                 <root id="src.java.dir"/>
-                <root id="src.java2.dir"/>
             </source-roots>
             <test-roots>
-                <root id="test.java.dir"/>
+                <root id="test.editorold.dir"/>
                 <root id="test.ferro.dir"/>
+                <root id="test.java.dir"/>
             </test-roots>
         </data>
-        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
-            <word>Sourceforge</word>
-        </spellchecker-wordlist>
     </configuration>
 </project>

@@ -1,7 +1,0 @@
-<#if licenseFirst??>
-${licenseFirst} @(#)${name}.java
-</#if>
-${licensePrefix}Copyright (c) ${date?date?string("yyyy")} by the authors and contributors of JHotDraw. MIT License.
-<#if licenseLast??>
-${licenseLast}
-</#if>

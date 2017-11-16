@@ -74,9 +74,13 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
      */
     protected void buildAddArrow(int a, int b, A arrow) {
         if (arrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {
-            int[] tmp = arrowHeads;
+            int[] tmpArrowHeads = arrowHeads;
             arrowHeads = new int[arrowHeads.length * ARROWS_NUM_FIELDS];
-            System.arraycopy(tmp, 0, arrowHeads, 0, tmp.length);
+            System.arraycopy(tmpArrowHeads, 0, arrowHeads, 0, tmpArrowHeads.length);
+            
+            Object[] tmpArrows = arrows;
+            arrows = new Object[arrows.length * ARROWS_NUM_FIELDS];
+            System.arraycopy(tmpArrows, 0, arrows, 0, tmpArrows.length);
         }
 
         int arrowCountOfA = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
