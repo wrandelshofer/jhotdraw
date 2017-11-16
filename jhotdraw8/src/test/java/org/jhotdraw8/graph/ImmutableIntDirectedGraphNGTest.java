@@ -27,14 +27,14 @@ public class ImmutableIntDirectedGraphNGTest {
         int a = 0;
         int b = 1;
         int c = 1;
-     IntDirectedGraphBuilder builder=new   IntDirectedGraphBuilder();
+     IntDirectedGraphBuilder<Double> builder=new   IntDirectedGraphBuilder<>();
      builder.setVertexCount(3);
         
         ImmutableIntDirectedGraph instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
         assertEquals(instance.getArrowCount(), 0, "edge count");
         
-        builder.addArrow(a,b);
+        builder.addArrow(a,b,1.0);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
         assertEquals(instance.getArrowCount(), 1, "edge count");
@@ -75,14 +75,14 @@ public class ImmutableIntDirectedGraphNGTest {
         int a = 0;
         int b = 1;
         int c = 1;
-     IntDirectedGraphBuilder builder=new   IntDirectedGraphBuilder();
+     IntDirectedGraphBuilder<Double> builder=new   IntDirectedGraphBuilder<>();
      builder.setVertexCount(3);
         
         ImmutableIntDirectedGraph instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
         assertEquals(instance.getArrowCount(), 0, "edge count");
         
-        builder.addArrow(a,b);
+        builder.addArrow(a,b,1.0);
          instance = builder.build();
         assertEquals(instance.getVertexCount(), 3, "vertex count");
         assertEquals(instance.getArrowCount(), 1, "edge count");

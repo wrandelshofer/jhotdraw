@@ -21,7 +21,7 @@ public class DirectedGraphPathBuilderNGTest {
     public DirectedGraphPathBuilderNGTest() {
     }
     
-    private DirectedGraph<Integer>createGraph() {
+    private DirectedGraph<Integer,Double>createGraph() {
         DirectedGraphBuilder<Integer,Double> builder=new DirectedGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
@@ -57,8 +57,8 @@ public class DirectedGraphPathBuilderNGTest {
     @Test(dataProvider = "anyPathProvider")
     public void testFindAnyPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
         System.out.println("findAnyPath");
-        DirectedGraph<Integer> graph = createGraph();
-        DirectedGraphPathBuilder<Integer> instance = new DirectedGraphPathBuilder<>();
+        DirectedGraph<Integer,Double> graph = createGraph();
+        DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
         VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
         assertEquals(result, expResult);
     }

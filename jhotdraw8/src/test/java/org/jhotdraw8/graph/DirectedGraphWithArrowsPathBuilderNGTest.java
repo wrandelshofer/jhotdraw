@@ -65,7 +65,7 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
         System.out.println("findShortestPath");
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
+        DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
         VertexPath<Integer> result = instance.findShortestVertexPath(graph, start, goal, costf);
         assertEquals(result, expResult);
     }
@@ -77,8 +77,8 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
         System.out.println("findShortestPath");
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
-        EdgePath<Double> result = instance.findShortestArrowPath(graph, start, goal, costf);
+        DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
+        EdgePath<Double> result = instance.findShortestEdgePath(graph, start, goal, costf);
         assertEquals(result, expResult);
     }
     @DataProvider
@@ -98,7 +98,7 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
     public void testFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
         System.out.println("findAnyVertexPath");
         DirectedGraph<Integer,Double> graph = createGraph();
-        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
+        DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
         VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
         assertEquals(result, expResult);
     }
@@ -119,8 +119,8 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
     public void testFindAnyEdgePath_3args(Integer start, Integer goal, EdgePath<Double> expResult ) throws Exception {
         System.out.println("findAnyVertexPath");
         DirectedGraph<Integer,Double> graph = createGraph();
-        DirectedGraphWithArrowsPathBuilder<Integer,Double> instance = new DirectedGraphWithArrowsPathBuilder<>();
-        EdgePath<Double> result = instance.findAnyArrowPath(graph, start, goal);
+        DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
+        EdgePath<Double> result = instance.findAnyEdgePath(graph, start, goal);
         assertEquals(result, expResult);
     }
 

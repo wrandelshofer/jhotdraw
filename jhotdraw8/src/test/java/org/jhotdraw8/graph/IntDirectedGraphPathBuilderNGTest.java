@@ -21,18 +21,18 @@ public class IntDirectedGraphPathBuilderNGTest {
     public IntDirectedGraphPathBuilderNGTest() {
     }
     
-    private IntDirectedGraph createGraph() {
-        IntDirectedGraphBuilder builder=new IntDirectedGraphBuilder();
+    private IntDirectedGraph<Double> createGraph() {
+        IntDirectedGraphBuilder<Double> builder=new IntDirectedGraphBuilder<>();
         builder.setVertexCount(6);
-        builder.addBidiArrow(0, 1);
-        builder.addBidiArrow(0, 2);
-        builder.addBidiArrow(0, 5);
-        builder.addBidiArrow(1, 2);
-        builder.addBidiArrow(1, 3);
-        builder.addBidiArrow(2, 3);
-        builder.addBidiArrow(2, 5);
-        builder.addBidiArrow(3, 4);
-        builder.addBidiArrow(4, 5);
+        builder.addBidiArrow(0, 1,1.0);
+        builder.addBidiArrow(0, 2,1.0);
+        builder.addBidiArrow(0, 5,1.0);
+        builder.addBidiArrow(1, 2,1.0);
+        builder.addBidiArrow(1, 3,1.0);
+        builder.addBidiArrow(2, 3,1.0);
+        builder.addBidiArrow(2, 5,1.0);
+        builder.addBidiArrow(3, 4,1.0);
+        builder.addBidiArrow(4, 5,1.0);
         return builder;
     }
     
@@ -52,7 +52,7 @@ public class IntDirectedGraphPathBuilderNGTest {
     @Test(dataProvider = "anyPathProvider")
     public void testFindAnyPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
         System.out.println("findShortestPath");
-        IntDirectedGraph graph = createGraph();
+        IntDirectedGraph<Double> graph = createGraph();
         IntDirectedGraphPathBuilder instance = new IntDirectedGraphPathBuilder();
         VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
         assertEquals(result, expResult);
