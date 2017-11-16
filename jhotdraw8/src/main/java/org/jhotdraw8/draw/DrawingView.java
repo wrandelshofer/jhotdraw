@@ -32,6 +32,7 @@ import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -154,7 +155,7 @@ public interface DrawingView extends RenderContext {
     default void scrollSelectedFiguresToVisible() {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         if (!selectedFigures.isEmpty()) {
-            scrollRectToVisible(Figures.getBounds(selectedFigures));
+            scrollRectToVisible(worldToView(Figures.getBounds(selectedFigures)));
         }
     }
 
