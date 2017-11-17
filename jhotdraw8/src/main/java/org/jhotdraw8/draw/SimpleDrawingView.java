@@ -1229,7 +1229,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void updateNodes() {
-        set(RenderContext.CLIP_BOUNDS, getVisibleRect());
+        set(RenderContext.CLIP_BOUNDS, viewToWorld(getVisibleRect()));
         if (!renderIntoImage) {
             // create copies of the lists to allow for concurrent modification
             Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
