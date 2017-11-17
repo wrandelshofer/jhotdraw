@@ -22,7 +22,7 @@ public class IntBreadthFirstIterator<A> implements Iterator<Integer> {
 
     public IntBreadthFirstIterator(IntDirectedGraph<A> graph, int root) {
         this.graph = graph;
-        queue = new ArrayDeque<>(graph.getArrowCount());
+        queue = new ArrayDeque<>(16);
         visited = new BitSet(graph.getVertexCount());
         queue.add(root);
         visited.set(root);

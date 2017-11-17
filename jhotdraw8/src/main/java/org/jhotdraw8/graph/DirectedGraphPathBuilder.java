@@ -3,10 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import static java.lang.Math.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Deque;
@@ -35,8 +33,14 @@ import javax.annotation.Nullable;
  */
 public class DirectedGraphPathBuilder<V, A> {
 
-    private @Nonnull
-    ToDoubleFunction<A> costFunction;
+    @Nonnull
+    private ToDoubleFunction<A> costFunction;
+    private BitSet intExplored;
+    private PriorityQueue< IntNodeWithCost<A>> intFrontier;
+    @SuppressWarnings({"rawtypes"})
+    private IntNodeWithCost[] intFrontierMap;
+    private Queue<BackLinkWithArrow<V, A>> queue;
+    private Set<V> visitedSet;
 
     public DirectedGraphPathBuilder(ToDoubleFunction<A> costFunction) {
         this.costFunction = costFunction;
@@ -44,6 +48,110 @@ public class DirectedGraphPathBuilder<V, A> {
 
     public DirectedGraphPathBuilder() {
         this.costFunction = arrow -> 1.0;
+    }
+
+    /**
+     * Breadth-first-search.
+     *
+     * @param <V> the vertex type
+     * @param graph a graph
+     * @param root the starting point of the search
+     * @param goal the goal of the search
+     * @param visited a predicate with side effect. The predicate returns true
+     * if the specified vertex has been visited, and marks the specified vertex
+     * as visited.
+     * @return a back link on success, null on failure
+     */
+    private BackLinkWithArrow<V, A> breadthFirstSearchWithArrows(DirectedGraph<V, A> graph, V root, V goal, Predicate<V> visited) {
+        if (queue == null) {
+            queue = new ArrayDeque<>(16);
+        }
+        BackLinkWithArrow<V, A> rootBackLink = new BackLinkWithArrow<>(root, null, null);// temporaly allocated objects producing lots of garbage
+        visited.test(root);
+        queue.add(rootBackLink);
+        BackLinkWithArrow<V, A> current = null;
+        while (!queue.isEmpty()) {
+            current = queue.remove();
+            if (current.vertex == goal) {
+                break;
+            }
+            for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
+                V next = graph.getNext(current.vertex, i);
+                A arrow = graph.getArrow(current.vertex, i);
+                if (visited.test(next)) {
+                    BackLinkWithArrow<V, A> backLink = new BackLinkWithArrow<>(next, current, arrow);
+                    queue.add(backLink);
+                }
+            }
+        }
+        queue.clear();
+        if (current == null || current.vertex != goal) {
+            return null;
+        }
+        return current;
+    }
+
+    /**
+     * Breadth-first-search.
+     *
+     * @param <V> the vertex type
+     * @param graph a graph
+     * @param root the starting point of the search
+     * @param goal the goal of the search
+     * @return the path elements. Returns an empty list if there is no path. The
+     * list is mutable.
+     */
+    private BackLinkWithArrow<V, A> breadthFirstSearchWithArrows(DirectedGraph<V, A> graph, V root, V goal) {
+        if (visitedSet == null) {
+            visitedSet = new HashSet<>();
+        }
+        BackLinkWithArrow<V, A> result = breadthFirstSearchWithArrows(graph, root, goal, visitedSet::add);
+        visitedSet.clear();
+        return result;
+    }
+
+    /**
+     * Builds a VertexPath through the graph which traverses the specified
+     * waypoints.
+     * <p>
+     * This method uses breadth first search. It returns the first path that it
+     * finds with this search strategy.
+     *
+     * @param graph a graph
+     * @param waypoints waypoints, the iteration sequence of this collection
+     * determines how the waypoints are traversed
+     * @return a VertexPath if traversal is possible
+     * @throws org.jhotdraw8.graph.PathBuilderException if traversal is not
+     * possible
+     */
+    @Nonnull
+    public VertexPath<V> buildAnyVertexPath(@Nonnull DirectedGraph<V, A> graph, @Nonnull Collection<V> waypoints) throws PathBuilderException {
+        Iterator<V> i = waypoints.iterator();
+        List<V> pathElements = new ArrayList<>(graph.getVertexCount());
+        if (!i.hasNext()) {
+            throw new PathBuilderException("No waypoints provided");
+        }
+        V start = i.next();
+        pathElements.add(start);
+        while (i.hasNext()) {
+            V goal = i.next();
+            BackLinkWithArrow<V, A> back = breadthFirstSearchWithArrows(graph, start, goal);
+            if (back == null) {
+                throw new PathBuilderException("Breadh first search stalled at vertex: " + goal
+                        + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
+            } else {
+                for (BackLinkWithArrow<V, A> b = back; b.vertex != start; b = b.parent) {
+                    pathElements.add(null);
+                }
+                int index = pathElements.size();
+                for (BackLinkWithArrow<V, A> b = back; b.vertex != start; b = b.parent) {
+                    pathElements.set(--index, b.vertex);
+                }
+            }
+
+            start = goal;
+        }
+        return new VertexPath<>(pathElements);
     }
 
     @SuppressWarnings("rawtypes")
@@ -117,6 +225,22 @@ public class DirectedGraphPathBuilder<V, A> {
         return new VertexPath<>(elements);
     }
 
+    @Nullable
+    private EdgePath<A> doFindShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
+            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+
+        NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
+        if (node == null) {
+            return null;
+        }
+        //
+        LinkedList<A> arrows = new LinkedList<>();
+        for (NodeWithCost<V, A> parent = node; parent != null && parent.arrow != null; parent = parent.parent) {
+            arrows.addFirst(parent.arrow);
+        }
+        return new EdgePath<>(arrows);
+    }
+
     private NodeWithCost<V, A> doFindShortestPath(V start, PriorityQueue<NodeWithCost<V, A>> frontier, Map<V, NodeWithCost<V, A>> frontierMap, V goal, Set<V> explored, DirectedGraph<V, A> graph, ToDoubleFunction<A> costf) {
         NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
@@ -155,34 +279,6 @@ public class DirectedGraphPathBuilder<V, A> {
         }
 
         return node;
-    }
-
-    @Nullable
-    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal) {
-        return findShortestVertexPath(graph, start, goal, costFunction);
-    }
-
-    @Nullable
-    public EdgePath<A> findShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal) {
-        return findShortestEdgePath(graph, start, goal, costFunction);
-    }
-
-    @Nullable
-    private EdgePath<A> doFindShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
-
-        NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
-        if (node == null) {
-            return null;
-        }
-        //
-        LinkedList<A> arrows = new LinkedList<>();
-        for (NodeWithCost<V, A> parent = node; parent != null && parent.arrow != null; parent = parent.parent) {
-            arrows.addFirst(parent.arrow);
-        }
-        return new EdgePath<>(arrows);
     }
 
     @Nullable
@@ -261,6 +357,43 @@ public class DirectedGraphPathBuilder<V, A> {
         return new VertexPath<>(vertices);
     }
 
+    /**
+     * Builds a VertexPath through the graph which traverses the specified
+     * waypoints.
+     * <p>
+     * This method uses breadth first search. It returns the first path that it
+     * finds with this search strategy.
+     *
+     * @param graph a graph
+     * @param waypoints waypoints, the iteration sequence of this collection
+     * determines how the waypoints are traversed
+     * @return a VertexPath if traversal is possible, null otherwise
+     */
+    @Nullable
+    public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V, A> graph, @Nonnull Collection<V> waypoints) {
+        Iterator<V> i = waypoints.iterator();
+        List<V> pathElements = new ArrayList<>(graph.getVertexCount());
+        if (!i.hasNext()) {
+            return null;
+        }
+        V start = i.next();
+        pathElements.add(start); // root element
+        while (i.hasNext()) {
+            V goal = i.next();
+            BackLinkWithArrow<V, A> back = breadthFirstSearchWithArrows(graph, start, goal);
+            if (back == null) {
+                return null;
+            } else {
+                int index = pathElements.size();
+                for (; back != null; back = back.parent) {
+                    pathElements.add(index, back.vertex);
+                }
+            }
+            start = goal;
+        }
+        return new VertexPath<>(pathElements);
+    }
+
     @Nullable
     public EdgePath<A> findIntShortestEdgePath(@Nonnull IntDirectedGraph<A> graph,
             int start, int goal, @Nonnull ToDoubleFunction<A> costf) {
@@ -277,11 +410,6 @@ public class DirectedGraphPathBuilder<V, A> {
         return new EdgePath<>(arrows);
     }
 
-    private PriorityQueue< IntNodeWithCost<A>> intFrontier;
-    private BitSet intExplored;
-    @SuppressWarnings({"rawtypes"})
-    private IntNodeWithCost[] intFrontierMap;
-
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     private IntNodeWithCost<A> findIntShortestPath(@Nonnull IntDirectedGraph< A> graph,
@@ -290,7 +418,7 @@ public class DirectedGraphPathBuilder<V, A> {
         if (intFrontierMap == null || intFrontierMap.length < vertexCount) {
             intFrontierMap = new IntNodeWithCost[vertexCount];
             intExplored = new BitSet(vertexCount);
-            intFrontier = new PriorityQueue<>();
+            intFrontier = new PriorityQueue<>(16);
         }
 
         IntNodeWithCost<A> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
@@ -314,6 +442,12 @@ public class DirectedGraphPathBuilder<V, A> {
             vertices.addFirst(parent.vertex);
         }
         return new VertexPath<>(vertices);
+    }
+
+    @Nullable
+    public EdgePath<A> findShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
+            @Nonnull V start, @Nonnull V goal) {
+        return findShortestEdgePath(graph, start, goal, costFunction);
     }
 
     /**
@@ -364,10 +498,16 @@ public class DirectedGraphPathBuilder<V, A> {
     @Nullable
     private NodeWithCost<V, A> findShortestPath(@Nonnull DirectedGraph<V, A> graph,
             @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
-        PriorityQueue< NodeWithCost<V, A>> frontier = new PriorityQueue<>();
+        PriorityQueue< NodeWithCost<V, A>> frontier = new PriorityQueue<>(16);
         Set<V> explored = new HashSet<>(graph.getVertexCount());
         Map<V, NodeWithCost<V, A>> frontierMap = new HashMap<>(graph.getVertexCount());
         return doFindShortestPath(start, frontier, frontierMap, goal, explored, graph, costf);
+    }
+
+    @Nullable
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+            @Nonnull V start, @Nonnull V goal) {
+        return findShortestVertexPath(graph, start, goal, costFunction);
     }
 
     /**
@@ -393,18 +533,6 @@ public class DirectedGraphPathBuilder<V, A> {
             return doFindIntShortestVertexPath(graph, start, goal, costf);
         } else {
             return doFindShortestVertexPath(graph, start, goal, costf);
-        }
-    }
-
-    @SuppressWarnings({"unchecked","rawtypes"})
-    private static void clear(IntNodeWithCost[] array) {
-        int len = array.length;
-        if (len > 0) {
-            array[0] = null;
-        }
-        for (int i = 1; i < len; i += i) {
-            System.arraycopy(array, 0, array, i,
-                    ((len - i) < i) ? (len - i) : i);
         }
     }
 
@@ -550,137 +678,16 @@ public class DirectedGraphPathBuilder<V, A> {
         }
     }
 
-    /**
-     * Breadth-first-search.
-     *
-     * @param <V> the vertex type
-     * @param graph a graph
-     * @param root the starting point of the search
-     * @param goal the goal of the search
-     * @param visited a predicate with side effect. The predicate returns true
-     * if the specified vertex has been visited, and marks the specified vertex
-     * as visited.
-     * @return a back link on success, null on failure
-     */
-    private static <V, E> BackLinkWithArrow<V, E> breadthFirstSearchWithArrows(DirectedGraph<V, E> graph, V root, V goal, Predicate<V> visited) {
-        Queue<BackLinkWithArrow<V, E>> queue = new ArrayDeque<>(max(1, min(graph.getVertexCount(), graph.getArrowCount())));
-        BackLinkWithArrow<V, E> rootBackLink = new BackLinkWithArrow<>(root, null, null);// temporaly allocated objects producing lots of garbage
-        visited.test(root);
-        queue.add(rootBackLink);
-        BackLinkWithArrow<V, E> current = null;
-        while (!queue.isEmpty()) {
-            current = queue.remove();
-            if (current.vertex == goal) {
-                break;
-            }
-            for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
-                V next = graph.getNext(current.vertex, i);
-                E arrow = graph.getArrow(current.vertex, i);
-                if (visited.test(next)) {
-                    BackLinkWithArrow<V, E> backLink = new BackLinkWithArrow<>(next, current, arrow);
-                    queue.add(backLink);
-                }
-            }
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void clear(IntNodeWithCost[] array) {
+        int len = array.length;
+        if (len > 0) {
+            array[0] = null;
         }
-        if (current == null || current.vertex != goal) {
-            return null;
+        for (int i = 1; i < len; i += i) {
+            System.arraycopy(array, 0, array, i,
+                    ((len - i) < i) ? (len - i) : i);
         }
-        return current;
-    }
-
-    /**
-     * Breadth-first-search.
-     *
-     * @param <V> the vertex type
-     * @param graph a graph
-     * @param root the starting point of the search
-     * @param goal the goal of the search
-     * @return the path elements. Returns an empty list if there is no path. The
-     * list is mutable.
-     */
-    private static <V, E> BackLinkWithArrow<V, E> breadthFirstSearchWithArrows(DirectedGraph<V, E> graph, V root, V goal) {
-        Set<V> visitedSet = new HashSet<>(graph.getVertexCount());// HashSet has a large O(1) cost.
-        return breadthFirstSearchWithArrows(graph, root, goal, visitedSet::add);
-    }
-    /**
-     * Builds a VertexPath through the graph which traverses the specified
-     * waypoints.
-     * <p>
-     * This method uses breadth first search. It returns the first path that it
-     * finds with this search strategy.
-     *
-     * @param graph a graph
-     * @param waypoints waypoints, the iteration sequence of this collection
-     * determines how the waypoints are traversed
-     * @return a VertexPath if traversal is possible
-     * @throws org.jhotdraw8.graph.PathBuilderException if traversal is not
-     * possible
-     */
-    @Nonnull
-    public VertexPath<V> buildAnyVertexPath(@Nonnull DirectedGraph<V,A> graph, @Nonnull Collection<V> waypoints) throws PathBuilderException {
-        Iterator<V> i = waypoints.iterator();
-        List<V> pathElements = new ArrayList<>(graph.getVertexCount());
-        if (!i.hasNext()) {
-            throw new PathBuilderException("No waypoints provided");
-        }
-        V start = i.next();
-        pathElements.add(start);
-        while (i.hasNext()) {
-            V goal = i.next();
-            BackLinkWithArrow<V,A> back = breadthFirstSearchWithArrows(graph, start, goal);
-            if (back == null) {
-                throw new PathBuilderException("Breadh first search stalled at vertex: " + goal
-                        + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
-            } else {
-                for (BackLinkWithArrow<V,A> b = back; b.vertex != start; b = b.parent) {
-                    pathElements.add(null);
-                }
-                int index = pathElements.size();
-                for (BackLinkWithArrow<V,A> b = back; b.vertex != start; b = b.parent) {
-                    pathElements.set(--index, b.vertex);
-                }
-            }
-
-            start = goal;
-        }
-        return new VertexPath<>(pathElements);
-    }
-
-    /**
-     * Builds a VertexPath through the graph which traverses the specified
-     * waypoints.
-     * <p>
-     * This method uses breadth first search. It returns the first path that it
-     * finds with this search strategy.
-     *
-     * @param graph a graph
-     * @param waypoints waypoints, the iteration sequence of this collection
-     * determines how the waypoints are traversed
-     * @return a VertexPath if traversal is possible, null otherwise
-     */
-    @Nullable
-    public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V,A> graph, @Nonnull Collection<V> waypoints) {
-        Iterator<V> i = waypoints.iterator();
-        List<V> pathElements = new ArrayList<>(graph.getVertexCount());
-        if (!i.hasNext()) {
-            return null;
-        }
-        V start = i.next();
-        pathElements.add(start); // root element
-        while (i.hasNext()) {
-            V goal = i.next();
-            BackLinkWithArrow<V,A> back = breadthFirstSearchWithArrows(graph, start, goal);
-            if (back == null) {
-                return null;
-            } else {
-                int index = pathElements.size();
-                for (; back != null; back = back.parent) {
-                    pathElements.add(index, back.vertex);
-                }
-            }
-            start = goal;
-        }
-        return new VertexPath<>(pathElements);
     }
 
 }

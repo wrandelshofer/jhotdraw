@@ -18,7 +18,7 @@ import javafx.scene.control.TreeItem;
  */
 public class ExpandedTreeItemIterator<T> implements Iterator<TreeItem<T>> {
 
-    private final Deque<Iterator<TreeItem<T>>> stack = new ArrayDeque<>();
+    private final Deque<Iterator<TreeItem<T>>> stack = new ArrayDeque<>(16);
 
     public ExpandedTreeItemIterator(TreeItem<T> root) {
         stack.push(Collections.singleton(root).iterator());

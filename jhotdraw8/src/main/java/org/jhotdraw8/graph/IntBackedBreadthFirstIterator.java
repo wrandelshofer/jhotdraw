@@ -26,7 +26,7 @@ public class IntBackedBreadthFirstIterator<V,A> implements Iterator<V> {
     public IntBackedBreadthFirstIterator(IntDirectedGraph<A> graph, IntFunction<V> intToV, int root) {
         this.graph = graph;
         this.intToV=intToV;
-        queue = new ArrayDeque<>(graph.getArrowCount());
+        queue = new ArrayDeque<>(16);
         visited = new BitSet(graph.getVertexCount());
         queue.add(root);
         visited.set(root);
