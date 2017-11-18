@@ -63,7 +63,7 @@ public class DirectedGraphPathBuilder<V, A> {
      * as visited.
      * @return a back link on success, null on failure
      */
-    private BackLinkWithArrow<V, A> breadthFirstSearchWithArrows(DirectedGraph<V, A> graph, V root, V goal, Predicate<V> visited) {
+    private BackLinkWithArrow<V, A> breadthFirstSearch(DirectedGraph<V, A> graph, V root, V goal, Predicate<V> visited) {
         if (queue == null) {
             queue = new ArrayDeque<>(16);
         }
@@ -102,11 +102,11 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return the path elements. Returns an empty list if there is no path. The
      * list is mutable.
      */
-    private BackLinkWithArrow<V, A> breadthFirstSearchWithArrows(DirectedGraph<V, A> graph, V root, V goal) {
+    private BackLinkWithArrow<V, A> breadthFirstSearch(DirectedGraph<V, A> graph, V root, V goal) {
         if (visitedSet == null) {
             visitedSet = new HashSet<>();
         }
-        BackLinkWithArrow<V, A> result = breadthFirstSearchWithArrows(graph, root, goal, visitedSet::add);
+        BackLinkWithArrow<V, A> result = breadthFirstSearch(graph, root, goal, visitedSet::add);
         visitedSet.clear();
         return result;
     }
@@ -128,7 +128,7 @@ public class DirectedGraphPathBuilder<V, A> {
     @Nonnull
     public VertexPath<V> buildAnyVertexPath(@Nonnull DirectedGraph<V, A> graph, @Nonnull Collection<V> waypoints) throws PathBuilderException {
         Iterator<V> i = waypoints.iterator();
-        List<V> pathElements = new ArrayList<>(graph.getVertexCount());
+        List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
             throw new PathBuilderException("No waypoints provided");
         }
@@ -136,7 +136,7 @@ public class DirectedGraphPathBuilder<V, A> {
         pathElements.add(start);
         while (i.hasNext()) {
             V goal = i.next();
-            BackLinkWithArrow<V, A> back = breadthFirstSearchWithArrows(graph, start, goal);
+            BackLinkWithArrow<V, A> back = breadthFirstSearch(graph, start, goal);
             if (back == null) {
                 throw new PathBuilderException("Breadh first search stalled at vertex: " + goal
                         + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
@@ -318,7 +318,7 @@ public class DirectedGraphPathBuilder<V, A> {
     public EdgePath<A> findAnyEdgePath(@Nonnull DirectedGraph<V, A> graph,
             @Nonnull V start, @Nonnull V goal) {
         Deque<A> arrows = new ArrayDeque<>();
-        BackLinkWithArrow<V, A> current = breadthFirstSearchWithArrows(graph, start, goal);
+        BackLinkWithArrow<V, A> current = breadthFirstSearch(graph, start, goal);
         if (current == null) {
             return null;
         }
@@ -348,7 +348,7 @@ public class DirectedGraphPathBuilder<V, A> {
     public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V, A> graph,
             @Nonnull V start, @Nonnull V goal) {
         Deque<V> vertices = new ArrayDeque<>();
-        BackLinkWithArrow<V, A> current = breadthFirstSearchWithArrows(graph, start, goal);
+        BackLinkWithArrow<V, A> current = breadthFirstSearch(graph, start, goal);
         if (current == null) {
             return null;
         }
@@ -373,7 +373,7 @@ public class DirectedGraphPathBuilder<V, A> {
     @Nullable
     public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V, A> graph, @Nonnull Collection<V> waypoints) {
         Iterator<V> i = waypoints.iterator();
-        List<V> pathElements = new ArrayList<>(graph.getVertexCount());
+        List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
             return null;
         }
@@ -381,7 +381,7 @@ public class DirectedGraphPathBuilder<V, A> {
         pathElements.add(start); // root element
         while (i.hasNext()) {
             V goal = i.next();
-            BackLinkWithArrow<V, A> back = breadthFirstSearchWithArrows(graph, start, goal);
+            BackLinkWithArrow<V, A> back = breadthFirstSearch(graph, start, goal);
             if (back == null) {
                 return null;
             } else {
