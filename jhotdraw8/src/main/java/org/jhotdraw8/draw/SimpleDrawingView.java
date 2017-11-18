@@ -7,8 +7,8 @@ import java.io.IOException;
 import static java.lang.Math.max;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,14 +108,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private boolean constrainerNodeValid;
     /**
      * This is the set of figures which are out of sync with their JavaFX node.
-     * We do not wrap the IdentityHashMap into a Set to avoid an additional
-     * level of indirection.
      */
     private final Set<Figure> dirtyFigureNodes = new HashSet<>();
     /**
      * This is the set of handles which are out of sync with their JavaFX node.
-     * We do not wrap the IdentityHashMap into a Set to avoid an additional
-     * level of indirection.
      */
     private final Set<Figure> dirtyHandles = new HashSet<>();
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
@@ -145,7 +141,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Figure is represented by multiple nodes. Then only the parent of these
      * nodes is associated with the figure.
      */
-    private final Map<Figure, Node> figureToNodeMap = new IdentityHashMap<>();
+    private final Map<Figure, Node> figureToNodeMap = new HashMap<>();
     /**
      * This is just a wrapper around the focusedProperty of the JavaFX Node
      * which is used to render this view.
@@ -155,7 +151,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final Map<Figure, List<Handle>> handles = new IdentityHashMap<>();
+    private final Map<Figure, List<Handle>> handles = new HashMap<>();
     private boolean handlesAreValid;
     private Group handlesPane;
     /**
@@ -230,7 +226,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * Maps each JavaFX node to a figure in the drawing.
      */
-    private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();
+    private final Map<Node, Figure> nodeToFigureMap = new HashMap<>();
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
@@ -685,7 +681,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle master) {
         validateHandles();
-        Map<Figure, Figure> result = new IdentityHashMap<>();
+        Map<Figure, Figure> result = new HashMap<>();
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
             if (figures.contains(entry.getKey())) {
                 for (Handle h : entry.getValue()) {

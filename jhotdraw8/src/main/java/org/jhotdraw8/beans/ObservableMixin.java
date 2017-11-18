@@ -15,7 +15,8 @@ import javax.annotation.Nonnull;
  * @version $Id$
  */
 public interface ObservableMixin extends Observable {
-     CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() ;
+
+    CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
 
     @Override
     default void addListener(@Nonnull InvalidationListener listener) {
@@ -29,25 +30,31 @@ public interface ObservableMixin extends Observable {
 
     /**
      * Notifies all registered invalidation listeners.
-     * 
-     * @param o observable. Will not be used. Listeners are notified with "this" as the observable.
+     *
+     * @param o observable. Will not be used. Listeners are notified with "this"
+     * as the observable.
      */
     default void fireInvalidated(@Nonnull Observable o) {
         invalidated();
-        for (InvalidationListener l : getInvalidationListeners()) {
-            l.invalidated(this);
+        final CopyOnWriteArrayList<InvalidationListener> listeners = getInvalidationListeners();
+        if (!listeners.isEmpty()) {
+            for (InvalidationListener l : listeners) {
+                l.invalidated(this);
+            }
         }
     }
+
     default void fireInvalidated() {
         fireInvalidated(this);
     }
-    
-        /**
+
+    /**
      * The method {@code invalidated()} can be overridden to receive
      * invalidation notifications. This is the preferred option in
      * {@code Objects} defining the property, because it requires less memory.
-*
-* The default implementation is empty.
+     *
+     * The default implementation is empty.
      */
-    default  void invalidated() {}
+    default void invalidated() {
+    }
 }

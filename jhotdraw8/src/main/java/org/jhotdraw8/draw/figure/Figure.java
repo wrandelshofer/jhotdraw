@@ -166,7 +166,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         double maxy = Double.NEGATIVE_INFINITY;
 
         for (Figure f : selection) {
-            Bounds fb = f.getLocalToWorld().transform(f.getBoundsInLocal());
+            Bounds fb = Transforms.transform(f.getLocalToWorld(), f.getBoundsInLocal());
             double v = fb.getMaxX();
             if (v > maxx) {
                 maxx = v;
@@ -985,7 +985,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its local bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -1028,7 +1028,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its parent bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
