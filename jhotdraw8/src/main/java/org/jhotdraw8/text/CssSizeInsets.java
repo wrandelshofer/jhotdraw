@@ -16,10 +16,10 @@ import org.jhotdraw8.io.UnitConverter;
  */
 public class CssSizeInsets {
 
-    private final CssSize top;
-    private final CssSize right;
     private final CssSize bottom;
     private final CssSize left;
+    private final CssSize right;
+    private final CssSize top;
 
     public CssSizeInsets(CssSize top, CssSize right, CssSize bottom, CssSize left) {
         this.top = top;
@@ -67,6 +67,28 @@ public class CssSizeInsets {
         return bottom;
     }
 
+    /**
+     * Converts values using the specified width and heights for converting
+     * percentages in the insets.
+     *
+     * @param width the width for computing percentages for left and right
+     * insets
+     * @param height the height for computing percentages for top and bottom
+     * insets
+     * @return the converted value
+     */
+    public Insets getConvertedValue(double width, double height) {
+        final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
+        final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);
+        return new Insets(heightConverter.convert(top, null), widthConverter.convert(right, null),
+                heightConverter.convert(bottom, null), widthConverter.convert(left, null));
+    }
+
+    public Insets getDefaultConvertedValue() {
+        return new Insets(top.getConvertedValue(), right.getConvertedValue(),
+                bottom.getConvertedValue(), left.getConvertedValue());
+    }
+
     public CssSize getLeft() {
         return left;
     }
@@ -89,25 +111,4 @@ public class CssSizeInsets {
         return hash;
     }
 
-    public Insets getDefaultConvertedValue() {
-        return new Insets(top.getConvertedValue(), right.getConvertedValue(),
-                bottom.getConvertedValue(), left.getConvertedValue());
-    }
-
-    /**
-     * Converts values using the specified width and heights for converting
-     * percentages in the insets.
-     *
-     * @param width the width for computing percentages for left and right
-     * insets
-     * @param height the height for computing percentages for top and bottom
-     * insets
-     * @return the converted value
-     */
-    public Insets getConvertedValue(double width, double height) {
-        final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
-        final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);
-        return new Insets(heightConverter.convert(top, null), widthConverter.convert(right, null),
-                heightConverter.convert(bottom, null), widthConverter.convert(left, null));
-    }
 }
