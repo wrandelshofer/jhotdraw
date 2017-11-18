@@ -213,11 +213,10 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
     private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
     private final Map<K, StyledValue> backingMap;
-    private Map<K, V> styledMap;
 
     public StyleableMap() {
         this.backingMap = new IdentityHashMap<>();
-                }
+    }
 
     private class SimpleChange extends MapChangeListener.Change<K, V> {
 
@@ -395,22 +394,19 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
      * @return a map
      */
     public Map<K, V> getStyledMap() {
-        if (styledMap == null) {
-            styledMap = new MapAdapter<K, V>() {
-                @Override
-                @SuppressWarnings("unchecked")
-                public boolean containsKey(Object key) {
-                    return containsStyledKey((K) key);
-                }
+        return new MapAdapter<K, V>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean containsKey(Object key) {
+                return containsStyledKey((K) key);
+            }
 
-                @Override
-                @SuppressWarnings("unchecked")
-                public V get(Object key) {
-                    return getStyled((K) key);
-                }
-            };
-        }
-        return styledMap;
+            @Override
+            @SuppressWarnings("unchecked")
+            public V get(Object key) {
+                return getStyled((K) key);
+            }
+        };
     }
 
     /**
@@ -489,7 +485,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             sv.setValue(o, value);
             callObservers(o, false, change);
         }
-            return ret;
+        return ret;
     }
 
     /**
