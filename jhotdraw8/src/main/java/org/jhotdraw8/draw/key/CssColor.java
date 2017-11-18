@@ -23,6 +23,9 @@ public class CssColor implements Paintable {
     private final String name;
     private final Color color;
 
+    public final static CssColor BLACK=CssColor.valueOf("black");
+    public final static CssColor WHITE=CssColor.valueOf("white");
+    
     public CssColor(Color color) {
         this(null, color);
     }
