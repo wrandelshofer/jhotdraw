@@ -5,6 +5,7 @@ package org.jhotdraw8.graph;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Deque;
@@ -418,13 +419,15 @@ public class DirectedGraphPathBuilder<V, A> {
         if (intFrontierMap == null || intFrontierMap.length < vertexCount) {
             intFrontierMap = new IntNodeWithCost[vertexCount];
             intExplored = new BitSet(vertexCount);
+        }
+        if (intFrontier == null ) {
             intFrontier = new PriorityQueue<>(16);
         }
 
         IntNodeWithCost<A> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
         intFrontier.clear();
         intExplored.clear();
-        clear(intFrontierMap);
+        Arrays.fill(intFrontierMap,null);// clears array to prevent build-up of garbage
         return result;
     }
 
@@ -677,17 +680,4 @@ public class DirectedGraphPathBuilder<V, A> {
             return hash;
         }
     }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void clear(IntNodeWithCost[] array) {
-        int len = array.length;
-        if (len > 0) {
-            array[0] = null;
-        }
-        for (int i = 1; i < len; i += i) {
-            System.arraycopy(array, 0, array, i,
-                    ((len - i) < i) ? (len - i) : i);
-        }
-    }
-
 }
