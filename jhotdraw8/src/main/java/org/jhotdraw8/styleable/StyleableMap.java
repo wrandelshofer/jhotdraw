@@ -4,7 +4,7 @@
 package org.jhotdraw8.styleable;
 
 import java.util.Collection;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -215,7 +215,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     private final Map<K, StyledValue> backingMap;
 
     public StyleableMap() {
-        this.backingMap = new IdentityHashMap<>();
+        this.backingMap = new HashMap<>();
     }
 
     private class SimpleChange extends MapChangeListener.Change<K, V> {
