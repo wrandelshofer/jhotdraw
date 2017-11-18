@@ -159,7 +159,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return bounds
      */
     @Nonnull
-    public static Bounds bounds(@Nonnull Collection<Figure> selection) {
+    public static Bounds bounds(@Nonnull Collection<? extends Figure> selection) {
         double minx = Double.POSITIVE_INFINITY;
         double miny = Double.POSITIVE_INFINITY;
         double maxx = Double.NEGATIVE_INFINITY;
