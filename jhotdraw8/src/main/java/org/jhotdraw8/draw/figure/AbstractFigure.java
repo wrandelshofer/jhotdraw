@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -41,7 +42,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     private final Map<? super Key<?>, Object> cachedValues = new HashMap<>();
 
     private ObservableSet<Figure> dependentFigures;
-    private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
+    private final ObjectProperty<Figure> parent = new ObjectPropertyBase<Figure>() {
 
         @Override
         protected void fireValueChangedEvent() {
@@ -51,14 +52,25 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
             super.fireValueChangedEvent();
         }
 
+        @Override
+        public Object getBean() {
+            return AbstractFigure.this;
+        }
+
+        @Override
+        public String getName() {
+            return PARENT_PROPERTY;
+        }
+
     };
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
 
-    /** This method calls {@link #doAddNotify}.*/
+    /**
+     * This method calls {@link #doAddNotify}.
+     */
     @Override
-    final
-    public void addNotify(Drawing drawing) {
-        this.drawing=drawing;
+    final public void addNotify(Drawing drawing) {
+        this.drawing = drawing;
         doAddNotify(drawing);
     }
 
@@ -98,24 +110,29 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    final
-    public Drawing getDrawing() {
+    final public Drawing getDrawing() {
         return drawing;
     }
-    
-   /** This method is called by {@link #addNotify}. The implementation of this class is empty.
+
+    /**
+     * This method is called by {@link #addNotify}. The implementation of this
+     * class is empty.
+     *
      * @param drawing the drawing
      */
-   protected void doAddNotify(@Nonnull Drawing drawing) {
-       
-   }
-   /** This method is called by {@link #removeNotify}. The implementation of this class is empty.
+    protected void doAddNotify(@Nonnull Drawing drawing) {
+
+    }
+
+    /**
+     * This method is called by {@link #removeNotify}. The implementation of
+     * this class is empty.
+     *
      * @param drawing the drawing
      */
-   protected void doRemoveNotify(@Nonnull Drawing drawing) {
-       
-   }
-    
+    protected void doRemoveNotify(@Nonnull Drawing drawing) {
+
+    }
 
     @Override
     public final ObservableSet<Figure> getLayoutObservers() {
@@ -222,19 +239,17 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         // empty
     }
 
-    /** This method calls {@link #doAddNotify}.*/
+    /**
+     * This method calls {@link #doAddNotify}.
+     */
     @Override
-    final
-    public void removeNotify(Drawing drawing) {
-       this.drawing=null;
-       doRemoveNotify(drawing);
+    final public void removeNotify(Drawing drawing) {
+        this.drawing = null;
+        doRemoveNotify(drawing);
     }
-    
-    
+
     @Nullable
     private Drawing drawing;
-    
-    
 
     @Override
     public <T> T setCachedValue(Key<T> key, T value) {
