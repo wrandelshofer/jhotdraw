@@ -220,7 +220,7 @@ public class TransformHandleKit {
     private static class NorthEastHandle extends AbstractTransformHandle {
 
         NorthEastHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.northEast(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.NORTH_EAST, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -251,7 +251,7 @@ public class TransformHandleKit {
     private static class EastHandle extends AbstractTransformHandle {
 
         EastHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.east(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.EAST, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -275,7 +275,7 @@ public class TransformHandleKit {
     private static class NorthHandle extends AbstractTransformHandle {
 
         NorthHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.north(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.NORTH, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -299,7 +299,7 @@ public class TransformHandleKit {
     private static class NorthWestHandle extends AbstractTransformHandle {
 
         NorthWestHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.northWest(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.NORTH_WEST, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -329,7 +329,7 @@ public class TransformHandleKit {
     private static class SouthEastHandle extends AbstractTransformHandle {
 
         SouthEastHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.southEast(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.SOUTH_EAST, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -358,7 +358,7 @@ public class TransformHandleKit {
     private static class SouthHandle extends AbstractTransformHandle {
 
         SouthHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.south(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.SOUTH, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -381,7 +381,7 @@ public class TransformHandleKit {
     private static class SouthWestHandle extends AbstractTransformHandle {
 
         SouthWestHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.southWest(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.SOUTH_WEST, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -410,7 +410,7 @@ public class TransformHandleKit {
     private static class WestHandle extends AbstractTransformHandle {
 
         WestHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.west(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.WEST, REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override

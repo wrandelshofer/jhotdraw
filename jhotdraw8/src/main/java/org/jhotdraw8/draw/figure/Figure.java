@@ -340,10 +340,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             list.add(new AnchorOutlineHandle(this, Handle.STYLECLASS_HANDLE_LEAD_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new MoveHandle(this, RelativeLocator.northEast()));
-            list.add(new MoveHandle(this, RelativeLocator.northWest()));
-            list.add(new MoveHandle(this, RelativeLocator.southEast()));
-            list.add(new MoveHandle(this, RelativeLocator.southWest()));
+            list.add(new MoveHandle(this, RelativeLocator.NORTH_EAST));
+            list.add(new MoveHandle(this, RelativeLocator.NORTH_WEST));
+            list.add(new MoveHandle(this, RelativeLocator.SOUTH_EAST));
+            list.add(new MoveHandle(this, RelativeLocator.SOUTH_WEST));
         } else if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
@@ -353,10 +353,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
                 ResizeHandleKit.addEdgeResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
             } else {
-                list.add(new MoveHandle(this, RelativeLocator.northEast(), Handle.STYLECLASS_HANDLE_RESIZE));
-                list.add(new MoveHandle(this, RelativeLocator.northWest(), Handle.STYLECLASS_HANDLE_RESIZE));
-                list.add(new MoveHandle(this, RelativeLocator.southEast(), Handle.STYLECLASS_HANDLE_RESIZE));
-                list.add(new MoveHandle(this, RelativeLocator.southWest(), Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, RelativeLocator.NORTH_EAST, Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, RelativeLocator.NORTH_WEST, Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, RelativeLocator.SOUTH_EAST, Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, RelativeLocator.SOUTH_WEST, Handle.STYLECLASS_HANDLE_RESIZE));
 
             }
         } else if (handleType == HandleType.TRANSFORM) {

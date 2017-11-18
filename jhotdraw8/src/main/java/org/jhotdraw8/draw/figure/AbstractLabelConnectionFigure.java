@@ -135,10 +135,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             if (get(LABEL_CONNECTOR) == null) {
-                list.add(new MoveHandle(this, RelativeLocator.northEast()));
-                list.add(new MoveHandle(this, RelativeLocator.northWest()));
-                list.add(new MoveHandle(this, RelativeLocator.southEast()));
-                list.add(new MoveHandle(this, RelativeLocator.southWest()));
+                list.add(new MoveHandle(this, RelativeLocator.NORTH_EAST));
+                list.add(new MoveHandle(this, RelativeLocator.NORTH_WEST));
+                list.add(new MoveHandle(this, RelativeLocator.SOUTH_EAST));
+                list.add(new MoveHandle(this, RelativeLocator.SOUTH_WEST));
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));

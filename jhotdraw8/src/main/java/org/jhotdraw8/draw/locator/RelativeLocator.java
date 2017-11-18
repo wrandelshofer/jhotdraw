@@ -16,6 +16,17 @@ import org.jhotdraw8.geom.Geom;
  */
 public class RelativeLocator extends AbstractLocator {
 
+    public static final RelativeLocator CENTER = new RelativeLocator(0.5, 0.5);
+
+    public static final RelativeLocator EAST = new RelativeLocator(1.0, 0.5);
+    public static final RelativeLocator NORTH = new RelativeLocator(0.5, 0.0);
+    public static final RelativeLocator NORTH_EAST = new RelativeLocator(1.0, 0.0);
+    public static final RelativeLocator NORTH_WEST = new RelativeLocator(0.0, 0.0);
+    public static final RelativeLocator SOUTH = new RelativeLocator(0.5, 1.0);
+    public static final RelativeLocator SOUTH_EAST = new RelativeLocator(1.0, 1.0);
+    public static final RelativeLocator SOUTH_WEST = new RelativeLocator(0.0, 1.0);
+    public static final RelativeLocator WEST = new RelativeLocator(0.0, 0.5);
+
     private static final long serialVersionUID = 1L;
     /**
      * Relative x-coordinate on the bounds of the figure. The value 0 is on the
@@ -82,87 +93,6 @@ public class RelativeLocator extends AbstractLocator {
                 bounds.getMinY() + bounds.getHeight() * relativeY
         );
         return location;
-    }
-
-    /**
-     * East.
-     *
-     * @return locator
-     */
-    static public Locator east() {
-        return new RelativeLocator(1.0, 0.5);
-    }
-
-    /**
-     * North.
-     *
-     * @return locator
-     */
-    static public Locator north() {
-        return new RelativeLocator(0.5, 0.0);
-    }
-
-    /**
-     * West.
-     *
-     * @return locator
-     */
-    static public Locator west() {
-        return new RelativeLocator(0.0, 0.5);
-    }
-
-    /**
-     * North East.
-     *
-     * @return locator
-     */
-    static public Locator northEast() {
-        return new RelativeLocator(1.0, 0.0);
-    }
-
-    /**
-     * North West.
-     *
-     * @return locator
-     */
-    static public Locator northWest() {
-        return new RelativeLocator(0.0, 0.0);
-    }
-
-    /**
-     * South.
-     *
-     * @return locator
-     */
-    static public Locator south() {
-        return new RelativeLocator(0.5, 1.0);
-    }
-
-    /**
-     * South East.
-     *
-     * @return locator
-     */
-    static public Locator southEast() {
-        return new RelativeLocator(1.0, 1.0);
-    }
-
-    /**
-     * South West.
-     *
-     * @return locator
-     */
-    static public Locator southWest() {
-        return new RelativeLocator(0.0, 1.0);
-    }
-
-    /**
-     * Center.
-     *
-     * @return locator
-     */
-    static public Locator center() {
-        return new RelativeLocator(0.5, 0.5);
     }
 
     @Override
