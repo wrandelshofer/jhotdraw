@@ -16,7 +16,7 @@ import javafx.collections.SetChangeListener;
 import static org.jhotdraw8.collection.ImmutableList.emptyList;
 
 /**
- * ImmutableSet.
+ * ImmutableSet preserves insertion order of items.
  *
  * @author Werner Randelshofer
  * @version $Id$
