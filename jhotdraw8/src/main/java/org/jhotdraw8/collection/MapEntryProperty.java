@@ -21,7 +21,6 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
 
     protected K key;
     protected ObservableMap<K, V> map;
-    protected MapChangeListener<K, V> mapListener;
     protected Class<T> tClazz;
     private WeakMapChangeListener<K, V> weakListener;
 
@@ -31,7 +30,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
         this.tClazz = tClazz;
 
         if (key != null) {
-            this.mapListener = (MapChangeListener.Change<? extends K, ? extends V> change) -> {
+            MapChangeListener<K, V> mapListener= (MapChangeListener.Change<? extends K, ? extends V> change) -> {
                 if (this.key.equals(change.getKey())) {
                     if (change.wasAdded()) {// was added, or removed and then added
                         @SuppressWarnings("unchecked")
@@ -75,7 +74,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
         super.unbind();
         if (map != null) {
             map.removeListener(weakListener);
-            mapListener = null;
+            weakListener = null;
             map = null;
             key = null;
         }
