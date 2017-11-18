@@ -15,13 +15,11 @@ import javafx.collections.ObservableMap;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class KeyMapEntryProperty<V> extends  ObjectPropertyBase<V> {
-    protected ObservableMap<Key<?>, Object> map;
-
+public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V>{
     private final MapAccessor<V> accessor;
 
     public KeyMapEntryProperty(ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
-        this.map=map;
+       super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getValueType());
         this.accessor = key;
     }
 
