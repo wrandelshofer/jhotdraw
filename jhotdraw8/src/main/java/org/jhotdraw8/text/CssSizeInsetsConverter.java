@@ -72,7 +72,7 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
 
     @Override
     public CssSizeInsets getDefaultValue() {
-        return new CssSizeInsets();
+        return  CssSizeInsets.ZERO;
     }
 
 }

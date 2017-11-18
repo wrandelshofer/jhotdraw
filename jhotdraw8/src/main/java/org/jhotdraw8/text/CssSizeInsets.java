@@ -16,6 +16,8 @@ import org.jhotdraw8.io.UnitConverter;
  */
 public class CssSizeInsets {
 
+    public final static CssSizeInsets ZERO = new CssSizeInsets();
+
     private final CssSize bottom;
     private final CssSize left;
     private final CssSize right;
