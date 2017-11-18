@@ -23,7 +23,7 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 public class PathConnector extends LocatorConnector {
 
     public PathConnector() {
-        super(new RelativeLocator(0.5, 0.5));
+        super(RelativeLocator.CENTER);
     }
 
     public PathConnector(Locator locator) {

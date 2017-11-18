@@ -25,7 +25,7 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 public class RectangleConnector extends LocatorConnector {
 
     public RectangleConnector() {
-        super(new RelativeLocator(0.5,0.5));
+        super( RelativeLocator.CENTER);
     }
 public RectangleConnector(Locator locator) {
         super(locator);

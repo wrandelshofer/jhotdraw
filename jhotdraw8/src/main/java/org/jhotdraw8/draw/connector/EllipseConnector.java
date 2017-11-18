@@ -24,7 +24,7 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 public class EllipseConnector extends LocatorConnector {
 
     public EllipseConnector() {
-        super(new RelativeLocator(0.5, 0.5));
+        super(RelativeLocator.CENTER);
     }
 
     public EllipseConnector(Locator locator) {
