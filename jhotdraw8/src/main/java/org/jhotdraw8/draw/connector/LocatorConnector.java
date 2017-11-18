@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.locator.Locator;
  */
 public class LocatorConnector extends AbstractConnector {
 
-    private Locator locator;
+    private final Locator locator;
 
     /**
      * Creates a new instance
