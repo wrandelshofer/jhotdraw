@@ -90,7 +90,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
                 if ("none".equals(tt.currentStringValue())) {
                     tt.skipWhitespace();
                     in.position(tt.getStartPosition());
-                    return new RegexReplace();
+                    return null;
                 } else {
                     throw new ParseException("\"replace(\" or \"none\" expected", tt.getStartPosition());
                 }
@@ -135,7 +135,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
 
     @Override
     public RegexReplace getDefaultValue() {
-        return new RegexReplace();
+        return null;
     }
 
 }
