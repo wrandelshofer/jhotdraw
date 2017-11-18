@@ -4,6 +4,7 @@
 package org.jhotdraw8.collection;
 
 import javafx.beans.binding.MapExpression;
+import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -17,7 +18,7 @@ import javafx.collections.WeakMapChangeListener;
  * @param <V> map value type
  * @param <T> entry value type
  */
-public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T> {
+public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T> {
 
     protected K key;
     protected ObservableMap<K, V> map;
@@ -67,6 +68,16 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
         // Note: super must be called after "put", so that listeners
         //       can be properly informed.
         super.set(value);
+    }
+
+    @Override
+    public Object getBean() {
+        return map;
+    }
+
+    @Override
+    public String getName() {
+        return key.toString();
     }
 
     @Override
