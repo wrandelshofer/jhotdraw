@@ -18,7 +18,8 @@ import javafx.collections.WeakMapChangeListener;
  * @param <V> map value type
  * @param <T> entry value type
  */
-public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T> {
+public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T> 
+implements MapChangeListener< K, V> {
 
     protected K key;
     protected ObservableMap<K, V> map;
@@ -30,24 +31,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T> {
         this.key = key;
         this.tClazz = tClazz;
 
-        if (key != null) {
-            MapChangeListener<K, V> mapListener= (MapChangeListener.Change<? extends K, ? extends V> change) -> {
-                if (this.key.equals(change.getKey())) {
-                    if (change.wasAdded()) {// was added, or removed and then added
-                        @SuppressWarnings("unchecked")
-                        T valueAdded = (T) change.getValueAdded();
-                        if (super.get() != valueAdded) {
-                            set(valueAdded);
-                        }
-                    } else if (change.wasRemoved()) {// was removed but not added
-                        if (super.get() != null) {
-                            set(null);
-                        }
-                    }
-                }
-            };
-            map.addListener(weakListener = new WeakMapChangeListener<>(mapListener));
-        }
+        map.addListener(weakListener = new WeakMapChangeListener<>(this));
     }
 
     @Override
@@ -79,6 +63,22 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T> {
     public String getName() {
         return key.toString();
     }
+
+    @Override
+    public void onChanged(Change<? extends K, ? extends V> change) {
+ if (this.key.equals(change.getKey())) {
+                if (change.wasAdded()) {// was added, or removed and then added
+                    @SuppressWarnings("unchecked")
+                    T valueAdded = (T) change.getValueAdded();
+                    if (super.get() != valueAdded) {
+                        set(valueAdded);
+                    }
+                } else if (change.wasRemoved()) {// was removed but not added
+                    if (super.get() != null) {
+                        set(null);
+                    }
+                }
+            }    }
 
     @Override
     public void unbind() {

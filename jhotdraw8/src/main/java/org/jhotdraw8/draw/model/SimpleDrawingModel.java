@@ -138,13 +138,13 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
      */
     @SuppressWarnings("unchecked")
     private void onPropertyChangedOLD(FigurePropertyChangeEvent event) {
-        if (event.getType() == FigurePropertyChangeEvent.EventType.WILL_CHANGE) {
+       /* if (event.getType() == FigurePropertyChangeEvent.EventType.WILL_CHANGE) {
             Key<?> k = event.getKey();
             if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
                 layoutSubjectChange.clear();
                 layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
             }
-        } else if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
+        } else*/ if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     (Key<Object>) event.getKey(), event.getOldValue(),
                     event.getNewValue()));

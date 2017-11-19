@@ -3,7 +3,9 @@
  */
 package org.jhotdraw8.styleable;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
@@ -18,19 +20,23 @@ import org.jhotdraw8.collection.MapAccessor;
  * @version $Id$
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
+    private final static Map<Class<?>,Map<Key<?>,Integer>> keyMaps=new ConcurrentHashMap<>();
 
     /**
      * Holds the properties.
      */
     // protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
-    protected final StyleableMap<Key<?>, Object> properties = new StyleableMap<Key<?>, Object>() {
+    //protected final StyleableMap<Key<?>, Object> properties = new OldStyleableMap<Key<?>, Object>() {
+    protected final StyleableMap<Key<?>, Object> properties = new SimpleStyleableMap<Key<?>, Object>(
+    keyMaps.computeIfAbsent(getClass(), k->new HashMap<>())
+    ) {
 
         @Override
         @SuppressWarnings("unchecked")
-        protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
+        protected void callObservers(StyleOrigin origin,  MapChangeListener.Change<Key<?>, Object> change) {
             changed((Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
-            AbstractStyleablePropertyBean.this.callObservers(origin, willChange, change);
-            super.callObservers(origin, willChange, change);
+            AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
+            super.callObservers(origin,  change);
         }
 
     };

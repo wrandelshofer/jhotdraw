@@ -1,0 +1,1115 @@
+/* @(#)OldStyleableMap.java
+ * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ */
+package org.jhotdraw8.styleable;
+
+import java.util.AbstractCollection;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import javafx.beans.InvalidationListener;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
+import javafx.css.StyleOrigin;
+
+/**
+ * {@code OldStyleableMap} is a map which stores separate values for each
+ * {@code StyleOrigin}.
+ * <p>
+ * XXX delete this class.
+ *
+ * @author Werner Randelshofer
+ * @param <K> key type
+ * @param <V> value type
+ */
+public class OldStyleableMap<K, V> implements StyleableMap<K, V> {
+
+    private static class MapAdapter<K, V> implements Map<K, V> {
+
+        @Override
+        public int size() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean isEmpty() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean containsKey(Object key) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean containsValue(Object value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public V get(Object key) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public V put(K key, V value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public V remove(Object key) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void putAll(Map<? extends K, ? extends V> m) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public Set<K> keySet() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public Collection<V> values() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public Set<Entry<K, V>> entrySet() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+    }
+
+    private static class StyledValue {
+
+        /**
+         * Magic value object to indicate that we have not stored a value.
+         */
+        private final static Object NO_VALUE = new Object();
+        private final static StyleOrigin[] ORIGINS = StyleOrigin.values();
+        private int origin = -1;
+        /**
+         * Contains a slot for each of the four possible origins. The ordinal
+         * number of StyleOrigin is used as an index.
+         */
+        private Object value0 = NO_VALUE;
+        private Object value1 = NO_VALUE;
+        private Object value2 = NO_VALUE;
+        private Object value3 = NO_VALUE;
+
+        public <T> T removeValue(StyleOrigin origin) {
+            if (hasValue(origin)) {
+                int i = origin.ordinal();
+                @SuppressWarnings("unchecked")
+                T oldValue = (T) setValue(i, NO_VALUE);
+                if (this.origin == origin.ordinal()) {
+                    this.origin = -1;
+                    for (int j = origin.ordinal(); j >= 0; j--) {
+                        if (getValue(j) != NO_VALUE) {
+                            this.origin = j;
+                            break;
+                        }
+                    }
+                }
+                return oldValue;
+            } else {
+                return null;
+            }
+        }
+
+        private Object getValue(int index) {
+            switch (index) {
+                case 0:
+                    return value0;
+                case 1:
+                    return value1;
+                case 2:
+                    return value2;
+                case 3:
+                    return value3;
+                default:
+                    throw new ArrayIndexOutOfBoundsException(index);
+            }
+        }
+
+        private Object setValue(int index, Object newValue) {
+            Object oldValue;
+            switch (index) {
+                case 0:
+                    oldValue = value0;
+                    value0 = newValue;
+                    break;
+                case 1:
+                    oldValue = value1;
+                    value1 = newValue;
+                    break;
+                case 2:
+                    oldValue = value2;
+                    value2 = newValue;
+                    break;
+                case 3:
+                    oldValue = value3;
+                    value3 = newValue;
+                    break;
+                default:
+                    throw new ArrayIndexOutOfBoundsException(index);
+            }
+            return oldValue;
+        }
+
+        public <T> T setValue(StyleOrigin origin, T newValue) {
+            int i = origin.ordinal();
+            @SuppressWarnings("unchecked")
+            T oldValue = (T) setValue(i, newValue);
+            if (this.origin == -1 || origin.ordinal() > this.origin) {
+                this.origin = origin.ordinal();
+            }
+            return oldValue;
+        }
+
+        public boolean hasValue(StyleOrigin origin) {
+            return getValue(origin.ordinal()) != NO_VALUE;
+        }
+
+        public boolean isEmpty() {
+            return origin == -1;
+        }
+
+        private <T> T getValue(StyleOrigin styleOrigin) {
+            @SuppressWarnings("unchecked")
+            T ret = styleOrigin == null ? null : (T) getValue(styleOrigin.ordinal());
+            return ret;
+        }
+
+        private <T> T getValue(StyleOrigin styleOrigin, T defaultValue) {
+            @SuppressWarnings("unchecked")
+            T ret = (T) getValue(styleOrigin == null ? 0 : styleOrigin.ordinal());
+            return ret == NO_VALUE ? defaultValue : ret;
+        }
+
+        private StyleOrigin getOrigin() {
+            return origin == -1 ? null : ORIGINS[origin];
+        }
+
+        @Override
+        public String toString() {
+            return "StyleableMap$StyledValue{" + "origin=" + origin + ", value0=" + value0 + ", value1=" + value1 + ", value2=" + value2 + ", value3=" + value3 + '}';
+        }
+
+    }
+
+    private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
+    private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
+    private final Map<K, StyledValue> backingMap;
+
+    public OldStyleableMap() {
+        this.backingMap = new HashMap<>();
+    }
+
+    private class ChangeEvent extends MapChangeListener.Change<K, V> {
+
+        private final K key;
+        private final V old;
+        private final V added;
+        private final boolean wasAdded;
+        private final boolean wasRemoved;
+
+        public ChangeEvent(K key, V old, V added, boolean wasAdded, boolean wasRemoved) {
+            super(OldStyleableMap.this);
+            assert (wasAdded || wasRemoved);
+            this.key = key;
+            this.old = old;
+            this.added = added;
+            this.wasAdded = wasAdded;
+            this.wasRemoved = wasRemoved;
+        }
+
+        @Override
+        public boolean wasAdded() {
+            return wasAdded;
+        }
+
+        @Override
+        public boolean wasRemoved() {
+            return wasRemoved;
+        }
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValueAdded() {
+            return added;
+        }
+
+        @Override
+        public V getValueRemoved() {
+            return old;
+        }
+    }
+
+    protected void callObservers(StyleOrigin origin,  MapChangeListener.Change<K, V> change) {
+        
+            if (origin == StyleOrigin.USER) {
+                if (changeListenerList != null) {
+                    for (MapChangeListener<? super K, ? super V> l : changeListenerList) {
+                        l.onChanged(change);
+                    }
+                }
+            }
+            if (invalidationListenerList != null) {
+                for (InvalidationListener l : invalidationListenerList) {
+                    l.invalidated(this);
+                }
+            }
+        
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+        if (invalidationListenerList == null) {
+            invalidationListenerList = new CopyOnWriteArrayList<>();
+        }
+        invalidationListenerList.add(listener);
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+        if (invalidationListenerList != null) {
+            invalidationListenerList.remove(listener);
+        }
+    }
+
+    @Override
+    public void addListener(MapChangeListener<? super K, ? super V> observer) {
+        if (changeListenerList == null) {
+            changeListenerList = new CopyOnWriteArrayList<>();
+        }
+        changeListenerList.add(observer);
+    }
+
+    @Override
+    public void removeListener(MapChangeListener<? super K, ? super V> observer) {
+        if (changeListenerList != null) {
+            changeListenerList.remove(observer);
+        }
+    }
+
+    @Override
+    public int size() {
+        return size(StyleOrigin.USER);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return isEmpty(StyleOrigin.USER);
+    }
+
+    public int size(StyleOrigin o) {
+        int count = 0;
+        for (Map.Entry<K, StyledValue> e : backingMap.entrySet()) {
+            if (e.getValue().hasValue(o)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean isEmpty(StyleOrigin o) {
+        for (Map.Entry<K, StyledValue> e : backingMap.entrySet()) {
+            if (e.getValue().hasValue(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return containsKey(StyleOrigin.USER, key);
+    }
+
+    public boolean containsKey(StyleOrigin o, Object key) {
+        StyledValue sv = backingMap.get(key);
+        return sv == null ? false : sv.hasValue(o);
+    }
+
+    public <T> boolean containsStyledKey(K key) {
+        StyledValue sv = backingMap.get(key);
+        return sv == null ? false : sv.getOrigin() != null;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return containsValue(StyleOrigin.USER, value);
+    }
+
+    public boolean containsValue(StyleOrigin o, Object value) {
+        for (Map.Entry<K, StyledValue> e : backingMap.entrySet()) {
+            if (e.getValue().hasValue(o)) {
+                Object v = e.getValue().getValue(o);
+                if (v == value
+                        || (value != null && value.equals(v))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public V get(Object key) {
+        @SuppressWarnings("unchecked")
+        V ret = get(StyleOrigin.USER, (K) key);
+        return ret;
+    }
+
+    public V get(StyleOrigin o, K key) {
+        StyledValue sv = backingMap.get(key);
+        @SuppressWarnings("unchecked")
+        V val = sv == null || !sv.hasValue(o) ? null : (V) sv.getValue(o);
+        return val;
+    }
+
+    /**
+     * Returns a map which wraps the {@link #getStyled} method.
+     * <p>
+     * The returned map only supports the {@code get} method and the
+     * {@code containsKey} method.
+     *
+     * @return a map
+     */
+    public Map<K, V> getStyledMap() {
+        return new MapAdapter<K, V>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean containsKey(Object key) {
+                return containsStyledKey((K) key);
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public V get(Object key) {
+                return getStyled((K) key);
+            }
+        };
+    }
+
+    /**
+     * Returns a map which wraps the {@code get(Origin, ...)},
+     *  {@code put(Origin, ...)}, {@code remove(Origin, ...)},
+     * {@code containsKey(Origin, ...)} methods.
+     * <p>
+     * The returned map only supports the {@code get},{@code put},
+     * {@code remove} and {@code containsKey} methods.
+     *
+     * @param origin the style origin
+     * @return a map
+     */
+    public Map<K, V> getMap(StyleOrigin origin) {
+        return new MapAdapter<K, V>() {
+            @Override
+            public boolean containsKey(Object key) {
+                return OldStyleableMap.this.containsKey(origin, key);
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public V get(Object key) {
+                return OldStyleableMap.this.get(origin, (K) key);
+            }
+
+            @Override
+            public V put(K key, V value) {
+                return OldStyleableMap.this.put(origin, key, value);
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public V remove(Object key) {
+                return OldStyleableMap.this.remove(origin, (K) key);
+            }
+        };
+    }
+
+    protected V getStyled(K key) {
+        StyledValue sv = backingMap.get(key);
+        @SuppressWarnings("unchecked")
+        V ret = sv == null ? null : (V) sv.getValue(sv.getOrigin());
+        return ret;
+    }
+
+    /*public V getStyled(K key, V defaultValue) {
+        StyledValue sv = backingMap.get(key);
+        @SuppressWarnings("unchecked")
+        V ret = (sv == null) ? defaultValue : sv.getValue(sv.getOrigin(), defaultValue);
+        return ret;
+    }*/
+    @Override
+    public StyleOrigin getStyleOrigin(Object key) {
+        StyledValue sv = backingMap.get(key);
+        return sv == null ? null : sv.getOrigin();
+    }
+
+    @Override
+    public V put(K key, V value) {
+        return put(StyleOrigin.USER, key, value);
+    }
+
+    public V put(StyleOrigin o, K key, V value) {
+        StyledValue sv = backingMap.compute(key, OldStyleableMap::computePut);
+        /*
+        if (sv == null) {
+            sv = new StyledValue();
+            backingMap.put(key, sv);
+        }*/
+
+        boolean hadValue = sv.hasValue(o);
+        V ret = sv.getValue(o);
+        if (!Objects.equals(ret, value)) {
+            ChangeEvent change = new ChangeEvent(key, ret, value, true, hadValue);
+            
+            sv.setValue(o, value);
+            callObservers(o,  change);
+        }
+        return ret;
+    }
+
+    /**
+     * Returns the old StyledValue if it exists, otherwise creates a new one.
+     *
+     * @return StyledValue associated to key
+     */
+    private static <K> StyledValue computePut(K key, StyledValue oldValue) {
+        return oldValue != null ? oldValue : new StyledValue();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public V remove(Object key) {
+        return remove(StyleOrigin.USER, (K) key);
+    }
+
+    public V remove(StyleOrigin o, K key) {
+        StyledValue sv = backingMap.get(key);
+        V ret = null;
+        boolean hadValue;
+        if (sv != null && sv.hasValue(o)) {
+            ret = sv.getValue(o);
+            ChangeEvent change = new ChangeEvent(key, ret, null, false, true);
+          
+            sv.removeValue(o);
+            callObservers(o,  change);
+        } else {
+            ret = null;
+        }
+        return ret;
+    }
+
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m) {
+        for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
+            put(e.getKey(), e.getValue());
+        }
+    }
+
+    public void putAll(StyleOrigin o, Map<? extends K, ? extends V> m) {
+        for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
+            put(o, e.getKey(), e.getValue());
+        }
+    }
+
+    @Override
+    public void clear() {
+        clear(StyleOrigin.USER);
+    }
+
+    public void removeAll(StyleOrigin o) {
+        clear(o);
+    }
+
+    public void clear(StyleOrigin o) {
+        for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+            Entry<K, StyledValue> e = i.next();
+            K key = e.getKey();
+            StyledValue sv = e.getValue();
+            @SuppressWarnings("unchecked")
+            V val = sv.getValue(o);
+            ChangeEvent change = new ChangeEvent(key, val, null, false, true);
+          
+            sv.removeValue(o);
+            callObservers(o,  change);
+        }
+    }
+
+    public void clearAuthorAndInlineValues() {
+        for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+            Entry<K, StyledValue> e = i.next();
+            StyledValue sv = e.getValue();
+            sv.removeValue(StyleOrigin.INLINE);
+            sv.removeValue(StyleOrigin.AUTHOR);
+        }
+    }
+
+    @Override
+    public Set<K> keySet() {
+        return new KeySet(StyleOrigin.USER);
+    }
+
+    public Set<K> keySet(StyleOrigin o) {
+        return new KeySet(o);
+    }
+
+    @Override
+    public Collection<V> values() {
+        return new ValuesCollection(StyleOrigin.USER);
+    }
+
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+        return new EntrySet(StyleOrigin.USER);
+    }
+
+    @Override
+    public String toString() {
+        return backingMap.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return backingMap.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return backingMap.hashCode();
+    }
+
+    private class KeySet extends AbstractSet<K>  {
+
+        private final StyleOrigin ksetOrigin;
+
+        public KeySet(StyleOrigin o) {
+            this.ksetOrigin = o;
+        }
+
+        @Override
+        public int size() {
+            return OldStyleableMap.this.size(ksetOrigin);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return OldStyleableMap.this.isEmpty(ksetOrigin);
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            return OldStyleableMap.this.containsKey(ksetOrigin, o);
+        }
+
+        @Override
+        public Iterator<K> iterator() {
+            return new Iterator<K>() {
+
+                private Iterator<Entry<K, StyledValue>> entryIt = backingMap.entrySet().iterator();
+                private boolean hasNext;
+                private K nextKey;
+                private K lastKey;
+
+                {
+                    advance();
+                }
+
+                private void advance() {
+                    while (entryIt.hasNext()) {
+                        Entry<K, StyledValue> entry = entryIt.next();
+                        if (entry.getValue().hasValue(ksetOrigin)) {
+                            nextKey = entry.getKey();
+                            hasNext = true;
+                            return;
+                        }
+                    }
+                    hasNext = false;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return hasNext;
+                }
+
+                @Override
+                public K next() {
+                    lastKey = nextKey;
+                    advance();
+                    return lastKey;
+                }
+
+                @Override
+                public void remove() {
+                    OldStyleableMap.this.remove(ksetOrigin, lastKey);
+                }
+
+            };
+        }
+
+        @Override
+        public boolean add(K e) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            return OldStyleableMap.this.remove(o) != null;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            for (Object k : c) {
+                if (!containsKey(ksetOrigin, k)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends K> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return removeRetain(c, false);
+        }
+
+        private boolean removeRetain(Collection<?> c, boolean remove) {
+            boolean removed = false;
+            for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+                Entry<K, StyledValue> e = i.next();
+                if (remove == c.contains(e.getKey())) {
+                    K key = e.getKey();
+                    StyledValue sv = e.getValue();
+                    if (sv.hasValue(ksetOrigin)) {
+                        removed = true;
+                        V value = sv.getValue(ksetOrigin);
+                        ChangeEvent change = new ChangeEvent(key, value, null, false, true);
+                       
+                        sv.removeValue(ksetOrigin);
+                        callObservers(ksetOrigin,change);
+                    }
+                }
+            }
+            return removed;
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return removeRetain(c, true);
+        }
+
+        @Override
+        public void clear() {
+            OldStyleableMap.this.clear(ksetOrigin);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return backingMap.keySet().equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return backingMap.keySet().hashCode();
+        }
+
+    }
+
+    private class ValuesCollection extends AbstractCollection<V> {
+
+        private final StyleOrigin origin;
+
+        public ValuesCollection(StyleOrigin o) {
+            this.origin = o;
+        }
+
+        @Override
+        public int size() {
+            return OldStyleableMap.this.size(origin);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return OldStyleableMap.this.isEmpty(origin);
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            return OldStyleableMap.this.containsValue(origin, o);
+        }
+
+        @Override
+        public Iterator<V> iterator() {
+            return new Iterator<V>() {
+
+                private Iterator<Entry<K, StyledValue>> entryIt = backingMap.entrySet().iterator();
+                private boolean hasNext;
+                private K nextKey;
+                private K lastKey;
+                private V nextValue;
+                private V lastValue;
+
+                {
+                    advance();
+                }
+
+                private void advance() {
+                    while (entryIt.hasNext()) {
+                        Entry<K, StyledValue> entry = entryIt.next();
+                        if (entry.getValue().hasValue(origin)) {
+                            nextKey = entry.getKey();
+                            nextValue = entry.getValue().getValue(origin);
+                            hasNext = true;
+                            return;
+                        }
+                    }
+                    hasNext = false;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return hasNext;
+                }
+
+                @Override
+                public V next() {
+                    lastKey = nextKey;
+                    lastValue = nextValue;
+                    advance();
+                    return lastValue;
+                }
+
+                @Override
+                public void remove() {
+                    OldStyleableMap.this.remove(origin, lastKey);
+                }
+
+            };
+        }
+
+        @Override
+        public boolean add(V e) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            for (Iterator<V> i = iterator(); i.hasNext();) {
+                if (i.next().equals(o)) {
+                    i.remove();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            for (Object k : c) {
+                if (!containsValue(origin, k)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends V> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return removeRetain(c, true);
+        }
+
+        private boolean removeRetain(Collection<?> c, boolean remove) {
+            boolean removed = false;
+            for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+                Entry<K, StyledValue> e = i.next();
+                if (remove == c.contains(e.getValue())) {
+                    K key = e.getKey();
+                    StyledValue sv = e.getValue();
+                    if (sv.hasValue(origin)) {
+                        removed = true;
+                        V value = sv.getValue(origin);
+                        ChangeEvent change = new ChangeEvent(key, value, null, false, true);
+                       
+                        sv.removeValue(origin);
+                        if (sv.isEmpty()) {
+                            i.remove();
+                        }
+                        callObservers(origin, change);
+                    }
+                }
+            }
+            return removed;
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return removeRetain(c, false);
+        }
+
+        @Override
+        public void clear() {
+            OldStyleableMap.this.clear(origin);
+        }
+
+        @Override
+        public String toString() {
+            Iterator<V> it = iterator();
+            if (!it.hasNext()) {
+                return "[]";
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append('[');
+            for (;;) {
+                V e = it.next();
+                sb.append(e == this ? "(this Collection)" : e);
+                if (!it.hasNext()) {
+                    return sb.append(']').toString();
+                }
+                sb.append(',').append(' ');
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return backingMap.values().equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return backingMap.values().hashCode();
+        }
+
+    }
+
+    private class ObservableEntry implements Entry<K, V> {
+
+        private final StyleOrigin oeOrigin;
+        private final Entry<K, StyledValue> backingEntry;
+
+        public ObservableEntry(StyleOrigin o, Entry<K, StyledValue> backingEntry) {
+            this.oeOrigin = o;
+            this.backingEntry = backingEntry;
+        }
+
+        @Override
+        public K getKey() {
+            return backingEntry.getKey();
+        }
+
+        @Override
+        public V getValue() {
+            return backingEntry.getValue().getValue(oeOrigin);
+        }
+
+        @Override
+        public V setValue(V value) {
+            V oldValue = backingEntry.getValue().getValue(oeOrigin);
+            ChangeEvent change = new ChangeEvent(getKey(), oldValue, value, true, true);
+            
+            backingEntry.getValue().setValue(oeOrigin, value);
+            callObservers(oeOrigin, change);
+            return oldValue;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (!(o instanceof Map.Entry)) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            Map.Entry<K, V> e = (Map.Entry<K, V>) o;
+            Object k1 = getKey();
+            Object k2 = e.getKey();
+            if (k1 == k2 || (k1 != null && k1.equals(k2))) {
+                Object v1 = getValue();
+                Object v2 = e.getValue();
+                if (v1 == v2 || (v1 != null && v1.equals(v2))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public final int hashCode() {
+            return (getKey() == null ? 0 : getKey().hashCode())
+                    ^ (getValue() == null ? 0 : getValue().hashCode());
+        }
+
+        @Override
+        public final String toString() {
+            return getKey() + "=" + getValue();
+        }
+
+    }
+
+    private class EntrySet implements Set<Entry<K, V>> {
+
+        private final StyleOrigin oesOrigin;
+
+        public EntrySet(StyleOrigin oesOrigin) {
+            this.oesOrigin = oesOrigin;
+        }
+
+        @Override
+        public int size() {
+            return OldStyleableMap.this.size(oesOrigin);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return OldStyleableMap.this.isEmpty(oesOrigin);
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
+            return new Iterator<Entry<K, V>>() {
+
+                private Iterator<Entry<K, StyledValue>> entryIt = backingMap.entrySet().iterator();
+                private boolean hasNext;
+                private Entry<K, StyledValue> nextEntry;
+                private Entry<K, StyledValue> lastEntry;
+
+                {
+                    advance();
+                }
+
+                private void advance() {
+                    while (entryIt.hasNext()) {
+                        Entry<K, StyledValue> entry = entryIt.next();
+                        if (entry.getValue().hasValue(oesOrigin)) {
+                            nextEntry = entry;
+                            hasNext = true;
+                            return;
+                        }
+                    }
+                    hasNext = false;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return hasNext;
+                }
+
+                @Override
+                public Entry<K, V> next() {
+                    lastEntry = nextEntry;
+                    advance();
+                    return new ObservableEntry(oesOrigin, lastEntry);
+                }
+
+                @Override
+                public void remove() {
+                    OldStyleableMap.this.remove(oesOrigin, lastEntry.getKey());
+                }
+
+            };
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Object[] toArray() {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T[] toArray(T[] a) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean add(Entry<K, V> e) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public boolean remove(Object o) {
+            Entry<K, V> entry = (Entry<K, V>) o;
+            return OldStyleableMap.this.remove(oesOrigin, entry.getKey()) != null;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends Entry<K, V>> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return removeRetain(c, false);
+        }
+
+        private boolean removeRetain(Collection<?> c, boolean remove) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return removeRetain(c, true);
+        }
+
+        @Override
+        public void clear() {
+            OldStyleableMap.this.clear(oesOrigin);
+        }
+
+        @Override
+        public String toString() {
+            return backingMap.entrySet().toString();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return backingMap.entrySet().equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return backingMap.entrySet().hashCode();
+        }
+
+    }
+
+}
