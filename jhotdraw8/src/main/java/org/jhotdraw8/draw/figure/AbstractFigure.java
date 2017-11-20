@@ -39,8 +39,6 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
-    private final Map<? super Key<?>, Object> cachedValues = new HashMap<>();
-
     private ObservableSet<Figure> dependentFigures;
     private final ObjectProperty<Figure> parent = new ObjectPropertyBase<Figure>() {
 
@@ -92,7 +90,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Override
     public <T> T getCachedValue(Key<T> key) {
-        return key.get(cachedValues);
+        return key.get(properties);
     }
 
     @Override
@@ -158,7 +156,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      *
      * @return a new list instance
      */
-    public HashMap<String, Object> getPropertyMap() {
+    public Map<String, Object> getPropertyMap() {
         HashMap<String, Object> result = new HashMap<>();
         for (Map.Entry<Key<?>, Object> e : getProperties().entrySet()) {
             Key<?> k = e.getKey();
@@ -253,7 +251,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Override
     public <T> T setCachedValue(Key<T> key, T value) {
-        return key.put(cachedValues, value);
+        return key.put(properties, value);
     }
 
     @Override
