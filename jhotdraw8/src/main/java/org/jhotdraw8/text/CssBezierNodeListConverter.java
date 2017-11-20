@@ -69,7 +69,7 @@ public class CssBezierNodeListConverter implements Converter<ImmutableList<Bezie
         }
         
         out.append('"');
-        out.append(Shapes.svgStringFromAWT(new BezierNodePath(value).getPathIterator(null)));// we lose smooth!
+        out.append(Shapes.doubleSvgStringFromAWT(new BezierNodePath(value).getPathIterator(null)));// we lose smooth!
         out.append('"');
     }
 

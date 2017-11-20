@@ -1019,8 +1019,8 @@ public class Shapes {
      * @param shape AWT Shape
      * @return SVG Path
      */
-    public static String svgStringFromAWT(Shape shape) {
-        return Shapes.svgStringFromAWT(shape.getPathIterator(null));
+    public static String doubleSvgStringFromAWT(Shape shape) {
+        return Shapes.doubleSvgStringFromAWT(shape.getPathIterator(null));
     }
 
     /**
@@ -1030,17 +1030,17 @@ public class Shapes {
      * @param at Optional transformation which is applied to the shape
      * @return SVG Path
      */
-    public static String svgStringFromAWT(Shape shape, AffineTransform at) {
-        return Shapes.svgStringFromAWT(shape.getPathIterator(at));
+    public static String doubleSvgStringFromAWT(Shape shape, AffineTransform at) {
+        return Shapes.doubleSvgStringFromAWT(shape.getPathIterator(at));
     }
 
     /**
-     * Converts a Java Path iterator to a JavaFX shape.
+     * Converts a Java Path iterator to a SVG path with double precision.
      *
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static String svgStringFromAWT(PathIterator iter) {
+    public static String doubleSvgStringFromAWT(PathIterator iter) {
         XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
@@ -1095,9 +1095,70 @@ public class Shapes {
         }
         return buf.toString();
     }
+    /**
+     * Converts a Java Path iterator to a SVG path with float precision.
+     *
+     * @param iter AWT Path Iterator
+     * @return SVG Path
+     */
+    public static String floatSvgStringFromAWT(PathIterator iter) {
+        XmlNumberConverter nb = new XmlNumberConverter();
+        StringBuilder buf = new StringBuilder();
+        float[] coords = new float[6];
+        boolean first = true;
+        for (; !iter.isDone(); iter.next()) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(' ');
+            }
+            switch (iter.currentSegment(coords)) {
+                case PathIterator.SEG_CLOSE:
+                    buf.append('Z');
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    buf.append('C');
+                    for (int i = 0; i < 6; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_LINETO:
+                    buf.append('L');
+                    for (int i = 0; i < 2; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    buf.append('M');
+                    for (int i = 0; i < 2; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    buf.append('Q');
+                    for (int i = 0; i < 4; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+            }
+        }
+        return buf.toString();
+    }
 
-    public static String svgStringFromElements(List<PathElement> elements) {
-        return svgStringFromAWT(awtShapeFromFXPathElements(elements));
+    public static String doubleSvgStringFromElements(List<PathElement> elements) {
+        return doubleSvgStringFromAWT(awtShapeFromFXPathElements(elements));
     }
 
     public static List<PathElement> transformFXPathElements(List<PathElement> elements, javafx.scene.transform.Transform fxT) {

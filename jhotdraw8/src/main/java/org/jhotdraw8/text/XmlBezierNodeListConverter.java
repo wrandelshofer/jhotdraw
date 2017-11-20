@@ -68,7 +68,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
             return;
         }
 
-        out.append(Shapes.svgStringFromAWT(new BezierNodePath(value).getPathIterator(null)));// we lose smooth!
+        out.append(Shapes.doubleSvgStringFromAWT(new BezierNodePath(value).getPathIterator(null)));// we lose smooth!
 
     }
 
