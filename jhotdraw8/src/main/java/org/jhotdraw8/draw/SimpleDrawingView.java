@@ -715,7 +715,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Node n = figureToNodeMap.get(f);
         if (n == null) {
             n = f.createNode(this);
-System.out.println("SimpleDrawingView createNode "+f.getId());           
             figureToNodeMap.put(f, n);
             nodeToFigureMap.put(n, f);
             dirtyFigureNodes.add(f);
