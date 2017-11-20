@@ -21,6 +21,7 @@ import javafx.scene.shape.QuadCurveTo;
  * @version $Id$
  */
 public class FXPathBuilder extends AbstractPathBuilder {
+    public final static ClosePath CLOSE_PATH=new ClosePath();
 
     public FXPathBuilder() {
         this(new ArrayList<PathElement>());
@@ -39,7 +40,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doClosePath() {
-        elements.add(new ClosePath());
+        elements.add(CLOSE_PATH);
     }
 
     @Override
