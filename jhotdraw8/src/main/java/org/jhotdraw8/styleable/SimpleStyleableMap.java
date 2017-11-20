@@ -22,7 +22,7 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 
 /**
  * A map which stores its values in an array, and which can share its keys with
- * other maps.
+ * other SimpleStyleableMaps.
  * <p>
  * This map stores one distinct value for each StyleOrigin.
  *
@@ -56,7 +56,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      * @param keyMap a map which maps from keys to indices. The indices must be
      * in the range {@code [0,keyMap.size()-1]}. This map will add new keys to
      * the keyMap if necessary, and assign {@code keyMap.size()} to each new
-     * key.
+     * key. Keys may be added to this map, but may never be removed.
      */
     public SimpleStyleableMap(Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
@@ -215,14 +215,9 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
         return null;
     }
-    private transient SimpleStyleableMap<K, V> styledMap;
 
     public Map<K, V> getStyledMap() {
-        createListenerLists();
-        if (styledMap == null) {
-            styledMap = new SimpleStyleableMap<K, V>(this, null);
-        }
-        return styledMap;
+        return new SimpleStyleableMap<>(this, null);
     }
 
     private V getValue(int index, K key) {
