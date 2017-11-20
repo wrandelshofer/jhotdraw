@@ -86,7 +86,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
 
         this.name = name;
         this.clazz = clazz;
-        this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
+        this.typeParameters = typeParameters == null ? Collections.emptyList() :Arrays.asList(typeParameters.clone());
         this.defaultValue = defaultValue;
         this.subAccessors = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(subAccessors)));
 

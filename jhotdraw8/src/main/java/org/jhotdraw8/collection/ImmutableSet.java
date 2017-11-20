@@ -142,17 +142,23 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     public int size() {
         return backingSet.size();
     }
+
     public void copyInto(Object[] out, int offset) {
-        int i=offset;
-        for (E e :this) {
-            out[i++]=e;
+        int i = offset;
+        for (E e : this) {
+            out[i++] = e;
         }
     }
 
     public static <T> ImmutableSet<T> add(Collection<T> collection, T item) {
-        Set<T> a = new HashSet<T>(collection);
-        a.add(item);
-        return new ImmutableSet<T>(true, a);
+        switch (collection.size()) {
+            case 0:
+                return new ImmutableSet<T>(Collections.singleton(item));
+            default:
+                Set<T> a = new LinkedHashSet<T>(collection);
+                a.add(item);
+                return new ImmutableSet<T>(true, a);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -169,14 +175,47 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
         return collection.isEmpty() ? emptySet() : new ImmutableSet<T>(collection);
     }
-    public static <T> ImmutableSet<T> ofArray(  Object[] a, int offset, int length) {
-        return length==0?emptySet():new ImmutableSet<>(a,offset,length);
+
+    public static <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
+        return length == 0 ? emptySet() : new ImmutableSet<>(a, offset, length);
     }
 
-
     public static <T> ImmutableSet<T> remove(Collection<T> collection, T item) {
-        Set<T> a = new HashSet<T>(collection);
-        a.remove(item);
-        return new ImmutableSet<T>(true, a);
+        switch (collection.size()) {
+            case 0:
+                return (ImmutableSet<T>) EMPTY;
+            case 1:
+                if (collection.contains(item)) {
+                    return (ImmutableSet<T>) EMPTY;
+                } else if (collection instanceof ImmutableSet) {
+                    return (ImmutableSet<T>) collection;
+                } else {
+                    return new ImmutableSet(true, Collections.singleton(item));
+                }
+            case 2:
+                if (collection.contains(item)) {
+                    Iterator<T> iter = collection.iterator();
+                    T one = iter.next();
+                    T two = iter.next();
+                    return new ImmutableSet(true, Collections.singleton(one.equals(item) ? two : one));
+
+                } else {
+                    if (collection instanceof ImmutableSet) {
+                        return (ImmutableSet<T>) collection;
+                    }
+                    return new ImmutableSet(collection);
+                }
+            default:
+                if (collection.contains(item)) {
+                    Set<T> a = new LinkedHashSet<T>(collection);
+                    a.remove(item);
+                    return new ImmutableSet<T>(true, a);
+                } else {
+                    if (collection instanceof ImmutableSet) {
+                        return (ImmutableSet<T>) collection;
+                    }
+                    return new ImmutableSet(collection);
+                }
+        }
     }
 }

@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.collection;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -28,6 +29,6 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
         return true;
     }
 
-    public Set<MapAccessor<?>> getSubAccessors();
+    public Collection<MapAccessor<?>> getSubAccessors();
 
 }

@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.key;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -40,7 +41,7 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
      */
     private final List<Class<?>> typeParameters;
 
-    private final Set<MapAccessor<?>> subAccessors;
+    private final List<MapAccessor<?>> subAccessors;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -79,9 +80,9 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
 
         this.name = name;
         this.clazz = clazz;
-        this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
+        this.typeParameters = typeParameters == null ? Collections.emptyList() :Arrays.asList(typeParameters.clone());
         this.defaultValue = defaultValue;
-        this.subAccessors = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(subAccessors)));
+        this.subAccessors = Arrays.asList(subAccessors.clone());
     }
 
     /**
@@ -146,7 +147,7 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
     }
 
     @Override
-    public Set<MapAccessor<?>> getSubAccessors() {
+    public Collection<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 
