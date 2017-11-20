@@ -438,21 +438,21 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return drawing.getReadOnlyProperty();
     }
 
-    public void dump(Node n, int depth) {
+    public void dump(StringBuilder buf, Node n, int depth) {
         for (int i = 0; i < depth; i++) {
-            System.out.print(".");
+            buf.append(".");
         }
-        System.out.print(n + " lb: " + Geom.toString(n.getLayoutBounds()));
+        buf.append(n + " lb: " + Geom.toString(n.getLayoutBounds())).append('\n');
         Figure f = nodeToFigureMap.get(n);
         if (f != null) {
-            System.out.println(" flb: " + Geom.toString(f.getBoundsInParent()));
+            buf.append(" flb: " + Geom.toString(f.getBoundsInParent())).append('\n');
         } else {
-            System.out.println();
+            buf.append('\n');
         }
         if (n instanceof Parent) {
             Parent p = (Parent) n;
             for (Node c : p.getChildrenUnmodifiable()) {
-                dump(c, depth + 1);
+                dump(buf, c, depth + 1);
             }
         }
     }
@@ -501,10 +501,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Node worldNode = getNode(getDrawing());
         Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
         for (Figure f : figures) {
+            if (f.isVisible()) {
             Node n = getNode(f);
             Point2D pointInLocal = n.sceneToLocal(pointInScene);
             if (contains(n, pointInLocal, tolerance)) {
                 return f;
+            }
             }
         }
 
@@ -713,6 +715,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Node n = figureToNodeMap.get(f);
         if (n == null) {
             n = f.createNode(this);
+System.out.println("SimpleDrawingView createNode "+f.getId());           
             figureToNodeMap.put(f, n);
             nodeToFigureMap.put(n, f);
             dirtyFigureNodes.add(f);
@@ -1231,7 +1234,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
             dirtyFigureNodes.clear();
             for (Figure f : copyOfDirtyFigureNodes) {
-                f.updateNode(this, getNode(f));
+                if (f.isVisible()) {
+                    f.updateNode(this, getNode(f));
+                }
             }
         }
 
