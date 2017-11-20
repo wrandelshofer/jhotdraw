@@ -861,7 +861,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return true if the user can see the figure
      */
-    default boolean isVisible() {
+    default boolean isShowing() {
         Figure node = this;
         while (node != null) {
             if (!node.getStyled(HideableFigure.VISIBLE)) {
@@ -870,6 +870,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             node = node.getParent();
         }
         return true;
+    }
+
+    /**
+     * Whether the figure is visible.
+     *
+     * @return true if the user can see the figure
+     */
+    default boolean isVisible() {
+        Figure node = this;
+        return node.getStyled(HideableFigure.VISIBLE);
     }
 
     /**
@@ -986,7 +996,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its local bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -1029,7 +1039,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its parent bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call

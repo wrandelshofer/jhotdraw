@@ -35,7 +35,7 @@ import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.AWTDoublePathBuilder;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
@@ -227,7 +227,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Bounds b = getBoundsInLocal();
 
         try {
-            AWTPathBuilder builder = new AWTPathBuilder();
+            AWTDoublePathBuilder builder = new AWTDoublePathBuilder();
             Shapes.buildFromSvgString(builder, content);
             Path2D.Double path = builder.get();
 

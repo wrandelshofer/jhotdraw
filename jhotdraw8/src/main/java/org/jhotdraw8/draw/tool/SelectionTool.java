@@ -165,7 +165,7 @@ public class SelectionTool extends AbstractTool {
                     Figure firstFigure = null;
                     boolean selectionFound = false;
                     for (Figure f : view.findFigures(vx, vy, false)) {
-                        if (f.isVisible()) {
+                        if (f.isShowing()) {
                             if (firstFigure == null) {
                                 firstFigure = f;
                             }

@@ -322,7 +322,7 @@ public class Shapes {
     }
 
     private static Shape awtShapeFromFXSvgPath(SVGPath node) {
-        AWTPathBuilder b = new AWTPathBuilder();
+        AWTDoublePathBuilder b = new AWTDoublePathBuilder();
         try {
             buildFromSvgString(b, node.getContent());
         } catch (IOException ex) {
@@ -342,7 +342,7 @@ public class Shapes {
      * @throws java.io.IOException if the String is not a valid path
      */
     public static Path2D.Double awtShapeFromSvgString(String str) throws IOException {
-        AWTPathBuilder b = new AWTPathBuilder();
+        AWTDoublePathBuilder b = new AWTDoublePathBuilder();
         buildFromSvgString(b, str);
         return b.get();
     }
@@ -780,7 +780,7 @@ public class Shapes {
         } catch (IllegalPathStateException e) {
             throw new IOException(e);
         }
-        
+
         builder.pathDone();
         return builder;
     }
@@ -914,7 +914,7 @@ public class Shapes {
         double[] coords = new double[6];
         double prevX = 0, prevY = 0;
         double moveX = 0, moveY = 0;
-        for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), Math.abs(tolerance+0.1e-4)); !i.isDone(); i.next()) {
+        for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), Math.abs(tolerance + 0.1e-4)); !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
                 case PathIterator.SEG_CLOSE:
                     if (Geom.lineContainsPoint(
@@ -1095,6 +1095,7 @@ public class Shapes {
         }
         return buf.toString();
     }
+
     /**
      * Converts a Java Path iterator to a SVG path with float precision.
      *

@@ -58,7 +58,7 @@ public class SelectSameAction extends AbstractSelectedAction {
         
         List<Figure> selectedSame=new ArrayList<>();
         for (Figure f : view.getDrawing().preorderIterable()) { 
-                if (f.isSelectable()&&f.isVisible()){
+                if (f.isSelectable()&&f.isShowing()){
             if (Objects.equals(f.getTypeSelector(), stype)
                     && Objects.equals(f.getStyleClass(),sclass)&&f!=prototype) {
                     selectedSame.add(f);

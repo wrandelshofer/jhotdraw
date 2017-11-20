@@ -501,12 +501,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Node worldNode = getNode(getDrawing());
         Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
         for (Figure f : figures) {
-            if (f.isVisible()) {
-            Node n = getNode(f);
-            Point2D pointInLocal = n.sceneToLocal(pointInScene);
-            if (contains(n, pointInLocal, tolerance)) {
-                return f;
-            }
+            if (f.isShowing()) {
+                Node n = getNode(f);
+                Point2D pointInLocal = n.sceneToLocal(pointInScene);
+                if (contains(n, pointInLocal, tolerance)) {
+                    return f;
+                }
             }
         }
 
@@ -564,7 +564,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 continue;
             }
             Figure f1 = nodeToFigureMap.get(n);
-            if (f1 != null && f1.isSelectable() && f1.isVisible()) {
+            if (f1 != null && f1.isSelectable() && f1.isShowing()) {
                 Bounds pl = n.parentToLocal(pp);
                 if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent bounds contains the point
                     Figure f = nodeToFigureMap.get(n);
@@ -628,7 +628,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, tolerance)) { // only drill down if the parent contains the point
                     Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable() && f1.isVisible()) {
+                    if (f != null && f.isSelectable() && f1.isShowing()) {
                         found.add(f);
                     }
                     if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
@@ -707,6 +707,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return node;
     }
 
+    private boolean hasNode(Figure f) {
+        return figureToNodeMap.containsKey(f);
+    }
+
     @Override
     public Node getNode(Figure f) {
         if (f == null) {
@@ -718,6 +722,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             figureToNodeMap.put(f, n);
             nodeToFigureMap.put(n, f);
             dirtyFigureNodes.add(f);
+            repaint();
         }
         return n;
     }
@@ -769,7 +774,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
                 Layer layer = (Layer) d.getChild(i);
-                if (!layer.isEditable() && layer.isVisible()) {
+                if (!layer.isEditable() && layer.isShowing()) {
                     activeLayer.set(layer);
                     break;
                 }
@@ -1035,10 +1040,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (repainter == null) {
             repainter = () -> {
                 getModel().validate();
+                repainter = null;
                 updateNodes();
                 validateHandles();
                 //dump(getNode(getDrawing()),0);
-                repainter = null;
             };
             Platform.runLater(repainter);
         }
@@ -1233,9 +1238,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
             dirtyFigureNodes.clear();
             for (Figure f : copyOfDirtyFigureNodes) {
-                if (f.isVisible()) {
-                    f.updateNode(this, getNode(f));
+                if (!f.isShowing() && !hasNode(f)) {
+                    continue;
                 }
+                f.updateNode(this, getNode(f));
             }
         }
 

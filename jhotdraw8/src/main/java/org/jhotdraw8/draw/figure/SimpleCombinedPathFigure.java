@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.AWTDoublePathBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 
@@ -100,7 +100,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
                                 Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue());
 
                     }
-                    iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AWTPathBuilder(), iter).get()).getPathIterator(null);
+                    iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AWTDoublePathBuilder(), iter).get()).getPathIterator(null);
                 }
             }
         }
@@ -132,9 +132,9 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
                 final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
                 if (first) {
                     first = false;
-                    area = new Area(Shapes.buildFromPathIterator(new AWTPathBuilder(), childPathIterator).get());
+                    area = new Area(Shapes.buildFromPathIterator(new AWTDoublePathBuilder(), childPathIterator).get());
                 } else {
-                    Area area1 = new Area(Shapes.buildFromPathIterator(new AWTPathBuilder(), childPathIterator).get());
+                    Area area1 = new Area(Shapes.buildFromPathIterator(new AWTDoublePathBuilder(), childPathIterator).get());
                     switch (op) {
                         case ADD:
                         default:

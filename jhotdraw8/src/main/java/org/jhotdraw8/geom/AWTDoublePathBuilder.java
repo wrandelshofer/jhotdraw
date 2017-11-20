@@ -1,4 +1,4 @@
-/* @(#)AWTPathBuilder.java
+/* @(#)AWTDoublePathBuilder.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
@@ -11,7 +11,7 @@ import java.awt.geom.Path2D;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class AWTPathBuilder extends AbstractPathBuilder {
+public class AWTDoublePathBuilder extends AbstractPathBuilder {
 
     private Path2D.Double path = new Path2D.Double();
 
