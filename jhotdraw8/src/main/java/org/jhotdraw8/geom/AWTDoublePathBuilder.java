@@ -15,6 +15,14 @@ public class AWTDoublePathBuilder extends AbstractPathBuilder {
 
     private Path2D.Double path = new Path2D.Double();
 
+    public AWTDoublePathBuilder() {
+        this(new Path2D.Double());
+    }
+
+    public AWTDoublePathBuilder(Path2D.Double path) {
+        this.path = path;
+    }
+
     @Override
     protected void doClosePath() {
         path.closePath();

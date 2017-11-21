@@ -13,7 +13,15 @@ import java.awt.geom.Path2D;
  */
 public class AWTFloatPathBuilder extends AbstractPathBuilder {
 
-    private Path2D.Float path = new Path2D.Float();
+    private Path2D.Float path;
+
+    public AWTFloatPathBuilder() {
+        this(new Path2D.Float());
+    }
+
+    public AWTFloatPathBuilder(Path2D.Float path) {
+        this.path = path;
+    }
 
     @Override
     protected void doClosePath() {
