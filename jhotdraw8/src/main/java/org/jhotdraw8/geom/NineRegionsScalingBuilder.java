@@ -98,7 +98,7 @@ public class NineRegionsScalingBuilder extends AbstractPathBuilder {
         );
         bottomLeft = Transforms.createReshapeTransform(
                 sx, sy + sh - ib, il, ib,
-                dx, dy + sh - ib, il, ib
+                dx, dy + dh - ib, il, ib
         );
         topRight = Transforms.createReshapeTransform(
                 sx + sw - ir, sy, ir, it,
@@ -106,7 +106,7 @@ public class NineRegionsScalingBuilder extends AbstractPathBuilder {
         );
         bottomRight = Transforms.createReshapeTransform(
                 sx + sw - ir, sy + sh - ib, ir, ib,
-                dx + sw - ir, dy + dh - ib, ir, ib
+                dx + dw - ir, dy + dh - ib, ir, ib
         );
     }
 
