@@ -26,11 +26,9 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;
@@ -47,6 +45,7 @@ import org.jhotdraw8.text.CssSetConverter;
 import org.jhotdraw8.text.CssWordListConverter;
 import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.text.StringConverterAdapter;
+import org.jhotdraw8.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.tree.SimpleTreePresentationModel;
 
 /**
@@ -57,10 +56,6 @@ import org.jhotdraw8.tree.SimpleTreePresentationModel;
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
-    @FXML
-    private TreeTableColumn<Figure, ImmutableList<String>> styleClassesColumn;
-    @FXML
-    private TreeTableColumn<Figure, ImmutableSet<PseudoClass>> pseudoClassesColumn;
     private final CachingCollator collator = new CachingCollator(new OSXCollator());
 
     private DrawingView drawingView;
@@ -71,6 +66,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableColumn<Figure, Boolean> lockedColumn;
     private SimpleTreePresentationModel<Figure> model;
     private Node node;
+    @FXML
+    private TreeTableColumn<Figure, ImmutableSet<PseudoClass>> pseudoClassesColumn;
+    @FXML
+    private TreeTableColumn<Figure, ImmutableList<String>> styleClassesColumn;
     private final InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
@@ -140,16 +139,16 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
+                cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
             @Override
             @SuppressWarnings("unchecked")
             public ImmutableList<String> getValue() {
-                return figure == null ? null :  ImmutableList.ofCollection(figure.getStyleClass());
+                return figure == null ? null : ImmutableList.ofCollection(figure.getStyleClass());
             }
         }
         );
         pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
+                cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
             @Override
             @SuppressWarnings("unchecked")
             public ImmutableSet<PseudoClass> getValue() {
@@ -319,6 +318,22 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
     }
 
+    private void updateSelectionInDrawingView() {
+        if (!isUpdatingSelectionInView) {
+            isUpdatingSelectionInView = true;
+            TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
+            Set<Figure> newSelection = new LinkedHashSet<>();
+            for (TreeItem<Figure> item : selectionModel.getSelectedItems()) {
+                if (item != null) {
+                    newSelection.add(item.getValue());
+                }
+            }
+            drawingView.getSelectedFigures().retainAll(newSelection);
+            drawingView.getSelectedFigures().addAll(newSelection);
+            isUpdatingSelectionInView = false;
+        }
+    }
+
     private void updateSelectionInTree() {
         willUpdateSelectionInTree = false;
         if (!isUpdatingSelectionInView) {
@@ -362,22 +377,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         if (!willUpdateSelectionInTree && !isUpdatingSelectionInView) {
             willUpdateSelectionInTree = true;
             Platform.runLater(this::updateSelectionInTree);
-        }
-    }
-
-    private void updateSelectionInDrawingView() {
-        if (!isUpdatingSelectionInView) {
-            isUpdatingSelectionInView = true;
-            TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
-            Set<Figure> newSelection = new LinkedHashSet<>();
-            for (TreeItem<Figure> item : selectionModel.getSelectedItems()) {
-                if (item != null) {
-                    newSelection.add(item.getValue());
-                }
-            }
-            drawingView.getSelectedFigures().retainAll(newSelection);
-            drawingView.getSelectedFigures().addAll(newSelection);
-            isUpdatingSelectionInView = false;
         }
     }
 
