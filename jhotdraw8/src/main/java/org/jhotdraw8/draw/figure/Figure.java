@@ -679,7 +679,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * figure needs to be updated.
      * <p>
      * See {@link #getLayoutObservers} for a description of the update strategy.
-     *
+     * <p>
+     * This default implementation returns an unmodifiable empty set.
      *
      * @return a list of layout subjects
      */
