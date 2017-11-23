@@ -154,15 +154,11 @@ public class XmlUtil {
             throw new IOException(ex);
         }
     }
-    public static final String SYSTEM_ID_ATTRIBUTE = "systemId";
-    public static final String LINE_NUMBER_ATTRIBUTE = "line";
-    public static final String COLUMN_NUMBER_ATTRIBUTE = "column";
-    private static final String QUALIFIED_SYSTEM_ID_ATTRIBUTE = "xmlutil:systemId";
-    private static final String QUALIFIED_LINE_ATTRIBUTE = "xmlutil:line";
-    private static final String QUALIFIED_COLUMN_ATTRIBUTE = "xmlutil:column";
+    public static final String LOCATION_ATTRIBUTE = "location";
+    private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
 
     public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
-
+private final static String SEPARATOR="\0";
     private static class LocationFilter extends XMLFilterImpl {
 
         LocationFilter(XMLReader xmlReader) {
@@ -182,11 +178,57 @@ public class XmlUtil {
 
             // Add extra attribute to elements to hold location
             Attributes2Impl attrs = new Attributes2Impl(attributes);
-            attrs.addAttribute(LOCATION_NAMESPACE, SYSTEM_ID_ATTRIBUTE, QUALIFIED_SYSTEM_ID_ATTRIBUTE, "CDATA", locator.getSystemId());
-            attrs.addAttribute(LOCATION_NAMESPACE, LINE_NUMBER_ATTRIBUTE, QUALIFIED_LINE_ATTRIBUTE, "CDATA",Integer.toString( locator.getLineNumber()));
-            attrs.addAttribute(LOCATION_NAMESPACE, COLUMN_NUMBER_ATTRIBUTE, QUALIFIED_COLUMN_ATTRIBUTE, "CDATA", Integer.toString(locator.getColumnNumber()));
+            attrs.addAttribute(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE, QUALIFIED_LOCATION_ATTRIBUTE, "CDATA",
+                                 locator.getLineNumber()+SEPARATOR+     locator.getColumnNumber()+SEPARATOR+locator.getSystemId()+SEPARATOR+locator.getPublicId());
             super.startElement(uri, localName, qName, attrs);
         }
+    }
+    
+    private static class MyLocator implements Locator {
+        private final int line;
+        private final int column;
+        private final String systemId;
+        private final String publicId;
+
+        public MyLocator(int line, int column, String systemId, String publicId) {
+            this.line = line;
+            this.column = column;
+            this.systemId = systemId;
+            this.publicId=publicId;
+        }
+
+
+        @Override
+        public int getColumnNumber() {
+          return column;
+        }
+
+        @Override
+        public int getLineNumber() {
+            return line;
+        }
+
+        @Override
+        public String getPublicId() {
+            return publicId;
+        }
+
+        @Override
+        public String getSystemId() {
+            return systemId;
+        }
+        
+    }
+    
+    public static Locator getLocator(Node node) {
+        Node attrNode=node.getAttributes().getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
+        if (attrNode!=null) {
+            String[] parts=attrNode.getNodeValue().split(SEPARATOR);
+            if (parts.length==4) {
+                return new MyLocator(Integer.parseInt(parts[0]),Integer.parseInt(parts[1]),parts[2],parts[3]);
+            }
+        }
+        return null;
     }
 
     public static void validate(Document doc, URI schemaUri) throws IOException {
