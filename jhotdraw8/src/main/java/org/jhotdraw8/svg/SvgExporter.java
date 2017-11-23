@@ -523,9 +523,11 @@ public class SvgExporter {
         Element elem = null;
         if (node instanceof Shape) {
             elem = writeShape(doc, parent, (Shape) node);
-            writeFillAttributes(elem, (Shape) node);
-            writeStrokeAttributes(elem, (Shape) node);
-            writeClipAttributes(elem, node);
+            if (elem != null) {
+                writeFillAttributes(elem, (Shape) node);
+                writeStrokeAttributes(elem, (Shape) node);
+                writeClipAttributes(elem, node);
+            }
         } else if (node instanceof Group) {
             // a group can be omitted if it does not perform a transformation, an effect or a clip
             boolean omitGroup = false;
@@ -662,6 +664,7 @@ public class SvgExporter {
     }
 
     private Element writePath(Document doc, Element parent, Path node) {
+        if (node.getElements().isEmpty()) return null;
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
         StringBuilder buf = new StringBuilder();
@@ -943,6 +946,15 @@ public class SvgExporter {
         return elem;
     }
 
+    /**
+     * Writes a shape if it has a visual representation. 
+     * 
+     * @param doc the document
+     * @param parent the parent element
+     * @param node the shape
+     * @return the created element or null if the shape has no visual representation (e.g. a path without path elements)
+     * @throws IOException 
+     */
     private Element writeShape(Document doc, Element parent, Shape node) throws IOException {
         Element elem = null;
         if (node instanceof Arc) {
