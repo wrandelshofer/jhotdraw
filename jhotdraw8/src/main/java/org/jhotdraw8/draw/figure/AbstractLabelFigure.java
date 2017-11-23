@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.List;
 import javafx.geometry.BoundingBox;
@@ -19,7 +18,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -40,7 +38,6 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.text.CssSize;
 
 /**
@@ -170,7 +167,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
                 b.getMinY() - i.getTop(),
                 b.getWidth() + i.getLeft() + i.getRight(),
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
-    }
+        }
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
