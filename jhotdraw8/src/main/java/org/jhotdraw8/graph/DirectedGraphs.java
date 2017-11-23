@@ -57,6 +57,7 @@ public class DirectedGraphs {
      * tool.
      *
      * @param <V> the vertex type
+     * @param <A> the arrow type
      * @param g the graph
      * @return a "dot" String.
      */
@@ -87,6 +88,7 @@ public class DirectedGraphs {
      * Uses Kruskal's algorithm.
      *
      * @param <V> the vertex type
+     * @param <A> the arrow type
      * @param g a directed graph
      * @return the disjoint sets.
      */
@@ -122,6 +124,7 @@ public class DirectedGraphs {
      * <p>
      * Uses Kruskal's algorithm.
      *
+     * @param <A> the arrow type
      * @param g a directed graph
      * @return the disjoint sets.
      */
@@ -174,7 +177,7 @@ public class DirectedGraphs {
      * Uses Kruskal's algorithm.
      *
      * @param <V> the vertex type
-     * @param <E> the arrow type
+     * @param <A> the arrow type
      * @param vertices a directed graph
      * @param orderedArrows list of arrows sorted by cost in ascending order
      * (lowest cost first, highest cost last).
@@ -182,8 +185,8 @@ public class DirectedGraphs {
      * if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
-    public static <V, E extends Pair<V>> List<E> findMinimumSpanningTree(Collection<V> vertices, List<E> orderedArrows, List<E> rejectedArrows) {
-        List<E> minimumSpanningTree = new ArrayList<>(orderedArrows.size());
+    public static <V, A extends Pair<V>> List<A> findMinimumSpanningTree(Collection<V> vertices, List<A> orderedArrows, List<A> rejectedArrows) {
+        List<A> minimumSpanningTree = new ArrayList<>(orderedArrows.size());
         if (rejectedArrows == null) {
             rejectedArrows = new ArrayList<>(orderedArrows.size());
         }
@@ -192,7 +195,7 @@ public class DirectedGraphs {
         Map<V, List<V>> forest = createForest(vertices);
 
         // Process arrows from lowest cost to highest cost
-        for (E arrow : orderedArrows) {
+        for (A arrow : orderedArrows) {
             List<V> uset = forest.get(arrow.getStart());
             List<V> vset = forest.get(arrow.getEnd());
             if (uset != vset) {
@@ -213,7 +216,7 @@ public class DirectedGraphs {
      * <p>
      *
      * @param <V> the vertex type
-     * @param <E> the arrow type
+     * @param <A> the arrow type
      * @param vertices the list of vertices
      * @param orderedArrows list of arrows sorted by cost in ascending order
      * (lowest cost first, highest cost last)
@@ -222,16 +225,16 @@ public class DirectedGraphs {
      * if it is provided.
      * @return the graph builder
      */
-    public static <V, E extends Pair<V>> DirectedGraphBuilder<V,E> findMinimumSpanningTreeGraph(Collection<V> vertices, List<E> orderedArrows, List<E> includedArrows, List<E> rejectedArrows) {
-        List<E> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
+    public static <V, A extends Pair<V>> DirectedGraphBuilder<V,A> findMinimumSpanningTreeGraph(Collection<V> vertices, List<A> orderedArrows, List<A> includedArrows, List<A> rejectedArrows) {
+        List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);
         }
-        DirectedGraphBuilder<V,E> builder = new DirectedGraphBuilder<>();
+        DirectedGraphBuilder<V,A> builder = new DirectedGraphBuilder<>();
         for (V v : vertices) {
             builder.addVertex(v);
         }
-        for (E e : includedArrowList) {
+        for (A e : includedArrowList) {
             builder.addArrow(e.getStart(), e.getEnd(),e);
             builder.addArrow(e.getEnd(), e.getStart(),e);
         }
@@ -242,6 +245,7 @@ public class DirectedGraphs {
      * Sorts the specified directed graph topologically.
      *
      * @param <V> the vertex type
+     * @param <A> the arrow type
      * @param m the graph
      * @return the sorted list of vertices
      */
@@ -264,6 +268,7 @@ public class DirectedGraphs {
     /**
      * Sorts the specified directed graph topologically.
      *
+     * @param <A> the arrow type
      * @param model the graph
      * @return the sorted list of vertices
      */

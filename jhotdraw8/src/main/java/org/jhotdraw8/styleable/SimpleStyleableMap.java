@@ -196,15 +196,17 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return get(origin.ordinal(), key);
     }
 
+    @SuppressWarnings("unchecked")
     private V get(int originOrdinal, Object key) {
         Integer index = keyMap.get(key);
         return index == null ? null : getValue(originOrdinal, index, (K) key);
     }
 
     public Map<K, V> getMap(StyleOrigin origin) {
-        return (origin == this.origin) ? this : new SimpleStyleableMap(this, origin);
+        return (origin == this.origin) ? this : new SimpleStyleableMap<>(this, origin);
     }
 
+        @SuppressWarnings("unchecked")
     public StyleOrigin getStyleOrigin(Object key) {
         int index = ensureCapacity((K) key);
         for (int i = numOrigins - 1; i >= 0; i--) {
@@ -250,7 +252,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     private boolean hasValue(int ordinal, int index) {
         final int arrayIndex = index * numOrigins + ordinal;
-        return arrayIndex<values.size()&&values.get(arrayIndex) != EMPTY;
+        return arrayIndex < values.size() && values.get(arrayIndex) != EMPTY;
     }
 
     @Override
@@ -306,6 +308,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
     }
 
+    @SuppressWarnings("unchecked")
     private V removeValue(int ordinal, int index, K key) {
         if (ordinal == -1) {
             throw new UnsupportedOperationException("can not remove styled value");
@@ -329,6 +332,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     }
 
+        @SuppressWarnings("unchecked")
     private V setValue(int ordinal, int index, K key, V newValue) {
         if (ordinal == -1) {
             throw new UnsupportedOperationException("can not set styled value");
@@ -338,7 +342,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             sizes[ordinal]++;
         }
         values.set(index * numOrigins + ordinal, newValue);
-        
+
         V returnValue = oldValue == EMPTY ? null : oldValue;
         if (!Objects.equals(oldValue, newValue)) {
             if (origin == StyleOrigin.USER) {
@@ -349,7 +353,10 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
         return returnValue;
     }
-    public int getIdentityHash() {return System.identityHashCode(values);}
+
+    public int getIdentityHash() {
+        return System.identityHashCode(values);
+    }
 
     @Override
     public int size() {
@@ -429,6 +436,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public boolean contains(Object o) {
             if (!(o instanceof Entry)) {
                 return false;

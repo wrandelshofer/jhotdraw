@@ -180,6 +180,7 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
         return length == 0 ? emptySet() : new ImmutableSet<>(a, offset, length);
     }
 
+    @SuppressWarnings({"unchecked","rawtypes"})
     public static <T> ImmutableSet<T> remove(Collection<T> collection, T item) {
         switch (collection.size()) {
             case 0:

@@ -110,7 +110,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
     /**
      * Creates a graph with all arrows inverted.
      *
-     * @param <V,A> the vertex type
+     * @param <V> the vertex type
+     * @param <A> the arrow type
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
@@ -147,7 +148,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
      * Creates a builder which contains the specified vertices, and only arrows
      * from the directed graph, for the specified vertices.
      *
-     * @param <V,A> the vertex type
+     * @param <V> the vertex type
+     * @param <A> the arrow type
      * @param model a graph
      * @param vertices a set of vertices
      * @return a subset of the directed graph

@@ -27,6 +27,7 @@ public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A> 
      *
      * @param a vertex a
      * @param b vertex b
+     * @param arrow the arrow from 'a' to 'b' and from 'b' to 'a'
      */
     public void addBidiArrow(int a, int b, A arrow) {
         addArrow(a, b, arrow);
@@ -42,6 +43,7 @@ public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A> 
      *
      * @param a vertex a
      * @param b vertex b
+     * @param arrow the arrow from 'a' to 'b'
      */
     public void addArrow(int a, int b, A arrow) {
         buildAddArrow(a, b, arrow);
@@ -69,6 +71,7 @@ public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A> 
     /**
      * Creates a graph with all arrows inverted.
      *
+     * @param <A> the arrow type
      * @param graph a graph
      * @return a new graph with inverted arrows
      */

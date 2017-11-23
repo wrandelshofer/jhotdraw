@@ -3,14 +3,13 @@
  */
 package org.jhotdraw8.graph;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * IntImmutableDirectedGraph.
  *
+ * @param <A> the arrow type
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -59,6 +58,7 @@ public class IntImmutableDirectedGraph<A> implements IntDirectedGraph<A> {
      * Creates a new instance from the specified graph.
      *
      * @param <V> the vertex type
+     * @param <A> the arrow type
      * @param graph a graph
      */
     public <V,A> IntImmutableDirectedGraph(DirectedGraph<V,A> graph) {

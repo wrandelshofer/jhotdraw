@@ -137,6 +137,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V get(Object key) {
         Integer index = keyMap.get(key);
         return index == null ? null : getValue(index, (K) key);
@@ -208,6 +209,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
     }
 
+    @SuppressWarnings("unchecked")
     private V removeValue(int index, K key) {
         final int arrayIndex = index;
 
@@ -226,6 +228,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
     }
 
+    @SuppressWarnings("unchecked")
     private V setValue(int index, K key, V newValue) {
         V oldValue = (V) values.get(index);
         if (oldValue == EMPTY) {
@@ -324,6 +327,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public boolean contains(Object o) {
             if (!(o instanceof Entry)) {
                 return false;
