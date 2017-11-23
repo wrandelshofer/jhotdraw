@@ -292,6 +292,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             if (constrainer.get() != null) {
                 constrainer.get().updateNode(SimpleDrawingView.this);
             }
+            scrollSelectedFiguresToVisible();
         }
     };
 
