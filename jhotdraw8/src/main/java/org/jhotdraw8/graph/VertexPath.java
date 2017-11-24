@@ -44,27 +44,15 @@ public class VertexPath<V> {
         return true;
     }
 
+    public List<V> getVertices() {
+        return vertices;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 53 * hash + Objects.hashCode(this.vertices);
         return hash;
-    }
-    
-    /**
-     * Creates a new VertexPath with the specified vertices.
-     * 
-     * @param <VV> the vertex type
-     * @param vertices the vertices
-     * @return the vertex path
-     */
-    @SafeVarargs @SuppressWarnings("varargs")
-    public static<VV> VertexPath<VV> of(VV... vertices) {
-        return new VertexPath<>(Arrays.asList(vertices));
-    }
-
-    public List<V> getVertices() {
-        return vertices;
     }
 
     @Override
@@ -72,6 +60,17 @@ public class VertexPath<V> {
         return "VertexPath{" + vertices + '}';
     }
 
-
+    /**
+     * Creates a new VertexPath with the specified vertices.
+     *
+     * @param <VV> the vertex type
+     * @param vertices the vertices
+     * @return the vertex path
+     */
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <VV> VertexPath<VV> of(VV... vertices) {
+        return new VertexPath<>(Arrays.asList(vertices));
+    }
 
 }
