@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -99,7 +100,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         endConnectorProperty.addListener(clConnector);
     }
 
-
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
@@ -108,12 +108,14 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             if (get(START_CONNECTOR) == null) {
                 list.add(new MoveHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE));
-            }else
+            } else {
                 list.add(new SelectionHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
+            }
             if (get(END_CONNECTOR) == null) {
                 list.add(new MoveHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE));
-            }else
+            } else {
                 list.add(new SelectionHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
+            }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineConnectionOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
@@ -148,12 +150,17 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      */
     @Override
     public Set<Figure> getLayoutSubjects() {
-        Set<Figure> ctf = new HashSet<>();
-        if (get(START_TARGET) != null) {
-            ctf.add(get(START_TARGET));
+        final Figure startTarget = get(START_TARGET);
+        final Figure endTarget = get(END_TARGET);
+        if (startTarget == null && endTarget == null) {
+            return Collections.emptySet();
         }
-        if (get(END_TARGET) != null) {
-            ctf.add(get(END_TARGET));
+        Set<Figure> ctf = new HashSet<>();
+        if (startTarget != null) {
+            ctf.add(startTarget);
+        }
+        if (endTarget != null) {
+            ctf.add(endTarget);
         }
         return ctf;
     }

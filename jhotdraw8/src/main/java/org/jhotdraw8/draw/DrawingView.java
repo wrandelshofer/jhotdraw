@@ -3,12 +3,6 @@
  */
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.model.DrawingModel;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -27,13 +21,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Figures;
-import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.tool.Tool;
 
 /**
  * A {@code DrawingView} can display a {@code Drawing} in a JavaFX scene graph.
@@ -538,7 +536,7 @@ public interface DrawingView extends RenderContext {
 
     @Nonnull
     default ObservableSet<Figure> getSelectedFigures() {
-        return selectedFiguresProperty();
+        return selectedFiguresProperty().get();
     }
 
     /**

@@ -107,7 +107,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     default <TT> TT getAncestor(@Nonnull Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
-        while (ancestor != null && !ancestorType.isAssignableFrom(ancestor.getClass())) {
+        while (ancestor != null && !ancestorType.isInstance(ancestor)) {
             ancestor = ancestor.getParent();
         }
         @SuppressWarnings("unchecked")

@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ModifiableObservableSet;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.event.Listener;
@@ -135,7 +136,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     @Override
     public final ObservableSet<Figure> getLayoutObservers() {
         if (dependentFigures == null) {
-            dependentFigures = FXCollections.observableSet(Collections.newSetFromMap(new IdentityHashMap<Figure, Boolean>()));
+            dependentFigures =new ModifiableObservableSet<>();
         }
         return dependentFigures;
     }

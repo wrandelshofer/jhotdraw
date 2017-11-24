@@ -189,29 +189,34 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     @Override
     public V get(Object key) {
-        return get(originOrdinal, key);
+        return get(originOrdinal, key, null);
+    }
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return get(originOrdinal, key, defaultValue);
     }
 
     public V get(StyleOrigin origin, K key) {
-        return get(origin.ordinal(), key);
+        return get(origin.ordinal(), key, null);
     }
 
     @SuppressWarnings("unchecked")
-    private V get(int originOrdinal, Object key) {
+    private V get(int originOrdinal, Object key, V defaultValue) {
         Integer index = keyMap.get(key);
-        return index == null ? null : getValue(originOrdinal, index, (K) key);
+        return index == null ? defaultValue : getValue(originOrdinal, index, (K) key, defaultValue);
     }
 
     public Map<K, V> getMap(StyleOrigin origin) {
         return (origin == this.origin) ? this : new SimpleStyleableMap<>(this, origin);
     }
 
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public StyleOrigin getStyleOrigin(Object key) {
         int index = ensureCapacity((K) key);
         for (int i = numOrigins - 1; i >= 0; i--) {
             final int arrayIndex = index * numOrigins + i;
-            Object value = arrayIndex<values.size()? values.get(arrayIndex):EMPTY;
+            Object value = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
             if (value != EMPTY) {
                 return StyleOrigin.values()[i];
             }
@@ -224,15 +229,15 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     private V getValue(int index, K key) {
-        return getValue(originOrdinal, index, key);
+        return getValue(originOrdinal, index, key, null);
     }
 
     @SuppressWarnings("unchecked")
-    private V getValue(int ordinal, int index, K key) {
+    private V getValue(int ordinal, int index, K key, V defaultValue) {
         Object value;
         if (ordinal == -1) {
             value = (V) EMPTY;
-            if ((index+1) * numOrigins <= values.size()) {
+            if ((index + 1) * numOrigins <= values.size()) {
                 for (int i = numOrigins - 1; i >= 0; i--) {
                     final int arrayIndex = index * numOrigins + i;
                     value = (V) values.get(arrayIndex);
@@ -245,7 +250,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             final int arrayIndex = index * numOrigins + ordinal;
             value = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
         }
-        return value == EMPTY ? null : (V) value;
+        return value == EMPTY ? defaultValue : (V) value;
     }
 
     private boolean hasValue(int index) {
@@ -334,7 +339,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     }
 
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     private V setValue(int ordinal, int index, K key, V newValue) {
         if (ordinal == -1) {
             throw new UnsupportedOperationException("can not set styled value");
@@ -617,12 +622,12 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
         @Override
         public V getValue() {
-            return SimpleStyleableMap.this.getValue(SimpleStyleableMap.this.originOrdinal, index, key);
+            return SimpleStyleableMap.this.getValue(SimpleStyleableMap.this.originOrdinal, index, key, null);
         }
 
         @Override
         public V setValue(V value) {
-            V oldValue = SimpleStyleableMap.this.getValue(SimpleStyleableMap.this.originOrdinal, index, key);
+            V oldValue = SimpleStyleableMap.this.getValue(SimpleStyleableMap.this.originOrdinal, index, key, null);
             SimpleStyleableMap.this.setValue(SimpleStyleableMap.this.originOrdinal, index, key, value);
             return oldValue;
         }

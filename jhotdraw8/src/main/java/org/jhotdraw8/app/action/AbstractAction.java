@@ -24,7 +24,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      * Holds the properties.
      */
     protected final ObservableMap<Key<?>, Object> properties//
-            = FXCollections.observableMap(new IdentityHashMap<>());
+            =FXCollections.observableHashMap();
 
     private final BooleanProperty selected=new SimpleBooleanProperty(this, SELECTED_PROPERTY);
     /**

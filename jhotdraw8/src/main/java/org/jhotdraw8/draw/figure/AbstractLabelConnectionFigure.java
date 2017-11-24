@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -99,11 +100,11 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         // We must update the start and end point when ever one of
         // the connection targets changes
         ChangeListener<Figure> clTarget = (observable, oldValue, newValue) -> {
-            if (oldValue != null && get(LABEL_TARGET) != oldValue) {
-                oldValue.getLayoutObservers().remove(AbstractLabelConnectionFigure.this);
+            if (oldValue != null) {
+                oldValue.getLayoutObservers().remove(this);
             }
             if (newValue != null) {
-                newValue.getLayoutObservers().add(AbstractLabelConnectionFigure.this);
+                newValue.getLayoutObservers().add(this);
             }
             updateConnectedProperty();
         };
@@ -159,11 +160,8 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      */
     @Override
     public Set<Figure> getLayoutSubjects() {
-        HashSet<Figure> ctf = new HashSet<>();
-        if (get(LABEL_TARGET) != null) {
-            ctf.add(get(LABEL_TARGET));
-        }
-        return ctf;
+        final Figure labelTarget = get(LABEL_TARGET);
+        return labelTarget == null ? Collections.emptySet(): Collections.singleton(labelTarget);
     }
 
     public boolean isConnected() {
@@ -269,7 +267,6 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
 
     @Override
     public void removeLayoutSubject(Figure subject) {
-
         if (subject == get(LABEL_TARGET)) {
             set(LABEL_TARGET, null);
         }

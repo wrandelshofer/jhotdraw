@@ -40,7 +40,7 @@ public class AbstractCompositeFigureNGTest {
         parent.addChild(child);
         
         assertTrue(parent.getChildren().contains(child));
-        assertEquals(child.getParent(),parent);
+        assertEquals((Object)child.getParent(),(Object)parent);
     }
     @Test
     public void testRemoveChildUpdatesParentAndChildrenProperties() {
@@ -64,7 +64,7 @@ public class AbstractCompositeFigureNGTest {
         
         assertFalse(parent1.getChildren().contains(child));
         assertTrue(parent2.getChildren().contains(child));
-        assertEquals(child.getParent(),parent2);
+        assertEquals((Object)child.getParent(),(Object)parent2);
     }
     @Test
     public void testMoveChildToSameParentUpdatesParentAndChildrenProperties() {
@@ -78,10 +78,10 @@ public class AbstractCompositeFigureNGTest {
         
         assertEquals(parent1.getChildren().size(),2   );
         assertTrue(parent1.getChildren().contains(child1));
-        assertEquals(child1.getParent(),parent1);
-        assertEquals(parent1.getChildren().get(0),child2);
-        assertEquals(parent1.getChildren().get(1),child1);
-        assertEquals(child1.getParent(),parent1);
+        assertEquals((Object)child1.getParent(),parent1);
+        assertEquals((Object)parent1.getChildren().get(0),child2);
+        assertEquals((Object)parent1.getChildren().get(1),child1);
+        assertEquals((Object)child1.getParent(),parent1);
     }
     @Test
     public void testMoveChildToSampeParentUpdatesParentAndChildrenProperties2() {
@@ -95,18 +95,30 @@ public class AbstractCompositeFigureNGTest {
         
         assertEquals(parent1.getChildren().size(),2   );
         assertTrue(parent1.getChildren().contains(child1));
-        assertEquals(child1.getParent(),parent1);
-        assertEquals(parent1.getChildren().get(0),child1);
-        assertEquals(parent1.getChildren().get(1),child2);
-        assertEquals(child1.getParent(),parent1);
+        assertEquals((Object)child1.getParent(),parent1);
+        assertEquals((Object)parent1.getChildren().get(0),child1);
+        assertEquals((Object)parent1.getChildren().get(1),child2);
+        assertEquals((Object)child1.getParent(),parent1);
     }
 
 
     /** Mock class. */
     public class AbstractCompositeFigureImpl extends AbstractCompositeFigure implements NonTransformableFigure {
 
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Bounds getBoundsInLocal() {
+            throw new UnsupportedOperationException("Not supported yet."); 
+        }
+
+        @Override
+        public Transform getWorldToLocal() {
+            throw new UnsupportedOperationException("Not supported yet."); 
+        }
+
+        @Override
+        public Transform getWorldToParent() {
             throw new UnsupportedOperationException("Not supported yet."); 
         }
 
@@ -117,6 +129,21 @@ public class AbstractCompositeFigureNGTest {
 
         @Override
         public Node createNode(RenderContext renderer) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void reshapeInParent(Transform transform) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void transformInLocal(Transform transform) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void transformInParent(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

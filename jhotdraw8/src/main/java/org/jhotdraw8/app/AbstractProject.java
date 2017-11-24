@@ -27,7 +27,7 @@ public abstract class AbstractProject extends AbstractDisableable implements Pro
     protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
     protected final ObservableMap<Key<?>, Object> properties//
-            = FXCollections.observableMap(new IdentityHashMap<>());
+            = FXCollections.observableHashMap();
     protected final StringProperty title = new SimpleStringProperty();
     private final IntegerProperty disambiguation = new SimpleIntegerProperty();
 

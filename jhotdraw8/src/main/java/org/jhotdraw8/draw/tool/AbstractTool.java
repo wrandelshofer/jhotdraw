@@ -246,7 +246,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
-            properties = FXCollections.observableMap(new IdentityHashMap<>());
+            properties =FXCollections.observableHashMap();
         }
         return properties;
     }

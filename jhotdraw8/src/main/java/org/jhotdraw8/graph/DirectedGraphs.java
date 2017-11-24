@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -109,7 +111,7 @@ public class DirectedGraphs {
         }
 
         // Create final forest.
-        Set<List<V>> visited = Collections.newSetFromMap(new IdentityHashMap<List<V>, Boolean>(forest.size()));// must be identity hash !
+        Set<List<V>> visited = new HashSet<List<V>>(forest.size());
         List<Set<V>> disjointSets = new ArrayList<>(forest.size());
         for (List<V> set : forest.values()) {
             if (visited.add(set)) {
@@ -159,7 +161,7 @@ public class DirectedGraphs {
             }
         }
         // Create final forest.
-        final Map<IntArrayList, Object> setMap = new IdentityHashMap<IntArrayList, Object>();
+        final Map<IntArrayList, Object> setMap = new HashMap<IntArrayList, Object>();
         final List<Set<Integer>> disjointSets = new ArrayList<>();
         for (IntArrayList set : sets) {
             if (!setMap.containsKey(set)) {

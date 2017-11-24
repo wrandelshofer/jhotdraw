@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -518,6 +517,17 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
+    
+    /**
+     * Returns the bounds of the figure in world coordinates.
+     * 
+     * @return the bounds in world coordinates
+     */
+    @Nonnull
+    default Bounds getBoundsInWorld() {
+        return Transforms.transform(getLocalToWorld(), getBoundsInLocal());
+    }
+
 
     /**
      * Returns the center of the figure in the local coordinates of the figure.
@@ -540,7 +550,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         Bounds b = getBoundsInParent();
         return Geom.center(b);
     }
-
+    
     /**
      * The child figures.
      * <p>

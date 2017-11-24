@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -113,7 +114,17 @@ public class LayersInspector extends AbstractDrawingInspector {
         this(LayersInspector.class.getResource("LayersInspector.fxml"), layerFactory);
     }
 
+    private boolean isUpdateSelection;
+
     private void onSelectionChanged() {
+        if (!isUpdateSelection) {
+            isUpdateSelection = true;
+            Platform.runLater(this::updateSelection);
+        }
+    }
+
+    private void updateSelection() {
+        isUpdateSelection = false;
         Drawing d = drawingView.getDrawing();
         Set<Figure> selection = drawingView.getSelectedFigures();
         HashMap<Figure, Integer> layerToIndex = new HashMap<>();

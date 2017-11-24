@@ -1159,14 +1159,18 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             recreateHandles = false;
         }
 
+        Bounds visibleRect = getVisibleRect();
+
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
             //dirtyHandles.addChild(entry.getKey());
             for (Handle handle : entry.getValue()) {
                 Node n = handle.getNode();
-                if (nodeToHandleMap.put(n, handle) == null) {
-                    handlesPane.getChildren().add(n);
-                }
                 handle.updateNode(this);
+                if (visibleRect.intersects(n.getBoundsInParent())) {
+                    if (nodeToHandleMap.put(n, handle) == null) {
+                        handlesPane.getChildren().add(n);
+                    }
+                }
             }
         }
     }

@@ -6,8 +6,12 @@ package org.jhotdraw8.draw.inspector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Supplier;
@@ -100,7 +104,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getDrawingModel().set(f, tagsKey,  ImmutableList.ofCollection(newTags));
+                        getDrawingModel().set(f, tagsKey, ImmutableList.ofCollection(newTags));
                     }
                 }
                 updateList();
@@ -131,7 +135,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     @Override
     protected void handleSelectionChanged(Set<Figure> newValue) {
-        updateList();
+       updateListLater();
     }
 
     private void init(URL fxmlUrl) {
@@ -192,7 +196,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     protected void updateList() {
         Set<Figure> newValue = getSelectedFigures();
-        Set<String> union = new TreeSet<>(CssWordListConverter.NFD_COMPARATOR);
+        Set<String> union = new HashSet<>();
         Set<String> intersection = new HashSet<>();
 
         boolean first = true;
@@ -203,14 +207,20 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 intersection.addAll(tags);
                 first = false;
             } else {
-                intersection.retainAll(tags);
+                if (!intersection.isEmpty()) {
+                    intersection.retainAll(tags);
+                }
             }
-            union.addAll(tags);
+            if (!tags.isEmpty()) {
+                union.addAll(tags);
+            }
         }
 
         ObservableList<StyleClassItem> items = listView.getItems();
         items.clear();
-        for (String t : union) {
+        List<String> unionList=new ArrayList<>(union);
+        Collections.sort(unionList);
+        for (String t : unionList) {
             items.add(new StyleClassItem(t, intersection.contains(t)));
         }
     }

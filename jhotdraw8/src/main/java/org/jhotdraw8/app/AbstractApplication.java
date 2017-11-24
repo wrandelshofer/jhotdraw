@@ -89,7 +89,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     @Nonnull
     public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
-            properties = FXCollections.observableMap(new IdentityHashMap<>());
+            properties = FXCollections.observableHashMap();
         }
         return properties;
     }
