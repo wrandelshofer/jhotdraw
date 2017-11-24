@@ -143,7 +143,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
 
         boolean result = index != null
-                && index * numOrigins < values.size()
+                && index * numOrigins + origin.ordinal() < values.size()
                 && values.get(index * numOrigins + origin.ordinal()) != EMPTY;
         return result;
     }
@@ -210,7 +210,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     public StyleOrigin getStyleOrigin(Object key) {
         int index = ensureCapacity((K) key);
         for (int i = numOrigins - 1; i >= 0; i--) {
-            V value = (V) values.get(index * numOrigins + i);
+            final int arrayIndex = index * numOrigins + i;
+            Object value = arrayIndex<values.size()? values.get(arrayIndex):EMPTY;
             if (value != EMPTY) {
                 return StyleOrigin.values()[i];
             }
@@ -231,9 +232,10 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         Object value;
         if (ordinal == -1) {
             value = (V) EMPTY;
-            if (index * numOrigins < values.size()) {
+            if ((index+1) * numOrigins <= values.size()) {
                 for (int i = numOrigins - 1; i >= 0; i--) {
-                    value = (V) values.get(index * numOrigins + i);
+                    final int arrayIndex = index * numOrigins + i;
+                    value = (V) values.get(arrayIndex);
                     if (value != EMPTY) {
                         break;
                     }
@@ -241,7 +243,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             }
         } else {
             final int arrayIndex = index * numOrigins + ordinal;
-            value = values.size() < arrayIndex ? EMPTY : values.get(arrayIndex);
+            value = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
         }
         return value == EMPTY ? null : (V) value;
     }
