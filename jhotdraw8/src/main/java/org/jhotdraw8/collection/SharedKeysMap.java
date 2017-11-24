@@ -147,7 +147,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private V getValue(int index, K key) {
         Object value;
         final int arrayIndex = index;
-        value = values.size() < arrayIndex ? EMPTY : values.get(arrayIndex);
+        value =  arrayIndex < values.size()? values.get(arrayIndex): EMPTY ;
         return value == EMPTY ? null : (V) value;
     }
 
