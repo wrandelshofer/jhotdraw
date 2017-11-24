@@ -328,7 +328,7 @@ public class Shapes {
         } catch (IOException ex) {
             // suppress error
         }
-        return b.get();
+        return b.build();
     }
 
     /**
@@ -344,7 +344,7 @@ public class Shapes {
     public static Path2D.Double awtShapeFromSvgString(String str) throws IOException {
         AWTDoublePathBuilder b = new AWTDoublePathBuilder();
         buildFromSvgString(b, str);
-        return b.get();
+        return b.build();
     }
 
     public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter) {
@@ -842,7 +842,7 @@ public class Shapes {
         } catch (IOException ex) {
             // suppress error, XXX really?
         }
-        return b.get().getElements();
+        return b.build().getElements();
     }
 
     /**

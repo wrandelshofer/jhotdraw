@@ -11,7 +11,7 @@ package org.jhotdraw8.geom;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class FloatSvgPathBuilder implements PathBuilder {
+public class SvgFloatPathBuilder implements PathBuilder {
 
     private StringBuilder buf = new StringBuilder();
 

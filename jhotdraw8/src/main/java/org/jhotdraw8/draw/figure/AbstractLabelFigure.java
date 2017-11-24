@@ -226,7 +226,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         try {
             AWTDoublePathBuilder builder = new AWTDoublePathBuilder();
             Shapes.buildFromSvgString(builder, content);
-            Path2D.Double path = builder.get();
+            Path2D.Double path = builder.build();
 
             FXPathBuilder builder2 = new FXPathBuilder();
 

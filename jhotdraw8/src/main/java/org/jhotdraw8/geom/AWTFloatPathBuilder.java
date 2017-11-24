@@ -48,7 +48,7 @@ public class AWTFloatPathBuilder extends AbstractPathBuilder {
         path.quadTo(x, y, x0, y0);
     }
 
-    public Path2D.Float get() {
+    public Path2D.Float build() {
         pathDone();
         return path;
     }

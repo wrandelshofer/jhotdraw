@@ -68,7 +68,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
 // empty
     }
 
-    public Path get() {
+    public Path build() {
         pathDone();
         return new Path(elements);
     }

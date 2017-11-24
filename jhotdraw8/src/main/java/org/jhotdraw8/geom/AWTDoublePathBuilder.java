@@ -48,7 +48,7 @@ public class AWTDoublePathBuilder extends AbstractPathBuilder {
         path.quadTo(x, y, x0, y0);
     }
 
-    public Path2D.Double get() {
+    public Path2D.Double build() {
         pathDone();
         return path;
     }
