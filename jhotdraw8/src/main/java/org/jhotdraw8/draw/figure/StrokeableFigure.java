@@ -168,7 +168,11 @@ public interface StrokeableFigure extends Figure {
      * @param shape a shape node
      */
     default void applyStrokeableFigureProperties(@Nonnull Shape shape) {
+        Paint p = Paintable.getPaint(getStyled(STROKE));
         applyStrokeColorProperties(shape);
+        if (p == null) {
+            return;
+        }
         applyStrokeWidthProperties(shape);
         applyStrokeCapAndJoinProperties(shape);
 

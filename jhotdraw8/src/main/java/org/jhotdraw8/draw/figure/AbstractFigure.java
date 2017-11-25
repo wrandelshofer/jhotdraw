@@ -4,32 +4,28 @@
 package org.jhotdraw8.draw.figure;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
-import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ModifiableObservableSet;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.FigureKey;
+import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
-import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -39,8 +35,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @version $Id$
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
-
-    private ObservableSet<Figure> dependentFigures;
+    private transient Map<Key<?>,Object> cachedValues;
+    private ObservableList<Figure> dependentFigures;
     private final ObjectProperty<Figure> parent = new ObjectPropertyBase<Figure>() {
 
         @Override
@@ -74,24 +70,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
-        if (origin == StyleOrigin.USER && !Objects.equals(change.getValueRemoved(), change.getValueAdded())) {
-            if (willChange) {
-                if (change.getKey() instanceof FigureKey) {
-                    if (((FigureKey<?>) change.getKey()).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                        firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.WILL_CHANGE, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
-                    }
-                }
-            } else {
-                firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.CHANGED, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
-            }
-        }
-    }
-
-    @Override
     public <T> T getCachedValue(Key<T> key) {
-        return key.get(properties);
+       return (cachedValues==null)?key.getDefaultValue(): key.get(cachedValues);
     }
 
     @Override
@@ -134,9 +114,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public final ObservableSet<Figure> getLayoutObservers() {
+    public final Collection<Figure> getLayoutObservers() {
         if (dependentFigures == null) {
-            dependentFigures =new ModifiableObservableSet<>();
+            dependentFigures =FXCollections.observableArrayList();
         }
         return dependentFigures;
     }
@@ -252,7 +232,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Override
     public <T> T setCachedValue(Key<T> key, T value) {
-        return key.put(properties, value);
+        if (cachedValues==null) cachedValues=new ConcurrentHashMap<>();
+        return (value==null)?key.remove(cachedValues):key.put(cachedValues, value);
     }
 
     @Override

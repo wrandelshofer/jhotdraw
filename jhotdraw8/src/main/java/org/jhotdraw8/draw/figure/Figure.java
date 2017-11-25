@@ -201,7 +201,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 }
             }
         } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
+            throw new InternalError("class can not read its own keys",ex);
         }
     }
 
@@ -585,7 +585,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return a list of dependent figures
      */
     @Nonnull
-    Set<Figure> getLayoutObservers();
+    Collection<Figure> getLayoutObservers();
 
     /**
      * Returns the ancestor Drawing.
@@ -695,7 +695,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return a list of layout subjects
      */
     @Nonnull
-    default Set<Figure> getLayoutSubjects() {
+    default Collection<Figure> getLayoutSubjects() {
         return Collections.emptySet();
     }
 

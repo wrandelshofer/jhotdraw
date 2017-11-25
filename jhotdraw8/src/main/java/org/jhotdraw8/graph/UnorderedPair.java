@@ -60,10 +60,7 @@ public class UnorderedPair<V> implements Pair<V> {
 
     @Override
     public int hashCode() {
-        int hash = 13
-                + a.hashCode()
-                + b.hashCode();
-        return hash;
+        return a.hashCode() * b.hashCode();
     }
 
     @Override

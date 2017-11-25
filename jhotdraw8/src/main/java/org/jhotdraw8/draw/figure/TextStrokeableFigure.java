@@ -5,7 +5,6 @@ package org.jhotdraw8.draw.figure;
 
 import java.util.List;
 import java.util.Objects;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
@@ -18,12 +17,12 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 
 /**
- * {@code TextStrokeableFigure} allows to change the stroke ofCollection the text.
+ * {@code TextStrokeableFigure} allows to change the stroke ofCollection the
+ * text.
  *
  * @design.pattern Figure Mixin, Traits.
  *
@@ -50,7 +49,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static EnumStyleableFigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("text-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), false,StrokeLineCap.BUTT);
+    public static EnumStyleableFigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("text-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -60,7 +59,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static EnumStyleableFigureKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("text-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false,StrokeLineJoin.MITER);
+    public static EnumStyleableFigureKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("text-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
      * value: {@code 4.0}.
@@ -86,7 +85,7 @@ public interface TextStrokeableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.OUTSIDE}.
      */
-    public static EnumStyleableFigureKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableFigureKey<>("text-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false,StrokeType.OUTSIDE);
+    public static EnumStyleableFigureKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableFigureKey<>("text-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false, StrokeType.OUTSIDE);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -128,6 +127,17 @@ public interface TextStrokeableFigure extends Figure {
      * @param shape a shape node
      */
     default void applyTextStrokeableFigureProperties(@Nonnull Shape shape) {
+        Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE_COLOR));
+        double strokeWidth = getStyled(TEXT_STROKE_WIDTH);
+        if (!Objects.equals(shape.getStroke(), paint)) {
+            shape.setStroke(paint);
+        }
+        if (paint == null) {
+            return;
+        }
+        if (shape.getStrokeWidth() != strokeWidth) {
+            shape.setStrokeWidth(strokeWidth);
+        }
         double d = getStyled(TEXT_STROKE_DASH_OFFSET);
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -144,17 +154,9 @@ public interface TextStrokeableFigure extends Figure {
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
-        Paint p = Paintable.getPaint(getStyled(TEXT_STROKE_COLOR));
-        if (!Objects.equals(shape.getStroke(), p)) {
-            shape.setStroke(p);
-        }
         StrokeType st = getStyled(TEXT_STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
-        }
-        d = getStyled(TEXT_STROKE_WIDTH);
-        if (shape.getStrokeWidth() != d) {
-            shape.setStrokeWidth(d);
         }
 
         List<Double> dashArray = getStyled(TEXT_STROKE_DASH_ARRAY);

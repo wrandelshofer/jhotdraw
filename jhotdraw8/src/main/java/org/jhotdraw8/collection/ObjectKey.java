@@ -58,6 +58,7 @@ public class ObjectKey<T> implements Key<T> {
      * Whether the value may be set to null.
      */
     private final boolean isNullable;
+    private final boolean isTransient;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -108,6 +109,9 @@ public class ObjectKey<T> implements Key<T> {
      * @param defaultValue The default value.
      */
     public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
+        this(name,clazz,typeParameters,isNullable,false,defaultValue);
+    }
+    public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable,boolean isTransient, T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -122,6 +126,7 @@ public class ObjectKey<T> implements Key<T> {
         this.clazz = clazz;
         this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
         this.isNullable = isNullable;
+        this.isTransient=isTransient;
         this.defaultValue = defaultValue;
     }
 
@@ -183,7 +188,7 @@ public class ObjectKey<T> implements Key<T> {
     }
 
     public boolean isTransient() {
-        return false;
+        return isTransient;
     }
 
     /**

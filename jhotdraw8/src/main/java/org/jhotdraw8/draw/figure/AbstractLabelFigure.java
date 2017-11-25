@@ -8,6 +8,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -19,6 +20,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -76,7 +78,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      */
     public final static SizeInsetsStyleableMapAccessor SHAPE_SLICE = new SizeInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
     /**
-     * This property specifies the bounds of a {@link SHAPE} property. If the
+     * This property specifies the bounds of a {@link#SHAPE} property. If the
      * bounds are null or empty, then the bounds of the shape are used.
      */
     public final static DoubleStyleableFigureKey SHAPE_BOUNDS_X = new DoubleStyleableFigureKey("shapeBoundsX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
@@ -90,7 +92,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
-    protected transient Bounds boundsInLocal;
+    public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY=new ObjectKey<>("boundsInLocal",Bounds.class,null,true,true,null);
     private Text textNode;
 
     public AbstractLabelFigure() {
@@ -135,6 +137,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     @Override
     public Bounds getBoundsInLocal() {
+        Bounds boundsInLocal=getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
         if (boundsInLocal == null) {
             getLayoutBounds();
             Bounds b = textNode.getBoundsInLocal();
@@ -144,6 +147,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
                     b.getMinY() - i.getTop(),
                     b.getWidth() + i.getLeft() + i.getRight(),
                     b.getHeight() + i.getTop() + i.getBottom());
+            setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, boundsInLocal);
         }
         return boundsInLocal;
     }
@@ -183,7 +187,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     protected abstract String getText(RenderContext ctx);
 
     protected void invalidateBounds() {
-        boundsInLocal = null;
+        setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, null);
     }
 
     @Override

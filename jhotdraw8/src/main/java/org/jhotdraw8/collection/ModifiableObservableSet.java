@@ -101,33 +101,43 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     public boolean containsAll(Collection<?> c) {
         return backingSet.containsAll(c);
     }
+    
+    private static class Change<EE> extends SetChangeListener.Change<EE> {
+private final EE value;
+private final boolean wasAdded;
+        public Change(ObservableSet<EE> set, EE value, boolean wasAdded) {
+            super(set);
+            this.value=value;this.wasAdded=wasAdded;
+        }
+        
+        @Override
+        public EE getElementAdded() {
+            return (wasAdded)?value:null;
+        }
 
-    private void fireAdded(E e) {
+        @Override
+        public EE getElementRemoved() {
+            return (!wasAdded)?value:null;
+        }
+
+        @Override
+        public boolean wasAdded() {
+        return wasAdded;
+        }
+
+        @Override
+        public boolean wasRemoved() {
+            return !wasAdded;
+        }
+        
+    }
+
+    protected void fireAdded(E e) {
         if (e instanceof Observable) {
             ((Observable) e).addListener(itemHandler);
         }
         if (changeListeners != null) {
-            SetChangeListener.Change<E> change = new SetChangeListener.Change<E>(this) {
-                @Override
-                public E getElementAdded() {
-                    return e;
-                }
-
-                @Override
-                public E getElementRemoved() {
-                    return null;
-                }
-
-                @Override
-                public boolean wasAdded() {
-                    return true;
-                }
-
-                @Override
-                public boolean wasRemoved() {
-                    return false;
-                }
-            };
+            SetChangeListener.Change<E> change = new Change<E>(this,e,true);
             for (SetChangeListener<? super E> listener : changeListeners) {
                 listener.onChanged(change);
             }
@@ -162,32 +172,12 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         }
     }
 
-    private void fireRemoved(E e) {
+    protected void fireRemoved(E e) {
         if (e instanceof Observable) {
             ((Observable) e).removeListener(itemHandler);
         }
-        if (changeListeners != null) {
-            SetChangeListener.Change<E> change = new SetChangeListener.Change<E>(this) {
-                @Override
-                public E getElementAdded() {
-                    return null;
-                }
-
-                @Override
-                public E getElementRemoved() {
-                    return e;
-                }
-
-                @Override
-                public boolean wasAdded() {
-                    return false;
-                }
-
-                @Override
-                public boolean wasRemoved() {
-                    return true;
-                }
-            };
+        if (changeListeners != null&&!changeListeners.isEmpty()) {
+            SetChangeListener.Change<E> change = new Change<E>(this,e,false);
             for (SetChangeListener<? super E> listener : changeListeners) {
                 listener.onChanged(change);
             }

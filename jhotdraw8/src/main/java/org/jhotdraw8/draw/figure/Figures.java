@@ -5,13 +5,10 @@ package org.jhotdraw8.draw.figure;
 
 import static java.lang.Double.max;
 import static java.lang.Math.min;
-import java.util.Collection;
-import java.util.stream.StreamSupport;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import org.jhotdraw8.collection.Iterators;
 import org.jhotdraw8.geom.BoundsCalculator;
-import org.jhotdraw8.geom.Geom;
 
 /**
  * Figures.
@@ -26,7 +23,7 @@ public class Figures {
     }
 
     public static Bounds getBounds(Iterable<? extends Figure> figures) {
-        Bounds b3= Iterators.toList(figures).stream().map(Figure::getBoundsInWorld)
+        Bounds b3= Iterators.toList(figures).stream().parallel().map(Figure::getBoundsInWorld)
                 .filter(b->Double.isFinite(b.getMaxX())&&Double.isFinite(b.getMaxY()))
                 .collect(BoundsCalculator::new, BoundsCalculator::accept,
                         BoundsCalculator::combine).getBounds();

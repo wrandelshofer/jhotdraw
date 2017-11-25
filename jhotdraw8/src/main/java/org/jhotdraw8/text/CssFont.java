@@ -3,7 +3,9 @@
  */
 package org.jhotdraw8.text;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -23,7 +25,7 @@ public class CssFont {
     private final FontWeight weight;
     private final FontPosture posture;
     private final double size;
-    private final transient Font font;
+    private final Font font;
 
     public CssFont(String family, FontWeight weight, FontPosture posture, double size) {
         this.family = family;
@@ -55,9 +57,9 @@ public class CssFont {
     public Font getFont() {
         return font;
     }
-
+private final static Map<String,CssFont> cachedFonts=new ConcurrentHashMap<>();
     public static CssFont font(String family, FontWeight weight, FontPosture posture, double size) {
-        return new CssFont(family, weight, posture, size);
+        return cachedFonts.computeIfAbsent(family+weight.name()+posture.name()+Double.doubleToRawLongBits(size),str->new CssFont(family, weight, posture, size));
     }
 
     public static CssFont font(String family, double size) {

@@ -26,7 +26,7 @@ import javafx.geometry.Point2D;
 public class Transforms {
 
     public static Transform concat(Transform a, Transform b) {
-        return (a == null) ? b : (b == null ? a : a.createConcatenation(b));
+        return (a == null||a.isIdentity()) ? b : (b == null||b.isIdentity() ? a : a.createConcatenation(b));
     }
 
     public static Transform concat(Transform a, Transform b, Transform c) {

@@ -16,8 +16,11 @@ import org.jhotdraw8.collection.Key;
  * @version $Id$
  */
 public interface CacheableFigure extends Figure {
-@Nullable
-     <T>T setCachedValue(@Nonnull Key<T> key,@Nullable T value);
-     @Nullable <T>T getCachedValue(@Nonnull Key<T> key);
+
+    @Nullable
+    <T> T setCachedValue(@Nonnull Key<T> key, @Nullable T value);
+
+    @Nullable
+    <T> T getCachedValue(@Nonnull Key<T> key);
 
 }
