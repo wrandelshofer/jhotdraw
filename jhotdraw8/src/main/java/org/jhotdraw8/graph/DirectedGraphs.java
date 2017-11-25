@@ -278,7 +278,7 @@ public class DirectedGraphs {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex
-        final int[] deg = new int[n]; // number of unprocessed incoming arrows on vertex
+        final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
             final int m = model.getNextCount(i);
             for (int j = 0; j < m; j++) {
