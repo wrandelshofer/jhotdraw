@@ -1126,11 +1126,11 @@ public class Geom {
     }
 
     public static String toString(Bounds b) {
-        return b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
+        return b==null?"null":b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
     public static String toString(Rectangle2D b) {
-        return b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
+        return b==null?"null":b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
     public static Bounds union(Bounds a, Bounds b) {

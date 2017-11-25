@@ -187,11 +187,6 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     public void layout() {
 
         Figure labelTarget = get(LABEL_TARGET);
-        if (labelTarget == null || labelTarget == this) {
-            invalidateBounds();
-            invalidateTransforms();
-            return;
-        }
        final Point2D labeledLoc;
         Connector labelConnector = get(LABEL_CONNECTOR);
         final Point2D perp;
@@ -255,9 +250,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         } else {
             setTransforms();
         }
-
-        invalidateBounds();
-        invalidateTransforms();
+        
+        Bounds bconnected = getLayoutBounds();
+        setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
+            invalidateTransforms();
     }
 
     @Override

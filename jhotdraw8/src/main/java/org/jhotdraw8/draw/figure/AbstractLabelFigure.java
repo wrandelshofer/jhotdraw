@@ -92,7 +92,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
-    public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY=new ObjectKey<>("boundsInLocal",Bounds.class,null,true,true,null);
+    public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY = new ObjectKey<>("boundsInLocal", Bounds.class, null, true, true, null);
     private Text textNode;
 
     public AbstractLabelFigure() {
@@ -107,15 +107,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     public AbstractLabelFigure(double x, double y) {
         set(ORIGIN, new Point2D(x, y));
-    }
-
-    @Override
-    protected <T> void changed(Key<T> key, T oldv, T newv) {
-        super.changed(key, oldv, newv);
-        if ((key instanceof FigureKey)
-                && ((FigureKey) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
-            invalidateBounds();
-        }
     }
 
     @Override
@@ -137,19 +128,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     @Override
     public Bounds getBoundsInLocal() {
-        Bounds boundsInLocal=getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
-        if (boundsInLocal == null) {
-            getLayoutBounds();
-            Bounds b = textNode.getBoundsInLocal();
-            Insets i = getStyled(PADDING);
-            boundsInLocal = new BoundingBox(
-                    b.getMinX() - i.getLeft(),
-                    b.getMinY() - i.getTop(),
-                    b.getWidth() + i.getLeft() + i.getRight(),
-                    b.getHeight() + i.getTop() + i.getBottom());
-            setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, boundsInLocal);
-        }
-        return boundsInLocal;
+        Bounds boundsInLocal = getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
+        return boundsInLocal == null ? new BoundingBox(0, 0, 0, 0) : boundsInLocal;
     }
 
     /**
@@ -171,7 +151,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
                 b.getMinY() - i.getTop(),
                 b.getWidth() + i.getLeft() + i.getRight(),
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
-        }
+    }
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
@@ -186,13 +166,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     protected abstract String getText(RenderContext ctx);
 
-    protected void invalidateBounds() {
-        setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, null);
-    }
 
     @Override
     public void layout() {
-        invalidateBounds();
+        Bounds b = getLayoutBounds();
+        setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, b);
     }
 
     @Override
@@ -200,7 +178,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Bounds lb = getLayoutBounds();
         Insets i = getStyled(PADDING);
         set(ORIGIN, new Point2D(x + i.getLeft(), y + lb.getHeight() - i.getBottom()));
-        invalidateBounds();
+        //invalidateBounds();
     }
 
     protected void updateGroupNode(RenderContext ctx, Group node) {
@@ -251,7 +229,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     protected void updateTextNode(RenderContext ctx, Text tn) {
-        tn.setText(getText(ctx));
+        final String text = getText(ctx);
+        if (!Objects.equals(text, tn.getText())) {
+            tn.setText(text);
+        }
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));
         applyTextFillableFigureProperties(tn);

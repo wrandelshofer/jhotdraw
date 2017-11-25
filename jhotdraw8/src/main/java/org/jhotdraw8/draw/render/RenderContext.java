@@ -38,7 +38,7 @@ public interface RenderContext extends PropertyBean {
      */
     Key<Double> DPI = new ObjectKey<>("dpi", Double.class, 72.0);
     /**
-     * Contains a non-null value if the rendering is clipped.
+     * Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
      */
     Key<Bounds> CLIP_BOUNDS = new ObjectKey<>("clipBounds", Bounds.class, null);
     /**

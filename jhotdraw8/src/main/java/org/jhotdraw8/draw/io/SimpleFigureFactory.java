@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import javafx.css.Styleable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
@@ -35,7 +36,7 @@ import org.w3c.dom.Text;
  * @version $Id$
  */
 public class SimpleFigureFactory implements FigureFactory {
-
+private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.getName());
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
     private final Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> elemToKey = new HashMap<>();
@@ -310,8 +311,8 @@ public class SimpleFigureFactory implements FigureFactory {
         for (HashMap<MapAccessor<?>, String> map : keyToAttr.values()) {
             for (MapAccessor<?> k : map.keySet()) {
                 String fullValueType = k.getFullValueType();
-                if (!keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
-                    System.err.println(this + " WARNING can not convert " + fullValueType + " to XML for key " + k + ".");
+                if (!k.isTransient()&&!keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
+                   LOGGER.warning( "can not convert " + fullValueType + " to XML for key " + k + ".");
                 }
             }
         }
@@ -474,7 +475,7 @@ public class SimpleFigureFactory implements FigureFactory {
         if (!strToKey.containsKey(attributeName)) {
             Set<Class<? extends Figure>> set = (skipAttributes.get(attributeName));
             if (set == null || !set.contains(f.getClass())) {
-                System.err.println("SimpleFigureFactory WARNING no mapping for attribute " + attributeName
+                LOGGER.warning("no mapping for attribute " + attributeName
                         + " in figure " + f.getClass());
                 return null;
             }

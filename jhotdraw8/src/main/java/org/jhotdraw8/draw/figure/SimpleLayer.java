@@ -50,14 +50,13 @@ public class SimpleLayer extends AbstractCompositeFigure
         Bounds clipBounds= ctx.get(RenderContext.CLIP_BOUNDS) ;
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
                 &&clipBounds!=null
-                && getChildren().size() > maxNodesPerLayer) {
+               /* && getChildren().size() > maxNodesPerLayer*/) {
 
             
             for (Figure child : getChildren()) {
                 Node childNode=ctx.getNode(child);
-                if (childNode.getBoundsInParent().intersects(clipBounds)){
+                if (child.getBoundsInWorld().intersects(clipBounds)){
                     childNodes.add(childNode);
-                    if (childNodes.size()>maxNodesPerLayer)break;
                 }
             }
             
