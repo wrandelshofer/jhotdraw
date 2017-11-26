@@ -341,7 +341,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void reshape(Figure f, double x, double y, double width, double height) {
+    public void reshapeInLocal(Figure f, double x, double y, double width, double height) {
         f.reshapeInLocal(x, y, width, height);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }

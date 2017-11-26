@@ -257,7 +257,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param height desired height in the local coordinat system, may be
      * negative
      */
-    void reshape(@Nonnull Figure f, double x, double y, double width, double height);
+    void reshapeInLocal(@Nonnull Figure f, double x, double y, double width, double height);
 
     /**
      * Invokes the layout method of the figure and fires appropriate /

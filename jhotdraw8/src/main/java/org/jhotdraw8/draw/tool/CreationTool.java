@@ -111,7 +111,7 @@ private double defaultHeight=10;
                     c2 = new Point2D(c1.getX() + defaultWidth, c1.getY() + defaultHeight);
                 }
                 DrawingModel dm = dv.getModel();
-                dm.reshape(createdFigure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
+                dm.reshapeInLocal(createdFigure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
                         - c1.getY());
             }
             dv.selectedFiguresProperty().clear();
@@ -144,7 +144,7 @@ private double defaultHeight=10;
             }
 
             DrawingModel dm = dv.getModel();
-            dm.reshape(createdFigure, c1.getX(), c1.getY(), newWidth, newHeight);
+            dm.reshapeInLocal(createdFigure, c1.getX(), c1.getY(), newWidth, newHeight);
         }
         event.consume();
     }

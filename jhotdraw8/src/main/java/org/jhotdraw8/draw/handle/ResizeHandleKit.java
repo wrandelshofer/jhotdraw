@@ -212,7 +212,7 @@ public class ResizeHandleKit {
                 }
             }
 
-            model.reshape(owner, bounds.getMinX(), bounds.getMaxY() - newHeight, newWidth, newHeight);
+            model.reshapeInLocal(owner, bounds.getMinX(), bounds.getMaxY() - newHeight, newWidth, newHeight);
         }
     }
 
@@ -235,7 +235,7 @@ public class ResizeHandleKit {
                 double newRatio = newHeight / newWidth;
                 newHeight = newWidth * preferredAspectRatio;
             }
-            model.reshape(owner, bounds.getMinX(), (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
+            model.reshapeInLocal(owner, bounds.getMinX(), (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
         }
     }
 
@@ -259,7 +259,7 @@ public class ResizeHandleKit {
                 double newRatio = newHeight / newWidth;
                 newWidth = newHeight / preferredAspectRatio;
             }
-            model.reshape(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, newY, newWidth, newHeight);
+            model.reshapeInLocal(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, newY, newWidth, newHeight);
         }
     }
 
@@ -289,7 +289,7 @@ public class ResizeHandleKit {
                 }
             }
 
-            model.reshape(owner, bounds.getMaxX() - newWidth, bounds.getMaxY() - newHeight, newWidth, newHeight);
+            model.reshapeInLocal(owner, bounds.getMaxX() - newWidth, bounds.getMaxY() - newHeight, newWidth, newHeight);
         }
     }
 
@@ -318,7 +318,7 @@ public class ResizeHandleKit {
                     newWidth = newHeight / preferredAspectRatio;
                 }
             }
-            model.reshape(owner, bounds.getMinX(), bounds.getMinY(), newWidth, newHeight);
+            model.reshapeInLocal(owner, bounds.getMinX(), bounds.getMinY(), newWidth, newHeight);
         }
     }
 
@@ -341,7 +341,7 @@ public class ResizeHandleKit {
             if (keepAspect) {
                 newWidth = newHeight / preferredAspectRatio;
             }
-            model.reshape(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, bounds.getMinY(), newWidth, newHeight);
+            model.reshapeInLocal(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, bounds.getMinY(), newWidth, newHeight);
         }
     }
 
@@ -370,7 +370,7 @@ public class ResizeHandleKit {
                     newWidth = newHeight / preferredAspectRatio;
                 }
             }
-            model.reshape(owner, bounds.getMaxX() - newWidth, bounds.getMinY(), newWidth, newHeight);
+            model.reshapeInLocal(owner, bounds.getMaxX() - newWidth, bounds.getMinY(), newWidth, newHeight);
         }
     }
 
@@ -394,7 +394,7 @@ public class ResizeHandleKit {
                 double newRatio = newHeight / newWidth;
                 newHeight = newWidth * preferredAspectRatio;
             }
-            model.reshape(owner, newX, (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
+            model.reshapeInLocal(owner, newX, (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
         }
     }
 }

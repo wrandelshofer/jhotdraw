@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.beans.property.Property;
@@ -15,6 +15,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
@@ -33,7 +35,6 @@ import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.text.CssSize;
 
 /**
@@ -200,56 +201,58 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             tangent = new Point2D(1, 0);
             perp = new Point2D(0, -1);
         }
-        switch (getStyled(LABEL_AUTOROTATE)) {
-        case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
-            final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
-            set(ROTATE, theta);
-        }
-        break;
-        case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
-            final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
-            final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
-            set(ROTATE, halfTheta);
-        }
-        break;
-        case OFF:
-        default:
-            break;
-        }
+ 
 
         set(LABELED_LOCATION, labeledLoc);
         Bounds b = getLayoutBounds();
-        double tx = 0;
+        double hposTranslate = 0;
         switch (getStyled(TEXT_HPOS)) {
         case CENTER:
-            tx = b.getWidth() * -0.5;
+            hposTranslate = b.getWidth() * -0.5;
             break;
         case LEFT:
             break;
         case RIGHT:
-            tx = -b.getWidth();
+            hposTranslate = -b.getWidth();
             break;
         }
 
-        // Note: must subtract LABEL_OFFSET, because it points downwards but perp points upwards.
         // FIXME must convert with current font size of label!!
-        final double labelOffsetX = -getStyled(LABEL_OFFSET_X).getConvertedValue();
+        final double labelOffsetX = getStyled(LABEL_OFFSET_X).getConvertedValue();
         final double labelOffsetY = getStyled(LABEL_OFFSET_Y).getConvertedValue();
         Point2D origin = labeledLoc
                 .add(perp.multiply(-labelOffsetY))
                 .add(tangent.multiply(labelOffsetX));
         
-        // FIXME add tx in angle of rotated label!
-        origin=origin.add(tx,0);
+       Rotate rotate= null;
+        switch (getStyled(LABEL_AUTOROTATE)) {
+        case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
+            final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+            rotate=new Rotate(theta,origin.getX(),origin.getY());
+           // set(ROTATE, theta);
+        }
+        break;
+        case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
+            final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+            final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
+            rotate=new Rotate(halfTheta,origin.getX(),origin.getY());
+           // set(ROTATE, halfTheta);
+        }
+        break;
+        case OFF:
+        default:
+            break;
+        }        // FIXME add tx in angle of rotated label!
+//        origin=origin.add(tangent.multiply(hposTranslate));
+        origin=origin.add(hposTranslate,0);
 
         Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
         origin = origin.add(labelTranslation);
         set(ORIGIN, origin);
-        if (labelTarget != null) {
-            setTransforms(labelTarget.getLocalToParent());
-        } else {
-            setTransforms();
-        }
+        List<Transform> transforms=new ArrayList<>();
+        if (rotate!=null)transforms.add(rotate);
+        //if (labelTarget!=null)transforms.add(labelTarget.getLocalToParent()); really?
+        setTransforms(transforms.toArray(new Transform[transforms.size()]));
         
         Bounds bconnected = getLayoutBounds();
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
