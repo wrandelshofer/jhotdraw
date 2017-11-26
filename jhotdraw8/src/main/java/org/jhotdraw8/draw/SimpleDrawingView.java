@@ -91,13 +91,26 @@ import org.jhotdraw8.util.ReversedList;
  */
 public class SimpleDrawingView extends AbstractDrawingView implements EditableComponent {
 
+    /**
+     * The id of the canvas pane for CSS styling.
+     */
+    public static final String CANVAS_PANE_ID = "canvasPane";
+
     private final static double INVSQRT2 = 1.0 / Math.sqrt(2);
+    /**
+     * The name of the margin property.
+     */
+    public final static String MARGIN_PROPERTY = "margin";
     /**
      * Selection tolerance. Selectable margin around a figure.
      */
     public final static double TOLERANCE = 5;
 
     public final static double TOLERANCE_SQUARED = TOLERANCE * TOLERANCE;
+    /**
+     * The id of the tool pane for CSS styling.
+     */
+    public static final String TOOL_PANE_ID = "toolPane";
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
 
     private Rectangle canvasPane;
@@ -132,32 +145,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             oldValue = newValue;
         }
     };
-    private Group drawingPane;
-
-    private Group drawingSubScene;
-    /**
-     * Maps JavaFX nodes to a figure. Note that the DrawingView may contain
-     * JavaFX nodes which have no mapping. this is usually the case, when a
-     * Figure is represented by multiple nodes. Then only the parent of these
-     * nodes is associated with the figure.
-     */
-    private final Map<Figure, Node> figureToNodeMap = new HashMap<>();
-    /**
-     * This is just a wrapper around the focusedProperty of the JavaFX Node
-     * which is used to render this view.
-     */
-    private final ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
-    private Group gridPane;
-    /**
-     * The set of all handles which were produced by selected figures.
-     */
-    private final Map<Figure, List<Handle>> handles = new HashMap<>();
-    private boolean handlesAreValid;
-    private Group handlesPane;
-    /**
-     * The number of nodes that are maximally updated per frame.
-     */
-    private int maxUpdate = 100;
     private final Listener<DrawingModelEvent> drawingModelHandler = new Listener<DrawingModelEvent>() {
 
         @Override
@@ -185,6 +172,71 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
 
     };
+    private Group drawingPane;
+
+    private Group drawingSubScene;
+    /**
+     * Maps JavaFX nodes to a figure. Note that the DrawingView may contain
+     * JavaFX nodes which have no mapping. this is usually the case, when a
+     * Figure is represented by multiple nodes. Then only the parent of these
+     * nodes is associated with the figure.
+     */
+    private final Map<Figure, Node> figureToNodeMap = new HashMap<>();
+    /**
+     * This is just a wrapper around the focusedProperty of the JavaFX Node
+     * which is used to render this view.
+     */
+    private final ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
+    private Group gridPane;
+    /**
+     * The set of all handles which were produced by selected figures.
+     */
+    private final Map<Figure, List<Handle>> handles = new HashMap<>();
+    private boolean handlesAreValid;
+    private Group handlesPane;
+    /**
+     * Margin around the drawing.
+     */
+    private final ObjectProperty<Insets> margin = new NonnullProperty<Insets>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
+    /**
+     * The number of nodes that are maximally updated per frame.
+     */
+    private int maxUpdate = 100;
+    private final InvalidationListener modelInvalidationListener = o -> repaint();
+
+    private SimpleDrawingViewNode node;
+    /**
+     * Maps each JavaFX node to a figure in the drawing.
+     */
+    private final Map<Node, Figure> nodeToFigureMap = new HashMap<>();
+    /**
+     * Maps each JavaFX node to a handle in the drawing view.
+     */
+    private final Map<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
+    private Pane overlaysPane;
+    private Group overlaysSubScene;
+    private Bounds previousScaledBounds = null;
+    private boolean recreateHandles;
+    boolean renderIntoImage = false;
+
+    private Runnable repainter = null;
+    /**
+     * This is the JavaFX Node which is used to represent this drawing view. in
+     * a JavaFX scene graph.
+     */
+    private Pane rootPane;
+    private ScrollPane scrollPane;
+    /**
+     * The set of all secondary handles. One handle at a time may create
+     * secondary handles.
+     */
+    private final ArrayList<Handle> secondaryHandles = new ArrayList<>();
+    /**
+     * If too many figures are selected, we only draw one outline handle for all
+     * selected figures instead of one outline handle for each selected figure.
+     */
+    private int tooManySelectedFigures = 20;
+    private BorderPane toolPane;
     private final Listener<TreeModelEvent<Figure>> treeModelHandler = (TreeModelEvent<Figure> event) -> {
         Figure f = event.getNode();
         switch (event.getEventType()) {
@@ -220,55 +272,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                         + " not supported");
         }
     };
-    private final InvalidationListener modelInvalidationListener = o -> repaint();
-
-    private SimpleDrawingViewNode node;
-    /**
-     * Maps each JavaFX node to a figure in the drawing.
-     */
-    private final Map<Node, Figure> nodeToFigureMap = new HashMap<>();
-    /**
-     * Maps each JavaFX node to a handle in the drawing view.
-     */
-    private final Map<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
-    private Pane overlaysPane;
-    private Group overlaysSubScene;
-    private Bounds previousScaledBounds = null;
-    private boolean recreateHandles;
-    boolean renderIntoImage = false;
-
-    /**
-     * The name of the margin property.
-     */
-    public final static String MARGIN_PROPERTY = "margin";
-
-    /**
-     * Margin around the drawing.
-     */
-    private final ObjectProperty<Insets> margin = new NonnullProperty<Insets>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
-
-    {
-        margin.addListener(observable -> updateLayout());
-    }
-
-    private Runnable repainter = null;
-    /**
-     * This is the JavaFX Node which is used to represent this drawing view. in
-     * a JavaFX scene graph.
-     */
-    private Pane rootPane;
-    /**
-     * The set of all secondary handles. One handle at a time may create
-     * secondary handles.
-     */
-    private final ArrayList<Handle> secondaryHandles = new ArrayList<>();
-    /**
-     * If too many figures are selected, we only draw one outline handle for all
-     * selected figures instead of one outline handle for each selected figure.
-     */
-    private int tooManySelectedFigures = 20;
-    private BorderPane toolPane;
     private Transform viewToWorldTransform = null;
+    private final InvalidationListener visibleRectChangedHandler = this::handleVisibleRectChanged;
     private Transform worldToViewTransform = null;
     /**
      * The zoom factor.
@@ -278,24 +283,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         @Override
         protected void fireValueChangedEvent() {
             super.fireValueChangedEvent();
-            double newValue = get();
-            Scale st = new Scale(newValue, newValue);
-            if (drawingPane != null) {
-                if (drawingPane.getTransforms().isEmpty()) {
-                    drawingPane.getTransforms().add(st);
-                } else {
-                    drawingPane.getTransforms().set(0, st);
-                }
-            }
-            updateLayout();
-            invalidateHandleNodes();
-            if (constrainer.get() != null) {
-                constrainer.get().updateNode(SimpleDrawingView.this);
-            }
-            scrollSelectedFiguresToVisible();
-            handleVisibleRectChanged(this);
+            handleZoomFactorChanged(get());
         }
     };
+
+    {
+        margin.addListener(observable -> updateLayout());
+    }
 
     {
         constrainer.addListener((o, oldValue, newValue) -> updateConstrainer(oldValue, newValue));
@@ -699,6 +693,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return result.keySet();
     }
 
+    public Insets getMargin() {
+        return margin.get();
+    }
+
+    public void setMargin(Insets value) {
+        margin.set(value);
+    }
+
     @Override
     public DrawingModel getModel() {
         return drawingModel.get();
@@ -707,10 +709,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Node getNode() {
         return node;
-    }
-
-    private boolean hasNode(Figure f) {
-        return figureToNodeMap.containsKey(f);
     }
 
     @Override
@@ -733,6 +731,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return scrollPane;
     }
 
+    public ObservableList<String> getStylesheets() {
+        return rootPane.getStylesheets();
+    }
+
     @Override
     public Transform getViewToWorld() {
         if (viewToWorldTransform == null) {
@@ -742,6 +744,37 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             viewToWorldTransform = (zoom == 1.0) ? tr : Transforms.concat(new Scale(1.0 / zoom, 1.0 / zoom), tr);
         }
         return viewToWorldTransform;
+    }
+
+    @Override
+    public Bounds getVisibleRect() {
+        ScrollPane sp = getScrollPane();
+        if (sp == null) {
+            return getNode().getBoundsInLocal();
+        }
+
+        final Bounds viewportBounds = sp.getViewportBounds();
+
+        final Bounds contentBounds = sp.getContent().getBoundsInLocal();
+
+        final double hmin = sp.getHmin();
+        final double hmax = sp.getHmax();
+        final double hvalue = sp.getHvalue();
+        final double contentWidth = contentBounds.getWidth();
+        final double viewportWidth = viewportBounds.getWidth();
+
+        final double vmin = sp.getVmin();
+        final double vmax = sp.getVmax();
+        final double vvalue = sp.getVvalue();
+        final double contentHeight = contentBounds.getHeight();
+        final double viewportHeight = viewportBounds.getHeight();
+
+        final double hoffset = Math.max(0, contentWidth - viewportWidth) * (hvalue - hmin) / (hmax - hmin);
+        final double voffset = Math.max(0, contentHeight - viewportHeight) * (vvalue - vmin) / (vmax - vmin);
+
+        final Bounds rect = new BoundingBox(hoffset, voffset, viewportWidth, viewportHeight);
+
+        return rect;
     }
 
     @Override
@@ -843,6 +876,33 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
+    private void handleVisibleRectChanged(Observable o) {
+        invalidateConstrainerNode();
+        invalidateLayerNodes();
+        repaint();
+    }
+
+    private void handleZoomFactorChanged(double newValue) {
+        Scale st = new Scale(newValue, newValue);
+        if (drawingPane != null) {
+            if (drawingPane.getTransforms().isEmpty()) {
+                drawingPane.getTransforms().add(st);
+            } else {
+                drawingPane.getTransforms().set(0, st);
+            }
+        }
+        updateLayout();
+        invalidateHandleNodes();
+        if (constrainer.get() != null) {
+            constrainer.get().updateNode(SimpleDrawingView.this);
+        }
+        scrollSelectedFiguresToVisible();
+    }
+
+    private boolean hasNode(Figure f) {
+        return figureToNodeMap.containsKey(f);
+    }
+
     protected void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
@@ -900,54 +960,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // install/deiinstall listeners to scrollpane
         node.sceneProperty().addListener(this::updateScrollPaneListeners);
     }
-    /**
-     * The id of the tool pane for CSS styling.
-     */
-    public static final String TOOL_PANE_ID = "toolPane";
-    /**
-     * The id of the canvas pane for CSS styling.
-     */
-    public static final String CANVAS_PANE_ID = "canvasPane";
-
-    private ScrollPane scrollPane;
-    private final InvalidationListener visibleRectChangedHandler = this::handleVisibleRectChanged;
-
-    private void updateScrollPaneListeners(Observable o) {
-        if (scrollPane != null) {
-            scrollPane.vvalueProperty().removeListener(visibleRectChangedHandler);
-            scrollPane.hvalueProperty().removeListener(visibleRectChangedHandler);
-            scrollPane.widthProperty().removeListener(visibleRectChangedHandler);
-            scrollPane.heightProperty().removeListener(visibleRectChangedHandler);
-        }
-
-        for (Parent p = node.getParent(); p != null; p = p.getParent()) {
-            if (p instanceof ScrollPane) {
-                scrollPane = (ScrollPane) p;
-                break;
-            }
-        }
-        if (scrollPane != null) {
-            scrollPane.vvalueProperty().addListener(visibleRectChangedHandler);
-            scrollPane.hvalueProperty().addListener(visibleRectChangedHandler);
-            scrollPane.widthProperty().addListener(visibleRectChangedHandler);
-            scrollPane.heightProperty().addListener(visibleRectChangedHandler);
-        }
-    }
-
-    private void handleVisibleRectChanged(Observable o) {
-        invalidateConstrainerNode();
-        invalidateLayerNodes();
-        repaint();
-    }
 
     private void invalidateConstrainerNode() {
         constrainerNodeValid = false;
-    }
-
-    private void invalidateLayerNodes() {
-        for (Figure f : getDrawing().getChildren()) {
-            dirtyFigureNodes.add(f);
-        }
     }
 
     private void invalidateFigureNode(Figure f) {
@@ -984,6 +999,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
+    private void invalidateLayerNodes() {
+        for (Figure f : getDrawing().getChildren()) {
+            dirtyFigureNodes.add(f);
+        }
+    }
+
     private void invalidateWorldViewTransforms() {
         worldToViewTransform = viewToWorldTransform = null;
     }
@@ -1004,6 +1025,16 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         double dx = point.getX() - cx;
         double dy = point.getY() - cy;
         return dx * dx + dy * dy < squaredRadius;
+    }
+
+    /**
+     * The top, right, bottom, and left margin around the drawing.
+     *
+     * @return The margin. The default value is:
+     * {@code new Insets(20, 20, 20, 20)}.
+     */
+    public ObjectProperty<Insets> marginProperty() {
+        return margin;
     }
 
     @Override
@@ -1057,7 +1088,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (sp == null) {
             return;
         }
-
+        System.out.println("SimpleDrawingView. scrollRectToVisible " + Geom.toString(boundsInView));
         final Bounds contentBounds = sp.getContent().getBoundsInLocal();
 
         double width = contentBounds.getWidth();
@@ -1068,37 +1099,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // scrolling values range from 0 to 1
         sp.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
         sp.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
-    }
-
-    @Override
-    public Bounds getVisibleRect() {
-        ScrollPane sp = getScrollPane();
-        if (sp == null) {
-            return getNode().getBoundsInLocal();
-        }
-
-        final Bounds viewportBounds = sp.getViewportBounds();
-
-        final Bounds contentBounds = sp.getContent().getBoundsInLocal();
-
-        final double hmin = sp.getHmin();
-        final double hmax = sp.getHmax();
-        final double hvalue = sp.getHvalue();
-        final double contentWidth = contentBounds.getWidth();
-        final double viewportWidth = viewportBounds.getWidth();
-
-        final double vmin = sp.getVmin();
-        final double vmax = sp.getVmax();
-        final double vvalue = sp.getVvalue();
-        final double contentHeight = contentBounds.getHeight();
-        final double viewportHeight = viewportBounds.getHeight();
-
-        final double hoffset = Math.max(0, contentWidth - viewportWidth) * (hvalue - hmin) / (hmax - hmin);
-        final double voffset = Math.max(0, contentHeight - viewportHeight) * (vvalue - vmin) / (vmax - vmin);
-
-        final Bounds rect = new BoundingBox(hoffset, voffset, viewportWidth, viewportHeight);
-
-        return rect;
     }
 
     /**
@@ -1140,6 +1140,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             newValue.addListener(this::handleConstrainerInvalidated);
             invalidateConstrainerNode();
             repaint();
+        }
+    }
+
+    private void updateConstrainerNode() {
+        constrainerNodeValid = true;
+        Constrainer c = getConstrainer();
+        if (c != null) {
+            c.updateNode(this);
         }
     }
 
@@ -1272,11 +1280,25 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    private void updateConstrainerNode() {
-        constrainerNodeValid = true;
-        Constrainer c = getConstrainer();
-        if (c != null) {
-            c.updateNode(this);
+    private void updateScrollPaneListeners(Observable o) {
+        if (scrollPane != null) {
+            scrollPane.vvalueProperty().removeListener(visibleRectChangedHandler);
+            scrollPane.hvalueProperty().removeListener(visibleRectChangedHandler);
+            scrollPane.widthProperty().removeListener(visibleRectChangedHandler);
+            scrollPane.heightProperty().removeListener(visibleRectChangedHandler);
+        }
+
+        for (Parent p = node.getParent(); p != null; p = p.getParent()) {
+            if (p instanceof ScrollPane) {
+                scrollPane = (ScrollPane) p;
+                break;
+            }
+        }
+        if (scrollPane != null) {
+            scrollPane.vvalueProperty().addListener(visibleRectChangedHandler);
+            scrollPane.hvalueProperty().addListener(visibleRectChangedHandler);
+            scrollPane.widthProperty().addListener(visibleRectChangedHandler);
+            scrollPane.heightProperty().addListener(visibleRectChangedHandler);
         }
     }
 
@@ -1376,28 +1398,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         public void paste() {
             SimpleDrawingView.this.paste();
         }
-    }
-
-    public ObservableList<String> getStylesheets() {
-        return rootPane.getStylesheets();
-    }
-
-    public Insets getMargin() {
-        return margin.get();
-    }
-
-    public void setMargin(Insets value) {
-        margin.set(value);
-    }
-
-    /**
-     * The top, right, bottom, and left margin around the drawing.
-     *
-     * @return The margin. The default value is:
-     * {@code new Insets(20, 20, 20, 20)}.
-     */
-    public ObjectProperty<Insets> marginProperty() {
-        return margin;
     }
 
 }

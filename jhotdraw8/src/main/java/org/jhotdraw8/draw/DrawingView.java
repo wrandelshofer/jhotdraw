@@ -153,7 +153,7 @@ public interface DrawingView extends RenderContext {
     default void scrollSelectedFiguresToVisible() {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         if (!selectedFigures.isEmpty()) {
-            scrollRectToVisible(worldToView(Figures.getBounds(selectedFigures)));
+            scrollRectToVisible(worldToView(Figures.getBoundsInWorld(selectedFigures)));
         }
     }
 

@@ -22,7 +22,7 @@ public class Figures {
 
     }
 
-    public static Bounds getBounds(Iterable<? extends Figure> figures) {
+    public static Bounds getBoundsInWorld(Iterable<? extends Figure> figures) {
         Bounds b3= Iterators.toList(figures).stream().parallel().map(Figure::getBoundsInWorld)
                 .filter(b->Double.isFinite(b.getMaxX())&&Double.isFinite(b.getMaxY()))
                 .collect(BoundsCalculator::new, BoundsCalculator::accept,
