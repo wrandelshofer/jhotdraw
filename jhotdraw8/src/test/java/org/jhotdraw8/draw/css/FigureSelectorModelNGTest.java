@@ -42,7 +42,7 @@ public class FigureSelectorModelNGTest {
         
        assertNotNull(key.getDefaultValue(),"need a key with a non-null default value for this test");
         
-        assertEquals(instance.getAttribute(figure,attrName),converter.toString(key.getDefaultValue()),"no value has been set, must be default");
+        assertEquals(instance.getAttribute(figure,attrName),"initial","no value has been set, must be 'initial'");
         
         instance.setAttribute(figure, StyleOrigin.USER, attrName, converter.toString(null));
         

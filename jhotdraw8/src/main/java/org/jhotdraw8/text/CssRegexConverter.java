@@ -16,10 +16,10 @@ import org.jhotdraw8.io.IdFactory;
  *
  * Parses the following EBNF:
  * <pre>
- RegexReplace := "none" | "regex(" Find  ","   [ Replace ] ")" ;
- Find := TT_STRING;
- Replace := TT_STRING;
- </pre>
+ * RegexReplace := "none" | "regex(" Find  ","   [ Replace ] ")" ;
+ * Find := TT_STRING;
+ * Replace := TT_STRING;
+ * </pre>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -79,23 +79,28 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         String find = null;
         String replace = null;
 
+        String msg = nullable ? "\"replace(\" or \"none\" expected" : "\"replace(\" expected";
+
         switch (tt.nextToken()) {
             case CssTokenizer.TT_FUNCTION:
                 if ("replace".equals(tt.currentStringValue())) {
                 } else {
-                    throw new ParseException("\"replace(\" or \"none\" expected", tt.getStartPosition());
+                    throw new ParseException(msg, tt.getStartPosition());
                 }
                 break;
             case CssTokenizer.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
                     tt.skipWhitespace();
                     in.position(tt.getStartPosition());
-                    return null;
+                    if (nullable) {
+                        return null;
+                    }
+                    throw new ParseException(msg, tt.getStartPosition());
                 } else {
-                    throw new ParseException("\"replace(\" or \"none\" expected", tt.getStartPosition());
+                    throw new ParseException(msg, tt.getStartPosition());
                 }
             default:
-                throw new ParseException("find string expected", tt.getStartPosition());
+                throw new ParseException(msg, tt.getStartPosition());
         }
         switch (tt.nextToken()) {
             case CssTokenizer.TT_STRING:
@@ -120,7 +125,8 @@ public class CssRegexConverter implements Converter<RegexReplace> {
             case CssTokenizer.TT_EOF:
                 break;
             default:
-                throw new ParseException("replace string expected", tt.getStartPosition());
+                replace = null;
+                tt.pushBack();
         }
         switch (tt.nextToken()) {
             case ')':

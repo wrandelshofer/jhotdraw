@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.text.CssRegexConverter;
-import org.jhotdraw8.text.RegexReplace;
+import java.text.ParseException;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -28,13 +27,13 @@ public class CssRegexConverterNGTest {
     @DataProvider
     public Object[][] regexOutputData() {
         return new Object[][]{
-            {"'' ''", "", ""},
-            {"'.*@(.*)'", "a@b", "a@b"},
-            {"'.*@(.*)' '$1'", "a@b", "b"},
-            {"'.*@(.*)' '$0'", "a@b", "a@b"},
-            {"'.*@(.*)'", "a@b", "a@b"},
-            {"'.*@(.*)' ' ' ", "a@b", " "},
-            {"'.*@(.*)' ''", "a@b", ""},};
+            {"replace('' '')", "", ""},
+            {"replace('.*@(.*)')", "a@b", "a@b"},
+            {"replace('.*@(.*)' '$1')", "a@b", "b"},
+            {"replace('.*@(.*)' '$0')", "a@b", "a@b"},
+            {"replace('.*@(.*)')", "a@b", "a@b"},
+            {"replace('.*@(.*)' ' ' )", "a@b", " "},
+            {"replace('.*@(.*)' '')", "a@b", ""},};
     }
     @Test(dataProvider = "regexConverterData")
     public void testRegexFromStringReplace(String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
@@ -43,27 +42,53 @@ public class CssRegexConverterNGTest {
         assertEquals(rgx.getFind(), expectedFind,"find");
         assertEquals(rgx.getReplace(), expectedReplace,"replace");
     }
+    @Test(dataProvider = "nullableRegexConverterData")
+    public void testRegexFromStringReplaceNullable(String inputCssRegex, boolean expectNull) throws Exception {
+        CssRegexConverter cNullable = new CssRegexConverter(true);
+        RegexReplace rgx = cNullable.fromString(inputCssRegex);
+        if (expectNull)
+            assertNull(rgx,"Nullable converter must return null regex");
+        else
+            assertNotNull(rgx,"Nullable converter most not return null regex");
+        
+        CssRegexConverter cNonnull = new CssRegexConverter(false);
+        try {
+        RegexReplace rgxNonnull = cNonnull.fromString(inputCssRegex);
+            if (expectNull)
+                fail("Nonnull converter must produce ParseException");
+        } catch (ParseException e) {
+            if (!expectNull)
+                fail("Nonnull converter must not produce ParseException");
+        }
+    }
+    
 
     @DataProvider
     public Object[][] regexConverterData() {
         return new Object[][]{
-            {"'' ''", "", ""},
-            {"'.*@(.*)'", ".*@(.*)", null},
-            {"'.*@(.*)' '$1'", ".*@(.*)", "$1"},
-            {"'.*@(.*)' '$0'", ".*@(.*)", "$0"},
-            {"'.*@(.*)'", ".*@(.*)", null},
-            {"'.*@(.*)' ''", ".*@(.*)", ""},
-            {"'.*@(.*)' ''", ".*@(.*)", ""},
+            {"replace('' '')", "", ""},
+            {"replace('.*@(.*)')", ".*@(.*)", null},
+            {"replace('.*@(.*)' '$1')", ".*@(.*)", "$1"},
+            {"replace('.*@(.*)' '$0')", ".*@(.*)", "$0"},
+            {"replace('.*@(.*)')", ".*@(.*)", null},
+            {"replace('.*@(.*)' '')", ".*@(.*)", ""},
+            {"replace('.*@(.*)' '')", ".*@(.*)", ""},
         //
-            {"none", null, null},
-            {"'.*@(.*)'", ".*@(.*)", null},
-            {"'.*@(.*)' '$1'", ".*@(.*)", "$1"},
-            {"'.*@(.*)' '$0'", ".*@(.*)", "$0"},
-            {"'.*@(.*)'", ".*@(.*)", null},
-            {"'.*@(.*)' ''", ".*@(.*)", ""},
-            {"'.*@(.*)'", ".*@(.*)", null},
+            {"replace('.*@(.*)')", ".*@(.*)", null},
+            {"replace('.*@(.*)' '$1')", ".*@(.*)", "$1"},
+            {"replace('.*@(.*)' '$0')", ".*@(.*)", "$0"},
+            {"replace('.*@(.*)')", ".*@(.*)", null},
+            {"replace('.*@(.*)' '')", ".*@(.*)", ""},
+            {"replace('.*@(.*)')", ".*@(.*)", null},
             //
-            {"'.*\\'(.*)' '$1'", ".*'(.*)", "$1"},
+            {"replace('.*\\'(.*)' '$1')", ".*'(.*)", "$1"},
+        };
+    }
+    @DataProvider
+    public Object[][] nullableRegexConverterData() {
+        return new Object[][]{
+            {"replace('' '')", false},
+            {"none", true},
         };
     }
 }
