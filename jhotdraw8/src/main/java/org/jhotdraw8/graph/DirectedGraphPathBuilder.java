@@ -416,18 +416,22 @@ public class DirectedGraphPathBuilder<V, A> {
     private IntNodeWithCost<A> findIntShortestPath(@Nonnull IntDirectedGraph< A> graph,
             @Nonnull int start, @Nonnull int goal, @Nonnull ToDoubleFunction<A> costf) {
         final int vertexCount = graph.getVertexCount();
+        if (vertexCount == 0) {
+            return null;
+        }
+
         if (intFrontierMap == null || intFrontierMap.length < vertexCount) {
             intFrontierMap = new IntNodeWithCost[vertexCount];
             intExplored = new BitSet(vertexCount);
         }
-        if (intFrontier == null ) {
+        if (intFrontier == null) {
             intFrontier = new PriorityQueue<>(16);
         }
 
         IntNodeWithCost<A> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
         intFrontier.clear();
         intExplored.clear();
-        Arrays.fill(intFrontierMap,null);// clears array to prevent build-up of garbage
+        Arrays.fill(intFrontierMap, null);// clears array to prevent build-up of garbage
         return result;
     }
 
