@@ -101,6 +101,8 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
             }
             if (uri != null) {
                 saveProjectChooseOptions(v, uri, chsr.getDataFormat());
+            }else{
+                v.removeDisabler(this);
             }
             if (oldFocusOwner != null) {
                 oldFocusOwner.requestFocus();
