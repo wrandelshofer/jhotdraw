@@ -1088,7 +1088,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (sp == null) {
             return;
         }
-        System.out.println("SimpleDrawingView. scrollRectToVisible " + Geom.toString(boundsInView));
         final Bounds contentBounds = sp.getContent().getBoundsInLocal();
 
         double width = contentBounds.getWidth();
