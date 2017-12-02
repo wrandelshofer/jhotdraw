@@ -39,10 +39,11 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     @Override
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
-        g.getProperties().put("line", new Line());
+        final Line line = new Line();
+        g.getProperties().put("line", line);
         g.getProperties().put("startMarker", new SVGPath());
         g.getProperties().put("endMarker", new SVGPath());
-        g.getChildren().add((Line) (g.getProperties().get("line")));
+        g.getChildren().add(line);
         return g;
     }
 

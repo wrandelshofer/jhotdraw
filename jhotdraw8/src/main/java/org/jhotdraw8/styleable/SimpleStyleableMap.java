@@ -176,7 +176,9 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         final int indexIfAbsent = keyMap.size();
         Integer indexIfPresent = keyMap.putIfAbsent(key, indexIfAbsent);
         int index = indexIfPresent == null ? indexIfAbsent : indexIfPresent;
-        for (int i = values.size(), n = (1 + index) * numOrigins; i < n; i++) {
+        int n = n = (1 + index) * numOrigins;
+        values.ensureCapacity(n);
+        for (int i = values.size(); i < n; i++) {
             values.add(EMPTY);
         }
         return index;

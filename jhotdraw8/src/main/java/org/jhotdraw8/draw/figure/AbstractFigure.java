@@ -15,14 +15,12 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.ModifiableObservableSet;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
@@ -35,7 +33,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @version $Id$
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
-    private transient Map<Key<?>,Object> cachedValues;
+
+    private transient Map<Key<?>, Object> cachedValues;
     private ObservableList<Figure> dependentFigures;
     private final ObjectProperty<Figure> parent = new ObjectPropertyBase<Figure>() {
 
@@ -71,7 +70,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Override
     public <T> T getCachedValue(Key<T> key) {
-       return (cachedValues==null)?key.getDefaultValue(): key.get(cachedValues);
+        return (cachedValues == null) ? key.getDefaultValue() : key.get(cachedValues);
     }
 
     @Override
@@ -116,7 +115,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     @Override
     public final Collection<Figure> getLayoutObservers() {
         if (dependentFigures == null) {
-            dependentFigures =FXCollections.observableArrayList();
+            dependentFigures = FXCollections.observableArrayList();
         }
         return dependentFigures;
     }
@@ -232,8 +231,10 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Override
     public <T> T setCachedValue(Key<T> key, T value) {
-        if (cachedValues==null) cachedValues=new ConcurrentHashMap<>();
-        return (value==null)?key.remove(cachedValues):key.put(cachedValues, value);
+        if (cachedValues == null) {
+            cachedValues = new ConcurrentHashMap<>();
+        }
+        return (value == null) ? key.remove(cachedValues) : key.put(cachedValues, value);
     }
 
     @Override

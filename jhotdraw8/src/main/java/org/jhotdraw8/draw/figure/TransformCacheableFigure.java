@@ -39,7 +39,8 @@ public interface TransformCacheableFigure extends CacheableFigure {
         Transform t = CACHE ? getCachedValue(LOCAL_TO_WORLD) : null;
         if (t == null) {
             t = getLocalToParent();
-            t = getParent() == null ? t : Transforms.concat(getParent().getLocalToWorld(), t);
+            final Figure parent = getParent();
+            t = parent == null ? t : Transforms.concat(parent.getLocalToWorld(), t);
             if (CACHE) {
                 setCachedValue(LOCAL_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
             }
@@ -52,7 +53,8 @@ public interface TransformCacheableFigure extends CacheableFigure {
         Transform t = getCachedValue(WORLD_TO_LOCAL);
         if (t == null) {
             t = getParentToLocal();
-            t = getParent() == null ? t : Transforms.concat(t, getParent().getWorldToLocal());
+            final Figure parent = getParent();
+            t = parent == null ? t : Transforms.concat(t, parent.getWorldToLocal());
             setCachedValue(WORLD_TO_LOCAL, t == null ? IDENTITY_TRANSFORM : t);
         }
         return t == IDENTITY_TRANSFORM ? null : t;
@@ -62,7 +64,8 @@ public interface TransformCacheableFigure extends CacheableFigure {
     default Transform getWorldToParent() {
         Transform t = CACHE ? getCachedValue(WORLD_TO_PARENT) : null;
         if (t == null) {
-            t = getParent() == null ? IDENTITY_TRANSFORM : getParent().getWorldToLocal();
+            final Figure parent = getParent();
+            t = parent == null ? IDENTITY_TRANSFORM : parent.getWorldToLocal();
             if (CACHE) {
                 setCachedValue(WORLD_TO_PARENT, t == null ? IDENTITY_TRANSFORM : t);
             }
