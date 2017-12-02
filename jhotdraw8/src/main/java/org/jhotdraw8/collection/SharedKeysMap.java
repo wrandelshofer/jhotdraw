@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.styleable.*;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -18,15 +17,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
-import javafx.css.StyleOrigin;
-import static org.jhotdraw8.draw.figure.FontableFigure.TEXT_VPOS;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 
 /**
- * A map which stores its values in an array, and which can share its keys with
- * other SharedKeysMaps.
- * <p>
- * This map stores one distinct value for each StyleOrigin.
+ * An observable map which stores its values in an array, and which can share
+ * its keys with other SharedKeysMaps.
  *
  * @author Werner Randelshofer
  * @param <K> key type
@@ -36,7 +30,6 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
     private final static Object EMPTY = new Object();
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
-
     private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
     private final Map<K, Integer> keyMap;
     private int size;
@@ -88,6 +81,22 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
             for (InvalidationListener l : invalidationListenerList) {
                 l.invalidated(this);
             }
+        }
+    }
+
+    public void clear() {
+        for (Iterator<Entry<K, Integer>> i = keyMap.entrySet().iterator(); i.hasNext();) {
+            Entry<K, Integer> e = i.next();
+            Integer index = e.getValue();
+            if (index < values.size()) {
+                removeValue(index, e.getKey());
+            }
+        }
+        if (size != 0) {
+            for (int i = 0, n = values.size(); i < n; i++) {
+                values.set(i, EMPTY);
+            }
+            size = 0;
         }
     }
 
@@ -143,11 +152,15 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return index == null ? null : getValue(index, (K) key);
     }
 
+    public int getIdentityHash() {
+        return System.identityHashCode(values);
+    }
+
     @SuppressWarnings("unchecked")
     private V getValue(int index, K key) {
         Object value;
         final int arrayIndex = index;
-        value =  arrayIndex < values.size()? values.get(arrayIndex): EMPTY ;
+        value = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
         return value == EMPTY ? null : (V) value;
     }
 
@@ -177,22 +190,6 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     public V remove(Object key) {
         int index = ensureCapacity((K) key);
         return removeValue(index, (K) key);
-    }
-
-    public void clear() {
-        for (Iterator<Entry<K, Integer>> i = keyMap.entrySet().iterator(); i.hasNext();) {
-            Entry<K, Integer> e = i.next();
-            Integer index = e.getValue();
-            if (index < values.size()) {
-                removeValue(index, e.getKey());
-            }
-        }
-        if (size != 0) {
-            for (int i = 0, n = values.size(); i < n; i++) {
-                values.set(i, EMPTY);
-            }
-            size = 0;
-        }
     }
 
     @Override
@@ -243,10 +240,6 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         return returnValue;
-    }
-
-    public int getIdentityHash() {
-        return System.identityHashCode(values);
     }
 
     @Override
