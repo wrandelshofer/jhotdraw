@@ -8,7 +8,7 @@ import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Path;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -40,8 +40,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         final Line line = new Line();
-        final SVGPath startMarker=new SVGPath();
-        final SVGPath endMarker=new SVGPath();
+        final Path startMarker=new Path();
+        final Path endMarker=new Path();
         g.getChildren().addAll(line,startMarker,endMarker);
         return g;
     }
@@ -64,7 +64,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
      * @param ctx the context
      * @param node the node
      */
-    protected void updateStartMarkerNode(RenderContext ctx, SVGPath node) {
+    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
             // empty
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
      * @param ctx the context
      * @param node the node
      */
-    protected void updateEndMarkerNode(RenderContext ctx, SVGPath node) {
+    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
             // empty
     }
 
@@ -83,8 +83,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     public void updateNode(RenderContext ctx, Node node) {
         javafx.scene.Group g = (javafx.scene.Group) node;
         Line lineNode = (Line) g.getChildren().get(0);
-        final SVGPath startMarkerNode = (SVGPath) g.getChildren().get(1);
-        final SVGPath endMarkerNode = (SVGPath) g.getChildren().get(2);
+        final Path startMarkerNode = (Path) g.getChildren().get(1);
+        final Path endMarkerNode = (Path) g.getChildren().get(2);
 
         Point2D start = get(START);
         Point2D end = get(END);
@@ -114,15 +114,18 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     }
 
     private void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
-            SVGPath markerNode,
+            Path markerNode,
             Point2D start, Point2D end, String svgString, double markerScaleFactor) {
         if (svgString != null) {
-            markerNode.setContent(svgString);
+            markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
             double angle = Math.atan2(start.getY() - end.getY(), start.getX() - end.getX());
             markerNode.getTransforms().setAll(
                     new Rotate(angle * 180 / Math.PI, start.getX(), start.getY()),
                     new Scale(markerScaleFactor, markerScaleFactor, start.getX(), start.getY()),
                     new Translate(start.getX(), start.getY()));
+            markerNode.setVisible(true);
+        }else{
+            markerNode.setVisible(false);
         }
     }
 

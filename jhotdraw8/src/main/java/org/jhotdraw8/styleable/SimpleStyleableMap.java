@@ -17,8 +17,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.css.StyleOrigin;
-import static org.jhotdraw8.draw.figure.FontableFigure.TEXT_VPOS;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 
 /**
  * A map which stores its values in an array, and which can share its keys with
@@ -32,7 +30,7 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
  */
 public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements StyleableMap<K, V> {
 
-    private final static Object EMPTY = new Object();
+    private final static Object NULL_VALUE = new Object();
     private final static int numOrigins = 4;
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
 
@@ -144,7 +142,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
         boolean result = index != null
                 && index * numOrigins + origin.ordinal() < values.size()
-                && values.get(index * numOrigins + origin.ordinal()) != EMPTY;
+                && values.get(index * numOrigins + origin.ordinal()) != null;
         return result;
     }
 
@@ -154,6 +152,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     public boolean containsValue(StyleOrigin origin, Object value) {
+        if (value==null)value=NULL_VALUE;
         for (int i = originOrdinal, n = values.size(); i < n; i += numOrigins) {
             if (Objects.equals(values.get(i), value)) {
                 return true;
@@ -171,7 +170,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         int n = n = (1 + index) * numOrigins;
         values.ensureCapacity(n);
         for (int i = values.size(); i < n; i++) {
-            values.add(EMPTY);
+            values.add(null);
         }
         return index;
     }
@@ -210,8 +209,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         int index = ensureCapacity((K) key);
         for (int i = numOrigins - 1; i >= 0; i--) {
             final int arrayIndex = index * numOrigins + i;
-            Object value = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
-            if (value != EMPTY) {
+            Object value = arrayIndex < values.size() ? values.get(arrayIndex) : null;
+            if (value != null) {
                 return StyleOrigin.values()[i];
             }
         }
@@ -230,21 +229,21 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private V getValue(int ordinal, int index, K key, V defaultValue) {
         Object value;
         if (ordinal == -1) {
-            value = (V) EMPTY;
+            value = (V) null;
             if ((index + 1) * numOrigins <= values.size()) {
                 for (int i = numOrigins - 1; i >= 0; i--) {
                     final int arrayIndex = index * numOrigins + i;
                     value = (V) values.get(arrayIndex);
-                    if (value != EMPTY) {
+                    if (value != null) {
                         break;
                     }
                 }
             }
         } else {
             final int arrayIndex = index * numOrigins + ordinal;
-            value = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
+            value = arrayIndex < values.size() ? values.get(arrayIndex) : null;
         }
-        return value == EMPTY ? defaultValue : (V) value;
+        return value == null ? defaultValue : (V) (value==NULL_VALUE?null:value);
     }
 
     private boolean hasValue(int index) {
@@ -253,7 +252,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     private boolean hasValue(int ordinal, int index) {
         final int arrayIndex = index * numOrigins + ordinal;
-        return arrayIndex < values.size() && values.get(arrayIndex) != EMPTY;
+        return arrayIndex < values.size() && values.get(arrayIndex) != null;
     }
 
     @Override
@@ -316,19 +315,20 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
         final int arrayIndex = index * numOrigins + ordinal;
 
-        Object oldValue = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
-        if (oldValue == EMPTY) {
+        Object oldValue = arrayIndex < values.size() ? values.get(arrayIndex) : null;
+        if (oldValue == null) {
             return null;
         } else {
-            values.set(index * numOrigins + ordinal, EMPTY);
+            values.set(index * numOrigins + ordinal, null);
             sizes[ordinal]--;
+            V returnValue=oldValue==NULL_VALUE?null:(V)oldValue;
             if (origin == StyleOrigin.USER) {
                 @SuppressWarnings("unchecked")
-                ChangeEvent change = new ChangeEvent(key, (V) oldValue, null, false, true);
+                ChangeEvent change = new ChangeEvent(key, returnValue, null, false, true);
                 callObservers(this.origin, change);
             }
 
-            return (V) oldValue;
+            return  returnValue;
         }
 
     }
@@ -339,15 +339,15 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             throw new UnsupportedOperationException("can not set styled value");
         }
         V oldValue = (V) values.get(index * numOrigins + ordinal);
-        if (oldValue == EMPTY) {
+        if (oldValue == null) {
             sizes[ordinal]++;
         }
-        values.set(index * numOrigins + ordinal, newValue);
+        values.set(index * numOrigins + ordinal, newValue==null?NULL_VALUE:newValue);
 
-        V returnValue = oldValue == EMPTY ? null : oldValue;
+        V returnValue = oldValue == NULL_VALUE ? null : oldValue;
         if (!Objects.equals(oldValue, newValue)) {
             if (origin == StyleOrigin.USER) {
-                ChangeEvent change = new ChangeEvent(key, returnValue, newValue, true, oldValue != EMPTY);
+                ChangeEvent change = new ChangeEvent(key, returnValue, newValue, true, oldValue != null);
                 callObservers(this.origin, change);
             }
         }

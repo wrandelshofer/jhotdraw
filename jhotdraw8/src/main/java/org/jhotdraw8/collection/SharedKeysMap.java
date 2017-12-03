@@ -28,7 +28,7 @@ import javafx.collections.ObservableMap;
  */
 public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
-    private final static Object EMPTY = new Object();
+    private final static Object NULL_VALUE = new Object();
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
     private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
     private final Map<K, Integer> keyMap;
@@ -85,19 +85,8 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     public void clear() {
-        for (Iterator<Entry<K, Integer>> i = keyMap.entrySet().iterator(); i.hasNext();) {
-            Entry<K, Integer> e = i.next();
-            Integer index = e.getValue();
-            if (index < values.size()) {
-                removeValue(index, e.getKey());
-            }
-        }
-        if (size != 0) {
-            for (int i = 0, n = values.size(); i < n; i++) {
-                values.set(i, EMPTY);
-            }
-            size = 0;
-        }
+        values.clear();
+        size=0;
     }
 
     @Override
@@ -106,7 +95,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
         boolean result = index != null
                 && index < values.size()
-                && values.get(index) != EMPTY;
+                && values.get(index) != null;
         return result;
     }
 
@@ -135,7 +124,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         Integer indexIfPresent = keyMap.putIfAbsent(key, indexIfAbsent);
         int index = indexIfPresent == null ? indexIfAbsent : indexIfPresent;
         for (int i = values.size(), n = (1 + index); i < n; i++) {
-            values.add(EMPTY);
+            values.add(null);
         }
         return index;
     }
@@ -160,13 +149,13 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private V getValue(int index, K key) {
         Object value;
         final int arrayIndex = index;
-        value = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
-        return value == EMPTY ? null : (V) value;
+        value = arrayIndex < values.size() ? values.get(arrayIndex) : null;
+        return value == NULL_VALUE ? null : (V) value;
     }
 
     private boolean hasValue(int index) {
         final int arrayIndex = index;
-        return arrayIndex < values.size() && values.get(arrayIndex) != EMPTY;
+        return arrayIndex < values.size() && values.get(arrayIndex) != null;
     }
 
     @Override
@@ -210,17 +199,18 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private V removeValue(int index, K key) {
         final int arrayIndex = index;
 
-        Object oldValue = arrayIndex < values.size() ? values.get(arrayIndex) : EMPTY;
-        if (oldValue == EMPTY) {
+        Object oldValue = arrayIndex < values.size() ? values.get(arrayIndex) : null;
+        if (oldValue == null) {
             return null;
         } else {
-            values.set(index, EMPTY);
+            values.set(index, null);
             size--;
+             V returnValue = (V)(oldValue==NULL_VALUE?null:oldValue);
             @SuppressWarnings("unchecked")
-            ChangeEvent change = new ChangeEvent(key, (V) oldValue, null, false, true);
+            ChangeEvent change = new ChangeEvent(key, returnValue, null, false, true);
             callObservers(change);
 
-            return (V) oldValue;
+            return returnValue;
         }
 
     }
@@ -228,14 +218,14 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     @SuppressWarnings("unchecked")
     private V setValue(int index, K key, V newValue) {
         V oldValue = (V) values.get(index);
-        if (oldValue == EMPTY) {
+        if (oldValue == null) {
             size++;
         }
         values.set(index, newValue);
 
-        V returnValue = oldValue == EMPTY ? null : oldValue;
+        V returnValue = oldValue == NULL_VALUE ? null : oldValue;
         if (!Objects.equals(oldValue, newValue)) {
-            ChangeEvent change = new ChangeEvent(key, returnValue, newValue, true, oldValue != EMPTY);
+            ChangeEvent change = new ChangeEvent(key, returnValue, newValue, true, oldValue != null);
             callObservers(change);
         }
 

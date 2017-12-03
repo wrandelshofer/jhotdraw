@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Path;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -45,7 +45,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     }
 
     @Override
-    protected void updateEndMarkerNode(RenderContext ctx, SVGPath node) {
+    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         super.updateEndMarkerNode(ctx, node); 
         applyMarkerFillableFigureProperties(node);
     }
@@ -66,7 +66,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     }
 
     @Override
-    protected void updateStartMarkerNode(RenderContext ctx, SVGPath node) {
+    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         super.updateStartMarkerNode(ctx, node); 
         applyMarkerFillableFigureProperties(node);
     }    
