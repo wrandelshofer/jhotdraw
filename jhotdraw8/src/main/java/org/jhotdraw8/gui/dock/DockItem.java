@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.gui.dock;
 
-
+import java.util.prefs.Preferences;
 import javafx.beans.Observable;
 
 import javafx.beans.property.ObjectProperty;
@@ -25,22 +25,30 @@ import javafx.scene.text.Text;
  * @version $Id$
  */
 public class DockItem extends Tab {
+
     static DockItem draggedTab;
     private final ObjectProperty<Dock> dock = new SimpleObjectProperty<>();
     public final static DataFormat DOCKABLE_TAB_FORMAT = new DataFormat("application/x-java-dockabletab");
+
     public DockItem() {
-        this(null,null);
+        this(null,null, null);
     }
 
     public DockItem(Node content) {
-this(null,content);        
+        this(null,null, content);
     }
+
     public DockItem(String text, Node content) {
+        this(text,text,content);
+    }
+    public DockItem(String id, String text, Node content) {
         super(text, content);
+        setId(id);
         graphicProperty().addListener(this::graphicChanged);
         setGraphic(new Text("❏"));
         setClosable(false);
-                getStyleClass().add("dockItem");
+        getStyleClass().add("dockItem");
+        selectedProperty().addListener(this::selectionChanged);
     }
 
     public ObjectProperty<Dock> dockProperty() {
@@ -55,29 +63,34 @@ this(null,content);
         dock.set(value);
     }
 
+    private void selectionChanged(Observable o, boolean oldv, boolean newv) {
+        Preferences prefs=Preferences.userNodeForPackage(DockItem.class);
+        prefs.putBoolean(getId()+".selected", newv);
+    }
+    
     private void graphicChanged(Observable o, Node oldv, Node newv) {
-        if (oldv!=null) {
+        if (oldv != null) {
             oldv.setOnDragDetected(null);
             oldv.setOnDragDone(null);
         }
-        if (newv!=null) {
+        if (newv != null) {
             newv.setOnDragDetected(this::handleDragDetected);
             newv.setOnDragDone(this::handleDragDone);
         }
     }
-    
+
     public void handleDragDone(DragEvent e) {
-        draggedTab=null;
+        draggedTab = null;
     }
-    
+
     public void handleDragDetected(MouseEvent e) {
         Node graphic = getGraphic();
         draggedTab = this;
         Dragboard db = graphic.startDragAndDrop(TransferMode.MOVE);
-       
+
         db.setDragView(
-              (  graphic.getParent()==null?graphic:graphic.getParent()).snapshot(null, null), 
-        e.getX(), e.getY());
+                (graphic.getParent() == null ? graphic : graphic.getParent()).snapshot(null, null),
+                e.getX(), e.getY());
         ClipboardContent content = new ClipboardContent();
         content.put(DOCKABLE_TAB_FORMAT, System.identityHashCode(this));
         db.setContent(content);

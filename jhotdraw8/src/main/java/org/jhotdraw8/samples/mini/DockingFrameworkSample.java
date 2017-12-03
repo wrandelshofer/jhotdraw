@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.jhotdraw8.gui.dock.ResizePane;
 import org.jhotdraw8.gui.dock.Dock;
 import org.jhotdraw8.gui.dock.DockItem;
 import org.jhotdraw8.gui.dock.DockRoot;
@@ -35,7 +34,7 @@ public class DockingFrameworkSample extends Application {
     public DockRoot initStage(String title, Stage primaryStage, int numTabs, Supplier<Dock> dockSupp, Supplier<Track> hbSupp, Supplier<Track> vbSupp) {
         DockRoot root = new DockRoot();
         root.setDockFactory(dockSupp);
-        root.setVerticalTrackFactory(vbSupp);
+        root.setVerticalInnerTrackFactory(vbSupp);
         root.setHorizontalTrackFactory(hbSupp);
         if (numTabs > 0) {
             final TabPaneDock tabPane = new TabPaneDock();

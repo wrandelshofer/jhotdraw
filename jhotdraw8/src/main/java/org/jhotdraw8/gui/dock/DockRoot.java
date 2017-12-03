@@ -75,6 +75,7 @@ public class DockRoot extends Control {
     private StackPane stackPane;
     RectangleTransition transition;
     private final ObjectProperty<Supplier<Track>> verticalTrackFactory = new SimpleObjectProperty<>(this, "vtrackFactory", () -> new SplitPaneTrack(Orientation.VERTICAL));
+    private final ObjectProperty<Supplier<Track>> verticalRootTrackFactory = new SimpleObjectProperty<>(this, "vRootTrackFactory", () -> new SplitPaneTrack(Orientation.VERTICAL));
     private final ObservableMap<Class<?>, Supplier<Track>> verticalTrackFactoryMap = FXCollections.observableHashMap();
 
     public DockRoot() {
@@ -151,11 +152,11 @@ public class DockRoot extends Control {
         neededOrientation = getNeededOrientation(zone);
 
         if (parentTrack == null) {
-            parentTrack = createTrack(parent, neededOrientation);
+            parentTrack = createTrack(null,parent, neededOrientation);
             addTrack(parentTrack);
         } else if (parentTrack.getOrientation() != neededOrientation) {
             Track oldParentTrack = parentTrack;
-            parentTrack = createTrack(parent, neededOrientation);
+            parentTrack = createTrack(parentTrack,parent, neededOrientation);
             int i = oldParentTrack.getItems().indexOf(parent.getNode());
             oldParentTrack.getItems().remove(i);
             oldParentTrack.getItems().add(i, parentTrack.getNode());
@@ -187,9 +188,8 @@ public class DockRoot extends Control {
         Orientation neededOrientation = getNeededOrientation(zone);
         Track topTrack = getRootTrack();
         if (topTrack == null || topTrack.getOrientation() != neededOrientation) {
-            topTrack = createTrack(newDock, neededOrientation);
+            topTrack = createTrack(null,newDock, neededOrientation);
             addTrack(topTrack);
-
         }
 
         switch (zone) {
@@ -209,11 +209,14 @@ public class DockRoot extends Control {
         return getDockFactory().get();
     }
 
-    private Track createTrack(Dock dock, Orientation orientation) {
+    private Track createTrack(Track parentTrack, Dock dock, Orientation orientation) {
         Supplier<Track> supplier = null;
         switch (orientation) {
             case VERTICAL:
-                if (dock != null) {
+               if (parentTrack==null) {
+                    supplier=verticalRootTrackFactory.get();
+                }
+                if (supplier==null&&dock != null) {
                     supplier = getVerticalTrackFactoryMap().get(dock.getClass());
                 }
                 if (supplier == null) {
@@ -313,8 +316,11 @@ public class DockRoot extends Control {
         return verticalTrackFactory.get();
     }
 
-    public void setVerticalTrackFactory(Supplier<Track> value) {
+    public void setVerticalInnerTrackFactory(Supplier<Track> value) {
         verticalTrackFactory.set(value);
+    }
+    public void setVerticalRootTrackFactory(Supplier<Track> value) {
+        verticalRootTrackFactory.set(value);
     }
 
     public ObservableMap<Class<?>, Supplier<Track>> getVerticalTrackFactoryMap() {
@@ -466,7 +472,7 @@ public class DockRoot extends Control {
                 track.getItems().add(dock.getNode());
             } else {
                 children.remove(0);
-                Track track = createTrack((oldRoot instanceof Dock)?(Dock)oldRoot:null, VERTICAL);
+                Track track = createTrack(null,(oldRoot instanceof Dock)?(Dock)oldRoot:null, VERTICAL);
                 track.getItems().addAll(oldRoot, dock.getNode());
                 children.add(track.getNode());
             }

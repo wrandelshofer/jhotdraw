@@ -46,7 +46,7 @@ public class TabPaneDock extends Control implements Dock {
             }
         });
     }
-
+    
     @Override
     protected double computePrefHeight(double width) {
         return tabPane.prefHeight(width);
@@ -73,11 +73,11 @@ public class TabPaneDock extends Control implements Dock {
         super.layoutChildren();
         tabPane.resizeRelocate(0, 0, getWidth(), getHeight());
     }
-private ObjectProperty<Track> track=new SimpleObjectProperty<>();
+    private ObjectProperty<Track> track = new SimpleObjectProperty<>();
+
     @Override
     public ObjectProperty<Track> trackProperty() {
         return track;
     }
-
 
 }

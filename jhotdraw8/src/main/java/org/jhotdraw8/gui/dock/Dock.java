@@ -21,19 +21,21 @@ public interface Dock {
     default Node getNode() {
         return (Node) this;
     }
-    
-    /** Returns true if the user may add and remove items.
-     * @return  true if editable by user
+
+    /**
+     * Returns true if the user may add and remove items.
+     *
+     * @return true if editable by user
      */
     boolean isEditable();
-    
-         ObjectProperty<Track> trackProperty();
+
+    ObjectProperty<Track> trackProperty();
 
     default Track getTrack() {
         return trackProperty().get();
     }
 
     default void setTrack(Track value) {
-         trackProperty().set(value);
+        trackProperty().set(value);
     }
 }

@@ -42,10 +42,7 @@ public class SplitPaneTrack extends SplitPane implements Track {
                         }
                     }
                 }
-
-                //updateResizableWithParent();
             }
-
         });
     }
 

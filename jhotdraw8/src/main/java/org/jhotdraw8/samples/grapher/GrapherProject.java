@@ -112,6 +112,7 @@ import org.jhotdraw8.gui.dock.ScrollableVBoxTrack;
 import org.jhotdraw8.gui.dock.SingleItemDock;
 import org.jhotdraw8.gui.dock.SplitPaneTrack;
 import org.jhotdraw8.gui.dock.TabbedAccordionDock;
+import org.jhotdraw8.gui.dock.VBoxTrack;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.text.CssSize2D;
@@ -337,9 +338,10 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         // set up the docking framework
         dockRoot = new DockRoot();
         dockRoot.setDockFactory(TabbedAccordionDock::new);
-        dockRoot.setVerticalTrackFactory(ScrollableVBoxTrack::new);
+        dockRoot.setVerticalInnerTrackFactory(ScrollableVBoxTrack::new);
         dockRoot.setHorizontalTrackFactory(SplitPaneTrack::createHorizontalTrack);
         dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
+        dockRoot.setVerticalRootTrackFactory(SplitPaneTrack::createVerticalTrack);
         DockItem dockItem = new DockItem(null, viewScrollPane);
         SingleItemDock singleItemDock = new SingleItemDock(dockItem);
         dockRoot.addDock(singleItemDock);
