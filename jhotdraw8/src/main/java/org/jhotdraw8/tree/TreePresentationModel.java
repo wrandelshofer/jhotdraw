@@ -3,16 +3,14 @@
  */
 package org.jhotdraw8.tree;
 
-import java.util.HashMap;
-import java.util.Map;
 import javafx.scene.control.TreeItem;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
-import org.jhotdraw8.event.Listener;
 
 /**
- * The {@code TreePresentationModel} can be used to present a
- * {@code TreeModel} in a {@code TreeView} or a {@code TreeTableView}.
+ * The {@code TreePresentationModel} can be used to present a {@code TreeModel}
+ * in a {@code TreeView} or a {@code TreeTableView}.
  * <p>
  * Maps {@code TreeModel} to a {@code TreeItem&lt;E&gt;} hierarchy.
  * <p>
@@ -21,24 +19,38 @@ import org.jhotdraw8.event.Listener;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface TreePresentationModel<N>  {
+public interface TreePresentationModel<N> {
 
     /**
      * The name of the model property.
      */
     public final static String MODEL_PROPERTY = "model";
 
-  
-@Nonnull 
+    @Nonnull
     default TreeModel<N> getTreeModel() {
         return treeModelProperty().get();
     }
 
     default void setTreeModel(@Nonnull TreeModel<N> newValue) {
-         treeModelProperty().set(newValue);
+        treeModelProperty().set(newValue);
     }
-@Nonnull 
+
+    @Nonnull
     NonnullProperty<TreeModel<N>> treeModelProperty();
-@Nonnull 
-     TreeItem<N> getRoot();
+
+    @Nonnull
+    TreeItem<N> getRoot();
+
+    boolean isUpdating();
+
+    /**
+     * Returns the tree item associated to the specified node.
+     *
+     * @param value the node value
+     * @return a TreeItem. Returns null if no tree item has been associated to
+     * the node because the tree is not expanded yet.
+     */
+    @Nullable
+    TreeItem<N> getTreeItem(N value);
+
 }
