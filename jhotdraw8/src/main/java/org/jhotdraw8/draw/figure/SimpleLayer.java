@@ -45,33 +45,31 @@ public class SimpleLayer extends AbstractCompositeFigure
         applyStyleableFigureProperties(ctx, n);
 
         List<Node> childNodes = new ArrayList<>(getChildren().size());
-        
-        int maxNodesPerLayer = ctx.get(RenderContext.MAX_NODES_PER_LAYER);
-        Bounds clipBounds= ctx.get(RenderContext.CLIP_BOUNDS) ;
-        if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
-                &&clipBounds!=null
-               /* && getChildren().size() > maxNodesPerLayer*/) {
 
-            
+        int maxNodesPerLayer = ctx.get(RenderContext.MAX_NODES_PER_LAYER);
+        Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
+        if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
+                && clipBounds != null /* && getChildren().size() > maxNodesPerLayer*/) {
+
             for (Figure child : getChildren()) {
-                Node childNode=ctx.getNode(child);
-                if (child.getBoundsInWorld().intersects(clipBounds)){
+                if (child.getBoundsInWorld().intersects(clipBounds)) {
+                    Node childNode = ctx.getNode(child);
                     childNodes.add(childNode);
                 }
             }
-            
-            
-            if (childNodes.size()>maxNodesPerLayer) {
+
+            if (childNodes.size() > maxNodesPerLayer) {
                 Text text = new Text();
                 text.setText("Layer \"" + getId() + "\" has too many children: " + getChildren().size());
                 text.setFill(Color.RED);
-                text.setX(clipBounds.getMinX()+20);
+                text.setX(clipBounds.getMinX() + 20);
                 if (getParent() != null) {
-                    text.setY(clipBounds.getMinY()+20  * getParent().getChildren().indexOf(this));
+                    text.setY(clipBounds.getMinY() + 20 * getParent().getChildren().indexOf(this));
                 } else {
-                    text.setY(clipBounds.getMinY()+20);
+                    text.setY(clipBounds.getMinY() + 20);
                 }
-                childNodes.clear();childNodes.add(text);
+                childNodes.clear();
+                childNodes.add(text);
             }
         } else {
             for (Figure child : getChildren()) {

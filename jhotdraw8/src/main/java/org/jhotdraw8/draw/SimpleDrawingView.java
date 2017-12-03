@@ -804,7 +804,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
             updateLayout();
-            handleSubtreeNodesChanged(d);
+            //handleSubtreeNodesChanged(d);
             repaint();
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
