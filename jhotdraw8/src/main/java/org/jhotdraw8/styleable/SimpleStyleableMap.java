@@ -42,6 +42,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private final int originOrdinal;
     private final int[] sizes;
     private final ArrayList<Object> values;
+    private final SimpleStyleableMap<K,V> originalMap;
 
     /**
      * Creates a new instance.
@@ -64,6 +65,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         this.origin = StyleOrigin.USER;
         this.originOrdinal = origin.ordinal();
         this.sizes = new int[numOrigins];
+        this.originalMap=this;
     }
 
     private SimpleStyleableMap(SimpleStyleableMap<K, V> that, StyleOrigin styleOrigin) {
@@ -72,38 +74,36 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         this.origin = styleOrigin;
         this.originOrdinal = (styleOrigin == null) ? -1 : styleOrigin.ordinal();
         this.sizes = that.sizes;
-        that.createListenerLists();
-        this.changeListenerList = that.changeListenerList;
-        this.invalidationListenerList = that.invalidationListenerList;
+        this.originalMap=that;
     }
 
     @Override
     public void addListener(InvalidationListener listener) {
-        if (invalidationListenerList == null) {
-            invalidationListenerList = new CopyOnWriteArrayList<>();
+        if (originalMap.invalidationListenerList == null) {
+            originalMap.invalidationListenerList = new CopyOnWriteArrayList<>();
         }
-        invalidationListenerList.add(listener);
+        originalMap.invalidationListenerList.add(listener);
     }
 
     @Override
     public void addListener(MapChangeListener<? super K, ? super V> observer) {
-        if (changeListenerList == null) {
-            changeListenerList = new CopyOnWriteArrayList<>();
+        if (originalMap.changeListenerList == null) {
+            originalMap.changeListenerList = new CopyOnWriteArrayList<>();
         }
-        changeListenerList.add(observer);
+        originalMap.changeListenerList.add(observer);
     }
 
     protected void callObservers(StyleOrigin origin, MapChangeListener.Change<K, V> change) {
 
         if (origin == StyleOrigin.USER) {
-            if (changeListenerList != null) {
-                for (MapChangeListener<? super K, ? super V> l : changeListenerList) {
+            if (originalMap.changeListenerList != null) {
+                for (MapChangeListener<? super K, ? super V> l : originalMap.changeListenerList) {
                     l.onChanged(change);
                 }
             }
         }
-        if (invalidationListenerList != null) {
-            for (InvalidationListener l : invalidationListenerList) {
+        if (originalMap.invalidationListenerList != null) {
+            for (InvalidationListener l : originalMap.invalidationListenerList) {
                 l.invalidated(this);
             }
         }
@@ -162,14 +162,6 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return false;
     }
 
-    private void createListenerLists() {
-        if (invalidationListenerList == null) {
-            invalidationListenerList = new CopyOnWriteArrayList<>();
-        }
-        if (changeListenerList == null) {
-            changeListenerList = new CopyOnWriteArrayList<>();
-        }
-    }
 
     @SuppressWarnings("unchecked")
     private int ensureCapacity(K key) {
@@ -305,15 +297,15 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     @Override
     public void removeListener(InvalidationListener listener) {
-        if (invalidationListenerList != null) {
-            invalidationListenerList.remove(listener);
+        if (originalMap.invalidationListenerList != null) {
+            originalMap.invalidationListenerList.remove(listener);
         }
     }
 
     @Override
     public void removeListener(MapChangeListener<? super K, ? super V> observer) {
-        if (changeListenerList != null) {
-            changeListenerList.remove(observer);
+        if (originalMap.changeListenerList != null) {
+            originalMap.changeListenerList.remove(observer);
         }
     }
 

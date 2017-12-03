@@ -6,20 +6,20 @@ package org.jhotdraw8.geom;
 import java.awt.geom.Path2D;
 
 /**
- * Builds an AWT {@code Path2D.Double}.
+ * Builds an AWT {@code Path2D}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class AWTFloatPathBuilder extends AbstractPathBuilder {
+public class AWTPathBuilder extends AbstractPathBuilder {
 
-    private Path2D.Float path;
+    private Path2D path;
 
-    public AWTFloatPathBuilder() {
-        this(new Path2D.Float());
+    public AWTPathBuilder() {
+        this(new Path2D.Double());
     }
 
-    public AWTFloatPathBuilder(Path2D.Float path) {
+    public AWTPathBuilder(Path2D path) {
         this.path = path;
     }
 
@@ -48,7 +48,7 @@ public class AWTFloatPathBuilder extends AbstractPathBuilder {
         path.quadTo(x, y, x0, y0);
     }
 
-    public Path2D.Float build() {
+    public Path2D build() {
         pathDone();
         return path;
     }

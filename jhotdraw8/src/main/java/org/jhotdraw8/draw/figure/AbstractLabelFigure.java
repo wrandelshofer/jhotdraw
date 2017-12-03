@@ -26,7 +26,6 @@ import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
@@ -35,7 +34,7 @@ import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTDoublePathBuilder;
+import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
@@ -108,7 +107,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public AbstractLabelFigure(double x, double y) {
         set(ORIGIN, new Point2D(x, y));
     }
-
+    
     @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
@@ -116,8 +115,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Path p = new Path();
         Text text = new Text();
         g.getChildren().addAll(p, text);
-        g.getProperties().put("path", p);
-        g.getProperties().put("text", text);
         return g;
     }
 
@@ -188,8 +185,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
-        Path p = (Path) g.getProperties().get("path");
-        Text t = (Text) g.getProperties().get("text");
+        Path p = (Path) g.getChildren().get(0);
+        Text t = (Text) g.getChildren().get(1);
         updateGroupNode(ctx, g);
         updatePathNode(ctx, p);
         updateTextNode(ctx, t);
@@ -206,9 +203,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Bounds b = getBoundsInLocal();
 
         try {
-            AWTDoublePathBuilder builder = new AWTDoublePathBuilder();
+            AWTPathBuilder builder = new AWTPathBuilder(new Path2D.Float());
             Shapes.buildFromSvgString(builder, content);
-            Path2D.Double path = builder.build();
+            Path2D path = builder.build();
 
             FXPathBuilder builder2 = new FXPathBuilder();
 

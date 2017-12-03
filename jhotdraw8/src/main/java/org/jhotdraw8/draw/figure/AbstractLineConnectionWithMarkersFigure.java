@@ -40,10 +40,9 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         final Line line = new Line();
-        g.getProperties().put("line", line);
-        g.getProperties().put("startMarker", new SVGPath());
-        g.getProperties().put("endMarker", new SVGPath());
-        g.getChildren().add(line);
+        final SVGPath startMarker=new SVGPath();
+        final SVGPath endMarker=new SVGPath();
+        g.getChildren().addAll(line,startMarker,endMarker);
         return g;
     }
 
@@ -83,9 +82,9 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         javafx.scene.Group g = (javafx.scene.Group) node;
-        Line lineNode = (Line) g.getProperties().get("line");
-        final SVGPath startMarkerNode = (SVGPath) g.getProperties().get("startMarker");
-        final SVGPath endMarkerNode = (SVGPath) g.getProperties().get("endMarker");
+        Line lineNode = (Line) g.getChildren().get(0);
+        final SVGPath startMarkerNode = (SVGPath) g.getChildren().get(1);
+        final SVGPath endMarkerNode = (SVGPath) g.getChildren().get(2);
 
         Point2D start = get(START);
         Point2D end = get(END);
@@ -124,14 +123,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
                     new Rotate(angle * 180 / Math.PI, start.getX(), start.getY()),
                     new Scale(markerScaleFactor, markerScaleFactor, start.getX(), start.getY()),
                     new Translate(start.getX(), start.getY()));
-
-            if (!group.getChildren().contains(markerNode)) {
-                group.getChildren().add(markerNode);
-            }
-        } else {
-            group.getChildren().remove(markerNode);
         }
-
     }
 
     @Override

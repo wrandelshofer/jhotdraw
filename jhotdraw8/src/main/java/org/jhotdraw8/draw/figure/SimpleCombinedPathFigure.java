@@ -7,14 +7,12 @@ import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableList;
@@ -24,8 +22,8 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;
-import org.jhotdraw8.geom.AWTDoublePathBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 
@@ -100,7 +98,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
                                 Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue());
 
                     }
-                    iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AWTDoublePathBuilder(), iter).build()).getPathIterator(null);
+                    iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AWTPathBuilder(), iter).build()).getPathIterator(null);
                 }
             }
         }
@@ -132,9 +130,9 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
                 final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
                 if (first) {
                     first = false;
-                    area = new Area(Shapes.buildFromPathIterator(new AWTDoublePathBuilder(), childPathIterator).build());
+                    area = new Area(Shapes.buildFromPathIterator(new AWTPathBuilder(), childPathIterator).build());
                 } else {
-                    Area area1 = new Area(Shapes.buildFromPathIterator(new AWTDoublePathBuilder(), childPathIterator).build());
+                    Area area1 = new Area(Shapes.buildFromPathIterator(new AWTPathBuilder(), childPathIterator).build());
                     switch (op) {
                         case ADD:
                         default:

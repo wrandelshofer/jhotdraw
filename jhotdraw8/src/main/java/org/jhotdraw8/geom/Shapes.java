@@ -322,7 +322,7 @@ public class Shapes {
     }
 
     private static Shape awtShapeFromFXSvgPath(SVGPath node) {
-        AWTDoublePathBuilder b = new AWTDoublePathBuilder();
+        AWTPathBuilder b = new AWTPathBuilder();
         try {
             buildFromSvgString(b, node.getContent());
         } catch (IOException ex) {
@@ -342,9 +342,9 @@ public class Shapes {
      * @throws java.io.IOException if the String is not a valid path
      */
     public static Path2D.Double awtShapeFromSvgString(String str) throws IOException {
-        AWTDoublePathBuilder b = new AWTDoublePathBuilder();
+        AWTPathBuilder b = new AWTPathBuilder();
         buildFromSvgString(b, str);
-        return b.build();
+        return (Path2D.Double) b.build();
     }
 
     public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter) {
@@ -1176,6 +1176,18 @@ public class Shapes {
      * @param elems on output contains the reshaped path elements
      */
     public static void reshapePathElements(String pathstr, Bounds b, List<PathElement> elems) {
+        FXPathBuilder builder=new FXPathBuilder(elems);
+       reshape(pathstr,b,builder );
+        builder.pathDone();
+    }
+    /**
+     * Fits the specified SVGPath into the given bounds.
+     *
+     * @param pathstr an SVGPath String
+     * @param b the desired bounds
+     * @param elems on output contains the reshaped path elements
+     */
+    public static void reshape(String pathstr, Bounds b,PathBuilder builder) {
         if (pathstr != null) {
             try {
                 Shape shape = Shapes.awtShapeFromSvgString(pathstr);
@@ -1184,20 +1196,18 @@ public class Shapes {
                         r2d.getX(), r2d.getY(), r2d.getWidth(), r2d.getHeight(),
                         b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()
                 );
-                elems.clear();
-                elems.addAll(Shapes.fxPathElementsFromAWT(shape.getPathIterator(Transforms.toAWT(tx))));
+                buildFromPathIterator(builder, shape.getPathIterator(Transforms.toAWT(tx)));
             } catch (IOException ex) {
                 pathstr = null;
                 Logger.getLogger(Shape.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (pathstr == null) {
-            elems.clear();
-            elems.add(new MoveTo(b.getMinX(), b.getMinY()));
-            elems.add(new LineTo(b.getMaxX(), b.getMinY()));
-            elems.add(new LineTo(b.getMaxX(), b.getMaxY()));
-            elems.add(new LineTo(b.getMinX(), b.getMaxY()));
-            elems.add(new ClosePath());
+            builder.moveTo(b.getMinX(), b.getMinY());
+            builder.lineTo(b.getMaxX(), b.getMinY());
+            builder.lineTo(b.getMaxX(), b.getMaxY());
+            builder.lineTo(b.getMinX(), b.getMaxY());
+            builder.closePath();
         }
     }
 

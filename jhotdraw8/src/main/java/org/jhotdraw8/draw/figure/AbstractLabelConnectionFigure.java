@@ -17,6 +17,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
@@ -87,35 +88,24 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     public static final Point2DStyleableFigureKey LABEL_TRANSLATE = new Point2DStyleableFigureKey(
             "labelTranslation", DirtyMask
                     .of(DirtyBits.NODE, DirtyBits.LAYOUT), new Point2D(0, 0));
-    /**
-     * Holds a strong reference to the property.
-     */
-    private Property<Figure> labelTargetProperty;
-    /**
-     * Holds a strong reference to the property.
-     */
-    private Property<Connector> labelConnectorProperty;
     private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
     public AbstractLabelConnectionFigure() {
-        // We must update the start and end point when ever one of
-        // the connection targets changes
-        ChangeListener<Figure> clTarget = (observable, oldValue, newValue) -> {
+    }
+
+    @Override
+    protected <T> void changed(Key<T> key, T oldValue, T newValue) {
+        if (key == LABEL_TARGET) {
             if (oldValue != null) {
-                oldValue.getLayoutObservers().remove(this);
+                ((Figure) oldValue).getLayoutObservers().remove(this);
             }
             if (newValue != null) {
-                newValue.getLayoutObservers().add(this);
+                ((Figure) newValue).getLayoutObservers().add(this);
             }
             updateConnectedProperty();
-        };
-        ChangeListener<Connector> clConnector = (observable, oldValue, newValue) -> {
+        } else if (key == LABEL_CONNECTOR) {
             updateConnectedProperty();
-        };
-        labelTargetProperty = LABEL_TARGET.propertyAt(getProperties());
-        labelTargetProperty.addListener(clTarget);
-        labelConnectorProperty = LABEL_CONNECTOR.propertyAt(getProperties());
-        labelConnectorProperty.addListener(clConnector);
+        }
     }
 
     private void updateConnectedProperty() {
@@ -162,7 +152,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public Set<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? Collections.emptySet(): Collections.singleton(labelTarget);
+        return labelTarget == null ? Collections.emptySet() : Collections.singleton(labelTarget);
     }
 
     public boolean isConnected() {
@@ -188,7 +178,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     public void layout() {
 
         Figure labelTarget = get(LABEL_TARGET);
-       final Point2D labeledLoc;
+        final Point2D labeledLoc;
         Connector labelConnector = get(LABEL_CONNECTOR);
         final Point2D perp;
         final Point2D tangent;
@@ -197,24 +187,23 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             tangent = labelConnector.getTangentInWorld(this, labelTarget);
             perp = Geom.perp(tangent);
         } else {
-         labeledLoc = get(LABELED_LOCATION);
+            labeledLoc = get(LABELED_LOCATION);
             tangent = new Point2D(1, 0);
             perp = new Point2D(0, -1);
         }
- 
 
         set(LABELED_LOCATION, labeledLoc);
         Bounds b = getLayoutBounds();
         double hposTranslate = 0;
         switch (getStyled(TEXT_HPOS)) {
-        case CENTER:
-            hposTranslate = b.getWidth() * -0.5;
-            break;
-        case LEFT:
-            break;
-        case RIGHT:
-            hposTranslate = -b.getWidth();
-            break;
+            case CENTER:
+                hposTranslate = b.getWidth() * -0.5;
+                break;
+            case LEFT:
+                break;
+            case RIGHT:
+                hposTranslate = -b.getWidth();
+                break;
         }
 
         // FIXME must convert with current font size of label!!
@@ -223,40 +212,42 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         Point2D origin = labeledLoc
                 .add(perp.multiply(-labelOffsetY))
                 .add(tangent.multiply(labelOffsetX));
-        
-       Rotate rotate= null;
+
+        Rotate rotate = null;
         switch (getStyled(LABEL_AUTOROTATE)) {
-        case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
-            final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
-            rotate=new Rotate(theta,origin.getX(),origin.getY());
-           // set(ROTATE, theta);
-        }
-        break;
-        case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
-            final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
-            final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
-            rotate=new Rotate(halfTheta,origin.getX(),origin.getY());
-           // set(ROTATE, halfTheta);
-        }
-        break;
-        case OFF:
-        default:
+            case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
+                final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+                rotate = new Rotate(theta, origin.getX(), origin.getY());
+                // set(ROTATE, theta);
+            }
             break;
+            case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
+                final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+                final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
+                rotate = new Rotate(halfTheta, origin.getX(), origin.getY());
+                // set(ROTATE, halfTheta);
+            }
+            break;
+            case OFF:
+            default:
+                break;
         }        // FIXME add tx in angle of rotated label!
 //        origin=origin.add(tangent.multiply(hposTranslate));
-        origin=origin.add(hposTranslate,0);
+        origin = origin.add(hposTranslate, 0);
 
         Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
         origin = origin.add(labelTranslation);
         set(ORIGIN, origin);
-        List<Transform> transforms=new ArrayList<>();
-        if (rotate!=null)transforms.add(rotate);
+        List<Transform> transforms = new ArrayList<>();
+        if (rotate != null) {
+            transforms.add(rotate);
+        }
         //if (labelTarget!=null)transforms.add(labelTarget.getLocalToParent()); really?
         setTransforms(transforms.toArray(new Transform[transforms.size()]));
-        
+
         Bounds bconnected = getLayoutBounds();
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
-            invalidateTransforms();
+        invalidateTransforms();
     }
 
     @Override

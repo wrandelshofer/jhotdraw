@@ -16,6 +16,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -37,23 +38,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
     private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
-    /**
-     * Holds a strong reference to the property.
-     */
-    private Property<Connector> endConnectorProperty;
-    /**
-     * Holds a strong reference to the property.
-     */
-    private Property<Figure> endTargetProperty;
-    /**
-     * Holds a strong reference to the property.
-     */
-    private Property<Connector> startConnectorProperty;
-    /**
-     * Holds a strong reference to the property.
-     */
-    private Property<Figure> startTargetProperty;
-
     public AbstractLineConnectionFigure() {
         this(0, 0, 1, 1);
     }
@@ -65,39 +49,30 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     public AbstractLineConnectionFigure(double startX, double startY, double endX, double endY) {
         set(START, new Point2D(startX, startY));
         set(END, new Point2D(endX, endY));
+    }
 
-        // We must update the start and end point when ever one of
-        // the connection targets changes
-        ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
+    @Override
+    protected <T> void changed(Key<T> key, T oldValue, T newValue) {
+        if (key == START_TARGET) {
             if (oldValue != null && get(END_TARGET) != oldValue) {
-                oldValue.getLayoutObservers().remove(AbstractLineConnectionFigure.this);
+                ((Figure) oldValue).getLayoutObservers().remove(AbstractLineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getLayoutObservers().add(AbstractLineConnectionFigure.this);
+                ((Figure) newValue).getLayoutObservers().add(AbstractLineConnectionFigure.this);
             }
             updateConnectedProperty();
-        };
-        ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
+        } else if (key == END_TARGET) {
             if (oldValue != null && get(START_TARGET) != oldValue) {
-                oldValue.getLayoutObservers().remove(AbstractLineConnectionFigure.this);
+                ((Figure) oldValue).getLayoutObservers().remove(AbstractLineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getLayoutObservers().add(AbstractLineConnectionFigure.this);
+                ((Figure) newValue).getLayoutObservers().add(AbstractLineConnectionFigure.this);
             }
             updateConnectedProperty();
-        };
-        ChangeListener<Connector> clConnector = (observable, oldValue, newValue) -> {
-            updateConnectedProperty();
-        };
 
-        startTargetProperty = START_TARGET.propertyAt(getProperties());
-        startTargetProperty.addListener(clStart);
-        endTargetProperty = END_TARGET.propertyAt(getProperties());
-        endTargetProperty.addListener(clEnd);
-        startConnectorProperty = START_CONNECTOR.propertyAt(getProperties());
-        startConnectorProperty.addListener(clConnector);
-        endConnectorProperty = END_CONNECTOR.propertyAt(getProperties());
-        endConnectorProperty.addListener(clConnector);
+        } else if (key == END_CONNECTOR) {
+            updateConnectedProperty();
+        }
     }
 
     @Override

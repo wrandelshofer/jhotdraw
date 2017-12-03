@@ -20,6 +20,7 @@ import javafx.collections.SetChangeListener;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <E>
  */
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
@@ -35,7 +36,6 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     public ModifiableObservableSet() {
         backingSet = new LinkedHashSet<>();
     }
-    
 
     @Override
     public boolean add(E e) {
@@ -101,43 +101,46 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     public boolean containsAll(Collection<?> c) {
         return backingSet.containsAll(c);
     }
-    
+
     private static class Change<EE> extends SetChangeListener.Change<EE> {
-private final EE value;
-private final boolean wasAdded;
+
+        private final EE value;
+        private final boolean wasAdded;
+
         public Change(ObservableSet<EE> set, EE value, boolean wasAdded) {
             super(set);
-            this.value=value;this.wasAdded=wasAdded;
+            this.value = value;
+            this.wasAdded = wasAdded;
         }
-        
+
         @Override
         public EE getElementAdded() {
-            return (wasAdded)?value:null;
+            return (wasAdded) ? value : null;
         }
 
         @Override
         public EE getElementRemoved() {
-            return (!wasAdded)?value:null;
+            return (!wasAdded) ? value : null;
         }
 
         @Override
         public boolean wasAdded() {
-        return wasAdded;
+            return wasAdded;
         }
 
         @Override
         public boolean wasRemoved() {
             return !wasAdded;
         }
-        
+
     }
 
     protected void fireAdded(E e) {
-        if (e instanceof Observable) {
+        /*if (e instanceof Observable) {
             ((Observable) e).addListener(itemHandler);
-        }
+        }*/
         if (changeListeners != null) {
-            SetChangeListener.Change<E> change = new Change<E>(this,e,true);
+            SetChangeListener.Change<E> change = new Change<E>(this, e, true);
             for (SetChangeListener<? super E> listener : changeListeners) {
                 listener.onChanged(change);
             }
@@ -173,11 +176,11 @@ private final boolean wasAdded;
     }
 
     protected void fireRemoved(E e) {
-        if (e instanceof Observable) {
+        /*if (e instanceof Observable) {
             ((Observable) e).removeListener(itemHandler);
-        }
-        if (changeListeners != null&&!changeListeners.isEmpty()) {
-            SetChangeListener.Change<E> change = new Change<E>(this,e,false);
+        }*/
+        if (changeListeners != null && !changeListeners.isEmpty()) {
+            SetChangeListener.Change<E> change = new Change<E>(this, e, false);
             for (SetChangeListener<? super E> listener : changeListeners) {
                 listener.onChanged(change);
             }

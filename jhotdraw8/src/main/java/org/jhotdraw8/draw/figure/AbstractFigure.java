@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.SharedKeysMap;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
@@ -228,11 +229,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Nullable
     private Drawing drawing;
-
+private static Map<Key<?>,Integer> cachedValuesKeyMap=new ConcurrentHashMap<>();
     @Override
     public <T> T setCachedValue(Key<T> key, T value) {
         if (cachedValues == null) {
-            cachedValues = new ConcurrentHashMap<>();
+            cachedValues = new SharedKeysMap<>(cachedValuesKeyMap);
         }
         return (value == null) ? key.remove(cachedValues) : key.put(cachedValues, value);
     }
