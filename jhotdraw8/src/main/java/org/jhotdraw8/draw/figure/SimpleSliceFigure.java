@@ -17,6 +17,7 @@ import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PointHandle;
+import org.jhotdraw8.draw.handle.RelativePointHandle;
 import org.jhotdraw8.draw.handle.ResizeHandleKit;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -70,7 +71,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
         if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
-            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_CUSTOM, SLICE_ORIGIN));
+            list.add(new RelativePointHandle(this, Handle.STYLECLASS_HANDLE_CUSTOM, SLICE_ORIGIN));
         } else {
             super.createHandles(handleType, list); //To change body of generated methods, choose Tools | Templates.
         }
@@ -83,7 +84,9 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
 
     @Override
     public Point2D getSliceOrigin() {
-        return get(SLICE_ORIGIN);
+        Bounds b=getBoundsInLocal();
+        Point2D p = get(SLICE_ORIGIN);
+        return p.add(b.getMinX(),b.getMinY());
     }
 
     @Override

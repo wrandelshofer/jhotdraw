@@ -113,7 +113,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    private void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
+    protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
             Path markerNode,
             Point2D start, Point2D end, String svgString, double markerScaleFactor) {
         if (svgString != null) {
