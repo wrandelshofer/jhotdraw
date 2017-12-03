@@ -92,7 +92,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
     public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY = new ObjectKey<>("boundsInLocal", Bounds.class, null, true, true, null);
-    private Text textNode;
 
     public AbstractLabelFigure() {
         this(0, 0);
@@ -136,9 +135,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @return the layout bounds
      */
     public Bounds getLayoutBounds() {
-        if (textNode == null) {
-            textNode = new Text();
-        }
+        Text  textNode = new Text();
         updateTextNode(null, textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = getStyled(PADDING);
