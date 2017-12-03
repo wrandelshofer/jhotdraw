@@ -47,6 +47,7 @@ import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.tree.SimpleTreePresentationModel;
+import org.jhotdraw8.tree.TreePresentationModel;
 
 /**
  * FXML Controller class
@@ -64,7 +65,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private boolean isUpdatingSelectionInView;
     @FXML
     private TreeTableColumn<Figure, Boolean> lockedColumn;
-    private SimpleTreePresentationModel<Figure> model;
+    private TreePresentationModel<Figure> model;
     private Node node;
     @FXML
     private TreeTableColumn<Figure, ImmutableSet<PseudoClass>> pseudoClassesColumn;
@@ -348,7 +349,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     break;
                 case 1:
                     selectionModel.clearSelection();
-                    selectionModel.select(model.getTreeItem(selection.iterator().next()));
+                    final TreeItem<Figure> treeItem = model.getTreeItem(selection.iterator().next());
+                    if (treeItem != null) {
+                        selectionModel.select(treeItem);
+                    }
                     break;
                 default:
                     int index = 0;
