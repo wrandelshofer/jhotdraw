@@ -24,7 +24,7 @@ import javafx.collections.SetChangeListener;
  */
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private final Set<E> backingSet;
+    private Set<E> backingSet;
     private List<SetChangeListener<? super E>> changeListeners;
     private List<InvalidationListener> invalidationListeners;
     private InvalidationListener itemHandler = this::itemInvalidated;
@@ -37,6 +37,8 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         backingSet = new LinkedHashSet<>();
     }
 
+    
+    
     @Override
     public boolean add(E e) {
         boolean modified = backingSet.add(e);
@@ -100,6 +102,10 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     @Override
     public boolean containsAll(Collection<?> c) {
         return backingSet.containsAll(c);
+    }
+
+    public void setBackingSet(Set<E> backingSet) {
+        this.backingSet = backingSet;
     }
 
     private static class Change<EE> extends SetChangeListener.Change<EE> {
