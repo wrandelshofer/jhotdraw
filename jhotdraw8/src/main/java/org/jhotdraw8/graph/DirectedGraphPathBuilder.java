@@ -12,7 +12,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -235,7 +235,7 @@ public class DirectedGraphPathBuilder<V, A> {
             return null;
         }
         //
-        LinkedList<A> arrows = new LinkedList<>();
+        ArrayDeque<A> arrows = new ArrayDeque<>();
         for (NodeWithCost<V, A> parent = node; parent != null && parent.arrow != null; parent = parent.parent) {
             arrows.addFirst(parent.arrow);
         }
@@ -291,7 +291,7 @@ public class DirectedGraphPathBuilder<V, A> {
             return null;
         }
         // 
-        LinkedList<V> vertices = new LinkedList<>();
+        ArrayDeque<V> vertices = new ArrayDeque<>();
         for (NodeWithCost<V, A> parent = node; parent != null; parent = parent.parent) {
             vertices.addFirst(parent.vertex);
         }
@@ -404,7 +404,7 @@ public class DirectedGraphPathBuilder<V, A> {
             return null;
         }
         // 
-        LinkedList<A> arrows = new LinkedList<>();
+        ArrayDeque<A> arrows = new ArrayDeque<>();
         for (IntNodeWithCost<A> parent = node; parent != null && parent.arrow != null; parent = parent.parent) {
             arrows.addFirst(parent.arrow);
         }
@@ -444,7 +444,7 @@ public class DirectedGraphPathBuilder<V, A> {
             return null;
         }
         //
-        LinkedList<Integer> vertices = new LinkedList<>();
+        ArrayDeque<Integer> vertices = new ArrayDeque<>();
         for (IntNodeWithCost<A> parent = node; parent != null; parent = parent.parent) {
             vertices.addFirst(parent.vertex);
         }
@@ -505,9 +505,12 @@ public class DirectedGraphPathBuilder<V, A> {
     @Nullable
     private NodeWithCost<V, A> findShortestPath(@Nonnull DirectedGraph<V, A> graph,
             @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
-        PriorityQueue< NodeWithCost<V, A>> frontier = new PriorityQueue<>(16);
-        Set<V> explored = new HashSet<>(graph.getVertexCount());
-        Map<V, NodeWithCost<V, A>> frontierMap = new HashMap<>(graph.getVertexCount());
+        // Size of priority queue and frontierMap is the expected size of the frontier.
+        // We use a size that is smaller than 256 bytes (assuming 12 bytes for object header).
+        PriorityQueue< NodeWithCost<V, A>> frontier = new PriorityQueue<>(61);
+        Map<V, NodeWithCost<V, A>> frontierMap = new HashMap<>(61);
+        // Size of explored is the expected number of vertices that we need to explore.
+        Set<V> explored = new HashSet<>(61);
         return doFindShortestPath(start, frontier, frontierMap, goal, explored, graph, costf);
     }
 
