@@ -214,10 +214,12 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 .add(tangent.multiply(labelOffsetX));
 
         Rotate rotate = null;
+        final boolean layoutTransforms;
         switch (getStyled(LABEL_AUTOROTATE)) {
             case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
                 final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
                 rotate = new Rotate(theta, origin.getX(), origin.getY());
+                layoutTransforms=true;
                 // set(ROTATE, theta);
             }
             break;
@@ -225,11 +227,13 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
                 final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
                 rotate = new Rotate(halfTheta, origin.getX(), origin.getY());
+                layoutTransforms=true;
                 // set(ROTATE, halfTheta);
             }
             break;
             case OFF:
             default:
+                layoutTransforms=false;
                 break;
         }        // FIXME add tx in angle of rotated label!
 //        origin=origin.add(tangent.multiply(hposTranslate));
@@ -242,8 +246,9 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         if (rotate != null) {
             transforms.add(rotate);
         }
-        //if (labelTarget!=null)transforms.add(labelTarget.getLocalToParent()); really?
-        setTransforms(transforms.toArray(new Transform[transforms.size()]));
+       if (layoutTransforms) {
+            setTransforms(transforms.toArray(new Transform[transforms.size()]));
+       }
 
         Bounds bconnected = getLayoutBounds();
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
