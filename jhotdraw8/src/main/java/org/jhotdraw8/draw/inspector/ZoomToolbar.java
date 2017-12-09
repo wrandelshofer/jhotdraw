@@ -85,15 +85,6 @@ public class ZoomToolbar extends BorderPane {
             }
         });
 
-        /*new DoubleBinding() {{super.bind(zoomFactorProperty);}
-
-         @Override
-         protected double computeValue() {
-         double v= log((zoomFactorProperty.get()))/LOG2;
-         System.out.println("v:"+v);
-         return v;
-         }
-         });*/
     }
 
     /**
