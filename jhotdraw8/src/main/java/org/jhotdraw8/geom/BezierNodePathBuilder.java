@@ -5,7 +5,7 @@ package org.jhotdraw8.geom;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Point2D;
+import javafx.util.Builder;
 import org.jhotdraw8.collection.ImmutableList;
 
 /**
@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.ImmutableList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BezierNodePathBuilder extends AbstractPathBuilder {
+public class BezierNodePathBuilder extends AbstractPathBuilder implements Builder<List<BezierNode>> {
 
     private List<BezierNode> nodes = new ArrayList<BezierNode>();
 
@@ -73,7 +73,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder {
         nodes.set(nodes.size() - 1, newValue);
     }
 
-    public ImmutableList<BezierNode> getNodes() {
+    public ImmutableList<BezierNode> build() {
         return  ImmutableList.ofCollection(nodes);
     }
     @Override
