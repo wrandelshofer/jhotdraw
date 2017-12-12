@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javafx.util.Builder;
 import javax.annotation.Nonnull;
 
 /**
@@ -19,7 +20,7 @@ import javax.annotation.Nonnull;
  * @param <A> the arrow type
  */
 public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
-        implements DirectedGraph<V, A>, IntDirectedGraph<A> {
+        implements DirectedGraph<V, A>, IntDirectedGraph<A>, Builder<DirectedGraph<V, A>> {
 
     /**
      * Maps a vertex to a vertex index.
