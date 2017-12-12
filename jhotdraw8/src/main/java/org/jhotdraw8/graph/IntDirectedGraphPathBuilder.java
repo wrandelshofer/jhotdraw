@@ -3,7 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;

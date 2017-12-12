@@ -13,6 +13,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Builder;
 
 /**
  * Builds a bounding box path.
@@ -20,7 +21,8 @@ import javafx.scene.shape.Rectangle;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BoundingBoxBuilder extends AbstractPathBuilder {
+public class BoundingBoxBuilder extends AbstractPathBuilder
+        implements Builder<BoundingBox> {
 
     private double minx = Double.POSITIVE_INFINITY, miny = Double.POSITIVE_INFINITY, maxx = Double.NEGATIVE_INFINITY, maxy = Double.NEGATIVE_INFINITY;
 
@@ -66,7 +68,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder {
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
 
-    public BoundingBox getBoundingBox() {
+    public BoundingBox build() {
         if (Double.isNaN(minx)) {
             return new BoundingBox(0, 0, 0, 0);
         }

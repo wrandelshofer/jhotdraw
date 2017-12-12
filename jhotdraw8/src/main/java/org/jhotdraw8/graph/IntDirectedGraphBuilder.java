@@ -3,13 +3,16 @@
  */
 package org.jhotdraw8.graph;
 
+import javafx.util.Builder;
+
 /**
  * IntDirectedGraphBuilder.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A> {
+public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A>
+        implements Builder<IntDirectedGraph<A>> {
 
     public IntDirectedGraphBuilder() {
         this(16, 16);

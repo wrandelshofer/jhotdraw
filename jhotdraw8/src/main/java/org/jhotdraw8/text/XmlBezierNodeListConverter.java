@@ -50,7 +50,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
         }
         BezierNodePathBuilder builder = new BezierNodePathBuilder();
         Shapes.buildFromSvgString(builder, input);
-        p = builder.getNodes();
+        p = builder.build();
 
         buf.position(buf.limit());
 

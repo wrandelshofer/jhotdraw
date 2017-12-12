@@ -56,6 +56,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
         private StyleOrigin origin;
         private FutureTask<Stylesheet> future;
+        private Stylesheet stylesheet;
 
         public ParsedStylesheetEntry(StyleOrigin origin, URI uri) {
             this.origin = origin;
@@ -80,13 +81,19 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
 
         public Stylesheet getStylesheet() {
-            try {
-                return future.get();
-            } catch (InterruptedException ex) {
-                return null;
-            } catch (ExecutionException ex) {
-                return null;
+            if (future != null) {
+                try {
+                    stylesheet = future.get();
+                    future = null;
+                } catch (InterruptedException ex) {
+                    // retry later
+                } catch (ExecutionException ex) {
+                    ex.printStackTrace();
+                    stylesheet=null;
+                    future = null;
+                }
             }
+            return stylesheet;
         }
 
     }
@@ -215,7 +222,6 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
         // The value of a property was set by the user through a call to a set method with StyleOrigin.USER
         // ... nothing to do!
-        
         // The stylesheet is an external file
         for (Declaration d : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
             doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getProperty(), d.getTermsAsString());

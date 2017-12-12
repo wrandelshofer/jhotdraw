@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
+import javafx.util.Builder;
 import javax.annotation.Nonnull;
 
 /**

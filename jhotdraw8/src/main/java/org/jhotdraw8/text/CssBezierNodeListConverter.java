@@ -51,7 +51,7 @@ public class CssBezierNodeListConverter implements Converter<ImmutableList<Bezie
             }
             BezierNodePathBuilder builder=new BezierNodePathBuilder();
             Shapes.buildFromSvgString(builder, tt.currentStringValue());
-            p = builder.getNodes();
+            p = builder.build();
         }
         buf.position(buf.limit());
 

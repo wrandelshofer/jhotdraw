@@ -12,7 +12,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +30,7 @@ import javax.annotation.Nullable;
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the vertex type
+ * @param <A> the arrow type
  */
 public class DirectedGraphPathBuilder<V, A> {
 
@@ -242,7 +242,10 @@ public class DirectedGraphPathBuilder<V, A> {
         return new EdgePath<>(arrows);
     }
 
-    private NodeWithCost<V, A> doFindShortestPath(V start, PriorityQueue<NodeWithCost<V, A>> frontier, Map<V, NodeWithCost<V, A>> frontierMap, V goal, Set<V> explored, DirectedGraph<V, A> graph, ToDoubleFunction<A> costf) {
+    private NodeWithCost<V, A> doFindShortestPath(V start,
+            PriorityQueue<NodeWithCost<V, A>> frontier, 
+            Map<V, NodeWithCost<V, A>> frontierMap, V goal, 
+            Set<V> explored, DirectedGraph<V, A> graph, ToDoubleFunction<A> costf) {
         NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
