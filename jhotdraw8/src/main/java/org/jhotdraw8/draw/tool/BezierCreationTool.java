@@ -167,7 +167,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             BezierNodePathBuilder builder = new BezierNodePathBuilder();
             double error = 5 / dv.getZoomFactor();
             BezierFit.fitBezierPath(builder, digitized, error);
-            final ImmutableList<BezierNode> built = builder.getNodes();
+            final ImmutableList<BezierNode> built = builder.build();
             ArrayList<BezierNode> newList = new ArrayList<>(dragStartIndex + built.size());
             for (int i = 0; i < dragStartIndex; i++) {
                 newList.add(points.get(i));
