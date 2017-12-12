@@ -35,8 +35,12 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
+    private static Map<Key<?>, Integer> cachedValuesKeyMap = new ConcurrentHashMap<>();
+
     private transient Map<Key<?>, Object> cachedValues;
     private ObservableList<Figure> dependentFigures;
+    @Nullable
+    private Drawing drawing;
     private final ObjectProperty<Figure> parent = new ObjectPropertyBase<Figure>() {
 
         @Override
@@ -69,6 +73,26 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         doAddNotify(drawing);
     }
 
+    /**
+     * This method is called by {@link #addNotify}. The implementation of this
+     * class is empty.
+     *
+     * @param drawing the drawing
+     */
+    protected void doAddNotify(@Nonnull Drawing drawing) {
+
+    }
+
+    /**
+     * This method is called by {@link #removeNotify}. The implementation of
+     * this class is empty.
+     *
+     * @param drawing the drawing
+     */
+    protected void doRemoveNotify(@Nonnull Drawing drawing) {
+
+    }
+
     @Override
     public <T> T getCachedValue(Key<T> key) {
         return (cachedValues == null) ? key.getDefaultValue() : key.get(cachedValues);
@@ -91,26 +115,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     @Override
     final public Drawing getDrawing() {
         return drawing;
-    }
-
-    /**
-     * This method is called by {@link #addNotify}. The implementation of this
-     * class is empty.
-     *
-     * @param drawing the drawing
-     */
-    protected void doAddNotify(@Nonnull Drawing drawing) {
-
-    }
-
-    /**
-     * This method is called by {@link #removeNotify}. The implementation of
-     * this class is empty.
-     *
-     * @param drawing the drawing
-     */
-    protected void doRemoveNotify(@Nonnull Drawing drawing) {
-
     }
 
     @Override
@@ -227,9 +231,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         doRemoveNotify(drawing);
     }
 
-    @Nullable
-    private Drawing drawing;
-private static Map<Key<?>,Integer> cachedValuesKeyMap=new ConcurrentHashMap<>();
     @Override
     public <T> T setCachedValue(Key<T> key, T value) {
         if (cachedValues == null) {
