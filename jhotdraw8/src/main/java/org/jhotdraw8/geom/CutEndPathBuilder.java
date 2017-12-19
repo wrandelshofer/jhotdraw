@@ -53,7 +53,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                         out.closePath();
                         break;
                     case PathIterator.SEG_CUBICTO: {
-                        Intersection isect = Intersection.intersectBezier3Circle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
+                        Intersection isect = Intersections.intersectBezier3Circle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
                            // break Loop;
                         }else         if (isect.isEmpty()) {
@@ -68,7 +68,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                         break;
                     }
                     case PathIterator.SEG_LINETO: {
-                        Intersection isect = Intersection.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
+                        Intersection isect = Intersections.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
                    //         break Loop;
                         }else if (isect.isEmpty()) {
@@ -83,7 +83,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                         break;
                     }
                     case PathIterator.SEG_MOVETO: {
-                        Intersection isect = Intersection.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
+                        Intersection isect = Intersections.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
                 //            break Loop;
                         }else if (isect.isEmpty()) {
@@ -98,7 +98,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                         break;
                     }
                     case PathIterator.SEG_QUADTO: {
-                        Intersection isect = Intersection.intersectBezier2Circle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
+                        Intersection isect = Intersections.intersectBezier2Circle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
                         if (isect.getStatus()==Intersection.Status.NO_INTERSECTION_INSIDE) {
              //               break Loop;
                         }else if (isect.isEmpty()) {

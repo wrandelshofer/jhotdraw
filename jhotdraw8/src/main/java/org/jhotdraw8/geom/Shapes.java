@@ -411,8 +411,6 @@ public class Shapes {
                     tt.pushBack();
                 }
 
-                BezierPath.Node node;
-
                 switch (command) {
                     case 'M':
 

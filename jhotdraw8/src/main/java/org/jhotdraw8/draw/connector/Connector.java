@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
+import org.jhotdraw8.geom.Intersections;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -169,7 +170,7 @@ public interface Connector {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getBoundsInLocal();
-        Intersection i = Intersection.intersectLineRectangle(s, e, b);
+        Intersection i = Intersections.intersectLineRectangle(s, e, b);
         return i.isEmpty() ? null : i.getIntersections().lastKey();
     }
 }

@@ -15,6 +15,7 @@ import java.awt.geom.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
+@Deprecated
 public class BezierPathIterator implements PathIterator {
 
     /**

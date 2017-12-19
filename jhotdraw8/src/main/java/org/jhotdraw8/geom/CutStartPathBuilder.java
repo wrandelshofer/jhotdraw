@@ -36,7 +36,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.curveTo(x1, y1, x2, y2, x3, y3);
             return;
         }
-        Intersection i = Intersection.intersectBezier3Circle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
+        Intersection i = Intersections.intersectBezier3Circle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
                 double t = i.getLastT();
@@ -69,7 +69,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.lineTo(x, y);
             return;
         }
-        Intersection i = Intersection.intersectLineCircle(getLastX(), getLastY(), x, y, cx, cy, radius);
+        Intersection i = Intersections.intersectLineCircle(getLastX(), getLastY(), x, y, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
                 Point2D p = i.getLastPoint();
@@ -107,7 +107,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.quadTo(x1, y1, x2, y2);
             return;
         }
-        Intersection i = Intersection.intersectBezier2Circle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
+        Intersection i = Intersections.intersectBezier2Circle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
                 double t = i.getLastT();

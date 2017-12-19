@@ -32,11 +32,10 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
-import org.jhotdraw8.geom.BezierPath;
 import org.jhotdraw8.geom.Shapes;
 
 /**
- * A {@link Figure} which draws a {@link BezierPath}.
+ * A {@link Figure} which draws a {@link BezierNodePath}.
  *
  * @author Werner Randelshofer
  * @version $Id$

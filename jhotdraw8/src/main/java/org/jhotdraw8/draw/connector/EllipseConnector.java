@@ -14,6 +14,7 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
+import org.jhotdraw8.geom.Intersections;
 
 /**
  * EllipseConnector.
@@ -55,7 +56,7 @@ public class EllipseConnector extends LocatorConnector {
             bounds = Geom.grow(bounds, grow, grow);
         }
 
-        Intersection i = Intersection.intersectLineEllipse(s, e, bounds);
+        Intersection i = Intersections.intersectLineEllipse(s, e, bounds);
         double maxT = 0;
         for (double t : i.getTs()) {
             if (t > maxT) {

@@ -22,6 +22,7 @@ import org.jhotdraw8.draw.figure.SimplePolylineFigure;
 import static org.jhotdraw8.draw.handle.Handle.STYLECLASS_HANDLE_MOVE_OUTLINE;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
+import org.jhotdraw8.geom.Intersections;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -87,7 +88,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
                 Point2D p1 = points.get((n + i - 1) % n);
                 Point2D p2 = points.get(i);
 
-                Intersection result = Intersection.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
+                Intersection result = Intersections.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
                 if (result.getTs().size() == 2) {
                     insertLocation = Geom.lerp(p1, p2, (result.getIntersections().firstKey() + result.getIntersections().lastKey()) / 2);
                     insertAt = i;

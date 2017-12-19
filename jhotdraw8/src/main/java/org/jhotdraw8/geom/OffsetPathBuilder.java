@@ -71,10 +71,10 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
         for (int i = 0, n = segments.size(); i < n - 2; ++i) {
             Point2D a1 = segments.get(i);
             Point2D a2 = segments.get(i + 1);
-            for (int j = i + 1; j < n - 1; ++j) {
+            for (int j = n-2;j>=i + 1; --j) {
                 Point2D b1 = segments.get(j);
                 Point2D b2 = segments.get(j + 1);
-                Intersection inter = Intersection.intersectLineLine(a1, a2, b1, b2);
+                Intersection inter = Intersections.intersectLineLine(a1, a2, b1, b2);
                 if (inter.getStatus() == Intersection.Status.INTERSECTION) {
                     Point2D p = inter.getPoints().iterator().next();
                     segments.set(i + 1, p);

@@ -7,11 +7,12 @@ import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
+import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Intersection;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
+import org.jhotdraw8.geom.Intersections;
 
 /**
  * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
@@ -62,7 +63,7 @@ public class PathConnector extends LocatorConnector {
             pit = pif.getPathIterator(null);
         }
 
-        Intersection i = Intersection.intersectLinePathIterator(s, e, pit);
+        Intersection i = Intersections.intersectLinePathIterator(s, e, pit);
         return i.isEmpty() ? null : i.getIntersections().lastKey();
     }
 }

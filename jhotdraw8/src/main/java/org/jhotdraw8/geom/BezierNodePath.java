@@ -23,8 +23,8 @@ import javafx.scene.shape.FillRule;
 public class BezierNodePath implements Shape {
 
     private boolean closed;
-    private int windingRule;
     private List<BezierNode> nodes ;
+    private int windingRule;
 
     public BezierNodePath() {
         this(new ArrayList<>(),false,PathIterator.WIND_EVEN_ODD);

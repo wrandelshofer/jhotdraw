@@ -28,6 +28,7 @@ import java.util.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
+@Deprecated
 public class BezierPath extends ArrayList<BezierPath.Node>
         implements Shape, Serializable, Cloneable {
 
