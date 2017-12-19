@@ -163,7 +163,7 @@ public class Intersections {
             );
         }
 
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
         double[] roots = poly.getRoots();
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
@@ -200,7 +200,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             }
         }
 
-        return new Intersection(result.isEmpty()?Intersection.Status.NO_INTERSECTION:Intersection.Status.INTERSECTION,result);
+        return new Intersection(result);
     }
 
     /**
@@ -294,7 +294,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
                 + c20x2 * c12y2 + c12x2 * c20y2
         );
         double[] roots = poly.getRootsInInterval(0, 1);
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
@@ -329,8 +329,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             }
         }
 
-
-        return new Intersection(result.isEmpty()?Intersection.Status.NO_INTERSECTION:Intersection.Status.INTERSECTION,result);
+        return new Intersection(result);
 
     }
 
@@ -393,7 +392,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
                 - 2 * (ryry * ec.getX() * c0.getX() + rxrx * ec.getY() * c0.getY()) - rxrx * ryry
         ).getRoots();
 
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
@@ -409,7 +408,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             status = intersectPointEllipse(p1, ec, rx, ry).getStatus();
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -433,7 +432,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         Point2D n;                // normal for normal form of line
         Point2D min = minp(a1, a2); // used to determine if point is on line segment
         Point2D max = maxp(a1, a2); // used to determine if point is on line segment
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         a = p2.multiply(-2);
         c2 = p1.add(a.add(p3));
@@ -462,7 +461,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         // Any roots in closed interval [0,1] are intersections on Bezier, but
         // might not be on the line segment.
         // Find intersections and calculate point coordinates
-        Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
@@ -494,7 +493,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -511,7 +510,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      * @return the computed intersection
      */
     public static Intersection intersectBezier2Polygon(Point2D p1, Point2D p2, Point2D p3, List<Point2D> points) {
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -522,8 +521,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             result.putAll(inter.getIntersections());
         }
 
-
-        return new Intersection(result.isEmpty()?Intersection.Status.NO_INTERSECTION:Status.INTERSECTION,result);
+        return new Intersection(result);
     }
 
     ;
@@ -552,7 +550,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         Intersection inter3 = Intersections.intersectBezier2Line(p1, p2, p3, max, bottomLeft);
         Intersection inter4 = Intersections.intersectBezier2Line(p1, p2, p3, bottomLeft, min);
 
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         result.putAll(inter1.getIntersections());
         result.putAll(inter2.getIntersections());
@@ -560,7 +558,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         result.putAll(inter4.getIntersections());
 
         return new Intersection(result);
-}
+    }
 
     /**
      * Computes the intersection between cubic bezier curve 'a' and cubic bezier
@@ -583,7 +581,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         Point2D a, b, c, d;         // temporary variables
         Point2D c13, c12, c11, c10; // coefficients of cubic
         Point2D c23, c22, c21, c20; // coefficients of cubic
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         // Calculate the coefficients of cubic polynomial
         a = a1.multiply(-1);
@@ -927,7 +925,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
     public static Intersection intersectBezier3Ellipse(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D ec, double rx, double ry) {
         Point2D a, b, c, d;       // temporary variables
         Point2D c3, c2, c1, c0;   // coefficients of cubic
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         // Calculate the coefficients of cubic polynomial
         a = p1.multiply(-1);
@@ -1009,7 +1007,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         Point2D n;                // normal for normal form of line
         final Point2D min = minp(a1, a2); // used to determine if point is on line segment
         final Point2D max = maxp(a1, a2); // used to determine if point is on line segment
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
         //     (1-t^3)P1 + 3t(1-t)^2P2 + 3t^2(1-t)P3 + t^3P4
@@ -1059,7 +1057,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         // Any roots in closed interval [0,1] are intersections on Bezier, but
         // might not be on the line segment.
         // Find intersections and calculate point coordinates
-        Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
@@ -1095,7 +1093,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -1110,7 +1108,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      * @return the computed intersection
      */
     public static Intersection intersectBezier3Polygon(Point2D p1, Point2D p2, Point2D p3, Point2D p4, List<Point2D> points) {
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -1120,7 +1118,6 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
 
             result.putAll(inter.getIntersections());
         }
-
 
         return new Intersection(result);
     }
@@ -1148,15 +1145,14 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         Intersection inter3 = Intersections.intersectBezier3Line(p1, p2, p3, p4, max, bottomLeft);
         Intersection inter4 = Intersections.intersectBezier3Line(p1, p2, p3, p4, bottomLeft, min);
 
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         result.putAll(inter1.getIntersections());
         result.putAll(inter2.getIntersections());
         result.putAll(inter3.getIntersections());
         result.putAll(inter4.getIntersections());
 
-            // FIXME compute inside/outside
-
+        // FIXME compute inside/outside
         return new Intersection(result);
     }
 
@@ -1170,7 +1166,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      * @return computed intersection
      */
     public static Intersection intersectCircleCircle(Point2D c1, double r1, Point2D c2, double r2) {
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         // Determine minimum and maximum radii where circles can intersect
         double r_max = r1 + r2;
@@ -1180,9 +1176,9 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         double c_dist = c1.distance(c2);
 
         Intersection.Status status;
-        
+
         if (c_dist > r_max) {
-            status =Intersection.Status.NO_INTERSECTION_OUTSIDE;
+            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         } else if (c_dist < r_min) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
@@ -1193,7 +1189,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             Point2D p = lerp(c1, c2, a / c_dist);
             double b = h / c_dist;
 
-            // FIXME compute angle with atan2
+            // FIXME compute t
             result.put(Double.NaN, new Point2D(
                     p.getX() - b * (c2.getY() - c1.getY()),
                     p.getY() + b * (c2.getX() - c1.getX())
@@ -1205,7 +1201,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             )
             );
         }
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
     private final static double EPSILON = 1e-6;
 
@@ -1218,21 +1214,21 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      * @return computed intersection
      */
     public static Intersection intersectPointCircle(Point2D point, Point2D center, double radius) {
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         final double distance = point.distance(center);
 
         Intersection.Status status;
         if (distance - radius < EPSILON) {
-           status=Intersection.Status.INTERSECTION;
-           // FIXME compute angle with atan2
+            status = Intersection.Status.INTERSECTION;
+            // FIXME compute angle with atan2
             result.put(0.0, point);
         } else if (distance < radius) {
-            status =Intersection.Status.NO_INTERSECTION_INSIDE;
+            status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
-            status=Intersection.Status.NO_INTERSECTION_OUTSIDE;
+            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         }
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -1276,7 +1272,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      * @return computed intersection
      */
     public static Intersection intersectCirclePolygon(Point2D c, double r, List<Point2D> points) {
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
         int length = points.size();
         Intersection inter = null;
 
@@ -1318,7 +1314,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         Intersection inter3 = Intersections.intersectCircleLine(c, r, max, bottomLeft);
         Intersection inter4 = Intersections.intersectCircleLine(c, r, bottomLeft, min);
 
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         result.putAll(inter1.getIntersections());
         result.putAll(inter2.getIntersections());
@@ -1332,7 +1328,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             status = inter1.getStatus();
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     ;
@@ -1363,7 +1359,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
         double[] yRoots = yPoly.getRoots();
         double norm0 = (a[0] * a[0] + 2 * a[1] * a[1] + a[2] * a[2]) * EPSILON;
         double norm1 = (b[0] * b[0] + 2 * b[1] * b[1] + b[2] * b[2]) * EPSILON;
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         for (int y = 0; y < yRoots.length; y++) {
             Polynomial xPoly = new Polynomial(
@@ -1400,7 +1396,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      * @return computed intersection
      */
     public static Intersection intersectPointEllipse(Point2D point, Point2D center, double rx, double ry) {
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         double px = point.getX();
         double py = point.getY();
@@ -1410,15 +1406,15 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         double det = (px - cx) * (px - cx) / (rx * rx) + (py - py) * (py - py) / (ry * ry);
         Intersection.Status status;
         if (abs(det) - 1 == EPSILON) {
-            status=Intersection.Status.INTERSECTION;
+            status = Intersection.Status.INTERSECTION;
             result.put(0.0, point);
         } else if (det < 1) {
-            status=Intersection.Status.NO_INTERSECTION_INSIDE;
+            status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
-            status=Intersection.Status.NO_INTERSECTION_OUTSIDE;
+            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -1447,7 +1443,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      * @return computed intersection
      */
     public static Intersection intersectEllipsePolygon(Point2D c, double rx, double ry, List<Point2D> points) {
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -1484,13 +1480,12 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Intersection inter3 = Intersections.intersectEllipseLine(c, rx, ry, max, bottomLeft);
         Intersection inter4 = Intersections.intersectEllipseLine(c, rx, ry, bottomLeft, min);
 
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         result.putAll(inter1.getIntersections());
         result.putAll(inter2.getIntersections());
         result.putAll(inter3.getIntersections());
         result.putAll(inter4.getIntersections());
-
 
         return new Intersection(result);
     }
@@ -1532,7 +1527,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         Point2D n;                // normal for normal form of line
         Point2D min = minp(ax, ay, bx, by); // used to determine if point is on line segment
         Point2D max = maxp(ax, ay, bx, by); // used to determine if point is on line segment
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
         final Point2D p1 = new Point2D(p1x, p1y);
         final Point2D p2 = new Point2D(p2x, p2y);
 //final Point2D p3 = new Point2D(p3x,p3y);
@@ -1562,7 +1557,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
 // Any roots in closed interval [0,1] are intersections on Bezier, but
 // might not be on the line segment.
 // Find intersections and calculate point coordinates
-Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
@@ -1594,7 +1589,7 @@ Intersection.Status status=Intersection.Status.NO_INTERSECTION;
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -1651,7 +1646,7 @@ Intersection.Status status=Intersection.Status.NO_INTERSECTION;
         Point2D n;                // normal for normal form of line
         final Point2D amin = minp(a1, a2); // used to determine if point is on line segment
         final Point2D amax = maxp(a1, a2); // used to determine if point is on line segment
-NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
         //     (1-t^3)P1 + 3t(1-t)^2P2 + 3t^2(1-t)P3 + t^3P4
@@ -1702,7 +1697,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
         // Any roots in closed interval [0,1] are intersections on Bezier, but
         // might not be on the line segment.
         // Find intersections and calculate point coordinates
-        Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
@@ -1738,7 +1733,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -1782,7 +1777,7 @@ NavigableMap<Double, Point2D> result = new TreeMap<>();
      */
     public static Intersection intersectLineCircle(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
         NavigableMap<Double, Point2D> result = new TreeMap<>();
-double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+        double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
         double b = 2 * ((x2 - x1) * (x1 - cx) + (y2 - y1) * (y1 - cy));
         double cc = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
         double deter = b * b - 4 * a * cc;
@@ -1818,7 +1813,7 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -1852,7 +1847,7 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
      * @return computed intersection
      */
     public static Intersection intersectLineEllipse(Point2D a1, Point2D a2, Point2D ec, double rx, double ry) {
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
 
         Point2D origin = new Point2D(a1.getX(), a1.getY());
         Point2D dir = a2.subtract(a1);
@@ -1865,7 +1860,7 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
         double b = dir.dotProduct(mDiff);
         double c = diff.dotProduct(mDiff) - 1.0;
         double d = b * b - a * c;
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         if (d < 0) {
             status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         } else if (d > 0) {
@@ -1898,7 +1893,7 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -1923,8 +1918,8 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
     }
 
     public static Intersection intersectLineLine(double a1x, double a1y, double a2x, double a2y, double b1x, double b1y, double b2x, double b2y) {
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         double ua_t = (b2x - b1x) * (a1y - b1y) - (b2y - b1y) * (a1x - b1x);
         double ub_t = (a2x - a1x) * (a1y - b1y) - (a2y - a1y) * (a1x - b1x);
@@ -1935,29 +1930,29 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
             double ub = ub_t / u_b;
 
             if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
-                status =  Intersection.Status.INTERSECTION;
+                status = Intersection.Status.INTERSECTION;
                 result.put(ua, new Point2D(
                         a1x + ua * (a2x - a1x),
                         a1y + ua * (a2y - a1y)
                 )
                 );
             } else {
-                status =Intersection.Status.NO_INTERSECTION;
+                status = Intersection.Status.NO_INTERSECTION;
             }
         } else {
             if (ua_t == 0 || ub_t == 0) {
-                status =Intersection.Status.NO_INTERSECTION_COINCIDENT;
+                status = Intersection.Status.NO_INTERSECTION_COINCIDENT;
             } else {
                 status = Intersection.Status.NO_INTERSECTION_PARALLEL;
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     public static Intersection intersectLinePathIterator(Point2D a, Point2D b, PathIterator pit) {
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final double ax = a.getX();
         final double ay = a.getY();
         final double bx = b.getX();
@@ -2006,6 +2001,108 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
 
         return new Intersection(result);
     }
+    public static Intersection intersectPathIteratorPointTolerance(PathIterator pit, double px, double py, double tolerance) {
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
+        final double[] seg = new double[6];
+        double firstx = 0, firsty = 0;
+        double lastx = 0, lasty = 0;
+        double x, y;
+        for (; !pit.isDone(); pit.next()) {
+            Intersection inter;
+            switch (pit.currentSegment(seg)) {
+                case PathIterator.SEG_CLOSE:
+                    inter = Intersections.intersectLineCircle(lastx, lasty, firstx, firsty,px,py,tolerance);
+                    // FIXME project point on line
+                    result.putAll(inter.getIntersections());
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    x = seg[4];
+                    y = seg[5];
+                    inter = Intersections.intersectBezier3Circle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y,px,py,tolerance);
+                    // FIXME project point on curve
+                    result.putAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    x = seg[0];
+                    y = seg[1];
+                    inter = Intersections.intersectLineCircle(lastx, lasty, x, y,px,py,tolerance);
+                    // FIXME project point on line
+                    result.putAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    lastx = firstx = seg[0];
+                    lasty = firsty = seg[1];
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    x = seg[2];
+                    y = seg[3];
+                    inter = Intersections.intersectBezier2Circle(lastx, lasty, seg[0], seg[1], x, y,px,py,tolerance);
+                    // FIXME project point on curve
+                    result.putAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+            }
+        }
+
+        return new Intersection(result);
+    }
+    public static Intersection intersectPathIteratorCircle(PathIterator pit, double cx, double cy, double r) {
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
+        final double[] seg = new double[6];
+        double firstx = 0, firsty = 0;
+        double lastx = 0, lasty = 0;
+        double x, y;
+        for (; !pit.isDone(); pit.next()) {
+            Intersection inter;
+            switch (pit.currentSegment(seg)) {
+                case PathIterator.SEG_CLOSE:
+                    inter = Intersections.intersectLineCircle(lastx, lasty, firstx, firsty,cx,cy,r);
+                    // FIXME add segment number to t
+                    result.putAll(inter.getIntersections());
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    x = seg[4];
+                    y = seg[5];
+                    inter = Intersections.intersectBezier3Circle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y,cx,cy,r);
+                    // FIXME add segment number to t
+                    result.putAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    x = seg[0];
+                    y = seg[1];
+                    inter = Intersections.intersectLineCircle(lastx, lasty, x, y,cx,cy,r);
+                    // FIXME add segment number to t
+                    result.putAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    lastx = firstx = seg[0];
+                    lasty = firsty = seg[1];
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    x = seg[2];
+                    y = seg[3];
+                    inter = Intersections.intersectBezier2Circle(lastx, lasty, seg[0], seg[1], x, y,cx,cy,r);
+                    // FIXME add segment number to t
+                    result.putAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+            }
+        }
+
+        return new Intersection(result);
+    }
 
     /**
      * Computes the intersection between a line and a polygon.
@@ -2019,8 +2116,8 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
      * @return computed intersection
      */
     public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Point2D> points) {
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -2030,7 +2127,6 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
 
             result.putAll(inter.getIntersections());
         }
-
 
         return new Intersection(result);
     }
@@ -2071,8 +2167,8 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
         Intersection inter3 = Intersections.intersectLineLine(a1, a2, max, bottomLeft);
         Intersection inter4 = Intersections.intersectLineLine(a1, a2, bottomLeft, min);
 
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         result.putAll(inter1.getIntersections());
         result.putAll(inter2.getIntersections());
@@ -2090,8 +2186,8 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
      * @return computed intersection
      */
     public static Intersection intersectPolygonPolygon(List<Point2D> points1, List<Point2D> points2) {
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         int length = points1.size();
 
         for (int i = 0; i < length; i++) {
@@ -2125,8 +2221,8 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
         Intersection inter3 = Intersections.intersectLinePolygon(max, bottomLeft, points);
         Intersection inter4 = Intersections.intersectLinePolygon(bottomLeft, min, points);
 
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         result.putAll(inter1.getIntersections());
         result.putAll(inter2.getIntersections());
@@ -2149,8 +2245,8 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
      * @return computed intersection
      */
     public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         double ua_t = (b2.getX() - b1.getX()) * (a1.getY() - b1.getY()) - (b2.getY() - b1.getY()) * (a1.getX() - b1.getX());
         double ub_t = (a2.getX() - a1.getX()) * (a1.getY() - b1.getY()) - (a2.getY() - a1.getY()) * (a1.getX() - b1.getX());
@@ -2167,13 +2263,13 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
             );
         } else {
             if (ua_t == 0 || ub_t == 0) {
-                status =Intersection.Status.NO_INTERSECTION_COINCIDENT;
+                status = Intersection.Status.NO_INTERSECTION_COINCIDENT;
             } else {
-                status =Intersection.Status.NO_INTERSECTION_PARALLEL;
+                status = Intersection.Status.NO_INTERSECTION_PARALLEL;
             }
         }
 
-        return new Intersection(status,result);
+        return new Intersection(status, result);
     }
 
     /**
@@ -2196,8 +2292,8 @@ double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
         Intersection inter3 = Intersections.intersectLineRectangle(max, bottomLeft, b1, b2);
         Intersection inter4 = Intersections.intersectLineRectangle(bottomLeft, min, b1, b2);
 
-       NavigableMap<Double, Point2D> result = new TreeMap<>();
-    Intersection.Status status=Intersection.Status.NO_INTERSECTION;
+        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         result.putAll(inter1.getIntersections());
         result.putAll(inter2.getIntersections());
