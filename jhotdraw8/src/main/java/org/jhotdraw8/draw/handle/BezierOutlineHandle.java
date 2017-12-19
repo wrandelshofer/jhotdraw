@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.handle;
 
+import static java.lang.Math.sqrt;
 import java.util.List;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -21,6 +22,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
+import org.jhotdraw8.geom.Intersection;
+import org.jhotdraw8.geom.Intersections;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 
@@ -53,7 +56,11 @@ public class BezierOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
-        return false;
+        final SimpleBezierFigure o = getOwner();
+        Point2D localp = Transforms.concat(dv.getViewToWorld(),o.getWorldToLocal()).transform(x,y);
+        Intersection isect=Intersections.intersectPathIteratorPointTolerance(o.getPathIterator(null),
+                localp.getX(),localp.getY(),sqrt(tolerance));
+        return !isect.isEmpty();
     }
 
     @Override
@@ -82,10 +89,10 @@ public class BezierOutlineHandle extends AbstractHandle {
 
             Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
             pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
-            Point2D pInLocal = owner.worldToLocal(pInDrawing);
+            Point2D localp = owner.worldToLocal(pInDrawing);
             
-            
-            
+            final ImmutableList<BezierNode> nodes = getOwner().get(key);
+            System.err.println("BezierOutlineHandle add point at "+localp+" not implemented");
             //dv.getModel().set(owner, key, ImmutableList.addChild(owner.get(key), insertAt, pInLocal));
             dv.recreateHandles();
         }
