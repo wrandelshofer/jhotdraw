@@ -519,7 +519,7 @@ public class Polynomial {
 
 private static double[] push(double[] a, double d) {
         double[] r = new double[a.length + 1];
-        System.arraycopy(a, 0, r, 0, r.length);
+        System.arraycopy(a, 0, r, 0, a.length);
         r[a.length] = d;
         return r;
     }
