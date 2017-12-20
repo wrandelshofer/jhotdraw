@@ -12,7 +12,7 @@
 package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;
-import static java.lang.Math.abs;
+import static java.lang.Math.*;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
@@ -211,6 +211,23 @@ public class Intersections {
         return new Intersection(result);
     }
 
+    public static Intersection intersectBezier2Bezier3(double ax1, double ay1, double ax2, double ay2, double ax3, double ay3,
+            double bx1, double by1, double bx2, double by2, double bx3, double by3, double bx4, double by4) {
+        return intersectBezier2Bezier3(new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
+                new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3), new Point2D(bx4, by4));
+        
+    }
+    public static Intersection intersectBezier3Bezier2(
+            double ax1, double ay1, double ax2, double ay2, double ax3, double ay3, double ax4, double ay4,
+            double bx1, double by1, double bx2, double by2, double bx3, double by3) {
+        Intersection isect= intersectBezier2Bezier3(
+                new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3),
+                new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
+                 new Point2D(ax4, ay4));
+        // FIXME compute t for a instead for b
+        return isect;
+        
+    }
     /**
      * Computes the intersection between quadratic bezier curve 'a' and cubic
      * bezier curve 'b'.
@@ -368,13 +385,15 @@ public class Intersections {
                 return new Intersection(Status.NO_INTERSECTION);
             }
         }
-        // We have now n-points with distance 'tolerance' to px,py or the entire curve is inside r.
+        // FIXME We have now n-points with distance 'tolerance' to px,py or the entire curve is inside r.
         // Find closest point to px,py.
         // Could be (x1,y1) or (x3,y3) if curve starts/ends within circle.
         return isect;
     }
 
-    public static Intersection intersectBezier2Ellipse(double x1, double y1, double x2, double y2, double x3, double y3, double cx, double cy, double rx, double ry) {
+    public static Intersection intersectBezier2Ellipse(
+            double x1, double y1, double x2, double y2, double x3, double y3, 
+            double cx, double cy, double rx, double ry) {
         return intersectBezier2Ellipse(new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(cx, cy), rx, ry);
     }
 
@@ -413,14 +432,22 @@ public class Intersections {
 
         double rxrx = rx * rx;
         double ryry = ry * ry;
+        final double cx2 = c2.getX();
+        final double cy2 = c2.getY();
+        final double cx1 = c1.getX();
+        final double cy1 = c1.getY();
+        final double cx0 = c0.getX();
+        final double cy0 = c0.getY();
+        final double ecx = ec.getX();
+        final double ecy = ec.getY();
         double[] roots = new Polynomial(
-                ryry * c2.getX() * c2.getX() + rxrx * c2.getY() * c2.getY(),
-                2 * (ryry * c2.getX() * c1.getX() + rxrx * c2.getY() * c1.getY()),
-                ryry * (2 * c2.getX() * c0.getX() + c1.getX() * c1.getX()) + rxrx * (2 * c2.getY() * c0.getY() + c1.getY() * c1.getY())
-                - 2 * (ryry * ec.getX() * c2.getX() + rxrx * ec.getY() * c2.getY()),
-                2 * (ryry * c1.getX() * (c0.getX() - ec.getX()) + rxrx * c1.getY() * (c0.getY() - ec.getY())),
-                ryry * (c0.getX() * c0.getX() + ec.getX() * ec.getX()) + rxrx * (c0.getY() * c0.getY() + ec.getY() * ec.getY())
-                - 2 * (ryry * ec.getX() * c0.getX() + rxrx * ec.getY() * c0.getY()) - rxrx * ryry
+                ryry * cx2 * cx2 + rxrx * cy2 * cy2,
+                2 * (ryry * cx2 * cx1 + rxrx * cy2 * cy1),
+                ryry * (2 * cx2 * cx0 + cx1 * cx1) + rxrx * (2 * cy2 * cy0 + cy1 * cy1)
+                - 2 * (ryry * ecx * cx2 + rxrx * ecy * cy2),
+                2 * (ryry * cx1 * (cx0 - ecx) + rxrx * cy1 * (cy0 - ecy)),
+                ryry * (cx0 * cx0 + ecx * ecx) + rxrx * (cy0 * cy0 + ecy * ecy)
+                - 2 * (ryry * ecx * cx0 + rxrx * ecy * cy0) - rxrx * ryry
         ).getRoots();
 
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
@@ -591,7 +618,8 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         return new Intersection(result);
     }
 
-    public static Intersection intersectBezier3Bezier3(double ax1, double ay1, double ax2, double ay2, double ax3, double ay3, double ax4, double ay4,
+    public static Intersection intersectBezier3Bezier3(
+            double ax1, double ay1, double ax2, double ay2, double ax3, double ay3, double ax4, double ay4,
             double bx1, double by1, double bx2, double by2, double bx3, double by3, double bx4, double by4) {
         return intersectBezier3Bezier3(new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3), new Point2D(ax4, ay4),
                 new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3), new Point2D(bx4, by4));
@@ -959,6 +987,14 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         return isect;
     }
 
+    public static Intersection intersectBezier3Ellipse(
+            double ax1, double ay1, double ax2, double ay2, double ax3, double ay3, double ax4, double ay4,
+            double cx, double cy, double rx, double ry) {
+        return intersectBezier3Ellipse(
+                new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3), new Point2D(ax4, ay4),
+                new Point2D(cx, cy), rx, ry);
+        
+    }
     /**
      * Computes the intersection between cubic bezier curve 'p' and the given
      * ellipse.
@@ -1824,16 +1860,28 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
     /**
      * Computes the intersection between a line and a circle.
      * <p>
-     * The intersection will contain the parameters 't' of the line in range
-     * [0,1].
+     * The intersection will contain the parameters 't' of the line in range [0,1].
      * <p>
      * The intersection will have one of the following status:
      * <ul>
      * <li>{@link Status#INTERSECTION}</li>
      * <li>{@link Status#NO_INTERSECTION_INSIDE}</li>
      * <li>{@link Status#NO_INTERSECTION_OUTSIDE}</li>
-     * <li>{@link Status#NO_INTERSECTION_TANGENT}</li>
      * </ul>
+     * <p>
+     * This method solves the following equation:
+     * <pre>
+     * {@literal x1 + (x2 - x1) · t, y1 + (y2 - y1) · t, with t in range [0,1] : line equation}
+     * {@literal (x - cx)² + (y - cy)² = r²} : circle equation
+     * {@literal (x1 + (x2 - x1) · t - cx)² + (y1 + (y2 - y1) · t - cy)² - r² =0} : intersection equation
+     * {@literal (x1 + x2·t - x1·t - cx)² + (y1 + y2· t - y1· t - cy)² - r² =0} 
+     * {@literal -2·x1·x2·t²  + 2·x1·(cx+x2)·t - 2·x1*cx +(x1²+x2²)·t² - 2·(x1² - x2·cx)·t + x1² + cx²  ...+same for y...   - r² =0} 
+     * {@literal (x1²+-2·x1·x2+x2²)·t²  + (2·x1·(cx+x2)- 2·(x1² - x2·cx))·t  - 2·x1*cx + x1² + cx²  ...+same for y...   - r² =0} 
+     * {@literal (x2 - x1)²·t²  + 2·((x2 - x1)·(x1 - cx))·t  - 2·x1*cx + x1² + cx²  ...+same for y...   - r² =0} 
+     * {@literal (x2 - x1)²·(y2 - y1)²·t²  + 2·((x2 - x1)·(x1 - cx)+(y2 - y1)·(y1 - cy))·t - 2·(x1·cx + y1·cy) + cx² + cy² + x1² + y1²  - r² =0} 
+     * {@literal Δx²·Δy²·t²  + 2·(Δx·(x1 - cx)+Δy·(y1 - cy))·t - 2·(x1·cx + y1·cy) + cx² + cy² + x1² + y1²  - r² =0} 
+     * {@literal a·t² + b·t + c = 0 : quadratic polynomial, with t in range [0,1]} 
+     * </pre>
      *
      * @param x1 point 1 of the line
      * @param y1 point 1 of the line
@@ -1846,19 +1894,17 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      */
     public static Intersection intersectLineCircle(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
-        double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
-        double b = 2 * ((x2 - x1) * (x1 - cx) + (y2 - y1) * (y1 - cy));
-        double cc = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
-        double deter = b * b - 4 * a * cc;
+        final double Δx = x2 - x1;
+        final double Δy = y2 - y1;
+        double a = Δx * Δx + Δy * Δy;
+        double b = 2 * (Δx * (x1 - cx) + Δy * (y1 - cy));
+        double c = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
+        double deter = b * b - 4 * a * c;
 
         Intersection.Status status;
-        if (deter < 0) {
+        if (deter < -EPSILON) {
             status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
-        } else if (deter == 0) {
-            status = Intersection.Status.NO_INTERSECTION_TANGENT;
-            //double u = (-b) / (2 * a);
-            //result.add(new AbstractMap.SimpleEntry<>(u, lerp(x1, y1, x2, y2, u)));// result must be empty when there is no intersection!
-        } else {
+        } else  if (deter > 0) {
             double e = Math.sqrt(deter);
             double u1 = (-b + e) / (2 * a);
             double u2 = (-b - e) / (2 * a);
@@ -1871,20 +1917,76 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 }
             } else {
                 status = Intersection.Status.INTERSECTION;
-
                 if (0 <= u1 && u1 <= 1) {
                     result.add(new AbstractMap.SimpleEntry<>(u1, lerp(x1, y1, x2, y2, u1)));
                 }
-
                 if (0 <= u2 && u2 <= 1) {
                     result.add(new AbstractMap.SimpleEntry<>(u2, lerp(x1, y1, x2, y2, u2)));
                 }
+            }
+        } else {
+            double t = (-b) / (2 * a);
+            if (0 <= t && t <= 1) {
+                status = Intersection.Status.INTERSECTION;
+                result.add(new AbstractMap.SimpleEntry<>(t, lerp(x1, y1, x2, y2, t)));
+            } else {
+                status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
         }
 
         return new Intersection(status, result);
     }
 
+    /**
+     * Computes the intersection between a line and a point with tolerance radius r.
+     * <p>
+     * The intersection will contain the parameters 't' of the line in range [0,1].
+     * <p>
+     * The intersection will have one of the following status:
+     * <ul>
+     * <li>{@link Status#INTERSECTION}</li>
+     * <li>{@link Status#NO_INTERSECTION}</li>
+     * </ul>
+     * <p>
+     * This method solves the following equation:
+     * <pre>
+     * {@literal x1 + (x2 - x1) · t, y1 + (y2 - y1) · t, with t in range [0,1] : line equation}
+     * {@literal (x - cx)² + (y - cy)² = 0} : point equation
+     * {@literal Δx²·Δy²·t²  + 2·(Δx·(x1 - cx)+Δy·(y1 - cy))·t - 2·(x1·cx + y1·cy) + cx² + cy² + x1² + y1²  =0} 
+     * {@literal a·t² + b·t + c = 0 : quadratic polynomial, with t in range [0,1]} 
+     * {@literal 2·a·t + b = 0 : derivative} 
+     * </pre>
+     *
+     * @param x1 point 1 of the line
+     * @param y1 point 1 of the line
+     * @param x2 point 2 of the line
+     * @param y2 point 2 of the line
+     * @param cx the center of the point
+     * @param cy the center of the point
+     * @param r the tolerance radius
+     * @return computed intersection
+     */
+    public static Intersection intersectLinePoint(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        final double Δx = x2 - x1;
+        final double Δy = y2 - y1;
+        double a = Δx * Δx + Δy * Δy;
+        double b = 2 * (Δx * (x1 - cx) + Δy * (y1 - cy));
+        double[] roots = new Polynomial(2*a,b).getRoots();
+
+        if (roots.length>0) {
+           double t = max(0,min(roots[0],1));
+System.out.println("  Intersections.linePoint t="+t);           
+            double x = x1+t* Δx;
+            double y = y1+t* Δy;
+            double squaredDistance=(x-cx)*(x-cx)+(y-cy)*(y-cy);
+            if (squaredDistance<=r*r) {
+                result.add(new AbstractMap.SimpleEntry<>(t, new Point2D(x,y)));
+            }
+        }
+
+        return new Intersection( result);
+    }
     /**
      * Intersects a line with the specified point and the given tolerance.
      *
@@ -1895,12 +1997,14 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @param cx the center of the point
      * @param cy the center of the point
      * @param r the tolerance radius
-     * @return the intersection with t in range [0,1] if an intersection
+     * @return the intersection with t in range [0,1] if the point is within radius r of the line
      */
-    public static Intersection intersectLinePoint(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
+    public static Intersection intersectLinePointOLD(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
-        double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
-        double b = 2 * ((x2 - x1) * (x1 - cx) + (y2 - y1) * (y1 - cy));
+        final double Δx = x2 - x1;
+        final double Δy = y2 - y1;
+        double a = Δx * Δx + Δy * Δy;
+        double b = 2 * (Δx * (x1 - cx) + Δy * (y1 - cy));
         double cc = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
         double deter = b * b - 4 * a * cc;
 
@@ -1908,7 +2012,9 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         if (deter < 0) {
             status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         } else if (deter == 0) {
-            status = Intersection.Status.NO_INTERSECTION_TANGENT;
+            status = Intersection.Status.INTERSECTION;// line is tangent to circle
+            double u = (-b) / (2 * a);
+            result.add(new AbstractMap.SimpleEntry<>(u, lerp(x1, y1, x2, y2, u)));
         } else {
             double e = Math.sqrt(deter);
             double u1 = (-b + e) / (2 * a);
@@ -1925,9 +2031,9 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
                 if (0 <= u1 && u1 <= 1) {
                     if (u2 > 1) {
-                        result.add(new AbstractMap.SimpleEntry<>(1.0, new Point2D(x1, y1)));
-                    } else if (u2 < 0) {
                         result.add(new AbstractMap.SimpleEntry<>(0.0, new Point2D(x2, y2)));
+                    } else if (u2 < 0) {
+                        result.add(new AbstractMap.SimpleEntry<>(1.0, new Point2D(x1, y1)));
                     } else {
                         final double u = 0.5 * (u1 + u2);
                         result.add(new AbstractMap.SimpleEntry<>(u, lerp(x1, y1, x2, y2, u)));
@@ -1992,7 +2098,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         double c = diff.dotProduct(mDiff) - 1.0;
         double d = b * b - a * c;
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
-        if (d < 0) {
+        if (d < -EPSILON) {
             status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         } else if (d > 0) {
             double root = Math.sqrt(d);

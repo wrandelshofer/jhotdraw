@@ -500,8 +500,9 @@ public class Polynomial {
      */
     public double[] getRoots() {
         double[] result;
+        final int simplifiedDegree = simplifiedDegree();
 
-        switch (simplifiedDegree()) {
+        switch (simplifiedDegree) {
             case 0:
                 result = new double[0];
                 break;
@@ -518,8 +519,7 @@ public class Polynomial {
                 result = getQuarticRoots();
                 break;
             default:
-                result = new double[0];
-            // should try Newton's method and/or bisection
+                throw new UnsupportedOperationException("Degree is too high. simplifiedDegree="+simplifiedDegree);
         }
 
         return result;
@@ -533,7 +533,8 @@ public class Polynomial {
     }
 
     /**
-     * getRootsInInterval
+     * Gets roots in the given interval. Uses the bisection method for root finding.
+     * Can work with a polynomial of any degree.
      *
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval
@@ -633,10 +634,6 @@ public class Polynomial {
 
     /**
      * Returns the roots of a cubic polynomial (degree equals three).
-     *
-     * This code is based on MgcPolynomial.cpp written by David Eberly. His code
-     * along with many other excellent examples are avaiable at his site:
-     * http://www.magic-software.com
      *
      * @return the roots
      */
