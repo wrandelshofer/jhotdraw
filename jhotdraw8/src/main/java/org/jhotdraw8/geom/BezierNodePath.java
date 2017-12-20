@@ -152,4 +152,14 @@ public class BezierNodePath implements Shape {
     public boolean intersects(Rectangle2D r) {
         return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
+    
+    public boolean pathIntersects(double x, double y, double tolerance) {
+        Intersection isect=Intersections.intersectPathIteratorPoint(getPathIterator(null),x, y, tolerance);
+        return !isect.isEmpty();
+    }
+    public boolean split(double x, double y, double tolerance) {
+        Intersection isect=Intersections.intersectPathIteratorPoint(getPathIterator(null),x, y, tolerance);
+        System.err.println("BezierNodePath split "+isect);
+        return !isect.isEmpty();
+    }
 }

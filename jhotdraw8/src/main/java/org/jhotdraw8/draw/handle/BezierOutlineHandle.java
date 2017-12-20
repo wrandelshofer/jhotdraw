@@ -55,11 +55,16 @@ public class BezierOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+    public boolean contains(DrawingView dv, double x, double y, double toleranceSquared) {
+        return contains(dv,x,y,sqrt(toleranceSquared),toleranceSquared);
+        
+    }
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
         final SimpleBezierFigure o = getOwner();
         Point2D localp = Transforms.concat(dv.getViewToWorld(),o.getWorldToLocal()).transform(x,y);
-        Intersection isect=Intersections.intersectPathIteratorPointTolerance(o.getPathIterator(null),
-                localp.getX(),localp.getY(),sqrt(tolerance));
+        Intersection isect=Intersections.intersectPathIteratorCircle(o.getPathIterator(null),
+                localp.getX(),localp.getY(),tolerance);
         return !isect.isEmpty();
     }
 
@@ -80,19 +85,21 @@ public class BezierOutlineHandle extends AbstractHandle {
 
     @Override
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
-
-        // FIXME implement me
         if (key != null && event.getClickCount() == 2) {
             double px = event.getX();
             double py = event.getY();
-            double tolerance = SimpleDrawingView.TOLERANCE;
 
             Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
-            pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
+            double tolerance = dv.getViewToWorld().deltaTransform(dv.getTolerance(),dv.getTolerance()).getX();
+           // pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
             Point2D localp = owner.worldToLocal(pInDrawing);
             
             final ImmutableList<BezierNode> nodes = getOwner().get(key);
             System.err.println("BezierOutlineHandle add point at "+localp+" not implemented");
+            BezierNodePath path=new BezierNodePath(nodes);
+            if (path.split(localp.getX(),localp.getY(),tolerance)) {
+                
+            }
             //dv.getModel().set(owner, key, ImmutableList.addChild(owner.get(key), insertAt, pInLocal));
             dv.recreateHandles();
         }

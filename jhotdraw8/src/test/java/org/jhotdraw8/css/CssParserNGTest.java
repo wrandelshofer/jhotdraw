@@ -98,13 +98,13 @@ public class CssParserNGTest {
     @DataProvider
     public Object[][] stylesheetData() {
         return new Object[][]{
-            {"#vertex4 {\n" +
-"    -jhotdraw-fill: yellow;\n" +
-"}\n" +
-"\n" +
-"[class~=\"warning\"] {\n" +
-"  color: red;\n" +
-"}","<xml><a/><b class=\"warning\"/></xml>","<xml><a/><b class=\"warning\" color=\"red\"/></xml>"},
+            {"#vertex4 {\n"
+                + "    -jhotdraw-fill: yellow;\n"
+                + "}\n"
+                + "\n"
+                + "[class~=\"warning\"] {\n"
+                + "  color: red;\n"
+                + "}", "<xml><a/><b class=\"warning\"/></xml>", "<xml><a/><b class=\"warning\" color=\"red\"/></xml>"},
             {"[att] {a:1}", "<xml><elem att=\"bla\"/></xml>", "<xml><elem a=\"1\" att=\"bla\"/></xml>"},
             {"[att=val] {a:1}", "<xml><elem att=\"bla\"/><elem att=\"val\"/></xml>", "<xml><elem att=\"bla\"/><elem a=\"1\" att=\"val\"/></xml>"},
             {"[att~=val] {a:1}", "<xml><elem att=\"bla blu\"/><elem att=\"val kilmer\"/></xml>", "<xml><elem att=\"bla blu\"/><elem a=\"1\" att=\"val kilmer\"/></xml>"},
@@ -211,7 +211,7 @@ public class CssParserNGTest {
         System.out.println(" expected: " + expectedValue);
         //---
         assertEquals(actualValue, expectedValue);
-        assertEquals(p.getParseExceptions().isEmpty(),valid);
+        assertEquals(p.getParseExceptions().isEmpty(), valid);
     }
 
     /**

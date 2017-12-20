@@ -6,7 +6,8 @@
 package org.jhotdraw8.geom;
 
 import java.util.Arrays;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -20,17 +21,44 @@ public class PolynomialNGTest {
     public PolynomialNGTest() {
     }
 
-    /**
-     * Test of getRoots method, of class Polynomial.
-     */
-    @Test
-    public void testGetRoots() {
+    
+    @DataProvider
+    public Object[][] polynomials() {
+        return new Object[][]{
+            {new Polynomial(5),new double[]{}},
+            {new Polynomial(2,1),new double[]{-0.5}},
+            {new Polynomial(-3, 0, 2, 0, 5),new double[]{1.2909944487358056, -1.2909944487358056}},
+        };
+    }
+
+    @Test(dataProvider="polynomials")
+    public void testGetRoots(Polynomial instance, double[] expected) {
         System.out.println("getRoots");
-        Polynomial instance = new Polynomial(0.0,13885.714285714286,0,-13885.714285714286);
         System.out.println(instance);
-        double[] expResult = new double[]{1,-1};
-        double[] result = instance.getRoots();
-        assertEquals(Arrays.toString(result),Arrays.toString( expResult));
+        Arrays.sort(expected);
+        double[] actual = instance.getRoots();
+        Arrays.sort(actual);
+        assertEquals(Arrays.toString(actual),Arrays.toString( expected));
+    }
+
+    @Test(dataProvider="polynomials")
+    public void testGetRootsInInterval(Polynomial instance, double[] expected) {
+        System.out.println("getRootsInInterval");
+        System.out.println(instance);
+        Arrays.sort(expected);
+        double[] actual = instance.getRootsInInterval(-5,5);
+        Arrays.sort(actual);
+        for (int i=0;i<expected.length;i++) {
+            assertEquals(actual[i], expected[i],1e-6,"root #"+i);
+        }
+    }
+    
+    public static void main(String[] args){
+        PolynomialNGTest test=new PolynomialNGTest();
+        for (Object[] a:test.polynomials()){
+            test.testGetRoots((Polynomial)a[0],(double[])a[1]);
+            test.testGetRootsInInterval((Polynomial)a[0],(double[])a[1]);
+        }
     }
 
 }

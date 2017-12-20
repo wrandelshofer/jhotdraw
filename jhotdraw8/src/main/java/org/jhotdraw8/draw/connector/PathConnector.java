@@ -64,6 +64,6 @@ public class PathConnector extends LocatorConnector {
         }
 
         Intersection i = Intersections.intersectLinePathIterator(s, e, pit);
-        return i.isEmpty() ? null : i.getIntersections().lastKey();
+        return i.isEmpty() ? null : i.getLastT();
     }
 }

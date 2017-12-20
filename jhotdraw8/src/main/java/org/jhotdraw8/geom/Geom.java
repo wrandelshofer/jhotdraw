@@ -294,7 +294,7 @@ public class Geom {
      * @return the constrained value
      */
     public static double clamp(double value, double min, double max) {
-        if (Double.isNaN(value)||value < min) {
+        if (Double.isNaN(value) || value < min) {
             return min;
         }
         if (value > max) {
@@ -1126,11 +1126,11 @@ public class Geom {
     }
 
     public static String toString(Bounds b) {
-        return b==null?"null":b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
+        return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
     public static String toString(Rectangle2D b) {
-        return b==null?"null":b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
+        return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
     public static Bounds union(Bounds a, Bounds b) {
@@ -1159,8 +1159,7 @@ public class Geom {
     }
 
     public static Point2D lerp(double x1, double y1, double x2, double y2, double t) {
-        return new Point2D(x1 + (x2 - x1) * t,
-                y1 + (y2 - y1) * t);
+        return new Point2D(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t);
     }
 
     /**
@@ -1295,7 +1294,7 @@ public class Geom {
             leftLineTo.accept(x12, y12);
         }
         if (rightLineTo != null) {
-            rightLineTo.accept( x2, y2);
+            rightLineTo.accept(x2, y2);
         }
     }
 }

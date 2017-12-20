@@ -13,9 +13,10 @@ package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;
 import static java.lang.Math.abs;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.List;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import static org.jhotdraw8.geom.Geom.lerp;
@@ -29,6 +30,7 @@ import org.jhotdraw8.geom.Intersection.Status;
  * Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic
  * Software. Inc.
  * <p>
+ * >
  * References:
  * <p>
  * <a href="http://www.kevlindev.com/gui/index.htm">Intersection.js</a>,
@@ -49,12 +51,11 @@ public class Intersections {
     }
 
     /**
-     * Constructs a polynomial as a Bezout determinant given two polynomials e1
-     * and e2.
+     * Constructs Bézout determinant polynomial given two polynomials e1 and e2.
      *
      * @param e1 polynomial e1
      * @param e2 polynomial e2
-     * @return the bezout determinant
+     * @return the Bézout determinant polynomial
      */
     public static Polynomial bezout(double[] e1, double[] e2) {
         double AB = e1[0] * e2[1] - e2[0] * e1[1];
@@ -91,6 +92,13 @@ public class Intersections {
      */
     private static boolean gte(Point2D a, Point2D b) {
         return a.getX() >= b.getX() && a.getY() >= b.getY();
+    }
+
+    public static Intersection intersectBezier2Bezier2(double ax1, double ay1, double ax2, double ay2, double ax3, double ay3,
+            double bx1, double by1, double bx2, double by2, double bx3, double by3) {
+        return intersectBezier2Bezier2(new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
+                new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3));
+
     }
 
     /**
@@ -163,7 +171,7 @@ public class Intersections {
             );
         }
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         double[] roots = poly.getRoots();
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
@@ -190,7 +198,7 @@ public class Intersections {
                         if (0 <= xRoot && xRoot <= 1) {
                             for (int k = 0; k < yRoots.length; k++) {
                                 if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                    result.put(xRoot, c22.multiply(s * s).add(c21.multiply(s).add(c20)));
+                                    result.add(new AbstractMap.SimpleEntry<>(xRoot, c22.multiply(s * s).add(c21.multiply(s).add(c20))));
                                     break checkRoots;
                                 }
                             }
@@ -294,7 +302,7 @@ public class Intersections {
                 + c20x2 * c12y2 + c12x2 * c20y2
         );
         double[] roots = poly.getRootsInInterval(0, 1);
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
@@ -319,8 +327,7 @@ public class Intersections {
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.put(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
-                                );
+                                result.add(new AbstractMap.SimpleEntry<>(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
                                 break checkRoots;
                             }
                         }
@@ -352,6 +359,29 @@ public class Intersections {
         return Intersections.intersectBezier2Ellipse(new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(cx, cy), r, r);
     }
 
+    public static Intersection intersectBezier2Point(double x1, double y1, double x2, double y2, double x3, double y3, double px, double py, double tolerance) {
+        Intersection isect = intersectBezier2Ellipse(new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(px, py), tolerance, tolerance);
+        if (isect.isEmpty()) {
+            if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE && tolerance > EPSILON * 2) {
+                return intersectBezier2Point(x1, y1, x2, y2, x3, y3, px, py, tolerance / 2);
+            } else {
+                return new Intersection(Status.NO_INTERSECTION);
+            }
+        }
+        // We have now n-points with distance 'tolerance' to px,py or the entire curve is inside r.
+        // Find closest point to px,py.
+        // Could be (x1,y1) or (x3,y3) if curve starts/ends within circle.
+        return isect;
+    }
+
+    public static Intersection intersectBezier2Ellipse(double x1, double y1, double x2, double y2, double x3, double y3, double cx, double cy, double rx, double ry) {
+        return intersectBezier2Ellipse(new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(cx, cy), rx, ry);
+    }
+
+    public static Intersection intersectEllipseBezier2(double cx, double cy, double rx, double ry, double x1, double y1, double x2, double y2, double x3, double y3) {
+        return intersectBezier2Ellipse(new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(cx, cy), rx, ry);
+    }
+
     /**
      * Computes the intersection between quadratic bezier curve 'p' and the
      * given ellipse.
@@ -365,7 +395,8 @@ public class Intersections {
      * @param ec the center of the ellipse
      * @param rx the x-radius of the ellipse
      * @param ry the y-radius of the ellipse
-     * @return the computed result
+     * @return the computed result. Status can be{@link Status#INTERSECTION},
+     * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
     public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point2D p3, Point2D ec, double rx, double ry) {
         Point2D a, b;       // temporary variables
@@ -392,12 +423,12 @@ public class Intersections {
                 - 2 * (ryry * ec.getX() * c0.getX() + rxrx * ec.getY() * c0.getY()) - rxrx * ryry
         ).getRoots();
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
             if (0 <= t && t <= 1) {
-                result.put(t, c2.multiply(t * t).add(c1.multiply(t).add(c0)));
+                result.add(new AbstractMap.SimpleEntry<>(t, c2.multiply(t * t).add(c1.multiply(t).add(c0))));
             }
         }
 
@@ -405,7 +436,7 @@ public class Intersections {
         if (result.size() > 0) {
             status = Intersection.Status.INTERSECTION;
         } else {
-            status = intersectPointEllipse(p1, ec, rx, ry).getStatus();
+            return intersectPointEllipse(p1, ec, rx, ry);
         }
 
         return new Intersection(status, result);
@@ -432,7 +463,7 @@ public class Intersections {
         Point2D n;                // normal for normal form of line
         Point2D min = minp(a1, a2); // used to determine if point is on line segment
         Point2D max = maxp(a1, a2); // used to determine if point is on line segment
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         a = p2.multiply(-2);
         c2 = p1.add(a.add(p3));
@@ -479,16 +510,16 @@ public class Intersections {
                 if (a1.getX() == a2.getX()) {
                     if (min.getY() <= p6.getY() && p6.getY() <= max.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(t, p6);
+                        result.add(new AbstractMap.SimpleEntry<>(t, p6));
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (min.getX() <= p6.getX() && p6.getX() <= max.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(t, p6);
+                        result.add(new AbstractMap.SimpleEntry<>(t, p6));
                     }
                 } else if (gte(p6, min) && lte(p6, max)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.put(t, p6);
+                    result.add(new AbstractMap.SimpleEntry<>(t, p6));
                 }
             }
         }
@@ -510,7 +541,7 @@ public class Intersections {
      * @return the computed intersection
      */
     public static Intersection intersectBezier2Polygon(Point2D p1, Point2D p2, Point2D p3, List<Point2D> points) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -518,7 +549,7 @@ public class Intersections {
             Point2D a2 = points.get((i + 1) % length);
             Intersection inter = Intersections.intersectBezier2Line(p1, p2, p3, a1, a2);
 
-            result.putAll(inter.getIntersections());
+            result.addAll(inter.getIntersections());
         }
 
         return new Intersection(result);
@@ -550,14 +581,21 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         Intersection inter3 = Intersections.intersectBezier2Line(p1, p2, p3, max, bottomLeft);
         Intersection inter4 = Intersections.intersectBezier2Line(p1, p2, p3, bottomLeft, min);
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
-        result.putAll(inter1.getIntersections());
-        result.putAll(inter2.getIntersections());
-        result.putAll(inter3.getIntersections());
-        result.putAll(inter4.getIntersections());
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
 
         return new Intersection(result);
+    }
+
+    public static Intersection intersectBezier3Bezier3(double ax1, double ay1, double ax2, double ay2, double ax3, double ay3, double ax4, double ay4,
+            double bx1, double by1, double bx2, double by2, double bx3, double by3, double bx4, double by4) {
+        return intersectBezier3Bezier3(new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3), new Point2D(ax4, ay4),
+                new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3), new Point2D(bx4, by4));
+
     }
 
     /**
@@ -581,7 +619,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         Point2D a, b, c, d;         // temporary variables
         Point2D c13, c12, c11, c10; // coefficients of cubic
         Point2D c23, c22, c21, c20; // coefficients of cubic
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         // Calculate the coefficients of cubic polynomial
         a = a1.multiply(-1);
@@ -623,51 +661,51 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         c20 = new Point2D(b1.getX(), b1.getY());
         final double c10x = c10.getX();
 
-        double c10x2 = c10x * c10x;
-        double c10x3 = c10x * c10x * c10x;
+       final double c10x2 = c10x * c10x;
+       final  double c10x3 = c10x * c10x * c10x;
         final double c10y = c10.getY();
-        double c10y2 = c10y * c10y;
-        double c10y3 = c10y * c10y * c10y;
+       final  double c10y2 = c10y * c10y;
+       final  double c10y3 = c10y * c10y * c10y;
         final double c11x = c11.getX();
-        double c11x2 = c11x * c11x;
-        double c11x3 = c11x * c11x * c11x;
+        final double c11x2 = c11x * c11x;
+        final double c11x3 = c11x * c11x * c11x;
         final double c11y = c11.getY();
-        double c11y2 = c11y * c11y;
-        double c11y3 = c11y * c11y * c11y;
+        final double c11y2 = c11y * c11y;
+        final double c11y3 = c11y * c11y * c11y;
         final double c12x = c12.getX();
-        double c12x2 = c12x * c12x;
-        double c12x3 = c12x * c12x * c12x;
+        final double c12x2 = c12x * c12x;
+        final double c12x3 = c12x * c12x * c12x;
         final double c12y = c12.getY();
-        double c12y2 = c12y * c12y;
-        double c12y3 = c12y * c12y * c12y;
+        final double c12y2 = c12y * c12y;
+        final double c12y3 = c12y * c12y * c12y;
         final double c13x = c13.getX();
-        double c13x2 = c13x * c13x;
-        double c13x3 = c13x * c13x * c13x;
+        final double c13x2 = c13x * c13x;
+        final double c13x3 = c13x * c13x * c13x;
         final double c13y = c13.getY();
-        double c13y2 = c13y * c13y;
-        double c13y3 = c13y * c13y * c13y;
+        final double c13y2 = c13y * c13y;
+        final double c13y3 = c13y * c13y * c13y;
         final double c20x = c20.getX();
-        double c20x2 = c20x * c20x;
-        double c20x3 = c20x * c20x * c20x;
+        final double c20x2 = c20x * c20x;
+        final double c20x3 = c20x * c20x * c20x;
         final double c20y = c20.getY();
-        double c20y2 = c20y * c20y;
-        double c20y3 = c20y * c20y * c20y;
+        final double c20y2 = c20y * c20y;
+        final double c20y3 = c20y * c20y * c20y;
         final double c21x = c21.getX();
-        double c21x2 = c21x * c21x;
-        double c21x3 = c21x * c21x * c21x;
+        final double c21x2 = c21x * c21x;
+        final double c21x3 = c21x * c21x * c21x;
         final double c21y = c21.getY();
-        double c21y2 = c21y * c21y;
+        final double c21y2 = c21y * c21y;
         final double c22x = c22.getX();
-        double c22x2 = c22x * c22x;
-        double c22x3 = c22x * c22x * c22x;
+        final double c22x2 = c22x * c22x;
+        final double c22x3 = c22x * c22x * c22x;
         final double c22y = c22.getY();
-        double c22y2 = c22y * c22y;
+        final double c22y2 = c22y * c22y;
         final double c23x = c23.getX();
-        double c23x2 = c23x * c23x;
-        double c23x3 = c23x * c23x * c23x;
+        final double c23x2 = c23x * c23x;
+        final double c23x3 = c23x * c23x * c23x;
         final double c23y = c23.getY();
-        double c23y2 = c23y * c23y;
-        double c23y3 = c23y * c23y * c23y;
+        final double c23y2 = c23y * c23y;
+        final double c23y3 = c23y * c23y * c23y;
         Polynomial poly = new Polynomial(
                 -c13x3 * c23y3 + c13y3 * c23x3 - 3 * c13x * c13y2 * c23x2 * c23y
                 + 3 * c13x2 * c13y * c23x * c23y2,
@@ -872,12 +910,10 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
                 checkRoots:
                 for (int j = 0; j < xRoots.length; j++) {
                     double xRoot = xRoots[j];
-
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.put(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
-                                );
+                                result.add(new AbstractMap.SimpleEntry<>(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
                                 break checkRoots;
                             }
                         }
@@ -909,6 +945,20 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         return Intersections.intersectBezier3Ellipse(new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(x4, y4), new Point2D(cx, cy), r, r);
     }
 
+    public static Intersection intersectBezier3Point(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double px, double py, double tolerance) {
+        Intersection isect = Intersections.intersectBezier3Ellipse(new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(x4, y4), new Point2D(px, py), tolerance, tolerance);
+        if (isect.isEmpty()) {
+            if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE && tolerance > EPSILON * 2) {
+                return intersectBezier2Point(x1, y1, x2, y2, x3, y3, px, py, tolerance / 2);
+            } else {
+                return new Intersection(Status.NO_INTERSECTION);
+            }
+        }
+        // FIXME find closest point on bezier!
+        // We have now n-points with distance 'tolerance' to px,py 
+        return isect;
+    }
+
     /**
      * Computes the intersection between cubic bezier curve 'p' and the given
      * ellipse.
@@ -920,12 +970,13 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
      * @param ec the center of the ellipse
      * @param rx the x-radius of the ellipse
      * @param ry the y-radius of the ellipse
-     * @return the computed result
+     * @return the computed result. Status can be{@link Status#INTERSECTION},
+     * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
     public static Intersection intersectBezier3Ellipse(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D ec, double rx, double ry) {
         Point2D a, b, c, d;       // temporary variables
         Point2D c3, c2, c1, c0;   // coefficients of cubic
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         // Calculate the coefficients of cubic polynomial
         a = p1.multiply(-1);
@@ -976,14 +1027,13 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            result.put(t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))
-            );
+            result.add(new AbstractMap.SimpleEntry<>(t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))));
         }
 
         if (result.size() > 0) {
             return new Intersection(result);
         } else {
-            return intersectPointEllipse(p1, ec, rx, ry);
+            return intersectPointEllipse(p1, ec, rx, ry);// Computes inside/outside status
         }
 
     }
@@ -1007,7 +1057,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         Point2D n;                // normal for normal form of line
         final Point2D min = minp(a1, a2); // used to determine if point is on line segment
         final Point2D max = maxp(a1, a2); // used to determine if point is on line segment
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
         //     (1-t^3)P1 + 3t(1-t)^2P2 + 3t^2(1-t)P3 + t^3P4
@@ -1079,16 +1129,16 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
                 if (a1.getX() == a2.getX()) {
                     if (min.getY() <= p10.getY() && p10.getY() <= max.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(t, p10);
+                        result.add(new AbstractMap.SimpleEntry<>(t, p10));
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (min.getX() <= p10.getX() && p10.getX() <= max.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(t, p10);
+                        result.add(new AbstractMap.SimpleEntry<>(t, p10));
                     }
                 } else if (gte(p10, min) && lte(p10, max)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.put(t, p10);
+                    result.add(new AbstractMap.SimpleEntry<>(t, p10));
                 }
             }
         }
@@ -1108,7 +1158,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
      * @return the computed intersection
      */
     public static Intersection intersectBezier3Polygon(Point2D p1, Point2D p2, Point2D p3, Point2D p4, List<Point2D> points) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -1116,7 +1166,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
             Point2D a2 = points.get((i + 1) % length);
             Intersection inter = Intersections.intersectBezier3Line(p1, p2, p3, p4, a1, a2);
 
-            result.putAll(inter.getIntersections());
+            result.addAll(inter.getIntersections());
         }
 
         return new Intersection(result);
@@ -1145,12 +1195,12 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         Intersection inter3 = Intersections.intersectBezier3Line(p1, p2, p3, p4, max, bottomLeft);
         Intersection inter4 = Intersections.intersectBezier3Line(p1, p2, p3, p4, bottomLeft, min);
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
-        result.putAll(inter1.getIntersections());
-        result.putAll(inter2.getIntersections());
-        result.putAll(inter3.getIntersections());
-        result.putAll(inter4.getIntersections());
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
 
         // FIXME compute inside/outside
         return new Intersection(result);
@@ -1166,7 +1216,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
      * @return computed intersection
      */
     public static Intersection intersectCircleCircle(Point2D c1, double r1, Point2D c2, double r2) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         // Determine minimum and maximum radii where circles can intersect
         double r_max = r1 + r2;
@@ -1190,16 +1240,16 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
             double b = h / c_dist;
 
             // FIXME compute t
-            result.put(Double.NaN, new Point2D(
+            result.add(new AbstractMap.SimpleEntry<>(Double.NaN, new Point2D(
                     p.getX() - b * (c2.getY() - c1.getY()),
                     p.getY() + b * (c2.getX() - c1.getX())
             )
-            );
-            result.put(Double.NaN, new Point2D(
+            ));
+            result.add(new AbstractMap.SimpleEntry<>(Double.NaN, new Point2D(
                     p.getX() + b * (c2.getY() - c1.getY()),
                     p.getY() - b * (c2.getX() - c1.getX())
             )
-            );
+            ));
         }
         return new Intersection(status, result);
     }
@@ -1214,15 +1264,15 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
      * @return computed intersection
      */
     public static Intersection intersectPointCircle(Point2D point, Point2D center, double radius) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         final double distance = point.distance(center);
 
         Intersection.Status status;
         if (distance - radius < EPSILON) {
             status = Intersection.Status.INTERSECTION;
-            // FIXME compute angle with atan2
-            result.put(0.0, point);
+            // FIXME compute t with atan2/2*PI
+            result.add(new AbstractMap.SimpleEntry<>(0.0, point));
         } else if (distance < radius) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
@@ -1272,7 +1322,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
      * @return computed intersection
      */
     public static Intersection intersectCirclePolygon(Point2D c, double r, List<Point2D> points) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         int length = points.size();
         Intersection inter = null;
 
@@ -1281,7 +1331,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
             Point2D a2 = points.get((i + 1) % length);
 
             inter = Intersections.intersectCircleLine(c, r, a1, a2);
-            result.putAll(inter.getIntersections());
+            result.addAll(inter.getIntersections());
         }
 
         Intersection.Status status;
@@ -1314,12 +1364,12 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         Intersection inter3 = Intersections.intersectCircleLine(c, r, max, bottomLeft);
         Intersection inter4 = Intersections.intersectCircleLine(c, r, bottomLeft, min);
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
-        result.putAll(inter1.getIntersections());
-        result.putAll(inter2.getIntersections());
-        result.putAll(inter3.getIntersections());
-        result.putAll(inter4.getIntersections());
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
 
         Intersection.Status status;
         if (!result.isEmpty()) {
@@ -1330,9 +1380,6 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
 
         return new Intersection(status, result);
     }
-
-    ;
-
 
     /**
      * Computes the intersection between two ellipses.
@@ -1345,21 +1392,36 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
      * @param ry2 the y-radius of ellipse 2
      * @return computed intersection
      */
-public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, double ry1, Point2D c2, double rx2, double ry2) {
+    public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, double ry1, Point2D c2, double rx2, double ry2) {
+        return intersectEllipseEllipse(c1.getX(), c1.getY(), rx1, ry1, c2.getX(), c2.getY(), rx2, ry2);
+    }
+
+    /**
+     * Computes the intersection between two ellipses.
+     *
+     * @param c1 the center of ellipse 1
+     * @param rx1 the x-radius of ellipse 1
+     * @param ry1 the y-radius of ellipse 1
+     * @param c2 the center of ellipse 2
+     * @param rx2 the x-radius of ellipse 2
+     * @param ry2 the y-radius of ellipse 2
+     * @return computed intersection
+     */
+    public static Intersection intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
         double[] a = {
-            ry1 * ry1, 0, rx1 * rx1, -2 * ry1 * ry1 * c1.getX(), -2 * rx1 * rx1 * c1.getY(),
-            ry1 * ry1 * c1.getX() * c1.getX() + rx1 * rx1 * c1.getY() * c1.getY() - rx1 * rx1 * ry1 * ry1
+            ry1 * ry1, 0, rx1 * rx1, -2 * ry1 * ry1 * cx1, -2 * rx1 * rx1 * cy1,
+            ry1 * ry1 * cx1 * cx1 + rx1 * rx1 * cy1 * cy1 - rx1 * rx1 * ry1 * ry1
         };
         double[] b = {
-            ry2 * ry2, 0, rx2 * rx2, -2 * ry2 * ry2 * c2.getX(), -2 * rx2 * rx2 * c2.getY(),
-            ry2 * ry2 * c2.getX() * c2.getX() + rx2 * rx2 * c2.getY() * c2.getY() - rx2 * rx2 * ry2 * ry2
+            ry2 * ry2, 0, rx2 * rx2, -2 * ry2 * ry2 * cx2, -2 * rx2 * rx2 * cy2,
+            ry2 * ry2 * cx2 * cx2 + rx2 * rx2 * cy2 * cy2 - rx2 * rx2 * ry2 * ry2
         };
 
         Polynomial yPoly = Intersections.bezout(a, b);
         double[] yRoots = yPoly.getRoots();
         double norm0 = (a[0] * a[0] + 2 * a[1] * a[1] + a[2] * a[2]) * EPSILON;
         double norm1 = (b[0] * b[0] + 2 * b[1] * b[1] + b[2] * b[2]) * EPSILON;
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         for (int y = 0; y < yRoots.length; y++) {
             Polynomial xPoly = new Polynomial(
@@ -1377,7 +1439,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
                         // FIXME compute angle in radians
-                        result.put(Double.NaN, new Point2D(xRoots[x], yRoots[y]));
+                        result.add(new AbstractMap.SimpleEntry<>((double) x, new Point2D(xRoots[x], yRoots[y])));
                     }
                 }
             }
@@ -1387,16 +1449,17 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
     }
 
     /**
-     * Computes the intersection between two ellipses.
+     * Computes the intersection between a point and an ellipse.
      *
      * @param point the point
      * @param center the center of the ellipse
      * @param rx the x-radius of ellipse
      * @param ry the y-radius of ellipse
-     * @return computed intersection
+     * @return computed intersection. Status can be{@link Status#INTERSECTION},
+     * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
     public static Intersection intersectPointEllipse(Point2D point, Point2D center, double rx, double ry) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         double px = point.getX();
         double py = point.getY();
@@ -1407,7 +1470,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
         Intersection.Status status;
         if (abs(det) - 1 == EPSILON) {
             status = Intersection.Status.INTERSECTION;
-            result.put(0.0, point);
+            result.add(new AbstractMap.SimpleEntry<>(0.0, point));
         } else if (det < 1) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
@@ -1433,6 +1496,12 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
         return result;
     }
 
+    public static Intersection intersectEllipseLine(double cx, double cy, double rx, double ry, double x1, double y1, double x2, double y2) {
+        Intersection result = intersectLineEllipse(x1, y1, x2, y2, cx, cy, rx, ry);
+        // FIXME compute t for Ellipse instead for Line!
+        return result;
+    }
+
     /**
      * Computes the intersection between a circle and a polygon.
      *
@@ -1443,7 +1512,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
      * @return computed intersection
      */
     public static Intersection intersectEllipsePolygon(Point2D c, double rx, double ry, List<Point2D> points) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -1451,7 +1520,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
             Point2D b2 = points.get((i + 1) % length);
             Intersection inter = Intersections.intersectEllipseLine(c, rx, ry, b1, b2);
 
-            result.putAll(inter.getIntersections());
+            result.addAll(inter.getIntersections());
         }
 
         return new Intersection(result);
@@ -1480,12 +1549,12 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Intersection inter3 = Intersections.intersectEllipseLine(c, rx, ry, max, bottomLeft);
         Intersection inter4 = Intersections.intersectEllipseLine(c, rx, ry, bottomLeft, min);
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
-        result.putAll(inter1.getIntersections());
-        result.putAll(inter2.getIntersections());
-        result.putAll(inter3.getIntersections());
-        result.putAll(inter4.getIntersections());
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
 
         return new Intersection(result);
     }
@@ -1527,7 +1596,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Point2D n;                // normal for normal form of line
         Point2D min = minp(ax, ay, bx, by); // used to determine if point is on line segment
         Point2D max = maxp(ax, ay, bx, by); // used to determine if point is on line segment
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         final Point2D p1 = new Point2D(p1x, p1y);
         final Point2D p2 = new Point2D(p2x, p2y);
 //final Point2D p3 = new Point2D(p3x,p3y);
@@ -1575,16 +1644,16 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 if (ax == bx) {
                     if (min.getY() <= p6.getY() && p6.getY() <= max.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6);
+                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6));
                     }
                 } else if (ay == by) {
                     if (min.getX() <= p6.getX() && p6.getX() <= max.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6);
+                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6));
                     }
                 } else if (gte(p6, min) && lte(p6, max)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.put(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6);
+                    result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6));
                 }
             }
         }
@@ -1646,7 +1715,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Point2D n;                // normal for normal form of line
         final Point2D amin = minp(a1, a2); // used to determine if point is on line segment
         final Point2D amax = maxp(a1, a2); // used to determine if point is on line segment
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
         //     (1-t^3)P1 + 3t(1-t)^2P2 + 3t^2(1-t)P3 + t^3P4
@@ -1719,16 +1788,16 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 if (a1.getX() == a2.getX()) {
                     if (amin.getY() <= p10.getY() && p10.getY() <= amax.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10);
+                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10));
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (amin.getX() <= p10.getX() && p10.getX() <= amax.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.put(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10);
+                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10));
                     }
                 } else if (gte(p10, amin) && lte(p10, amax)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.put(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10);
+                    result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10));
                 }
             }
         }
@@ -1766,17 +1835,17 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * <li>{@link Status#NO_INTERSECTION_TANGENT}</li>
      * </ul>
      *
-     * @param cx the center of the circle
-     * @param cy the center of the circle
-     * @param r the radius of the circle
      * @param x1 point 1 of the line
      * @param y1 point 1 of the line
      * @param x2 point 2 of the line
      * @param y2 point 2 of the line
+     * @param cx the center of the circle
+     * @param cy the center of the circle
+     * @param r the radius of the circle
      * @return computed intersection
      */
     public static Intersection intersectLineCircle(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
         double b = 2 * ((x2 - x1) * (x1 - cx) + (y2 - y1) * (y1 - cy));
         double cc = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
@@ -1787,8 +1856,8 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         } else if (deter == 0) {
             status = Intersection.Status.NO_INTERSECTION_TANGENT;
-            double u = (-b) / (2 * a);
-            //result.put(u, lerp(x1, y1, x2, y2, u));// result must be empty when there is no intersection!
+            //double u = (-b) / (2 * a);
+            //result.add(new AbstractMap.SimpleEntry<>(u, lerp(x1, y1, x2, y2, u)));// result must be empty when there is no intersection!
         } else {
             double e = Math.sqrt(deter);
             double u1 = (-b + e) / (2 * a);
@@ -1804,11 +1873,69 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 status = Intersection.Status.INTERSECTION;
 
                 if (0 <= u1 && u1 <= 1) {
-                    result.put(u1, lerp(x1, y1, x2, y2, u1));
+                    result.add(new AbstractMap.SimpleEntry<>(u1, lerp(x1, y1, x2, y2, u1)));
                 }
 
                 if (0 <= u2 && u2 <= 1) {
-                    result.put(u2, lerp(x1, y1, x2, y2, u2));
+                    result.add(new AbstractMap.SimpleEntry<>(u2, lerp(x1, y1, x2, y2, u2)));
+                }
+            }
+        }
+
+        return new Intersection(status, result);
+    }
+
+    /**
+     * Intersects a line with the specified point and the given tolerance.
+     *
+     * @param x1 point 1 of the line
+     * @param y1 point 1 of the line
+     * @param x2 point 2 of the line
+     * @param y2 point 2 of the line
+     * @param cx the center of the point
+     * @param cy the center of the point
+     * @param r the tolerance radius
+     * @return the intersection with t in range [0,1] if an intersection
+     */
+    public static Intersection intersectLinePoint(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+        double b = 2 * ((x2 - x1) * (x1 - cx) + (y2 - y1) * (y1 - cy));
+        double cc = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
+        double deter = b * b - 4 * a * cc;
+
+        Intersection.Status status;
+        if (deter < 0) {
+            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+        } else if (deter == 0) {
+            status = Intersection.Status.NO_INTERSECTION_TANGENT;
+        } else {
+            double e = Math.sqrt(deter);
+            double u1 = (-b + e) / (2 * a);
+            double u2 = (-b - e) / (2 * a);
+
+            if ((u1 < 0 || u1 > 1) && (u2 < 0 || u2 > 1)) {
+                if ((u1 < 0 && u2 < 0) || (u1 > 1 && u2 > 1)) {
+                    status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+                } else {
+                    status = Intersection.Status.NO_INTERSECTION_INSIDE;
+                }
+            } else {
+                status = Intersection.Status.INTERSECTION;
+
+                if (0 <= u1 && u1 <= 1) {
+                    if (u2 > 1) {
+                        result.add(new AbstractMap.SimpleEntry<>(1.0, new Point2D(x1, y1)));
+                    } else if (u2 < 0) {
+                        result.add(new AbstractMap.SimpleEntry<>(0.0, new Point2D(x2, y2)));
+                    } else {
+                        final double u = 0.5 * (u1 + u2);
+                        result.add(new AbstractMap.SimpleEntry<>(u, lerp(x1, y1, x2, y2, u)));
+                    }
+                } else if (u1 < 0) {
+                    result.add(new AbstractMap.SimpleEntry<>(0.0, new Point2D(x1, y1)));
+                } else {
+                    result.add(new AbstractMap.SimpleEntry<>(1.0, new Point2D(x2, y2)));
                 }
             }
         }
@@ -1847,11 +1974,15 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectLineEllipse(Point2D a1, Point2D a2, Point2D ec, double rx, double ry) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        return intersectLineEllipse(a1.getX(), a1.getY(), a2.getX(), a2.getY(), ec.getX(), ec.getY(), rx, ry);
+    }
 
-        Point2D origin = new Point2D(a1.getX(), a1.getY());
-        Point2D dir = a2.subtract(a1);
-        Point2D center = new Point2D(ec.getX(), ec.getY());
+    public static Intersection intersectLineEllipse(double x1, double y1, double x2, double y2, double cx, double cy, double rx, double ry) {
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+
+        Point2D origin = new Point2D(x1, y1);
+        Point2D dir = new Point2D(x2, y2).subtract(x1, y1);
+        Point2D center = new Point2D(cx, cy);
         Point2D diff = origin.subtract(center);
         Point2D mDir = new Point2D(dir.getX() / (rx * rx), dir.getY() / (ry * ry));
         Point2D mDiff = new Point2D(diff.getX() / (rx * rx), diff.getY() / (ry * ry));
@@ -1877,17 +2008,17 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             } else {
                 status = Intersection.Status.INTERSECTION;
                 if (0 <= t_a && t_a <= 1) {
-                    result.put(t_a, lerp(a1, a2, t_a));
+                    result.add(new AbstractMap.SimpleEntry<>(t_a, lerp(x1, y1, x2, y2, t_a)));
                 }
                 if (0 <= t_b && t_b <= 1) {
-                    result.put(t_b, lerp(a1, a2, t_b));
+                    result.add(new AbstractMap.SimpleEntry<>(t_b, lerp(x1, y1, x2, y2, t_b)));
                 }
             }
         } else {
             double t = -b / a;
             if (0 <= t && t <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.put(t, lerp(a1, a2, t));
+                result.add(new AbstractMap.SimpleEntry<>(t, lerp(x1, y1, x2, y2, t)));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
@@ -1918,7 +2049,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
     }
 
     public static Intersection intersectLineLine(double a1x, double a1y, double a2x, double a2y, double b1x, double b1y, double b2x, double b2y) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         double ua_t = (b2x - b1x) * (a1y - b1y) - (b2y - b1y) * (a1x - b1x);
@@ -1931,11 +2062,11 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
             if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.put(ua, new Point2D(
+                result.add(new AbstractMap.SimpleEntry<>(ua, new Point2D(
                         a1x + ua * (a2x - a1x),
                         a1y + ua * (a2y - a1y)
                 )
-                );
+                ));
             } else {
                 status = Intersection.Status.NO_INTERSECTION;
             }
@@ -1951,7 +2082,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
     }
 
     public static Intersection intersectLinePathIterator(Point2D a, Point2D b, PathIterator pit) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final double ax = a.getX();
         final double ay = a.getY();
@@ -1966,13 +2097,13 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             switch (pit.currentSegment(seg)) {
                 case PathIterator.SEG_CLOSE:
                     inter = Intersections.intersectLineLine(ax, ay, bx, by, lastx, lasty, firstx, firsty);
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     break;
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
                     inter = Intersections.intersectLineBezier3(ax, ay, bx, by, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -1980,7 +2111,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                     x = seg[0];
                     y = seg[1];
                     inter = Intersections.intersectLineLine(ax, ay, bx, by, lastx, lasty, x, y);
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -1992,7 +2123,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                     x = seg[2];
                     y = seg[3];
                     inter = Intersections.intersectLineBezier2(ax, ay, bx, by, lastx, lasty, seg[0], seg[1], x, y);
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -2001,59 +2132,74 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
         return new Intersection(result);
     }
-    public static Intersection intersectPathIteratorPointTolerance(PathIterator pit, double px, double py, double tolerance) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+
+    /**
+     * Intersects the given path iterator with the given point.
+     *
+     * @param pit the path iterator
+     * @param px the x-coordinate of the point
+     * @param py the y-coordinate of the point
+     * @param tolerance radius around the point which counts as hit.
+     * @return
+     */
+    public static Intersection intersectPathIteratorPoint(PathIterator pit, double px, double py, double tolerance) {
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;
         double lastx = 0, lasty = 0;
         double x, y;
-        for (; !pit.isDone(); pit.next()) {
+        int i = 0;
+        for (; !pit.isDone(); pit.next(), i++) {
             Intersection inter;
             switch (pit.currentSegment(seg)) {
                 case PathIterator.SEG_CLOSE:
-                    inter = Intersections.intersectLineCircle(lastx, lasty, firstx, firsty,px,py,tolerance);
-                    // FIXME project point on line
-                    result.putAll(inter.getIntersections());
+                    inter = Intersections.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
                     break;
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
-                    inter = Intersections.intersectBezier3Circle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y,px,py,tolerance);
-                    // FIXME project point on curve
-                    result.putAll(inter.getIntersections());
+                    inter = Intersections.intersectBezier3Point(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
                     lastx = x;
                     lasty = y;
                     break;
                 case PathIterator.SEG_LINETO:
                     x = seg[0];
                     y = seg[1];
-                    inter = Intersections.intersectLineCircle(lastx, lasty, x, y,px,py,tolerance);
-                    // FIXME project point on line
-                    result.putAll(inter.getIntersections());
+                    inter = Intersections.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
                     lastx = x;
                     lasty = y;
                     break;
                 case PathIterator.SEG_MOVETO:
                     lastx = firstx = seg[0];
                     lasty = firsty = seg[1];
+                    inter = null;
                     break;
                 case PathIterator.SEG_QUADTO:
                     x = seg[2];
                     y = seg[3];
-                    inter = Intersections.intersectBezier2Circle(lastx, lasty, seg[0], seg[1], x, y,px,py,tolerance);
-                    // FIXME project point on curve
-                    result.putAll(inter.getIntersections());
+                    inter = Intersections.intersectBezier2Point(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
                     lastx = x;
                     lasty = y;
                     break;
+                default:
+                    inter = null;
+                    break;
             }
+            if (inter != null) {
+                for (Map.Entry<Double, Point2D> entry : inter.getIntersections()) {
+                    result.add(new AbstractMap.SimpleEntry<>(entry.getKey() + i, entry.getValue()));
+                }
+            }
+
         }
 
+        // FIXME the result should contain only one point
         return new Intersection(result);
     }
+
     public static Intersection intersectPathIteratorCircle(PathIterator pit, double cx, double cy, double r) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;
@@ -2063,25 +2209,25 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             Intersection inter;
             switch (pit.currentSegment(seg)) {
                 case PathIterator.SEG_CLOSE:
-                    inter = Intersections.intersectLineCircle(lastx, lasty, firstx, firsty,cx,cy,r);
+                    inter = Intersections.intersectLineCircle(lastx, lasty, firstx, firsty, cx, cy, r);
                     // FIXME add segment number to t
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     break;
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
-                    inter = Intersections.intersectBezier3Circle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y,cx,cy,r);
+                    inter = Intersections.intersectBezier3Circle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, cx, cy, r);
                     // FIXME add segment number to t
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
                 case PathIterator.SEG_LINETO:
                     x = seg[0];
                     y = seg[1];
-                    inter = Intersections.intersectLineCircle(lastx, lasty, x, y,cx,cy,r);
+                    inter = Intersections.intersectLineCircle(lastx, lasty, x, y, cx, cy, r);
                     // FIXME add segment number to t
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -2092,9 +2238,9 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 case PathIterator.SEG_QUADTO:
                     x = seg[2];
                     y = seg[3];
-                    inter = Intersections.intersectBezier2Circle(lastx, lasty, seg[0], seg[1], x, y,cx,cy,r);
+                    inter = Intersections.intersectBezier2Circle(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
                     // FIXME add segment number to t
-                    result.putAll(inter.getIntersections());
+                    result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -2116,7 +2262,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Point2D> points) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         int length = points.size();
 
@@ -2125,7 +2271,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             Point2D b2 = points.get((i + 1) % length);
             Intersection inter = Intersections.intersectLineLine(a1, a2, b1, b2);
 
-            result.putAll(inter.getIntersections());
+            result.addAll(inter.getIntersections());
         }
 
         return new Intersection(result);
@@ -2167,13 +2313,13 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Intersection inter3 = Intersections.intersectLineLine(a1, a2, max, bottomLeft);
         Intersection inter4 = Intersections.intersectLineLine(a1, a2, bottomLeft, min);
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
-        result.putAll(inter1.getIntersections());
-        result.putAll(inter2.getIntersections());
-        result.putAll(inter3.getIntersections());
-        result.putAll(inter4.getIntersections());
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
 
         return new Intersection(result);
     }
@@ -2186,7 +2332,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectPolygonPolygon(List<Point2D> points1, List<Point2D> points2) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         int length = points1.size();
 
@@ -2195,7 +2341,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             Point2D a2 = points1.get((i + 1) % length);
             Intersection inter = Intersections.intersectLinePolygon(a1, a2, points2);
 
-            result.putAll(inter.getIntersections());
+            result.addAll(inter.getIntersections());
         }
 
         return new Intersection(result);
@@ -2221,13 +2367,13 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Intersection inter3 = Intersections.intersectLinePolygon(max, bottomLeft, points);
         Intersection inter4 = Intersections.intersectLinePolygon(bottomLeft, min, points);
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
-        result.putAll(inter1.getIntersections());
-        result.putAll(inter2.getIntersections());
-        result.putAll(inter3.getIntersections());
-        result.putAll(inter4.getIntersections());
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
 
         return new Intersection(result);
     }
@@ -2245,7 +2391,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         double ua_t = (b2.getX() - b1.getX()) * (a1.getY() - b1.getY()) - (b2.getY() - b1.getY()) * (a1.getX() - b1.getX());
@@ -2256,11 +2402,11 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             double ua = ua_t / u_b;
 
             status = Intersection.Status.INTERSECTION;
-            result.put(ua, new Point2D(
+            result.add(new AbstractMap.SimpleEntry<>(ua, new Point2D(
                     a1.getX() + ua * (a2.getX() - a1.getX()),
                     a1.getY() + ua * (a2.getY() - a1.getY())
             )
-            );
+            ));
         } else {
             if (ua_t == 0 || ub_t == 0) {
                 status = Intersection.Status.NO_INTERSECTION_COINCIDENT;
@@ -2292,13 +2438,13 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Intersection inter3 = Intersections.intersectLineRectangle(max, bottomLeft, b1, b2);
         Intersection inter4 = Intersections.intersectLineRectangle(bottomLeft, min, b1, b2);
 
-        NavigableMap<Double, Point2D> result = new TreeMap<>();
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
-        result.putAll(inter1.getIntersections());
-        result.putAll(inter2.getIntersections());
-        result.putAll(inter3.getIntersections());
-        result.putAll(inter4.getIntersections());
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
 
         return new Intersection(result);
     }

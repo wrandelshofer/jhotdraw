@@ -102,12 +102,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      */
     public final static String MARGIN_PROPERTY = "margin";
     /**
-     * Selection tolerance. Selectable margin around a figure.
-     */
-    public final static double TOLERANCE = 5;
-
-    public final static double TOLERANCE_SQUARED = TOLERANCE * TOLERANCE;
-    /**
      * The id of the tool pane for CSS styling.
      */
     public static final String TOOL_PANE_ID = "toolPane";
@@ -327,7 +321,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @param node The node
      * @param point The point in local coordinates
      * @param tolerance The maximal distance the point is allowed to be away
-     * from the
+     * from the node
      * @return true if the node contains the point
      */
     private boolean contains(Node node, Point2D point, double tolerance) {
@@ -461,7 +455,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), TOLERANCE);
+        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), 
+                getViewToWorld().deltaTransform(getTolerance(),getTolerance()).getX());
         return f;
     }
 
@@ -479,7 +474,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      */
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
-        return findFigure(vx, vy, figures, TOLERANCE);
+        return findFigure(vx, vy, figures, getTolerance());
     }
 
     /**
@@ -615,7 +610,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void findFiguresRecursive(Parent p, Point2D pp, List<Figure> found, boolean decompose) {
-        double tolerance = TOLERANCE;
+        double tolerance = getTolerance();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -655,10 +650,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             if (!handle.isSelectable()) {
                 continue;
             }
-            if (handle.contains(this, vx, vy, TOLERANCE_SQUARED)) {
+            if (handle.contains(this, vx, vy, getTolerance(), getTolerance()*getTolerance())) {
                 return handle;
             } else {
-                if (contains(node, new Point2D(vx, vy), TOLERANCE)) {
+                if (contains(node, new Point2D(vx, vy), getTolerance())) {
                     return handle;
                 }
             }

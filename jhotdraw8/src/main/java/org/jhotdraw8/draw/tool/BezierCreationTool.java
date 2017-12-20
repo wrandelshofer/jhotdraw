@@ -74,6 +74,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     @Override
     public void activate(DrawingEditor editor) {
         requestFocus();
+        rubberBand.setVisible(false);
         createdFigure = null;
     }
 
@@ -168,6 +169,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         }
         dm.set(createdFigure, key, ImmutableList.ofCollection(points));
 
+        rubberBand.setVisible(false);
         dragStartIndex = -1;
         event.consume();
     }

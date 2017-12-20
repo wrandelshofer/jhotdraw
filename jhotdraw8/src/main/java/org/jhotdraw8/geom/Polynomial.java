@@ -122,11 +122,18 @@ public class Polynomial {
      * @param coefs the coefficients of the polynomial
      */
     public Polynomial(double... coefs) {
+        this(true,coefs);
+    }
+    public Polynomial(boolean highestToLowestDegree,double[] coefs) {
+        if (highestToLowestDegree) {
         this.coefs = new double[coefs.length];
         for (int i = 0; i < coefs.length; i++) {
             this.coefs[i] = coefs[coefs.length - i - 1];
         }
 
+        }else{
+            this.coefs=coefs;
+        }
         this.variable = "t";
     }
     private double[] coefs;
@@ -140,6 +147,9 @@ public class Polynomial {
      * @return the value of the polynomial at x
      */
     public double eval(double x) {
+        if (Double.isNaN(x))
+        throw new IllegalArgumentException("parameter must be a number, x="+x);
+        
         double result = 0;
 
         for (int i = this.coefs.length - 1; i >= 0; i--) {
@@ -219,7 +229,7 @@ public class Polynomial {
 
         double[] newCoefs = new double[popAt];
         System.arraycopy(this.coefs, 0, newCoefs, 0, popAt);
-        return new Polynomial(newCoefs);
+        return new Polynomial(false,newCoefs);
     }
 
     /**
@@ -238,10 +248,10 @@ public class Polynomial {
      * @param max the upper bound of the interval
      * @return the potential root
      */
-    public double bisection(double min, double max) {
+    public Double bisection(double min, double max) {
         double minValue = this.eval(min);
         double maxValue = this.eval(max);
-        double result = 0;
+        Double result = null;
 
         if (Math.abs(minValue) <= Polynomial.TOLERANCE) {
             result = min;
@@ -274,11 +284,8 @@ public class Polynomial {
     }
 
     /**
-     * ***
+     * toString.
      *
-     * toString
-     *
-     ****
      * @return string representation
      */
     public String toString() {
@@ -475,16 +482,19 @@ public class Polynomial {
             derivative[i - 1] = (i * this.coefs[i]);
         }
 
-        return new Polynomial(derivative);
+        return new Polynomial(false, derivative);
     }
 
     /**
      * Attempts to find the roots of the current polynomial. This method will
-     * attempt to decrease the degree of the polynomial using the simplify()
-     * method. Once the degree is determined, getRoots() dispatches the
-     * appropriate root-finding method for the degree of the polynomial.
+     * attempt to decrease the degree of the polynomial using the
+     * {@link #simplifiedDegree}. method. Once the degree is determined,
+     * getRoots() dispatches the appropriate root-finding method for the degree
+     * of the polynomial.
      * <p>
-     * NOTE Polynomials above the 4'th degree are not supported.
+     * NOTE This method does not find roots for polynomials, which can not be
+     * simplfied to 4th degree or less. Use {@link #getRootsInInterval} for
+     * polynomials above 4th degree.
      *
      * @return the roots of the polynomial
      */
@@ -515,9 +525,7 @@ public class Polynomial {
         return result;
     }
 
-    ;
-
-private static double[] push(double[] a, double d) {
+    private static double[] push(double[] a, double d) {
         double[] r = new double[a.length + 1];
         System.arraycopy(a, 0, r, 0, a.length);
         r[a.length] = d;
@@ -533,10 +541,11 @@ private static double[] push(double[] a, double d) {
      */
     public double[] getRootsInInterval(double min, double max) {
         double[] roots = new double[0];
-        Double root;
 
-        if (this.getDegree() == 1) {
-            root = this.bisection(min, max);
+        if (this.getDegree() == 0) {
+            return new double[0];
+        } else if (this.getDegree() == 1) {
+            Double root = this.bisection(min, max);
             if (root != null) {
                 roots = new double[]{root};
             }
@@ -547,7 +556,7 @@ private static double[] push(double[] a, double d) {
 
             if (droots.length > 0) {
                 // find root on [min, droots[0]]
-                root = this.bisection(min, droots[0]);
+                Double root = this.bisection(min, droots[0]);
                 if (root != null) {
                     roots = new double[]{root};
                 }
@@ -567,7 +576,7 @@ private static double[] push(double[] a, double d) {
                 }
             } else {
                 // polynomial is monotone on [min,max], has at most one root
-                root = this.bisection(min, max);
+                Double root = this.bisection(min, max);
                 if (root != null) {
                     roots = new double[]{root};
                 }
@@ -577,15 +586,12 @@ private static double[] push(double[] a, double d) {
         return roots;
     }
 
-    ;
-
-
-/**
-* Returns  the root of a linear polynomial (degree equals one).
-*
+    /**
+     * Returns the root of a linear polynomial (degree equals one).
+     *
      * @return the roots
-*/
-private double[] getLinearRoot() {
+     */
+    private double[] getLinearRoot() {
         double[] result = new double[0];
         double a = this.coefs[1];
 
@@ -596,16 +602,14 @@ private double[] getLinearRoot() {
         return result;
     }
 
-    ;
-
-
-/**
-* Returns the roots of a quadratic polynomial (degree equals two).
+    /**
+     * Returns the roots of a quadratic polynomial (degree equals two).
+     *
      * @return the roots
-*
+     *
      * @return the roots
-*/
-private double[] getQuadraticRoots() {
+     */
+    private double[] getQuadraticRoots() {
         double[] results = new double[0];
 
         double a = this.coefs[2];
@@ -703,9 +707,7 @@ private double[] getQuadraticRoots() {
     /**
      * Returns the roots of a quartic polynomial (degree equals four).
      *
-     * This code is based on MgcPolynomial.cpp written by David Eberly. His code
-     * along with many other excellent examples are available at his site:
-     * http://www.magic-software.com
+     * This code is based on MgcPolynomial.cpp written by David Eberly.
      *
      * @return the roots
      */

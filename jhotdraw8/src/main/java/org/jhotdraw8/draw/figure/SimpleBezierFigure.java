@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -24,6 +25,7 @@ import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
 import org.jhotdraw8.draw.handle.BezierOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableFigureKey;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -45,12 +47,38 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
-    public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
     public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), false);
+    public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Bezier";
+
+    public SimpleBezierFigure() {
+        setStyled(StyleOrigin.USER_AGENT,FILL,null);
+    }
+
+    @Override
+    public void createHandles(HandleType handleType, List<Handle> list) {
+        if (handleType == HandleType.SELECT) {
+            list.add(new PathIterableOutlineHandle(this, true, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new PathIterableOutlineHandle(this, true, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            for (int i = 0, n = get(PATH).size(); i < n; i++) {
+                list.add(new BezierNodeMoveHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_MOVE));
+            }
+        } else if (handleType == HandleType.POINT) {
+            list.add(new BezierOutlineHandle(this, PATH, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            for (int i = 0, n = get(PATH).size(); i < n; i++) {
+                list.add(new BezierNodeTangentHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE));
+                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                list.add(new BezierNodeEditHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_POINT));
+            }
+        } else {
+            super.createHandles(handleType, list);
+        }
+    }
 
     @Override
     public Node createNode(RenderContext ctx) {
@@ -128,28 +156,6 @@ public class SimpleBezierFigure extends AbstractLeafFigure
             pathNode.getElements().setAll(elements);
         }
 
-    }
-
-    @Override
-    public void createHandles(HandleType handleType, List<Handle> list) {
-        if (handleType == HandleType.SELECT) {
-            list.add(new BezierOutlineHandle(this, PATH, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
-        } else if (handleType == HandleType.MOVE) {
-            list.add(new BezierOutlineHandle(this, PATH, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            for (int i = 0, n = get(PATH).size(); i < n; i++) {
-                list.add(new BezierNodeMoveHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_MOVE));
-            }
-        } else if (handleType == HandleType.POINT) {
-            list.add(new BezierOutlineHandle(this, PATH, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            for (int i = 0, n = get(PATH).size(); i < n; i++) {
-                list.add(new BezierNodeTangentHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE));
-                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
-                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
-                list.add(new BezierNodeEditHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_POINT));
-            }
-        } else {
-            super.createHandles(handleType, list);
-        }
     }
 
 }

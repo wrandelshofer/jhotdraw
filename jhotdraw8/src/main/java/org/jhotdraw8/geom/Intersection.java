@@ -11,17 +11,15 @@
  */
 package org.jhotdraw8.geom;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Set;
-import java.util.SortedMap;
+import java.util.stream.Collectors;
 import javafx.geometry.Point2D;
 
 /**
  * Describes the result of an intersection test.
- * <p>
+ * <p>>
  * This class is a port of Intersection.js by Kevin Lindsey. Part of
  * Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic
  * Software. Inc.
@@ -42,44 +40,51 @@ import javafx.geometry.Point2D;
  */
 public class Intersection {
 
-    private final NavigableMap<Double, Point2D> intersections;
+    private final List<Map.Entry<Double, Point2D>> intersections;
     private final Status status;
 
-    public Intersection(NavigableMap<Double, Point2D> intersections) {
+    public Intersection(List<Map.Entry<Double, Point2D>> intersections) {
         this(intersections.isEmpty() ? Status.NO_INTERSECTION : Status.INTERSECTION, intersections);
     }
+    public Intersection(Status status) {
+        this(status, Collections.emptyList());
+    }
 
-    public Intersection(Status status, NavigableMap<Double, Point2D> intersections) {
+    public Intersection(Status status, List<Map.Entry<Double, Point2D>> intersections) {
         if (status == Status.INTERSECTION && intersections.isEmpty()
                 || status != Status.INTERSECTION && !intersections.isEmpty()) {
             throw new IllegalArgumentException("status=" + status + " intersections=" + intersections);
         }
-        this.intersections = Collections.unmodifiableNavigableMap(intersections);
+        intersections.sort((a,b)->Double.compare(a.getKey(),b.getKey()));
+        this.intersections = Collections.unmodifiableList(intersections);
         this.status = status;
     }
 
-    public SortedMap<Double, Point2D> getIntersections() {
+    public List<Map.Entry<Double, Point2D>> getIntersections() {
         return intersections;
     }
 
     public Point2D getLastPoint() {
-        return intersections.get(intersections.lastKey());
+        return intersections.get(intersections.size()-1).getValue();
     }
 
     public double getLastT() {
-        return intersections.lastKey();
+        return intersections.get(intersections.size()-1).getKey();
+    }
+    public double getFirstT() {
+        return intersections.get(0).getKey();
     }
 
-    public Collection<Point2D> getPoints() {
-        return intersections.values();
+    public List<Point2D> getPoints() {
+        return intersections.stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
     public Status getStatus() {
         return status;
     }
 
-    public Set<Double> getTs() {
-        return intersections.keySet();
+    public List<Double> getTs() {
+        return intersections.stream().map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
     public boolean isEmpty() {

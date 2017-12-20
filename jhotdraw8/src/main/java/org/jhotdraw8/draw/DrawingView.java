@@ -533,6 +533,11 @@ public interface DrawingView extends RenderContext {
     default double getZoomFactor() {
         return zoomFactorProperty().get();
     }
+    
+    /** Tolerance (radius) in view coordinates. */
+    default double getTolerance() {
+        return 5;
+    }
 
     @Nonnull
     default ObservableSet<Figure> getSelectedFigures() {

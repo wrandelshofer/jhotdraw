@@ -77,7 +77,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
             Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
             Point2D pInLocal = owner.worldToLocal(pInDrawing);
 
-            double tolerance = Transforms.deltaTransform(owner.getWorldToLocal(), Transforms.deltaTransform(dv.getViewToWorld(), SimpleDrawingView.TOLERANCE, SimpleDrawingView.TOLERANCE)).getX();
+            double tolerance = Transforms.deltaTransform(owner.getWorldToLocal(), Transforms.deltaTransform(dv.getViewToWorld(), dv.getTolerance(), dv.getTolerance())).getX();
             double px = pInLocal.getX();
             double py = pInLocal.getY();
 
@@ -89,7 +89,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
 
                 Intersection result = Intersections.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
                 if (result.getTs().size() == 2) {
-                    insertLocation = Geom.lerp(p1, p2, (result.getIntersections().firstKey() + result.getIntersections().lastKey()) / 2);
+                    insertLocation = Geom.lerp(p1, p2, (result.getFirstT() + result.getLastT()) / 2);
                     insertAt = i;
                     break;
                 }

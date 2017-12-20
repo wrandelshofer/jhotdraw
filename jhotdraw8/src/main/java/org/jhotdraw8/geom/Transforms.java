@@ -16,6 +16,7 @@ import static java.lang.Math.abs;
 import static java.lang.Double.isNaN;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.transform.Affine;
 
 /**
  * Transforms.
@@ -183,5 +184,59 @@ public class Transforms {
     public static Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
         double theta = Math.atan2(tangentY, tangentX);
         return Transform.rotate(theta * 180.0 / Math.PI, pivotX, pivotY);
+    }
+    
+    /**
+     * Creates a transformation matrix, which projects a point onto the given line.
+     * The projection is orthogonal to the line.
+     * The point will not be clipped off by the line.
+     * <p>
+     * Formula: b = project(a, p1,p2)
+     * <pre>
+     *  v = p2 - p1;
+     *  b = vvT / vTv * (a - p1) + p1;
+     *  b = [ vvT / vTv | vvT / vTv * p1 ] * a; // 2 by 3 matrix
+     * </pre>
+     * 
+     * @param x1 x-coordinate of p1 of the line
+     * @param y1 y-coordinate of p1 of the line
+     * @param x2 x-coordinate of p2 of the line
+     * @param y2 y-coordinate of p2 of the line
+     * @return 
+     */
+    public static Transform createProjectPointOnLineTransform(double x1,double y1, double x2, double y2) {
+        double vx =x2-x1;
+        double vy =y2-y1;
+        double vxx=vx*vx;
+        double vyy=vy*vy;
+        double vTv=vxx+vyy;
+        
+        double xx = vxx/vTv;
+        double xy = vx*vy/vTv;
+        double yy = vyy/vTv;
+        double yx = xy;
+        double tx = xx*x1+xy*y1;
+        double ty = yx*x1+yy*y1;
+        
+        return new Affine(xx,xy,tx,yx,yy,ty);
+    }
+    public static Point2D projectPointOnLine(double ax, double ay, double x1,double y1, double x2, double y2) {
+        double vx =x2-x1;
+        double vy =y2-y1;
+        double vxx=vx*vx;
+        double vyy=vy*vy;
+        double vTv=vxx+vyy;
+        
+        double xx = vxx/vTv;
+        double xy = vx*vy/vTv;
+        double yy = vyy/vTv;
+        double yx = xy;
+        double tx = xx*x1+xy*y1;
+        double ty = yx*x1+yy*y1;
+        
+        
+        double bx = xx*ax+xy*ay+tx;
+        double by = yx*ax+yy*ay+ty;
+        return new Point2D(bx,by);
     }
 }

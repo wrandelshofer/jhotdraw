@@ -171,6 +171,6 @@ public interface Connector {
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getBoundsInLocal();
         Intersection i = Intersections.intersectLineRectangle(s, e, b);
-        return i.isEmpty() ? null : i.getIntersections().lastKey();
+        return i.isEmpty() ? null : i.getLastT();
     }
 }
