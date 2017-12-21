@@ -436,6 +436,11 @@ public class IntersectionSampleMain extends Application {
                 Line l1 = (Line) shape1;
                 isect = Intersections.intersectEllipseLine(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
                         l1.getStartX(), l1.getStartY(), l1.getEndX(), l1.getEndY());
+            } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Point.class) {
+                Ellipse e0 = (Ellipse) shape0;
+                Point e1 = (Point) shape1;
+                isect = Intersections.intersectEllipsePoint(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
+                        e1.getCenterX(), e1.getCenterY(), e1.getRadius());
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == QuadCurve.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 QuadCurve l1 = (QuadCurve) shape0;

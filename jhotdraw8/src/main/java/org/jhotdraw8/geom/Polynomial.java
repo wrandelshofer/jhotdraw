@@ -432,7 +432,6 @@ public class Polynomial {
      * @return the area under the curve
      */
     public double romberg(double min, double max) {
-
         int MAX = 20;
         int K = 3;
         double TOLERANCE = 1e-6;
@@ -755,13 +754,11 @@ public class Polynomial {
 
             if (plus >= 0) {
                 double f = Math.sqrt(plus);
-
                 results[numResults++] = -c3 / 4 + (e + f) / 2;
                 results[numResults++] = -c3 / 4 + (e - f) / 2;
             }
             if (minus >= 0) {
                 double f = Math.sqrt(minus);
-
                 results[numResults++] = -c3 / 4 + (f - e) / 2;
                 results[numResults++] = -c3 / 4 - (f + e) / 2;
             }

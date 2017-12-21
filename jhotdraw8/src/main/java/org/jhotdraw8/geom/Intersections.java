@@ -1556,29 +1556,30 @@ public class Intersections {
         return intersectCirclePoint(new Point2D(c1x, c1y), r1, new Point2D(c2x, c2y), r2);
     }
 
-    public static Intersection intersectCirclePoint(Point2D c1, double r1, Point2D c2, double r2) {
+    public static Intersection intersectCirclePoint(Point2D cc, double cr, Point2D pc, double pr) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
         // Determine minimum and maximum radii where circles can intersect
-        double r_max = r1 + r2;
-        double r_min = Math.abs(r1 - r2);
+        double r_max = cr + pr;
+        double r_min = Math.abs(cr - pr);
 
         // Determine actual distance between circle circles
-        double c_dist = c1.distance(c2);
+        double c_dist = cc.distance(pc);
 
         Intersection.Status status;
 
-        if (c_dist > r_max) {
-            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
-        } else if (c_dist < r_min) {
+ if (abs(c_dist) < EPSILON) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
+
+            Point2D p = lerp(cc, pc, cr / c_dist);
+            final double dd = Geom.squaredDistance(p, pc);
+            if (dd<=pr*pr) {
             status = Intersection.Status.INTERSECTION;
-
-            Point2D p = lerp(c1, c2, r1 / c_dist);
-
             // FIXME compute t
             result.add(new AbstractMap.SimpleEntry<>(Double.NaN, p));
+            }else
+            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
         }
         return new Intersection(status, result);
     }
@@ -2240,6 +2241,60 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             if (0 <= t && t <= 1) {
                 status = Intersection.Status.INTERSECTION;
                 result.add(new AbstractMap.SimpleEntry<>(t, lerp(x0, y0, x1, y1, t)));
+            } else {
+                status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+            }
+        }
+
+        return new Intersection(status, result);
+    }
+    public static Intersection intersectEllipsePoint(
+            double cx, double cy, double rx, double ry,
+            double px, double py, double pr ) {
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+
+        final Point2D origin, dir, center, diff, mDir, mDiff;
+        origin = new Point2D(px, py);
+        dir = new Point2D(cx, cy).subtract(px, py);
+        center = new Point2D(cx, cy);
+        mDir = new Point2D(dir.getX() / (rx * rx), dir.getY() / (ry * ry));
+        mDiff = mDir.multiply(-1);
+
+        final double a, b, c, d;
+        a = dir.dotProduct(mDir);
+        b = dir.dotProduct(mDiff);
+        c = dir.dotProduct(mDir) - 1.0;
+        d = b * b - a * c;
+
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
+        if (d < -EPSILON) {
+            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+        } else if (d > 0) {
+            final double root, t0, t1;
+            root = Math.sqrt(d);
+            t0 = (-b - root) / a;
+            t1 = (-b + root) / a;
+
+            if ((t0 < 0 || 1 < t0) && (t1 < 0 || 1 < t1)) {
+                if ((t0 < 0 && t1 < 0) || (t0 > 1 && t1 > 1)) {
+                    status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+                } else {
+                    status = Intersection.Status.NO_INTERSECTION_INSIDE;
+                }
+            } else {
+                status = Intersection.Status.INTERSECTION;
+                if (0 <= t0 && t0 <= 1) {
+                    result.add(new AbstractMap.SimpleEntry<>(t0, lerp(px, py, cx, cy, t0)));
+                }
+                if (0 <= t1 && t1 <= 1) {
+                    result.add(new AbstractMap.SimpleEntry<>(t1, lerp(px, py, cx, cy, t1)));
+                }
+            }
+        } else {
+            final double t = -b / a;
+            if (0 <= t && t <= 1) {
+                status = Intersection.Status.INTERSECTION;
+                result.add(new AbstractMap.SimpleEntry<>(t, lerp(px, py, cx, cy, t)));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
