@@ -87,6 +87,22 @@ public class Intersections {
     }
 
     /**
+     * Computes the coordinates of the bottom right corner of a rectangle given
+     * two corner points defining the extrema of the rectangle.
+     *
+     * @param a corner point a
+     * @param b corner point b
+     * @return the bottom right corner
+     */
+    private static Point2D bottomRight(Point2D a, Point2D b) {
+        return new Point2D(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
+    }
+
+    private static Point2D bottomRight(double ax, double ay, double bx, double by) {
+        return new Point2D(Math.max(ax, bx), Math.max(ay, by));
+    }
+
+    /**
      * Returns true if point 'a' is greater or equal to point 'b'. Compares the
      * x-coordinates first, and if they are equal compares the y-coordinates.
      *
@@ -525,6 +541,13 @@ public class Intersections {
         }
 
         return new Intersection(status, result);
+    }
+
+    public static Intersection intersectBezier2Line(
+            double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
+            double bx0, double by0, double bx1, double by1) {
+        return intersectBezier2Line(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
+                new Point2D(bx0, by0), new Point2D(bx1, by1));
     }
 
     /**
@@ -1129,6 +1152,13 @@ public class Intersections {
 
     }
 
+    public static Intersection intersectBezier3Line(
+            double ax0, double ay0, double ax1, double ay1, double ax2, double ay2, double ax3, double ay3,
+            double bx0, double by0, double bx1, double by1) {
+        return intersectBezier3Line(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
+                new Point2D(bx0, by0), new Point2D(bx1, by1));
+    }
+
     /**
      * Computes the intersection between cubic bezier curve 'p' and the line
      * 'a'.
@@ -1233,17 +1263,19 @@ public class Intersections {
      * <p>
      * This method solves the last equation shown in the list below.
      * <ol>
-     * <li>{@literal (1 - t)³·p1 + 3·(1 - t)²·t·p2 + 2·(1 - t)·t·p2 + t²·p3 , 0 ≤ t ≤ 1
+     * <li>{@literal (1 - t)³·p0 + 3·(1 - t)²·t·p1 + 3·(1 - t)·t²·p2 + t³·p3 , 0 ≤ t ≤ 1
      * }<br>
-     * : quadratic bezier equation, vector form
+     * : cubic bezier equation, vector form
      * </li>
-     * <li>{@literal  (p1 - 2·p2 + p3)·t² - 2·(p1 - p2)·t + p1 }<br>
+     * <li>{@literal  -(p0 - 3*p1 + 3*p2 - p3)*t^3 + 3*(p0 - 2*p1 + p2)*t^2 - 3*(p0 - p1)*t + p0
+     * }<br>
      * : expanded, and then collected for t
      * </li>
-     * <li>{@literal c2·t² + c1·t + c0 }<br>
+     * <li>{@literal c3·t³ + c2·t² + c1·t + c0 }<br>
      * : coefficients compacted
      * </li>
-     * <li>{@literal c2x·t² + c1x·t + c0x , c2y·t² + c1y·t + c0y }<br>
+     * <li>{@literal c3x·t³ + c2x·t² + c1x·t + c0x , c3y·t³ + c2y·t² + c1y·t + c0y
+     * }<br>
      * : bezier equation in matrix form
      * </li>
      * <li>{@literal fx , fy }<br>
@@ -1252,19 +1284,27 @@ public class Intersections {
      * <li>{@literal (fx - cx)² + (fy - cy)² = 0 }<br>
      * : distance to point equation, with fx, fy inserted from matrix form
      * </li>
-     * <li>{@literal c2x²·t⁴ + 2·c1x·c2x·t³ + (c1x² - 2·cx·c2x + 2·c0x·c2x)·t² + cx² - 2·cx·c0x + c0x² - 2·(cx·c1x - c0x·c1x)·t
-     * }<br> {@literal + ..same for y-axis... }<br>
+     * <li>{
+     *
+     * @literalc3x^2*t^6 + 2*c2x*c3x*t^5 + (c2x^2 + 2*c1x*c3x)*t^4 + 2*(c1x*c2x
+     * + c0x*c3x - c3x*cx)*t^3 + (c1x^2 + 2*c0x*c2x - 2*c2x*cx)*t^2 + c0x^2 -
+     * 2*c0x*cx + cx^2 + 2*(c0x*c1x - c1x*cx)*t }<br> {@literal + ..same for y-axis...
+     * }<br>
      * : coefficients expanded
      * </li>
-     * <li>{@literal (c2x^2 + c2y^2)*t^4 }<br>
-     * {@literal+ 2*(c1x*c2x + c1y*c2y)*t^3 }<br>
-     * {@literal+ (c1x^2 + c1y^2 + 2*c0x*c2x + 2*c0y*c2y - 2*c2x*cx - 2*c2y*cy)*t^2 }<br>
-     * {@literal+ c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t}<br>
+     * <li>{@literal (c3x^2 + c3y^2)*t^6 }<br> null null     {@literal + 2*(c2x*c3x + c2y*c3y)*t^5
+     * }<br> {@literal + (c2x^2 + c2y^2 + 2*c1x*c3x + 2*c1y*c3y)*t^4 }<br> null null     {@literal + 2*(c1x*c2x + c1y*c2y + c0x*c3x + c0y*c3y - c3x*cx - c3y*cy)*t^3
+     * }<br>
+     * {@literal + (c1x^2 + c1y^2 + 2*c0x*c2x + 2*c0y*c2y - 2*c2x*cx - 2*c2y*cy)*t^2 }<br>
+     * {@literal + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t }<br> null null     {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2
+     * }<br>
      * : coefficients collected for t</li>
-     * <li>{@literal a·t⁴ + b·t³ + c·t² + d·t + e = 0, 0 ≤ t ≤ 1 }<br>
+     * <li>{@literal a·t⁶ + b·t⁵ + c·t⁴ + d·t³ + e·t² + f·t + g = 0, 0 ≤ t ≤ 1
+     * }<br>
      * : final polynomial equation
      * </li>
-     * <li>{@literal 4·a·t³ + 3·b·t² + 2·c·t + d = 0, 0 ≤ t ≤ 1 }<br>
+     * <li>{@literal 6·a·t⁵ + 5·b·t⁴ + 4·c·t³ + 3·d·t² + 2·e·t + f = 0, 0 ≤ t ≤ 1
+     * }<br>
      * : derivative
      * </li>
      * </ol>
@@ -1286,56 +1326,70 @@ public class Intersections {
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double r) {
         // Build polynomial
-        final double c2x, c2y, c1x, c1y, c0x, c0y;
-        c2x = x0 - 2 * x1 + x2;
-        c2y = y0 - 2 * y1 + y2;
-        c1x = -2 * (x0 - x1);
-        c1y = -2 * (y0 - y1);
+        final double c3x, c3y, c2x, c2y, c1x, c1y, c0x, c0y;
+        c3x = -(x0 - 3 * x1 + 3 * x2 - x3);
+        c3y = -(y0 - 3 * y1 + 3 * y2 - y3);
+        c2x = 3 * (x0 - 2 * x1 + x2);
+        c2y = 3 * (y0 - 2 * y1 + y2);
+        c1x = - 3 * (x0 - x1);
+        c1y = -3 * (y0 - y1);
         c0x = x0;
         c0y = y0;
 
-        final double a, b, c, d;
-        a = (c2x * c2x + c2y * c2y);
-        b = 2 * (c1x * c2x + c1y * c2y);
-        c = (c1x * c1x + c1y * c1y + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy);
-        d = 2 * (c0x * c1x + c0y * c1y - c1x * cx - c1y * cy);
-        //  e=c0x*c0x + c0y*c0y - 2*c0x*cx + cx*cx - 2*c0y*cy + cy*cy;
+        final double a, b, c, d, e, f;
+        a = (c3x * c3x + c3y * c3y);
+        b = 2 * (c2x * c3x + c2y * c3y);
+        c = (c2x * c2x + c2y * c2y + 2 * c1x * c3x + 2 * c1y * c3y);
+        d = 2 * (c1x * c2x + c1y * c2y + c0x * c3x + c0y * c3y - c3x * cx - c3y * cy);
+        e = (c1x * c1x + c1y * c1y + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy);
+        f = 2 * (c0x * c1x + c0y * c1y - c1x * cx - c1y * cy);
 
         // Solve for roots in derivative
-        final double[] roots = new Polynomial(4 * a, 3 * b, 2 * c, d).getRoots();
+        final double[] roots = new Polynomial(6 * a, 5 * b, 4 * c, 3 * d, 2 * e, f).getRootsInInterval(0, 1);
 
         // Select roots with closest distance to point
         final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
-        final Point2D p0, p1, p2;
+        final Point2D p0, p1, p2, p3;
         p0 = new Point2D(x0, y0);
         p1 = new Point2D(x1, y1);
         p2 = new Point2D(x2, y2);
+        p3 = new Point2D(x3, y3);
         final double rr = r * r;
         double bestDistance = Double.POSITIVE_INFINITY;
         for (double t : roots) {
-            final Point2D p;
-            double tt;
-            if (t < 0) {
-                tt = 0;
-                p = p0;
-            } else if (t > 1) {
-                tt = 1;
-                p = p2;
-            } else {
-                tt = t;
-                p = p0.multiply((1 - t) * (1 - t))
-                        .add(p1.multiply(2 * (1 - t) * t))
-                        .add(p2.multiply(t * t));
-            }
+            final Point2D p = p0.multiply((1 - t) * (1 - t) * (1 - t))
+                    .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
+                    .add(p2.multiply(3 * (1 - t) * t * t))
+                    .add(p3.multiply(t * t * t));
 
-            double squaredDistance = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
-            if (squaredDistance < rr) {
-                if (squaredDistance < bestDistance) {
-                    bestDistance = squaredDistance;
+            double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
+            if (dd < rr) {
+                if (dd < bestDistance) {
+                    bestDistance = dd;
                     result.clear();
-                    result.add(new AbstractMap.SimpleEntry<>(tt, p));
-                } else if (squaredDistance == bestDistance) {
-                    result.add(new AbstractMap.SimpleEntry<>(tt, p));
+                    result.add(new AbstractMap.SimpleEntry<>(t, p));
+                } else if (dd == bestDistance) {
+                    result.add(new AbstractMap.SimpleEntry<>(t, p));
+                }
+            }
+        }
+
+        if (result.isEmpty()) {
+            for (double t = 0; t <= 1; t += 1) {
+                final Point2D p = p0.multiply((1 - t) * (1 - t) * (1 - t))
+                        .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
+                        .add(p2.multiply(3 * (1 - t) * t * t))
+                        .add(p3.multiply(t * t * t));
+
+                double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
+                if (dd < rr) {
+                    if (dd < bestDistance) {
+                        bestDistance = dd;
+                        result.clear();
+                        result.add(new AbstractMap.SimpleEntry<>(t, p));
+                    } else if (dd == bestDistance) {
+                        result.add(new AbstractMap.SimpleEntry<>(t, p));
+                    }
                 }
             }
         }
@@ -1405,9 +1459,10 @@ public class Intersections {
         return new Intersection(result);
     }
 
-    public static Intersection intersectCircleCircle(double c1x, double c1y, double r1, double c2x,double c2y, double r2) {
-        return intersectCircleCircle(new Point2D(c1x,c1y), r1, new Point2D(c2x,c2y), r2);
+    public static Intersection intersectCircleCircle(double c1x, double c1y, double r1, double c2x, double c2y, double r2) {
+        return intersectCircleCircle(new Point2D(c1x, c1y), r1, new Point2D(c2x, c2y), r2);
     }
+
     /**
      * Computes the intersection between circle 1 and circle 2.
      *
@@ -1470,6 +1525,14 @@ public class Intersections {
         return Intersections.intersectEllipseEllipse(cc, r, r, ec, rx, ry);
     }
 
+    public static Intersection intersectCircleEllipse(double cx1, double cy1, double r1, double cx2, double cy2, double rx2, double ry2) {
+        return intersectEllipseEllipse(cx1, cy1, r1, r1, cx2, cy2, rx2, ry2);
+    }
+
+    public static Intersection intersectCircleLine(double cx, double cy, double r, double a0x, double a0y, double a1x, double a1y) {
+        return intersectCircleLine(new Point2D(cx, cy), r, new Point2D(a0x, a0y), new Point2D(a1x, a1y));
+    }
+
     /**
      * Computes the intersection between a circle and a line.
      * <p>
@@ -1486,6 +1549,37 @@ public class Intersections {
         Intersection inter = intersectLineCircle(a0, a1, c, r);
         // FIXME compute t of circle!
         return inter;
+    }
+
+    public static Intersection intersectCirclePoint(double c1x, double c1y, double r1, double c2x, double c2y, double r2) {
+        return intersectCirclePoint(new Point2D(c1x, c1y), r1, new Point2D(c2x, c2y), r2);
+    }
+
+    public static Intersection intersectCirclePoint(Point2D c1, double r1, Point2D c2, double r2) {
+        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+
+        // Determine minimum and maximum radii where circles can intersect
+        double r_max = r1 + r2;
+        double r_min = Math.abs(r1 - r2);
+
+        // Determine actual distance between circle circles
+        double c_dist = c1.distance(c2);
+
+        Intersection.Status status;
+
+        if (c_dist > r_max) {
+            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+        } else if (c_dist < r_min) {
+            status = Intersection.Status.NO_INTERSECTION_INSIDE;
+        } else {
+            status = Intersection.Status.INTERSECTION;
+
+            Point2D p = lerp(c1, c2, r1 / c_dist);
+
+            // FIXME compute t
+            result.add(new AbstractMap.SimpleEntry<>(Double.NaN, p));
+        }
+        return new Intersection(status, result);
     }
 
     /**
@@ -1566,6 +1660,10 @@ public class Intersections {
         return intersectBezier2Ellipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y3), new Point2D(cx, cy), rx, ry);
     }
 
+    public static Intersection intersectEllipseCircle(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double r2) {
+        return intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, r2, r2);
+    }
+
     /**
      * Computes the intersection between two ellipses.
      *
@@ -1584,10 +1682,12 @@ public class Intersections {
     /**
      * Computes the intersection between two ellipses.
      *
-     * @param c1 the center of ellipse 1
+     * @param cx1 the center of ellipse 1
+     * @param cy1 the center of ellipse 1
      * @param rx1 the x-radius of ellipse 1
      * @param ry1 the y-radius of ellipse 1
-     * @param c2 the center of ellipse 2
+     * @param cx2 the center of ellipse 2
+     * @param cy2 the center of ellipse 2
      * @param rx2 the x-radius of ellipse 2
      * @param ry2 the y-radius of ellipse 2
      * @return computed intersection
@@ -1632,7 +1732,7 @@ public class Intersections {
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
                         // FIXME compute angle in radians
-                        result.add(new AbstractMap.SimpleEntry<>((double) x, new Point2D(xRoots[x], yRoots[y])));
+                        result.add(new AbstractMap.SimpleEntry<>(Double.NaN, new Point2D(xRoots[x], yRoots[y])));
                     }
                 }
             }
@@ -2378,17 +2478,17 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
     public static Intersection intersectLineRectangle(Point2D a0, Point2D a1,
             double rminx, double rminy, double rmaxx, double rmaxy) {
 
-        final Point2D topLeft,bottomRight,topRight,bottomLeft;
-         topLeft = new Point2D(rminx, rminy);
-         bottomRight = new Point2D(rmaxx, rmaxy);
-         topRight = new Point2D(rmaxx, rminy);
-         bottomLeft = new Point2D(rminx, rmaxy);
+        final Point2D topLeft, bottomRight, topRight, bottomLeft;
+        topLeft = new Point2D(rminx, rminy);
+        bottomRight = new Point2D(rmaxx, rmaxy);
+        topRight = new Point2D(rmaxx, rminy);
+        bottomLeft = new Point2D(rminx, rmaxy);
 
-         final Intersection inter1,inter2,inter3,inter4;
-         inter1 = Intersections.intersectLineLine(a0, a1, topLeft, topRight);
-         inter2 = Intersections.intersectLineLine(a0, a1, topRight, bottomRight);
-         inter3 = Intersections.intersectLineLine(a0, a1, bottomRight, bottomLeft);
-         inter4 = Intersections.intersectLineLine(a0, a1, bottomLeft, topLeft);
+        final Intersection inter1, inter2, inter3, inter4;
+        inter1 = Intersections.intersectLineLine(a0, a1, topLeft, topRight);
+        inter2 = Intersections.intersectLineLine(a0, a1, topRight, bottomRight);
+        inter3 = Intersections.intersectLineLine(a0, a1, bottomRight, bottomLeft);
+        inter4 = Intersections.intersectLineLine(a0, a1, bottomLeft, topLeft);
 
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
@@ -2609,17 +2709,17 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectPolygonRectangle(List<Point2D> points, Point2D r0, Point2D r1) {
-        final Point2D topLeft,bottomRight,topRight,bottomLeft;
-         topLeft = topLeft(r0, r1);
-         bottomRight = bottomRight(r0, r1);
-         topRight = new Point2D(bottomRight.getX(), topLeft.getY());
-         bottomLeft = new Point2D(topLeft.getX(), bottomRight.getY());
+        final Point2D topLeft, bottomRight, topRight, bottomLeft;
+        topLeft = topLeft(r0, r1);
+        bottomRight = bottomRight(r0, r1);
+        topRight = new Point2D(bottomRight.getX(), topLeft.getY());
+        bottomLeft = new Point2D(topLeft.getX(), bottomRight.getY());
 
-         final Intersection inter1,inter2,inter3,inter4;
-         inter1 = Intersections.intersectLinePolygon(topLeft, topRight, points);
-         inter2 = Intersections.intersectLinePolygon(topRight, bottomRight, points);
-         inter3 = Intersections.intersectLinePolygon(bottomRight, bottomLeft, points);
-         inter4 = Intersections.intersectLinePolygon(bottomLeft, topLeft, points);
+        final Intersection inter1, inter2, inter3, inter4;
+        inter1 = Intersections.intersectLinePolygon(topLeft, topRight, points);
+        inter2 = Intersections.intersectLinePolygon(topRight, bottomRight, points);
+        inter3 = Intersections.intersectLinePolygon(bottomRight, bottomLeft, points);
+        inter4 = Intersections.intersectLinePolygon(bottomLeft, topLeft, points);
 
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
@@ -2672,6 +2772,14 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         return new Intersection(status, result);
     }
 
+    public static Intersection intersectRectangleRectangle(double ax, double ay, double aw, double ah,
+            double bx, double by, double bw, double bh) {
+        return intersectRectangleRectangle(
+                new Point2D(ax, ay), new Point2D(ax + aw, ay + ah),
+                new Point2D(bx, by), new Point2D(bx + bw, by + bh));
+
+    }
+
     /**
      * Computes the intersection between two rectangles 'a' and 'b'.
      *
@@ -2682,17 +2790,17 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectRectangleRectangle(Point2D a0, Point2D a1, Point2D b0, Point2D b1) {
-        final Point2D topLeft,bottomRight,topRight,bottomLeft;
-         topLeft = topLeft(a0, a1);
-         bottomRight = bottomRight(a0, a1);
-         topRight = new Point2D(bottomRight.getX(), topLeft.getY());
-         bottomLeft = new Point2D(topLeft.getX(), bottomRight.getY());
+        final Point2D topLeft, bottomRight, topRight, bottomLeft;
+        topLeft = topLeft(a0, a1);
+        bottomRight = bottomRight(a0, a1);
+        topRight = new Point2D(bottomRight.getX(), topLeft.getY());
+        bottomLeft = new Point2D(topLeft.getX(), bottomRight.getY());
 
-         final Intersection inter1,inter2,inter3,inter4;
-         inter1 = Intersections.intersectLineRectangle(topLeft, topRight, b0, b1);
-         inter2 = Intersections.intersectLineRectangle(topRight, bottomRight, b0, b1);
-         inter3 = Intersections.intersectLineRectangle(bottomRight, bottomLeft, b0, b1);
-         inter4 = Intersections.intersectLineRectangle(bottomLeft, topLeft, b0, b1);
+        final Intersection inter1, inter2, inter3, inter4;
+        inter1 = Intersections.intersectLineRectangle(topLeft, topRight, b0, b1);
+        inter2 = Intersections.intersectLineRectangle(topRight, bottomRight, b0, b1);
+        inter3 = Intersections.intersectLineRectangle(bottomRight, bottomLeft, b0, b1);
+        inter4 = Intersections.intersectLineRectangle(bottomLeft, topLeft, b0, b1);
 
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
@@ -2718,22 +2826,6 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      */
     private static boolean lte(Point2D a, Point2D b) {
         return a.getX() <= b.getX() && a.getY() <= b.getY();
-    }
-
-    /**
-     * Computes the coordinates of the bottom right corner of a rectangle given
-     * two corner points defining the extrema of the rectangle.
-     *
-     * @param a corner point a
-     * @param b corner point b
-     * @return the bottom right corner
-     */
-    private static Point2D bottomRight(Point2D a, Point2D b) {
-        return new Point2D(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
-    }
-
-    private static Point2D bottomRight(double ax, double ay, double bx, double by) {
-        return new Point2D(Math.max(ax, bx), Math.max(ay, by));
     }
 
     /**

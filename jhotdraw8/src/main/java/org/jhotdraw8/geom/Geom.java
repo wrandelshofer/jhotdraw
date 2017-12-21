@@ -1098,16 +1098,21 @@ public class Geom {
                 + r.getHeight());
     }
 
+    public static double squaredDistance(Point2D p, Point2D q) {
+        double Δx = p.getX() - q.getX();
+        double Δy = p.getY() - q.getY();
+        return Δx * Δx + Δy * Δy;
+    }
     public static double squaredDistance(Point2D p, double x, double y) {
-        double a = p.getX() - x;
-        double b = p.getY() - y;
-        return a * a + b * b;
+        double Δx = p.getX() - x;
+        double Δy = p.getY() - y;
+        return Δx * Δx + Δy * Δy;
     }
 
     public static double squaredDistance(double x1, double y1, double x2, double y2) {
-        double a = x1 - x2;
-        double b = x2 - y2;
-        return a * a + b * b;
+        double Δx = x1 - x2;
+        double Δy = x2 - y2;
+        return Δx * Δx + Δy * Δy;
     }
 
     static Bounds subtractInsets(Bounds b, Insets i) {

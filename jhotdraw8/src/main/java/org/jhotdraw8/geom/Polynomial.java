@@ -122,17 +122,18 @@ public class Polynomial {
      * @param coefs the coefficients of the polynomial
      */
     public Polynomial(double... coefs) {
-        this(true,coefs);
+        this(true, coefs);
     }
-    public Polynomial(boolean highestToLowestDegree,double[] coefs) {
-        if (highestToLowestDegree) {
-        this.coefs = new double[coefs.length];
-        for (int i = 0; i < coefs.length; i++) {
-            this.coefs[i] = coefs[coefs.length - i - 1];
-        }
 
-        }else{
-            this.coefs=coefs;
+    public Polynomial(boolean highestToLowestDegree, double[] coefs) {
+        if (highestToLowestDegree) {
+            this.coefs = new double[coefs.length];
+            for (int i = 0; i < coefs.length; i++) {
+                this.coefs[i] = coefs[coefs.length - i - 1];
+            }
+
+        } else {
+            this.coefs = coefs;
         }
         this.variable = "t";
     }
@@ -147,9 +148,10 @@ public class Polynomial {
      * @return the value of the polynomial at x
      */
     public double eval(double x) {
-        if (Double.isNaN(x))
-        throw new IllegalArgumentException("parameter must be a number, x="+x);
-        
+        if (Double.isNaN(x)) {
+            throw new IllegalArgumentException("parameter must be a number, x=" + x);
+        }
+
         double result = 0;
 
         for (int i = this.coefs.length - 1; i >= 0; i--) {
@@ -229,7 +231,7 @@ public class Polynomial {
 
         double[] newCoefs = new double[popAt];
         System.arraycopy(this.coefs, 0, newCoefs, 0, popAt);
-        return new Polynomial(false,newCoefs);
+        return new Polynomial(false, newCoefs);
     }
 
     /**
@@ -519,7 +521,7 @@ public class Polynomial {
                 result = getQuarticRoots();
                 break;
             default:
-                throw new UnsupportedOperationException("Degree is too high. simplifiedDegree="+simplifiedDegree);
+                throw new UnsupportedOperationException("Degree is too high. simplifiedDegree=" + simplifiedDegree);
         }
 
         return result;
@@ -533,8 +535,8 @@ public class Polynomial {
     }
 
     /**
-     * Gets roots in the given interval. Uses the bisection method for root finding.
-     * Can work with a polynomial of any degree.
+     * Gets roots in the given interval. Uses the bisection method for root
+     * finding. Can work with a polynomial of any degree.
      *
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval
@@ -543,43 +545,47 @@ public class Polynomial {
     public double[] getRootsInInterval(double min, double max) {
         double[] roots = new double[0];
 
-        if (this.getDegree() == 0) {
-            return new double[0];
-        } else if (this.getDegree() == 1) {
-            Double root = this.bisection(min, max);
-            if (root != null) {
-                roots = new double[]{root};
-            }
-        } else {
-            // get roots of derivative
-            Polynomial deriv = this.getDerivative();
-            double[] droots = deriv.getRootsInInterval(min, max);
-
-            if (droots.length > 0) {
-                // find root on [min, droots[0]]
-                Double root = this.bisection(min, droots[0]);
-                if (root != null) {
-                    roots = new double[]{root};
-                }
-
-                // find root on [droots[i],droots[i+1]] for 0 <= i <= count-2
-                for (int i = 0; i <= droots.length - 2; i++) {
-                    root = this.bisection(droots[i], droots[i + 1]);
-                    if (root != null) {
-                        roots = push(roots, root);
-                    }
-                }
-
-                // find root on [droots[count-1],xmax]
-                root = this.bisection(droots[droots.length - 1], max);
-                if (root != null) {
-                    roots = push(roots, root);
-                }
-            } else {
-                // polynomial is monotone on [min,max], has at most one root
+        switch (this.simplifiedDegree()) {
+            case 0:
+                return new double[0];
+            case 1: {
                 Double root = this.bisection(min, max);
                 if (root != null) {
                     roots = new double[]{root};
+                }
+                return roots;
+            }
+            default: {
+                // get roots of derivative
+                Polynomial deriv = this.getDerivative();
+                double[] droots = deriv.getRootsInInterval(min, max);
+
+                if (droots.length > 0) {
+                    // find root on [min, droots[0]]
+                    Double root = this.bisection(min, droots[0]);
+                    if (root != null) {
+                        roots = new double[]{root};
+                    }
+
+                    // find root on [droots[i],droots[i+1]] for 0 <= i <= count-2
+                    for (int i = 0; i <= droots.length - 2; i++) {
+                        root = this.bisection(droots[i], droots[i + 1]);
+                        if (root != null) {
+                            roots = push(roots, root);
+                        }
+                    }
+
+                    // find root on [droots[count-1],xmax]
+                    root = this.bisection(droots[droots.length - 1], max);
+                    if (root != null) {
+                        roots = push(roots, root);
+                    }
+                } else {
+                    // polynomial is monotone on [min,max], has at most one root
+                    Double root = this.bisection(min, max);
+                    if (root != null) {
+                        roots = new double[]{root};
+                    }
                 }
             }
         }
