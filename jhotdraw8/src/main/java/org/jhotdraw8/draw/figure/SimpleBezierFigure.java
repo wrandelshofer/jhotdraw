@@ -35,6 +35,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A {@link Figure} which draws a {@link BezierNodePath}.
@@ -135,6 +136,11 @@ public class SimpleBezierFigure extends AbstractLeafFigure
             newP.set(i, newP.get(i).transform(transform));
         }
         set(PATH, ImmutableList.ofCollection(newP));
+    }
+
+    @Override
+    public void reshapeInLocal(double x, double y, double width, double height) {
+        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
     }
 
     @Override

@@ -11,15 +11,18 @@ import static java.lang.Math.round;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -29,6 +32,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.geom.Geom;
 
 /**
@@ -75,6 +79,14 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
+
+    private Property<CssColor> majorGridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,0.4)", Color.hsb(226, 1.0, 0.75, 0.4))) {
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+
     private final Path majorNode = new Path();
     /**
      * The x-factor for the major grid of the grid.
@@ -91,6 +103,12 @@ public class GridConstrainer extends AbstractConstrainer {
      */
     private final IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
 
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    private Property<CssColor> minorGridColorProperty = new SimpleObjectProperty<CssColor>(this, "minorGridColor", new CssColor("hsba(226,100%,75%,0.2)", Color.hsb(226, 1.0, 0.75, 0.2))) {
         @Override
         public void invalidated() {
             fireInvalidated();
@@ -196,12 +214,28 @@ public class GridConstrainer extends AbstractConstrainer {
         return height.get();
     }
 
+    public CssColor getMajorGridColor() {
+        return majorGridColorProperty.getValue();
+    }
+
+    public void setMajorGridColor(CssColor newValue) {
+        majorGridColorProperty.setValue(newValue);
+    }
+
     public int getMajorX() {
         return majorX.get();
     }
 
     public int getMajorY() {
         return majorY.get();
+    }
+
+    public CssColor getMinorGridColor() {
+        return minorGridColorProperty.getValue();
+    }
+
+    public void setMinorGridColor(CssColor newValue) {
+        minorGridColorProperty.setValue(newValue);
     }
 
     @Override
@@ -213,8 +247,20 @@ public class GridConstrainer extends AbstractConstrainer {
         return width.get();
     }
 
+    public double getX() {
+        return x.get();
+    }
+
+    public double getY() {
+        return y.get();
+    }
+
     public DoubleProperty heightProperty() {
         return height;
+    }
+
+    public Property<CssColor> majorGridColorProperty() {
+        return majorGridColorProperty;
     }
 
     public IntegerProperty majorXProperty() {
@@ -223,6 +269,10 @@ public class GridConstrainer extends AbstractConstrainer {
 
     public IntegerProperty majorYProperty() {
         return majorY;
+    }
+
+    public Property<CssColor> minorGridColorProperty() {
+        return minorGridColorProperty;
     }
 
     public BooleanProperty snapToGridProperty() {
@@ -326,8 +376,12 @@ public class GridConstrainer extends AbstractConstrainer {
         ObservableList<PathElement> major = majorNode.getElements();
         minor.clear();
         major.clear();
-        
-        Bounds visibleRect =  drawingView.viewToWorld(drawingView.getVisibleRect());
+        CssColor minorGridColor = getMinorGridColor();
+        minorNode.setStroke(minorGridColor == null ? null : minorGridColor.getColor());
+        CssColor majorGridColor = getMajorGridColor();
+        majorNode.setStroke(majorGridColor == null ? null : majorGridColor.getColor());
+
+        Bounds visibleRect = drawingView.viewToWorld(drawingView.getVisibleRect());
 
         if (drawGrid.get()) {
             Drawing drawing = drawingView.getDrawing();
@@ -355,8 +409,8 @@ public class GridConstrainer extends AbstractConstrainer {
             // render minor
             Point2D scaled = t.deltaTransform(gxdelta, gydelta);
             if (scaled.getX() > 2 && gmx != 1) {
-                final int start = (int) ceil((max(0,visibleRect.getMinX()) - gx0) / gxdelta);
-                final int end= (int) ceil((min(dw,visibleRect.getMaxX()) - gx0) / gxdelta);
+                final int start = (int) ceil((max(0, visibleRect.getMinX()) - gx0) / gxdelta);
+                final int end = (int) ceil((min(dw, visibleRect.getMaxX()) - gx0) / gxdelta);
                 for (int i = start; i < end; i++) {
                     if (gmx > 0 && i % gmx == 0) {
                         continue;
@@ -374,8 +428,8 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
             if (scaled.getY() > 2 && gmy != 1) {
-                final int start = (int) ceil((max(0,visibleRect.getMinY()) - gy0) / gydelta);
-                final int end=  (int) Math.ceil((min(dh,visibleRect.getMaxY()) - gy0) / gydelta);
+                final int start = (int) ceil((max(0, visibleRect.getMinY()) - gy0) / gydelta);
+                final int end = (int) Math.ceil((min(dh, visibleRect.getMaxY()) - gy0) / gydelta);
                 for (int i = start; i < end; i++) {
                     if (gmy > 0 && i % gmy == 0) {
                         continue;
@@ -398,9 +452,9 @@ public class GridConstrainer extends AbstractConstrainer {
             double gmxdelta = gxdelta * gmx;
             scaled = t.deltaTransform(gmxdelta, gmydelta);
             if (scaled.getX() > 2) {
-                final int start = (int) ceil((max(0,visibleRect.getMinX()) - gx0) / gmxdelta);
-                final int end= (int) ceil((min(dw,visibleRect.getMaxX()) - gx0) / gmxdelta);
-                for (int i =start;i<end; i++) {
+                final int start = (int) ceil((max(0, visibleRect.getMinX()) - gx0) / gmxdelta);
+                final int end = (int) ceil((min(dw, visibleRect.getMaxX()) - gx0) / gmxdelta);
+                for (int i = start; i < end; i++) {
                     double x = gx0 + i * gmxdelta;
                     double x1 = x;
                     double y1 = 0;
@@ -414,9 +468,9 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
             if (scaled.getY() > 2) {
-                final int start = (int) ceil((max(0,visibleRect.getMinY()) - gy0) / gmydelta);
-                final int end=  (int) Math.ceil((min(dh,visibleRect.getMaxY()) - gy0) / gmydelta);
-                for (int i = start; i< end; i++) {
+                final int start = (int) ceil((max(0, visibleRect.getMinY()) - gy0) / gmydelta);
+                final int end = (int) Math.ceil((min(dh, visibleRect.getMaxY()) - gy0) / gmydelta);
+                for (int i = start; i < end; i++) {
                     double y = gy0 + i * gmydelta;
                     double x1 = 0;
                     double y1 = y;
@@ -442,14 +496,6 @@ public class GridConstrainer extends AbstractConstrainer {
 
     public DoubleProperty yProperty() {
         return y;
-    }
-
-    public double getY() {
-        return y.get();
-    }
-
-    public double getX() {
-        return x.get();
     }
 
 }

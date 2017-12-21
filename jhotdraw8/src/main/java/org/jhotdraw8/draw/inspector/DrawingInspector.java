@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -35,21 +36,20 @@ public class DrawingInspector extends AbstractDrawingInspector {
     private TextField backgroundColorField;
 
     @FXML
-    private TextField heightField;
-
-    @FXML
     private ColorPicker backgroundColorPicker;
 
-    @FXML
-    private TextField widthField;
-
-    private Property<Double> widthProperty;
-    private Property<Double> heightProperty;
-    private Property<CssColor> backgroundProperty;
+    private Property<CssColor> myBackgroundProperty=new SimpleObjectProperty<>();
+    private Property<CssColor> boundBackgroundProperty;
 
     private InvalidationListener commitHandler = o -> commitEdits();
+    @FXML
+    private TextField heightField;
+    private Property<Double> heightProperty;
 
     private Node node;
+    @FXML
+    private TextField widthField;
+    private Property<Double> widthProperty;
 
     public DrawingInspector() {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));
@@ -57,6 +57,15 @@ public class DrawingInspector extends AbstractDrawingInspector {
 
     public DrawingInspector(URL fxmlUrl) {
         init(fxmlUrl);
+    }
+
+    private void commitEdits() {
+        drawingView.getModel().fireTreeModelEvent(TreeModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
     }
 
     private void init(URL fxmlUrl) {
@@ -72,7 +81,19 @@ public class DrawingInspector extends AbstractDrawingInspector {
             } catch (IOException ex) {
                 throw new InternalError(ex);
             }
+            
+            CustomBinding.bindBidirectional(//
+                    myBackgroundProperty,//
+                    backgroundColorPicker.valueProperty(),//
+                    (CssColor c) -> c == null ? null : c.getColor(), //
+                    (Color c) -> new CssColor(c)//
+            );
+            backgroundColorField.textProperty().bindBidirectional(myBackgroundProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
+            myBackgroundProperty.addListener(commitHandler);
+            
         });
+        
+        
     }
 
     @Override
@@ -85,42 +106,25 @@ public class DrawingInspector extends AbstractDrawingInspector {
             heightField.textProperty().unbindBidirectional(heightProperty);
             heightProperty.removeListener(commitHandler);
         }
-        if (backgroundProperty != null) {
-            backgroundColorField.textProperty().unbindBidirectional(backgroundProperty);
-            backgroundProperty.removeListener(commitHandler);
-        }
         widthProperty = null;
         heightProperty = null;
-        backgroundProperty = null;
+        if (oldValue!=null) {
+            myBackgroundProperty.unbindBidirectional(boundBackgroundProperty);
+            boundBackgroundProperty=null;
+        }
         if (newValue != null) {
             widthProperty = Drawing.WIDTH.propertyAt(newValue.getProperties());
             heightProperty = Drawing.HEIGHT.propertyAt(newValue.getProperties());
-            backgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.getProperties());
+            boundBackgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.getProperties());
             widthProperty.addListener(commitHandler);
             heightProperty.addListener(commitHandler);
-            backgroundProperty.addListener(commitHandler);
+            myBackgroundProperty.bindBidirectional(boundBackgroundProperty);
 
             // FIXME binding to figure properties bypasses the DrawingModel!
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new XmlDoubleConverter()));
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterAdapter<>(new XmlDoubleConverter()));
-            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
 
-            CustomBinding.bindBidirectional(//
-                    backgroundProperty,//
-                    backgroundColorPicker.valueProperty(),//
-                    (CssColor c) -> c == null ? null : c.getColor(), //
-                    (Color c) -> new CssColor(c)//
-            );
         }
-    }
-
-    private void commitEdits() {
-        drawingView.getModel().fireTreeModelEvent(TreeModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
-    }
-
-    @Override
-    public Node getNode() {
-        return node;
     }
 
 }

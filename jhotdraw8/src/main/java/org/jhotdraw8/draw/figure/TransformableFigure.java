@@ -392,7 +392,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * Throws unsupported operation exception.
      * <p>
      * If subclass overrides {@link #reshapeInLocal(javafx.scene.transform.Transform) } then the
-     * implementation ofCollection this method is most likely as follows:
+     * implementation of this method is most likely as follows:
      * <pre>
      *         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
      * </pre>

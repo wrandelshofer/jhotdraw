@@ -7,16 +7,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.prefs.Preferences;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
+import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
+import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.gui.PlatformUtil;
+import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.text.XmlNumberConverter;
 
@@ -29,28 +36,37 @@ import org.jhotdraw8.text.XmlNumberConverter;
 public class GridInspector extends AbstractDrawingViewInspector {
 
     @FXML
+    private TextField angleField;
+    @FXML
+    private CheckBox drawGridCheckBox;
+    private GridConstrainer gridConstrainer;
+    @FXML
     private TextField heightField;
+    @FXML
+    private TextField majorGridColorField;
 
+    @FXML
+    private ColorPicker majorGridColorPicker;
+    @FXML
+    private TextField majorXField;
+    @FXML
+    private TextField majorYField;
+    @FXML
+    private TextField minorGridColorField;
+    @FXML
+    private ColorPicker minorGridColorPicker;
+    private Property<CssColor> myMajorGridColorProperty = new SimpleObjectProperty<>();
+    private Property<CssColor> myMinorGridColorProperty = new SimpleObjectProperty<>();
+    private Node node;
+
+    @FXML
+    private CheckBox snapToGridCheckBox;
     @FXML
     private TextField widthField;
     @FXML
     private TextField xField;
     @FXML
     private TextField yField;
-    @FXML
-    private TextField majorXField;
-    @FXML
-    private TextField majorYField;
-
-    @FXML
-    private TextField angleField;
-
-    @FXML
-    private CheckBox snapToGridCheckBox;
-    @FXML
-    private CheckBox drawGridCheckBox;
-
-    private Node node;
 
     public GridInspector() {
         this(LayersInspector.class.getResource("GridInspector.fxml"));
@@ -58,6 +74,11 @@ public class GridInspector extends AbstractDrawingViewInspector {
 
     public GridInspector(URL fxmlUrl) {
         init(fxmlUrl);
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
     }
 
     private void init(URL fxmlUrl) {
@@ -82,8 +103,23 @@ public class GridInspector extends AbstractDrawingViewInspector {
         drawGridCheckBox.setSelected(prefs.getBoolean("drawGrid", true));
         drawGridCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("drawGrid", newValue));
+
+        CustomBinding.bindBidirectional(//
+                myMinorGridColorProperty,//
+                minorGridColorPicker.valueProperty(),//
+                (CssColor c) -> c == null ? null : c.getColor(), //
+                (Color c) -> new CssColor(c)//
+        );
+        minorGridColorField.textProperty().bindBidirectional(myMinorGridColorProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
+
+        CustomBinding.bindBidirectional(//
+                myMajorGridColorProperty,//
+                majorGridColorPicker.valueProperty(),//
+                (CssColor c) -> c == null ? null : c.getColor(), //
+                (Color c) -> new CssColor(c)//
+        );
+        majorGridColorField.textProperty().bindBidirectional(myMajorGridColorProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
     }
-    private GridConstrainer gridConstrainer;
 
     @Override
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
@@ -106,15 +142,11 @@ public class GridInspector extends AbstractDrawingViewInspector {
             angleField.textProperty().unbind();
             drawGridCheckBox.selectedProperty().unbind();
             snapToGridCheckBox.selectedProperty().unbind();
-        }
-        if (gridConstrainer != null) {
-            gridConstrainer.xProperty().removeListener(prefsGridX);
-            gridConstrainer.yProperty().removeListener(prefsGridY);
-            gridConstrainer.widthProperty().removeListener(prefsGridWidth);
-            gridConstrainer.heightProperty().removeListener(prefsGridHeight);
-            gridConstrainer.angleProperty().removeListener(prefsGridAngle);
-            gridConstrainer.majorXProperty().removeListener(prefsGridMajorX);
-            gridConstrainer.majorYProperty().removeListener(prefsGridMajorY);
+            if (oldValue instanceof GridConstrainer) {
+                GridConstrainer gc = (GridConstrainer) oldValue;
+                myMinorGridColorProperty.unbindBidirectional(gc.minorGridColorProperty());
+                myMajorGridColorProperty.unbindBidirectional(gc.majorGridColorProperty());
+            }
         }
         if (newValue != null) {
             if (false && (newValue.getConstrainer() instanceof GridConstrainer)) {
@@ -147,13 +179,11 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 gridConstrainer.angleProperty().addListener(prefsGridAngle);
                 gridConstrainer.majorXProperty().addListener(prefsGridMajorX);
                 gridConstrainer.majorYProperty().addListener(prefsGridMajorY);
+
+                myMinorGridColorProperty.bindBidirectional(gridConstrainer.minorGridColorProperty());
+                myMajorGridColorProperty.bindBidirectional(gridConstrainer.majorGridColorProperty());
             }
+
         }
     }
-
-    @Override
-    public Node getNode() {
-        return node;
-    }
-
 }
