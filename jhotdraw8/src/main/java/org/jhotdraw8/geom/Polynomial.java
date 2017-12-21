@@ -48,7 +48,6 @@ public class Polynomial {
     }
 
     /**
-     * "
      * Interpolate. Computes y and dy for a given x.
      *
      * @param xs
@@ -56,11 +55,11 @@ public class Polynomial {
      * @param n
      * @param offset
      * @param x
-     * @return a tuple: y, dy. ***
+     * @return a tuple: y, dy
      */
     private static YDY interpolate(double[] xs, double[] ys, int n, int offset, double x) {
 
-        double y = 0;
+        double y ;
         double dy = 0;
         double[] c = new double[n];
         double[] d = new double[n];
@@ -148,16 +147,10 @@ public class Polynomial {
      * @return the value of the polynomial at x
      */
     public double eval(double x) {
-        if (Double.isNaN(x)) {
-            throw new IllegalArgumentException("parameter must be a number, x=" + x);
-        }
-
         double result = 0;
-
         for (int i = this.coefs.length - 1; i >= 0; i--) {
             result = result * x + this.coefs[i];
         }
-
         return result;
     }
 
