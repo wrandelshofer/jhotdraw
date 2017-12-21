@@ -15,6 +15,7 @@ import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -1346,7 +1347,7 @@ public class Intersections {
 
         // Solve for roots in derivative
         final double[] roots = new Polynomial(6 * a, 5 * b, 4 * c, 3 * d, 2 * e, f).getRootsInInterval(0, 1);
-
+        
         // Select roots with closest distance to point
         final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         final Point2D p0, p1, p2, p3;
@@ -1614,6 +1615,9 @@ public class Intersections {
         return new Intersection(status, result);
     }
 
+    public static Intersection intersectCircleRectangle(double c1x, double c1y, double r1, double x, double y, double w, double h) {
+        return intersectCircleRectangle(new Point2D(c1x, c1y), r1, new Point2D(x, y), new Point2D(x+w,y+h));
+    }
     /**
      * Computes the intersection between a circle and a rectangle.
      *

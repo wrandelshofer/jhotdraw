@@ -538,22 +538,30 @@ public class Polynomial {
      * Gets roots in the given interval. Uses the bisection method for root
      * finding. Can work with a polynomial of any degree.
      *
-     * @param min the lower bound of the interval
-     * @param max the upper bound of the interval
+     * @param min the lower bound of the interval (inclusive)
+     * @param max the upper bound of the interval (inclusive)
      * @return a list of roots
      */
     public double[] getRootsInInterval(double min, double max) {
-        double[] roots = new double[0];
+        final double[] roots = new double[getDegree()];
+        int numRoots = 0;
 
         switch (this.simplifiedDegree()) {
             case 0:
-                return new double[0];
-            case 1: {
-                Double root = this.bisection(min, max);
-                if (root != null) {
-                    roots = new double[]{root};
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4: {
+                double[] allroots = getRoots();
+                for (int i = 0; i < allroots.length; i++) {
+                    double root = allroots[i];
+                    if (min <= root && root <= max) {
+                        roots[numRoots++] = root;
+                    }
+                    Arrays.sort(roots,0,numRoots);
                 }
-                return roots;
+                break;
             }
             default: {
                 // get roots of derivative
@@ -564,33 +572,40 @@ public class Polynomial {
                     // find root on [min, droots[0]]
                     Double root = this.bisection(min, droots[0]);
                     if (root != null) {
-                        roots = new double[]{root};
+                        roots[numRoots++] = root;
                     }
 
                     // find root on [droots[i],droots[i+1]] for 0 <= i <= count-2
                     for (int i = 0; i <= droots.length - 2; i++) {
                         root = this.bisection(droots[i], droots[i + 1]);
                         if (root != null) {
-                            roots = push(roots, root);
+                            roots[numRoots++] = root;
                         }
                     }
 
                     // find root on [droots[count-1],xmax]
                     root = this.bisection(droots[droots.length - 1], max);
                     if (root != null) {
-                        roots = push(roots, root);
+                        roots[numRoots++] = root;
                     }
                 } else {
                     // polynomial is monotone on [min,max], has at most one root
                     Double root = this.bisection(min, max);
                     if (root != null) {
-                        roots = new double[]{root};
+                        roots[numRoots++] = root;
                     }
                 }
+                break;
             }
         }
 
-        return roots;
+        if (numRoots == roots.length) {
+            return roots;
+        }
+        double[] finalResults = new double[numRoots];
+        System.arraycopy(roots, 0, finalResults, 0, numRoots);
+        return finalResults;
+
     }
 
     /**
@@ -617,8 +632,6 @@ public class Polynomial {
      * @return the roots
      */
     private double[] getQuadraticRoots() {
-        double[] results = new double[0];
-
         double a = this.coefs[2];
         double b = this.coefs[1] / a;
         double c = this.coefs[0] / a;
@@ -627,15 +640,15 @@ public class Polynomial {
         if (d > 0) {
             double e = Math.sqrt(d);
 
-            results = new double[]{
+            return new double[]{
                 0.5 * (-b + e),
                 0.5 * (-b - e)};
         } else if (d == 0) {
             // really two roots with same value, but we only return one
-            results = new double[]{0.5 * -b};
+            return new double[]{0.5 * -b};
         }
 
-        return results;
+        return new double[0];
     }
 
     /**
@@ -644,7 +657,7 @@ public class Polynomial {
      * @return the roots
      */
     private double[] getCubicRoots() {
-        double[] results = new double[0];
+        double[] results;
 
         double c3 = this.coefs[3];
         double c2 = this.coefs[2] / c3;
@@ -709,8 +722,6 @@ public class Polynomial {
 
     /**
      * Returns the roots of a quartic polynomial (degree equals four).
-     *
-     * This code is based on MgcPolynomial.cpp written by David Eberly.
      *
      * @return the roots
      */
@@ -788,9 +799,11 @@ public class Polynomial {
             }
         }
 
+        if (numResults == results.length) {
+            return results;
+        }
         double[] finalResults = new double[numResults];
         System.arraycopy(results, 0, finalResults, 0, numResults);
-
         return finalResults;
     }
 }

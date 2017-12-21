@@ -377,6 +377,12 @@ public class IntersectionSampleMain extends Application {
                 Point l1 = (Point) shape1;
                 isect = Intersections.intersectCirclePoint(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
+            } else if (shape0.getClass() == Circle.class && shape1.getClass() == Rectangle.class) {
+                Circle l0 = (Circle) shape0;
+                Rectangle l1 = (Rectangle) shape1;
+                isect = Intersections.intersectCircleRectangle(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
+                        l1.getX(), l1.getY(), l1.getWidth(), l1.getHeight()
+                );
                 //
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Circle.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
