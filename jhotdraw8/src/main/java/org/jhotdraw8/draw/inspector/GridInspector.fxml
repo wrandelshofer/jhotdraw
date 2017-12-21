@@ -65,14 +65,14 @@
       </tooltip>
     </Label>
     <TextField fx:id="angleField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <Label text="%grid.majorColor.shortLabelText" GridPane.rowIndex="1" />
+      <Label text="%grid.majorColor.shortLabelText" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
       <HBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
          <children>
             <TextField fx:id="majorGridColorField" prefColumnCount="14" />
             <ColorPicker fx:id="majorGridColorPicker" style="-fx-color-label-visible: false;" />
          </children>
       </HBox>
-      <Label text="%grid.minorColor.shortLabelText" GridPane.rowIndex="2" />
+      <Label text="%grid.minorColor.shortLabelText" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
       <HBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
          <children>
             <TextField fx:id="minorGridColorField" prefColumnCount="14" />
