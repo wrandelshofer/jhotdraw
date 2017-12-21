@@ -307,7 +307,14 @@ public class IntersectionSampleMain extends Application {
             Shape shape0 = entry0.getKey();
             Shape shape1 =entry1.getKey();
             Intersection isect = null;
-            if (shape0 .getClass()== CubicCurve.class && shape1.getClass() == CubicCurve.class) {
+            if (shape0 .getClass()== Circle.class && shape1.getClass() == Circle.class) {
+                Circle l0 = (Circle) shape0;
+                Circle l1 = (Circle) shape1;
+                isect = Intersections.intersectCircleCircle(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
+                        l1.getCenterX(), l1.getCenterY(), l1.getRadius());
+                System.out.println("circle0:" + l0.getCenterX() + " " + l0.getCenterY() + " " + l0.getRadius());
+                System.out.println("circle1:" + l1.getCenterX() + " " + l1.getCenterY() + " " + l1.getRadius());
+            }else            if (shape0 .getClass()== CubicCurve.class && shape1.getClass() == CubicCurve.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 CubicCurve l1 = (CubicCurve) shape1;
                 isect = Intersections.intersectBezier3Bezier3(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
