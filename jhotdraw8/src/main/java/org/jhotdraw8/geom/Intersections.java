@@ -50,7 +50,8 @@ import org.jhotdraw8.geom.Intersection.Status;
  */
 public class Intersections {
 
-    private final static double EPSILON = 1e-6;
+    /** We have 52 bits of precision in a double. We use 26 bits for EPSILON. */
+    private final static double EPSILON = 1.0/(1<<26);
 
     private Intersections() {
     }
@@ -652,11 +653,11 @@ public class Intersections {
 
             double dist_2 = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dist_2 < r_2) {
-                if (dist_2 < bestDistance) {
+                if (abs(dist_2 - bestDistance) < EPSILON) {
+                    result.add(new AbstractMap.SimpleEntry<>(tt, p));
+                } else if (dist_2 < bestDistance) {
                     bestDistance = dist_2;
                     result.clear();
-                    result.add(new AbstractMap.SimpleEntry<>(tt, p));
-                } else if (dist_2 == bestDistance) {
                     result.add(new AbstractMap.SimpleEntry<>(tt, p));
                 }
             }
@@ -1268,15 +1269,13 @@ public class Intersections {
      * }<br>
      * : cubic bezier equation, vector form
      * </li>
-     * <li>{@literal  -(p0 - 3*p1 + 3*p2 - p3)*t^3 + 3*(p0 - 2*p1 + p2)*t^2 - 3*(p0 - p1)*t + p0
-     * }<br>
+     * <li>{@literal  -(p0 - 3*p1 + 3*p2 - p3)*t^3 + 3*(p0 - 2*p1 + p2)*t^2 - 3*(p0 - p1)*t + p0 }<br>
      * : expanded, and then collected for t
      * </li>
      * <li>{@literal c3·t³ + c2·t² + c1·t + c0 }<br>
      * : coefficients compacted
      * </li>
-     * <li>{@literal c3x·t³ + c2x·t² + c1x·t + c0x , c3y·t³ + c2y·t² + c1y·t + c0y
-     * }<br>
+     * <li>{@literal c3x·t³ + c2x·t² + c1x·t + c0x , c3y·t³ + c2y·t² + c1y·t + c0y }<br>
      * : bezier equation in matrix form
      * </li>
      * <li>{@literal fx , fy }<br>
@@ -1285,27 +1284,24 @@ public class Intersections {
      * <li>{@literal (fx - cx)² + (fy - cy)² = 0 }<br>
      * : distance to point equation, with fx, fy inserted from matrix form
      * </li>
-     * <li>{
-     *
-     * @literalc3x^2*t^6 + 2*c2x*c3x*t^5 + (c2x^2 + 2*c1x*c3x)*t^4 + 2*(c1x*c2x
+     * <li>{@literal c3x^2*t^6 + 2*c2x*c3x*t^5 + (c2x^2 + 2*c1x*c3x)*t^4 + 2*(c1x*c2x
      * + c0x*c3x - c3x*cx)*t^3 + (c1x^2 + 2*c0x*c2x - 2*c2x*cx)*t^2 + c0x^2 -
-     * 2*c0x*cx + cx^2 + 2*(c0x*c1x - c1x*cx)*t }<br> {@literal + ..same for y-axis...
-     * }<br>
+     * 2*c0x*cx + cx^2 + 2*(c0x*c1x - c1x*cx)*t }<br>
+     * {@literal + ..same for y-axis... }<br>
      * : coefficients expanded
      * </li>
-     * <li>{@literal (c3x^2 + c3y^2)*t^6 }<br> null null     {@literal + 2*(c2x*c3x + c2y*c3y)*t^5
-     * }<br> {@literal + (c2x^2 + c2y^2 + 2*c1x*c3x + 2*c1y*c3y)*t^4 }<br> null null     {@literal + 2*(c1x*c2x + c1y*c2y + c0x*c3x + c0y*c3y - c3x*cx - c3y*cy)*t^3
-     * }<br>
+     * <li>{@literal (c3x^2 + c3y^2)*t^6 }<br>
+     * {@literal + 2*(c2x*c3x + c2y*c3y)*t^5 }<br>
+     * {@literal + (c2x^2 + c2y^2 + 2*c1x*c3x + 2*c1y*c3y)*t^4 }<br>
+     * {@literal + 2*(c1x*c2x + c1y*c2y + c0x*c3x + c0y*c3y - c3x*cx - c3y*cy)*t^3 }<br>
      * {@literal + (c1x^2 + c1y^2 + 2*c0x*c2x + 2*c0y*c2y - 2*c2x*cx - 2*c2y*cy)*t^2 }<br>
-     * {@literal + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t }<br> null null     {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2
-     * }<br>
+     * {@literal + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t }<br>
+     * {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 }<br>
      * : coefficients collected for t</li>
-     * <li>{@literal a·t⁶ + b·t⁵ + c·t⁴ + d·t³ + e·t² + f·t + g = 0, 0 ≤ t ≤ 1
-     * }<br>
+     * <li>{@literal a·t⁶ + b·t⁵ + c·t⁴ + d·t³ + e·t² + f·t + g = 0, 0 ≤ t ≤ 1 }<br>
      * : final polynomial equation
      * </li>
-     * <li>{@literal 6·a·t⁵ + 5·b·t⁴ + 4·c·t³ + 3·d·t² + 2·e·t + f = 0, 0 ≤ t ≤ 1
-     * }<br>
+     * <li>{@literal 6·a·t⁵ + 5·b·t⁴ + 4·c·t³ + 3·d·t² + 2·e·t + f = 0, 0 ≤ t ≤ 1 }<br>
      * : derivative
      * </li>
      * </ol>
@@ -1347,7 +1343,7 @@ public class Intersections {
 
         // Solve for roots in derivative
         final double[] roots = new Polynomial(6 * a, 5 * b, 4 * c, 3 * d, 2 * e, f).getRootsInInterval(0, 1);
-        
+
         // Select roots with closest distance to point
         final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         final Point2D p0, p1, p2, p3;
@@ -1365,11 +1361,11 @@ public class Intersections {
 
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
-                if (dd < bestDistance) {
+                if (abs(dd - bestDistance) < EPSILON) {
+                    result.add(new AbstractMap.SimpleEntry<>(t, p));
+                } else if (dd < bestDistance) {
                     bestDistance = dd;
                     result.clear();
-                    result.add(new AbstractMap.SimpleEntry<>(t, p));
-                } else if (dd == bestDistance) {
                     result.add(new AbstractMap.SimpleEntry<>(t, p));
                 }
             }
@@ -1384,11 +1380,11 @@ public class Intersections {
 
                 double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
                 if (dd < rr) {
-                    if (dd < bestDistance) {
+                    if (abs(dd - bestDistance) < EPSILON) {
+                        result.add(new AbstractMap.SimpleEntry<>(t, p));
+                    } else if (dd < bestDistance) {
                         bestDistance = dd;
                         result.clear();
-                        result.add(new AbstractMap.SimpleEntry<>(t, p));
-                    } else if (dd == bestDistance) {
                         result.add(new AbstractMap.SimpleEntry<>(t, p));
                     }
                 }
@@ -1396,6 +1392,116 @@ public class Intersections {
         }
 
         return new Intersection(result);
+    }
+    public static Intersection intersectBezier3PointRotated(
+            double ax0, double ay0, double ax1, double ay1, double ax2, double ay2, double ax3, double ay3,
+            double acx, double acy, double r) {
+        
+        Point2D[] points=translateRotate(ax0,ay0,ax3,ay3,  ax1,  ay1, ax2,  ay2,ax3,  ay3,acx, acy);
+            final double x1,  y1,  x2, y2, x3,  y3, cx,  cy        ;
+            x1=points[0].getX();
+            y1=points[0].getY();
+            x2=points[1].getX();
+            y2=points[1].getY();
+            x3=points[2].getX();
+            cx=points[3].getX();
+            cy=points[3].getY();
+            
+        // Build polynomial
+        final double c3x, c3y, c2x, c2y, c1x, c1y;
+        c3x = -( - 3 * x1 + 3 * x2 - x3);
+        c3y = -( - 3 * y1 + 3 * y2 );
+        c2x = 3 * ( - 2 * x1 + x2);
+        c2y = 3 * ( - 2 * y1 + y2);
+        c1x = - 3 * ( - x1);
+        c1y = -3 * ( - y1);
+
+        final double a, b, c, d, e, f;
+        a = (c3x * c3x + c3y * c3y);
+        b = 2 * (c2x * c3x + c2y * c3y);
+        c = (c2x * c2x + c2y * c2y + 2 * c1x * c3x + 2 * c1y * c3y);
+        d = 2 * (c1x * c2x + c1y * c2y - c3x * cx - c3y * cy);
+        e = (c1x * c1x + c1y * c1y  - 2 * c2x * cx - 2 * c2y * cy);
+        f = 2 * ( - c1x * cx - c1y * cy);
+
+        // Solve for roots in derivative
+        final double[] roots = new Polynomial(6 * a, 5 * b, 4 * c, 3 * d, 2 * e, f).getRootsInInterval(0, 1);
+
+        // Select roots with closest distance to point
+        final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        final Point2D p0, p1, p2, p3;
+        p0 = new Point2D(ax0, ay0);
+        p1 = new Point2D(ax1, ay1);
+        p2 = new Point2D(ax2, ay2);
+        p3 = new Point2D(ax3, ay3);
+        final double rr = r * r;
+        double bestDistance = Double.POSITIVE_INFINITY;
+        for (double t : roots) {
+            final Point2D p = p0.multiply((1 - t) * (1 - t) * (1 - t))
+                    .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
+                    .add(p2.multiply(3 * (1 - t) * t * t))
+                    .add(p3.multiply(t * t * t));
+
+            double dd = (p.getX() - acx) * (p.getX() - acx) + (p.getY() - acy) * (p.getY() - acy);
+            if (dd < rr) {
+                if (abs(dd - bestDistance) < EPSILON) {
+                    result.add(new AbstractMap.SimpleEntry<>(t, p));
+                } else if (dd < bestDistance) {
+                    bestDistance = dd;
+                    result.clear();
+                    result.add(new AbstractMap.SimpleEntry<>(t, p));
+                }
+            }
+        }
+
+        if (result.isEmpty()) {
+            for (double t = 0; t <= 1; t += 1) {
+                final Point2D p = p0.multiply((1 - t) * (1 - t) * (1 - t))
+                        .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
+                        .add(p2.multiply(3 * (1 - t) * t * t))
+                        .add(p3.multiply(t * t * t));
+
+                double dd = (p.getX() - acx) * (p.getX() - acx) + (p.getY() - acy) * (p.getY() -acy);
+                if (dd < rr) {
+                    if (abs(dd - bestDistance) < EPSILON) {
+                        result.add(new AbstractMap.SimpleEntry<>(t, p));
+                    } else if (dd < bestDistance) {
+                        bestDistance = dd;
+                        result.clear();
+                        result.add(new AbstractMap.SimpleEntry<>(t, p));
+                    }
+                }
+            }
+        }
+
+        return new Intersection(result);
+    }
+    /**
+     * Translates and rotates a points, so that a0 is at 0,0 and a1 lies on the x-axis,
+     * (so that a1.y = 0.0).
+     *
+     * @param a0 P0 of the line
+     * @param a1 P1 of the line
+     * @param points the points to be translated and rotated
+     */
+    public static Point2D[] translateRotate(Point2D a0, Point2D a1, Point2D... points) {
+        Point2D dir = a1.subtract(a0).normalize();
+        Point2D normal = new Point2D(-dir.getY(), dir.getX());
+        Point2D[] result = new Point2D[points.length];
+        for (int i = 0; i < points.length; i++) {
+            Point2D translated = points[i].subtract(a0);
+            result[i] = new Point2D(dir.dotProduct(translated), normal.dotProduct(translated));
+        }
+        return result;
+    }
+    public static Point2D[] translateRotate(double a0x, double a0y, double a1x, double a1y, double... coords) {
+        Point2D a0=new Point2D(a0x,a0y);
+        Point2D a1=new Point2D(a1x,a1y);
+        Point2D[] points = new Point2D[coords.length/2];
+        for (int i = 0,j=0; i < points.length; i++,j+=2) {
+            points[i] = new Point2D(coords[j],coords[j+1]);
+        }
+        return translateRotate(a0,a1,points);
     }
 
     /**
@@ -1552,34 +1658,29 @@ public class Intersections {
         return inter;
     }
 
-    public static Intersection intersectCirclePoint(double c1x, double c1y, double r1, double c2x, double c2y, double r2) {
-        return intersectCirclePoint(new Point2D(c1x, c1y), r1, new Point2D(c2x, c2y), r2);
+    public static Intersection intersectCirclePoint(double cx, double cy, double cr, double px, double py, double pr) {
+        return intersectCirclePoint(new Point2D(cx, cy), cr, new Point2D(px, py), pr);
     }
 
     public static Intersection intersectCirclePoint(Point2D cc, double cr, Point2D pc, double pr) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
-        // Determine minimum and maximum radii where circles can intersect
-        double r_max = cr + pr;
-        double r_min = Math.abs(cr - pr);
-
-        // Determine actual distance between circle circles
         double c_dist = cc.distance(pc);
 
         Intersection.Status status;
-
- if (abs(c_dist) < EPSILON) {
+        if (abs(c_dist) < EPSILON) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
 
             Point2D p = lerp(cc, pc, cr / c_dist);
             final double dd = Geom.squaredDistance(p, pc);
-            if (dd<=pr*pr) {
-            status = Intersection.Status.INTERSECTION;
-            // FIXME compute t
-            result.add(new AbstractMap.SimpleEntry<>(Double.NaN, p));
-            }else
-            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+            if (dd <= pr * pr) {
+                status = Intersection.Status.INTERSECTION;
+                // FIXME compute t
+                result.add(new AbstractMap.SimpleEntry<>(Double.NaN, p));
+            } else {
+                status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
+            }
         }
         return new Intersection(status, result);
     }
@@ -1617,8 +1718,9 @@ public class Intersections {
     }
 
     public static Intersection intersectCircleRectangle(double c1x, double c1y, double r1, double x, double y, double w, double h) {
-        return intersectCircleRectangle(new Point2D(c1x, c1y), r1, new Point2D(x, y), new Point2D(x+w,y+h));
+        return intersectCircleRectangle(new Point2D(c1x, c1y), r1, new Point2D(x, y), new Point2D(x + w, y + h));
     }
+
     /**
      * Computes the intersection between a circle and a rectangle.
      *
@@ -2241,60 +2343,6 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             if (0 <= t && t <= 1) {
                 status = Intersection.Status.INTERSECTION;
                 result.add(new AbstractMap.SimpleEntry<>(t, lerp(x0, y0, x1, y1, t)));
-            } else {
-                status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
-            }
-        }
-
-        return new Intersection(status, result);
-    }
-    public static Intersection intersectEllipsePoint(
-            double cx, double cy, double rx, double ry,
-            double px, double py, double pr ) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
-
-        final Point2D origin, dir, center, diff, mDir, mDiff;
-        origin = new Point2D(px, py);
-        dir = new Point2D(cx, cy).subtract(px, py);
-        center = new Point2D(cx, cy);
-        mDir = new Point2D(dir.getX() / (rx * rx), dir.getY() / (ry * ry));
-        mDiff = mDir.multiply(-1);
-
-        final double a, b, c, d;
-        a = dir.dotProduct(mDir);
-        b = dir.dotProduct(mDiff);
-        c = dir.dotProduct(mDir) - 1.0;
-        d = b * b - a * c;
-
-        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
-        if (d < -EPSILON) {
-            status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
-        } else if (d > 0) {
-            final double root, t0, t1;
-            root = Math.sqrt(d);
-            t0 = (-b - root) / a;
-            t1 = (-b + root) / a;
-
-            if ((t0 < 0 || 1 < t0) && (t1 < 0 || 1 < t1)) {
-                if ((t0 < 0 && t1 < 0) || (t0 > 1 && t1 > 1)) {
-                    status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
-                } else {
-                    status = Intersection.Status.NO_INTERSECTION_INSIDE;
-                }
-            } else {
-                status = Intersection.Status.INTERSECTION;
-                if (0 <= t0 && t0 <= 1) {
-                    result.add(new AbstractMap.SimpleEntry<>(t0, lerp(px, py, cx, cy, t0)));
-                }
-                if (0 <= t1 && t1 <= 1) {
-                    result.add(new AbstractMap.SimpleEntry<>(t1, lerp(px, py, cx, cy, t1)));
-                }
-            }
-        } else {
-            final double t = -b / a;
-            if (0 <= t && t <= 1) {
-                status = Intersection.Status.INTERSECTION;
-                result.add(new AbstractMap.SimpleEntry<>(t, lerp(px, py, cx, cy, t)));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }

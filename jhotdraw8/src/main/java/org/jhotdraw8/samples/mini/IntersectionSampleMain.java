@@ -320,29 +320,30 @@ public class IntersectionSampleMain extends Application {
     }
 
     private void print(Shape shape, String name) {
+            System.out.print(name+" new ");
         if (shape.getClass() == Circle.class) {
             Circle l0 = (Circle) shape;
-            System.out.println("circle" + name + ":" + l0.getCenterX() + " " + l0.getCenterY() + " " + l0.getRadius());
+            System.out.print("Circle(" + l0.getCenterX() + ", " + l0.getCenterY() + ", " + l0.getRadius());
         } else if (shape.getClass() == CubicCurve.class) {
             CubicCurve l0 = (CubicCurve) shape;
-            System.out.println("cubiccurve" + name + ":" + l0.getStartX() + " " + l0.getStartY() + " " + l0.getControlX1() + " " + l0.getControlY1() + " " + l0.getControlX2() + " " + l0.getControlY2() + " " + l0.getEndX() + " " + l0.getEndY());
+            System.out.print("CubicCurve(" + l0.getStartX() + ", " + l0.getStartY() + ", " + l0.getControlX1() + ", " + l0.getControlY1() + ", " + l0.getControlX2() + ", " + l0.getControlY2() + ", " + l0.getEndX() + ", " + l0.getEndY());
         } else if (shape.getClass() == Ellipse.class) {
             Ellipse l0 = (Ellipse) shape;
-            System.out.println("ellipse" + name + ":" + l0.getCenterX() + " " + l0.getCenterY() + " " + l0.getRadiusX() + " " + l0.getRadiusY());
+            System.out.print("Ellipse(" + l0.getCenterX() + ", " + l0.getCenterY() + ", " + l0.getRadiusX() + ", " + l0.getRadiusY());
         } else if (shape.getClass() == Line.class) {
             Line l0 = (Line) shape;
-            System.out.println("line" + name + ":" + l0.getStartX() + " " + l0.getStartY() + " " + l0.getEndX() + " " + l0.getEndY());
+            System.out.print("Line(" + l0.getStartX() + ", " + l0.getStartY() + ", " + l0.getEndX() + ", " + l0.getEndY());
         } else if (shape.getClass() == Point.class) {
             Point l0 = (Point) shape;
-            System.out.println("point" + name + ":" + l0.getCenterX() + " " + l0.getCenterY() + " " + l0.getRadius());
+            System.out.print("Point(" + l0.getCenterX() + ", " + l0.getCenterY() + ", " + l0.getRadius());
         } else if (shape.getClass() == Rectangle.class) {
             Rectangle l0 = (Rectangle) shape;
-            System.out.println("rectangle" + name + ":" + l0.getX() + " " + l0.getY() + " " + l0.getWidth() + " " + l0.getHeight());
+            System.out.print("Rectangle(" + l0.getX() + ", " + l0.getY() + ", " + l0.getWidth() + ", " + l0.getHeight());
         } else if (shape.getClass() == QuadCurve.class) {
             QuadCurve l0 = (QuadCurve) shape;
-            System.out.println("quadcurve" + name + ":" + l0.getStartX() + " " + l0.getStartY() + " " + l0.getControlX() + " " + l0.getControlY() + " " + l0.getEndX() + " " + l0.getEndY());
+            System.out.print("QuadCurve(" + l0.getStartX() + ", " + l0.getStartY() + ", " + l0.getControlX() + ", " + l0.getControlY() + ", " + l0.getEndX() + ", " + l0.getEndY());
         }
-
+            System.out.println(")");
     }
 
     private void updateIntersections() {
@@ -439,8 +440,8 @@ public class IntersectionSampleMain extends Application {
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Point.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 Point e1 = (Point) shape1;
-                isect = Intersections.intersectEllipsePoint(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
-                        e1.getCenterX(), e1.getCenterY(), e1.getRadius());
+                //isect = Intersections.intersectEllipsePoint(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
+                  //      e1.getCenterX(), e1.getCenterY(), e1.getRadius());
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == QuadCurve.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 QuadCurve l1 = (QuadCurve) shape0;

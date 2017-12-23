@@ -1,4 +1,4 @@
-/* @(#)IntersectionNGTest.java
+/* @(#)IntersectionsNGTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -6,6 +6,8 @@ package org.jhotdraw8.geom;
 
 import java.util.Arrays;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
@@ -14,14 +16,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * IntersectionNGTest.
+ * IntersectionsNGTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class IntersectionNGTest {
+public class IntersectionsNGTest {
 
-    public IntersectionNGTest() {
+    public IntersectionsNGTest() {
     }
     @DataProvider
     public Object[][] lineBezier2() {
@@ -36,6 +38,14 @@ public class IntersectionNGTest {
             {new Line(10,40,200,40),new Ellipse(100,100,50,60),new double[]{0.47368421052631576}},
         };
     }
+    @DataProvider
+    public Object[][] bezier3Point() {
+        return new Object[][]{
+            {new CubicCurve(200.0,20.0,40.0,240.0,40.0,20.0,200.0,240.0),new Circle(130,180,40),new double[]{0.8548192690545715}},
+            {new CubicCurve(200.0,20.0,40.0,240.0,40.0,20.0,200.0,240.0),new Circle(120,180,40),new double[]{0.8380940208991527}},
+        };
+    }
+    
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
@@ -56,7 +66,7 @@ public class IntersectionNGTest {
         }
         Arrays.sort(actual);
         for (int i=0;i<expected.length;i++) {
-            assertEquals(actual[i],expected[i],1e6,"root #"+i);
+            assertEquals(actual[i],expected[i],1e-6,"root #"+i);
         }
     }
     /**
@@ -70,7 +80,6 @@ public class IntersectionNGTest {
         double bry = b.getRadiusY();
         Point2D a1 = new Point2D(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D(a.getEndX(), a.getEndY());
-        System.out.println("line->ellipse");
         Intersection isec = Intersections.intersectLineEllipse(a1, a2, bc, brx, bry);
         System.out.println("  isec: "+isec);
         double[] actual=new double[isec.size()];
@@ -79,7 +88,32 @@ public class IntersectionNGTest {
         }
         Arrays.sort(actual);
         for (int i=0;i<expected.length;i++) {
-            assertEquals(actual[i],expected[i],1e6,"root #"+i);
+            assertEquals(actual[i],expected[i],1e-6,"root #"+i);
+        }
+    }
+    /**
+     * Test of intersectLineBezier2 method, of class Intersection.
+     */
+    @Test(dataProvider="bezier3Point")
+    public void testIntersectBezier3Point_11args(CubicCurve a, Circle b, double[] expected) {
+        System.out.println("testIntersectBezier3Point_5args");
+        System.out.println("bezier3->point");
+        System.out.println("a:"+a);
+        System.out.println("b:"+b);
+        Intersection isec = Intersections.intersectBezier3Point(
+                a.getStartX(),a.getStartY(),                a.getControlX1(),a.getControlY1(),
+                a.getControlX2(),a.getControlY2(),a.getEndX(),a.getEndY(),
+                b.getCenterX(),b.getCenterY(),b.getRadius());
+        double[] actual=new double[isec.size()];
+        for (int i=0;i<actual.length;i++) {
+            actual[i]=isec.getTs().get(i);
+        }
+        Arrays.sort(actual);
+        Arrays.sort(expected);
+        System.out.println("  expected: "+Arrays.toString(expected));
+        System.out.println("  actual: "+Arrays.toString(actual));
+        for (int i=0;i<expected.length;i++) {
+            assertEquals(actual[i],expected[i],1e-6,"root #"+i);
         }
     }
 

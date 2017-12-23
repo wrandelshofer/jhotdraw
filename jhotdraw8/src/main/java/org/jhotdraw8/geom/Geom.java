@@ -1204,44 +1204,45 @@ public class Geom {
      * Reference:
      * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
      *
-     * @param x1 point 1 of the curve
-     * @param y1 point 1 of the curve
-     * @param x2 point 2 of the curve
-     * @param y2 point 2 of the curve
-     * @param x3 point 3 of the curve
-     * @param y3 point 3 of the curve
-     * @param x4 point 4 of the curve
-     * @param y4 point 4 of the curve
+     * @param x0 point 1 of the curve
+     * @param y0 point 1 of the curve
+     * @param x1 point 2 of the curve
+     * @param y1 point 2 of the curve
+     * @param x2 point 3 of the curve
+     * @param y2 point 3 of the curve
+     * @param x3 point 4 of the curve
+     * @param y3 point 4 of the curve
      * @param t where to split
      * @param leftCurveTo if not null, accepts the curve from x1,y1 to t
      * @param rightCurveTo if not null, accepts the curve from t to x4,y4
      */
-    public static void splitCubicCurve(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double t,
+    public static void splitCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+            double t,
             Double6Consumer leftCurveTo,
             Double6Consumer rightCurveTo) {
+        final double x01 = (x1 - x0) * t + x0;
+        final double y01 = (y1 - y0) * t + y0;
+
         final double x12 = (x2 - x1) * t + x1;
         final double y12 = (y2 - y1) * t + y1;
 
         final double x23 = (x3 - x2) * t + x2;
         final double y23 = (y3 - y2) * t + y2;
 
-        final double x34 = (x4 - x3) * t + x3;
-        final double y34 = (y4 - y3) * t + y3;
+        final double x012 = (x12 - x01) * t + x01;
+        final double y012 = (y12 - y01) * t + y01;
 
         final double x123 = (x23 - x12) * t + x12;
         final double y123 = (y23 - y12) * t + y12;
 
-        final double x234 = (x34 - x23) * t + x23;
-        final double y234 = (y34 - y23) * t + y23;
-
-        final double x1234 = (x234 - x123) * t + x123;
-        final double y1234 = (y234 - y123) * t + y123;
+        final double x0123 = (x123 - x012) * t + x012;
+        final double y0123 = (y123 - y012) * t + y012;
 
         if (leftCurveTo != null) {
-            leftCurveTo.accept(x12, y12, x123, y123, x1234, y1234);
+            leftCurveTo.accept(x01, y01, x012, y012, x0123, y0123);
         }
         if (rightCurveTo != null) {
-            rightCurveTo.accept(x234, y234, x3‌​4, y34, x4, y4);
+            rightCurveTo.accept(x123, y123, x23, y23, x3, y3);
         }
     }
 
