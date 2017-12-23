@@ -41,6 +41,7 @@ public class IntersectionsNGTest {
     @DataProvider
     public Object[][] bezier3Point() {
         return new Object[][]{
+            { new CubicCurve(900.0, 700.0, 60.0, 100.0, 70.0, 700.0, 900.0, 100.0), new Circle(410.0, 400.0, 60.0),new double[]{0.47368421052631576,0.7}},
             {new CubicCurve(200.0,20.0,40.0,240.0,40.0,20.0,200.0,240.0),new Circle(130,180,40),new double[]{0.8548192690545715}},
             {new CubicCurve(200.0,20.0,40.0,240.0,40.0,20.0,200.0,240.0),new Circle(120,180,40),new double[]{0.8380940208991527}},
         };

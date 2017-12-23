@@ -11,10 +11,6 @@
  */
 package org.jhotdraw8.geom;
 
-import static java.lang.Double.isNaN;
-import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -43,13 +39,21 @@ public class Polynomial {
     /**
      * ln(10)≈2.302
      */
-    private final static double MathLN10 = Math.log(10);
+    private final static double LN10 = Math.log(10);
     /**
      * ln(2)≈0.693
      */
-    private final static double MathLN2 = Math.log(2);
-    /** We have 52 bits of precision in a double. We use 26 bits for EPSILON. */
-    private final static double EPSILON = 1.0/(1<<26);
+    private final static double LN2 = Math.log(2);
+    /**
+     * Values closer to zero than epsilon are treated as zero .
+     * Machine precision for double is 2^-53.
+     */
+    private final static double EPSILON = 1.0 / (1 << 30);
+
+    /**
+     * Holds the coefficients from lowest to highest degree, that is
+     * {@literal coefs[i]*x^i}.
+     */
     private double[] coefs;
 
     /**
@@ -134,8 +138,8 @@ public class Polynomial {
             result = max;
         } else if (minValue * maxValue <= 0) {
             double tmp1 = Math.log(max - min);
-            double tmp2 = MathLN10 * Polynomial.ACCURACY;
-            double iters = Math.ceil((tmp1 + tmp2) / MathLN2);
+            double tmp2 = LN10 * Polynomial.ACCURACY;
+            double iters = Math.ceil((tmp1 + tmp2) / LN2);
 
             for (double i = 0; i < iters; i++) {
                 result = 0.5 * (min + max);
@@ -210,10 +214,10 @@ public class Polynomial {
         halfB = b / 2;
         double discrim = b * b / 4 + a * a * a / 27;
 
-        // Note: must not set discrim to 0 here, because we loose too much precision!
-        //if (Math.abs(discrim) <= EPSILON) {
-        //    discrim = 0;
-        //}
+        // Note: setting epsilon too high results in roots not being found!
+        if (Math.abs(discrim) <= EPSILON) {
+            discrim = 0;
+        }
 
         if (discrim > 0) {
             double e = Math.sqrt(discrim);
@@ -264,7 +268,7 @@ public class Polynomial {
     /**
      * Returns the degree of this polynomial.
      *
-     * @return the degree
+     * @return the degree = number of coefficients.
      */
     public int getDegree() {
         return this.coefs.length - 1;
@@ -351,10 +355,10 @@ public class Polynomial {
         double y = resolveRoots[0];
         double discrim = c3 * c3 / 4 - c2 + y;
 
-        // Note: must not set discrim to 0 here, because we loose too much precision!
-        //if (Math.abs(discrim) <= EPSILON) {
-        //    discrim = 0;
-        //}
+        // Note: setting epsilon too high results in roots not being found!
+        if (Math.abs(discrim) <= EPSILON) {
+            discrim = 0;
+        }
 
         if (discrim > 0) {
             double e = Math.sqrt(discrim);
@@ -516,7 +520,7 @@ public class Polynomial {
             }
         }
 
-        return trim(numRoots,roots);
+        return trim(numRoots, roots);
     }
 
     /**
@@ -592,12 +596,12 @@ public class Polynomial {
      * Trims an array to the specified length.
      * <p>
      * Returns the same array if it already has the specified length.
-     * 
+     *
      * @param length the specified length
      * @param a the array
      * @return array of the specified length
      */
-    private static double[] trim(int length, double[] a) {
+    static double[] trim(int length, double[] a) {
         if (length == a.length) {
             return a;
         }

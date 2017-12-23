@@ -16,10 +16,8 @@ import static java.lang.Math.*;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import static org.jhotdraw8.geom.Geom.lerp;
@@ -50,17 +48,36 @@ import org.jhotdraw8.geom.Intersection.Status;
  */
 public class Intersections {
 
-    /** We have 52 bits of precision in a double. We use 26 bits for EPSILON. */
-    private final static double EPSILON = 1.0/(1<<26);
+    /**
+     * Values closer to zero than epsilon are treated as zero .
+     * Machine precision for double is 2^-53.
+     */
+    private final static double EPSILON = 1.0 / (1 << 30);
 
     private Intersections() {
+    }
+
+    private static double[] addZeroAndOne(double[] clampedRoots) {
+        double[] roots=new double[clampedRoots.length+2];
+        int numRoots=0;
+        Arrays.sort(clampedRoots);
+        if (clampedRoots.length==0||clampedRoots[0]>0) {
+            roots[numRoots++]=0.0;
+        }
+        for (int i=0;i<clampedRoots.length;i++) {
+            roots[numRoots++]=clampedRoots[i];
+        }
+        if (clampedRoots.length==0||clampedRoots[clampedRoots.length-1]<1) {
+            roots[numRoots++]=1;
+        }
+        return Polynomial.trim(numRoots,roots);
     }
 
     /**
      * Constructs Bézout determinant polynomial given two polynomials e1 and e2.
      *
-     * @param e1 polynomial e1
-     * @param e2 polynomial e2
+     * @param e1 polynomial e1 of degree 5
+     * @param e2 polynomial e2 of degree 5
      * @return the Bézout determinant polynomial
      */
     public static Polynomial bezout(double[] e1, double[] e2) {
@@ -633,30 +650,30 @@ public class Intersections {
         p1 = new Point2D(x0, y0);
         p2 = new Point2D(x1, y1);
         p3 = new Point2D(x2, y2);
-        final double r_2 = r * r;
+        final double rr = r * r;
         double bestDistance = Double.POSITIVE_INFINITY;
-        for (double t : roots) {
+        for (double tt : roots) {
             final Point2D p;
-            double tt;
-            if (t < 0) {
-                tt = 0;
+            final double t;
+            if (tt < 0) {
+                t = 0;
                 p = p1;
-            } else if (t > 1) {
-                tt = 1;
+            } else if (tt > 1) {
+                t = 1;
                 p = p3;
             } else {
-                tt = t;
+                t = tt;
                 p = p1.multiply((1 - t) * (1 - t))
                         .add(p2.multiply(2 * (1 - t) * t))
                         .add(p3.multiply(t * t));
             }
 
-            double dist_2 = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
-            if (dist_2 < r_2) {
-                if (abs(dist_2 - bestDistance) < EPSILON) {
+            double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
+            if (dd < rr) {
+                if (abs(dd - bestDistance) < EPSILON) {
                     result.add(new AbstractMap.SimpleEntry<>(tt, p));
-                } else if (dist_2 < bestDistance) {
-                    bestDistance = dist_2;
+                } else if (dd < bestDistance) {
+                    bestDistance = dd;
                     result.clear();
                     result.add(new AbstractMap.SimpleEntry<>(tt, p));
                 }
@@ -1342,7 +1359,9 @@ public class Intersections {
         f = 2 * (c0x * c1x + c0y * c1y - c1x * cx - c1y * cy);
 
         // Solve for roots in derivative
-        final double[] roots = new Polynomial(6 * a, 5 * b, 4 * c, 3 * d, 2 * e, f).getRootsInInterval(0, 1);
+        final double[] clampedRoots = new Polynomial(6 * a, 5 * b, 4 * c, 3 * d, 2 * e, f).getRootsInInterval(0, 1);
+        // Add zero and one, because we have clamped the roots
+        final double[] roots=addZeroAndOne(clampedRoots);
 
         // Select roots with closest distance to point
         final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
@@ -1353,11 +1372,12 @@ public class Intersections {
         p3 = new Point2D(x3, y3);
         final double rr = r * r;
         double bestDistance = Double.POSITIVE_INFINITY;
-        for (double t : roots) {
-            final Point2D p = p0.multiply((1 - t) * (1 - t) * (1 - t))
-                    .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
-                    .add(p2.multiply(3 * (1 - t) * t * t))
-                    .add(p3.multiply(t * t * t));
+        for (double t: roots) {
+            final Point2D p;
+                p = p0.multiply((1 - t) * (1 - t) * (1 - t))
+                        .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
+                        .add(p2.multiply(3 * (1 - t) * t * t))
+                        .add(p3.multiply(t * t * t));
 
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
@@ -1371,29 +1391,8 @@ public class Intersections {
             }
         }
 
-        if (result.isEmpty()) {
-            for (double t = 0; t <= 1; t += 1) {
-                final Point2D p = p0.multiply((1 - t) * (1 - t) * (1 - t))
-                        .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
-                        .add(p2.multiply(3 * (1 - t) * t * t))
-                        .add(p3.multiply(t * t * t));
-
-                double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
-                if (dd < rr) {
-                    if (abs(dd - bestDistance) < EPSILON) {
-                        result.add(new AbstractMap.SimpleEntry<>(t, p));
-                    } else if (dd < bestDistance) {
-                        bestDistance = dd;
-                        result.clear();
-                        result.add(new AbstractMap.SimpleEntry<>(t, p));
-                    }
-                }
-            }
-        }
-
         return new Intersection(result);
     }
-
 
     /**
      * Computes the intersection between cubic bezier curve 'p' and the given
