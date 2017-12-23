@@ -16,7 +16,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimplePolylineFigure;
 import org.jhotdraw8.geom.Geom;
