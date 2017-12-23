@@ -64,7 +64,8 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         SnapshotParameters parameters = new SnapshotParameters();
         double scale = dpi / RenderContext.DPI.getDefaultValue();
         parameters.setTransform(Transforms.concat(Transform.scale(scale, scale), slice.getWorldToLocal()));
-        parameters.setFill(slice.getDrawing().get(Drawing.BACKGROUND).getColor());
+        Drawing drawing=(slice instanceof Drawing)?(Drawing)slice:slice.getDrawing();
+        parameters.setFill(drawing.get(Drawing.BACKGROUND).getColor());
         double x = bounds.getMinX() * scale;
         double y = bounds.getMinY() * scale;
         double width = bounds.getWidth() * scale;
