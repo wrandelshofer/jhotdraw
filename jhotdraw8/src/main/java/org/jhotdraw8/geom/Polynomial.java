@@ -11,7 +11,11 @@
  */
 package org.jhotdraw8.geom;
 
+import static java.lang.Double.isNaN;
+import static java.lang.Math.*;
 import java.util.Arrays;
+import java.util.function.ToDoubleFunction;
+import javafx.geometry.Point2D;
 
 /**
  * Polynomial encapsulates root finding functions needed by curve intersection
@@ -39,16 +43,16 @@ public class Polynomial {
     /**
      * ln(10)≈2.302
      */
-    private final static double LN10 = Math.log(10);
+    private final static double LN10 = log(10);
     /**
      * ln(2)≈0.693
      */
-    private final static double LN2 = Math.log(2);
+    private final static double LN2 = log(2);
     /**
      * Values closer to zero than epsilon are treated as zero .
      * Machine precision for double is 2^-53.
      */
-    private final static double EPSILON = 1.0 / (1 << 30);
+    private final static double EPSILON = 1.0 / (1L << 33);
 
     /**
      * Holds the coefficients from lowest to highest degree, that is
@@ -108,7 +112,7 @@ public class Polynomial {
         Polynomial result = new Polynomial();
         double d1 = this.getDegree();
         double d2 = that.getDegree();
-        double dmax = Math.max(d1, d2);
+        double dmax = max(d1, d2);
 
         for (int i = 0; i <= dmax; i++) {
             double v1 = (i <= d1) ? this.coefs[i] : 0;
@@ -132,20 +136,20 @@ public class Polynomial {
         double maxValue = this.eval(max);
         Double result = null;
 
-        if (Math.abs(minValue) <= EPSILON) {
+        if (abs(minValue) <= EPSILON) {
             result = min;
-        } else if (Math.abs(maxValue) <= EPSILON) {
+        } else if (abs(maxValue) <= EPSILON) {
             result = max;
         } else if (minValue * maxValue <= 0) {
-            double tmp1 = Math.log(max - min);
+            double tmp1 = log(max - min);
             double tmp2 = LN10 * Polynomial.ACCURACY;
-            double iters = Math.ceil((tmp1 + tmp2) / LN2);
+            double iters = ceil((tmp1 + tmp2) / LN2);
 
             for (double i = 0; i < iters; i++) {
                 result = 0.5 * (min + max);
                 double value = this.eval(result);
 
-                if (Math.abs(value) <= EPSILON) {
+                if (abs(value) <= EPSILON) {
                     break;
                 }
 
@@ -215,35 +219,35 @@ public class Polynomial {
         double discrim = b * b / 4 + a * a * a / 27;
 
         // Note: setting epsilon too high results in roots not being found!
-        if (Math.abs(discrim) <= EPSILON) {
+        if (abs(discrim) <= EPSILON) {
             discrim = 0;
         }
 
         if (discrim > 0) {
-            double e = Math.sqrt(discrim);
+            double e = sqrt(discrim);
             double tmp;
             double root;
 
             tmp = -halfB + e;
             if (tmp >= 0) {
-                root = Math.pow(tmp, 1.0 / 3);
+                root = cbrt(tmp);
             } else {
-                root = -Math.pow(-tmp, 1.0 / 3);
+                root = -cbrt(-tmp);
             }
 
             tmp = -halfB - e;
             if (tmp >= 0) {
-                root += Math.pow(tmp, 1.0 / 3);
+                root += cbrt(tmp);
             } else {
-                root -= Math.pow(-tmp, 1.0 / 3);
+                root -= cbrt(-tmp);
             }
             results[numResults++] = root - offset;
         } else if (discrim < 0) {
-            double distance = Math.sqrt(-a / 3);
-            double angle = Math.atan2(Math.sqrt(-discrim), -halfB) / 3;
-            double cos = Math.cos(angle);
-            double sin = Math.sin(angle);
-            double sqrt3 = Math.sqrt(3);
+            double distance = sqrt(-a / 3);
+            double angle = atan2(sqrt(-discrim), -halfB) / 3;
+            double cos = cos(angle);
+            double sin = sin(angle);
+            final double sqrt3 = sqrt(3);
 
             results[numResults++] = 2 * distance * cos - offset;
             results[numResults++] = -distance * (cos + sqrt3 * sin) - offset;
@@ -252,9 +256,9 @@ public class Polynomial {
             double tmp;
 
             if (halfB >= 0) {
-                tmp = -Math.pow(halfB, 1.0 / 3.0);
+                tmp = -cbrt(halfB);
             } else {
-                tmp = Math.pow(-halfB, 1.0 / 3.0);
+                tmp = cbrt(-halfB);
             }
 
             results[numResults++] = 2 * tmp - offset;
@@ -319,7 +323,7 @@ public class Polynomial {
         double d = b * b - 4 * c;
 
         if (d > 0) {
-            double e = Math.sqrt(d);
+            double e = sqrt(d);
 
             return new double[]{
                 0.5 * (-b + e),
@@ -356,32 +360,32 @@ public class Polynomial {
         double discrim = c3 * c3 / 4 - c2 + y;
 
         // Note: setting epsilon too high results in roots not being found!
-        if (Math.abs(discrim) <= EPSILON) {
+        if (abs(discrim) <= EPSILON) {
             discrim = 0;
         }
 
         if (discrim > 0) {
-            double e = Math.sqrt(discrim);
+            double e = sqrt(discrim);
             final double t1, t2;
             t1 = 0.75 * c3 * c3 - e * e - 2 * c2;
             t2 = (4 * c3 * c2 - 8 * c1 - c3 * c3 * c3) / (4 * e);
             double plus = t1 + t2;
             double minus = t1 - t2;
 
-            if (Math.abs(plus) <= EPSILON) {
+            if (abs(plus) <= EPSILON) {
                 plus = 0;
             }
-            if (Math.abs(minus) <= EPSILON) {
+            if (abs(minus) <= EPSILON) {
                 minus = 0;
             }
 
             if (plus >= 0) {
-                double f = Math.sqrt(plus);
+                double f = sqrt(plus);
                 results[numResults++] = c3 / -4 + (e + f) / 2;
                 results[numResults++] = c3 / -4 + (e - f) / 2;
             }
             if (minus >= 0) {
-                double f = Math.sqrt(minus);
+                double f = sqrt(minus);
                 results[numResults++] = c3 / -4 + (f - e) / 2;
                 results[numResults++] = c3 / -4 - (f + e) / 2;
             }
@@ -395,16 +399,16 @@ public class Polynomial {
                     t2 = 0;
                 }
 
-                t2 = 2 * Math.sqrt(t2);
+                t2 = 2 * sqrt(t2);
                 double t1 = 3 * c3 * c3 / 4 - 2 * c2;
                 if (t1 + t2 >= EPSILON) {
-                    double d = Math.sqrt(t1 + t2);
+                    double d = sqrt(t1 + t2);
 
                     results[numResults++] = -c3 / 4 + d / 2;
                     results[numResults++] = -c3 / 4 - d / 2;
                 }
                 if (t1 - t2 >= EPSILON) {
-                    double d = Math.sqrt(t1 - t2);
+                    double d = sqrt(t1 - t2);
 
                     results[numResults++] = -c3 / 4 + d / 2;
                     results[numResults++] = -c3 / 4 - d / 2;
@@ -543,7 +547,7 @@ public class Polynomial {
 
     private int simplifiedDegree() {
         int i = this.getDegree();
-        while (i > 0 && Math.abs(this.coefs[i]) <= EPSILON) {
+        while (i > 0 && abs(this.coefs[i]) <= EPSILON) {
             i--;
         }
         return i;
@@ -608,6 +612,157 @@ public class Polynomial {
         double[] finalResults = new double[length];
         System.arraycopy(a, 0, finalResults, 0, length);
         return finalResults;
+    }
+    /**
+     * Estimates the integral of the given function in the given interval using the
+     * trapezoidal rule.
+     *
+     * trapezoid Based on trapzd in "Numerical Recipes in C", page 137
+     *
+     * @param func the function
+     * @param min the lower bound of the interval
+     * @param max the upper bound of the interval
+     * @param n the number of trapezoids
+     * @return the area of the function
+     */
+    public static double trapezoid(ToDoubleFunction<Double> func, double min, double max, int n) {
+
+        double range = max - min;
+        double _s = 0;
+        if (n == 1) {
+            double minValue = func.applyAsDouble(min);
+            double maxValue =func.applyAsDouble(max);
+            _s = 0.5 * range * (minValue + maxValue);
+        } else {
+            double it = 1 << (n - 2);
+            double delta = range / it;
+            double x = min + 0.5 * delta;
+            double sum = 0;
+
+            for (double i = 0; i < it; i++) {
+                sum += func.applyAsDouble(x);
+                x += delta;
+            }
+            _s = 0.5 * (_s + range * sum / it);
+        }
+
+        return _s;
+    }
+
+
+    /**
+     * Interpolate. Computes y and dy for a given x.
+     *
+     * @param xs
+     * @param ys
+     * @param n
+     * @param offset
+     * @param x
+     * @return a tuple: y, dy
+     */
+    private static Point2D interpolate(double[] xs, double[] ys, int n, int offset, double x) {
+
+        double y;
+        double dy = 0;
+        double[] c = new double[n];
+        double[] d = new double[n];
+        int ns = 0;
+        Point2D result;
+
+        double diff = abs(x - xs[offset]);
+        for (int i = 0; i < n; i++) {
+            double dift = abs(x - xs[offset + i]);
+
+            if (dift < diff) {
+                ns = i;
+                diff = dift;
+            }
+            c[i] = d[i] = ys[offset + i];
+        }
+        y = ys[offset + ns];
+        ns--;
+
+        for (int m = 1; m < n; m++) {
+            for (int i = 0; i < n - m; i++) {
+                double ho = xs[offset + i] - x;
+                double hp = xs[offset + i + m] - x;
+                double w = c[i + 1] - d[i];
+                double den = ho - hp;
+
+                if (den == 0.0) {
+                    result = new Point2D(0, 0); //{ y: 0, dy: 0};
+                    break;
+                }
+
+                den = w / den;
+                d[i] = hp * den;
+                c[i] = ho * den;
+            }
+            dy = (2 * (ns + 1) < (n - m)) ? c[ns + 1] : d[ns--];
+            y += dy;
+        }
+
+        return new Point2D(y, dy);// { y: y, dy: dy };
+    }
+
+    /** Estimates the arc length of the polynomial in the interval [min,max].
+     * <p>
+     * Computes {@literal  ∫_min_max sqrt(1 + (f'(x))^2 )   }
+     * 
+     * @param min the lower bound of the interval
+     * @param max the upper bound of the interval
+     * @return the estimated arc length
+     */
+    public double arcLength(double min, double max) {
+        final Polynomial dfdx=getDerivative();
+        return simpson(x->{double y=dfdx.eval(x); return sqrt(1+y*y);},min,max);
+    }
+    
+    /**
+     * Estimates the integral of the polynomial in the given interval using
+     * Simpsons's rule.
+     *
+     * simpson Based on trapzd in "Numerical Recipes in C", page 139
+     *
+     * @param func the function
+     * @param min the lower bound of the interval
+     * @param max the upper bound of the interval
+     * @return the area under the curve
+     */
+    public static double simpson(ToDoubleFunction<Double> func, double min, double max) {
+
+        double range = max - min;
+        double st = 0.5 * range * (func.applyAsDouble(min) + func.applyAsDouble(max));
+        double t = st;
+        double s = 4.0 * st / 3.0;
+        double os = s;
+        double ost = st;
+
+        int it = 1;
+        for (int n = 2; n <= 20; n++) {
+            double delta = range / it;
+            double x = min + 0.5 * delta;
+            double sum = 0;
+
+            for (double i = 1; i <= it; i++) {
+                sum += func.applyAsDouble(x);
+                x += delta;
+            }
+
+            t = 0.5 * (t + range * sum / it);
+            st = t;
+            s = (4.0 * st - ost) / 3.0;
+
+            if (abs(s - os) < EPSILON * abs(os)) {
+                break;
+            }
+
+            os = s;
+            ost = st;
+            it <<= 1;
+        }
+
+        return s;
     }
 
 }
