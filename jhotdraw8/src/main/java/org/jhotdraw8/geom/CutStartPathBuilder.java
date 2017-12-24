@@ -36,12 +36,12 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.curveTo(x1, y1, x2, y2, x3, y3);
             return;
         }
-        Intersection i = Intersections.intersectBezier3Circle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
+        Intersection i = Intersections.intersectCubicCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
                 double t = i.getLastT();
                 out.moveTo(i.getLastPoint());
-                Geom.splitCubicCurve(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
+                Beziers.splitCubicCurve(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
                 break;
             case NO_INTERSECTION_INSIDE:
             cx=x3;
@@ -107,12 +107,12 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.quadTo(x1, y1, x2, y2);
             return;
         }
-        Intersection i = Intersections.intersectBezier2Circle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
+        Intersection i = Intersections.intersectQuadraticCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
                 double t = i.getLastT();
                 out.moveTo(i.getLastPoint());
-                Geom.splitQuadCurve(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
+                Beziers.splitQuadCurve(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
 
                 break;
             case NO_INTERSECTION_INSIDE:

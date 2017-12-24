@@ -51,7 +51,7 @@ public class IntersectionsNGTest {
      * Test of intersectLineBezier2 method, of class Intersection.
      */
     @Test(dataProvider="lineBezier2")
-    public void testIntersectLineBezier2_5args(Line a, QuadCurve b, double[] expected) {
+    public void testIntersectLineQuadraticCurve_5args(Line a, QuadCurve b, double[] expected) {
         System.out.println("intersectLineBezier2");
         Point2D b1 = new Point2D(b.getStartX(), b.getEndX());
         Point2D b2 = new Point2D(b.getControlX(), b.getControlY());
@@ -59,7 +59,7 @@ public class IntersectionsNGTest {
         Point2D a1 = new Point2D(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D(a.getEndX(), a.getEndY());
         System.out.println("line->bezier2");
-        Intersection isec = Intersections.intersectLineBezier2(a1, a2, b1, b2, b3);
+        Intersection isec = Intersections.intersectLineQuadraticCurve(a1, a2, b1, b2, b3);
         System.out.println("  isec: "+isec);
         double[] actual=new double[isec.size()];
         for (int i=0;i<actual.length;i++) {
@@ -96,12 +96,12 @@ public class IntersectionsNGTest {
      * Test of intersectLineBezier2 method, of class Intersection.
      */
     @Test(dataProvider="bezier3Point")
-    public void testIntersectBezier3Point_11args(CubicCurve a, Circle b, double[] expected) {
+    public void testIntersectCubicCurvePoint_11args(CubicCurve a, Circle b, double[] expected) {
         System.out.println("testIntersectBezier3Point_5args");
         System.out.println("bezier3->point");
         System.out.println("a:"+a);
         System.out.println("b:"+b);
-        Intersection isec = Intersections.intersectBezier3Point(
+        Intersection isec = Intersections.intersectCubicCurvePoint(
                 a.getStartX(),a.getStartY(),                a.getControlX1(),a.getControlY1(),
                 a.getControlX2(),a.getControlY2(),a.getEndX(),a.getEndY(),
                 b.getCenterX(),b.getCenterY(),b.getRadius());

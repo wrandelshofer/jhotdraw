@@ -69,6 +69,36 @@ public class Shapes {
     private Shapes() {
     }
 
+    public static int awtCapFromFX(StrokeLineCap cap) {
+        if (cap == null) {
+            return BasicStroke.CAP_BUTT;
+        }
+        switch (cap) {
+            case BUTT:
+            default:
+                return BasicStroke.CAP_BUTT;
+            case ROUND:
+                return BasicStroke.CAP_ROUND;
+            case SQUARE:
+                return BasicStroke.CAP_SQUARE;
+        }
+    }
+
+    public static int awtJoinFromFX(StrokeLineJoin join) {
+        if (join == null) {
+            return BasicStroke.JOIN_BEVEL;
+        }
+        switch (join) {
+            default:
+            case BEVEL:
+                return BasicStroke.JOIN_BEVEL;
+            case MITER:
+                return BasicStroke.JOIN_MITER;
+            case ROUND:
+                return BasicStroke.JOIN_ROUND;
+        }
+    }
+
     /**
      * Converts a Java Path iterator to a JavaFX shape.
      *
@@ -167,11 +197,6 @@ public class Shapes {
         return p;
     }
 
-    private static Shape awtShapeFromFXText(Text node) {
-        Path path = (Path) javafx.scene.shape.Shape.subtract(node, new Rectangle());
-        return awtShapeFromFXPath(path);
-    }
-
     private static Shape awtShapeFromFXPath(Path node) {
         return awtShapeFromFXPathElements(node.getElements());
     }
@@ -219,51 +244,6 @@ public class Shapes {
             }
         }
         return p;
-    }
-
-    public static <T extends PathBuilder> T buildFromFXPathElements(T builder, List<PathElement> pathElements) {
-        double x = 0;
-        double y = 0;
-        for (PathElement pe : pathElements) {
-            if (pe instanceof MoveTo) {
-                MoveTo e = (MoveTo) pe;
-                x = e.getX();
-                y = e.getY();
-                builder.moveTo(x, y);
-            } else if (pe instanceof LineTo) {
-                LineTo e = (LineTo) pe;
-                x = e.getX();
-                y = e.getY();
-                builder.lineTo(x, y);
-            } else if (pe instanceof CubicCurveTo) {
-                CubicCurveTo e = (CubicCurveTo) pe;
-                x = e.getX();
-                y = e.getY();
-                builder.curveTo(e.getControlX1(), e.getControlY1(), e.getControlX2(), e.getControlY2(), x, y);
-            } else if (pe instanceof QuadCurveTo) {
-                QuadCurveTo e = (QuadCurveTo) pe;
-                x = e.getX();
-                y = e.getY();
-                builder.quadTo(e.getControlX(), e.getControlY(), x, y);
-            } else if (pe instanceof ArcTo) {
-                ArcTo e = (ArcTo) pe;
-                x = e.getX();
-                y = e.getY();
-                builder.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), x, y, e.isLargeArcFlag(), e.isSweepFlag());
-            } else if (pe instanceof HLineTo) {
-                HLineTo e = (HLineTo) pe;
-                x = e.getX();
-                builder.lineTo(x, y);
-            } else if (pe instanceof VLineTo) {
-                VLineTo e = (VLineTo) pe;
-                y = e.getY();
-                builder.lineTo(x, y);
-            } else if (pe instanceof ClosePath) {
-                builder.closePath();
-            }
-        }
-        builder.pathDone();
-        return builder;
     }
 
     private static Shape awtShapeFromFXPolygon(Polygon node) {
@@ -331,6 +311,11 @@ public class Shapes {
         return b.build();
     }
 
+    private static Shape awtShapeFromFXText(Text node) {
+        Path path = (Path) javafx.scene.shape.Shape.subtract(node, new Rectangle());
+        return awtShapeFromFXPath(path);
+    }
+
     /**
      * Returns a value as a SvgPath2D.
      *
@@ -345,6 +330,66 @@ public class Shapes {
         AWTPathBuilder b = new AWTPathBuilder();
         buildFromSvgString(b, str);
         return (Path2D.Double) b.build();
+    }
+
+    /**
+     * Converts a Java Path iterator to a JavaFX shape.
+     *
+     * @param fxT A JavaFX Transform.
+     * @return An AWT Transform.
+     */
+    public static AffineTransform awtTransformFromFX(javafx.scene.transform.Transform fxT) {
+        if (fxT == null) {
+            return null;
+        }
+
+        double[] m = fxT.toArray(MatrixType.MT_2D_2x3);
+        return fxT == null ? null : new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
+    }
+
+    public static <T extends PathBuilder> T buildFromFXPathElements(T builder, List<PathElement> pathElements) {
+        double x = 0;
+        double y = 0;
+        for (PathElement pe : pathElements) {
+            if (pe instanceof MoveTo) {
+                MoveTo e = (MoveTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.moveTo(x, y);
+            } else if (pe instanceof LineTo) {
+                LineTo e = (LineTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.lineTo(x, y);
+            } else if (pe instanceof CubicCurveTo) {
+                CubicCurveTo e = (CubicCurveTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.curveTo(e.getControlX1(), e.getControlY1(), e.getControlX2(), e.getControlY2(), x, y);
+            } else if (pe instanceof QuadCurveTo) {
+                QuadCurveTo e = (QuadCurveTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.quadTo(e.getControlX(), e.getControlY(), x, y);
+            } else if (pe instanceof ArcTo) {
+                ArcTo e = (ArcTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), x, y, e.isLargeArcFlag(), e.isSweepFlag());
+            } else if (pe instanceof HLineTo) {
+                HLineTo e = (HLineTo) pe;
+                x = e.getX();
+                builder.lineTo(x, y);
+            } else if (pe instanceof VLineTo) {
+                VLineTo e = (VLineTo) pe;
+                y = e.getY();
+                builder.lineTo(x, y);
+            } else if (pe instanceof ClosePath) {
+                builder.closePath();
+            }
+        }
+        builder.pathDone();
+        return builder;
     }
 
     public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter) {
@@ -784,18 +829,160 @@ public class Shapes {
     }
 
     /**
-     * Converts a Java Path iterator to a JavaFX shape.
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
      *
-     * @param fxT A JavaFX Transform.
-     * @return An AWT Transform.
+     * @param shape AWT Shape
+     * @return SVG Path
      */
-    public static AffineTransform awtTransformFromFX(javafx.scene.transform.Transform fxT) {
-        if (fxT == null) {
-            return null;
-        }
+    public static String doubleSvgStringFromAWT(Shape shape) {
+        return Shapes.doubleSvgStringFromAWT(shape.getPathIterator(null));
+    }
 
-        double[] m = fxT.toArray(MatrixType.MT_2D_2x3);
-        return fxT == null ? null : new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @param at Optional transformation which is applied to the shape
+     * @return SVG Path
+     */
+    public static String doubleSvgStringFromAWT(Shape shape, AffineTransform at) {
+        return Shapes.doubleSvgStringFromAWT(shape.getPathIterator(at));
+    }
+
+    /**
+     * Converts a Java Path iterator to a SVG path with double precision.
+     *
+     * @param iter AWT Path Iterator
+     * @return SVG Path
+     */
+    public static String doubleSvgStringFromAWT(PathIterator iter) {
+        XmlNumberConverter nb = new XmlNumberConverter();
+        StringBuilder buf = new StringBuilder();
+        double[] coords = new double[6];
+        boolean first = true;
+        for (; !iter.isDone(); iter.next()) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(' ');
+            }
+            switch (iter.currentSegment(coords)) {
+                case PathIterator.SEG_CLOSE:
+                    buf.append('Z');
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    buf.append('C');
+                    for (int i = 0; i < 6; i++) {
+                        if (i % 2 == 1) {
+                            buf.append(',');
+                        } else {
+                            buf.append(' ');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_LINETO:
+                    buf.append('L');
+                    for (int i = 0; i < 2; i++) {
+                        if (i % 2 == 1) {
+                            buf.append(',');
+                        } else {
+                            buf.append(' ');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    buf.append('M');
+                    for (int i = 0; i < 2; i++) {
+                        if (i % 2 == 1) {
+                            buf.append(',');
+                        } else {
+                            buf.append(' ');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    buf.append('Q');
+                    for (int i = 0; i < 4; i++) {
+                        if (i % 2 == 1) {
+                            buf.append(',');
+                        } else {
+                            buf.append(' ');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+            }
+        }
+        return buf.toString();
+    }
+
+    public static String doubleSvgStringFromElements(List<PathElement> elements) {
+        return doubleSvgStringFromAWT(awtShapeFromFXPathElements(elements));
+    }
+
+    /**
+     * Converts a Java Path iterator to a SVG path with float precision.
+     *
+     * @param iter AWT Path Iterator
+     * @return SVG Path
+     */
+    public static String floatSvgStringFromAWT(PathIterator iter) {
+        XmlNumberConverter nb = new XmlNumberConverter();
+        StringBuilder buf = new StringBuilder();
+        float[] coords = new float[6];
+        boolean first = true;
+        for (; !iter.isDone(); iter.next()) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(' ');
+            }
+            switch (iter.currentSegment(coords)) {
+                case PathIterator.SEG_CLOSE:
+                    buf.append('Z');
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    buf.append('C');
+                    for (int i = 0; i < 6; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_LINETO:
+                    buf.append('L');
+                    for (int i = 0; i < 2; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    buf.append('M');
+                    for (int i = 0; i < 2; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    buf.append('Q');
+                    for (int i = 0; i < 4; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+            }
+        }
+        return buf.toString();
     }
 
     /**
@@ -1012,180 +1199,13 @@ public class Shapes {
     }
 
     /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @return SVG Path
-     */
-    public static String doubleSvgStringFromAWT(Shape shape) {
-        return Shapes.doubleSvgStringFromAWT(shape.getPathIterator(null));
-    }
-
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @param at Optional transformation which is applied to the shape
-     * @return SVG Path
-     */
-    public static String doubleSvgStringFromAWT(Shape shape, AffineTransform at) {
-        return Shapes.doubleSvgStringFromAWT(shape.getPathIterator(at));
-    }
-
-    /**
-     * Converts a Java Path iterator to a SVG path with double precision.
-     *
-     * @param iter AWT Path Iterator
-     * @return SVG Path
-     */
-    public static String doubleSvgStringFromAWT(PathIterator iter) {
-        XmlNumberConverter nb = new XmlNumberConverter();
-        StringBuilder buf = new StringBuilder();
-        double[] coords = new double[6];
-        boolean first = true;
-        for (; !iter.isDone(); iter.next()) {
-            if (first) {
-                first = false;
-            } else {
-                buf.append(' ');
-            }
-            switch (iter.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    buf.append('Z');
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    buf.append('C');
-                    for (int i = 0; i < 6; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_LINETO:
-                    buf.append('L');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    buf.append('M');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    buf.append('Q');
-                    for (int i = 0; i < 4; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-            }
-        }
-        return buf.toString();
-    }
-
-    /**
-     * Converts a Java Path iterator to a SVG path with float precision.
-     *
-     * @param iter AWT Path Iterator
-     * @return SVG Path
-     */
-    public static String floatSvgStringFromAWT(PathIterator iter) {
-        XmlNumberConverter nb = new XmlNumberConverter();
-        StringBuilder buf = new StringBuilder();
-        float[] coords = new float[6];
-        boolean first = true;
-        for (; !iter.isDone(); iter.next()) {
-            if (first) {
-                first = false;
-            } else {
-                buf.append(' ');
-            }
-            switch (iter.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    buf.append('Z');
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    buf.append('C');
-                    for (int i = 0; i < 6; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_LINETO:
-                    buf.append('L');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    buf.append('M');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    buf.append('Q');
-                    for (int i = 0; i < 4; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-            }
-        }
-        return buf.toString();
-    }
-
-    public static String doubleSvgStringFromElements(List<PathElement> elements) {
-        return doubleSvgStringFromAWT(awtShapeFromFXPathElements(elements));
-    }
-
-    public static List<PathElement> transformFXPathElements(List<PathElement> elements, javafx.scene.transform.Transform fxT) {
-        ArrayList<PathElement> result = new ArrayList<>();
-        awtShapeFromFXPathElements(elements);
-        return result;
-    }
-
-    /**
      * Fits the specified SVGPath into the given bounds.
      *
      * @param pathstr an SVGPath String
      * @param b the desired bounds
      * @param elems on output contains the reshaped path elements
      */
-    public static void reshapePathElements(String pathstr, Bounds b, List<PathElement> elems) {
-        FXPathBuilder builder=new FXPathBuilder(elems);
-       reshape(pathstr,b,builder );
-        builder.pathDone();
-    }
-    /**
-     * Fits the specified SVGPath into the given bounds.
-     *
-     * @param pathstr an SVGPath String
-     * @param b the desired bounds
-     * @param elems on output contains the reshaped path elements
-     */
-    public static void reshape(String pathstr, Bounds b,PathBuilder builder) {
+    public static void reshape(String pathstr, Bounds b, PathBuilder builder) {
         if (pathstr != null) {
             try {
                 Shape shape = Shapes.awtShapeFromSvgString(pathstr);
@@ -1209,33 +1229,23 @@ public class Shapes {
         }
     }
 
-    public static int awtCapFromFX(StrokeLineCap cap) {
-        if (cap == null) {
-            return BasicStroke.CAP_BUTT;
-        }
-        switch (cap) {
-            case BUTT:
-            default:
-                return BasicStroke.CAP_BUTT;
-            case ROUND:
-                return BasicStroke.CAP_ROUND;
-            case SQUARE:
-                return BasicStroke.CAP_SQUARE;
-        }
+    /**
+     * Fits the specified SVGPath into the given bounds.
+     *
+     * @param pathstr an SVGPath String
+     * @param b the desired bounds
+     * @param elems on output contains the reshaped path elements
+     */
+    public static void reshapePathElements(String pathstr, Bounds b, List<PathElement> elems) {
+        FXPathBuilder builder = new FXPathBuilder(elems);
+        reshape(pathstr, b, builder);
+        builder.pathDone();
     }
 
-    public static int awtJoinFromFX(StrokeLineJoin join) {
-        if (join == null) {
-            return BasicStroke.JOIN_BEVEL;
-        }
-        switch (join) {
-            default:
-            case BEVEL:
-                return BasicStroke.JOIN_BEVEL;
-            case MITER:
-                return BasicStroke.JOIN_MITER;
-            case ROUND:
-                return BasicStroke.JOIN_ROUND;
-        }
+    public static List<PathElement> transformFXPathElements(List<PathElement> elements, javafx.scene.transform.Transform fxT) {
+        ArrayList<PathElement> result = new ArrayList<>();
+        awtShapeFromFXPathElements(elements);
+        return result;
     }
+
 }

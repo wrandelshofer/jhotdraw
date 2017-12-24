@@ -52,8 +52,9 @@ public class Intersections {
      * Values closer to zero than epsilon are treated as zero .
      * Machine precision for double is 2^-53.
      */
-    private final static double EPSILON = 1.0 / (1 << 30);
+    private final static double EPSILON = 1.0 / (1L << 33);
 
+        /** Prevent instantiation. */
     private Intersections() {
     }
 
@@ -133,9 +134,9 @@ public class Intersections {
         return a.getX() >= b.getX() && a.getY() >= b.getY();
     }
 
-    public static Intersection intersectBezier2Bezier2(double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
+    public static Intersection intersectQuadraticCurveQuadraticCurve(double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double bx0, double by0, double bx1, double by1, double bx2, double by2) {
-        return intersectBezier2Bezier2(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
+        return intersectQuadraticCurveQuadraticCurve(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
                 new Point2D(bx0, by0), new Point2D(bx1, by1), new Point2D(bx2, by2));
 
     }
@@ -155,7 +156,7 @@ public class Intersections {
      * @param b2 control point P2 of 'b'
      * @return the computed result
      */
-    public static Intersection intersectBezier2Bezier2(Point2D a0, Point2D a1, Point2D a2, Point2D b0, Point2D b1, Point2D b2) {
+    public static Intersection intersectQuadraticCurveQuadraticCurve(Point2D a0, Point2D a1, Point2D a2, Point2D b0, Point2D b1, Point2D b2) {
         final Point2D c12, c11, c10;
         final Point2D c22, c21, c20;
         final Polynomial poly;
@@ -251,9 +252,9 @@ public class Intersections {
         return new Intersection(result);
     }
 
-    public static Intersection intersectBezier2Bezier3(double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
+    public static Intersection intersectQuadraticCurveCubicCurve(double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double bx0, double by0, double bx1, double by1, double bx2, double by2, double bx3, double by3) {
-        return intersectBezier2Bezier3(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
+        return intersectQuadraticCurveCubicCurve(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
                 new Point2D(bx0, by0), new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3));
 
     }
@@ -274,7 +275,7 @@ public class Intersections {
      * @param b3 control point P3 of 'b'
      * @return the computed result
      */
-    public static Intersection intersectBezier2Bezier3(Point2D a0, Point2D a1, Point2D a2,
+    public static Intersection intersectQuadraticCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2,
             Point2D b0, Point2D b1, Point2D b2, Point2D b3) {
         final Point2D c12, c11, c10;
         final Point2D c23, c22, c21, c20;
@@ -393,20 +394,20 @@ public class Intersections {
      * @param r the radius of the circle
      * @return the computed result
      */
-    public static Intersection intersectBezier2Circle(Point2D p0, Point2D p1, Point2D p2, Point2D c, double r) {
-        return Intersections.intersectBezier2Ellipse(p0, p1, p2, c, r, r);
+    public static Intersection intersectQuadraticCurveCircle(Point2D p0, Point2D p1, Point2D p2, Point2D c, double r) {
+        return Intersections.intersectQuadraticCurveEllipse(p0, p1, p2, c, r, r);
     }
 
-    public static Intersection intersectBezier2Circle(
+    public static Intersection intersectQuadraticCurveCircle(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double r) {
-        return Intersections.intersectBezier2Ellipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(cx, cy), r, r);
+        return Intersections.intersectQuadraticCurveEllipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(cx, cy), r, r);
     }
 
-    public static Intersection intersectBezier2Ellipse(
+    public static Intersection intersectQuadraticCurveEllipse(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double rx, double ry) {
-        return intersectBezier2Ellipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(cx, cy), rx, ry);
+        return intersectQuadraticCurveEllipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(cx, cy), rx, ry);
     }
 
     /**
@@ -425,7 +426,7 @@ public class Intersections {
      * @return the computed result. Status can be{@link Status#INTERSECTION},
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
-    public static Intersection intersectBezier2Ellipse(Point2D p0, Point2D p1, Point2D p2, Point2D c, double rx, double ry) {
+    public static Intersection intersectQuadraticCurveEllipse(Point2D p0, Point2D p1, Point2D p2, Point2D c, double rx, double ry) {
         final Point2D c2, c1, c0; // coefficients of quadratic
         c2 = p0.add(p1.multiply(-2).add(p2));
         c1 = p0.multiply(-2).add(p1.multiply(2));
@@ -486,7 +487,7 @@ public class Intersections {
      * @param a1 point 1 of 'a'
      * @return the computed intersection
      */
-    public static Intersection intersectBezier2Line(Point2D p0, Point2D p1, Point2D p2, Point2D a0, Point2D a1) {
+    public static Intersection intersectQuadraticCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D a0, Point2D a1) {
 
         // Bezier curve:  
         //   (1 - t)²·p0 + 2·(1 - t)·t·p1 + t²·p2 , 0 ≤ t ≤ 1
@@ -562,10 +563,10 @@ public class Intersections {
         return new Intersection(status, result);
     }
 
-    public static Intersection intersectBezier2Line(
+    public static Intersection intersectQuadraticCurveLine(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double bx0, double by0, double bx1, double by1) {
-        return intersectBezier2Line(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
+        return intersectQuadraticCurveLine(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
                 new Point2D(bx0, by0), new Point2D(bx1, by1));
     }
 
@@ -621,7 +622,7 @@ public class Intersections {
      * @param r the tolerance radius
      * @return the intersection
      */
-    public static Intersection intersectBezier2Point(
+    public static Intersection intersectQuadraticCurvePoint(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double r) {
 
@@ -696,7 +697,7 @@ public class Intersections {
      * @param points the points of the polygon
      * @return the computed intersection
      */
-    public static Intersection intersectBezier2Polygon(Point2D p0, Point2D p1, Point2D p2, List<Point2D> points) {
+    public static Intersection intersectQuadraticCurvePolygon(Point2D p0, Point2D p1, Point2D p2, List<Point2D> points) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         int length = points.size();
 
@@ -704,7 +705,7 @@ public class Intersections {
             final Point2D a0, a1;
             a0 = points.get(i);
             a1 = points.get((i + 1) % length);
-            Intersection inter = Intersections.intersectBezier2Line(p0, p1, p2, a0, a1);
+            Intersection inter = Intersections.intersectQuadraticCurveLine(p0, p1, p2, a0, a1);
 
             result.addAll(inter.getIntersections());
         }
@@ -723,7 +724,7 @@ public class Intersections {
      * @param r1 corner point 1 of the rectangle
      * @return the computed intersection
      */
-    public static Intersection intersectBezier2Rectangle(Point2D p0, Point2D p1, Point2D p2, Point2D r0, Point2D r1) {
+    public static Intersection intersectQuadraticCurveRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D r0, Point2D r1) {
         final Point2D topLeft, bottomRight, topRight, bottomLeft;
         topLeft = topLeft(r0, r1);
         bottomRight = bottomRight(r0, r1);
@@ -731,10 +732,10 @@ public class Intersections {
         bottomLeft = new Point2D(topLeft.getX(), bottomRight.getY());
 
         final Intersection inter1, inter2, inter3, inter4;
-        inter1 = Intersections.intersectBezier2Line(p0, p1, p2, topLeft, topRight);
-        inter2 = Intersections.intersectBezier2Line(p0, p1, p2, topRight, bottomRight);
-        inter3 = Intersections.intersectBezier2Line(p0, p1, p2, bottomRight, bottomLeft);
-        inter4 = Intersections.intersectBezier2Line(p0, p1, p2, bottomLeft, topLeft);
+        inter1 = Intersections.intersectQuadraticCurveLine(p0, p1, p2, topLeft, topRight);
+        inter2 = Intersections.intersectQuadraticCurveLine(p0, p1, p2, topRight, bottomRight);
+        inter3 = Intersections.intersectQuadraticCurveLine(p0, p1, p2, bottomRight, bottomLeft);
+        inter4 = Intersections.intersectQuadraticCurveLine(p0, p1, p2, bottomLeft, topLeft);
 
         final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         result.addAll(inter1.getIntersections());
@@ -745,10 +746,10 @@ public class Intersections {
         return new Intersection(result);
     }
 
-    public static Intersection intersectBezier3Bezier2(
+    public static Intersection intersectCubicCurveQuadraticCurve(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2, double ax3, double ay3,
             double bx0, double by0, double bx1, double by1, double bx2, double by2) {
-        Intersection isect = intersectBezier2Bezier3(
+        Intersection isect = intersectQuadraticCurveCubicCurve(
                 new Point2D(bx0, by0), new Point2D(bx1, by1), new Point2D(bx2, by2),
                 new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
                 new Point2D(ax3, ay3));
@@ -757,10 +758,10 @@ public class Intersections {
 
     }
 
-    public static Intersection intersectBezier3Bezier3(
+    public static Intersection intersectCubicCurveCubicCurve(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2, double ax3, double ay3,
             double bx0, double by0, double bx1, double by1, double bx2, double by2, double bx3, double by3) {
-        return intersectBezier3Bezier3(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
+        return intersectCubicCurveCubicCurve(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
                 new Point2D(bx0, by0), new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3));
 
     }
@@ -782,7 +783,7 @@ public class Intersections {
      * @param b3 control point P3 of 'b'
      * @return the computed result
      */
-    public static Intersection intersectBezier3Bezier3(Point2D a0, Point2D a1, Point2D a2, Point2D a3,
+    public static Intersection intersectCubicCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2, Point2D a3,
             Point2D b0, Point2D b1, Point2D b2, Point2D b3) {
         Point2D a, b, c, d;         // temporary variables
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
@@ -1081,22 +1082,22 @@ public class Intersections {
      * @param r the radius of the circle
      * @return the computed result
      */
-    public static Intersection intersectBezier3Circle(
+    public static Intersection intersectCubicCurveCircle(
             Point2D p0, Point2D p1, Point2D p2, Point2D p3,
             Point2D c, double r) {
-        return Intersections.intersectBezier3Ellipse(p0, p1, p2, p3, c, r, r);
+        return Intersections.intersectCubicCurveEllipse(p0, p1, p2, p3, c, r, r);
     }
 
-    public static Intersection intersectBezier3Circle(
+    public static Intersection intersectCubicCurveCircle(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double r) {
-        return Intersections.intersectBezier3Ellipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(cx, cy), r, r);
+        return Intersections.intersectCubicCurveEllipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3), new Point2D(cx, cy), r, r);
     }
 
-    public static Intersection intersectBezier3Ellipse(
+    public static Intersection intersectCubicCurveEllipse(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double rx, double ry) {
-        return intersectBezier3Ellipse(
+        return intersectCubicCurveEllipse(
                 new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y2), new Point2D(x3, y3),
                 new Point2D(cx, cy), rx, ry);
 
@@ -1116,7 +1117,7 @@ public class Intersections {
      * @return the computed result. Status can be{@link Status#INTERSECTION},
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
-    public static Intersection intersectBezier3Ellipse(
+    public static Intersection intersectCubicCurveEllipse(
             Point2D p0, Point2D p1, Point2D p2, Point2D p3,
             Point2D ec, double rx, double ry) {
         Point2D a, b, c, d;       // temporary variables
@@ -1171,10 +1172,10 @@ public class Intersections {
 
     }
 
-    public static Intersection intersectBezier3Line(
+    public static Intersection intersectCubicCurveLine(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2, double ax3, double ay3,
             double bx0, double by0, double bx1, double by1) {
-        return intersectBezier3Line(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
+        return intersectCubicCurveLine(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2), new Point2D(ax3, ay3),
                 new Point2D(bx0, by0), new Point2D(bx1, by1));
     }
 
@@ -1190,7 +1191,7 @@ public class Intersections {
      * @param a1 point 1 of 'a'
      * @return the computed intersection
      */
-    public static Intersection intersectBezier3Line(Point2D p0, Point2D p1, Point2D p2, Point2D p3, Point2D a0, Point2D a1) {
+    public static Intersection intersectCubicCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D p3, Point2D a0, Point2D a1) {
         final Point2D topLeft = topLeft(a0, a1); // used to determine if point is on line segment
         final Point2D bottomRight = bottomRight(a0, a1); // used to determine if point is on line segment
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
@@ -1336,7 +1337,7 @@ public class Intersections {
      * @param r the tolerance radius
      * @return the intersection
      */
-    public static Intersection intersectBezier3Point(
+    public static Intersection intersectCubicCurvePoint(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double r) {
         // Build polynomial
@@ -1405,14 +1406,14 @@ public class Intersections {
      * @param points the points of the polygon
      * @return the computed intersection
      */
-    public static Intersection intersectBezier3Polygon(Point2D p0, Point2D p1, Point2D p2, Point2D p3, List<Point2D> points) {
+    public static Intersection intersectCubicCurvePolygon(Point2D p0, Point2D p1, Point2D p2, Point2D p3, List<Point2D> points) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
             Point2D a1 = points.get(i);
             Point2D a2 = points.get((i + 1) % length);
-            Intersection inter = Intersections.intersectBezier3Line(p0, p1, p2, p3, a1, a2);
+            Intersection inter = Intersections.intersectCubicCurveLine(p0, p1, p2, p3, a1, a2);
 
             result.addAll(inter.getIntersections());
         }
@@ -1432,7 +1433,7 @@ public class Intersections {
      * @param r1 corner point 1 of the rectangle
      * @return the computed intersection
      */
-    public static Intersection intersectBezier3Rectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3, Point2D r0, Point2D r1) {
+    public static Intersection intersectCubicCurveRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3, Point2D r0, Point2D r1) {
         final Point2D topLeft, bottomRight, topRight, bottomLeft;
         topLeft = topLeft(r0, r1);
         bottomRight = bottomRight(r0, r1);
@@ -1440,10 +1441,10 @@ public class Intersections {
         bottomLeft = new Point2D(topLeft.getX(), bottomRight.getY());
 
         final Intersection inter1, inter2, inter3, inter4;
-        inter1 = Intersections.intersectBezier3Line(p0, p1, p2, p3, topLeft, topRight);
-        inter2 = Intersections.intersectBezier3Line(p0, p1, p2, p3, topRight, bottomRight);
-        inter3 = Intersections.intersectBezier3Line(p0, p1, p2, p3, bottomRight, bottomLeft);
-        inter4 = Intersections.intersectBezier3Line(p0, p1, p2, p3, bottomLeft, topLeft);
+        inter1 = Intersections.intersectCubicCurveLine(p0, p1, p2, p3, topLeft, topRight);
+        inter2 = Intersections.intersectCubicCurveLine(p0, p1, p2, p3, topRight, bottomRight);
+        inter3 = Intersections.intersectCubicCurveLine(p0, p1, p2, p3, bottomRight, bottomLeft);
+        inter4 = Intersections.intersectCubicCurveLine(p0, p1, p2, p3, bottomLeft, topLeft);
 
         final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
 
@@ -1650,11 +1651,11 @@ public class Intersections {
         return new Intersection(status, result);
     }
 
-    public static Intersection intersectEllipseBezier2(
+    public static Intersection intersectEllipseQuadraticCurve(
             double cx, double cy, double rx, double ry,
             double x0, double y0, double x1, double y1, double x2, double y3) {
         // FIXME compute t of Ellipse!
-        return intersectBezier2Ellipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y3), new Point2D(cx, cy), rx, ry);
+        return intersectQuadraticCurveEllipse(new Point2D(x0, y0), new Point2D(x1, y1), new Point2D(x2, y3), new Point2D(cx, cy), rx, ry);
     }
 
     public static Intersection intersectEllipseCircle(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double r2) {
@@ -1834,8 +1835,8 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @param a1 point 0 of 'a'
      * @return the computed intersection
      */
-    public static Intersection intersectLineBezier2(Point2D a0, Point2D a1, Point2D p0, Point2D p1, Point2D p2) {
-        return intersectLineBezier2(
+    public static Intersection intersectLineQuadraticCurve(Point2D a0, Point2D a1, Point2D p0, Point2D p1, Point2D p2) {
+        return intersectLineQuadraticCurve(
                 a0.getX(), a0.getY(),
                 a1.getX(), a1.getY(),
                 p0.getX(), p0.getY(),
@@ -1843,7 +1844,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 p2.getX(), p2.getY());
     }
 
-    public static Intersection intersectLineBezier2(double a0x, double a0y, double a1x, double a1y,
+    public static Intersection intersectLineQuadraticCurve(double a0x, double a0y, double a1x, double a1y,
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         /* steps:
         * 1. Rotate the bezier curve so that the line coincides with the x-axis.
@@ -1938,7 +1939,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      *
      * @return the computed intersection
      */
-    public static Intersection intersectLineBezier3(
+    public static Intersection intersectLineCubicCurve(
             double a0x, double a0y, double a1x, double a1y,
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y) {
 
@@ -1948,7 +1949,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         Point2D p1 = new Point2D(p1x, p1y);
         Point2D p2 = new Point2D(p2x, p2y);
         Point2D p3 = new Point2D(p3x, p3y);
-        return intersectLineBezier3(a0, a1, p0, p1, p2, p3);
+        return intersectLineCubicCurve(a0, a1, p0, p1, p2, p3);
     }
 
     /**
@@ -1963,7 +1964,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @param a1 point 2 of 'a'
      * @return the computed intersection
      */
-    public static Intersection intersectLineBezier3(Point2D a0, Point2D a1, Point2D p0, Point2D p1, Point2D p2, Point2D p3) {
+    public static Intersection intersectLineCubicCurve(Point2D a0, Point2D a1, Point2D p0, Point2D p1, Point2D p2, Point2D p3) {
         final double a0x, a0y, a1x, a1y;
         a0x = a0.getX();
         a0y = a0.getY();
@@ -2320,7 +2321,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
-                    inter = Intersections.intersectLineBezier3(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
+                    inter = Intersections.intersectLineCubicCurve(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
                     result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
@@ -2340,7 +2341,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 case PathIterator.SEG_QUADTO:
                     x = seg[2];
                     y = seg[3];
-                    inter = Intersections.intersectLineBezier2(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], x, y);
+                    inter = Intersections.intersectLineQuadraticCurve(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], x, y);
                     result.addAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
@@ -2516,7 +2517,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
-                    inter = Intersections.intersectBezier3Circle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, cx, cy, r);
+                    inter = Intersections.intersectCubicCurveCircle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, cx, cy, r);
                     // FIXME add segment number to t
                     result.addAll(inter.getIntersections());
                     lastx = x;
@@ -2538,7 +2539,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 case PathIterator.SEG_QUADTO:
                     x = seg[2];
                     y = seg[3];
-                    inter = Intersections.intersectBezier2Circle(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
+                    inter = Intersections.intersectQuadraticCurveCircle(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
                     // FIXME add segment number to t
                     result.addAll(inter.getIntersections());
                     lastx = x;
@@ -2567,6 +2568,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         double lastx = 0, lasty = 0;
         double x, y;
         int i = 0;
+        double closestDistance=Double.POSITIVE_INFINITY;
         for (; !pit.isDone(); pit.next(), i++) {
             Intersection inter;
             switch (pit.currentSegment(seg)) {
@@ -2576,7 +2578,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
-                    inter = Intersections.intersectBezier3Point(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
+                    inter = Intersections.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
                     lastx = x;
                     lasty = y;
                     break;
@@ -2595,7 +2597,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 case PathIterator.SEG_QUADTO:
                     x = seg[2];
                     y = seg[3];
-                    inter = Intersections.intersectBezier2Point(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
+                    inter = Intersections.intersectQuadraticCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
                     lastx = x;
                     lasty = y;
                     break;
@@ -2605,7 +2607,14 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             }
             if (inter != null) {
                 for (Map.Entry<Double, Point2D> entry : inter.getIntersections()) {
+                    final double dd = Geom.squaredDistance(entry.getValue(),px,py);
+                    if (abs(dd-closestDistance)<EPSILON){
                     result.add(new AbstractMap.SimpleEntry<>(entry.getKey() + i, entry.getValue()));
+                    }else if (dd<closestDistance){
+                        result.clear();
+                        closestDistance=dd;
+                    result.add(new AbstractMap.SimpleEntry<>(entry.getKey() + i, entry.getValue()));
+                    }
                 }
             }
 
@@ -2744,18 +2753,28 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
     public static Intersection intersectRayRay(Point2D a0, Point2D a1, Point2D b0, Point2D b1) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
+        
+        final double a0y, b1x, b0x, b0y, b1y, a0x, a1y        ;
+        a0y = a0.getY();
+        b1x = b1.getX();
+        b0x = b0.getX();
+        b0y = b0.getY();
+        b1y = b1.getY();
+        a0x = a0.getX();
+        a1y = a1.getY();
 
-        double ua_t = (b1.getX() - b0.getX()) * (a0.getY() - b0.getY()) - (b1.getY() - b0.getY()) * (a0.getX() - b0.getX());
-        double ub_t = (a1.getX() - a0.getX()) * (a0.getY() - b0.getY()) - (a1.getY() - a0.getY()) * (a0.getX() - b0.getX());
-        double u_b = (b1.getY() - b0.getY()) * (a1.getX() - a0.getX()) - (b1.getX() - b0.getX()) * (a1.getY() - a0.getY());
+        double ua_t = (b1x - b0x) * (a0y - b0y) - (b1y - b0y) * (a0x - b0x);
+        final double a1x = a1.getX();
+        double ub_t = (a1x - a0x) * (a0y - b0y) - (a1y - a0y) * (a0x - b0x);
+        double u_b = (b1y - b0y) * (a1x - a0x) - (b1x - b0x) * (a1y - a0y);
 
         if (u_b != 0) {
             double ua = ua_t / u_b;
 
             status = Intersection.Status.INTERSECTION;
             result.add(new AbstractMap.SimpleEntry<>(ua, new Point2D(
-                    a0.getX() + ua * (a1.getX() - a0.getX()),
-                    a0.getY() + ua * (a1.getY() - a0.getY())
+                    a0x + ua * (a1x - a0x),
+                    a0y + ua * (a1y - a0y)
             )
             ));
         } else {

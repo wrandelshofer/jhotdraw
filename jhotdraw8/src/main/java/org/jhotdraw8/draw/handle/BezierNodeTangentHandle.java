@@ -115,12 +115,13 @@ public class BezierNodeTangentHandle extends AbstractHandle {
                 points.add(c0.getX());
                 points.add(c0.getY());
             } else if (prev.isC2()) {
+                /*
                 c1 = Transforms.transform(t, prev.getC2());
 
                 points.add(c1.getX());
                 points.add(c1.getY());
                 points.add(c0.getX());
-                points.add(c0.getY());
+                points.add(c0.getY());*/
             }
             if (bn.isC2()) {
                 if (points.isEmpty()) {
@@ -130,6 +131,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
                 points.add(c2.getX());
                 points.add(c2.getY());
             } else if (next.isC1()) {
+                /*
                 c2 = Transforms.transform(t, next.getC1());
 
                 if (points.isEmpty()) {
@@ -138,6 +140,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
                 }
                 points.add(c2.getX());
                 points.add(c2.getY());
+*/
 
             }
         }

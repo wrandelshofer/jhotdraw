@@ -15,6 +15,7 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import javax.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
 import org.jhotdraw8.util.function.Double6Consumer;
@@ -1103,6 +1104,7 @@ public class Geom {
         double Δy = p.getY() - q.getY();
         return Δx * Δx + Δy * Δy;
     }
+
     public static double squaredDistance(Point2D p, double x, double y) {
         double Δx = p.getX() - x;
         double Δy = p.getY() - y;
@@ -1114,6 +1116,15 @@ public class Geom {
         double Δy = x2 - y2;
         return Δx * Δx + Δy * Δy;
     }
+    public static double distance(double x1, double y1, double x2, double y2) {
+        double Δx = x1 - x2;
+        double Δy = x2 - y2;
+        return sqrt(Δx * Δx + Δy * Δy);
+    }
+        public static Point2D divide(Point2D p, double factor) {
+        return new Point2D(p.getX() / factor, p.getY() / factor);
+    }
+
 
     static Bounds subtractInsets(Bounds b, Insets i) {
         return new BoundingBox(
@@ -1153,18 +1164,18 @@ public class Geom {
     /**
      * Computes the linear interpolation/extrapolation between two points.
      *
-     * @param a point a
-     * @param b point b
+     * @param start point a
+     * @param end point b
      * @param t a value between [0, 1] defines the interpolation between a and
      * b. Values outside this range yield an extrapolation.
      * @return the interpolated or extrapolated value
      */
-    public static Point2D lerp(Point2D a, Point2D b, double t) {
-        return lerp(a.getX(), a.getY(), b.getX(), b.getY(), t);
+    public static Point2D lerp(Point2D start, Point2D end, double t) {
+        return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 
-    public static Point2D lerp(double x1, double y1, double x2, double y2, double t) {
-        return new Point2D(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t);
+    public static Point2D lerp(double x0, double y0, double x1, double y1, double t) {
+        return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
     /**
@@ -1199,108 +1210,27 @@ public class Geom {
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
-     * <p>
-     * Reference:
-     * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
-     *
-     * @param x0 point 1 of the curve
-     * @param y0 point 1 of the curve
-     * @param x1 point 2 of the curve
-     * @param y1 point 2 of the curve
-     * @param x2 point 3 of the curve
-     * @param y2 point 3 of the curve
-     * @param x3 point 4 of the curve
-     * @param y3 point 4 of the curve
-     * @param t where to split
-     * @param leftCurveTo if not null, accepts the curve from x1,y1 to t
-     * @param rightCurveTo if not null, accepts the curve from t to x4,y4
-     */
-    public static void splitCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
-            double t,
-            Double6Consumer leftCurveTo,
-            Double6Consumer rightCurveTo) {
-        final double x01 = (x1 - x0) * t + x0;
-        final double y01 = (y1 - y0) * t + y0;
-
-        final double x12 = (x2 - x1) * t + x1;
-        final double y12 = (y2 - y1) * t + y1;
-
-        final double x23 = (x3 - x2) * t + x2;
-        final double y23 = (y3 - y2) * t + y2;
-
-        final double x012 = (x12 - x01) * t + x01;
-        final double y012 = (y12 - y01) * t + y01;
-
-        final double x123 = (x23 - x12) * t + x12;
-        final double y123 = (y23 - y12) * t + y12;
-
-        final double x0123 = (x123 - x012) * t + x012;
-        final double y0123 = (y123 - y012) * t + y012;
-
-        if (leftCurveTo != null) {
-            leftCurveTo.accept(x01, y01, x012, y012, x0123, y0123);
-        }
-        if (rightCurveTo != null) {
-            rightCurveTo.accept(x123, y123, x23, y23, x3, y3);
-        }
-    }
-
-    /**
-     * Splits the provided bezier curve into two parts.
-     *
-     * @param x1 point 1 of the curve
-     * @param y1 point 1 of the curve
-     * @param x2 point 2 of the curve
-     * @param y2 point 2 of the curve
-     * @param x3 point 3 of the curve
-     * @param y3 point 3 of the curve
-     * @param t where to split
-     * @param leftCurveTo if not null, accepts the curve from x1,y1 to t
-     * @param rightCurveTo if not null, accepts the curve from t to x3,y3
-     */
-    public static void splitQuadCurve(double x1, double y1, double x2, double y2, double x3, double y3, double t,
-            Double4Consumer leftCurveTo,
-            Double4Consumer rightCurveTo) {
-        final double x12 = (x2 - x1) * t + x1;
-        final double y12 = (y2 - y1) * t + y1;
-
-        final double x23 = (x3 - x2) * t + x2;
-        final double y23 = (y3 - y2) * t + y2;
-
-        final double x123 = (x23 - x12) * t + x12;
-        final double y123 = (y23 - y12) * t + y12;
-
-        if (leftCurveTo != null) {
-            leftCurveTo.accept(x12, y12, x123, y123);
-        }
-        if (rightCurveTo != null) {
-            rightCurveTo.accept(x23, y23, x3, y3);
-        }
-    }
-
-    /**
      * Splits the provided line into two parts.
      *
-     * @param x1 point 1 of the line
-     * @param y1 point 1 of the line
-     * @param x2 point 2 of the line
-     * @param y2 point 2 of the line
+     * @param x0 point 1 of the line
+     * @param y0 point 1 of the line
+     * @param x1 point 2 of the line
+     * @param y1 point 2 of the line
      * @param t where to split
      * @param leftLineTo if not null, accepts the curve from x1,y1 to t
      * @param rightLineTo if not null, accepts the curve from t to x2,y2
      */
-    public static void splitLine(double x1, double y1, double x2, double y2, double t,
+    public static void splitLine(double x0, double y0, double x1, double y1, double t,
             Double2Consumer leftLineTo,
             Double2Consumer rightLineTo) {
-        final double x12 = (x2 - x1) * t + x1;
-        final double y12 = (y2 - y1) * t + y1;
+        final double x12 = (x1 - x0) * t + x0;
+        final double y12 = (y1 - y0) * t + y0;
 
         if (leftLineTo != null) {
             leftLineTo.accept(x12, y12);
         }
         if (rightLineTo != null) {
-            rightLineTo.accept(x2, y2);
+            rightLineTo.accept(x1, y1);
         }
     }
 }

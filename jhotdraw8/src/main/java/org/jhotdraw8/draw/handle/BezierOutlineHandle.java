@@ -17,7 +17,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.geom.BezierNode;
@@ -93,14 +92,14 @@ public class BezierOutlineHandle extends AbstractHandle {
             double tolerance = dv.getViewToWorld().deltaTransform(dv.getTolerance(),dv.getTolerance()).getX();
            // pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
             Point2D localp = owner.worldToLocal(pInDrawing);
+            final SimpleBezierFigure o = getOwner();
             
-            final ImmutableList<BezierNode> nodes = getOwner().get(key);
+            final ImmutableList<BezierNode> nodes = o.get(key);
             System.err.println("BezierOutlineHandle add point at "+localp+" not implemented");
             BezierNodePath path=new BezierNodePath(nodes);
             if (path.split(localp.getX(),localp.getY(),tolerance)) {
-                
+dv.getModel().set(o,key, ImmutableList.ofCollection(path.getNodes())               ); 
             }
-            //dv.getModel().set(owner, key, ImmutableList.addChild(owner.get(key), insertAt, pInLocal));
             dv.recreateHandles();
         }
     }

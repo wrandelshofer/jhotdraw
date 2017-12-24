@@ -29,6 +29,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.geom.BezierNode;
+import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
@@ -115,7 +116,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
-                dv.getModel().set(owner, pointKey, ImmutableList.remove(owner.get(pointKey), pointIndex));
+                BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+                path.join(pointIndex, 1.0);
+                dv.getModel().set(owner, pointKey, ImmutableList.ofCollection(path.getNodes()));
                 dv.recreateHandles();
             }
         }

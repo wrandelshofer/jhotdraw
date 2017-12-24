@@ -578,7 +578,7 @@ public class BezierFit {
      *
      * @param Q Current fitted bezier curve.
      * @param P Digitized point.
-     * @param u Parameter value vor P.
+     * @param u Parameter value for P.
      */
     private static double newtonRaphsonRootFind(Point2D[] Q, Point2D P, double u) {
         double numerator, denominator;

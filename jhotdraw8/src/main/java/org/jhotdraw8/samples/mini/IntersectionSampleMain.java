@@ -7,6 +7,7 @@ package org.jhotdraw8.samples.mini;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -35,6 +36,8 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import org.jhotdraw8.geom.Beziers;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
 
@@ -388,37 +391,52 @@ public class IntersectionSampleMain extends Application {
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Circle.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Circle l1 = (Circle) shape1;
-                isect = Intersections.intersectBezier3Circle(
+                isect = Intersections.intersectCubicCurveCircle(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == CubicCurve.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 CubicCurve l1 = (CubicCurve) shape1;
-                isect = Intersections.intersectBezier3Bezier3(
+                isect = Intersections.intersectCubicCurveCubicCurve(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX1(), l1.getControlY1(), l1.getControlX2(), l1.getControlY2(), l1.getEndX(), l1.getEndY());
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Ellipse.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Ellipse l1 = (Ellipse) shape1;
-                isect = Intersections.intersectBezier3Ellipse(
+                isect = Intersections.intersectCubicCurveEllipse(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadiusX(), l1.getRadiusY());
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Line.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Line l1 = (Line) shape1;
-                isect = Intersections.intersectBezier3Line(
+                isect = Intersections.intersectCubicCurveLine(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(),  l1.getEndX(), l1.getEndY());
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Point.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Point l1 = (Point) shape1;
-                isect = Intersections.intersectBezier3Point(
+                isect = Intersections.intersectCubicCurvePoint(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
+                
+                if (isect.size()==1) {
+                    System.out.println("  t:"+isect.getFirstT()+" ctrlPoint:"+isect.getLastPoint());
+                    double[] left=new double[6];
+                    double[] right=new double[6];
+                    Beziers.splitCubicCurve(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1() ,
+                            l0.getControlX2(), l0.getControlY2(),l0.getEndX(), l0.getEndY(),isect.getFirstT(),
+                            left,right);
+                    System.out.println("  left:"+Arrays.toString(left));
+                    System.out.println("  right:"+Arrays.toString(right));
+                  Point2D[] newControlPoint=  Beziers.mergeCubicCurve(
+                          l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3],left[4], left[5],right[0], right[1], right[2], right[3], right[4], right[5],1.0);
+                    System.out.println("  new ctrlPoint:"+Arrays.toString(newControlPoint));
+                }
+                
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == QuadCurve.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 QuadCurve l1 = (QuadCurve) shape1;
-                isect = Intersections.intersectBezier3Bezier2(
+                isect = Intersections.intersectCubicCurveQuadraticCurve(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX(), l1.getControlY(), l1.getEndX(), l1.getEndY());
                 //
@@ -445,7 +463,7 @@ public class IntersectionSampleMain extends Application {
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == QuadCurve.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 QuadCurve l1 = (QuadCurve) shape0;
-                isect = Intersections.intersectEllipseBezier2(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
+                isect = Intersections.intersectEllipseQuadraticCurve(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX(), l1.getControlY(), l1.getEndX(), l1.getEndY());
             } else if (shape0.getClass() == Line.class && shape1.getClass() == Circle.class) {
                 Line l0 = (Line) shape0;
@@ -471,30 +489,44 @@ public class IntersectionSampleMain extends Application {
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == QuadCurve.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 QuadCurve l1 = (QuadCurve) shape1;
-                isect = Intersections.intersectBezier2Bezier2(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = Intersections.intersectQuadraticCurveQuadraticCurve(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX(), l1.getControlY(), l1.getEndX(), l1.getEndY());
                 //
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Circle.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Circle l1 = (Circle) shape1;
-                isect = Intersections.intersectBezier2Circle(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = Intersections.intersectQuadraticCurveCircle(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
                 //
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Ellipse.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Ellipse l1 = (Ellipse) shape1;
-                isect = Intersections.intersectBezier2Ellipse(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = Intersections.intersectQuadraticCurveEllipse(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadiusX(), l1.getRadiusY());
                 //
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Point.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Point l1 = (Point) shape1;
-                isect = Intersections.intersectBezier2Point(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = Intersections.intersectQuadraticCurvePoint(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
+                
+                if (isect.size()==1) {
+                    System.out.println("  t:"+isect.getFirstT()+" ctrlPoint:"+isect.getLastPoint());
+                    double[] left=new double[4];
+                    double[] right=new double[4];
+                    Beziers.splitQuadCurve(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),isect.getFirstT(),
+                            left,right);
+                    System.out.println("  left:"+Arrays.toString(left));
+                    System.out.println("  right:"+Arrays.toString(right));
+                  Point2D newControlPoint=  Beziers.mergeQuadCurve(
+                          l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3],right[0], right[1], right[2], right[3],1.0);
+                    System.out.println("  new ctrlPoint:"+newControlPoint);
+                }
+                
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Line.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Line l1 = (Line) shape1;
-                isect = Intersections.intersectBezier2Line(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = Intersections.intersectQuadraticCurveLine(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(),  l1.getEndX(), l1.getEndY());
                 //
             } else if (shape0.getClass() == Rectangle.class && shape1.getClass() == Rectangle.class) {

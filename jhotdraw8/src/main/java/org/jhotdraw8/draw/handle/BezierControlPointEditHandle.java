@@ -216,6 +216,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
         if (pointIndex >= list.size()) {
+            node.setVisible(false);
             return;
         }
         BezierNode p = getBezierNode();

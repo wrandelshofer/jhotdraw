@@ -24,8 +24,8 @@ public class BezierNode {
      */
     public static final int C0_MASK = 1;
     /**
-     * Constant for having control point C1 in effect (in addition to C0). C1
-     * controls the curve going towards C0.
+     * Constant for having control point C1 in effect (in addition to C0).
+     * C1 controls the curve going towards C0.
      *
      */
     public static final int C1_MASK = 2;
@@ -34,8 +34,8 @@ public class BezierNode {
      */
     public static final int C0C1_MASK = C0_MASK | C1_MASK;
     /**
-     * Constant for having control point C2 in effect (in addition to C0). C2
-     * controls the curve going away from C0.
+     * Constant for having control point C2 in effect (in addition to C0). 
+     * C2 controls the curve going away from C0.
      */
     public static final int C2_MASK = 4;
     /**
@@ -97,6 +97,18 @@ public class BezierNode {
      */
     private final double y2;
 
+    public BezierNode(double c0x, double c0y) {
+        this.mask = C0_MASK;
+        this.colinear = false;
+        this.equidistant = false;
+        this.x0 = c0x;
+        this.x1 = c0y;
+        this.x2 = c0x;
+        this.y0 = c0y;
+        this.y1 = c0x;
+        this.y2 = c0y;
+        
+    }
     public BezierNode(Point2D c0) {
         this.mask = C0_MASK;
         this.colinear = false;
@@ -131,9 +143,6 @@ public class BezierNode {
         this.y0 = y0;
         this.y1 = y1;
         this.y2 = y2;
-        if (equidistant) {
-            throw new InternalError("equidistant");
-        }
     }
 
     public boolean computeIsColinear() {
