@@ -133,16 +133,18 @@ public class Beziers {
             double tolerance) {
 
         final double t = (x012 - x123 == 0) ? (y012 - y0123) / (y012 - y123) : (x012 - x0123) / (x012 - x123);
-        final Point2D p1, p2;
+        final Point2D ctrl1, ctrl2;
         if (t == 0 || t == 1) {
-            p1 = new Point2D(x01, y01);
-            p2 = new Point2D(x23, y23);
+            ctrl1 = new Point2D(x01, y01);
+            ctrl2 = new Point2D(x23, y23);
         } else {
-            p1 = Geom.divide(new Point2D(x01, y01).subtract(x0, y0), t).add(x0, y0);
-            p2 = Geom.divide(new Point2D(x23, y23).subtract(x3, y3), 1 - t).add(x3, y3);
+            ctrl1 = Geom.divide(new Point2D(x01, y01).subtract(x0, y0), t).add(x0, y0);
+            ctrl2 = Geom.divide(new Point2D(x23, y23).subtract(x3, y3), 1 - t).add(x3, y3);
         }
-
-        return new Point2D[]{p1, p2};
+        
+        final Point2D joint0123 = evalCubicCurve(x0, y0, ctrl1.getX(), ctrl1.getY(),  ctrl2.getX(), ctrl2.getY(), x3, y3, t);
+        
+        return  joint0123.distance(x0123, y0123) <= tolerance ? new Point2D[]{ctrl1, ctrl2} : null;
     }
 
     /**

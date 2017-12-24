@@ -55,15 +55,16 @@ public class BezierOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(DrawingView dv, double x, double y, double toleranceSquared) {
-        return contains(dv,x,y,sqrt(toleranceSquared),toleranceSquared);
-        
+        return contains(dv, x, y, sqrt(toleranceSquared), toleranceSquared);
+
     }
+
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
         final SimpleBezierFigure o = getOwner();
-        Point2D localp = Transforms.concat(dv.getViewToWorld(),o.getWorldToLocal()).transform(x,y);
-        Intersection isect=Intersections.intersectPathIteratorCircle(o.getPathIterator(null),
-                localp.getX(),localp.getY(),tolerance);
+        Point2D localp = Transforms.concat(dv.getViewToWorld(), o.getWorldToLocal()).transform(x, y);
+        Intersection isect = Intersections.intersectPathIteratorCircle(o.getPathIterator(null),
+                localp.getX(), localp.getY(), tolerance);
         return !isect.isEmpty();
     }
 
@@ -89,16 +90,15 @@ public class BezierOutlineHandle extends AbstractHandle {
             double py = event.getY();
 
             Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
-            double tolerance = dv.getViewToWorld().deltaTransform(dv.getTolerance(),dv.getTolerance()).getX();
-           // pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
+            double tolerance = dv.getViewToWorld().deltaTransform(dv.getTolerance(), dv.getTolerance()).getX();
+            // pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
             Point2D localp = owner.worldToLocal(pInDrawing);
             final SimpleBezierFigure o = getOwner();
-            
+
             final ImmutableList<BezierNode> nodes = o.get(key);
-            System.err.println("BezierOutlineHandle add point at "+localp+" not implemented");
-            BezierNodePath path=new BezierNodePath(nodes);
-            if (path.split(localp.getX(),localp.getY(),tolerance)) {
-dv.getModel().set(o,key, ImmutableList.ofCollection(path.getNodes())               ); 
+            BezierNodePath path = new BezierNodePath(nodes);
+            if (path.split(localp.getX(), localp.getY(), tolerance)) {
+                dv.getModel().set(o, key, ImmutableList.ofCollection(path.getNodes()));
             }
             dv.recreateHandles();
         }

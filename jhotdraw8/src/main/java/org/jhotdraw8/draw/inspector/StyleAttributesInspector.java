@@ -397,6 +397,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                     m.fireLayoutInvalidated(f);
                 }
             }
+            drawingView.recreateHandles();
         } catch (IOException ex) {
             ex.printStackTrace();
             return;
