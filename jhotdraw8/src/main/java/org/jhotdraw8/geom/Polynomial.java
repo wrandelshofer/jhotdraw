@@ -161,7 +161,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param max the upper bound of the interval
      * @return the potential root
      */
-    public static Double bisection(ToDoubleFunction<Double> func, double min, double max) {
+    public static Double bisection(final ToDoubleFunction<Double> func, double min, double max) {
         double minValue = func.applyAsDouble(min);
         double maxValue = func.applyAsDouble(max);
         Double result = null;
@@ -501,7 +501,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @return a list of roots
      */
     public double[] getRootsInInterval(double min, double max) {
-        final double[] roots = new double[getDegree()];
+        double[] roots = new double[getDegree()];
         int numRoots = 0;
 
         switch (this.simplifiedDegree()) {
@@ -526,34 +526,54 @@ public class Polynomial implements ToDoubleFunction<Double> {
                 Polynomial deriv = this.getDerivative();
                 double[] droots = deriv.getRootsInInterval(min, max);
 
-                if (droots.length > 0) {
-                    // find root on [min, droots[0]]
-                    Double root = bisection(this, min, droots[0]);
-                    if (root != null) {
-                        roots[numRoots++] = root;
-                    }
-
-                    // find root on [droots[i],droots[i+1]] for 0 <= i <= count-2
-                    for (int i = 0; i <= droots.length - 2; i++) {
-                        root = bisection(this, droots[i], droots[i + 1]);
-                        if (root != null) {
-                            roots[numRoots++] = root;
-                        }
-                    }
-
-                    // find root on [droots[count-1],xmax]
-                    root = bisection(this, droots[droots.length - 1], max);
-                    if (root != null) {
-                        roots[numRoots++] = root;
-                    }
-                } else {
-                    // polynomial is monotone on [min,max], has at most one root
-                    Double root = bisection(this, min, max);
-                    if (root != null) {
-                        roots[numRoots++] = root;
-                    }
-                }
+                roots = getRootsInInterval(this, droots, min, max);
+                numRoots = roots.length;
                 break;
+            }
+        }
+
+        return trim(numRoots, roots);
+    }
+
+    /**
+     * Gets roots in the given interval. Uses the bisection method for root
+     * finding. Can work with a polynomial of any degree.
+     *
+     * @param func the function
+     * @param droots the roots of the derivative of the function
+     * @param min the lower bound of the interval (inclusive)
+     * @param max the upper bound of the interval (inclusive)
+     * @return a list of roots
+     */
+    public static double[] getRootsInInterval(ToDoubleFunction<Double> func, double[] droots, double min, double max) {
+        final double[] roots = new double[droots.length + 1];
+        int numRoots = 0;
+
+        if (droots.length > 0) {
+            // find root on [min, droots[0]]
+            Double root = bisection(func, min, droots[0]);
+            if (root != null) {
+                roots[numRoots++] = root;
+            }
+
+            // find root on [droots[i],droots[i+1]] for 0 <= i <= count-2
+            for (int i = 0; i <= droots.length - 2; i++) {
+                root = bisection(func, droots[i], droots[i + 1]);
+                if (root != null) {
+                    roots[numRoots++] = root;
+                }
+            }
+
+            // find root on [droots[count-1],xmax]
+            root = bisection(func, droots[droots.length - 1], max);
+            if (root != null) {
+                roots[numRoots++] = root;
+            }
+        } else {
+            // polynomial is monotone on [min,max], has at most one root
+            Double root = bisection(func, min, max);
+            if (root != null) {
+                roots[numRoots++] = root;
             }
         }
 
