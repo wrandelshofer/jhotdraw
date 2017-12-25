@@ -11,9 +11,9 @@
  */
 package org.jhotdraw8.geom;
 
-import static java.lang.Double.isNaN;
 import static java.lang.Math.*;
 import java.util.Arrays;
+import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import javafx.geometry.Point2D;
 
@@ -36,7 +36,7 @@ import javafx.geometry.Point2D;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Polynomial {
+public class Polynomial implements ToDoubleFunction<Double> {
 
     private final static double ACCURACY = 6;
 
@@ -101,7 +101,7 @@ public class Polynomial {
     }
 
     /**
-     * Adds the coefficients of this polynomial to the coefficients of that
+     * Adds the coefficients of that polynomial to the coefficients of this
      * polynomial and returns the resulting polynomial. Does not change this
      * polynomial.
      *
@@ -109,31 +109,61 @@ public class Polynomial {
      * @return a new polynomial containing the sum of the coefficients
      */
     public Polynomial add(Polynomial that) {
-        Polynomial result = new Polynomial();
-        double d1 = this.getDegree();
-        double d2 = that.getDegree();
-        double dmax = max(d1, d2);
+        int d1 = this.getDegree();
+        int d2 = that.getDegree();
+        int dmax = max(d1, d2);
 
+        double[] result = new double[dmax];
         for (int i = 0; i <= dmax; i++) {
             double v1 = (i <= d1) ? this.coefs[i] : 0;
             double v2 = (i <= d2) ? that.coefs[i] : 0;
 
-            result.coefs[i] = v1 + v2;
+            result[i] = v1 + v2;
         }
 
-        return result;
+        return new Polynomial(false, result);
+    }
+
+    /**
+     * Subtracts the coefficients of that polynomial from the coefficients of this
+     * polynomial and returns the resulting polynomial. Does not change this
+     * polynomial.
+     *
+     * @param that another polynomial
+     * @return a new polynomial containing the difference of the coefficients
+     */
+    public Polynomial subtract(Polynomial that) {
+        int d1 = this.getDegree();
+        int d2 = that.getDegree();
+        int dmax = max(d1, d2);
+
+        double[] result = new double[dmax];
+        for (int i = 0; i <= dmax; i++) {
+            double v1 = (i <= d1) ? this.coefs[i] : 0;
+            double v2 = (i <= d2) ? that.coefs[i] : 0;
+
+            result[i] = v1 - v2;
+        }
+
+        return new Polynomial(false, result);
+    }
+
+    @Override
+    public double applyAsDouble(Double x) {
+        return eval(x);
     }
 
     /**
      * Searches for a root in the given interval using the bisection method.
      *
+     * @param func the function
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval
      * @return the potential root
      */
-    public Double bisection(double min, double max) {
-        double minValue = this.eval(min);
-        double maxValue = this.eval(max);
+    public static Double bisection(ToDoubleFunction<Double> func, double min, double max) {
+        double minValue = func.applyAsDouble(min);
+        double maxValue = func.applyAsDouble(max);
         Double result = null;
 
         if (abs(minValue) <= EPSILON) {
@@ -147,7 +177,7 @@ public class Polynomial {
 
             for (double i = 0; i < iters; i++) {
                 result = 0.5 * (min + max);
-                double value = this.eval(result);
+                double value = func.applyAsDouble(result);
 
                 if (abs(value) <= EPSILON) {
                     break;
@@ -168,14 +198,17 @@ public class Polynomial {
 
     /**
      * Divides the coefficients of this polynomial by the provided scalar.
-     * Change this polynomial in-place.
+     * Does not change this polynomial.
      *
      * @param scalar a scalar
+     * @return a new polynomial
      */
-    public void divide_scalar(double scalar) {
+    public Polynomial divide_scalar(double scalar) {
+        double[] result = new double[this.coefs.length];
         for (int i = 0; i < this.coefs.length; i++) {
-            this.coefs[i] /= scalar;
+            result[i] = this.coefs[i] /= scalar;
         }
+        return new Polynomial(false, result);
     }
 
     /**
@@ -495,27 +528,27 @@ public class Polynomial {
 
                 if (droots.length > 0) {
                     // find root on [min, droots[0]]
-                    Double root = this.bisection(min, droots[0]);
+                    Double root = bisection(this, min, droots[0]);
                     if (root != null) {
                         roots[numRoots++] = root;
                     }
 
                     // find root on [droots[i],droots[i+1]] for 0 <= i <= count-2
                     for (int i = 0; i <= droots.length - 2; i++) {
-                        root = this.bisection(droots[i], droots[i + 1]);
+                        root = bisection(this, droots[i], droots[i + 1]);
                         if (root != null) {
                             roots[numRoots++] = root;
                         }
                     }
 
                     // find root on [droots[count-1],xmax]
-                    root = this.bisection(droots[droots.length - 1], max);
+                    root = bisection(this, droots[droots.length - 1], max);
                     if (root != null) {
                         roots[numRoots++] = root;
                     }
                 } else {
                     // polynomial is monotone on [min,max], has at most one root
-                    Double root = this.bisection(min, max);
+                    Double root = bisection(this, min, max);
                     if (root != null) {
                         roots[numRoots++] = root;
                     }
@@ -613,6 +646,7 @@ public class Polynomial {
         System.arraycopy(a, 0, finalResults, 0, length);
         return finalResults;
     }
+
     /**
      * Estimates the integral of the given function in the given interval using the
      * trapezoidal rule.
@@ -631,7 +665,7 @@ public class Polynomial {
         double _s = 0;
         if (n == 1) {
             double minValue = func.applyAsDouble(min);
-            double maxValue =func.applyAsDouble(max);
+            double maxValue = func.applyAsDouble(max);
             _s = 0.5 * range * (minValue + maxValue);
         } else {
             double it = 1 << (n - 2);
@@ -648,7 +682,6 @@ public class Polynomial {
 
         return _s;
     }
-
 
     /**
      * Interpolate. Computes y and dy for a given x.
@@ -705,19 +738,23 @@ public class Polynomial {
         return new Point2D(y, dy);// { y: y, dy: dy };
     }
 
-    /** Estimates the arc length of the polynomial in the interval [min,max].
+    /**
+     * Estimates the arc length of the polynomial in the interval [min,max].
      * <p>
-     * Computes {@literal  ∫_min_max sqrt(1 + (f'(x))^2 )   }
-     * 
+     * Computes {@literal  ∫_min_max sqrt(1 + (f'(x))^2 ) }
+     *
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval
      * @return the estimated arc length
      */
     public double arcLength(double min, double max) {
-        final Polynomial dfdx=getDerivative();
-        return simpson(x->{double y=dfdx.eval(x); return sqrt(1+y*y);},min,max);
+        final Polynomial dfdx = getDerivative();
+        return simpson(x -> {
+            double y = dfdx.eval(x);
+            return sqrt(1 + y * y);
+        }, min, max);
     }
-    
+
     /**
      * Estimates the integral of the polynomial in the given interval using
      * Simpsons's rule.
