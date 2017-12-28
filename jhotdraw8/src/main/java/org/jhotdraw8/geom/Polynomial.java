@@ -13,9 +13,10 @@ package org.jhotdraw8.geom;
 
 import static java.lang.Math.*;
 import java.util.Arrays;
-import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import javafx.geometry.Point2D;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Polynomial encapsulates root finding functions needed by curve intersection
@@ -159,9 +160,10 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param func the function
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval
-     * @return the potential root
+     * @return the root, null if no root could be found
      */
-    public static Double bisection(final ToDoubleFunction<Double> func, double min, double max) {
+    @Nullable
+    public static Double bisection(@Nonnull final ToDoubleFunction<Double> func, double min, double max) {
         double minValue = func.applyAsDouble(min);
         double maxValue = func.applyAsDouble(max);
         Double result = null;
@@ -540,12 +542,13 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * finding. Can work with a polynomial of any degree.
      *
      * @param func the function
-     * @param droots the roots of the derivative of the function
+     * @param droots the roots of the derivative of the function in the interval [min,max].
      * @param min the lower bound of the interval (inclusive)
      * @param max the upper bound of the interval (inclusive)
-     * @return a list of roots
+     * @return a list of roots. The list if empty, if no roots have been found
      */
-    public static double[] getRootsInInterval(ToDoubleFunction<Double> func, double[] droots, double min, double max) {
+    @Nonnull
+    public static double[] getRootsInInterval(@Nonnull ToDoubleFunction<Double> func, @Nonnull double[] droots, double min, double max) {
         final double[] roots = new double[droots.length + 1];
         int numRoots = 0;
 
