@@ -23,60 +23,53 @@
         </CheckBox>
       </children>
     </HBox>
-    <Label text="%grid.x.shortLabelText" GridPane.rowIndex="3">
+    <Label text="%grid.x.shortLabelText" GridPane.rowIndex="2">
       <tooltip>
         <Tooltip text="%grid.x.toolTipText" />
       </tooltip>
     </Label>
-    <TextField prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="xField" />
-    <Label text="%grid.y.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="3">
+    <TextField prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="xField" />
+    <Label text="%grid.y.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="2">
       <tooltip>
         <Tooltip text="%grid.y.toolTipText" />
       </tooltip>
     </Label>
-    <TextField fx:id="yField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-    <Label fx:id="widthLabel" text="%grid.width.shortLabelText" GridPane.rowIndex="4">
+    <TextField fx:id="yField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+    <Label fx:id="widthLabel" text="%grid.width.shortLabelText" GridPane.rowIndex="3">
       <tooltip>
         <Tooltip text="%grid.width.toolTipText" />
       </tooltip>
     </Label>
-    <TextField fx:id="widthField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-    <Label text="%grid.height.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="4">
+    <TextField fx:id="widthField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Label text="%grid.height.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="3">
       <tooltip>
         <Tooltip text="%grid.height.toolTipText" />
       </tooltip>
     </Label>
-    <TextField fx:id="heightField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-    <Label text="%grid.majorX.shortLabelText" GridPane.rowIndex="5">
+    <TextField fx:id="heightField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+    <Label text="%grid.majorX.shortLabelText" GridPane.rowIndex="4">
       <tooltip>
         <Tooltip text="%grid.majorX.toolTipText" />
       </tooltip>
     </Label>
-    <TextField fx:id="majorXField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-    <Label text="%grid.majorY.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="5">
+    <TextField fx:id="majorXField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Label text="%grid.majorY.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="4">
       <tooltip>
         <Tooltip text="%grid.majorY.toolTipText" />
       </tooltip>
     </Label>
-    <TextField fx:id="majorYField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-    <Label fx:id="heightLabel" text="%grid.angle.shortLabelText" GridPane.rowIndex="6">
+    <TextField fx:id="majorYField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+    <Label fx:id="heightLabel" text="%grid.angle.shortLabelText" GridPane.rowIndex="5">
       <tooltip>
         <Tooltip text="%grid.angle.toolTipText" />
       </tooltip>
     </Label>
-    <TextField fx:id="angleField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <Label text="%grid.majorColor.shortLabelText" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+    <TextField fx:id="angleField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label text="%grid.color.shortLabelText" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
       <HBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
          <children>
-            <TextField fx:id="majorGridColorField" prefColumnCount="14" />
-            <ColorPicker fx:id="majorGridColorPicker" style="-fx-color-label-visible: false;" />
-         </children>
-      </HBox>
-      <Label text="%grid.minorColor.shortLabelText" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <HBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
-         <children>
-            <TextField fx:id="minorGridColorField" prefColumnCount="14" />
-            <ColorPicker fx:id="minorGridColorPicker" style="-fx-color-label-visible: false;" />
+            <TextField fx:id="gridColorField" prefColumnCount="14" />
+            <ColorPicker fx:id="gridColorPicker" style="-fx-color-label-visible: false;" />
          </children>
       </HBox>
   </children>
@@ -91,7 +84,6 @@
   </padding>
   <rowConstraints>
     <RowConstraints vgrow="NEVER" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
     <RowConstraints vgrow="NEVER" />
     <RowConstraints vgrow="NEVER" />

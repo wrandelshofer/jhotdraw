@@ -6,6 +6,9 @@ package org.jhotdraw8.draw.inspector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,20 +46,16 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @FXML
     private TextField heightField;
     @FXML
-    private TextField majorGridColorField;
+    private TextField gridColorField;
 
     @FXML
-    private ColorPicker majorGridColorPicker;
+    private ColorPicker gridColorPicker;
     @FXML
     private TextField majorXField;
     @FXML
     private TextField majorYField;
-    @FXML
-    private TextField minorGridColorField;
-    @FXML
-    private ColorPicker minorGridColorPicker;
-    private Property<CssColor> myMajorGridColorProperty = new SimpleObjectProperty<>();
-    private Property<CssColor> myMinorGridColorProperty = new SimpleObjectProperty<>();
+
+    private Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
     private Node node;
 
     @FXML
@@ -105,20 +104,12 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 -> prefs.putBoolean("drawGrid", newValue));
 
         CustomBinding.bindBidirectional(//
-                myMinorGridColorProperty,//
-                minorGridColorPicker.valueProperty(),//
+                gridColorProperty,//
+                gridColorPicker.valueProperty(),//
                 (CssColor c) -> c == null ? null : c.getColor(), //
                 (Color c) -> new CssColor(c)//
         );
-        minorGridColorField.textProperty().bindBidirectional(myMinorGridColorProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
-
-        CustomBinding.bindBidirectional(//
-                myMajorGridColorProperty,//
-                majorGridColorPicker.valueProperty(),//
-                (CssColor c) -> c == null ? null : c.getColor(), //
-                (Color c) -> new CssColor(c)//
-        );
-        majorGridColorField.textProperty().bindBidirectional(myMajorGridColorProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
+        gridColorField.textProperty().bindBidirectional(gridColorProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
     }
 
     @Override
@@ -131,6 +122,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         ChangeListener<Number> prefsGridHeight = (o, oldv, newv) -> prefs.putDouble("gridHeight", newv.doubleValue());
         ChangeListener<Number> prefsGridMajorX = (o, oldv, newv) -> prefs.putInt("gridMajorX", newv.intValue());
         ChangeListener<Number> prefsGridMajorY = (o, oldv, newv) -> prefs.putInt("gridMajorY", newv.intValue());
+        ChangeListener<CssColor> prefsGridColor = (o, oldv, newv) -> prefs.put("gridColor", newv.getName());
 
         if (oldValue != null) {
             heightField.textProperty().unbind();
@@ -144,8 +136,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
             snapToGridCheckBox.selectedProperty().unbind();
             if (oldValue instanceof GridConstrainer) {
                 GridConstrainer gc = (GridConstrainer) oldValue;
-                myMinorGridColorProperty.unbindBidirectional(gc.minorGridColorProperty());
-                myMajorGridColorProperty.unbindBidirectional(gc.majorGridColorProperty());
+                gridColorProperty.unbindBidirectional(gc.gridColorProperty());
             }
         }
         if (newValue != null) {
@@ -155,6 +146,12 @@ public class GridInspector extends AbstractDrawingViewInspector {
 
                 gridConstrainer = new GridConstrainer(prefs.getDouble("gridX", 0), prefs.getDouble("gridY", 0), prefs.getDouble("gridWidth", 10), prefs.getDouble("gridHeight", 10),
                         prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
+                CssColorConverter converter=new CssColorConverter(true);
+                try {
+                    gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor",gridConstrainer.getGridColor().getName())));
+                } catch (ParseException|IOException ex) {
+                    // don't set color if preferences is bogus
+                }
                 newValue.setConstrainer(gridConstrainer);
             }
             StringConverter<Number> cc
@@ -179,9 +176,9 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 gridConstrainer.angleProperty().addListener(prefsGridAngle);
                 gridConstrainer.majorXProperty().addListener(prefsGridMajorX);
                 gridConstrainer.majorYProperty().addListener(prefsGridMajorY);
+                gridConstrainer.gridColorProperty().addListener(prefsGridColor);
 
-                myMinorGridColorProperty.bindBidirectional(gridConstrainer.minorGridColorProperty());
-                myMajorGridColorProperty.bindBidirectional(gridConstrainer.majorGridColorProperty());
+                gridColorProperty.bindBidirectional(gridConstrainer.gridColorProperty());
             }
 
         }

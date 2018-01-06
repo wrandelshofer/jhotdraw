@@ -80,7 +80,7 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
-    private Property<CssColor> majorGridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,0.4)", Color.hsb(226, 1.0, 0.75, 0.4))) {
+    private Property<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
         @Override
         public void invalidated() {
             fireInvalidated();
@@ -108,12 +108,7 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
-    private Property<CssColor> minorGridColorProperty = new SimpleObjectProperty<CssColor>(this, "minorGridColor", new CssColor("hsba(226,100%,75%,0.2)", Color.hsb(226, 1.0, 0.75, 0.2))) {
-        @Override
-        public void invalidated() {
-            fireInvalidated();
-        }
-    };
+
     private final Path minorNode = new Path();
     private final Group node = new Group();
     /**
@@ -214,12 +209,12 @@ public class GridConstrainer extends AbstractConstrainer {
         return height.get();
     }
 
-    public CssColor getMajorGridColor() {
-        return majorGridColorProperty.getValue();
+    public CssColor getGridColor() {
+        return gridColorProperty.getValue();
     }
 
-    public void setMajorGridColor(CssColor newValue) {
-        majorGridColorProperty.setValue(newValue);
+    public void setGridColor(CssColor newValue) {
+        gridColorProperty.setValue(newValue);
     }
 
     public int getMajorX() {
@@ -228,14 +223,6 @@ public class GridConstrainer extends AbstractConstrainer {
 
     public int getMajorY() {
         return majorY.get();
-    }
-
-    public CssColor getMinorGridColor() {
-        return minorGridColorProperty.getValue();
-    }
-
-    public void setMinorGridColor(CssColor newValue) {
-        minorGridColorProperty.setValue(newValue);
     }
 
     @Override
@@ -259,8 +246,8 @@ public class GridConstrainer extends AbstractConstrainer {
         return height;
     }
 
-    public Property<CssColor> majorGridColorProperty() {
-        return majorGridColorProperty;
+    public Property<CssColor> gridColorProperty() {
+        return gridColorProperty;
     }
 
     public IntegerProperty majorXProperty() {
@@ -271,9 +258,6 @@ public class GridConstrainer extends AbstractConstrainer {
         return majorY;
     }
 
-    public Property<CssColor> minorGridColorProperty() {
-        return minorGridColorProperty;
-    }
 
     public BooleanProperty snapToGridProperty() {
         return snapToGrid;
@@ -376,10 +360,11 @@ public class GridConstrainer extends AbstractConstrainer {
         ObservableList<PathElement> major = majorNode.getElements();
         minor.clear();
         major.clear();
-        CssColor minorGridColor = getMinorGridColor();
-        minorNode.setStroke(minorGridColor == null ? null : minorGridColor.getColor());
-        CssColor majorGridColor = getMajorGridColor();
-        majorNode.setStroke(majorGridColor == null ? null : majorGridColor.getColor());
+        CssColor gridColor = getGridColor();
+        minorNode.setStroke(gridColor == null ? null : gridColor.getColor());
+        majorNode.setStroke(gridColor == null ? null : gridColor.getColor());
+        minorNode.setStrokeWidth(0.5);
+        majorNode.setStrokeWidth(1.0);
 
         Bounds visibleRect = drawingView.viewToWorld(drawingView.getVisibleRect());
 
