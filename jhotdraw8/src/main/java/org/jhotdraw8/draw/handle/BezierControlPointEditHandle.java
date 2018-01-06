@@ -63,9 +63,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     static {
         final ObservableList<PathElement> elements = REGION_SHAPE_EQUIDISTANT.getElements();
         elements.add(new MoveTo(0, 0));
-        elements.add(new LineTo(4, -4));
-        elements.add(new LineTo(8, 0));
-        elements.add(new LineTo(4, 4));
+        elements.add(new LineTo(3, -3));
+        elements.add(new LineTo(6, 0));
+        elements.add(new LineTo(3, 3));
         elements.add(new ClosePath());
     }
     private int controlPointMask;
