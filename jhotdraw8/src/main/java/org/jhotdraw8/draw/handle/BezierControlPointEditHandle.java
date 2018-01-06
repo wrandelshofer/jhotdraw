@@ -43,19 +43,19 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Path REGION_SHAPE_COLINEAR = new Path();
-    private static final Rectangle REGION_SHAPE_CUSP = new Rectangle(7, 7);
+    private static final Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
     private static final Path REGION_SHAPE_EQUIDISTANT = new Path();
-    private static final Circle REGION_SHAPE_SMOOTH = new Circle(0, 0, 4);
+    private static final Circle REGION_SHAPE_SMOOTH = new Circle(0, 0, 3);
 
     static {
         final ObservableList<PathElement> elements = REGION_SHAPE_COLINEAR.getElements();
         elements.add(new MoveTo(2, 0));
-        elements.add(new LineTo(5, 0));
-        elements.add(new LineTo(7, 2));
-        elements.add(new LineTo(7, 5));
-        elements.add(new LineTo(5, 7));
-        elements.add(new LineTo(2, 7));
-        elements.add(new LineTo(0, 5));
+        elements.add(new LineTo(4, 0));
+        elements.add(new LineTo(6, 2));
+        elements.add(new LineTo(6, 4));
+        elements.add(new LineTo(4, 6));
+        elements.add(new LineTo(2, 6));
+        elements.add(new LineTo(0, 4));
         elements.add(new LineTo(0, 2));
         elements.add(new ClosePath());
     }
