@@ -32,6 +32,7 @@ import javafx.scene.shape.QuadCurve;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 
 /**
@@ -42,10 +43,11 @@ import org.jhotdraw8.geom.Shapes;
 public class UnfoldPathMain extends Application {
 
     private Polyline polyline = new Polyline();
-    private double width = 120;
+    private double width = 40;
     private Path skeleton = new Path();
     private Path unfoldedSkeleton = new Path();
     private Path offsetPath = new Path();
+    private Path builtOffsetPath = new Path();
     private Path strokedPath = new Path();
     private Path intersections = new Path();
     private Path intersections2 = new Path();
@@ -68,6 +70,19 @@ public class UnfoldPathMain extends Application {
         curve.setControlY(list1.get(1).getY());
         curve.setEndX(list1.get(2).getX());
         curve.setEndY(list1.get(2).getY());
+    }
+
+    private List<PathElement> buildOffsetPath(List<Point2D> points, double width) {
+        final FXPathBuilder fxPathBuilder = new FXPathBuilder();
+        final OffsetPathBuilder builder = new OffsetPathBuilder(fxPathBuilder,width);
+        if (!points.isEmpty()) {
+        builder.moveTo(points.get(0).getX(),points.get(0).getY());
+        for (int i=1,n=points.size();i<n;i++) {
+        builder.lineTo(points.get(i).getX(),points.get(i).getY());
+        }
+        builder.pathDone();
+        }
+        return fxPathBuilder.getElements();
     }
 
     private int findIndex(Point2D mousep) {
@@ -160,6 +175,8 @@ public class UnfoldPathMain extends Application {
         strokedPath.setFill(null);
         strokedPath.setStroke(Color.PURPLE);
         strokedPath.getStrokeDashArray().addAll(2.0,10.0);
+        
+        builtOffsetPath.setStroke(Color.LIGHTGREEN);
         /*
         curve3.setFill(null);
         curve3.setStroke(Color.GRAY);
@@ -183,6 +200,7 @@ public class UnfoldPathMain extends Application {
         root.getChildren().add(skeleton);
         root.getChildren().add(unfoldedSkeleton);
         root.getChildren().add(offsetPath);
+        root.getChildren().add(builtOffsetPath);
         root.getChildren().add(intersections);
         root.getChildren().add(intersections2);
         root.getChildren().add(strokedPath);
@@ -243,6 +261,8 @@ public class UnfoldPathMain extends Application {
             setPoints(offsetPath, result1.getValue());
             renderSkeleton(unfoldedElements, result1.getKey(), result1.getValue());
         }
+        
+       builtOffsetPath.getElements().setAll(buildOffsetPath( points, width+2));
         
         
         BasicStroke stroke=new BasicStroke((float)width,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
