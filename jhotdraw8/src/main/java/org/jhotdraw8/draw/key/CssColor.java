@@ -3,9 +3,10 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.draw.key.Paintable;
 import java.util.Objects;
 import javafx.scene.paint.Color;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.text.CssConverterFactory;
 import org.jhotdraw8.text.PatternConverter;
 
@@ -35,19 +36,23 @@ public class CssColor implements Paintable {
         this.color = color;
     }
 
+    @Nonnull
     public String getName() {
         return name;
     }
 
+    @Nonnull
     public Color getColor() {
         return color;
     }
 
+    @Nonnull
     @Override
     public Color getPaint() {
         return color;
     }
 
+    @Nonnull
     public static String toName(Color c) {
         if (c.getOpacity() == 1.0) {
             int r = (int) Math.round(c.getRed() * 255.0);
@@ -91,11 +96,13 @@ public class CssColor implements Paintable {
         return true;
     }
 
+    @Nonnull
     @Override
     public String toString() {
         return "CColor{" + getName() + '}';
     }
 
+    @Nullable
     public static CssColor valueOf(String value) {
         return new CssColor(value, Color.valueOf(value));
     }
