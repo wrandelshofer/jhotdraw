@@ -17,11 +17,18 @@ public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> {
     private final static long serialVersionUID = 1L;
 
     public BooleanStyleableKey(String key) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key));
+        this(key,  ReadOnlyStyleableMapAccessor.toCssName(key),null);
+    }
+    public BooleanStyleableKey(String key, Boolean defaultValue) {
+        this(key,  ReadOnlyStyleableMapAccessor.toCssName(key),defaultValue);
     }
 
     public BooleanStyleableKey(String key, String cssName) {
-        super(key, Boolean.class, null, new CssBooleanConverter());
+        this(key,  ReadOnlyStyleableMapAccessor.toCssName(key),null);
+    }
+
+    public BooleanStyleableKey(String key, String cssName, Boolean defaultValue) {
+        super(key, Boolean.class, null, new CssBooleanConverter(),defaultValue);
         setCssMetaData(
                 new StyleablePropertyFactory<>(null).createBooleanCssMetaData(
                         cssName, s -> {
