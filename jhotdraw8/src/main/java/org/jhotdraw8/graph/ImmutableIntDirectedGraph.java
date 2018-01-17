@@ -11,6 +11,7 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <A> the arrow type
  */
 public class ImmutableIntDirectedGraph<A> implements IntDirectedGraph<A> {
 

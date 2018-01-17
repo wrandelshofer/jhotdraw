@@ -3,6 +3,10 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.ArrayDeque;
+import java.util.BitSet;
+import java.util.Deque;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 
 /**
@@ -12,8 +16,9 @@ import javax.annotation.Nonnull;
  * @version $$Id$$
  * @param <A> the arrow type
  */
-public interface IntDirectedGraph< A>  {
-  /**
+public interface IntDirectedGraph< A> {
+
+    /**
      * Returns the number of arrows.
      *
      * @return arrow count
@@ -44,8 +49,7 @@ public interface IntDirectedGraph< A>  {
      */
     int getVertexCount();
 
-    
-        /**
+    /**
      * Returns the index of vertex b.
      *
      * @param a a vertex
@@ -54,12 +58,13 @@ public interface IntDirectedGraph< A>  {
      */
     default int findIndexOfNext(int a, int b) {
         for (int i = 0, n = getNextCount(a); i < n; i++) {
-            if (b==getNext(a, i)) {
+            if (b == getNext(a, i)) {
                 return i;
             }
         }
         return -1;
     }
+
     /**
      * Returns the specified arrow.
      *
@@ -92,4 +97,40 @@ public interface IntDirectedGraph< A>  {
         return index == -1 ? null : getArrow(a, index);
     }
 
+    /**
+     * Returns true if b is next of a.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return true if b is next of a.
+     */
+    default boolean isNext(int a, int b) {
+        return findIndexOfNext(a, b) != -1;
+    }
+
+    /**
+     * Returns true if b is reachable from a.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return true if b is next of a.
+     */
+    default boolean isReachable(int a, int b) {
+        Deque<Integer> stack = new ArrayDeque<>(16);
+        BitSet vset = new BitSet(getVertexCount());
+        while (!stack.isEmpty()) {
+            int current = stack.pop();
+            if (!vset.get(current)) {
+                vset.set(current);
+                if (current == b) {
+                    return true;
+                }
+                for (int i = 0, n = this.getNextCount(current); i < n; i++) {
+                    int next = this.getNext(current, i);
+                    stack.push(next);
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -4,8 +4,13 @@
 package org.jhotdraw8.graph;
 
 import java.util.AbstractCollection;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
 
@@ -229,4 +234,27 @@ public interface DirectedGraph<V, A> {
         return findIndexOfNext(a, b) != -1;
     }
 
+    /**
+     * Returns true if b is reachable from a.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return true if b is next of a.
+     */
+    default boolean isReachable(@Nonnull V a, @Nonnull V b) {
+        Deque<V> stack = new ArrayDeque<>(16);
+        Set<V> vset = new HashSet<>(16);
+        while (!stack.isEmpty()) {
+            V current = stack.pop();
+            if (vset.add(current)) {
+                if (Objects.equals(current, b)) {
+                    return true;
+                }
+                for (V next : this.getNextVertices(current)) {
+                    stack.push(next);
+                }
+            }
+        }
+        return false;
+    }
 }

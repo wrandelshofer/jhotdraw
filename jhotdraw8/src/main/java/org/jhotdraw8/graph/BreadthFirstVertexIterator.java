@@ -1,4 +1,4 @@
-/* @(#)BreadthFirstIterator.java
+/* @(#)BreadthFirstVertexIterator.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 /**
- * BreadthFirstIterator.
+ * BreadthFirstVertexIterator.
  * <p>
  * Naive implementation of a breadth first iterator which uses a hash set to
  * determine if a node has been visited.
@@ -20,9 +20,9 @@ import java.util.function.Predicate;
  * @version $$Id$$
  * @param <V> the vertex type
  */
-public class BreadthFirstIterator<V,A> implements Iterator<V> {
+public class BreadthFirstVertexIterator<V> implements Iterator<V> {
 
-    private final DirectedGraph<V,A> graph;
+    private final DirectedGraph<V,?> graph;
     private final Queue<V> queue;
     private final Predicate<V> visited;
 
@@ -32,10 +32,10 @@ public class BreadthFirstIterator<V,A> implements Iterator<V> {
      * @param graph the graph
      * @param root the root vertex
      */
-    public BreadthFirstIterator(DirectedGraph<V,A> graph, V root) {
+    public BreadthFirstVertexIterator(DirectedGraph<V,?> graph, V root) {
         this.graph = graph;
-        queue = new ArrayDeque<>(graph.getArrowCount());
-        Set<V> vset = new HashSet<>(graph.getVertexCount());
+        queue = new ArrayDeque<>(16);
+        Set<V> vset = new HashSet<>(16);
         visited=vset::add;
         queue.add(root);
         visited.test(root);
@@ -48,9 +48,9 @@ public class BreadthFirstIterator<V,A> implements Iterator<V> {
      * @param visited a predicate with side effect. The predicate returns true if the specified vertex has been visited, and marks
      * the specified vertex as visited.
      */
-    public BreadthFirstIterator(DirectedGraph<V,A> graph, V root, Predicate<V> visited) {
+    public BreadthFirstVertexIterator(DirectedGraph<V,?> graph, V root, Predicate<V> visited) {
         this.graph = graph;
-        queue = new ArrayDeque<>(graph.getArrowCount());
+        queue = new ArrayDeque<>(16);
         this.visited = visited;
         queue.add(root);
         visited.test(root);
