@@ -57,7 +57,7 @@ public class BreadthFirstIteratorNGTest {
     public void testIterate(Integer start, Integer goal, List<Integer> expResult ) throws Exception {
         System.out.println("testIterate");
         DirectedGraph<Integer,Double> graph = createGraph();
-        BreadthFirstVertexIterator<Integer,Double> instance = new BreadthFirstVertexIterator<>(graph,start);
+        BreadthFirstVertexIterator<Integer> instance = new BreadthFirstVertexIterator<>(graph,start);
         List<Integer> result=new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();

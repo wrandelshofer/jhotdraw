@@ -71,7 +71,7 @@ public class DepthFirstIteratorNGTest {
     public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate");
         DirectedGraph<Integer, Double> graph = createGraph();
-        DepthFirstVertexIterator<Integer, Double> instance = new DepthFirstVertexIterator<>(graph, start);
+        DepthFirstVertexIterator<Integer> instance = new DepthFirstVertexIterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();
