@@ -35,7 +35,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
-    private static Map<Key<?>, Integer> cachedValuesKeyMap = new ConcurrentHashMap<>();
+    private static Map<Key<?>, Integer> cachedValuesKeyMap = new HashMap<>();
 
     private transient Map<Key<?>, Object> cachedValues;
     private ObservableList<Figure> dependentFigures;

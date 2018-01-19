@@ -5,7 +5,6 @@ package org.jhotdraw8.styleable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
@@ -20,7 +19,7 @@ import org.jhotdraw8.collection.MapAccessor;
  * @version $Id$
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
-    private final static Map<Class<?>,Map<Key<?>,Integer>> keyMaps=new ConcurrentHashMap<>();
+    private final static Map<Class<?>,Map<Key<?>,Integer>> keyMaps=new HashMap<>();
 
     /**
      * Holds the properties.
