@@ -3,13 +3,9 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.draw.figure.Drawing;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
@@ -18,16 +14,12 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.figure.NonTransformableFigure;
-import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.css.StylesheetsManager;
-import static java.lang.Math.abs;
-import javafx.collections.MapChangeListener;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
-import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
+import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * SimpleDrawing.
