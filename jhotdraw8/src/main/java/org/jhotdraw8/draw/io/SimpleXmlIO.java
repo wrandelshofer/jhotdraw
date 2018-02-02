@@ -253,7 +253,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         try {
             setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
             setInternalHome(drawing == null ? getExternalHome() : drawing.get(Drawing.DOCUMENT_HOME));
-            return InputFormat.super.read(file, drawing);
+            final Drawing newDrawing = (Drawing)InputFormat.super.read(file, drawing);
+            return newDrawing;
         } catch (IOException e) {
             throw new IOException("Error reading " + file + ".", e);
         }
@@ -426,6 +427,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         comments = null;
         if (external != null) {
             Drawing internal = figureFactory.fromExternalDrawing(external);
+            internal.preorderIterable().forEach(figure->figure.addNotify(internal));
             internal.updateCss();
             return internal;
         } else {

@@ -501,6 +501,7 @@ public class CssEffectConverter implements Converter<Effect> {
         double spreadOrChocke = 0.0;
         double offsetX = 0.0;
         double offsetY = 4.0;
+        Effect input=null;
 
         if (tt.nextToken() != ')') {
             if (tt.currentToken() != CssTokenizer.TT_IDENT) {
@@ -542,32 +543,47 @@ public class CssEffectConverter implements Converter<Effect> {
                     spreadOrChocke = tt.currentNumericValue().doubleValue() / 100.0;
                     break;
                 default:
-                    throw new ParseException("CSS Effect: spread or chocke number expected", tt.getStartPosition());
+                    throw new ParseException("CSS Shadow-Effect: spread or chocke number expected", tt.getStartPosition());
             }
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                throw new ParseException("CSS Effect: offset-x number expected", tt.getStartPosition());
+                throw new ParseException("CSS Shadow-Effect: offset-x number expected", tt.getStartPosition());
             }
             offsetX = tt.currentNumericValue().doubleValue();
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                throw new ParseException("CSS Effect: offset-y number expected", tt.getStartPosition());
+                throw new ParseException("CSS Shadow-Effect: offset-y number expected", tt.getStartPosition());
             }
             offsetY = tt.currentNumericValue().doubleValue();
-            if (tt.nextToken() != ')') {
-                throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
+            if (tt.nextToken() != ',') {
+                tt.pushBack();
+            }else{
+                input=parseEffect(tt);
             }
         }
+            if (tt.currentToken() != ')') {
+                throw new ParseException("CSS Shadow-Effect: ')'  expected", tt.getStartPosition());
+            }
 
+         final Effect effect ;
         if (isDropShadow) {
-            return new DropShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            DropShadow dropShadow =new DropShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            if (input!=null) {
+                dropShadow.setInput(input);
+            }
+            effect=dropShadow;
         } else {
-            return new InnerShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            InnerShadow innerhShadow =new InnerShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            if (input!=null) {
+                innerhShadow.setInput(input);
+            }
+            effect=innerhShadow;
         }
+            return effect;
     }
 
     private Effect parseShadow(CssTokenizerInterface tt) throws ParseException, IOException {

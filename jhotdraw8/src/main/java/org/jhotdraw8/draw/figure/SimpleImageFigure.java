@@ -26,7 +26,9 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
+public class SimpleImageFigure extends AbstractLeafFigure 
+        implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure,
+        HideableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -133,7 +135,12 @@ public class SimpleImageFigure extends AbstractLeafFigure implements ResizableFi
         URI absoluteUri = (documentHome == null) ? uri : documentHome.resolve(uri);
         if (cachedImageUri == null || !cachedImageUri.equals(absoluteUri)) {
             cachedImageUri = absoluteUri;
+            try {
             cachedImage = new Image(cachedImageUri.toString(), true);
+            } catch (IllegalArgumentException e) {
+                System.err.println("could not load image from uri: "+absoluteUri);
+                e.printStackTrace();
+            }
         }
     }
 }

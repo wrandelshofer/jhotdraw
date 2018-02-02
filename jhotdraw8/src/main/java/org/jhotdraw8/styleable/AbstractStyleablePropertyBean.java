@@ -19,6 +19,7 @@ import org.jhotdraw8.collection.MapAccessor;
  * @version $Id$
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
+    // FIXME should be one instance per class. The instance should be unmodifiable.
     private final static Map<Class<?>,Map<Key<?>,Integer>> keyMaps=new HashMap<>();
 
     /**
