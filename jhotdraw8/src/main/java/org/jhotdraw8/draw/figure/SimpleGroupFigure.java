@@ -19,7 +19,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class SimpleGroupFigure extends AbstractCompositeFigure
-        implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+        implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
@@ -65,7 +65,8 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(ctx, n);
-
+        applyCompositableFigureProperties(n);
+        
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
