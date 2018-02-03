@@ -62,6 +62,11 @@ public class FontDialog extends Dialog<String> {
         
         setResultConverter(this::handleButton);
         controller.setOnAction(evt->dialogPane.lookupButton(chooseButtonType).executeAccessibleAction(AccessibleAction.FIRE));
+        
+        new DefaultFontChooserModelFactory().createAsync().whenComplete((m,ex)->{
+            if (ex!=null) ex.printStackTrace();
+            else controller.setModel(m);
+        });
     }
 
     private String handleButton(ButtonType buttonType) {

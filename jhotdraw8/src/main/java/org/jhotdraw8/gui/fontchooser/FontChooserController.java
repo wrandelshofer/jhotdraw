@@ -5,38 +5,43 @@
  */
 package org.jhotdraw8.gui.fontchooser;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-
 /**
  * FXML Controller class
  *
  * @author werni
  */
 import java.net.URL;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
-import java.util.concurrent.ForkJoinPool;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
+import javafx.util.StringConverter;
 import org.jhotdraw8.util.Resources;
 
 public class FontChooserController {
+
+    private final ObjectProperty<FontChooserModel> model = new SimpleObjectProperty<>();
 
     private final ObjectProperty<EventHandler<ActionEvent>> onAction = new SimpleObjectProperty<>();
 
@@ -61,6 +66,14 @@ public class FontChooserController {
     @FXML
     private ListView<FontTypeface> typefaceList;
 
+    public FontChooserModel getModel() {
+        return model.get();
+    }
+
+    public void setModel(FontChooserModel value) {
+        model.set(value);
+    }
+
     public EventHandler<ActionEvent> getOnAction() {
         return onAction.get();
     }
@@ -76,21 +89,33 @@ public class FontChooserController {
         assert collectionList != null : "fx:id=\"collectionList\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert familyList != null : "fx:id=\"familyList\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert typefaceList != null : "fx:id=\"typefaceList\" was not injected: check your FXML file 'FontChooser.fxml'.";
-        loadFontsAsync();
+
+        final Resources labels = Resources.getResources("org.jhotdraw8.gui.Labels");
 
         collectionList.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> {
             familyList.setItems(newv == null ? null : newv.getFamilies());
         });
         familyList.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> {
             typefaceList.setItems(newv == null ? null : newv.getTypefaces());
-            if (!newv.getTypefaces().isEmpty()) {
-                typefaceList.getSelectionModel().select(0);
+            if (newv != null && !newv.getTypefaces().isEmpty()) {
+                final ObservableList<FontTypeface> items = typefaceList.getItems();
+                boolean found = false;
+                for (int i = 0, n = items.size(); i < n; i++) {
+                    if (items.get(i).isRegular()) {
+                        typefaceList.getSelectionModel().select(i);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    typefaceList.getSelectionModel().select(0);
+                }
             }
         });
         typefaceList.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> {
             if (newv == null) {
-                fontNameLabel.setText(null);
-                previewTextArea.setFont(Font.getDefault());
+                fontNameLabel.setText(labels.getString("FontChooser.nothingSelected"));
+                previewTextArea.setFont(new Font("System Regular", 24));
             } else {
                 fontNameLabel.setText(newv.getName());
                 previewTextArea.setFont(new Font(newv.getName(), 24));
@@ -98,64 +123,132 @@ public class FontChooserController {
         });
 
         final EventHandler<MouseEvent> onMouseHandler = evt -> {
-            if (evt.getClickCount() == 2&&getOnAction() != null) {
-                    getOnAction().handle(new ActionEvent(evt.getSource(), evt.getTarget()));
+            if (evt.getClickCount() == 2 && getOnAction() != null && getSelectedFontName() != null) {
+                getOnAction().handle(new ActionEvent(evt.getSource(), evt.getTarget()));
             }
         };
         collectionList.setOnMousePressed(onMouseHandler);
         familyList.setOnMousePressed(onMouseHandler);
         typefaceList.setOnMousePressed(onMouseHandler);
-        
-        Preferences prefs=Preferences.userNodeForPackage(FontChooserController.class);
+
+        Preferences prefs = Preferences.userNodeForPackage(FontChooserController.class);
         previewTextArea.setText(prefs.get("fillerText", "Now is the time for all good men."));
-        previewTextArea.textProperty().addListener((o,oldv,newv)->{
+        previewTextArea.textProperty().addListener((o, oldv, newv) -> {
             prefs.put("fillerText", newv);
         });
-    }
 
-    private void loadFontsAsync() {
-        Task<ObservableList<FontCollection>> task = new Task<ObservableList<FontCollection>>() {
-            @Override
-            protected ObservableList<FontCollection> call() throws Exception {
-                ObservableList<FontCollection> list = loadFonts();
-                return list;
+        model.addListener((o, oldv, newv) -> {
+            if (newv != null) {
+                collectionList.setItems(newv.getFontCollections());
             }
-            @Override
-            protected void succeeded() {
-                collectionList.setItems(getValue());
-            }
-        };
-        ForkJoinPool.commonPool().execute(task);
-    }
+        });
 
-    private ObservableList<FontCollection> loadFonts() {
-        ObservableList<FontCollection> list = FXCollections.observableArrayList();
+        familyList.setCellFactory(lv -> {
+            final TextFieldListCell<FontFamily> listCell = new TextFieldListCell<FontFamily>();
+            listCell.setOnDragDetected(evt -> {
+                Dragboard dragBoard = familyList.startDragAndDrop(TransferMode.COPY);
+                ClipboardContent content = new ClipboardContent();
+                String familyNames
+                        = familyList.getSelectionModel().getSelectedItems().stream().map(FontFamily::getName).collect(Collectors.joining("\n"));
+                content.put(DataFormat.PLAIN_TEXT, familyNames);
+                dragBoard.setDragView(listCell.snapshot(null, null));
+                dragBoard.setContent(content);
+                evt.consume();
+            });
+            return listCell;
+        });
 
-        FontCollection fontCollection = new FontCollection();
-
-        final ResourceBundle labels = Resources.getBundle("org.jhotdraw8.gui.Labels");
-        fontCollection.setName(labels.getString("FontCollection.allFonts"));
-        list.add(fontCollection);
-        List<String> familyNames = Font.getFamilies();
-        for (String familyName : familyNames) {
-            FontFamily fontFamily = new FontFamily();
-            fontFamily.setName(familyName);
-            fontCollection.getFamilies().add(fontFamily);
-            final List<String> fontNames = Font.getFontNames(familyName);
-            for (String fontName : fontNames) {
-                FontTypeface fontTypeface = new FontTypeface();
-                String shortName = fontName.startsWith(familyName) ? fontName.substring(familyName.length()).trim() : fontName;
-                if (shortName.isEmpty()) {
-                    shortName = "Regular";
+        collectionList.setCellFactory(lv -> {
+            final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<FontCollection>() {
+                @Override
+                public void updateItem(FontCollection item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setEditable(item != null && !item.isSmartCollection());
                 }
-                fontTypeface.setName(fontName);
-                fontTypeface.setShortName(shortName);
-                fontFamily.getTypefaces().add(fontTypeface);
+
+            };
+            listCell.setConverter(new StringConverter<FontCollection>() {
+                @Override
+                public FontCollection fromString(String string) {
+                    final FontCollection item = listCell.getItem();
+                    item.setName(string);
+                    return item;
+                }
+
+                @Override
+                public String toString(FontCollection item) {
+                    return (item.isSmartCollection()) ? item.getName() + "•" : item.getName();
+                }
+
+            });
+            listCell.setOnDragOver(evt -> {
+                if ((listCell.getItem() == null || !listCell.getItem().isSmartCollection())
+                        && evt.getDragboard().hasString()) {
+                    evt.acceptTransferModes(TransferMode.COPY);
+                }
+                evt.consume();
+            });
+
+            listCell.setOnDragDropped(evt -> {
+                boolean success = false;
+                if ((listCell.getItem() == null || !listCell.getItem().isSmartCollection())
+                        && evt.getDragboard().hasString()) {
+                    String droppedString = evt.getDragboard().getString();
+                    addFamiliesToCollection(listCell.getItem(),
+                            droppedString.split("\n")
+                    );
+                    success = true;
+                }
+                evt.setDropCompleted(success);
+                evt.consume();
+            });
+            return listCell;
+        });
+
+        familyList.setOnKeyReleased(evt -> {
+            if (evt.getCode() == KeyCode.DELETE) {
+                FontCollection fontCollection = collectionList.getSelectionModel().getSelectedItem();
+                if (!fontCollection.isSmartCollection()) {
+                    fontCollection.getFamilies().remove(familyList.getSelectionModel().getSelectedItem());
+                }
+                evt.consume();
+            }
+        });
+        collectionList.setOnKeyReleased(evt -> {
+            if (evt.getCode() == KeyCode.DELETE) {
+                FontCollection fontCollection = collectionList.getSelectionModel().getSelectedItem();
+                if (!fontCollection.isSmartCollection()) {
+                    collectionList.getItems().remove(collectionList.getSelectionModel().getSelectedIndex());
+                }
+                evt.consume();
+            }
+        });
+
+    }
+
+    private void addFamiliesToCollection(FontCollection collection, String[] familyNames) {
+        final FontChooserModel model = getModel();
+        FontCollection allFonts = model.getAllFonts();
+        if (collection == null) {
+            final Resources labels = Resources.getResources("org.jhotdraw8.gui.Labels");
+            collection = new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
+            model.getFontCollections().add(collection);
+        }
+        if (collection.isSmartCollection()) {
+            return;
+        }
+        final ObservableList<FontFamily> existing = collection.getFamilies();
+        final ArrayList<FontFamily> collected = DefaultFontChooserModelFactory.collectFamiliesNamed(allFonts.getFamilies(), familyNames);
+        for (FontFamily family : collected) {
+            if (!existing.contains(family)) {
+                existing.add(family);
             }
         }
+        existing.sort(Comparator.comparing(FontFamily::getName));
+    }
 
-        return list;
-
+    public ObjectProperty<FontChooserModel> modelProperty() {
+        return model;
     }
 
     public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {

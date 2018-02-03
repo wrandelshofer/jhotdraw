@@ -12,7 +12,7 @@
 
 <SplitPane dividerPositions="0.1" orientation="VERTICAL" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jhotdraw8.gui.fontchooser.FontChooserController">
    <items>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" SplitPane.resizableWithParent="false">
          <children>
             <TextArea fx:id="previewTextArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" prefColumnCount="10" prefRowCount="1" styleClass="fontPreview" text="Now is the time for all good men." wrapText="true" VBox.vgrow="ALWAYS">
                <font>
@@ -36,7 +36,7 @@
             <Label text="%FontCollection.collection" />
             <Label text="%FontCollection.family" GridPane.columnIndex="1" />
             <Label text="%FontCollection.typeface" GridPane.columnIndex="2" />
-            <ListView fx:id="collectionList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+            <ListView fx:id="collectionList" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
             <ListView fx:id="familyList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <ListView fx:id="typefaceList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
          </children>

@@ -6,7 +6,9 @@
 
 package org.jhotdraw8.gui.fontchooser;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,6 +25,7 @@ import javafx.scene.text.Font;
 public class FontTypeface {
 
   private final StringProperty name = new SimpleStringProperty();
+    private final BooleanProperty regular = new SimpleBooleanProperty();
     private final StringProperty shortName = new SimpleStringProperty();
 
     public String getName() {
@@ -41,8 +44,20 @@ public class FontTypeface {
         shortName.set(value);
     }
 
+    public boolean isRegular() {
+        return regular.get();
+    }
+
+    public void setRegular(boolean value) {
+        regular.set(value);
+    }
+
     public StringProperty nameProperty() {
         return name;
+    }
+
+    public BooleanProperty regularProperty() {
+        return regular;
     }
 
     public StringProperty shortNameProperty() {
