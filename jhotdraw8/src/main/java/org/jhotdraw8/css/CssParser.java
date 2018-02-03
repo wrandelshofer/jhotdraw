@@ -599,7 +599,6 @@ public class CssParser {
                     } catch (ParseException e) {
                         // We could not parse the current declaration.
                         // However we will try to parse the next declarations.
-                        System.out.println("CssParser skipped " + e);
                         exceptions.add(e);
                     }
                     break;
