@@ -145,9 +145,6 @@ public class DefaultFontChooserModelFactory {
                         "Baskerville Old Face",
                         "Bell MT",
                         "Big Caslon",
-                        "Bodoni 72",
-                        "Bodoni 72 Oldstyle",
-                        "Bodoni 72 Smallcaps",
                         "Bodoni SvtyTwo ITC TT",
                         "Bodoni SvtyTwo OS ITC TT",
                         "Bodoni SvtyTwo SC ITC TT",
@@ -174,6 +171,11 @@ public class DefaultFontChooserModelFactory {
                         // Fonts on Mac OS X 10.6:
                         "Didot",
                         //
+                        // Fonts on Mac OS X 10.10:
+                        "Bodoni 72",
+                        "Bodoni 72 Oldstyle",
+                        "Bodoni 72 Smallcaps",
+                        //
                         // Fonts on Windows XP:
                         "Palatino Linotype",
                         "Bitstream Vera Serif Bold",
@@ -184,7 +186,6 @@ public class DefaultFontChooserModelFactory {
                         "Cambria",
                         "Cambria Math",
                         "Centaur",
-                        "Constantia",
                         "High Tower Text",
                         "Perpetua",
                         "Poor Richard",
@@ -258,8 +259,6 @@ public class DefaultFontChooserModelFactory {
                         "Berlin Sans FB",
                         "Berlin Sans FB Demi Bold",
                         "Bitstream Vera Sans Bold",
-                        "Calibri",
-                        "Candara",
                         "Corbel",
                         "Estrangelo Edessa",
                         "Eras Bold ITC",
@@ -349,8 +348,10 @@ public class DefaultFontChooserModelFactory {
                         "Casual",
                         "Chalkduster",
                         //
-                        // Fonts on Mac OS X 10.13:
+                        // Fonts on Mac OS X 10.10:
                         "Bradley Hand",
+                        "Noteworthy",
+                        "Trattatello",
                         //
                         // Fonts on Windows XP:
                         "Blackadder ITC",
@@ -401,7 +402,6 @@ public class DefaultFontChooserModelFactory {
                         // Fonts on Windows XP:
                         "Lucida Console",
                         "Bitstream Vera S...",
-                        "Consolas",
                         "OCR A Extended",
                         "OCR B",
                         //
@@ -477,7 +477,7 @@ public class DefaultFontChooserModelFactory {
                         // Fonts on Mac OS X 10.5:
                         "HeadLineA",
                         //
-                        // Fonts on Mac OS X 10.13:
+                        // Fonts on Mac OS X 10.10:
                         "Phosphate",
                         //
                         // Fonts on Windows XP:
@@ -522,6 +522,9 @@ public class DefaultFontChooserModelFactory {
                         "Wingdings 2",
                         "Wingdings 3",
                         "Zapf Dingbats",
+                        //
+                        // Fonts on Mac OS X 10.10:
+                        "Bodoni Ornaments",
                         //
                         // Fonts on Windows XP:
 

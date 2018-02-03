@@ -11,3 +11,7 @@
 .fontNameLabel{
     -fx-background-color: white;
 }
+.placardButton {
+    -fx-border-color: none;
+    -fx-padding: 0 4;
+}

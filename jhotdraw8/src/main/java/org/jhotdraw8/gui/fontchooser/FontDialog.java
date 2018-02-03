@@ -63,13 +63,20 @@ public class FontDialog extends Dialog<String> {
         setResultConverter(this::handleButton);
         controller.setOnAction(evt->dialogPane.lookupButton(chooseButtonType).executeAccessibleAction(AccessibleAction.FIRE));
         
-        new DefaultFontChooserModelFactory().createAsync().whenComplete((m,ex)->{
-            if (ex!=null) ex.printStackTrace();
-            else controller.setModel(m);
-        });
+             controller.setModel(getModel());
+        
     }
-
+    /** This model is shared by all font dialogs. */
+private static FontChooserModel model=null;
+    public static FontChooserModel getModel() {
+        if (model==null) {
+            model=new PreferencesFontChooserModelFactory().create();
+        }
+        return model;
+    }
+    
     private String handleButton(ButtonType buttonType) {
+         new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType !=null&&buttonType.getButtonData() == ButtonData.OK_DONE) {
             return controller == null ? null : controller.getSelectedFontName();
         } else {
