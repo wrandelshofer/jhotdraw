@@ -1,0 +1,13 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+.fontPreview {
+    -fx-background-color: white;
+}
+.fontNameLabel{
+    -fx-background-color: white;
+}

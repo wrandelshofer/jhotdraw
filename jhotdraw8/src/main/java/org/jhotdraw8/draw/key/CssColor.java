@@ -65,9 +65,9 @@ public class CssColor implements Paintable {
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
-            double o = c.getOpacity();
+            float o = (float)c.getOpacity();// Color represents opacity by a float. We must not promote it.
             return formatter.format(r, g, b, o);
-            // return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
+            //return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
         }
     }
 

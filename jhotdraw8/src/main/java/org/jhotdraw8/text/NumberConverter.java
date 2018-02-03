@@ -42,7 +42,8 @@ public class NumberConverter implements Converter<Number> {
     @SuppressWarnings("rawtypes")
     private Comparable max;
     private String unit;
-    private DecimalFormat decimalFormat;
+    private DecimalFormat doubleDecimalFormat;
+    private DecimalFormat floatDecimalFormat;
     private DecimalFormat scientificFormat;
     private double factor = 1;
     private int minIntDigits;
@@ -108,7 +109,8 @@ public class NumberConverter implements Converter<Number> {
 
     private void initFormats() {
         DecimalFormatSymbols s = new DecimalFormatSymbols(Locale.ENGLISH);
-        decimalFormat = new DecimalFormat("#################0.#################", s);
+        doubleDecimalFormat = new DecimalFormat("#################0.#################", s);
+        floatDecimalFormat = new DecimalFormat("#################0.########", s);
         scientificFormat = new DecimalFormat("0.0################E0", s);
     }
 
@@ -204,7 +206,7 @@ public class NumberConverter implements Converter<Number> {
      */
     public void setMinimumFractionDigits(int newValue) {
         minFractionDigits = newValue;
-        decimalFormat.setMinimumFractionDigits(newValue);
+        doubleDecimalFormat.setMinimumFractionDigits(newValue);
     }
 
     /**
@@ -240,7 +242,7 @@ public class NumberConverter implements Converter<Number> {
                 int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
                 if (!usesScientificNotation || exponent > minNegativeExponent
                         && exponent < minPositiveExponent) {
-                    str = decimalFormat.format(v);
+                    str = doubleDecimalFormat.format(v);
                 } else {
                     str = scientificFormat.format(v);
                 }
@@ -256,7 +258,7 @@ public class NumberConverter implements Converter<Number> {
             int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
             if (!usesScientificNotation || exponent > minNegativeExponent
                     && exponent < minPositiveExponent) {
-                str = decimalFormat.format(v);
+                str = floatDecimalFormat.format(v);
             } else {
                 str = scientificFormat.format(v);
             }
@@ -512,7 +514,7 @@ public class NumberConverter implements Converter<Number> {
      * @param newValue the new value
      */
     public void setMinimumIntegerDigits(int newValue) {
-        decimalFormat.setMinimumIntegerDigits(newValue);
+        doubleDecimalFormat.setMinimumIntegerDigits(newValue);
         scientificFormat.setMinimumIntegerDigits(newValue);
         this.minIntDigits = newValue;
     }
@@ -534,7 +536,7 @@ public class NumberConverter implements Converter<Number> {
      * @param newValue the new value
      */
     public void setMaximumIntegerDigits(int newValue) {
-        decimalFormat.setMaximumIntegerDigits(newValue);
+        doubleDecimalFormat.setMaximumIntegerDigits(newValue);
         scientificFormat.setMaximumIntegerDigits(newValue);
         this.maxIntDigits = newValue;
     }
@@ -556,7 +558,7 @@ public class NumberConverter implements Converter<Number> {
      * @param newValue the maximum fraction digits
      */
     public void setMaximumFractionDigits(int newValue) {
-        decimalFormat.setMaximumFractionDigits(newValue);
+        doubleDecimalFormat.setMaximumFractionDigits(newValue);
         scientificFormat.setMaximumFractionDigits(newValue);
         this.maxFractionDigits = newValue;
     }

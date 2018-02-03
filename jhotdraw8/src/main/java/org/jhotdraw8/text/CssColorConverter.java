@@ -7,6 +7,7 @@ import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.Arrays;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;

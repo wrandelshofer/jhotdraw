@@ -4,6 +4,7 @@
 package org.jhotdraw8.fxml;
 
 import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
@@ -33,7 +34,10 @@ public class AsyncFXMLLoader {
      * @return the FXMLLoader.
      */
     public static CompletionStage<FXMLLoader> load(URL location) {
-        return load(location, ForkJoinPool.commonPool());
+        return load(location, null, ForkJoinPool.commonPool());
+    }
+    public static CompletionStage<FXMLLoader> load(URL location, ResourceBundle resources) {
+        return load(location, resources, ForkJoinPool.commonPool());
     }
     /**
      * Asynchronously loads the specified FXML file on the specified executor, and returns a completion
@@ -67,7 +71,7 @@ public class AsyncFXMLLoader {
      * @param Executor the executor on which the task should be executed
      * @return the FXMLLoader.
      */
-    public static CompletionStage<FXMLLoader> load(URL location, Executor executor) {
+    public static CompletionStage<FXMLLoader> load(URL location,ResourceBundle resources, Executor executor) {
         CompletableFuture<FXMLLoader> future = new CompletableFuture<>();
 
         Task<FXMLLoader> task = new Task<FXMLLoader>() {
@@ -75,6 +79,7 @@ public class AsyncFXMLLoader {
             protected FXMLLoader call() throws Exception {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(location);
+                loader.setResources(resources);
                 loader.load();
                 return loader;
             }
