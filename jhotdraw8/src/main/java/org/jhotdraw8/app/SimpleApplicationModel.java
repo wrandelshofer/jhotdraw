@@ -49,7 +49,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private Supplier<DocumentProject> projectFactory;
+    private Supplier<DocumentOrientedActivity> projectFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
@@ -57,7 +57,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(
-            Supplier<DocumentProject> viewFactory,
+            Supplier<DocumentOrientedActivity> viewFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -66,7 +66,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(String name,
-            Supplier<DocumentProject> projectFactory,
+            Supplier<DocumentOrientedActivity> projectFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -84,11 +84,11 @@ public class SimpleApplicationModel implements ApplicationModel {
         return Preferences.userNodeForPackage(getClass());
     }
 
-    public Supplier<DocumentProject> getProjectFactory() {
+    public Supplier<DocumentOrientedActivity> getProjectFactory() {
         return projectFactory;
     }
 
-    public void setProjectFactory(Supplier<DocumentProject> projectFactory) {
+    public void setProjectFactory(Supplier<DocumentOrientedActivity> projectFactory) {
         this.projectFactory = projectFactory;
     }
 
@@ -117,7 +117,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public DocumentProject createProject() {
+    public DocumentOrientedActivity createProject() {
         return projectFactory.get();
     }
 

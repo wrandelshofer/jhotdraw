@@ -6,7 +6,7 @@ package org.jhotdraw8.app.action.edit;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
 
 /**
  * Presents a find dialog to the user and then highlights the found items in the
@@ -15,7 +15,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFindAction<P extends Project> extends AbstractProjectAction<P> {
+public abstract class AbstractFindAction<P extends Activity> extends AbstractProjectAction<P> {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.find";

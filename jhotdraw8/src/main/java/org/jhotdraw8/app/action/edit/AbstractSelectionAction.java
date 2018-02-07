@@ -13,7 +13,7 @@ import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
 
 /**
  * {@code AbstractSelectionAction} acts on the selection of a target component.
@@ -25,7 +25,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
     private static final long serialVersionUID = 1L;
     private Node target;
-    private final ChangeListener<Project> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode() == null) {
             disabled.set(true);
@@ -66,7 +66,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
     }
 
     public EditableComponent getEditableComponent() {
-        Project v = app.getActiveProject();
+        Activity v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             while (n!=null){

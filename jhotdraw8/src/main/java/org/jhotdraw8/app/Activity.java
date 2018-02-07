@@ -1,4 +1,4 @@
-/* @(#)Project.java
+/* @(#)Activity.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -13,16 +13,16 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code Project} represents a piece of work or an activity that the user
- * is going to perform over a period of time.
+ * A {@code Activity} represents an activity that the user
+ * is going to perform with help of the computer.
  * <p>
- * The life-cycle of a project object is managed by an application. See the
+ * The life-cycle of an activity object is managed by an application. See the
  * class comment of {@link Application} on how to launch an application.
  * <p>
- * The lifecycle of a project consists of the following steps:
+ * The lifecycle of an activity consists of the following steps:
  * <ol>
  * <li><b>Creation</b><br>
- * The application model instantiates a new project.
+ * The application model instantiates a new activity.
  * </li>
  * <li><b>Initialisation</b><br>
  * The application calls the following methods:
@@ -30,21 +30,21 @@ import org.jhotdraw8.beans.PropertyBean;
  * calls {@code clear()} or {@code read()}.
  * </li>
  * <li><b>Start</b><br>
- * The application adds the component of the project to a container (for example
+ * The application adds the component of the activity to a container (for example
  * a Stage) and then calls {@code start()}.
  * </li>
  * <li><b>Activation</b><br>
- * When a project becomes the active project of the application, application
+ * When an activity becomes the active view of the application, application
  * calls {@code activate()}.
  * </li>
  * <li><b>Deactivation</b><br>
- * When a project is not anymore the active project view of the application,
- * application calls {@code deactivate()}. At a later time, the project view may
+ * When an activity is not anymore the active view of the application,
+ * application calls {@code deactivate()}. At a later time, the activity may
  * become activated again.
  * </li>
  * <li><b>Stop</b><br>
- * The application calls {@code stop()} on the project and then removes the
- * component from its container. At a later time, the project may be started
+ * The application calls {@code stop()} on the activity and then removes its
+ * view from the screen. At a later time, the activity may be started
  * again.
  * </li>
  * <li><b>Dispose</b><br>
@@ -60,7 +60,7 @@ import org.jhotdraw8.beans.PropertyBean;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Project extends Disableable, PropertyBean {
+public interface Activity extends Disableable, PropertyBean {
 
     /**
      * Activates the view.
@@ -72,14 +72,14 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return the property
      */
-        public ObjectProperty<Application> applicationProperty();
+    public ObjectProperty<Application> applicationProperty();
 
     /**
      * Deactivates the view.
      */
     public void deactivate();
 
-        public IntegerProperty disambiguationProperty();
+    public IntegerProperty disambiguationProperty();
 
     /**
      * Disposes of the view.
@@ -91,7 +91,7 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return the action map
      */
-        public HierarchicalMap<String, Action> getActionMap();
+    public HierarchicalMap<String, Action> getActionMap();
 
     @Nullable
     default public Application getApplication() {
@@ -111,11 +111,11 @@ public interface Project extends Disableable, PropertyBean {
     }
 
     /**
-     * Returns the scene node which renders the view.
+     * Returns the scene node which renders the view for this activity.
      *
      * @return The node.
      */
-        public Node getNode();
+    public Node getNode();
 
     // convenience method
     @Nullable
@@ -148,6 +148,6 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return The title property.
      */
-        public StringProperty titleProperty();
+    public StringProperty titleProperty();
 
 }

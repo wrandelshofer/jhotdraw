@@ -11,11 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -69,9 +69,9 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     protected void handleActionPerformed(ActionEvent evt, Application app) {
         {
             // Search for an empty view
-            DocumentProject emptyView;
+            DocumentOrientedActivity emptyView;
             if (reuseEmptyViews) {
-                emptyView = (DocumentProject) app.getActiveProject();//FIXME class cast exception
+                emptyView = (DocumentOrientedActivity) app.getActiveProject();//FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -82,9 +82,9 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createProject().thenAccept(v -> {
+                app.createActivity().thenAccept(v -> {
                     app.add(v);
-                    doIt((DocumentProject) v, true);
+                    doIt((DocumentOrientedActivity) v, true);
                 });
             } else {
                 doIt(emptyView, false);
@@ -92,11 +92,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(DocumentProject view, boolean disposeView) {
+    public void doIt(DocumentOrientedActivity view, boolean disposeView) {
         openViewFromURI(view, uri);
     }
 
-    private void handleException(final DocumentProject v, Throwable exception) throws MissingResourceException {
+    private void handleException(final DocumentOrientedActivity v, Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
@@ -110,7 +110,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         v.removeDisabler(this);
     }
 
-    protected void openViewFromURI(final DocumentProject v, final URI uri) {
+    protected void openViewFromURI(final DocumentOrientedActivity v, final URI uri) {
         final Application app = getApplication();
         v.addDisabler(this);
 

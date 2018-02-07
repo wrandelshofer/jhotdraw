@@ -10,7 +10,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractFocusOwnerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
 
 /**
  * Deletes the region at (or after) the caret position.

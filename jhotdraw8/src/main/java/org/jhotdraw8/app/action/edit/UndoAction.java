@@ -7,7 +7,7 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
 
 /**
  * Undoes the last user action.
@@ -15,7 +15,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class UndoAction extends AbstractProjectAction<Project> {
+public class UndoAction extends AbstractProjectAction<Activity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,7 @@ public class UndoAction extends AbstractProjectAction<Project> {
      * @param app the application
      * @param view the view
      */
-    public UndoAction(Application app, Project view) {
+    public UndoAction(Application app, Activity view) {
         super(app, view,null);
         labels.configureAction(this, ID);
     }
@@ -57,7 +57,7 @@ public class UndoAction extends AbstractProjectAction<Project> {
     }
 
     @Override
-    protected void updateView(Project oldValue, Project newValue) {
+    protected void updateView(Activity oldValue, Activity newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //
@@ -72,7 +72,7 @@ public class UndoAction extends AbstractProjectAction<Project> {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void installViewListeners(Project p) {
+    protected void installViewListeners(Activity p) {
         super.installViewListeners(p);
         Action undoActionInView = p.getActionMap().get(ID);
         if (undoActionInView != null && undoActionInView != this) {
@@ -84,7 +84,7 @@ public class UndoAction extends AbstractProjectAction<Project> {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void uninstallViewListeners(Project p) {
+    protected void uninstallViewListeners(Activity p) {
         super.uninstallViewListeners(p);
         Action undoActionInView = p.getActionMap().get(ID);
         if (undoActionInView != null && undoActionInView != this) {
@@ -106,7 +106,7 @@ public class UndoAction extends AbstractProjectAction<Project> {
     }*/
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Project project) {
+    protected void handleActionPerformed(ActionEvent event, Activity project) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

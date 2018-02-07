@@ -9,14 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentProject;
-import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an empty view.
@@ -42,7 +42,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
-    protected URIChooser getChooser(DocumentProject view) {
+    protected URIChooser getChooser(DocumentOrientedActivity view) {
         URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createOpenChooser();
@@ -56,9 +56,9 @@ public class OpenFileAction extends AbstractApplicationAction {
         {
             app.addDisabler(this);
             // Search for an empty view
-            DocumentProject emptyView;
+            DocumentOrientedActivity emptyView;
             if (reuseEmptyViews) {
-                emptyView = (DocumentProject) app.getActiveProject(); // FIXME class cast exception
+                emptyView = (DocumentOrientedActivity) app.getActiveProject(); // FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -69,14 +69,14 @@ public class OpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createProject().thenAccept(v -> doIt((DocumentProject) v, true));
+                app.createActivity().thenAccept(v -> doIt((DocumentOrientedActivity) v, true));
             } else {
                 doIt(emptyView, false);
             }
         }
     }
 
-    public void doIt(DocumentProject view, boolean disposeView) {
+    public void doIt(DocumentOrientedActivity view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -84,8 +84,8 @@ public class OpenFileAction extends AbstractApplicationAction {
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                for (Project vp : getApplication().projects()) {
-                    DocumentProject v = (DocumentProject) vp;
+                for (Activity vp : getApplication().projects()) {
+                    DocumentOrientedActivity v = (DocumentOrientedActivity) vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -107,7 +107,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final DocumentProject v, final URI uri, final URIChooser chooser) {
+    protected void openViewFromURI(final DocumentOrientedActivity v, final URI uri, final URIChooser chooser) {
         final Application app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);

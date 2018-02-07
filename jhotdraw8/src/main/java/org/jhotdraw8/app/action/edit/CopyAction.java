@@ -9,7 +9,7 @@ import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
 
 /**
  * Copies the selected region and place its contents into the system clipboard.

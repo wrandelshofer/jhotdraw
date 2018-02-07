@@ -32,8 +32,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.app.AbstractDocumentProject;
-import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -119,6 +118,7 @@ import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSizeInsets;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * GrapherProject.
@@ -126,7 +126,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherProject extends AbstractDocumentProject implements DocumentProject, EditorView {
+public class GrapherProject extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";

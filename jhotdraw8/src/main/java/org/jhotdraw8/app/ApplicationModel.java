@@ -32,11 +32,11 @@ public interface ApplicationModel {
      *
      * @return a new instance
      */
-        default CompletionStage<Project> createProjectAsync() {
+    default CompletionStage<Activity> createProjectAsync() {
         return FXWorker.supply(this::createProject);
     }
 
-        public Project createProject();
+    public Activity createProject();
     // URI choosers
 
     /**
@@ -44,28 +44,28 @@ public interface ApplicationModel {
      *
      * @return chooser
      */
-        public URIChooser createOpenChooser();
+    public URIChooser createOpenChooser();
 
     /**
      * Creates a save chooser.
      *
      * @return chooser
      */
-        public URIChooser createSaveChooser();
+    public URIChooser createSaveChooser();
 
     /**
      * Creates an export chooser.
      *
      * @return chooser
      */
-        public URIChooser createExportChooser();
+    public URIChooser createExportChooser();
 
     /**
      * Creates an import chooser.
      *
      * @return chooser
      */
-        public URIChooser createImportChooser();
+    public URIChooser createImportChooser();
 
     // Copyright information
     /**
@@ -73,21 +73,21 @@ public interface ApplicationModel {
      *
      * @return name
      */
-        public String getName();
+    public String getName();
 
     /**
      * Returns the version of the application.
      *
      * @return version
      */
-        public String getVersion();
+    public String getVersion();
 
     /**
      * Returns the copyright of the application.
      *
      * @return copyright
      */
-        public String getCopyright();
+    public String getCopyright();
 
     /**
      * Returns true if the same URI can be opened more than once.
@@ -104,7 +104,7 @@ public interface ApplicationModel {
      *
      * @return a menu bar
      */
-        default CompletionStage<MenuBar> createMenuBarAsync() {
+    default CompletionStage<MenuBar> createMenuBarAsync() {
         return FXWorker.supply(this::createMenuBar);
     }
 
@@ -115,7 +115,7 @@ public interface ApplicationModel {
      *
      * @return the resource bundle
      */
-        ResourceBundle getResources();
+    ResourceBundle getResources();
 
     /**
      * Creates the application map which is used to populate menu bars.
@@ -123,12 +123,12 @@ public interface ApplicationModel {
      * @param app The application
      * @return the application map
      */
-        HierarchicalMap<String, Action> createApplicationActionMap( Application app);
+    HierarchicalMap<String, Action> createApplicationActionMap(Application app);
 
     /**
      * Gets the preferences of the application.
      *
      * @return the preferences
      */
-        Preferences getPreferences();
+    Preferences getPreferences();
 }

@@ -20,7 +20,8 @@ import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.HierarchicalMap;
 
 /**
- * An {@code Application} manages {@link Project}s.
+ * An {@code Application} handles the life-cycle of {@link Activity} objects and
+ * provides windows to present them on screen.
  *
  * @design.pattern Application Framework, KeyAbstraction. The application
  * framework supports the creation of document oriented applications which can
@@ -42,14 +43,14 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the model
      */
-        public ObjectProperty<ApplicationModel> modelProperty();
+    public ObjectProperty<ApplicationModel> modelProperty();
 
     /**
      * The set of projects contains all open projects..
      *
      * @return the projects
      */
-        public SetProperty<Project> projectsProperty();
+    public SetProperty<Activity> projectsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -59,7 +60,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the recent Uris
      */
-        public ReadOnlySetProperty<URI> recentUrisProperty();
+    public ReadOnlySetProperty<URI> recentUrisProperty();
 
     /**
      * The maximal number of recent URIs. Specifies how many items of
@@ -68,10 +69,10 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the number of recent Uris
      */
-        public IntegerProperty maxNumberOfRecentUrisProperty();
+    public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-        default public ObservableSet<Project> projects() {
+    default public ObservableSet<Activity> projects() {
         return projectsProperty().get();
     }
 
@@ -80,7 +81,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void add( Project v) {
+    default public void add(Activity v) {
         projectsProperty().add(v);
     }
 
@@ -89,7 +90,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void remove( Project v) {
+    default public void remove(Activity v) {
         projectsProperty().remove(v);
     }
 
@@ -99,11 +100,11 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return The active view.
      */
-        public ReadOnlyObjectProperty<Project> activeProjectProperty();
+    public ReadOnlyObjectProperty<Activity> activeProjectProperty();
 
     // Convenience method
     @Nullable
-    default public Project getActiveProject() {
+    default public Activity getActiveProject() {
         return activeProjectProperty().get();
     }
 
@@ -112,21 +113,21 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the action map
      */
-        public HierarchicalMap<String, Action> getActionMap();
+    public HierarchicalMap<String, Action> getActionMap();
 
     /**
      * Executes a worker on the thread pool of the application.
      *
      * @param r the runnable
      */
-    public void execute( Runnable r);
+    public void execute(Runnable r);
 
     /**
      * Returns the application model.
      *
      * @return the model
      */
-        default ApplicationModel getModel() {
+    default ApplicationModel getModel() {
         return modelProperty().get();
     }
 
@@ -135,7 +136,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param newValue the model
      */
-    default void setModel( ApplicationModel newValue) {
+    default void setModel(ApplicationModel newValue) {
         modelProperty().set(newValue);
     }
 
@@ -154,8 +155,8 @@ public interface Application extends Disableable, PropertyBean {
         return null;
     }
 
-    default void addProject() {
-        createProject().thenAccept(this::add);
+    default void addActivity() {
+        createActivity().thenAccept(this::add);
     }
 
     /**
@@ -163,14 +164,14 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return A callback.
      */
-        CompletionStage<Project> createProject();
+    CompletionStage<Activity> createActivity();
 
     /**
      * Adds a recent URI.
      *
      * @param uri a recent URI
      */
-    default void addRecentURI( URI uri) {
+    default void addRecentURI(URI uri) {
         // ensures that the last used uri lands at the end of the LinkedHashSet.
         Set<URI> recents = recentUrisProperty().get();
         recents.remove(uri);

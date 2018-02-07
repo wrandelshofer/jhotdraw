@@ -13,8 +13,8 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.app.Activity;
 
 /**
  * SelectSameAction.
@@ -40,7 +40,7 @@ public class SelectSameAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Project project) {
+    protected void handleActionPerformed(ActionEvent e, Activity project) {
         final DrawingView view = getView();
         if (view == null) {
             return;

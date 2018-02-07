@@ -8,11 +8,11 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
- * on the active {@link Project}, or on a specific {@code Project}.
+ * on the active {@link Activity}, or on a specific {@code Activity}.
  * <p>
  * If the active project or the specified project is disabled, the
  * AbstractProjectAction is disabled as well.
@@ -20,7 +20,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractProjectAction<P extends Project> extends AbstractApplicationAction {
+public abstract class AbstractProjectAction<P extends Activity> extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -28,7 +28,7 @@ public abstract class AbstractProjectAction<P extends Project> extends AbstractA
      */
     private boolean mayCreateView;
     private Class<P> pClass;
-    private final ChangeListener<Project> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeProjectProperty().isNull());
         if (newValue != null && (pClass == null || pClass.isAssignableFrom(newValue.getClass()))) {
@@ -39,7 +39,7 @@ public abstract class AbstractProjectAction<P extends Project> extends AbstractA
             disabled.set(true);
         }
     };
-    private final Project project;
+    private final Activity project;
 
     /**
      * Creates a new instance which acts on the specified project of the
@@ -64,7 +64,7 @@ public abstract class AbstractProjectAction<P extends Project> extends AbstractA
 
     @SuppressWarnings("unchecked")
     public P getActiveProject() {
-        Project p = (project != null) ? project : app.getActiveProject();
+        Activity p = (project != null) ? project : app.getActiveProject();
         return p == null || pClass == null || pClass.isAssignableFrom(p.getClass()) ? (P) p : null;
     }
 

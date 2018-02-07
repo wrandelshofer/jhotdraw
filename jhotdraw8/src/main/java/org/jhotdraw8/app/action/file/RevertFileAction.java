@@ -13,8 +13,8 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentProject;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -24,7 +24,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
+public class RevertFileAction extends AbstractProjectAction<DocumentOrientedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,13 +36,13 @@ public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
      * @param app the application
      * @param project the view
      */
-    public RevertFileAction(Application app, DocumentProject project) {
-        super(app, project, DocumentProject.class);
+    public RevertFileAction(Application app, DocumentOrientedActivity project) {
+        super(app, project, DocumentOrientedActivity.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, DocumentProject project) {
+    protected void handleActionPerformed(ActionEvent event, DocumentOrientedActivity project) {
         if (isDisabled()) {
             return;
         }
@@ -61,7 +61,7 @@ public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
         }
     }
 
-    private void doIt(DocumentProject view, URI uri, DataFormat dataFormat) {
+    private void doIt(DocumentOrientedActivity view, URI uri, DataFormat dataFormat) {
         view.addDisabler(this);
 
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {

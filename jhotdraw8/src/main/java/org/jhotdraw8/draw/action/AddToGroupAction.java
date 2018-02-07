@@ -14,8 +14,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
 import org.jhotdraw8.draw.figure.Grouping;
+import org.jhotdraw8.app.Activity;
 
 /**
  * AddToGroupAction.
@@ -40,7 +40,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Project project) {
+    protected void handleActionPerformed(ActionEvent e, Activity project) {
         final DrawingView view = getView();
         if (view == null) {
             return;

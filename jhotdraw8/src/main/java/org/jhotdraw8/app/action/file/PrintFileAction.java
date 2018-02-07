@@ -11,11 +11,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link org.jhotdraw8.app.DocumentProject}.
+ * {@link org.jhotdraw8.app.DocumentOrientedActivity}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
@@ -23,7 +23,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
+public class PrintFileAction extends AbstractProjectAction<DocumentOrientedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,13 +44,13 @@ public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction( Application app, @Nullable DocumentProject view) {
-        super(app, view, DocumentProject.class);
+    public PrintFileAction( Application app, @Nullable DocumentOrientedActivity view) {
+        super(app, view, DocumentOrientedActivity.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed( ActionEvent event, DocumentProject project) {
+    protected void handleActionPerformed( ActionEvent event, DocumentOrientedActivity project) {
         project.addDisabler(this);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(project.getNode().getScene().getWindow())) {

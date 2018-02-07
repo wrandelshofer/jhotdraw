@@ -6,7 +6,7 @@ package org.jhotdraw8.app.action.app;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.Activity;
 
 /**
  * Displays a preferences dialog for the application.

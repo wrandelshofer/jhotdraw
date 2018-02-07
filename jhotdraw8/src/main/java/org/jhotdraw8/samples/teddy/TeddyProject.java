@@ -25,12 +25,12 @@ import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.app.AbstractDocumentProject;
+import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
-import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * TeddyProject.
@@ -38,7 +38,7 @@ import org.jhotdraw8.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyProject extends AbstractDocumentProject implements DocumentProject, Initializable {
+public class TeddyProject extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, Initializable {
 
   @FXML
   private URL location;

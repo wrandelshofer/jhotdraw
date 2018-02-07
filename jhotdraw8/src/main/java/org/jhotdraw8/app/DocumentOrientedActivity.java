@@ -1,4 +1,4 @@
-/* @(#)DocumentProject.java
+/* @(#)DocumentOrientedActivity.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -17,20 +17,20 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 
 /**
- * A {@code DocumentProject} is a specialization of {@link Project} for document
+ * A {@code DocumentOrientedActivity} is a specialization of {@link Activity} for document
  * oriented applications.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DocumentProject extends Project {
+public interface DocumentOrientedActivity extends Activity {
 
     /**
      * The modified property is set to true by the view.
      *
      * @return the property
      */
-        public ReadOnlyBooleanProperty modifiedProperty();
+    public ReadOnlyBooleanProperty modifiedProperty();
 
     default public boolean isModified() {
         return modifiedProperty().get();
@@ -41,7 +41,7 @@ public interface DocumentProject extends Project {
      */
     public void clearModified();
 
-        public ObjectProperty<URI> uriProperty();
+    public ObjectProperty<URI> uriProperty();
 
     @Nullable
     default public URI getURI() {
@@ -52,7 +52,7 @@ public interface DocumentProject extends Project {
         uriProperty().set(newValue);
     }
 
-        public ObjectProperty<DataFormat> dataFormatProperty();
+    public ObjectProperty<DataFormat> dataFormatProperty();
 
     @Nullable
     default public DataFormat getDataFormat() {
@@ -80,7 +80,7 @@ public interface DocumentProject extends Project {
      * @return Returns a CompletionStage which is completed when the read
      * operation has finished.
      */
-        public CompletionStage<Void> read( URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
+    public CompletionStage<Void> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -96,7 +96,7 @@ public interface DocumentProject extends Project {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-        public CompletionStage<Void> write( URI uri, @Nullable DataFormat format,  Map<? super Key<?>, Object> options);
+    public CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<? super Key<?>, Object> options);
 
     /**
      * Clears the view.
@@ -105,7 +105,7 @@ public interface DocumentProject extends Project {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-        public CompletionStage<Void> clear();
+    public CompletionStage<Void> clear();
 
     /**
      * Prints the current document.
@@ -115,16 +115,16 @@ public interface DocumentProject extends Project {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-        public CompletionStage<Void> print( PrinterJob job);
+    public CompletionStage<Void> print(PrinterJob job);
 
     /**
      * The action map of the view.
      *
      * @return the action map
      */
-        public HierarchicalMap<String, Action> getActionMap();
+    public HierarchicalMap<String, Action> getActionMap();
 
-        public IntegerProperty disambiguationProperty();
+    public IntegerProperty disambiguationProperty();
 
     default public int getDisambiguation() {
         return disambiguationProperty().get();

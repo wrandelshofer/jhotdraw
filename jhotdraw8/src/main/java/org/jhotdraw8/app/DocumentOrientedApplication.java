@@ -59,8 +59,9 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 /**
- * DocumentOrientedApplication.
- *
+ * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedActivity} objects and
+ * provides windows to present them on screen.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -77,7 +78,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
-    private final ReadOnlyObjectWrapper<Project> activeProject = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<Activity> activeProject = new ReadOnlyObjectWrapper<>();
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
         Thread t = new Thread(r);
         t.setUncaughtExceptionHandler((Thread t1, Throwable e) -> {
@@ -87,27 +88,27 @@ public class DocumentOrientedApplication extends AbstractApplication {
     });
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
-    private final SetProperty<Project> projects = new SimpleSetProperty<>(FXCollections.observableSet());
+    private final SetProperty<Activity> projects = new SimpleSetProperty<>(FXCollections.observableSet());
     private ArrayList<Action> systemMenuActiveProjectActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
     {
         activeProject.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                handleProjectDeactivate((DocumentProject) oldv);
+                handleProjectDeactivate((DocumentOrientedActivity) oldv);
             }
             if (newv != null) {
-                handleProjectActivate((DocumentProject) newv);
+                handleProjectActivate((DocumentOrientedActivity) newv);
             }
         });
     }
 
     {
-        projects.addListener((SetChangeListener.Change<? extends Project> change) -> {
+        projects.addListener((SetChangeListener.Change<? extends Activity> change) -> {
             if (change.wasAdded()) {
-                handleProjectAdded((DocumentProject) change.getElementAdded());
+                handleProjectAdded((DocumentOrientedActivity) change.getElementAdded());
             } else {
-                handleProjectRemoved((DocumentProject) change.getElementRemoved());
+                handleProjectRemoved((DocumentOrientedActivity) change.getElementRemoved());
             }
         });
     }
@@ -117,7 +118,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public ReadOnlyObjectProperty<Project> activeProjectProperty() {
+    public ReadOnlyObjectProperty<Activity> activeProjectProperty() {
         return activeProject.getReadOnlyProperty();
     }
 
@@ -171,7 +172,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public CompletionStage<Project> createProject() {
+    public CompletionStage<Activity> createActivity() {
         return FXWorker.supply(() -> getModel().createProject())
                 .handle((v, e) -> {
                     if (e != null) {
@@ -187,22 +188,22 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     private void disambiguateProjects() {
-        HashMap<String, ArrayList<Project>> titles = new HashMap<>();
-        for (Project v : projects) {
+        HashMap<String, ArrayList<Activity>> titles = new HashMap<>();
+        for (Activity v : projects) {
             String t = v.getTitle();
             titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
         }
-        for (ArrayList<Project> list : titles.values()) {
+        for (ArrayList<Activity> list : titles.values()) {
             if (list.size() == 1) {
                 list.get(0).setDisambiguation(0);
             } else {
                 int max = 0;
-                for (Project v : list) {
+                for (Activity v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
                 Collections.sort(list, (a, b) -> a.getDisambiguation() - b.getDisambiguation());
                 int prev = 0;
-                for (Project v : list) {
+                for (Activity v : list) {
                     int current = v.getDisambiguation();
                     if (current == prev) {
                         v.setDisambiguation(++max);
@@ -252,7 +253,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param project the project
      */
-    protected void handleProjectActivate(DocumentProject project) {
+    protected void handleProjectActivate(DocumentOrientedActivity project) {
         project.activate();
     }
 
@@ -262,7 +263,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param project the project
      */
-    protected void handleProjectAdded(DocumentProject project) {
+    protected void handleProjectAdded(DocumentOrientedActivity project) {
         if (project.getApplication() != this) {
             project.setApplication(this);
             project.init();
@@ -339,7 +340,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
             Outer:
             for (int retries = projects.getSize(); retries > 0; retries--) {
-                for (Project v : projects) {
+                for (Activity v : projects) {
                     if (v != project) {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
@@ -364,7 +365,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param project the project
      */
-    protected void handleProjectDeactivate(DocumentProject project) {
+    protected void handleProjectDeactivate(DocumentOrientedActivity project) {
         project.deactivate();
     }
 
@@ -374,7 +375,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param project the project
      */
-    protected void handleProjectRemoved(DocumentProject project) {
+    protected void handleProjectRemoved(DocumentOrientedActivity project) {
         Stage stage = (Stage) project.getNode().getScene().getWindow();
         project.stop();
         ChangeListener<Boolean> focusListener = project.get(FOCUS_LISTENER_KEY);
@@ -407,7 +408,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public SetProperty<Project> projectsProperty() {
+    public SetProperty<Activity> projectsProperty() {
         return projects;
     }
 
@@ -436,8 +437,8 @@ public class DocumentOrientedApplication extends AbstractApplication {
         }
 
         final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-        createProject().whenComplete((pv, ex1) -> {
-            DocumentProject v = (DocumentProject) pv;
+        createActivity().whenComplete((pv, ex1) -> {
+            DocumentOrientedActivity v = (DocumentOrientedActivity) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -477,7 +478,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                 updateRecentMenuItemsMB(systemMenus);
             }
         } else {
-            for (Project v : projects()) {
+            for (Activity v : projects()) {
                 BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();
                 MenuBar mb = (MenuBar) bp.getTop();
                 if (mb != null) {

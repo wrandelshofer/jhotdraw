@@ -7,7 +7,7 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * Creates a new view.
@@ -37,8 +37,8 @@ public class NewFileAction extends AbstractApplicationAction {
 
     @Override
     protected void handleActionPerformed(ActionEvent evt, Application app) {
-        app.createProject().thenAccept(newProject-> {
-            DocumentProject newView= (DocumentProject) newProject;
+        app.createActivity().thenAccept(newProject-> {
+            DocumentOrientedActivity newView= (DocumentOrientedActivity) newProject;
             app.add(newView);
             newView.clear().thenRun(() -> {
                 newView.clearModified();

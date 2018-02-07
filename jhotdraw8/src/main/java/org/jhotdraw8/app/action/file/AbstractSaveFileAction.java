@@ -20,8 +20,8 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
-import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -31,7 +31,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSaveFileAction extends AbstractProjectAction<DocumentProject> {
+public abstract class AbstractSaveFileAction extends AbstractProjectAction<DocumentOrientedActivity> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -46,13 +46,13 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(Application app, DocumentProject view, String id, boolean saveAs) {
-        super(app, view, DocumentProject.class);
+    public AbstractSaveFileAction(Application app, DocumentOrientedActivity view, String id, boolean saveAs) {
+        super(app, view, DocumentOrientedActivity.class);
         this.saveAs = saveAs;
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
     }
 
-    protected URIChooser getChooser(DocumentProject view) {
+    protected URIChooser getChooser(DocumentOrientedActivity view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -61,10 +61,10 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         return c;
     }
 
-    protected abstract URIChooser createChooser(DocumentProject view);
+    protected abstract URIChooser createChooser(DocumentOrientedActivity view);
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, DocumentProject v) {
+    protected void handleActionPerformed(ActionEvent evt, DocumentOrientedActivity v) {
         if (v == null) {
             return;
         }
@@ -73,7 +73,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         saveProjectChooseUri(v);
     }
 
-    protected void saveProjectChooseUri(final DocumentProject v) {
+    protected void saveProjectChooseUri(final DocumentOrientedActivity v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -86,8 +86,8 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 // Prevent save to URI that is open in another view!
                 // unless  multipe projects to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Project pi : app.projects()) {
-                        DocumentProject vi = (DocumentProject) pi;
+                    for (Activity pi : app.projects()) {
+                        DocumentOrientedActivity vi = (DocumentOrientedActivity) pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -112,7 +112,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         }
     }
 
-    protected void saveProjectChooseOptions(final DocumentProject v, URI uri, DataFormat format) {
+    protected void saveProjectChooseOptions(final DocumentOrientedActivity v, URI uri, DataFormat format) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
         if (dialog != null) {
@@ -130,7 +130,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         saveProjectToUri(v, uri, format, options);
     }
 
-    protected void saveProjectToUri(final DocumentProject project, final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
+    protected void saveProjectToUri(final DocumentOrientedActivity project, final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
         project.write(uri, format, options).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 project.removeDisabler(this);
@@ -164,5 +164,5 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         return null;
     }
 
-    protected abstract void handleSucceded(DocumentProject v, URI uri, DataFormat format);
+    protected abstract void handleSucceded(DocumentOrientedActivity v, URI uri, DataFormat format);
 }

@@ -1,4 +1,4 @@
-/* @(#)AbstractProject.java
+/* @(#)AbstractActivity.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -17,12 +17,12 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.Key;
 
 /**
- * AbstractProject.
+ * AbstractActivity.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractProject extends AbstractDisableable implements Project {
+public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
     protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();

@@ -22,12 +22,12 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
-import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
- * to write unsaved changes of a {@link org.jhotdraw8.app.DocumentProject}
+ * to write unsaved changes of a {@link org.jhotdraw8.app.DocumentOrientedActivity}
  * before a destructive action is performed.
  * <p>
  * If the view has no unsaved changes, method {@code doIt} is invoked
@@ -41,7 +41,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAction<DocumentProject> {
+public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAction<DocumentOrientedActivity> {
 
     /**
      *
@@ -59,24 +59,24 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
      * @param app the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(Application app, DocumentProject view) {
-        super(app, view, DocumentProject.class);
+    public AbstractSaveUnsavedChangesAction(Application app, DocumentOrientedActivity view) {
+        super(app, view, DocumentOrientedActivity.class);
     }
 
     @Override
-    protected final void handleActionPerformed(ActionEvent evt, DocumentProject av) {
+    protected final void handleActionPerformed(ActionEvent evt, DocumentOrientedActivity av) {
         Application app = getApplication();
-        if (av instanceof DocumentProject) {
+        if (av instanceof DocumentOrientedActivity) {
             handleActionOnProjectPerformed(av);
         } else if (isMayCreateProject()) {
-            app.createProject().thenAccept(v -> {
+            app.createActivity().thenAccept(v -> {
                 app.add(v);
-                handleActionOnProjectPerformed((DocumentProject) v);//FIXME class cast exception
+                handleActionOnProjectPerformed((DocumentOrientedActivity) v);//FIXME class cast exception
             });
         }
     }
 
-    public void handleActionOnProjectPerformed(DocumentProject v) {
+    public void handleActionOnProjectPerformed(DocumentOrientedActivity v) {
         if (!v.isDisabled()) {
             final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
@@ -154,7 +154,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected URIChooser getChooser(DocumentProject view) {
+    protected URIChooser getChooser(DocumentOrientedActivity view) {
         URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -163,7 +163,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
         return chsr;
     }
 
-    protected void saveView(final DocumentProject v) {
+    protected void saveView(final DocumentOrientedActivity v) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -177,7 +177,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 // unless  multipe projects to same URI are supported
                 if (uri != null
                         && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Project vi : app.projects()) {
+                    for (Activity vi : app.projects()) {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -201,7 +201,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
         }
     }
 
-    protected void saveViewToURI(final DocumentProject v, final URI uri, final URIChooser chooser, final DataFormat dataFormat) {
+    protected void saveViewToURI(final DocumentOrientedActivity v, final URI uri, final URIChooser chooser, final DataFormat dataFormat) {
         v.write(uri, chooser == null ? null : dataFormat, null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -230,5 +230,5 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
         });
     }
 
-    protected abstract CompletionStage<Void> doIt(DocumentProject p);
+    protected abstract CompletionStage<Void> doIt(DocumentOrientedActivity p);
 }
