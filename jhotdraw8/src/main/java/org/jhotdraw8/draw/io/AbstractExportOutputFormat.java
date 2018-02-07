@@ -16,8 +16,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
@@ -50,7 +49,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
     protected abstract String getExtension();
 
-        @Nonnull 
+         
     private  Function<URI,URI> uriResolver = new UriResolver(null,null);
 
     @Override
@@ -67,12 +66,11 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
     }
 
-    @Nonnull
-    public Function<URI,URI> getUriResolver() {
+        public Function<URI,URI> getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver(@Nonnull Function<URI,URI>  uriResolver) {
+    public void setUriResolver( Function<URI,URI>  uriResolver) {
         this.uriResolver = uriResolver;
     }
 

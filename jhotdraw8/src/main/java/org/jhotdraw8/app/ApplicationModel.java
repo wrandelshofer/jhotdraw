@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CompletionStage;
 import java.util.prefs.Preferences;
 import javafx.scene.control.MenuBar;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
@@ -33,13 +32,11 @@ public interface ApplicationModel {
      *
      * @return a new instance
      */
-    @Nonnull
-    default CompletionStage<Project> createProjectAsync() {
+        default CompletionStage<Project> createProjectAsync() {
         return FXWorker.supply(this::createProject);
     }
 
-    @Nonnull
-    public Project createProject();
+        public Project createProject();
     // URI choosers
 
     /**
@@ -47,32 +44,28 @@ public interface ApplicationModel {
      *
      * @return chooser
      */
-    @Nonnull
-    public URIChooser createOpenChooser();
+        public URIChooser createOpenChooser();
 
     /**
      * Creates a save chooser.
      *
      * @return chooser
      */
-    @Nonnull
-    public URIChooser createSaveChooser();
+        public URIChooser createSaveChooser();
 
     /**
      * Creates an export chooser.
      *
      * @return chooser
      */
-    @Nonnull
-    public URIChooser createExportChooser();
+        public URIChooser createExportChooser();
 
     /**
      * Creates an import chooser.
      *
      * @return chooser
      */
-    @Nonnull
-    public URIChooser createImportChooser();
+        public URIChooser createImportChooser();
 
     // Copyright information
     /**
@@ -80,24 +73,21 @@ public interface ApplicationModel {
      *
      * @return name
      */
-    @Nonnull
-    public String getName();
+        public String getName();
 
     /**
      * Returns the version of the application.
      *
      * @return version
      */
-    @Nonnull
-    public String getVersion();
+        public String getVersion();
 
     /**
      * Returns the copyright of the application.
      *
      * @return copyright
      */
-    @Nonnull
-    public String getCopyright();
+        public String getCopyright();
 
     /**
      * Returns true if the same URI can be opened more than once.
@@ -114,8 +104,7 @@ public interface ApplicationModel {
      *
      * @return a menu bar
      */
-    @Nonnull
-    default CompletionStage<MenuBar> createMenuBarAsync() {
+        default CompletionStage<MenuBar> createMenuBarAsync() {
         return FXWorker.supply(this::createMenuBar);
     }
 
@@ -126,8 +115,7 @@ public interface ApplicationModel {
      *
      * @return the resource bundle
      */
-    @Nonnull
-    ResourceBundle getResources();
+        ResourceBundle getResources();
 
     /**
      * Creates the application map which is used to populate menu bars.
@@ -135,14 +123,12 @@ public interface ApplicationModel {
      * @param app The application
      * @return the application map
      */
-    @Nonnull
-    HierarchicalMap<String, Action> createApplicationActionMap(@Nonnull Application app);
+        HierarchicalMap<String, Action> createApplicationActionMap( Application app);
 
     /**
      * Gets the preferences of the application.
      *
      * @return the preferences
      */
-    @Nonnull
-    Preferences getPreferences();
+        Preferences getPreferences();
 }

@@ -4,8 +4,7 @@
 package org.jhotdraw8.io;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * IdFactory.
@@ -22,8 +21,7 @@ public interface IdFactory {
      * @param object the object
      * @return the id
      */
-    @Nonnull
-    default String createId(@Nonnull Object object) {
+        default String createId( Object object) {
         String id = createId(object, "");
         return id;
     }
@@ -36,7 +34,7 @@ public interface IdFactory {
      * @param prefix the desired prefix for the id
      * @return the id
      */
-    public String createId(@Nonnull Object object, @Nullable String prefix);
+    public String createId( Object object, @Nullable String prefix);
 
     /**
      * Creates an id for the specified object. If the object already has an id,
@@ -48,7 +46,7 @@ public interface IdFactory {
      * @param id the desired id
      * @return the id
      */
-    public String createId(@Nonnull Object object, @Nullable String prefix, @Nonnull String id);
+    public String createId( Object object, @Nullable String prefix,  String id);
 
     /**
      * Gets an id for the specified object. Returns null if the object has no
@@ -58,7 +56,7 @@ public interface IdFactory {
      * @return the id
      */
     @Nullable
-    public String getId(@Nonnull Object object);
+    public String getId( Object object);
 
     /**
      * Gets the object for the specified id. Returns null if the id has no
@@ -68,7 +66,7 @@ public interface IdFactory {
      * @return the object
      */
     @Nullable
-    public Object getObject(@Nonnull String id);
+    public Object getObject( String id);
 
     /**
      * Puts an id for the specified object. If the object already has an id, the
@@ -77,7 +75,7 @@ public interface IdFactory {
      * @param id the id
      * @param object the object
      */
-    public void putId(@Nonnull String id, @Nullable Object object);
+    public void putId( String id, @Nullable Object object);
 
     /**
      * Clears all ids.

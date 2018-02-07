@@ -14,7 +14,6 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
@@ -73,7 +72,7 @@ public interface FontableFigure extends Figure {
      * @param ctx RenderContext, can be null
      * @param text a text node
      */
-    default void applyFontableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Text text) {
+    default void applyFontableFigureProperties( RenderContext ctx,  Text text) {
         Font font = getStyled(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
@@ -117,7 +116,7 @@ public interface FontableFigure extends Figure {
      * @param ctx context
      * @param text a text node
      */
-    default void applyFontableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Labeled text) {
+    default void applyFontableFigureProperties( RenderContext ctx,  Labeled text) {
         Font font = getStyled(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);

@@ -5,7 +5,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.control.Labeled;
 import javafx.scene.text.Text;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.StringStyleableFigureKey;
@@ -30,7 +29,7 @@ public interface TextableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyTextableFigureProperties(@Nonnull Text text) {
+    default void applyTextableFigureProperties( Text text) {
         text.setText(getStyled(TEXT));
     }
 
@@ -39,7 +38,7 @@ public interface TextableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyTextableFigureProperties(@Nonnull Labeled text) {
+    default void applyTextableFigureProperties( Labeled text) {
         text.setText(getStyled(TEXT));
     }
 }

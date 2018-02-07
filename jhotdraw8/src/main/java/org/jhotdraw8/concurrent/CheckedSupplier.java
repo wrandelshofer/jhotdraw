@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.concurrent;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A Supplier which can throw a checked exception.

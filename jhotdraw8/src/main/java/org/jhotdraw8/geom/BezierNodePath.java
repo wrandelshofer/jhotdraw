@@ -13,7 +13,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.shape.FillRule;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * BezierNodePath.
@@ -238,7 +238,6 @@ public class BezierNodePath implements Shape {
         boolean mc1 = middle.isC1();
         boolean nc1 = next.isC1();
         if (!pc2 && mc1 && nc1) {
-            @Nullable
             javafx.geometry.Point2D p = Beziers.mergeQuadCurve(
                     prev.getX0(), prev.getY0(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
                     next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);
@@ -246,7 +245,6 @@ public class BezierNodePath implements Shape {
                 nodes.set(nextSegment, next.setX1(p.getX()).setY1(p.getY()));
             }
         } else if (pc2 && mc2 && !nc1) {
-            @Nullable
             javafx.geometry.Point2D p = Beziers.mergeQuadCurve(
                     prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX0(), middle.getY0(),
                     middle.getX2(), middle.getY2(), next.getX0(), next.getY0(), tolerance);
@@ -254,7 +252,6 @@ public class BezierNodePath implements Shape {
                 nodes.set(prevSegment, prev.setX2(p.getX()).setY2(p.getY()));
             }
         } else if (pc2&&mc1&&mc2&&nc1) {
-            @Nullable
             javafx.geometry.Point2D[] p = Beziers.mergeCubicCurve(
                     prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
                     middle.getX2(), middle.getY2(), next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);

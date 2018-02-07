@@ -4,7 +4,6 @@
 package org.jhotdraw8.collection;
 
 import java.util.Map;
-import javax.annotation.Nonnull;
 
 /**
  * NonnullMapAccessor.
@@ -20,8 +19,7 @@ public interface NonnullMapAccessor<T> extends MapAccessor<T> {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    @Nonnull
-    default T getNonnull(@Nonnull Map<? super Key<?>, Object> a) {
+        default T getNonnull( Map<? super Key<?>, Object> a) {
         T t = get(a);
         assert t != null;
         return t;
@@ -34,8 +32,7 @@ public interface NonnullMapAccessor<T> extends MapAccessor<T> {
      * @param value The new value.
      * @return The old value.
      */
-    @Nonnull
-    default T putNonnull(@Nonnull Map<? super Key<?>, Object> a, @Nonnull T value) {
+        default T putNonnull( Map<? super Key<?>, Object> a,  T value) {
         T t = put(a, value);
         assert t != null;
         return t;

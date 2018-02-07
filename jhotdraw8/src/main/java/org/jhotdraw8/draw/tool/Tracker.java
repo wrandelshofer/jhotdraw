@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.tool;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.DrawingView;
 
 /**
@@ -30,7 +29,7 @@ public interface Tracker {
      * Returns the node which presents the tracker.
      *
      * @return a node
-     */@Nonnull 
+     */ 
     Node getNode();
 
     /**
@@ -39,7 +38,7 @@ public interface Tracker {
      * @param evt an event
      * @param view a view
      */
-    void trackMousePressed(@Nonnull MouseEvent evt, @Nonnull DrawingView view );
+    void trackMousePressed( MouseEvent evt,  DrawingView view );
 
     /**
      * Handle input event forwarded from the parent Tool.
@@ -47,7 +46,7 @@ public interface Tracker {
      * @param evt an event
      * @param view a view
      */
-    void trackMouseReleased(@Nonnull MouseEvent evt, @Nonnull DrawingView view );
+    void trackMouseReleased( MouseEvent evt,  DrawingView view );
 
     /**
      * Handle input event forwarded from the parent Tool.
@@ -55,7 +54,7 @@ public interface Tracker {
      * @param evt an event
      * @param view a view
      */
-    void trackMouseClicked(@Nonnull MouseEvent evt, @Nonnull DrawingView view );
+    void trackMouseClicked( MouseEvent evt,  DrawingView view );
 
     /**
      * Handle input event forwarded from the parent Tool.
@@ -63,11 +62,11 @@ public interface Tracker {
      * @param evt an event
      * @param view a view
      */
-    void trackMouseDragged(@Nonnull MouseEvent evt, @Nonnull DrawingView view );
+    void trackMouseDragged( MouseEvent evt,  DrawingView view );
 
-    void trackKeyPressed(@Nonnull KeyEvent event, @Nonnull DrawingView view );
+    void trackKeyPressed( KeyEvent event,  DrawingView view );
 
-    void trackKeyReleased(@Nonnull KeyEvent event, @Nonnull DrawingView view );
+    void trackKeyReleased( KeyEvent event,  DrawingView view );
 
-    void trackKeyTyped(@Nonnull KeyEvent event, @Nonnull DrawingView view );
+    void trackKeyTyped( KeyEvent event,  DrawingView view );
 }

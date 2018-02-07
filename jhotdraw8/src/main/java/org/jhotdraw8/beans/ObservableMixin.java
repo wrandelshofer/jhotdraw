@@ -6,7 +6,6 @@ package org.jhotdraw8.beans;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javax.annotation.Nonnull;
 
 /**
  * ObservableMixin.
@@ -19,12 +18,12 @@ public interface ObservableMixin extends Observable {
     CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
 
     @Override
-    default void addListener(@Nonnull InvalidationListener listener) {
+    default void addListener( InvalidationListener listener) {
         getInvalidationListeners().add(listener);
     }
 
     @Override
-    default void removeListener(@Nonnull InvalidationListener listener) {
+    default void removeListener( InvalidationListener listener) {
         getInvalidationListeners().remove(listener);
     }
 
@@ -34,7 +33,7 @@ public interface ObservableMixin extends Observable {
      * @param o observable. Will not be used. Listeners are notified with "this"
      * as the observable.
      */
-    default void fireInvalidated(@Nonnull Observable o) {
+    default void fireInvalidated( Observable o) {
         invalidated();
         final CopyOnWriteArrayList<InvalidationListener> listeners = getInvalidationListeners();
         if (!listeners.isEmpty()) {

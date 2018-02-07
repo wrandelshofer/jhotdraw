@@ -5,8 +5,7 @@ package org.jhotdraw8.draw.key;
 
 import java.util.Objects;
 import javafx.scene.paint.Color;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.text.CssConverterFactory;
 import org.jhotdraw8.text.PatternConverter;
 
@@ -36,24 +35,20 @@ public class CssColor implements Paintable {
         this.color = color;
     }
 
-    @Nonnull
-    public String getName() {
+        public String getName() {
         return name;
     }
 
-    @Nonnull
-    public Color getColor() {
+        public Color getColor() {
         return color;
     }
 
-    @Nonnull
-    @Override
+        @Override
     public Color getPaint() {
         return color;
     }
 
-    @Nonnull
-    public static String toName(Color c) {
+        public static String toName(Color c) {
         if (c.getOpacity() == 1.0) {
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
@@ -96,8 +91,7 @@ public class CssColor implements Paintable {
         return true;
     }
 
-    @Nonnull
-    @Override
+        @Override
     public String toString() {
         return "CColor{" + getName() + '}';
     }

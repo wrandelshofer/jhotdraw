@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javax.annotation.Nonnull;
 
 /**
  * Defines a <i>clipping</i> of a {@link Drawing}.
@@ -32,8 +31,7 @@ public interface Clipping extends Figure {
         return false;
     }
 
-    @Override @Nonnull
-    default String getTypeSelector() {
+    @Override     default String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

@@ -21,7 +21,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import javax.annotation.Nonnull;
 import static org.jhotdraw8.app.Disableable.DISABLED_PROPERTY;
 import org.jhotdraw8.collection.Key;
 
@@ -74,27 +73,24 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    @Nonnull
-    public ReadOnlyBooleanProperty disabledProperty() {
+        public ReadOnlyBooleanProperty disabledProperty() {
         return disabled;
     }
 
     @Override
-    @Nonnull
-    public ObservableSet<Object> disablers() {
+        public ObservableSet<Object> disablers() {
         return disablers;
     }
 
     @Override
-    @Nonnull
-    public final ObservableMap<Key<?>, Object> getProperties() {
+        public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties = FXCollections.observableHashMap();
         }
         return properties;
     }
 
-    protected void loadRecentUris(@Nonnull String applicationId) {
+    protected void loadRecentUris( String applicationId) {
         Preferences prefs = getModel().getPreferences();
         String recentUrisSerialized = prefs.get(applicationId + ".recentUris", "");
         for (String str : recentUrisSerialized.split("\t")) {
@@ -133,20 +129,17 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    @Nonnull
-    public IntegerProperty maxNumberOfRecentUrisProperty() {
+        public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
     }
 
     @Override
-    @Nonnull
-    public ObjectProperty<ApplicationModel> modelProperty() {
+        public ObjectProperty<ApplicationModel> modelProperty() {
         return model;
     }
 
     @Override
-    @Nonnull
-    public ReadOnlySetProperty<URI> recentUrisProperty() {
+        public ReadOnlySetProperty<URI> recentUrisProperty() {
         return recentUris;
     }
 

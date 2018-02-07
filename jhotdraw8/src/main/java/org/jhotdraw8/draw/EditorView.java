@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw;
 
-import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Project;
 
 /**
@@ -13,6 +12,5 @@ import org.jhotdraw8.app.Project;
  * @version $Id$
  */
 public interface EditorView {
-@Nonnull
     DrawingEditor getEditor();
 }

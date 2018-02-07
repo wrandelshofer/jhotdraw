@@ -11,7 +11,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -125,7 +124,7 @@ public interface BorderableFigure extends Figure {
      */
     public static DoubleListStyleableFigureKey BORDER_STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("border-stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableList.emptyList());
 
-    default void applyBorderStrokeCapAndJoinProperties(@Nonnull Shape shape) {
+    default void applyBorderStrokeCapAndJoinProperties( Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(BORDER_STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -141,7 +140,7 @@ public interface BorderableFigure extends Figure {
         }
     }
 
-    default void applyBorderStrokeDashProperties(@Nonnull Shape shape) {
+    default void applyBorderStrokeDashProperties( Shape shape) {
         double d = getStyled(BORDER_STROKE_DASH_OFFSET);
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -152,7 +151,7 @@ public interface BorderableFigure extends Figure {
         }
     }
 
-    default void applyBorderStrokeTypeProperties(@Nonnull Shape shape) {
+    default void applyBorderStrokeTypeProperties( Shape shape) {
         StrokeType st = getStyled(BORDER_STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -164,7 +163,7 @@ public interface BorderableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyBorderStrokeableFigureProperties(@Nonnull Shape shape) {
+    default void applyBorderStrokeableFigureProperties( Shape shape) {
          applyBorderStrokeColorProperties( shape) ;
          applyBorderStrokeWidthProperties( shape) ;
         applyBorderStrokeCapAndJoinProperties(shape);
@@ -172,13 +171,13 @@ public interface BorderableFigure extends Figure {
         applyBorderStrokeTypeProperties(shape);
         applyBorderStrokeDashProperties(shape);
     }
-    default void applyBorderStrokeColorProperties(@Nonnull Shape shape) {
+    default void applyBorderStrokeColorProperties( Shape shape) {
         Paint p = Paintable.getPaint(getStyled(BORDER_STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
-    default void applyBorderStrokeWidthProperties(@Nonnull Shape shape) {
+    default void applyBorderStrokeWidthProperties( Shape shape) {
        double d = getStyled(BORDER_STROKE_WIDTH);
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);

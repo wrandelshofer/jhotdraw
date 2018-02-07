@@ -14,8 +14,7 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -43,16 +42,14 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the model
      */
-    @Nonnull
-    public ObjectProperty<ApplicationModel> modelProperty();
+        public ObjectProperty<ApplicationModel> modelProperty();
 
     /**
      * The set of projects contains all open projects..
      *
      * @return the projects
      */
-    @Nonnull
-    public SetProperty<Project> projectsProperty();
+        public SetProperty<Project> projectsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -62,8 +59,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the recent Uris
      */
-    @Nonnull
-    public ReadOnlySetProperty<URI> recentUrisProperty();
+        public ReadOnlySetProperty<URI> recentUrisProperty();
 
     /**
      * The maximal number of recent URIs. Specifies how many items of
@@ -72,12 +68,10 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the number of recent Uris
      */
-    @Nonnull
-    public IntegerProperty maxNumberOfRecentUrisProperty();
+        public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    @Nonnull
-    default public ObservableSet<Project> projects() {
+        default public ObservableSet<Project> projects() {
         return projectsProperty().get();
     }
 
@@ -86,7 +80,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void add(@Nonnull Project v) {
+    default public void add( Project v) {
         projectsProperty().add(v);
     }
 
@@ -95,7 +89,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void remove(@Nonnull Project v) {
+    default public void remove( Project v) {
         projectsProperty().remove(v);
     }
 
@@ -105,8 +99,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return The active view.
      */
-    @Nonnull
-    public ReadOnlyObjectProperty<Project> activeProjectProperty();
+        public ReadOnlyObjectProperty<Project> activeProjectProperty();
 
     // Convenience method
     @Nullable
@@ -119,23 +112,21 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the action map
      */
-    @Nonnull
-    public HierarchicalMap<String, Action> getActionMap();
+        public HierarchicalMap<String, Action> getActionMap();
 
     /**
      * Executes a worker on the thread pool of the application.
      *
      * @param r the runnable
      */
-    public void execute(@Nonnull Runnable r);
+    public void execute( Runnable r);
 
     /**
      * Returns the application model.
      *
      * @return the model
      */
-    @Nonnull
-    default ApplicationModel getModel() {
+        default ApplicationModel getModel() {
         return modelProperty().get();
     }
 
@@ -144,7 +135,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param newValue the model
      */
-    default void setModel(@Nonnull ApplicationModel newValue) {
+    default void setModel( ApplicationModel newValue) {
         modelProperty().set(newValue);
     }
 
@@ -172,15 +163,14 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return A callback.
      */
-    @Nonnull
-    CompletionStage<Project> createProject();
+        CompletionStage<Project> createProject();
 
     /**
      * Adds a recent URI.
      *
      * @param uri a recent URI
      */
-    default void addRecentURI(@Nonnull URI uri) {
+    default void addRecentURI( URI uri) {
         // ensures that the last used uri lands at the end of the LinkedHashSet.
         Set<URI> recents = recentUrisProperty().get();
         recents.remove(uri);

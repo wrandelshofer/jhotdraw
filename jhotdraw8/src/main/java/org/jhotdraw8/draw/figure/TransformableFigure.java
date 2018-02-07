@@ -21,8 +21,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -124,7 +123,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformableFigureProperties(@Nonnull Node node) {
+    default void applyTransformableFigureProperties( Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
         if (t.isIdentity()) {
@@ -141,7 +140,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
-    default void applyTransformableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    default void applyTransformableFigureProperties( RenderContext ctx,  Node node) {
         applyTransformableFigureProperties(node);
     }
 
@@ -228,8 +227,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return l2p;
     }
 
-    @Nonnull
-    default List<Transform> getLocalToParentAsList(boolean styled) {
+        default List<Transform> getLocalToParentAsList(boolean styled) {
         ArrayList<Transform> list = new ArrayList<>();
 
         Point2D center = getCenterInLocal();
@@ -333,7 +331,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      *
      * @param transforms new value
      */
-    default void setTransforms(@Nonnull Transform... transforms) {
+    default void setTransforms( Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
             set(TRANSFORMS, ImmutableList.emptyList());
         } else {
@@ -366,7 +364,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void reshapeInLocal(@Nonnull Transform transform) {
+    default void reshapeInLocal( Transform transform) {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
             List<Transform> ts = get(TRANSFORMS);
             if (ts.isEmpty()) {
@@ -408,7 +406,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void reshapeInParent(@Nonnull Transform transform) {
+    default void reshapeInParent( Transform transform) {
         final boolean hasCenters = hasCenterTransforms();
         final boolean hasTransforms = hasTransforms();
         if (!hasTransforms && (transform instanceof Translate)) {
@@ -440,7 +438,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void transformInLocal(@Nonnull Transform t) {
+    default void transformInLocal( Transform t) {
         flattenTransforms();
         List<Transform> transforms = get(TRANSFORMS);
         if (transforms.isEmpty()) {
@@ -451,7 +449,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void transformInParent(@Nonnull Transform t) {
+    default void transformInParent( Transform t) {
         if (t == null || t.isIdentity()) {
             return;
         }
@@ -471,8 +469,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
-    @Nonnull
-    public static Set<Key<?>> getDeclaredKeys() {
+        public static Set<Key<?>> getDeclaredKeys() {
         Set<Key<?>> keys = new LinkedHashSet<>();
         Figure.getDeclaredKeys(TransformableFigure.class, keys);
         return keys;

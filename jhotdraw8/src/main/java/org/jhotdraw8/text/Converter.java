@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.Locale;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -45,7 +44,7 @@ public interface Converter<T> {
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
     @Nullable
-    T fromString(@Nonnull CharBuffer in,@Nullable IdFactory idFactory) throws ParseException, IOException;
+    T fromString( CharBuffer in,@Nullable IdFactory idFactory) throws ParseException, IOException;
 
 
     /**
@@ -68,7 +67,7 @@ public interface Converter<T> {
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
     @Nullable
-    default T fromString(@Nonnull CharBuffer in) throws ParseException, IOException {
+    default T fromString( CharBuffer in) throws ParseException, IOException {
         return fromString(in, null);
     }
 
@@ -89,7 +88,7 @@ public interface Converter<T> {
      * @throws ParseException on conversion failure
      * @throws IOException on IO failure
      */@Nullable
-    default T fromString(@Nonnull CharSequence in) throws ParseException, IOException {
+    default T fromString( CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
         if (buf.remaining() != 0 && !buf.toString().trim().isEmpty()) {
@@ -149,7 +148,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @throws java.io.IOException thrown by Appendable
      */
-    void toString(@Nonnull Appendable out,@Nullable IdFactory idFactory, @Nullable T value) throws IOException;
+    void toString( Appendable out,@Nullable IdFactory idFactory, @Nullable T value) throws IOException;
     // ----
     // convenience methods
     // ----
@@ -163,7 +162,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @throws java.io.IOException thrown by Appendable
      */
-    default void toString(@Nonnull Appendable out, @Nullable T value) throws IOException {
+    default void toString( Appendable out, @Nullable T value) throws IOException {
       toString(out, null, value);
     }
     /**
@@ -177,7 +176,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @return The String.
      */
-    @Nonnull 
+     
     default String toString(@Nullable T value) {
       StringBuilder out = new StringBuilder();
       try {

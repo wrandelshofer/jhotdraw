@@ -5,8 +5,7 @@ package org.jhotdraw8.css;
 
 import java.util.Set;
 import javafx.css.StyleOrigin;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
@@ -37,7 +36,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value contains the specified substring.
      */
-    boolean attributeValueContains(@Nonnull T element, @Nonnull String attributeName, @Nonnull String substring);
+    boolean attributeValueContains( T element,  String attributeName,  String substring);
 
     /**
      * Returns true if the element has an attribute with the specified name and
@@ -49,7 +48,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value contains the specified word.
      */
-    boolean attributeValueContainsWord(@Nonnull T element, @Nonnull String attributeName, @Nonnull String word);
+    boolean attributeValueContainsWord( T element,  String attributeName,  String word);
 
     /**
      * Returns true if the element has an attribute with the specified name and
@@ -61,7 +60,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value ends with the specified substring.
      */
-    boolean attributeValueEndsWith(@Nonnull T element, @Nonnull String attributeName, @Nonnull String substring);
+    boolean attributeValueEndsWith( T element,  String attributeName,  String substring);
 
     /**
      * Returns true if the element has an attribute with the specified name and
@@ -73,7 +72,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * value
      */
-    boolean attributeValueEquals(@Nonnull T element, @Nonnull String attributeName, @Nonnull String attributeValue);
+    boolean attributeValueEquals( T element,  String attributeName,  String attributeValue);
 
     /**
      * Returns true if the element has an attribute with the specified name and
@@ -85,7 +84,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value starts with the specified substring.
      */
-    boolean attributeValueStartsWith(@Nonnull T element, @Nonnull String attributeName, @Nonnull String substring);
+    boolean attributeValueStartsWith( T element,  String attributeName,  String substring);
 
     /**
      * Returns the attribute value with the given name.
@@ -96,10 +95,10 @@ public interface SelectorModel<T> {
      * attribute with this name.
      */
     @Nullable
-    String getAttribute(@Nonnull T element, @Nonnull String name);
+    String getAttribute( T element,  String name);
 
     @Nullable
-    public String getAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name);
+    public String getAttribute( T element,  StyleOrigin origin,  String name);
 
     /**
      * Returns all styleable attributes of the element.
@@ -107,8 +106,7 @@ public interface SelectorModel<T> {
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
-    @Nonnull
-    Set<String> getAttributeNames(@Nonnull T element);
+        Set<String> getAttributeNames( T element);
 
     /**
      * Returns all non-decomposed styleable attributes of the element.
@@ -120,8 +118,7 @@ public interface SelectorModel<T> {
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
-    @Nonnull
-    Set<String> getComposedAttributeNames(@Nonnull T element);
+        Set<String> getComposedAttributeNames( T element);
 
     /**
      * Returns all decomposed styleable attributes of the element.
@@ -133,8 +130,7 @@ public interface SelectorModel<T> {
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
-    @Nonnull
-    Set<String> getDecomposedAttributeNames(@Nonnull T element);
+        Set<String> getDecomposedAttributeNames( T element);
 
     /**
      * Returns the id of the element.
@@ -143,7 +139,7 @@ public interface SelectorModel<T> {
      * @return the id or null if the element does not have an id.
      */
     @Nullable
-    String getId(@Nonnull T element);
+    String getId( T element);
 
     /**
      * Gets the parent of the element.
@@ -152,7 +148,7 @@ public interface SelectorModel<T> {
      * @return The parent element. Returns null if the element has no parent.
      */
     @Nullable
-    T getParent(@Nonnull T element);
+    T getParent( T element);
 
     /**
      * Gets the previous sibling of the element.
@@ -162,7 +158,7 @@ public interface SelectorModel<T> {
      * sibling.
      */
     @Nullable
-    T getPreviousSibling(@Nonnull T element);
+    T getPreviousSibling( T element);
 
     /**
      * Returns the style classes of the element.
@@ -170,8 +166,7 @@ public interface SelectorModel<T> {
      * @param element the element
      * @return the style classes or an empty set.
      */
-    @Nonnull
-    Set<String> getStyleClasses(@Nonnull T element);
+        Set<String> getStyleClasses( T element);
 
     /**
      * Returns the style type of the element.
@@ -179,8 +174,7 @@ public interface SelectorModel<T> {
      * @param element the element
      * @return the style type of the element.
      */
-    @Nonnull
-    String getType(@Nonnull T element);
+        String getType( T element);
 
     /**
      * Returns true if the element has the specified attribute.
@@ -189,7 +183,7 @@ public interface SelectorModel<T> {
      * @param attributeName an attribute name
      * @return true if the element has an attribute with the specified name
      */
-    boolean hasAttribute(@Nonnull T element, @Nonnull String attributeName);
+    boolean hasAttribute( T element,  String attributeName);
 
     /**
      * Returns true if the element has the specified id.
@@ -198,7 +192,7 @@ public interface SelectorModel<T> {
      * @param id an id
      * @return true if the element has the id
      */
-    boolean hasId(@Nonnull T element, @Nonnull String id);
+    boolean hasId( T element,  String id);
 
     /**
      * Returns true if the element has the specified pseudo class.
@@ -207,7 +201,7 @@ public interface SelectorModel<T> {
      * @param pseudoClass an id
      * @return true if the element has the id
      */
-    boolean hasPseudoClass(@Nonnull T element, @Nonnull String pseudoClass);
+    boolean hasPseudoClass( T element,  String pseudoClass);
 
     /**
      * Returns true if the element has the specified class.
@@ -216,7 +210,7 @@ public interface SelectorModel<T> {
      * @param clazz an id
      * @return true if the element has the id
      */
-    boolean hasStyleClass(@Nonnull T element, @Nonnull String clazz);
+    boolean hasStyleClass( T element,  String clazz);
 
     /**
      * Returns true if the element has the specified type.
@@ -225,7 +219,7 @@ public interface SelectorModel<T> {
      * @param type an id
      * @return true if the element has the id
      */
-    boolean hasType(@Nonnull T element, @Nonnull String type);
+    boolean hasType( T element,  String type);
 
     /**
      * Sets an attribute value.
@@ -236,5 +230,5 @@ public interface SelectorModel<T> {
      * @param value The attribute value. Null removes the attribute from the
      * element.
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable String value);
+    void setAttribute( T element,  StyleOrigin origin,  String name, @Nullable String value);
 }

@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
@@ -44,7 +43,7 @@ public interface Layer extends Figure {
     }
     
    @Override
-    default boolean isSuitableParent(@Nonnull Figure newParent) {
+    default boolean isSuitableParent( Figure newParent) {
         return newParent == null || (newParent instanceof Drawing) || (newParent instanceof Clipping);
     }
 }

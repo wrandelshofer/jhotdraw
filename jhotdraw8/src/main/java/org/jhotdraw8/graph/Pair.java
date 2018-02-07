@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.graph;
 
-import javax.annotation.Nonnull;
 
 /**
  * Pair.
@@ -14,9 +13,7 @@ import javax.annotation.Nonnull;
  */
 public interface Pair<V> {
 
-    @Nonnull
-    V getStart();
+        V getStart();
 
-    @Nonnull
-    V getEnd();
+        V getEnd();
 }

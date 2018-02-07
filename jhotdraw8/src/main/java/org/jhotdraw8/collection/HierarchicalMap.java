@@ -4,8 +4,7 @@
 package org.jhotdraw8.collection;
 
 import java.util.HashMap;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * HierarchicalMap.

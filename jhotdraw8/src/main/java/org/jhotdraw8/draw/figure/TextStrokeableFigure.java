@@ -10,7 +10,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -126,7 +125,7 @@ public interface TextStrokeableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyTextStrokeableFigureProperties(@Nonnull Shape shape) {
+    default void applyTextStrokeableFigureProperties( Shape shape) {
         Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE_COLOR));
         double strokeWidth = getStyled(TEXT_STROKE_WIDTH);
         if (!Objects.equals(shape.getStroke(), paint)) {

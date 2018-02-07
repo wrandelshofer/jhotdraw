@@ -4,7 +4,6 @@
 package org.jhotdraw8.draw.io;
 
 import java.util.Map;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.collection.DoubleKey;
 import org.jhotdraw8.collection.Key;
@@ -28,7 +27,7 @@ public interface ExportOutputFormat {
     
     /** Sets output format options.
      * @param options the options */
-    void setOptions(@Nonnull Map<? super Key<?>, Object> options);
+    void setOptions( Map<? super Key<?>, Object> options);
 
     
 }

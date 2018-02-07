@@ -4,7 +4,7 @@
 package org.jhotdraw8.css;
 
 import java.io.IOException;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * CssTokenizerInterface.

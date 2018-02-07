@@ -6,8 +6,7 @@ package org.jhotdraw8.draw;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.tool.Tool;
 
 /**
@@ -54,24 +53,21 @@ public interface DrawingEditor {
      *
      * @return the property
      */
-    @Nonnull
-    ReadOnlySetProperty<DrawingView> drawingViewsProperty();
+        ReadOnlySetProperty<DrawingView> drawingViewsProperty();
 
     /**
      * The currently active drawing view.
      *
      * @return the property
      */
-    @Nonnull
-    ObjectProperty<DrawingView> activeDrawingViewProperty();
+        ObjectProperty<DrawingView> activeDrawingViewProperty();
 
     /**
      * The currently active tool.
      *
      * @return the property
      */
-    @Nonnull
-    ObjectProperty<Tool> activeToolProperty();
+        ObjectProperty<Tool> activeToolProperty();
 
     /**
      * The default tool. When the value is not null, the default tool is made
@@ -79,8 +75,7 @@ public interface DrawingEditor {
      *
      * @return the property
      */
-    @Nonnull
-    ObjectProperty<Tool> defaultToolProperty();
+        ObjectProperty<Tool> defaultToolProperty();
 
     // ---
     // convenience methods
@@ -90,7 +85,7 @@ public interface DrawingEditor {
      *
      * @param drawingView the drawing view
      */
-    default void addDrawingView(@Nonnull DrawingView drawingView) {
+    default void addDrawingView( DrawingView drawingView) {
         drawingViewsProperty().add(drawingView);
     }
 
@@ -99,7 +94,7 @@ public interface DrawingEditor {
      *
      * @param drawingView the drawing view
      */
-    default void removeDrawingView(@Nonnull DrawingView drawingView) {
+    default void removeDrawingView( DrawingView drawingView) {
         drawingViewsProperty().remove(drawingView);
     }
 
@@ -118,8 +113,7 @@ public interface DrawingEditor {
      *
      * @return the active drawing view or empty
      */
-    @Nonnull
-    default ObservableSet<DrawingView> getDrawingViews() {
+        default ObservableSet<DrawingView> getDrawingViews() {
         return drawingViewsProperty().get();
     }
 

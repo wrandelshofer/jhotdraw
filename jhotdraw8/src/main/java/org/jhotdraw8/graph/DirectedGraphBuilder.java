@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javafx.util.Builder;
-import javax.annotation.Nonnull;
 
 /**
  * DirectedGraphBuilder.
@@ -66,7 +65,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
      * @param vb vertex b
      * @param arrow the arrow
      */
-    public void addArrow(@Nonnull V va, @Nonnull V vb, @Nonnull A arrow) {
+    public void addArrow( V va,  V vb,  A arrow) {
         if (va == null) {
             throw new IllegalArgumentException("va=null");
         }
@@ -87,7 +86,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
      * @param vb vertex b
      * @param arrow the arrow
      */
-    public void addBidiArrow(@Nonnull V va, @Nonnull V vb, @Nonnull A arrow) {
+    public void addBidiArrow( V va,  V vb,  A arrow) {
         addArrow(va, vb, arrow);
         addArrow(vb, va, arrow);
     }
@@ -97,7 +96,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
      *
      * @param v vertex
      */
-    public void addVertex(@Nonnull V v) {
+    public void addVertex( V v) {
         if (v == null) {
             throw new IllegalArgumentException("v=null");
         }
@@ -184,8 +183,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
     }
 
     @Override
-    @Nonnull
-    public V getVertex(int vi) {
+        public V getVertex(int vi) {
         if (vertices.get(vi) == null) {
             System.err.println("DIrectedGraphBuilder is broken");
         }
@@ -193,16 +191,16 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
     }
 
     @Override
-    public int getNextCount(@Nonnull V v) {
+    public int getNextCount( V v) {
         return getNextCount(getVertexIndex(v));
     }
 
     @Override
-    public V getNext(@Nonnull V v, int i) {
+    public V getNext( V v, int i) {
         return getVertex(getNext(getVertexIndex(v), i));
     }
 
-    protected int getVertexIndex(@Nonnull V v) {
+    protected int getVertexIndex( V v) {
         return vertexMap.get(v);
     }
     

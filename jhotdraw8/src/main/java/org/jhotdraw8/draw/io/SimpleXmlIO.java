@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 import javafx.css.StyleOrigin;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -93,7 +92,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     private URI internalHome;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    private @Nonnull Function<URI,URI> uriResolver;
+    private  Function<URI,URI> uriResolver;
 
     public SimpleXmlIO(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);

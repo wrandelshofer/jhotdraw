@@ -4,8 +4,7 @@
 package org.jhotdraw8.text;
 
 import java.util.function.BiFunction;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Creates a {@code Converter} given a type and style.
@@ -26,6 +25,6 @@ public interface ConverterFactory extends BiFunction<String, String, Converter<?
      *
      * @throws IllegalArgumentException if the type or the style are invalid
      */
-    @Override @Nonnull 
+    @Override  
     public Converter<?> apply(@Nullable String type, @Nullable String style);
 }

@@ -7,8 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -69,7 +68,7 @@ public interface StyleableFigure extends Figure {
      * @param ctx the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyStyleableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    default void applyStyleableFigureProperties( RenderContext ctx,  Node node) {
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EXPORT) {
             String styleId = getId();
             node.setId(styleId == null ? "" : styleId);
@@ -83,7 +82,7 @@ public interface StyleableFigure extends Figure {
         return get(STYLE);
     }
 
-    @Override @Nonnull 
+    @Override  
     default ObservableList<String> getStyleClass() {
         return get(STYLE_CLASS);
     }

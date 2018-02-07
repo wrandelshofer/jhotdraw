@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -32,8 +31,7 @@ public interface FigureFactory {
      *
      * @throws java.io.IOException if the factory does not support this figure
      */
-    @Nonnull
-    String figureToName(@Nonnull Figure f) throws IOException;
+        String figureToName( Figure f) throws IOException;
 
     /**
      * Maps an XML element name to a figure.
@@ -43,8 +41,7 @@ public interface FigureFactory {
      *
      * @throws java.io.IOException if the factory does not support this name
      */
-    @Nonnull
-    Figure nameToFigure(@Nonnull String name) throws IOException;
+        Figure nameToFigure( String name) throws IOException;
 
     /**
      * Maps a key to a XML attribute name. The name used for persistent storage
@@ -57,8 +54,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the key for
      * the specified figure
      */
-    @Nonnull
-    String keyToName(@Nonnull Figure f, @Nonnull MapAccessor<?> key) throws IOException;
+        String keyToName( Figure f,  MapAccessor<?> key) throws IOException;
 
     /**
      * Maps an XML attribute name to a key.
@@ -70,8 +66,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the name for
      * the specified figure
      */
-    @Nonnull
-    MapAccessor<?> nameToKey(@Nonnull Figure f, @Nonnull String name) throws IOException;
+        MapAccessor<?> nameToKey( Figure f,  String name) throws IOException;
 
     /**
      * Maps a key to a XML element name. The name used for persistent storage
@@ -90,8 +85,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the key for
      * the specified figure
      */
-    @Nonnull
-    String keyToElementName(@Nonnull Figure f, @Nonnull MapAccessor<?> key) throws IOException;
+        String keyToElementName( Figure f,  MapAccessor<?> key) throws IOException;
 
     /**
      * Maps an XML element name to a key.
@@ -103,8 +97,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the name for
      * the specified figure
      */
-    @Nonnull
-    MapAccessor<?> elementNameToKey(@Nonnull Figure f, @Nonnull String name) throws IOException;
+        MapAccessor<?> elementNameToKey( Figure f,  String name) throws IOException;
 
     /**
      * Maps a value to an XML attribute value.
@@ -117,8 +110,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    @Nonnull
-    <T> String valueToString(@Nonnull MapAccessor<T> key, @Nonnull T value) throws IOException;
+        <T> String valueToString( MapAccessor<T> key,  T value) throws IOException;
 
     /**
      * Maps a value to a XML node list.
@@ -134,8 +126,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    @Nonnull
-    List<Node> valueToNodeList(@Nonnull MapAccessor<?> key, @Nonnull Object value, @Nonnull Document document) throws IOException;
+        List<Node> valueToNodeList( MapAccessor<?> key,  Object value,  Document document) throws IOException;
 
     /**
      * Maps a XML node list to a value.
@@ -152,7 +143,7 @@ public interface FigureFactory {
      * the specified key
      */
     @Nullable
-    <T> T nodeListToValue(@Nonnull MapAccessor<T> key, @Nonnull List<Node> nodeList) throws IOException;
+    <T> T nodeListToValue( MapAccessor<T> key,  List<Node> nodeList) throws IOException;
 
     /**
      * Maps an XML attribute value to a value.
@@ -166,7 +157,7 @@ public interface FigureFactory {
      * the specified key
      */
     @Nullable
-    <T> T stringToValue(@Nonnull MapAccessor<T> key, @Nonnull String cdata) throws IOException;
+    <T> T stringToValue( MapAccessor<T> key,  String cdata) throws IOException;
 
     /**
      * Returns the default for the key. The default value used for persistent
@@ -178,7 +169,7 @@ public interface FigureFactory {
      * @return the default value
      */
     @Nullable
-    <T> T getDefaultValue(@Nonnull Figure f, @Nonnull MapAccessor<T> key);
+    <T> T getDefaultValue( Figure f,  MapAccessor<T> key);
 
     /**
      * Returns true if the specified value is the default for the given key.
@@ -189,7 +180,7 @@ public interface FigureFactory {
      * @param value the value
      * @return true if the value is the default value
      */
-    default <T> boolean isDefaultValue(@Nonnull Figure f, @Nonnull MapAccessor<T> key, @Nullable T value) {
+    default <T> boolean isDefaultValue( Figure f,  MapAccessor<T> key, @Nullable T value) {
         T defaultValue = key.getDefaultValue();
         return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
     }
@@ -201,8 +192,7 @@ public interface FigureFactory {
      * @param f The figure
      * @return an immutable set
      */
-    @Nonnull
-    Set<MapAccessor<?>> figureAttributeKeys(@Nonnull Figure f);
+        Set<MapAccessor<?>> figureAttributeKeys( Figure f);
 
     /**
      * Returns all keys for the specified figure which should be converted into
@@ -211,8 +201,7 @@ public interface FigureFactory {
      * @param f The figure
      * @return an immutable set
      */
-    @Nonnull
-    Set<MapAccessor<?>> figureNodeListKeys(@Nonnull Figure f);
+        Set<MapAccessor<?>> figureNodeListKeys( Figure f);
 
     /**
      * Creates an external representation of the drawing.
@@ -225,8 +214,7 @@ public interface FigureFactory {
      * @return An external representation of the drawing.
      * @throws java.io.IOException if no external representation can be created
      */
-    @Nonnull
-    default Drawing toExternalDrawing(@Nonnull Drawing internal) throws IOException {
+        default Drawing toExternalDrawing( Drawing internal) throws IOException {
         return internal;
     }
 
@@ -241,8 +229,7 @@ public interface FigureFactory {
      * @return An internal representation of the drawing.
      * @throws java.io.IOException if no internal representation can be created
      */
-    @Nonnull
-    default Drawing fromExternalDrawing(@Nonnull Drawing external) throws IOException {
+        default Drawing fromExternalDrawing( Drawing external) throws IOException {
         return external;
     }
 
@@ -253,8 +240,7 @@ public interface FigureFactory {
      * stylesheets shall not be supported. The default implementation returns
      * {@link org.jhotdraw8.draw.figure.Drawing#AUTHOR_STYLESHEETS}.
      */
-    @Nonnull
-    default MapAccessor<List<URI>> getStylesheetsKey() {
+        default MapAccessor<List<URI>> getStylesheetsKey() {
         return Drawing.AUTHOR_STYLESHEETS;
     }
 
@@ -264,6 +250,5 @@ public interface FigureFactory {
      *
      * @return name of the object id attribute
      */
-    @Nonnull
-    String getObjectIdAttribute();
+        String getObjectIdAttribute();
 }

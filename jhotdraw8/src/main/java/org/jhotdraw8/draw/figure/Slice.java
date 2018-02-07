@@ -5,8 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Defines a slice of a drawing.
@@ -37,8 +36,7 @@ public interface Slice extends Figure {
      *
      * @return origin of coordinate system
      */
-    @Nonnull
-    default Point2D getSliceOrigin() {
+        default Point2D getSliceOrigin() {
         final Bounds b = getBoundsInLocal();
         return new Point2D(b.getMinX(), b.getMinY());
     }

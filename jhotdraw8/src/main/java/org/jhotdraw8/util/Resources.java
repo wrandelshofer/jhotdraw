@@ -26,7 +26,7 @@ import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.app.action.Action;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a

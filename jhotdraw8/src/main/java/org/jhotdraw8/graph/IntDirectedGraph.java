@@ -7,7 +7,6 @@ import java.util.ArrayDeque;
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.Objects;
-import javax.annotation.Nonnull;
 
 /**
  * DirectedGraphWithArrows.
@@ -71,8 +70,7 @@ public interface IntDirectedGraph< A> {
      * @param index index of arrow
      * @return arrow
      */
-    @Nonnull
-    A getArrow(int index);
+        A getArrow(int index);
 
     /**
      * Returns the specified successor (next) arrow of the specified vertex.
@@ -81,8 +79,7 @@ public interface IntDirectedGraph< A> {
      * @param index index of next arrow
      * @return the specified arrow
      */
-    @Nonnull
-    A getArrow(int vertex, int index);
+        A getArrow(int vertex, int index);
 
     /**
      * Returns the arrow if b is next of a.
@@ -91,8 +88,7 @@ public interface IntDirectedGraph< A> {
      * @param b a vertex
      * @return the arrow or null if b is not next of a
      */
-    @Nonnull
-    default A findArrow(int a, int b) {
+        default A findArrow(int a, int b) {
         int index = findIndexOfNext(a, b);
         return index == -1 ? null : getArrow(a, index);
     }

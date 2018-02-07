@@ -17,8 +17,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -129,8 +128,7 @@ public interface DrawingView extends RenderContext {
      * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    @Nonnull
-    NonnullProperty<DrawingModel> modelProperty();
+        NonnullProperty<DrawingModel> modelProperty();
 
     /**
      * The drawing model.
@@ -138,8 +136,7 @@ public interface DrawingView extends RenderContext {
      * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    @Nonnull
-    ReadOnlyObjectProperty<Drawing> drawingProperty();
+        ReadOnlyObjectProperty<Drawing> drawingProperty();
 
     /**
      * The active layer of the drawing.
@@ -147,8 +144,7 @@ public interface DrawingView extends RenderContext {
      * @return the active layer of the drawing. Returns null if the drawing has
      * no layers or no layer has been activated.
      */
-    @Nonnull
-    ObjectProperty<Layer> activeLayerProperty();
+        ObjectProperty<Layer> activeLayerProperty();
 
     default void scrollSelectedFiguresToVisible() {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
@@ -171,8 +167,7 @@ public interface DrawingView extends RenderContext {
      * @return the tool property, with {@code getBean()} returning this drawing
      * view, and {@code getName()} returning {@code TOOL_PROPERTY}.
      */
-    @Nonnull
-    ObjectProperty<Tool> toolProperty();
+        ObjectProperty<Tool> toolProperty();
 
     /**
      * The scale factor of the drawing view.
@@ -181,8 +176,7 @@ public interface DrawingView extends RenderContext {
      * larger than 1 cause a magnification. Values between 0 and 1 causes a
      * minification.
      */
-    @Nonnull
-    DoubleProperty zoomFactorProperty();
+        DoubleProperty zoomFactorProperty();
 
     /**
      * The constrainer.
@@ -191,8 +185,7 @@ public interface DrawingView extends RenderContext {
      * drawing view, and {@code getName()} returning
      * {@code CONSTRAINER_PROPERTY}.
      */
-    @Nonnull
-    NonnullProperty<Constrainer> constrainerProperty();
+        NonnullProperty<Constrainer> constrainerProperty();
 
     /**
      * The focused property is set to true, when the DrawingView has input
@@ -201,8 +194,7 @@ public interface DrawingView extends RenderContext {
      * @return the focused property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code FOCUSED_PROPERTY}.
      */
-    @Nonnull
-    ReadOnlyBooleanProperty focusedProperty();
+        ReadOnlyBooleanProperty focusedProperty();
 
     /**
      * The selected figures.
@@ -212,64 +204,56 @@ public interface DrawingView extends RenderContext {
      *
      * @return a list of the selected figures
      */
-    @Nonnull
-    ReadOnlySetProperty<Figure> selectedFiguresProperty();
+        ReadOnlySetProperty<Figure> selectedFiguresProperty();
 
     /**
      * The active handle.
      *
      * @return the active handle if present
      */
-    @Nonnull
-    ObjectProperty<Handle> activeHandleProperty();
+        ObjectProperty<Handle> activeHandleProperty();
 
     /**
      * The handle type for single selection.
      *
      * @return the handle key
      */
-    @Nonnull
-    NonnullProperty<HandleType> handleTypeProperty();
+        NonnullProperty<HandleType> handleTypeProperty();
 
     /**
      * The handle type used for marking the anchor of a selection.
      *
      * @return the handle key
      */
-    @Nonnull
-    ObjectProperty<HandleType> anchorHandleTypeProperty();
+        ObjectProperty<HandleType> anchorHandleTypeProperty();
 
     /**
      * The handle type used for marking the lead of a selection.
      *
      * @return the handle key
      */
-    @Nonnull
-    ObjectProperty<HandleType> leadHandleTypeProperty();
+        ObjectProperty<HandleType> leadHandleTypeProperty();
 
     /**
      * The handle type for multiple selection.
      *
      * @return the handle key
      */
-    @Nonnull
-    NonnullProperty<HandleType> multiHandleTypeProperty();
+        NonnullProperty<HandleType> multiHandleTypeProperty();
 
     /**
      * The clipboard output format.
      *
      * @return the clipboard output format handle if present
      */
-    @Nonnull
-    ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
+        ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
 
     /**
      * The clipboard input format.
      *
      * @return the clipboard output format handle if present
      */
-    @Nonnull
-    ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
+        ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
 
     // ---
     // methods
@@ -279,8 +263,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return a node
      */
-    @Nonnull
-    public Node getNode();
+        public Node getNode();
 
     /**
      * Gets the node which is used to render the specified figure by the drawing
@@ -289,8 +272,7 @@ public interface DrawingView extends RenderContext {
      * @param f The figure
      * @return The node associated to the figure
      */
-    @Nonnull
-    public Node getNode(Figure f);
+        public Node getNode(Figure f);
 
     /**
      * Finds the handle at the given view coordinates. Handles are searched in
@@ -300,8 +282,7 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @return A handle or null
      */
-    @Nonnull
-    Handle findHandle(double vx, double vy);
+        Handle findHandle(double vx, double vy);
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
@@ -312,8 +293,7 @@ public interface DrawingView extends RenderContext {
      * @param figures Only searches in the provided list of figures
      * @return A figure or null
      */
-    @Nonnull
-    Figure findFigure(double vx, double vy, Set<Figure> figures);
+        Figure findFigure(double vx, double vy, Set<Figure> figures);
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
@@ -323,8 +303,7 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @return A figure or null
      */
-    @Nonnull
-    Figure findFigure(double vx, double vy);
+        Figure findFigure(double vx, double vy);
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
@@ -401,8 +380,7 @@ public interface DrawingView extends RenderContext {
      * @param pointInView point in view coordinates
      * @return A figure or empty
      */
-    default @Nonnull
-    Figure findFigure(Point2D pointInView) {
+    default     Figure findFigure(Point2D pointInView) {
         return findFigure(pointInView.getX(), pointInView.getY());
     }
 
@@ -539,8 +517,7 @@ public interface DrawingView extends RenderContext {
         return 5;
     }
 
-    @Nonnull
-    default ObservableSet<Figure> getSelectedFigures() {
+        default ObservableSet<Figure> getSelectedFigures() {
         return selectedFiguresProperty().get();
     }
 
@@ -550,8 +527,7 @@ public interface DrawingView extends RenderContext {
      * @param view a point in view coordinates
      * @return the corresponding point in world coordinates
      */
-    @Nonnull
-    default Point2D viewToWorld(@Nonnull Point2D view) {
+        default Point2D viewToWorld( Point2D view) {
         return getViewToWorld().transform(view);
     }
 
@@ -561,8 +537,7 @@ public interface DrawingView extends RenderContext {
      * @param view a rectangle in view coordinates
      * @return the corresponding point in world coordinates
      */
-    @Nonnull
-    default Bounds viewToWorld(@Nonnull Bounds view) {
+        default Bounds viewToWorld( Bounds view) {
         return getViewToWorld().transform(view);
     }
 
@@ -572,8 +547,7 @@ public interface DrawingView extends RenderContext {
      * @param world a point in world coordinates
      * @return the corresponding point in view coordinates
      */
-    @Nonnull
-    default Point2D worldToView(@Nonnull Point2D world) {
+        default Point2D worldToView( Point2D world) {
         return getWorldToView().transform(world);
     }
 
@@ -583,8 +557,7 @@ public interface DrawingView extends RenderContext {
      * @param world a box in world coordinates
      * @return the corresponding box in view coordinates
      */
-    @Nonnull
-    default Bounds worldToView(@Nonnull Bounds world) {
+        default Bounds worldToView( Bounds world) {
         return getWorldToView().transform(world);
     }
 
@@ -595,8 +568,7 @@ public interface DrawingView extends RenderContext {
      * @param vy the y coordinate of a point in view coordinates
      * @return the corresponding point in world coordinates
      */
-    @Nonnull
-    default Point2D viewToWorld(double vx, double vy) {
+        default Point2D viewToWorld(double vx, double vy) {
         return getViewToWorld().transform(vx, vy);
     }
 
@@ -607,8 +579,7 @@ public interface DrawingView extends RenderContext {
      * @param dy the y coordinate of a point in world coordinates
      * @return the corresponding point in view coordinates
      */
-    @Nonnull
-    default Point2D worldToView(double dx, double dy) {
+        default Point2D worldToView(double dx, double dy) {
         return getWorldToView().transform(dx, dy);
     }
 
@@ -617,8 +588,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return a drawing model
      */
-    @Nonnull
-    default DrawingModel getModel() {
+        default DrawingModel getModel() {
         return modelProperty().get();
     }
 
@@ -627,7 +597,7 @@ public interface DrawingView extends RenderContext {
      *
      * @param newValue a drawing model
      */
-    default void setModel(@Nonnull DrawingModel newValue) {
+    default void setModel( DrawingModel newValue) {
         modelProperty().set(newValue);
     }
 
@@ -656,7 +626,7 @@ public interface DrawingView extends RenderContext {
      *
      * @param f A figure in the drawing of this DrawingView.
      */
-    default void scrollFigureToVisible(@Nonnull Figure f) {
+    default void scrollFigureToVisible( Figure f) {
         Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
         scrollRectToVisible(boundsInView);
     }
@@ -666,14 +636,13 @@ public interface DrawingView extends RenderContext {
      *
      * @param boundsInView A rectangle in view coordinates.
      */
-    void scrollRectToVisible(@Nonnull Bounds boundsInView);
+    void scrollRectToVisible( Bounds boundsInView);
 
     /**
      * Returns the visible rectangle of the drawing view in view coordinates
      *
      * @return the portion of the DrawingView that is visible on screen.
      */
-    @Nonnull
-    Bounds getVisibleRect();
+        Bounds getVisibleRect();
 
 }

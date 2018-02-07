@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
 import org.jhotdraw8.geom.Transforms;

@@ -4,7 +4,6 @@
 package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
@@ -25,8 +24,7 @@ public interface Locator {
      * @param owner provided figure
      * @return a point on the figure in local coordinates.
      */
-    @Nonnull
-    public Point2D locate(@Nonnull Figure owner);
+        public Point2D locate( Figure owner);
 
     /**
      * Locates a position on the provided figure relative to the dependent
@@ -36,6 +34,5 @@ public interface Locator {
      * @param dependent dependent figure
      * @return a point on the figure in local coordinates.
      */
-    @Nonnull
-    public Point2D locate(@Nonnull Figure owner, @Nonnull Figure dependent);
+        public Point2D locate( Figure owner,  Figure dependent);
 }

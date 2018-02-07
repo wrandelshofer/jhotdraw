@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.util;
 
-import javax.annotation.Nonnull;
 
 /**
  * Decodes a resource value.
@@ -22,7 +21,7 @@ public interface ResourceDecoder {
      * @param type The desired type
      * @return true if the property can be decoded
      */
-    boolean canDecodeValue(@Nonnull String key, @Nonnull String propertyValue,@Nonnull  Class<?> type);
+    boolean canDecodeValue( String key,  String propertyValue,  Class<?> type);
 
     /**
      * Decodes the property value.
@@ -34,6 +33,6 @@ public interface ResourceDecoder {
      * resource uri
      * @param <T> The type of the decoded object
      * @return the decoded object
-     */@Nonnull 
-    <T> T decode(@Nonnull String key, @Nonnull String propertyValue, @Nonnull Class<T> type,@Nonnull  Class<?> baseClass);
+     */ 
+    <T> T decode( String key,  String propertyValue,  Class<T> type,  Class<?> baseClass);
 }

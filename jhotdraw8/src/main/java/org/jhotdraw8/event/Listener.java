@@ -4,7 +4,6 @@
 package org.jhotdraw8.event;
 
 import java.util.EventObject;
-import javax.annotation.Nonnull;
 
 /**
  * Functional listener interface.
@@ -20,5 +19,5 @@ public interface Listener<E extends EventObject> {
      *
      * @param event the event
      */
-    void handle(@Nonnull E event);
+    void handle( E event);
 }

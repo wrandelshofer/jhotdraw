@@ -8,14 +8,13 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code Project} provides a user interface for a resource which is
- * identified by an URI.
+ * A {@code Project} represents a piece of work or an activity that the user
+ * is going to perform over a period of time.
  * <p>
  * The life-cycle of a project object is managed by an application. See the
  * class comment of {@link Application} on how to launch an application.
@@ -73,16 +72,14 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return the property
      */
-    @Nonnull
-    public ObjectProperty<Application> applicationProperty();
+        public ObjectProperty<Application> applicationProperty();
 
     /**
      * Deactivates the view.
      */
     public void deactivate();
 
-    @Nonnull
-    public IntegerProperty disambiguationProperty();
+        public IntegerProperty disambiguationProperty();
 
     /**
      * Disposes of the view.
@@ -94,8 +91,7 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return the action map
      */
-    @Nonnull
-    public HierarchicalMap<String, Action> getActionMap();
+        public HierarchicalMap<String, Action> getActionMap();
 
     @Nullable
     default public Application getApplication() {
@@ -119,8 +115,7 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return The node.
      */
-    @Nonnull
-    public Node getNode();
+        public Node getNode();
 
     // convenience method
     @Nullable
@@ -153,7 +148,6 @@ public interface Project extends Disableable, PropertyBean {
      *
      * @return The title property.
      */
-    @Nonnull
-    public StringProperty titleProperty();
+        public StringProperty titleProperty();
 
 }

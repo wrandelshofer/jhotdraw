@@ -21,8 +21,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * DirectedGraphPathBuilder.
@@ -34,8 +33,7 @@ import javax.annotation.Nullable;
  */
 public class DirectedGraphPathBuilder<V, A> {
 
-    @Nonnull
-    private ToDoubleFunction<A> costFunction;
+        private ToDoubleFunction<A> costFunction;
     private BitSet intExplored;
     private PriorityQueue< IntNodeWithCost<A>> intFrontier;
     @SuppressWarnings({"rawtypes"})
@@ -125,8 +123,7 @@ public class DirectedGraphPathBuilder<V, A> {
      * @throws org.jhotdraw8.graph.PathBuilderException if traversal is not
      * possible
      */
-    @Nonnull
-    public VertexPath<V> buildAnyVertexPath(@Nonnull DirectedGraph<V, A> graph, @Nonnull Collection<V> waypoints) throws PathBuilderException {
+        public VertexPath<V> buildAnyVertexPath( DirectedGraph<V, A> graph,  Collection<V> waypoints) throws PathBuilderException {
         Iterator<V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -227,8 +224,8 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    private EdgePath<A> doFindShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+    private EdgePath<A> doFindShortestEdgePath( DirectedGraph<V, A> graph,
+             V start,  V goal,  ToDoubleFunction<A> costf) {
 
         NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
         if (node == null) {
@@ -286,8 +283,8 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    private VertexPath<V> doFindShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+    private VertexPath<V> doFindShortestVertexPath( DirectedGraph<V, A> graph,
+             V start,  V goal,  ToDoubleFunction<A> costf) {
 
         NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
         if (node == null) {
@@ -318,8 +315,8 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
-    public EdgePath<A> findAnyEdgePath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal) {
+    public EdgePath<A> findAnyEdgePath( DirectedGraph<V, A> graph,
+             V start,  V goal) {
         Deque<A> arrows = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = breadthFirstSearch(graph, start, goal);
         if (current == null) {
@@ -348,8 +345,8 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal) {
+    public VertexPath<V> findAnyVertexPath( DirectedGraph<V, A> graph,
+             V start,  V goal) {
         Deque<V> vertices = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = breadthFirstSearch(graph, start, goal);
         if (current == null) {
@@ -374,7 +371,7 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V, A> graph, @Nonnull Collection<V> waypoints) {
+    public VertexPath<V> findAnyVertexPath( DirectedGraph<V, A> graph,  Collection<V> waypoints) {
         Iterator<V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -399,8 +396,8 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public EdgePath<A> findIntShortestEdgePath(@Nonnull IntDirectedGraph<A> graph,
-            int start, int goal, @Nonnull ToDoubleFunction<A> costf) {
+    public EdgePath<A> findIntShortestEdgePath( IntDirectedGraph<A> graph,
+            int start, int goal,  ToDoubleFunction<A> costf) {
 
         IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
         if (node == null) {
@@ -416,8 +413,8 @@ public class DirectedGraphPathBuilder<V, A> {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
-    private IntNodeWithCost<A> findIntShortestPath(@Nonnull IntDirectedGraph< A> graph,
-            @Nonnull int start, @Nonnull int goal, @Nonnull ToDoubleFunction<A> costf) {
+    private IntNodeWithCost<A> findIntShortestPath( IntDirectedGraph< A> graph,
+             int start,  int goal,  ToDoubleFunction<A> costf) {
         final int vertexCount = graph.getVertexCount();
         if (vertexCount == 0) {
             return null;
@@ -439,8 +436,8 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public VertexPath<Integer> findIntShortestVertexPath(@Nonnull IntDirectedGraph<A> graph,
-            int start, int goal, @Nonnull ToDoubleFunction<A> costf) {
+    public VertexPath<Integer> findIntShortestVertexPath( IntDirectedGraph<A> graph,
+            int start, int goal,  ToDoubleFunction<A> costf) {
 
         IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
         if (node == null) {
@@ -455,8 +452,8 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public EdgePath<A> findShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal) {
+    public EdgePath<A> findShortestEdgePath( DirectedGraph<V, A> graph,
+             V start,  V goal) {
         return findShortestEdgePath(graph, start, goal, costFunction);
     }
 
@@ -477,8 +474,8 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public EdgePath<A> findShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+    public EdgePath<A> findShortestEdgePath( DirectedGraph<V, A> graph,
+             V start,  V goal,  ToDoubleFunction<A> costf) {
 
         if (graph instanceof IntDirectedGraph) {
             @SuppressWarnings("unchecked")
@@ -506,8 +503,8 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    private NodeWithCost<V, A> findShortestPath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+    private NodeWithCost<V, A> findShortestPath( DirectedGraph<V, A> graph,
+             V start,  V goal,  ToDoubleFunction<A> costf) {
         // Size of priority queue and frontierMap is the expected size of the frontier.
         // We use a size that is smaller than 256 bytes (assuming 12 bytes for object header).
         PriorityQueue< NodeWithCost<V, A>> frontier = new PriorityQueue<>(61);
@@ -518,8 +515,8 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal) {
+    public VertexPath<V> findShortestVertexPath( DirectedGraph<V, A> graph,
+             V start,  V goal) {
         return findShortestVertexPath(graph, start, goal, costFunction);
     }
 
@@ -540,8 +537,8 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
-            @Nonnull V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+    public VertexPath<V> findShortestVertexPath( DirectedGraph<V, A> graph,
+             V start,  V goal,  ToDoubleFunction<A> costf) {
         if (graph instanceof IntDirectedGraph) {
             return doFindIntShortestVertexPath(graph, start, goal, costf);
         } else {

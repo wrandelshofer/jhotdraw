@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -34,8 +33,8 @@ public interface InputFormat {
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
-     */@Nonnull 
-    default Figure read(@Nonnull URI uri, @Nonnull Drawing drawing) throws IOException {
+     */ 
+    default Figure read( URI uri,  Drawing drawing) throws IOException {
         return read(new File(uri), drawing);
     }
 
@@ -50,8 +49,8 @@ public interface InputFormat {
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
-     */@Nonnull 
-    default Figure read(@Nonnull File file, @Nonnull Drawing drawing) throws IOException {
+     */ 
+    default Figure read( File file,  Drawing drawing) throws IOException {
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
             return read(in, drawing);
         }
@@ -67,7 +66,7 @@ public interface InputFormat {
      * @return the drawing
      *
      * @throws java.io.IOException if an IO error occurs
-     */@Nonnull 
-    public Figure read(@Nonnull InputStream in, @Nonnull Drawing drawing) throws IOException;
+     */ 
+    public Figure read( InputStream in,  Drawing drawing) throws IOException;
 
 }

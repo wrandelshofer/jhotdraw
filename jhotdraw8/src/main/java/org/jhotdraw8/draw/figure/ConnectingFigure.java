@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.connector.Connector;
 import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END;
 import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END_CONNECTOR;
@@ -29,7 +28,7 @@ public interface ConnectingFigure extends Figure {
      * @param connector The connector that we want to use
      * @return true if the connection is supported
      */
-    default boolean canConnect(@Nonnull Figure figure, @Nonnull Connector connector) {
+    default boolean canConnect( Figure figure,  Connector connector) {
         return true;
     }
     

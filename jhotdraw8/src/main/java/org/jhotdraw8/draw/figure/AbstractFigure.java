@@ -17,8 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.SharedKeysMap;
@@ -79,7 +78,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      *
      * @param drawing the drawing
      */
-    protected void doAddNotify(@Nonnull Drawing drawing) {
+    protected void doAddNotify( Drawing drawing) {
 
     }
 
@@ -89,7 +88,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      *
      * @param drawing the drawing
      */
-    protected void doRemoveNotify(@Nonnull Drawing drawing) {
+    protected void doRemoveNotify( Drawing drawing) {
 
     }
 

@@ -11,8 +11,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
@@ -31,8 +30,7 @@ public interface DocumentProject extends Project {
      *
      * @return the property
      */
-    @Nonnull
-    public ReadOnlyBooleanProperty modifiedProperty();
+        public ReadOnlyBooleanProperty modifiedProperty();
 
     default public boolean isModified() {
         return modifiedProperty().get();
@@ -43,8 +41,7 @@ public interface DocumentProject extends Project {
      */
     public void clearModified();
 
-    @Nonnull
-    public ObjectProperty<URI> uriProperty();
+        public ObjectProperty<URI> uriProperty();
 
     @Nullable
     default public URI getURI() {
@@ -55,8 +52,7 @@ public interface DocumentProject extends Project {
         uriProperty().set(newValue);
     }
 
-    @Nonnull
-    public ObjectProperty<DataFormat> dataFormatProperty();
+        public ObjectProperty<DataFormat> dataFormatProperty();
 
     @Nullable
     default public DataFormat getDataFormat() {
@@ -84,8 +80,7 @@ public interface DocumentProject extends Project {
      * @return Returns a CompletionStage which is completed when the read
      * operation has finished.
      */
-    @Nonnull
-    public CompletionStage<Void> read(@Nonnull URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
+        public CompletionStage<Void> read( URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -101,8 +96,7 @@ public interface DocumentProject extends Project {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    @Nonnull
-    public CompletionStage<Void> write(@Nonnull URI uri, @Nullable DataFormat format, @Nonnull Map<? super Key<?>, Object> options);
+        public CompletionStage<Void> write( URI uri, @Nullable DataFormat format,  Map<? super Key<?>, Object> options);
 
     /**
      * Clears the view.
@@ -111,8 +105,7 @@ public interface DocumentProject extends Project {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    @Nonnull
-    public CompletionStage<Void> clear();
+        public CompletionStage<Void> clear();
 
     /**
      * Prints the current document.
@@ -122,19 +115,16 @@ public interface DocumentProject extends Project {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    @Nonnull
-    public CompletionStage<Void> print(@Nonnull PrinterJob job);
+        public CompletionStage<Void> print( PrinterJob job);
 
     /**
      * The action map of the view.
      *
      * @return the action map
      */
-    @Nonnull
-    public HierarchicalMap<String, Action> getActionMap();
+        public HierarchicalMap<String, Action> getActionMap();
 
-    @Nonnull
-    public IntegerProperty disambiguationProperty();
+        public IntegerProperty disambiguationProperty();
 
     default public int getDisambiguation() {
         return disambiguationProperty().get();

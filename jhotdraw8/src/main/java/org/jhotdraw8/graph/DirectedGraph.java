@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import javax.annotation.Nonnull;
 
 /**
  * DirectedGraph.
@@ -29,8 +28,7 @@ public interface DirectedGraph<V, A> {
      *
      * @return a dump of the directed graph
      */
-    @Nonnull
-    default String dump() {
+        default String dump() {
         return dump(Object::toString);
     }
 
@@ -40,8 +38,7 @@ public interface DirectedGraph<V, A> {
      * @param toStringFunction a function which converts a vertex to a string
      * @return the dumped graph
      */
-    @Nonnull
-    default String dump(@Nonnull Function<V, String> toStringFunction) {
+        default String dump( Function<V, String> toStringFunction) {
         StringBuilder buf = new StringBuilder();
         buf.append("DirectedGraph:");
         for (int ii = 0, nn = getVertexCount(); ii < nn; ii++) {
@@ -65,8 +62,7 @@ public interface DirectedGraph<V, A> {
      * @param b a vertex
      * @return the arrow or null if b is not next of a
      */
-    @Nonnull
-    default A findArrow(@Nonnull V a, @Nonnull V b) {
+        default A findArrow( V a,  V b) {
         int index = findIndexOfNext(a, b);
         return index == -1 ? null : getArrow(a, index);
     }
@@ -78,7 +74,7 @@ public interface DirectedGraph<V, A> {
      * @param b another vertex
      * @return index of vertex b. Returns -1 if b is not next index of a.
      */
-    default int findIndexOfNext(@Nonnull V a, @Nonnull V b) {
+    default int findIndexOfNext( V a,  V b) {
         for (int i = 0, n = getNextCount(a); i < n; i++) {
             if (b.equals(getNext(a, i))) {
                 return i;
@@ -93,8 +89,7 @@ public interface DirectedGraph<V, A> {
      * @param index index of arrow
      * @return arrow
      */
-    @Nonnull
-    A getArrow(int index);
+        A getArrow(int index);
 
     /**
      * Returns the specified successor (next) arrow of the specified vertex.
@@ -103,8 +98,7 @@ public interface DirectedGraph<V, A> {
      * @param index index of next arrow
      * @return the specified arrow
      */
-    @Nonnull
-    A getArrow(@Nonnull V vertex, int index);
+        A getArrow( V vertex, int index);
 
     /**
      * Returns the number of arrows.
@@ -120,8 +114,7 @@ public interface DirectedGraph<V, A> {
      * @param i index of next vertex
      * @return the i-th next vertex of v
      */
-    @Nonnull
-    V getNext(@Nonnull V vertex, int i);
+        V getNext( V vertex, int i);
 
     /**
      * Returns the number of direct successor vertices of v.
@@ -129,7 +122,7 @@ public interface DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return the number of next vertices of v.
      */
-    int getNextCount(@Nonnull V vertex);
+    int getNextCount( V vertex);
 
     /**
      * Returns the next successor vertices after the specified vertex.
@@ -137,8 +130,7 @@ public interface DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return an iterable for the next vertices after vertex
      */
-    @Nonnull
-    default Iterable<V> getNextVertices(@Nonnull V vertex) {
+        default Iterable<V> getNextVertices( V vertex) {
         class NextVertexIterator implements Iterator<V> {
 
             private int index;
@@ -170,8 +162,7 @@ public interface DirectedGraph<V, A> {
      * @param indexOfVertex index of vertex
      * @return vertex
      */
-    @Nonnull
-    V getVertex(int indexOfVertex);
+        V getVertex(int indexOfVertex);
 
     /**
      * Returns the number of vertices {@code V}.
@@ -187,8 +178,7 @@ public interface DirectedGraph<V, A> {
      *
      * @return an iterable for all vertice
      */
-    @Nonnull
-    default Collection<V> getVertices() {
+        default Collection<V> getVertices() {
         class VertexIterator implements Iterator<V> {
 
             private int index;
@@ -230,7 +220,7 @@ public interface DirectedGraph<V, A> {
      * @param b another vertex
      * @return true if b is next of a.
      */
-    default boolean isNext(@Nonnull V a, @Nonnull V b) {
+    default boolean isNext( V a,  V b) {
         return findIndexOfNext(a, b) != -1;
     }
 
@@ -241,7 +231,7 @@ public interface DirectedGraph<V, A> {
      * @param b another vertex
      * @return true if b is next of a.
      */
-    default boolean isReachable(@Nonnull V a, @Nonnull V b) {
+    default boolean isReachable( V a,  V b) {
         Deque<V> stack = new ArrayDeque<>(16);
         Set<V> vset = new HashSet<>(16);
         while (!stack.isEmpty()) {

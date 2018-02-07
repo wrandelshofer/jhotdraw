@@ -4,8 +4,7 @@
 package org.jhotdraw8.draw.tool;
 
 import java.util.Collection;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
 
@@ -26,6 +25,6 @@ import org.jhotdraw8.draw.handle.Handle;
  */
 public interface HandleTracker extends Tracker {
 
-    public void setHandles(@Nullable Handle handle, @Nonnull Collection<Figure> compatibleFigures);
+    public void setHandles(@Nullable Handle handle,  Collection<Figure> compatibleFigures);
 
 }

@@ -8,8 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.beans.PropertyBean;
@@ -96,8 +95,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @return The instance
      */
-    @Nonnull
-    default String getId() {
+        default String getId() {
         return get(ID_KEY);
     }
 
@@ -107,8 +105,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @return the property
      */
-    @Nonnull
-    BooleanProperty selectedProperty();
+        BooleanProperty selectedProperty();
 
     default void setSelected(boolean newValue) {
         selectedProperty().set(newValue);

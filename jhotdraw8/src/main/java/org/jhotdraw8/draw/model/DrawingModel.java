@@ -13,8 +13,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -75,21 +74,21 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * List of drawing model listeners.
      *
      * @return a list of drawing model listeners
-     */@Nonnull 
+     */ 
     CopyOnWriteArrayList<Listener<DrawingModelEvent>> getDrawingModelListeners();
 
     /**
      * List of invalidation listeners.
      *
      * @return a list of drawing model listeners
-     */@Nonnull 
+     */ 
     CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
 
     /**
      * The root of the drawing model.
      *
      * @return the root
-     */@Nonnull 
+     */ 
     ObjectProperty<Drawing> drawingProperty();
 
     /**
@@ -97,7 +96,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param l the listener
      */
-    default void addDrawingModelListener(@Nonnull Listener<DrawingModelEvent> l) {
+    default void addDrawingModelListener( Listener<DrawingModelEvent> l) {
         getDrawingModelListeners().add(l);
     }
 
@@ -106,17 +105,17 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param l the listener
      */
-    default void removeDrawingModelListener(@Nonnull Listener<DrawingModelEvent> l) {
+    default void removeDrawingModelListener( Listener<DrawingModelEvent> l) {
         getDrawingModelListeners().remove(l);
     }
 
     @Override
-    default void addListener(@Nonnull InvalidationListener l) {
+    default void addListener( InvalidationListener l) {
         getInvalidationListeners().add(l);
     }
 
     @Override
-    default void removeListener(@Nonnull InvalidationListener l) {
+    default void removeListener( InvalidationListener l) {
         getInvalidationListeners().remove(l);
     }
 
@@ -124,7 +123,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * Gets the root of the tree.
      *
      * @return the drawing
-     */@Nonnull 
+     */ 
     default Drawing getDrawing() {
         return drawingProperty().get();
     }
@@ -135,7 +134,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param root the new root
      */
-    default void setDrawing(@Nonnull Drawing root) {
+    default void setDrawing( Drawing root) {
         drawingProperty().set(root);
     }
 
@@ -144,8 +143,8 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param figure the figure.
      * @return the getChildren.
-     */@Nonnull 
-    default List<Figure> getChildren(@Nonnull Figure figure) {
+     */ 
+    default List<Figure> getChildren( Figure figure) {
         return figure.getChildren();
     }
 
@@ -155,7 +154,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure the parent.
      * @return the number of getChildren
      */
-    default int getChildCount(@Nonnull Figure figure) {
+    default int getChildCount( Figure figure) {
         return getChildren(figure).size();
     }
 
@@ -165,8 +164,8 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param parent the parent.
      * @param index the index.
      * @return the child
-     */@Nonnull 
-    default Figure getChildAt(@Nonnull Figure parent, int index) {
+     */ 
+    default Figure getChildAt( Figure parent, int index) {
         return getChildren(parent).get(index);
     }
 
@@ -176,7 +175,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param child the figure
      */
-    void removeFromParent(@Nonnull Figure child);
+    void removeFromParent( Figure child);
 
     /**
      * Adds the specified child to a parent and fires appropriate
@@ -186,7 +185,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param parent the parent.
      * @param index the index
      */
-    void insertChildAt(@Nonnull Figure child,@Nonnull  Figure parent, int index);
+    void insertChildAt( Figure child,  Figure parent, int index);
 
     /**
      * Adds the specified child to a parent and fires appropriate
@@ -195,7 +194,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param child the new child
      * @param parent the parent.
      */
-    default void addChildTo(@Nonnull Figure child, @Nonnull Figure parent) {
+    default void addChildTo( Figure child,  Figure parent) {
         insertChildAt(child, parent, getChildCount(parent));
     }
 
@@ -210,7 +209,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the old value
      */
     @Nullable
-    <T> T set(@Nonnull Figure figure, @Nonnull MapAccessor<T> key, @Nullable T newValue);
+    <T> T set( Figure figure,  MapAccessor<T> key, @Nullable T newValue);
 
     /**
      * Gets the specified property from the figure.
@@ -221,7 +220,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the value
      */
     @Nullable
-    default <T> T get(@Nonnull Figure figure, @Nullable MapAccessor<T> key) {
+    default <T> T get( Figure figure, @Nullable MapAccessor<T> key) {
         return figure.get(key);
     }
 
@@ -233,7 +232,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param transform the desired transformation in the local coordinate
      * system
      */
-    void reshapeInLocal(@Nonnull Figure f, @Nonnull Transform transform);
+    void reshapeInLocal( Figure f,  Transform transform);
 
     /**
      * Attempts to change the parent bounds of the figure and fires appropriate
@@ -243,7 +242,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param transform the desired transformation in the parent coordinate
      * system
      */
-    void reshapeInParent(@Nonnull Figure f,@Nonnull  Transform transform);
+    void reshapeInParent( Figure f,  Transform transform);
 
     /**
      * Attempts to change the local bounds of the figure and fires appropriate
@@ -257,7 +256,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param height desired height in the local coordinat system, may be
      * negative
      */
-    void reshapeInLocal(@Nonnull Figure f, double x, double y, double width, double height);
+    void reshapeInLocal( Figure f, double x, double y, double width, double height);
 
     /**
      * Invokes the layout method of the figure and fires appropriate /
@@ -265,7 +264,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
-    void layout(@Nonnull Figure f);
+    void layout( Figure f);
 
     /**
      * Invokes the disconnect method of the figure and fires appropriate
@@ -273,7 +272,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
-    void disconnect(@Nonnull Figure f);
+    void disconnect( Figure f);
 
     /**
      * Invokes the updateCss method of the figure and fires appropriate
@@ -281,14 +280,14 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
-    void updateCss(@Nonnull Figure f);
+    void updateCss( Figure f);
 
     /**
      * Fires the specified event.
      *
      * @param event the event
      */
-    default void fireDrawingModelEvent(@Nonnull DrawingModelEvent event) {
+    default void fireDrawingModelEvent( DrawingModelEvent event) {
        for (Listener<DrawingModelEvent> l : getDrawingModelListeners()) {
            l.handle(event);
        }
@@ -308,7 +307,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
-    default void fireNodeInvalidated(@Nonnull Figure f) {
+    default void fireNodeInvalidated( Figure f) {
         fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, f));
     }
 
@@ -321,7 +320,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param oldValue the old value
      * @param newValue the new value
      */
-    default <T> void firePropertyValueChanged(@Nonnull Figure f,@Nonnull  Key<T> key,@Nullable T oldValue, @Nullable T newValue) {
+    default <T> void firePropertyValueChanged( Figure f,  Key<T> key,@Nullable T oldValue, @Nullable T newValue) {
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue));
     }
 
@@ -330,7 +329,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
-    default void fireTransformInvalidated(@Nonnull Figure f) {
+    default void fireTransformInvalidated( Figure f) {
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
     }
 
@@ -339,7 +338,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
-    default void fireLayoutInvalidated(@Nonnull Figure f) {
+    default void fireLayoutInvalidated( Figure f) {
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
@@ -348,7 +347,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
-    default void fireStyleInvalidated(@Nonnull Figure f) {
+    default void fireStyleInvalidated( Figure f) {
         fireDrawingModelEvent(DrawingModelEvent.styleInvalidated(this, f));
     }
 
@@ -367,7 +366,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure a figure
      * @param transform the desired transformation
      */
-    public void transformInParent(@Nonnull Figure figure, @Nonnull Transform transform);
+    public void transformInParent( Figure figure,  Transform transform);
 
     /**
      * Invokes "transformInLocal" on the specified figure.
@@ -375,7 +374,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure a figure
      * @param transform the desired transformation
      */
-    public void transformInLocal(@Nonnull Figure figure,@Nonnull  Transform transform);
+    public void transformInLocal( Figure figure,  Transform transform);
 
     /**
      * Removes the specified key from the figure.
@@ -386,5 +385,5 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the old value 
      */
     @Nullable
-    public <T> T remove(@Nonnull Figure f, @Nonnull Key<T> remove);
+    public <T> T remove( Figure f,  Key<T> remove);
 }

@@ -3,8 +3,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -18,9 +17,9 @@ import org.jhotdraw8.collection.Key;
 public interface CacheableFigure extends Figure {
 
     @Nullable
-    <T> T setCachedValue(@Nonnull Key<T> key, @Nullable T value);
+    <T> T setCachedValue( Key<T> key, @Nullable T value);
 
     @Nullable
-    <T> T getCachedValue(@Nonnull Key<T> key);
+    <T> T getCachedValue( Key<T> key);
 
 }

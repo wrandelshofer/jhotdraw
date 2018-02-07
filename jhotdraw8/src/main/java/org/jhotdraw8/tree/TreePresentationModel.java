@@ -4,8 +4,7 @@
 package org.jhotdraw8.tree;
 
 import javafx.scene.control.TreeItem;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 
 /**
@@ -26,20 +25,17 @@ public interface TreePresentationModel<N> {
      */
     public final static String MODEL_PROPERTY = "model";
 
-    @Nonnull
-    default TreeModel<N> getTreeModel() {
+        default TreeModel<N> getTreeModel() {
         return treeModelProperty().get();
     }
 
-    default void setTreeModel(@Nonnull TreeModel<N> newValue) {
+    default void setTreeModel( TreeModel<N> newValue) {
         treeModelProperty().set(newValue);
     }
 
-    @Nonnull
-    NonnullProperty<TreeModel<N>> treeModelProperty();
+        NonnullProperty<TreeModel<N>> treeModelProperty();
 
-    @Nonnull
-    TreeItem<N> getRoot();
+        TreeItem<N> getRoot();
 
     boolean isUpdating();
 

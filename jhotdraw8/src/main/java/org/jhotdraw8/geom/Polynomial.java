@@ -15,8 +15,7 @@ import static java.lang.Math.*;
 import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Polynomial encapsulates root finding functions needed by curve intersection
@@ -163,7 +162,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @return the root, null if no root could be found
      */
     @Nullable
-    public static Double bisection(@Nonnull final ToDoubleFunction<Double> func, double min, double max) {
+    public static Double bisection( final ToDoubleFunction<Double> func, double min, double max) {
         double minValue = func.applyAsDouble(min);
         double maxValue = func.applyAsDouble(max);
         Double result = null;
@@ -547,8 +546,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param max the upper bound of the interval (inclusive)
      * @return a list of roots. The list if empty, if no roots have been found
      */
-    @Nonnull
-    public static double[] getRootsInInterval(@Nonnull ToDoubleFunction<Double> func, @Nonnull double[] droots, double min, double max) {
+        public static double[] getRootsInInterval( ToDoubleFunction<Double> func,  double[] droots, double min, double max) {
         final double[] roots = new double[droots.length + 1];
         int numRoots = 0;
 

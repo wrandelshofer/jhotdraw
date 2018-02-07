@@ -8,8 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -138,8 +137,7 @@ public interface Handle {
      *
      * @return a figure
      */
-    @Nonnull
-    Figure getOwner();
+        Figure getOwner();
 
     /**
      * Returns the node which is used to visualize the handle. The node is
@@ -155,15 +153,14 @@ public interface Handle {
      *
      * @return the node
      */
-    @Nonnull
-    Node getNode();
+        Node getNode();
 
     /**
      * Updates the node.
      *
      * @param drawingView the drawing view
      */
-    void updateNode(@Nonnull DrawingView drawingView);
+    void updateNode( DrawingView drawingView);
 
     /**
      * Whether the handle is selectable.
@@ -194,24 +191,24 @@ public interface Handle {
     // ---
     // Event handlers
     // ----
-    default void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView dv ) {
+    default void handleMouseDragged( MouseEvent event,  DrawingView dv ) {
     }
 
-    default void handleMouseReleased(@Nonnull MouseEvent event, @Nonnull DrawingView dv ) {
+    default void handleMouseReleased( MouseEvent event,  DrawingView dv ) {
     }
 
-    default void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView dv ) {
+    default void handleMousePressed( MouseEvent event,  DrawingView dv ) {
     }
 
-    default void handleKeyPressed(@Nonnull KeyEvent event, @Nonnull DrawingView dv ) {
+    default void handleKeyPressed( KeyEvent event,  DrawingView dv ) {
     }
 
-    default void handleKeyReleased(@Nonnull KeyEvent event, @Nonnull DrawingView dv ) {
+    default void handleKeyReleased( KeyEvent event,  DrawingView dv ) {
     }
 
-    default void handleKeyTyped(@Nonnull KeyEvent event, @Nonnull DrawingView dv ) {
+    default void handleKeyTyped( KeyEvent event,  DrawingView dv ) {
     }
-   default void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv ) {
+   default void handleMouseClicked( MouseEvent event,  DrawingView dv ) {
        
    }
     /**
@@ -220,7 +217,7 @@ public interface Handle {
      * @param that the other handle
      * @return true if compatible
      */
-    boolean isCompatible(@Nonnull Handle that);
+    boolean isCompatible( Handle that);
 
     /**
      * The cursor that should be shown when the mouse hovers over a selectable
@@ -239,7 +236,7 @@ public interface Handle {
      * @param toleranceSquared the squared tolerance (squared radius around the point)
       * @return true if we picked the handle
      */
-   default boolean contains(@Nonnull DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
+   default boolean contains( DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
        return contains(dv,x,y,toleranceSquared);
    }
     /**
@@ -250,7 +247,7 @@ public interface Handle {
      * @param toleranceSquared the squared tolerance (squared radius around the point)
       * @return true if we picked the handle
      */
-    boolean contains(@Nonnull DrawingView dv, double x, double y, double toleranceSquared);
+    boolean contains( DrawingView dv, double x, double y, double toleranceSquared);
     
 
     /**

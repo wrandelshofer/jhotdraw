@@ -68,7 +68,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -119,8 +118,7 @@ public class SvgExporter {
     private boolean skipInvisibleNodes = true;
     private final Object skipKey;
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
-    @Nonnull
-    private Function<URI, URI> uriResolver = new UriResolver(null, null);
+        private Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     /**
      *
@@ -138,12 +136,11 @@ public class SvgExporter {
         return null;
     }
 
-    @Nonnull
-    public Function<URI, URI> getUriResolver() {
+        public Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver(@Nonnull Function<URI, URI> uriResolver) {
+    public void setUriResolver( Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 

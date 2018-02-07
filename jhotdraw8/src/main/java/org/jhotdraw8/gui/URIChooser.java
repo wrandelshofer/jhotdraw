@@ -8,8 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Window;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * {@code URIChooser} provides a mechanism for the user to choose an URI.

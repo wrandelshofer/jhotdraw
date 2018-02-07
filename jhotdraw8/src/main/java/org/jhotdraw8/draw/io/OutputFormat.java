@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Drawing;
 
 /**
@@ -30,7 +29,7 @@ public interface OutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@Nonnull URI uri,@Nonnull  Drawing drawing) throws IOException {
+    default void write( URI uri,  Drawing drawing) throws IOException {
         write(new File(uri), drawing);
     }
 
@@ -43,7 +42,7 @@ public interface OutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@Nonnull File file, @Nonnull Drawing drawing) throws IOException {
+    default void write( File file,  Drawing drawing) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
             write(out, drawing);
         }
@@ -57,6 +56,6 @@ public interface OutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    void write(@Nonnull OutputStream out, @Nonnull Drawing drawing) throws IOException;
+    void write( OutputStream out,  Drawing drawing) throws IOException;
     
 }

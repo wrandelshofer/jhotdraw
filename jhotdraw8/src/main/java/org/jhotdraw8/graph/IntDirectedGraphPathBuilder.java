@@ -10,8 +10,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -36,9 +35,8 @@ public class IntDirectedGraphPathBuilder<A> {
      * @throws org.jhotdraw8.graph.PathBuilderException if traversal is not
      * possible
      */
-    @Nonnull
-    public VertexPath<Integer> buildAnyVertexPath(@Nonnull IntDirectedGraph<A> graph,
-            @Nonnull int start, @Nonnull int goal) throws PathBuilderException {
+        public VertexPath<Integer> buildAnyVertexPath( IntDirectedGraph<A> graph,
+             int start,  int goal) throws PathBuilderException {
         VertexPath<Integer> pathElements = IntDirectedGraphPathBuilder.this.findAnyVertexPath(graph, start, goal);
         if (pathElements == null) {
             throw new PathBuilderException("Breadh first search stalled at vertex: " + start + ".");
@@ -61,8 +59,8 @@ public class IntDirectedGraphPathBuilder<A> {
      * possible
      */
     @Nullable
-    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph<A> graph,
-            @Nonnull int start, @Nonnull int goal) throws PathBuilderException {
+    public VertexPath<Integer> findAnyVertexPath( IntDirectedGraph<A> graph,
+             int start,  int goal) throws PathBuilderException {
         IntArrayList pathElements = new IntArrayList(graph.getVertexCount());
         pathElements.add(start);
         boolean success = breadthFirstSearchInt(graph, start, goal, pathElements);
@@ -92,7 +90,7 @@ public class IntDirectedGraphPathBuilder<A> {
      * possible
      */
     @Nullable
-    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph<A> graph, @Nonnull Collection<Integer> waypoints) throws PathBuilderException {
+    public VertexPath<Integer> findAnyVertexPath( IntDirectedGraph<A> graph,  Collection<Integer> waypoints) throws PathBuilderException {
         Iterator<Integer> i = waypoints.iterator();
         IntArrayList pathElements = new IntArrayList();
         if (!i.hasNext()) {

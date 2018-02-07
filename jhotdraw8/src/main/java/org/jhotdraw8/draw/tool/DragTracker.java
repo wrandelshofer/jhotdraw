@@ -3,8 +3,7 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -20,6 +19,6 @@ import org.jhotdraw8.draw.figure.Figure;
  */
 public interface DragTracker extends Tracker {
 
-    void setDraggedFigure(@Nullable Figure f, @Nonnull DrawingView dv);
+    void setDraggedFigure(@Nullable Figure f,  DrawingView dv);
 
 }

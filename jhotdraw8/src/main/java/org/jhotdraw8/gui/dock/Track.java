@@ -6,7 +6,6 @@ package org.jhotdraw8.gui.dock;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javax.annotation.Nonnull;
 
 /**
  * A Track provides horizontal or vertical space for {@link Dock}s and other
@@ -29,21 +28,18 @@ public interface Track {
      *
      * @return the items
      */
-    @Nonnull
-    ObservableList<Node> getItems();
+        ObservableList<Node> getItems();
 
     /**
      * Must return this.
      *
      * @return this
      */
-    @Nonnull
-    default Node getNode() {
+        default Node getNode() {
         return (Node) this;
     }
 
-    @Nonnull
-    Orientation getOrientation();
+        Orientation getOrientation();
 
     /**
      * Returns true if this track resizes the items. If this method returns

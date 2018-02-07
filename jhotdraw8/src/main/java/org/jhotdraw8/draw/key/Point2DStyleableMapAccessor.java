@@ -10,7 +10,6 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -29,12 +28,9 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
-    private final CssMetaData<?, Point2D> cssMetaData;
-    @Nonnull
-    private final MapAccessor<Double> xKey;
-    @Nonnull
-    private final MapAccessor<Double> yKey;
+        private final CssMetaData<?, Point2D> cssMetaData;
+        private final MapAccessor<Double> xKey;
+        private final MapAccessor<Double> yKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -85,7 +81,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
     }
 
     @Override
-    public Point2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Point2D value) {
+    public Point2D put( Map<? super Key<?>, Object> a,  Point2D value) {
         Point2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());

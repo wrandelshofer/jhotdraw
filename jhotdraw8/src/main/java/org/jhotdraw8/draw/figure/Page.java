@@ -9,8 +9,7 @@ import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.text.CssSize2D;
 
@@ -33,8 +32,7 @@ public interface Page extends Figure {
    * @param internalPageNumber the internal page number
    * @return a new node
    */
-    @Nonnull
-  Node createPageNode(int internalPageNumber);
+      Node createPageNode(int internalPageNumber);
 
   /**
    * Creates a paper for the specified page.
@@ -42,8 +40,7 @@ public interface Page extends Figure {
    * @param internalPageNumber the internal page number
    * @return the internal page number
    */
-  @Nonnull
-  default Paper createPaper(int internalPageNumber) {
+    default Paper createPaper(int internalPageNumber) {
     CssSize2D size = getPaperSize();
     double w = DefaultUnitConverter.getInstance().convert(size.getX(), "pt");
     double h = DefaultUnitConverter.getInstance().convert(size.getY(), "pt");
@@ -75,7 +72,7 @@ public interface Page extends Figure {
    *
    * @param internalPageNumber the internal page number
    * @return the clipping region
-   */@Nonnull 
+   */ 
   Bounds getPageBounds(int internalPageNumber);
 
   /**
@@ -84,7 +81,7 @@ public interface Page extends Figure {
    * @param internalPageNumber the internal page number
    * @return the clipping region
    */
-@Nonnull   Shape getPageClip(int internalPageNumber);
+   Shape getPageClip(int internalPageNumber);
 
   /**
    * Returns a transform which will position the drawing contents inside the
@@ -93,14 +90,14 @@ public interface Page extends Figure {
    * @param internalPageNumber the internal page number
    * @return the transform
    */
-@Nonnull   Transform getPageTransform(int internalPageNumber);
+   Transform getPageTransform(int internalPageNumber);
 
   /**
    * Returns the paper size.
    *
    * @return the page size
    */
-@Nonnull   CssSize2D getPaperSize();
+   CssSize2D getPaperSize();
 
   @Override
   default boolean isAllowsChildren() {
@@ -108,7 +105,7 @@ public interface Page extends Figure {
   }
 
   @Override
-  default boolean isSuitableParent(@Nonnull Figure newParent) {
+  default boolean isSuitableParent( Figure newParent) {
     return (newParent instanceof Layer) || (newParent instanceof Clipping);
   }
 

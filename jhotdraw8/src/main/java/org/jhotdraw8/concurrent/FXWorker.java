@@ -26,7 +26,7 @@ public class FXWorker {
      * @return the completion stage
      */
     public static CompletionStage<Void> run(CheckedRunnable runnable) {
-        return run(null, runnable);
+        return run(Executors.newSingleThreadExecutor(), runnable);
     }
 
     /**
@@ -47,11 +47,7 @@ public class FXWorker {
                 Platform.runLater(() -> f.completeExceptionally(e));
             }
         };
-        if (executor == null) {
-            Executors.newSingleThreadExecutor() .execute(worker);
-        } else {
-            executor.execute(worker);
-        }
+        executor.execute(worker);
         return f;
     }
 
@@ -64,7 +60,7 @@ public class FXWorker {
      * @return the completion stage
      */
     public static <T> CompletionStage<T> supply(CheckedSupplier<T> supplier) {
-        return supply(null,supplier);
+        return supply(Executors.newSingleThreadExecutor(), supplier);
     }
 
     /**
@@ -73,13 +69,12 @@ public class FXWorker {
      *
      * @param <T> the value type
      * @param supplier the supplier
-     * @param executor the executor, if null then ForkJoinPool#commonPool is
-     * used
+     * @param executor the executor
      * @return the completion stage
      */
     public static <T> CompletionStage<T> supply(Executor executor, CheckedSupplier<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
-        (executor == null ? Executors.newSingleThreadExecutor() : executor).execute(() -> {
+        executor.execute(() -> {
             try {
                 T result = supplier.supply();
                 Platform.runLater(() -> {

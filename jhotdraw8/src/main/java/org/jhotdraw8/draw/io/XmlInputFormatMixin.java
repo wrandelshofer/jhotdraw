@@ -8,8 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.xml.XmlUtil;
@@ -27,24 +26,22 @@ public interface XmlInputFormatMixin {
 
     boolean isNamespaceAware();
 
-    default Figure read(@Nonnull InputStream in, @Nonnull Drawing drawing) throws IOException {
+    default Figure read( InputStream in,  Drawing drawing) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing);
     }
 
-    default Figure read(@Nonnull Reader in, @Nonnull Drawing drawing) throws IOException {
+    default Figure read( Reader in,  Drawing drawing) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing);
     }
 
-    @Nonnull
-    default Figure read(@Nonnull String string, @Nonnull Drawing drawing) throws IOException {
+        default Figure read( String string,  Drawing drawing) throws IOException {
         try (StringReader in = new StringReader(string)) {
             return read(in, drawing);
         }
     }
 
-    @Nonnull
-    Figure read(@Nonnull Document in, @Nonnull Drawing drawing) throws IOException;
+        Figure read( Document in,  Drawing drawing) throws IOException;
 
 }

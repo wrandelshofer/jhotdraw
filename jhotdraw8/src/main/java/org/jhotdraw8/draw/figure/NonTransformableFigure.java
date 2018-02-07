@@ -5,8 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -20,17 +19,17 @@ import org.jhotdraw8.geom.Transforms;
 public interface NonTransformableFigure extends TransformCacheableFigure {
 
     @Override
-    default void transformInParent(@Nonnull Transform transform) {
+    default void transformInParent( Transform transform) {
         // empty because non-transformable figures can not be transformed
     }
 
     @Override
-    default void transformInLocal(@Nonnull Transform transform) {
+    default void transformInLocal( Transform transform) {
         // empty because non-transformable figures can not be transformed
     }
 
     @Override
-    default void reshapeInParent(@Nonnull Transform transform) {
+    default void reshapeInParent( Transform transform) {
         reshapeInLocal(Transforms.concat(getParentToLocal(), transform));
     }
 
@@ -45,7 +44,7 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void reshapeInLocal(@Nonnull Transform transform) {
+    default void reshapeInLocal( Transform transform) {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
