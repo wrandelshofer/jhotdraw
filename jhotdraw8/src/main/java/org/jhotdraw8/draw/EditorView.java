@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * An application view which can return an editor.

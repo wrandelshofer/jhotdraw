@@ -4,9 +4,9 @@
 package org.jhotdraw8.app.action.edit;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractProjectAction;
+import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * Presents a find dialog to the user and then highlights the found items in the
@@ -15,7 +15,7 @@ import org.jhotdraw8.app.Activity;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFindAction<P extends Activity> extends AbstractProjectAction<P> {
+public abstract class AbstractFindAction<V extends ViewController> extends AbstractViewControllerAction<V> {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.find";
@@ -24,11 +24,11 @@ public abstract class AbstractFindAction<P extends Activity> extends AbstractPro
      * Creates a new instance.
      *
      * @param app the application
-     * @param p the project
-     * @param pClass the class of the project
+     * @param view the view
+     * @param viewClass the class of the view
      */
-    public AbstractFindAction(Application app, P p, Class<P> pClass) {
-        super(app, p,pClass);
+    public AbstractFindAction(Application app, V view, Class<V> viewClass) {
+        super(app, view,viewClass);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 }

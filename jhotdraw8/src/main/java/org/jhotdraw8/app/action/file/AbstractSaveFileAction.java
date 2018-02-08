@@ -14,14 +14,14 @@ import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractProjectAction;
+import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.ViewController;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -31,7 +31,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSaveFileAction extends AbstractProjectAction<DocumentOrientedActivity> {
+public abstract class AbstractSaveFileAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -46,13 +46,13 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(Application app, DocumentOrientedActivity view, String id, boolean saveAs) {
-        super(app, view, DocumentOrientedActivity.class);
+    public AbstractSaveFileAction(Application app, DocumentOrientedViewController view, String id, boolean saveAs) {
+        super(app, view, DocumentOrientedViewController.class);
         this.saveAs = saveAs;
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
     }
 
-    protected URIChooser getChooser(DocumentOrientedActivity view) {
+    protected URIChooser getChooser(DocumentOrientedViewController view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -61,19 +61,19 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         return c;
     }
 
-    protected abstract URIChooser createChooser(DocumentOrientedActivity view);
+    protected abstract URIChooser createChooser(DocumentOrientedViewController view);
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, DocumentOrientedActivity v) {
+    protected void handleActionPerformed(ActionEvent evt, DocumentOrientedViewController v) {
         if (v == null) {
             return;
         }
         oldFocusOwner = v.getNode().getScene().getFocusOwner();
         v.addDisabler(this);
-        saveProjectChooseUri(v);
+        saveFileChooseUri(v);
     }
 
-    protected void saveProjectChooseUri(final DocumentOrientedActivity v) {
+    protected void saveFileChooseUri(final DocumentOrientedViewController v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -84,10 +84,10 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 uri = chsr.showDialog(v.getNode());
 
                 // Prevent save to URI that is open in another view!
-                // unless  multipe projects to same URI are supported
+                // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Activity pi : app.projects()) {
-                        DocumentOrientedActivity vi = (DocumentOrientedActivity) pi;
+                    for (ViewController pi : app.views()) {
+                        DocumentOrientedViewController vi = (DocumentOrientedViewController) pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -100,7 +100,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 break;
             }
             if (uri != null) {
-                saveProjectChooseOptions(v, uri, chsr.getDataFormat());
+                saveFileChooseOptions(v, uri, chsr.getDataFormat());
             }else{
                 v.removeDisabler(this);
             }
@@ -108,11 +108,11 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 oldFocusOwner.requestFocus();
             }
         } else {
-            saveProjectChooseOptions(v, v.getURI(), v.getDataFormat());
+            saveFileChooseOptions(v, v.getURI(), v.getDataFormat());
         }
     }
 
-    protected void saveProjectChooseOptions(final DocumentOrientedActivity v, URI uri, DataFormat format) {
+    protected void saveFileChooseOptions(final DocumentOrientedViewController v, URI uri, DataFormat format) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
         if (dialog != null) {
@@ -127,13 +127,13 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 return;
             }
         }
-        saveProjectToUri(v, uri, format, options);
+        saveFileToUri(v, uri, format, options);
     }
 
-    protected void saveProjectToUri(final DocumentOrientedActivity project, final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
-        project.write(uri, format, options).handle((result, exception) -> {
+    protected void saveFileToUri(final DocumentOrientedViewController view, final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
+        view.write(uri, format, options).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
-                project.removeDisabler(this);
+                view.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
@@ -145,13 +145,13 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));
                 alert.showAndWait();
-                project.removeDisabler(this);
+                view.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
             } else {
-                handleSucceded(project, uri, format);
-                project.removeDisabler(this);
+                handleSucceded(view, uri, format);
+                view.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
@@ -164,5 +164,5 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         return null;
     }
 
-    protected abstract void handleSucceded(DocumentOrientedActivity v, URI uri, DataFormat format);
+    protected abstract void handleSucceded(DocumentOrientedViewController v, URI uri, DataFormat format);
 }

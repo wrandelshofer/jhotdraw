@@ -14,7 +14,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * SelectSameAction.
@@ -40,13 +40,13 @@ public class SelectSameAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity project) {
-        final DrawingView view = getView();
-        if (view == null) {
+    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+        final DrawingView dview = getView();
+        if (dview == null) {
             return;
         }
-        ObservableSet<Figure> selection=view.getSelectedFigures();
-        selectSame(view, selection.isEmpty()?null:selection.iterator().next());
+        ObservableSet<Figure> selection=dview.getSelectedFigures();
+        selectSame(dview, selection.isEmpty()?null:selection.iterator().next());
 
     }
 

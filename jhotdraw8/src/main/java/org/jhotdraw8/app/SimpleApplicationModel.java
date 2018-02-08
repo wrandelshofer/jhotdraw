@@ -49,7 +49,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private Supplier<DocumentOrientedActivity> projectFactory;
+    private Supplier<DocumentOrientedViewController> viewFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
@@ -57,7 +57,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(
-            Supplier<DocumentOrientedActivity> viewFactory,
+            Supplier<DocumentOrientedViewController> viewFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -66,7 +66,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(String name,
-            Supplier<DocumentOrientedActivity> projectFactory,
+            Supplier<DocumentOrientedViewController> viewFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -76,7 +76,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         URIExtensionFilter fef = new URIExtensionFilter(fileDescription, format, fileExtension);
         openExtensionFilters.add(fef);
         saveExtensionFilters.add(fef);
-        this.projectFactory = projectFactory;
+        this.viewFactory = viewFactory;
     }
 
     @Override
@@ -84,12 +84,12 @@ public class SimpleApplicationModel implements ApplicationModel {
         return Preferences.userNodeForPackage(getClass());
     }
 
-    public Supplier<DocumentOrientedActivity> getProjectFactory() {
-        return projectFactory;
+    public Supplier<DocumentOrientedViewController> getViewFactory() {
+        return viewFactory;
     }
 
-    public void setProjectFactory(Supplier<DocumentOrientedActivity> projectFactory) {
-        this.projectFactory = projectFactory;
+    public void setViewFactory(Supplier<DocumentOrientedViewController> factory) {
+        this.viewFactory = factory;
     }
 
     public URL getMenuFxml() {
@@ -117,8 +117,8 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public DocumentOrientedActivity createProject() {
-        return projectFactory.get();
+    public DocumentOrientedViewController createView() {
+        return viewFactory.get();
     }
 
     @Override

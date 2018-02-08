@@ -9,13 +9,13 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.UriUtil;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
- * Lets the user write unsaved changes of the active project, and then loads the
- * specified URI into the active project.
+ * Lets the user write unsaved changes of the active view, and then loads the
+ * specified URI into the active view.
  * <p>
- * If there is no active project, this action creates a new project and thus acts the
+ * If there is no active view, this action creates a new view and thus acts the
  * same like {@link OpenRecentFileAction}.
  * <p>
  * This action is called when the user selects an item in the Recent Files
@@ -35,7 +35,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
  * <p>
  * <em>Allow multiple views per URI</em><br>
  * When the feature is disabled, {@code LoadRecentFileAction} prevents loading
- * an URI which is opened in another project.<br>
+ * an URI which is opened in another view.<br>
  * See {@link org.jhotdraw8.app} for a description of the feature.
  * </p>
  *
@@ -56,10 +56,10 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view
      * @param uri the uri of the recent file
      */
-    public LoadRecentFileAction(Application app, DocumentOrientedActivity view, URI uri) {
+    public LoadRecentFileAction(Application app, DocumentOrientedViewController view, URI uri) {
         super(app, view);
         this.uri = uri;
-        setMayCreateProject(true);
+        setMayCreateView(true);
         set(Action.LABEL, UriUtil.getName(uri));
     }
 
@@ -170,7 +170,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
     }*/
 
     @Override
-    public CompletionStage<Void> doIt(final DocumentOrientedActivity view) {
+    public CompletionStage<Void> doIt(final DocumentOrientedViewController view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -1,4 +1,4 @@
-/* @(#)TextAreaViewController.java
+/* @(#)TeddyController.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.samples.teddy;
@@ -18,27 +18,27 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
+import org.jhotdraw8.app.AbstractDocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
-import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.concurrent.FXWorker;
 
 /**
- * TeddyProject.
+ * TeddyController.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyProject extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, Initializable {
+public class TeddyController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewController, Initializable {
 
   @FXML
   private URL location;

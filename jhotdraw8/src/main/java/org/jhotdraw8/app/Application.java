@@ -20,13 +20,13 @@ import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.HierarchicalMap;
 
 /**
- * An {@code Application} handles the life-cycle of {@link Activity} objects and
+ * An {@code Application} handles the life-cycle of {@link ViewController} objects and
  * provides windows to present them on screen.
  *
  * @design.pattern Application Framework, KeyAbstraction. The application
  * framework supports the creation of document oriented applications which can
  * support platform-specific guidelines. The application framework consists of
- * the following key abstractions: null {@link Application}, {@link ApplicationModel}, {@link Project},
+ * the following key abstractions: null {@link Application}, {@link ApplicationModel}, {@link ViewController},
  * {@link Action}.
  *
  * @author Werner Randelshofer
@@ -46,11 +46,11 @@ public interface Application extends Disableable, PropertyBean {
     public ObjectProperty<ApplicationModel> modelProperty();
 
     /**
-     * The set of projects contains all open projects..
+     * The set of views contains all open views..
      *
-     * @return the projects
+     * @return the views
      */
-    public SetProperty<Activity> projectsProperty();
+    public SetProperty<ViewController> viewsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -72,40 +72,40 @@ public interface Application extends Disableable, PropertyBean {
     public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default public ObservableSet<Activity> projects() {
-        return projectsProperty().get();
+    default public ObservableSet<ViewController> views() {
+        return viewsProperty().get();
     }
 
     /**
-     * Adds the project to the set of projects and shows it.
+     * Adds the view to the set of views and shows it.
      *
      * @param v the view
      */
-    default public void add(Activity v) {
-        projectsProperty().add(v);
+    default public void add(ViewController v) {
+        viewsProperty().add(v);
     }
 
     /**
-     * Removes the project from the set of visible projects and hides it.
+     * Removes the view from the set of visible views and hides it.
      *
      * @param v the view
      */
-    default public void remove(Activity v) {
-        projectsProperty().remove(v);
+    default public void remove(ViewController v) {
+        viewsProperty().remove(v);
     }
 
     /**
-     * Provides the currently active project. This is the last project which was
-     * focus owner. Returns null, if the application has no projects.
+     * Provides the currently active view. This is the last view which was
+    * focus owner. Returns null, if the application has no views.
      *
      * @return The active view.
      */
-    public ReadOnlyObjectProperty<Activity> activeProjectProperty();
+    public ReadOnlyObjectProperty<ViewController> activeViewProperty();
 
     // Convenience method
     @Nullable
-    default public Activity getActiveProject() {
-        return activeProjectProperty().get();
+    default public ViewController getActiveView() {
+        return activeViewProperty().get();
     }
 
     /**
@@ -155,8 +155,8 @@ public interface Application extends Disableable, PropertyBean {
         return null;
     }
 
-    default void addActivity() {
-        createActivity().thenAccept(this::add);
+    default void addView() {
+        createView().thenAccept(this::add);
     }
 
     /**
@@ -164,7 +164,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return A callback.
      */
-    CompletionStage<Activity> createActivity();
+    CompletionStage<ViewController> createView();
 
     /**
      * Adds a recent URI.

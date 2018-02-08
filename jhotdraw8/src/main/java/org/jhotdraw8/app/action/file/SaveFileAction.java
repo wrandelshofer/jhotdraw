@@ -8,7 +8,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -39,7 +39,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public SaveFileAction(Application app, DocumentOrientedActivity view) {
+    public SaveFileAction(Application app, DocumentOrientedViewController view) {
         this(app, view, false);
     }
 
@@ -50,7 +50,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, DocumentOrientedActivity view, boolean saveAs) {
+    public SaveFileAction(Application app, DocumentOrientedViewController view, boolean saveAs) {
         this(app, view, ID, saveAs);
     }
 
@@ -62,17 +62,17 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, DocumentOrientedActivity view, String id, boolean saveAs) {
+    public SaveFileAction(Application app, DocumentOrientedViewController view, String id, boolean saveAs) {
         super(app, view, id, saveAs);
     }
 
     @Override
-    protected URIChooser createChooser(DocumentOrientedActivity view) {
+    protected URIChooser createChooser(DocumentOrientedViewController view) {
         return app.getModel().createSaveChooser();
     }
 
     @Override
-    protected void handleSucceded(DocumentOrientedActivity v, URI uri, DataFormat format) {
+    protected void handleSucceded(DocumentOrientedViewController v, URI uri, DataFormat format) {
         v.setURI(uri);
        v.clearModified();
         v.setTitle(UriUtil.getName(uri));

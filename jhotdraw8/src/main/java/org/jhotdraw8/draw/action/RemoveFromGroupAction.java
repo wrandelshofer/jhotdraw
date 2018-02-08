@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Grouping;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * AddToGroupAction.
@@ -42,13 +42,13 @@ public class RemoveFromGroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity project) {
-        final DrawingView view = getView();
-        if (view == null) {
+    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+        final DrawingView dview = getView();
+        if (dview == null) {
             return;
         }
-        final List<Figure> figures = new ArrayList<>(view.getSelectedFigures());
-        removeFromGroup(view, figures);
+        final List<Figure> figures = new ArrayList<>(dview.getSelectedFigures());
+        removeFromGroup(dview, figures);
 
     }
 

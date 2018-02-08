@@ -9,13 +9,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractProjectAction;
+import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link org.jhotdraw8.app.DocumentOrientedActivity}.
+ * {@link org.jhotdraw8.app.DocumentOrientedViewController}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
@@ -23,7 +23,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractProjectAction<DocumentOrientedActivity> {
+public class PrintFileAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,22 +44,22 @@ public class PrintFileAction extends AbstractProjectAction<DocumentOrientedActiv
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction( Application app, @Nullable DocumentOrientedActivity view) {
-        super(app, view, DocumentOrientedActivity.class);
+    public PrintFileAction( Application app, @Nullable DocumentOrientedViewController view) {
+        super(app, view, DocumentOrientedViewController.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed( ActionEvent event, DocumentOrientedActivity project) {
-        project.addDisabler(this);
+    protected void handleActionPerformed( ActionEvent event, DocumentOrientedViewController view) {
+        view.addDisabler(this);
         PrinterJob job = PrinterJob.createPrinterJob();
-        if (job != null && job.showPrintDialog(project.getNode().getScene().getWindow())) {
-            project.print(job).thenRun(() -> project.removeDisabler(this));
+        if (job != null && job.showPrintDialog(view.getNode().getScene().getWindow())) {
+            view.print(job).thenRun(() -> view.removeDisabler(this));
         } else {
             Alert alert = new Alert(AlertType.INFORMATION, "Sorry, no printer found");
                 alert.getDialogPane().setMaxWidth(640.0);
             alert.show();
-            project.removeDisabler(this);
+            view.removeDisabler(this);
         }
     }
 }

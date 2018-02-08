@@ -1,4 +1,4 @@
-/* @(#)DocumentOrientedActivity.java
+/* @(#)DocumentOrientedViewController.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -17,13 +17,13 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 
 /**
- * A {@code DocumentOrientedActivity} is a specialization of {@link Activity} for document
+ * A {@code DocumentOrientedViewController} is a specialization of {@link ViewController} for document
  * oriented applications.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DocumentOrientedActivity extends Activity {
+public interface DocumentOrientedViewController extends ViewController {
 
     /**
      * The modified property is set to true by the view.

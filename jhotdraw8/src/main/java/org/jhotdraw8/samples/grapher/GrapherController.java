@@ -1,4 +1,4 @@
-/* @(#)GrapherProject.java
+/* @(#)GrapherController.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.samples.grapher;
@@ -32,7 +32,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
+import org.jhotdraw8.app.AbstractDocumentOrientedViewController;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -118,15 +118,15 @@ import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSizeInsets;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
- * GrapherProject.
+ * GrapherController.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherProject extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, EditorView {
+public class GrapherController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewController, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
@@ -175,7 +175,7 @@ public class GrapherProject extends AbstractDocumentOrientedActivity implements 
             VBox.setVgrow(a, newValue ? grow : Priority.NEVER);
         });
 
-        PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherProject.class), id + ".expanded", t.expandedProperty());
+        PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherController.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
             a.setExpandedPane(t);
             VBox.setVgrow(a, grow);
@@ -299,7 +299,7 @@ public class GrapherProject extends AbstractDocumentOrientedActivity implements 
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("GrapherProject.fxml"));
+            node = loader.load(getClass().getResourceAsStream("Grapher.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -419,7 +419,7 @@ public class GrapherProject extends AbstractDocumentOrientedActivity implements 
                 GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
         );
 
-        Preferences prefs = Preferences.userNodeForPackage(GrapherProject.class);
+        Preferences prefs = Preferences.userNodeForPackage(GrapherController.class);
 //        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 

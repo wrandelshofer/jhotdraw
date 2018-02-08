@@ -11,10 +11,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractProjectAction;
+import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.ViewController;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -24,7 +24,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertFileAction extends AbstractProjectAction<DocumentOrientedActivity> {
+public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,34 +34,34 @@ public class RevertFileAction extends AbstractProjectAction<DocumentOrientedActi
      * Creates a new instance.
      *
      * @param app the application
-     * @param project the view
+     * @param view the view
      */
-    public RevertFileAction(Application app, DocumentOrientedActivity project) {
-        super(app, project, DocumentOrientedActivity.class);
+    public RevertFileAction(Application app, DocumentOrientedViewController view) {
+        super(app, view, DocumentOrientedViewController.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, DocumentOrientedActivity project) {
+    protected void handleActionPerformed(ActionEvent event, DocumentOrientedViewController view) {
         if (isDisabled()) {
             return;
         }
-        final URI uri = project.getURI();
-        final DataFormat dataFormat = project.getDataFormat();
-        if (project.isModified()) {
+        final URI uri = view.getURI();
+        final DataFormat dataFormat = view.getDataFormat();
+        if (view.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
                     "Do you want to revert?\nYou will lose your changes when you revert.", ButtonType.YES, ButtonType.CANCEL);
             alert.getDialogPane().setMaxWidth(640.0);
             Optional<ButtonType> answer = alert.showAndWait();
             if (answer.isPresent() && answer.get() == ButtonType.YES) {
-                doIt(project, uri, dataFormat);
+                doIt(view, uri, dataFormat);
             }
         } else {
-            doIt(project, uri, dataFormat);
+            doIt(view, uri, dataFormat);
         }
     }
 
-    private void doIt(DocumentOrientedActivity view, URI uri, DataFormat dataFormat) {
+    private void doIt(DocumentOrientedViewController view, URI uri, DataFormat dataFormat) {
         view.addDisabler(this);
 
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {

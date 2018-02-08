@@ -1,28 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* @(#)FontDialog.java
+ * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.gui.fontchooser;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.concurrent.CompletionStage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.AccessibleAction;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-import org.jhotdraw8.fxml.AsyncFXMLLoader;
-import org.jhotdraw8.text.CssFont;
 import org.jhotdraw8.util.Resources;
 
 /**

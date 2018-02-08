@@ -1,11 +1,11 @@
 package org.jhotdraw8.draw.action;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractProjectAction;
+import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /* @(#)AbstractSelectedAction.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
@@ -22,7 +22,7 @@ import org.jhotdraw8.app.Activity;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSelectedAction extends AbstractProjectAction<Activity> {
+public abstract class AbstractSelectedAction extends AbstractViewControllerAction<ViewController> {
 
     private DrawingEditor editor;
 
@@ -66,7 +66,7 @@ public abstract class AbstractSelectedAction extends AbstractProjectAction<Activ
      */
     protected DrawingView getView() {
         if (editor == null) {
-            Activity v = getActiveProject();
+            ViewController v = getActiveView();
             if (v instanceof EditorView) {
                 EditorView ev = (EditorView) v;
                 return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;

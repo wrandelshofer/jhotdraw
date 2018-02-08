@@ -10,7 +10,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationModel;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * Displays a dialog showing information about the application.

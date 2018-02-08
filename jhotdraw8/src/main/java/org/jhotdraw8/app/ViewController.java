@@ -1,4 +1,4 @@
-/* @(#)Activity.java
+/* @(#)ViewController.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -13,7 +13,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code Activity} represents an activity that the user
+ * A {@code ViewController} represents an activity that the user
  * is going to perform with help of the computer.
  * <p>
  * The life-cycle of an activity object is managed by an application. See the
@@ -48,8 +48,8 @@ import org.jhotdraw8.beans.PropertyBean;
  * again.
  * </li>
  * <li><b>Dispose</b><br>
- * When the project is no longer needed, application calls {@code dispose()} on
- * the project, followed by
+ * When the view is no longer needed, application calls {@code dispose()} on
+ * the view, followed by
  * {@code setApplication(null);}, {@code getActionMap().setParent(null)} and
  * then removes all references to it, so that it can be garbage collected.
  * </li>
@@ -60,7 +60,7 @@ import org.jhotdraw8.beans.PropertyBean;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Activity extends Disableable, PropertyBean {
+public interface ViewController extends Disableable, PropertyBean {
 
     /**
      * Activates the view.

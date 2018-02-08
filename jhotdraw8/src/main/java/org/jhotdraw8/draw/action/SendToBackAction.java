@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * SendToBackAction.
@@ -38,13 +38,13 @@ public class SendToBackAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity project) {
-        final DrawingView view = getView();
-        if (view == null) {
+    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+        final DrawingView dview = getView();
+        if (dview == null) {
             return;
         }
-        final LinkedList<Figure> figures = new LinkedList<Figure>(view.getSelectedFigures());
-        sendToBack(view, figures);
+        final LinkedList<Figure> figures = new LinkedList<Figure>(dview.getSelectedFigures());
+        sendToBack(dview, figures);
 
     }
 

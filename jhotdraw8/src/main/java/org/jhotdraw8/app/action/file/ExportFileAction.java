@@ -12,11 +12,11 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Presents a file chooser to the user and then exports the contents of the
- * active project to the chosen file.
+ * active view to the chosen file.
  * <p>
  *
  * @author Werner Randelshofer
@@ -42,10 +42,10 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * Creates a new instance.
      *
      * @param app the application
-     * @param project the project
+     * @param view the view
      */
-    public ExportFileAction(Application app, DocumentOrientedActivity project) {
-        this(app, project, ID, null);
+    public ExportFileAction(Application app, DocumentOrientedViewController view) {
+        this(app, view, ID, null);
     }
 
     /**
@@ -62,17 +62,17 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * Creates a new instance.
      *
      * @param app the application, nonnull
-     * @param project the project, nullable
+     * @param view the view, nullable
      * @param id the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(Application app, DocumentOrientedActivity project, String id,  Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
-        super(app, project, id, true);
+    public ExportFileAction(Application app, DocumentOrientedViewController view, String id,  Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+        super(app, view, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
 
     @Override
-    protected URIChooser createChooser(DocumentOrientedActivity project) {
+    protected URIChooser createChooser(DocumentOrientedViewController view) {
         // XXX should be supplied to the action?
         return app.getModel().createExportChooser();
     }
@@ -82,7 +82,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSucceded(DocumentOrientedActivity v, URI uri, DataFormat format) {
+    protected void handleSucceded(DocumentOrientedViewController v, URI uri, DataFormat format) {
         // empty
     }
 }

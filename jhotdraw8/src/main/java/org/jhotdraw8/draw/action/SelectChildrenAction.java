@@ -14,7 +14,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * SelectChildrenAction.
@@ -40,13 +40,13 @@ public class SelectChildrenAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity project) {
-        final DrawingView view = getView();
-        if (view == null) {
+    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+        final DrawingView dview = getView();
+        if (dview == null) {
             return;
         }
-        final List<Figure> figures = new ArrayList<>(view.getSelectedFigures());
-        selectChildren(view, figures);
+        final List<Figure> figures = new ArrayList<>(dview.getSelectedFigures());
+        selectChildren(dview, figures);
 
     }
 

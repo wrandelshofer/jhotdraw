@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * BringToFrontAction.
@@ -39,13 +39,13 @@ public class BringToFrontAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity project) {
-        final DrawingView view = getView();
-        if (view == null) {
+    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+        final DrawingView drawingView = getView();
+        if (drawingView == null) {
             return;
         }
-        final List<Figure> figures = new ArrayList<>(view.getSelectedFigures());
-        bringToFront(view, figures);
+        final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
+        bringToFront(drawingView, figures);
 
     }
 

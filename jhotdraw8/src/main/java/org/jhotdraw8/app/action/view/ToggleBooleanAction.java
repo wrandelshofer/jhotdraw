@@ -7,9 +7,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractProjectAction;
+import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * This action toggles the state of its boolean property.
@@ -17,9 +17,9 @@ import org.jhotdraw8.app.Activity;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ToggleBooleanAction extends AbstractProjectAction<Activity> {
+public class ToggleBooleanAction extends AbstractViewControllerAction<ViewController> {
     private BooleanProperty value;
-  public ToggleBooleanAction(Application app, Activity view, String id, Resources labels, BooleanProperty value) {
+  public ToggleBooleanAction(Application app, ViewController view, String id, Resources labels, BooleanProperty value) {
     super(app, view,null);
     if (labels != null && id != null) {
       labels.configureAction(this, id);
@@ -29,7 +29,7 @@ selectedProperty().bind(value);
   }
 
   @Override
-  protected void handleActionPerformed(ActionEvent event, Activity project) {
+  protected void handleActionPerformed(ActionEvent event, ViewController view) {
     value.set(!value.get());
   }
 }

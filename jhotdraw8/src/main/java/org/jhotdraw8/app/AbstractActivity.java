@@ -22,7 +22,7 @@ import org.jhotdraw8.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractActivity extends AbstractDisableable implements Activity {
+public abstract class AbstractActivity extends AbstractDisableable implements ViewController {
 
     protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();

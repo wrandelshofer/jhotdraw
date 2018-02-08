@@ -15,7 +15,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -29,7 +29,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
  * <b>Features</b>
  *
  * <p>
- * <em>Allow multiple projects per URI</em><br>
+ * <em>Allow multiple views per URI</em><br>
  * When the feature is disabled, {@code OpenRecentFileAction} prevents opening
  * an URI which is opened in another view.<br>
  * See {@link org.jhotdraw8.app} for a description of the feature.
@@ -69,9 +69,9 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     protected void handleActionPerformed(ActionEvent evt, Application app) {
         {
             // Search for an empty view
-            DocumentOrientedActivity emptyView;
+            DocumentOrientedViewController emptyView;
             if (reuseEmptyViews) {
-                emptyView = (DocumentOrientedActivity) app.getActiveProject();//FIXME class cast exception
+                emptyView = (DocumentOrientedViewController) app.getActiveView();//FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -82,9 +82,9 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createActivity().thenAccept(v -> {
+                app.createView().thenAccept(v -> {
                     app.add(v);
-                    doIt((DocumentOrientedActivity) v, true);
+                    doIt((DocumentOrientedViewController) v, true);
                 });
             } else {
                 doIt(emptyView, false);
@@ -92,11 +92,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(DocumentOrientedActivity view, boolean disposeView) {
+    public void doIt(DocumentOrientedViewController view, boolean disposeView) {
         openViewFromURI(view, uri);
     }
 
-    private void handleException(final DocumentOrientedActivity v, Throwable exception) throws MissingResourceException {
+    private void handleException(final DocumentOrientedViewController v, Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
@@ -104,13 +104,13 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         alert.getDialogPane().setMaxWidth(640.0);
         alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
         
-        // Note: we must invoke clear() or read() on the project, before we start using it.
+        // Note: we must invoke clear() or read() on the view, before we start using it.
         v.clear();
         alert.showAndWait();
         v.removeDisabler(this);
     }
 
-    protected void openViewFromURI(final DocumentOrientedActivity v, final URI uri) {
+    protected void openViewFromURI(final DocumentOrientedViewController v, final URI uri) {
         final Application app = getApplication();
         v.addDisabler(this);
 

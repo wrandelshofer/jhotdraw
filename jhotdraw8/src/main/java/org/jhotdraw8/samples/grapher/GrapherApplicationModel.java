@@ -17,7 +17,7 @@ import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * GrapherApplicationModel.
@@ -37,7 +37,7 @@ public final static DataFormat GRAPHER_FORMAT;
     }
 
     public GrapherApplicationModel() {
-        super("Grapher", GrapherProject::new,
+        super("Grapher", GrapherController::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "Grapher Files", GRAPHER_FORMAT, "*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));

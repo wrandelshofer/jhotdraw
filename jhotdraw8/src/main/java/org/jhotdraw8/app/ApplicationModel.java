@@ -23,20 +23,19 @@ import org.jhotdraw8.gui.URIChooser;
  */
 public interface ApplicationModel {
 
-    // Projects
     /**
-     * Instantiates a project. But does not initialize it.
+     * Instantiates a view. But does not initialize it.
      *
      * Since this operation may involve class loading, it should be performed in
      * the background.
      *
      * @return a new instance
      */
-    default CompletionStage<Activity> createProjectAsync() {
-        return FXWorker.supply(this::createProject);
+    default CompletionStage<ViewController> createViewAsync() {
+        return FXWorker.supply(this::createView);
     }
 
-    public Activity createProject();
+    public ViewController createView();
     // URI choosers
 
     /**

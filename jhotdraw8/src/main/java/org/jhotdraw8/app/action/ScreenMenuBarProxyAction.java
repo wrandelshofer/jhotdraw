@@ -26,7 +26,7 @@ public class ScreenMenuBarProxyAction extends AbstractAction {
         disabled.set(true);
         selectedProperty().set(false);
 
-        app.activeProjectProperty().addListener((o, oldv, newv) -> {
+        app.activeViewProperty().addListener((o, oldv, newv) -> {
             if (currentAction != null) {
                 disabled.unbind();
                 disabled.set(true);

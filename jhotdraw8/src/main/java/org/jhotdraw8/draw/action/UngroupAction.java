@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Grouping;
-import org.jhotdraw8.app.Activity;
+import org.jhotdraw8.app.ViewController;
 
 /**
  * UngroupAction.
@@ -44,13 +44,13 @@ public class UngroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity project) {
-        final DrawingView view = getView();
-        if (view == null) {
+    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+        final DrawingView dview = getView();
+        if (dview == null) {
             return;
         }
-        final LinkedList<Figure> figures = new LinkedList<>(view.getSelectedFigures());
-        ungroup(view, figures);
+        final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
+        ungroup(dview, figures);
 
     }
 
