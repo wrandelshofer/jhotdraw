@@ -9,7 +9,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.UriUtil;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedViewModel;
 
 /**
  * Lets the user write unsaved changes of the active view, and then loads the
@@ -56,7 +56,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view
      * @param uri the uri of the recent file
      */
-    public LoadRecentFileAction(Application app, DocumentOrientedViewController view, URI uri) {
+    public LoadRecentFileAction(Application app, DocumentOrientedViewModel view, URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);
@@ -170,7 +170,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
     }*/
 
     @Override
-    public CompletionStage<Void> doIt(final DocumentOrientedViewController view) {
+    public CompletionStage<Void> doIt(final DocumentOrientedViewModel view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

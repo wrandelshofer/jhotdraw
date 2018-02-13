@@ -16,7 +16,7 @@ import org.jhotdraw8.beans.PropertyBean;
  * A {@code ViewController} represents an activity that the user
  * is going to perform with help of the computer.
  * <p>
- * The life-cycle of an activity object is managed by an application. See the
+ * The life-cycle of a view controller object is managed by an application. See the
  * class comment of {@link Application} on how to launch an application.
  * <p>
  * The lifecycle of an activity consists of the following steps:
@@ -111,7 +111,7 @@ public interface ViewController extends Disableable, PropertyBean {
     }
 
     /**
-     * Returns the scene node which renders the view for this activity.
+     * Returns the scene node which renders the view for this controller.
      *
      * @return The node.
      */

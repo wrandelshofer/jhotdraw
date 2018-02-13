@@ -17,7 +17,7 @@ import javafx.scene.input.DataFormat;
  * @version $Id$
  $$
  */
-public abstract class AbstractDocumentOrientedViewController extends AbstractActivity implements DocumentOrientedViewController {
+public abstract class AbstractDocumentOrientedViewController extends AbstractActivity implements DocumentOrientedViewModel {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty() {
         @Override

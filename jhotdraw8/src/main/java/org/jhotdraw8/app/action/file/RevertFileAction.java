@@ -14,7 +14,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.ViewController;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedViewModel;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -24,7 +24,7 @@ import org.jhotdraw8.app.DocumentOrientedViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
+public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedViewModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,13 +36,13 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
      * @param app the application
      * @param view the view
      */
-    public RevertFileAction(Application app, DocumentOrientedViewController view) {
-        super(app, view, DocumentOrientedViewController.class);
+    public RevertFileAction(Application app, DocumentOrientedViewModel view) {
+        super(app, view, DocumentOrientedViewModel.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, DocumentOrientedViewController view) {
+    protected void handleActionPerformed(ActionEvent event, DocumentOrientedViewModel view) {
         if (isDisabled()) {
             return;
         }
@@ -61,7 +61,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
         }
     }
 
-    private void doIt(DocumentOrientedViewController view, URI uri, DataFormat dataFormat) {
+    private void doIt(DocumentOrientedViewModel view, URI uri, DataFormat dataFormat) {
         view.addDisabler(this);
 
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {

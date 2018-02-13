@@ -23,11 +23,11 @@ import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.ViewController;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedViewModel;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
- * to write unsaved changes of a {@link org.jhotdraw8.app.DocumentOrientedViewController}
+ * to write unsaved changes of a {@link org.jhotdraw8.app.DocumentOrientedViewModel}
  * before a destructive action is performed.
  * <p>
  * If the view has no unsaved changes, method {@code doIt} is invoked
@@ -41,7 +41,7 @@ import org.jhotdraw8.app.DocumentOrientedViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
+public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewControllerAction<DocumentOrientedViewModel> {
 
     /**
      *
@@ -59,24 +59,24 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
      * @param app the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(Application app, DocumentOrientedViewController view) {
-        super(app, view, DocumentOrientedViewController.class);
+    public AbstractSaveUnsavedChangesAction(Application app, DocumentOrientedViewModel view) {
+        super(app, view, DocumentOrientedViewModel.class);
     }
 
     @Override
-    protected final void handleActionPerformed(ActionEvent evt, DocumentOrientedViewController av) {
+    protected final void handleActionPerformed(ActionEvent evt, DocumentOrientedViewModel av) {
         Application app = getApplication();
-        if (av instanceof DocumentOrientedViewController) {
+        if (av instanceof DocumentOrientedViewModel) {
             handleActionOnViewPerformed(av);
         } else if (isMayCreateView()) {
             app.createView().thenAccept(v -> {
                 app.add(v);
-                handleActionOnViewPerformed((DocumentOrientedViewController) v);//FIXME class cast exception
+                handleActionOnViewPerformed((DocumentOrientedViewModel) v);//FIXME class cast exception
             });
         }
     }
 
-    public void handleActionOnViewPerformed(DocumentOrientedViewController v) {
+    public void handleActionOnViewPerformed(DocumentOrientedViewModel v) {
         if (!v.isDisabled()) {
             final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
@@ -154,7 +154,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected URIChooser getChooser(DocumentOrientedViewController view) {
+    protected URIChooser getChooser(DocumentOrientedViewModel view) {
         URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -163,7 +163,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         return chsr;
     }
 
-    protected void saveView(final DocumentOrientedViewController v) {
+    protected void saveView(final DocumentOrientedViewModel v) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -201,7 +201,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         }
     }
 
-    protected void saveViewToURI(final DocumentOrientedViewController v, final URI uri, final URIChooser chooser, final DataFormat dataFormat) {
+    protected void saveViewToURI(final DocumentOrientedViewModel v, final URI uri, final URIChooser chooser, final DataFormat dataFormat) {
         v.write(uri, chooser == null ? null : dataFormat, null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -230,5 +230,5 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         });
     }
 
-    protected abstract CompletionStage<Void> doIt(DocumentOrientedViewController p);
+    protected abstract CompletionStage<Void> doIt(DocumentOrientedViewModel p);
 }

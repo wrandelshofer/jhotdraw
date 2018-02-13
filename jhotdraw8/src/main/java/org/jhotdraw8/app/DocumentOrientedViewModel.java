@@ -1,4 +1,4 @@
-/* @(#)DocumentOrientedViewController.java
+/* @(#)DocumentOrientedViewModel.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -6,24 +6,21 @@ package org.jhotdraw8.app;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 
 /**
- * A {@code DocumentOrientedViewController} is a specialization of {@link ViewController} for document
+ * A {@code DocumentOrientedViewModel} is a specialization of {@link ViewController} for document
  * oriented applications.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DocumentOrientedViewController extends ViewController {
+public interface DocumentOrientedViewModel extends ViewController {
 
     /**
      * The modified property is set to true by the view.
@@ -116,23 +113,6 @@ public interface DocumentOrientedViewController extends ViewController {
      * {@code return CompletableFuture.completedFuture(null);}
      */
     public CompletionStage<Void> print(PrinterJob job);
-
-    /**
-     * The action map of the view.
-     *
-     * @return the action map
-     */
-    public HierarchicalMap<String, Action> getActionMap();
-
-    public IntegerProperty disambiguationProperty();
-
-    default public int getDisambiguation() {
-        return disambiguationProperty().get();
-    }
-
-    default public void setDisambiguation(int newValue) {
-        disambiguationProperty().set(newValue);
-    }
 
     default public boolean isEmpty() {
         return !isModified() && getURI() == null;

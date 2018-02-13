@@ -12,7 +12,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedViewModel;
 
 /**
  * Presents a file chooser to the user and then exports the contents of the
@@ -44,7 +44,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public ExportFileAction(Application app, DocumentOrientedViewController view) {
+    public ExportFileAction(Application app, DocumentOrientedViewModel view) {
         this(app, view, ID, null);
     }
 
@@ -66,13 +66,13 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param id the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(Application app, DocumentOrientedViewController view, String id,  Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(Application app, DocumentOrientedViewModel view, String id,  Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
         super(app, view, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
 
     @Override
-    protected URIChooser createChooser(DocumentOrientedViewController view) {
+    protected URIChooser createChooser(DocumentOrientedViewModel view) {
         // XXX should be supplied to the action?
         return app.getModel().createExportChooser();
     }
@@ -82,7 +82,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSucceded(DocumentOrientedViewController v, URI uri, DataFormat format) {
+    protected void handleSucceded(DocumentOrientedViewModel v, URI uri, DataFormat format) {
         // empty
     }
 }
