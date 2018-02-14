@@ -257,7 +257,7 @@ private final static String SEPARATOR="\0";
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(new File(xmlUri)));
         } catch (SAXParseException e) {
-            throw new IOException("Invalid XML file: "+e.getSystemId()+"\nError in line: "+e.getLineNumber()+", column: "+e.getColumnNumber()+".",e);
+            throw new IOException("Invalid XML file: "+e.getSystemId()+"\nError in line: "+e.getLineNumber()+", column: "+e.getColumnNumber()+".\n"+e.getMessage(),e);
         } catch (SAXException e) {
             
             throw new IOException("Invalid XML file: " + xmlUri, e);

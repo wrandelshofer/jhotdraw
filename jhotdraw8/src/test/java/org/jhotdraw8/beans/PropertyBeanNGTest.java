@@ -7,8 +7,8 @@ package org.jhotdraw8.beans;
 import javafx.beans.value.ObservableValue;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
-import static org.testng.Assert.*;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  * PropertyBeanNGTest.

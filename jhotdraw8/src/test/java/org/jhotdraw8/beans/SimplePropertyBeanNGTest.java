@@ -6,12 +6,8 @@ package org.jhotdraw8.beans;
 
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-import org.testng.annotations.Test;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * SimplePropertyBeanNGTest.
@@ -34,19 +30,19 @@ public class SimplePropertyBeanNGTest {
         final PaintableStyleableFigureKey key = FillableFigure.FILL;
         
         
-       assertNotNull(key.getDefaultValue(),"need a key with a non-null default value for this test");
-       assertFalse(instance.getProperties().containsKey(key),"value has not been set, map must not contain key");
-        assertEquals(instance.get(key),key.getDefaultValue(),"value has not been set, must deliver default value");
+       assertNotNull("need a key with a non-null default value for this test",key.getDefaultValue());
+       assertFalse("value has not been set, map must not contain key",instance.getProperties().containsKey(key));
+        assertEquals("value has not been set, must deliver default value",instance.get(key),key.getDefaultValue());
         
         instance.set(key, null);
         
-       assertNull(instance.get(key),"value has been explicitly set to null");
-       assertTrue(instance.getProperties().containsKey(key),"map must contain key after explicit set");
+       assertNull("value has been explicitly set to null",instance.get(key));
+       assertTrue("map must contain key after explicit set",instance.getProperties().containsKey(key));
        
        instance.remove(key);
        
-       assertEquals(instance.get(key),key.getDefaultValue(),"key has been removed, value must be default value");
-       assertFalse(instance.getProperties().containsKey(key),"key has been removed, map must not contain key");
+       assertEquals("key has been removed, value must be default value",instance.get(key),key.getDefaultValue());
+       assertFalse("key has been removed, map must not contain key",instance.getProperties().containsKey(key));
        
     }
     

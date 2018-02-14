@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.io.SimpleIdFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
@@ -19,7 +18,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import javafx.css.Styleable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
@@ -312,7 +310,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
             for (MapAccessor<?> k : map.keySet()) {
                 String fullValueType = k.getFullValueType();
                 if (!k.isTransient()&&!keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
-                   LOGGER.warning( "can not convert " + fullValueType + " to XML for key " + k + ".");
+                   LOGGER.warning(getClass()+ " can not convert " + fullValueType + " to XML for key " + k + ".");
                 }
             }
         }

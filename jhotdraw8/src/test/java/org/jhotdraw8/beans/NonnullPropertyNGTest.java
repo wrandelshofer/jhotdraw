@@ -6,8 +6,9 @@ package org.jhotdraw8.beans;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import static org.testng.Assert.*;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
  *

@@ -173,7 +173,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(CssSize.class, new CssSizeConverter());
         addConverterForType(CssSizeInsets.class, new CssSizeInsetsConverter());
         addConverterForType(CssSize2D.class, new CssSize2DConverter());
-        addConverterForType(FillRule.class, new XmlEnumConverter<FillRule>(FillRule.class));
+        addConverterForType(FillRule.class, new XmlEnumConverter<>(FillRule.class));
         addConverterForType(FontWeight.class, new XmlEnumConverter<>(FontWeight.class));
         addConverterForType(FontPosture.class, new XmlEnumConverter<>(FontPosture.class));
         addConverterForType(LabelAutorotate.class, new XmlEnumConverter<>(LabelAutorotate.class));
