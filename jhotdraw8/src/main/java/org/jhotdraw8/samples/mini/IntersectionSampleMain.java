@@ -554,6 +554,7 @@ public class IntersectionSampleMain extends Application {
     private void updateShapes(ActionEvent evt) {
         int index = (evt.getSource() == choice1) ? 0 : 1;
         Color color = index == 0 ? Color.GREEN : Color.CYAN;
+        @SuppressWarnings("unchecked")
         final Map.Entry<Shape, List<Handle>> newEntry = createShapeAndHandles(((ChoiceBox<String>) evt.getSource()).getValue(), color, color);
         shapes.set(index, newEntry);
         canvas.getChildren().clear();

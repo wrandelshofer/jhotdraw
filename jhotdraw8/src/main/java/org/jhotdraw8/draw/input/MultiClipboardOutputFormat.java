@@ -22,6 +22,7 @@ public class MultiClipboardOutputFormat implements ClipboardOutputFormat {
 
     private ClipboardOutputFormat[] formats;
 
+    @SuppressWarnings("unchecked")
     public MultiClipboardOutputFormat(Supplier<ClipboardOutputFormat>... formatSuppliers) {
         this.formatSuppliers = formatSuppliers;
     }

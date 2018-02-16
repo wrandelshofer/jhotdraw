@@ -79,7 +79,9 @@ public class DepthFirstVertexIterator<V> implements Iterator<V> {
                 return;
             }
         }
-        next = (V) SENTINEL;
+        @SuppressWarnings("unchecked")
+        V tmp = (V) SENTINEL;
+        next = tmp;
     }
 
     @Override
@@ -91,7 +93,9 @@ public class DepthFirstVertexIterator<V> implements Iterator<V> {
             throw new NoSuchElementException();
         }
         V result = next;
-        next = (V) NEEDS_LOOKAHEAD;
+        @SuppressWarnings("unchecked")
+        V tmp = (V) NEEDS_LOOKAHEAD;
+        next = tmp;
         return result;
     }
 

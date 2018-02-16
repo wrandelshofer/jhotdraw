@@ -37,6 +37,7 @@ public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelF
                 case UNIT_SEPARATOR:
                     buf.append(ESCAPE_CHAR);
                     buf.append(UNIT_ESCAPE_CHAR);
+                    break;
                 case RECORD_SEPARATOR:
                     buf.append(ESCAPE_CHAR);
                     buf.append(RECORD_ESCAPE_CHAR);

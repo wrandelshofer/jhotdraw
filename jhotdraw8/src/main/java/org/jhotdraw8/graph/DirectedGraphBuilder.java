@@ -201,7 +201,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
     }
 
     protected int getVertexIndex( V v) {
-        return vertexMap.get(v);
+Integer index=       vertexMap.get(v);
+return (int) index;
     }
     
     

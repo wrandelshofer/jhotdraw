@@ -22,7 +22,7 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
 
     private int arrowCount;
     /**
-     * Table of arrows.
+     * Table of arrow heads.
      * <p>
      * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_VERTEX_FIELD} contains the index
      * of the vertex of the i-th arrow.
@@ -144,8 +144,6 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
     
     /**
      * Removes the i-th arrow of vertex vi.
-     * <p>
-     * This implementation has a time complexity of O(|V|+|A|).
      *
      * @param vi a vertex
      * @param i the i-th arrow of vertex vi

@@ -49,7 +49,7 @@ public class UnfoldPathMain extends Application {
     private Path strokedPath = new Path();
     private Path intersections = new Path();
     private Path intersections2 = new Path();
-    private List<Point2D> points = new ArrayList();
+    private List<Point2D> points = new ArrayList<>();
     private Point2D pressedp;
     private double tolerance = 10;
     private int selected = -1;
