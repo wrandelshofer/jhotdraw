@@ -20,12 +20,13 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
 
     public BidiDirectedGraphBuilder() {
     }
-    public BidiDirectedGraphBuilder(DirectedGraph<V,A> that) {
-        for (V v:that.getVertices()) {
+
+    public BidiDirectedGraphBuilder(DirectedGraph<V, A> that) {
+        for (V v : that.getVertices()) {
             addVertex(v);
         }
-        for (V v:that.getVertices()) {
-            for (int i=0,n=that.getNextCount(v);i<n;i++) {
+        for (V v : that.getVertices()) {
+            for (int i = 0, n = that.getNextCount(v); i < n; i++) {
                 addArrow(v, that.getNext(v, i), that.getArrow(v, i));
             }
         }
@@ -120,17 +121,19 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
     }
 
     public void removeArrow(V v, A a) {
-        for (int i=0,n=getNextCount(v);i<n;i++) {
+        for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (a.equals(getArrow(v, i))) {
                 removeNext(v, i);
                 break;
             }
         }
     }
-    
+
     public void removeVertex(V v) {
         final Vertex<V, A> vertex = vertices.get(v);
-        if (vertex==null)return;
+        if (vertex == null) {
+            return;
+        }
         for (int i = vertex.next.size() - 1; i >= 0; i--) {
             removeNext(v, i);
         }
@@ -143,9 +146,15 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
     }
 
     public void addArrow(V from, V to, A arrow) {
-        if (from==null||to==null||arrow==null)throw new IllegalArgumentException("from="+from+", to="+to+", arrow="+arrow);
+        if (from == null || to == null || arrow == null) {
+            throw new IllegalArgumentException("from=" + from + ", to=" + to + ", arrow=" + arrow);
+        }
         final Vertex<V, A> fromVertex = vertices.get(from);
         final Vertex<V, A> toVertex = vertices.get(to);
+        if (fromVertex == null || toVertex == null) {
+            throw new IllegalArgumentException(
+                    "from=" + from + ", to=" + to + ", arrow=" + arrow + ", fromVertex=" + fromVertex + ", toVertex=" + toVertex);
+        }
         Arrow<V, A> a = new Arrow<>(from, to, arrow);
         fromVertex.next.add(a);
         toVertex.prev.add(a);
