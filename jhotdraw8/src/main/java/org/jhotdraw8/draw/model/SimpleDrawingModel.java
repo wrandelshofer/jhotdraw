@@ -138,7 +138,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
      */
     @SuppressWarnings("unchecked")
     private void onPropertyChangedOLD(FigurePropertyChangeEvent event) {
-       /* if (event.getType() == FigurePropertyChangeEvent.EventType.WILL_CHANGE) {
+        /* if (event.getType() == FigurePropertyChangeEvent.EventType.WILL_CHANGE) {
             Key<?> k = event.getKey();
             if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
                 layoutSubjectChange.clear();
@@ -196,7 +196,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @SuppressWarnings("unchecked")
     private void onPropertyChanged(FigurePropertyChangeEvent event) {
         if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED
-                && !Objects.equals(event.getOldValue(),event.getNewValue())) {
+                && !Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     (Key<Object>) event.getKey(), event.getOldValue(),
                     event.getNewValue()));
@@ -205,9 +205,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @SuppressWarnings("unchecked")
     private <T> void onPropertyChanged(Figure figure, Key<T> key, T oldValue, T newValue) {
-        if (!Objects.equals(oldValue,newValue)) 
-        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
-                (Key<Object>) key, oldValue, newValue));
+        if (!Objects.equals(oldValue, newValue)) {
+            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
+                    (Key<Object>) key, oldValue, newValue));
+        }
     }
 
     private void markDirty(Figure figure, DirtyBits... bits) {
@@ -293,7 +294,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     public <T> T set(Figure figure, MapAccessor<T> key, T newValue) {
         if (key instanceof Key<?>) {
             T oldValue = figure.set(key, newValue);
-            // event will be fired by method onPropertyChanged
+            // event will be fired by method onPropertyChanged if newValue differs from oldValue
             onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
             return oldValue;
         } else {
@@ -478,7 +479,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // build a graph which includes all figures that must be laid out and all their observers
             // transitively
             visited.clear();
-            DirectedGraphBuilder<Figure,Figure> graphBuilder = new DirectedGraphBuilder<>();
+            DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>();
             while (!todo.isEmpty()) {
                 Figure f = todo.iterator().next();
                 todo.remove(f);
@@ -486,7 +487,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     graphBuilder.addVertex(f);
                     for (Figure obs : f.getLayoutObservers()) {
                         graphBuilder.addVertex(obs);
-                        graphBuilder.addArrow(f, obs,f);
+                        graphBuilder.addArrow(f, obs, f);
                         todo.add(obs);
                     }
                 }

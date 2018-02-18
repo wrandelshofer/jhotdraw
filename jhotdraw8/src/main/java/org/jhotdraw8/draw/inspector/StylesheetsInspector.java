@@ -150,9 +150,11 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                     -> new TextFieldListCell<>(uriConverter), io);
         });
     }
+    private int isReplacingDrawing;
 
     @Override
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
+        isReplacingDrawing++;
         if (oldValue != null) {
             listView.getItems().clear();
         }
@@ -164,10 +166,15 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 listView.getItems().setAll(stylesheets);
             }
         }
-        counter=0;
+        counter = 0;
+        isReplacingDrawing--;
     }
 
     private void onListChanged() {
+        if (isReplacingDrawing != 0) {
+            // The drawing is currently being replaced by a new one. Don't fire events.
+            return;
+        }
         drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, new ArrayList<>(listView.getItems()));
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);

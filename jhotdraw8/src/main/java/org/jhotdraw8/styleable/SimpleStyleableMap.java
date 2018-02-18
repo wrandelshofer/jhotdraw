@@ -40,7 +40,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private final int originOrdinal;
     private final int[] sizes;
     private final ArrayList<Object> values;
-    private final SimpleStyleableMap<K,V> originalMap;
+    private final SimpleStyleableMap<K, V> originalMap;
 
     /**
      * Creates a new instance.
@@ -63,7 +63,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         this.origin = StyleOrigin.USER;
         this.originOrdinal = origin.ordinal();
         this.sizes = new int[numOrigins];
-        this.originalMap=this;
+        this.originalMap = this;
     }
 
     private SimpleStyleableMap(SimpleStyleableMap<K, V> that, StyleOrigin styleOrigin) {
@@ -72,7 +72,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         this.origin = styleOrigin;
         this.originOrdinal = (styleOrigin == null) ? -1 : styleOrigin.ordinal();
         this.sizes = that.sizes;
-        this.originalMap=that;
+        this.originalMap = that;
     }
 
     @Override
@@ -152,7 +152,9 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     public boolean containsValue(StyleOrigin origin, Object value) {
-        if (value==null)value=NULL_VALUE;
+        if (value == null) {
+            value = NULL_VALUE;
+        }
         for (int i = originOrdinal, n = values.size(); i < n; i += numOrigins) {
             if (Objects.equals(values.get(i), value)) {
                 return true;
@@ -160,7 +162,6 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
         return false;
     }
-
 
     @SuppressWarnings("unchecked")
     private int ensureCapacity(K key) {
@@ -243,7 +244,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             final int arrayIndex = index * numOrigins + ordinal;
             value = arrayIndex < values.size() ? values.get(arrayIndex) : null;
         }
-        return value == null ? defaultValue : (V) (value==NULL_VALUE?null:value);
+        return value == null ? defaultValue : (V) (value == NULL_VALUE ? null : value);
     }
 
     private boolean hasValue(int index) {
@@ -321,14 +322,14 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         } else {
             values.set(index * numOrigins + ordinal, null);
             sizes[ordinal]--;
-            V returnValue=oldValue==NULL_VALUE?null:(V)oldValue;
+            V returnValue = oldValue == NULL_VALUE ? null : (V) oldValue;
             if (origin == StyleOrigin.USER) {
                 @SuppressWarnings("unchecked")
                 ChangeEvent change = new ChangeEvent(key, returnValue, null, false, true);
                 callObservers(this.origin, change);
             }
 
-            return  returnValue;
+            return returnValue;
         }
 
     }
@@ -342,7 +343,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         if (oldValue == null) {
             sizes[ordinal]++;
         }
-        values.set(index * numOrigins + ordinal, newValue==null?NULL_VALUE:newValue);
+        values.set(index * numOrigins + ordinal, newValue == null ? NULL_VALUE : newValue);
 
         V returnValue = oldValue == NULL_VALUE ? null : oldValue;
         if (!Objects.equals(oldValue, newValue)) {
