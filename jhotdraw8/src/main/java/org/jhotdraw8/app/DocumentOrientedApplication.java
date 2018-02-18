@@ -11,6 +11,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
@@ -34,6 +35,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -498,9 +500,11 @@ public class DocumentOrientedApplication extends AbstractApplication {
                     Menu mmi = (Menu) mi;
                     if ("file.openRecentMenu".equals(mmi.getId())) {
                         mmi.getItems().clear();
-                        for (URI uri : recentUrisProperty()) {
+                        for (Map.Entry<URI,DataFormat> entry : recentUrisProperty()) {
+                            URI uri=entry.getKey();
+                            DataFormat format=entry.getValue();
                             MenuItem mii = new MenuItem();
-                            Action a = new OpenRecentFileAction(this, uri);
+                            Action a = new OpenRecentFileAction(this, uri, format);
                             Actions.bindMenuItem(mii, a);
                             ((Menu) mi).getItems().add(mii);
                         }

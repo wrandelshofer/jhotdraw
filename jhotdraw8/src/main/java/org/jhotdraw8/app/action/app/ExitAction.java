@@ -282,7 +282,7 @@ public class ExitAction extends AbstractApplicationAction {
             } else {
                 v.setURI(uri);
                 v.clearModified();
-                app.addRecentURI(format==null?uri:UriUtil.addQuery(uri, "mimeType", format.getIdentifiers().iterator().next()));
+                app.addRecentURI(uri,format);
             }
             return null;
         });

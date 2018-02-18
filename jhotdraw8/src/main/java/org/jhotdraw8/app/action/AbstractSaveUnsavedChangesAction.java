@@ -223,7 +223,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                 v.setURI(uri);
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
-                app.addRecentURI(dataFormat == null ? uri : UriUtil.addQuery(uri, "mimeType", dataFormat.getIdentifiers().iterator().next()));
+                app.addRecentURI( uri,dataFormat);
                 doIt(v);
             }
             return null;

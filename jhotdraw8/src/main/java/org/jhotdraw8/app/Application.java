@@ -4,7 +4,9 @@
 package org.jhotdraw8.app;
 
 import java.net.URI;
+import java.util.AbstractMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import javafx.beans.property.IntegerProperty;
@@ -14,6 +16,7 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
+import javafx.scene.input.DataFormat;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
@@ -60,7 +63,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the recent Uris
      */
-    public ReadOnlySetProperty<URI> recentUrisProperty();
+    public ReadOnlySetProperty<Map.Entry<URI,DataFormat>> recentUrisProperty();
 
     /**
      * The maximal number of recent URIs. Specifies how many items of
@@ -171,13 +174,13 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param uri a recent URI
      */
-    default void addRecentURI(URI uri) {
+    default void addRecentURI(URI uri, DataFormat dataFormat) {
         // ensures that the last used uri lands at the end of the LinkedHashSet.
-        Set<URI> recents = recentUrisProperty().get();
+        Set<Map.Entry<URI,DataFormat>> recents = recentUrisProperty().get();
         recents.remove(uri);
-        recents.add(uri);
+        recents.add(new AbstractMap.SimpleEntry<>(uri,dataFormat));
         if (recents.size() > getMaxNumberOfRecentUris()) {
-            Iterator<URI> i = recents.iterator();
+            Iterator<Map.Entry<URI,DataFormat>> i = recents.iterator();
             i.next();
             i.remove();
         }

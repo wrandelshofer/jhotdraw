@@ -51,6 +51,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
     public static final String ID = "file.openRecent";
     private URI uri;
+    private DataFormat format;
     private boolean reuseEmptyViews = true;
 
     /**
@@ -59,9 +60,10 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
      * @param app the application
      * @param uri the uri
      */
-    public OpenRecentFileAction(Application app, URI uri) {
+    public OpenRecentFileAction(Application app, URI uri, DataFormat format) {
         super(app);
         this.uri = uri;
+        this.format=format;
         set(Action.LABEL, UriUtil.getName(uri));
     }
 
@@ -93,7 +95,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     public void doIt(DocumentOrientedViewModel view, boolean disposeView) {
-        openViewFromURI(view, uri);
+        openViewFromURI(view, uri, format);
     }
 
     private void handleException(final DocumentOrientedViewModel v, Throwable exception) throws MissingResourceException {
@@ -110,28 +112,20 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         v.removeDisabler(this);
     }
 
-    protected void openViewFromURI(final DocumentOrientedViewModel v, final URI uri) {
+    protected void openViewFromURI(final DocumentOrientedViewModel v, final URI uri, DataFormat format) {
         final Application app = getApplication();
         v.addDisabler(this);
 
-        final DataFormat format;
-        Map<String, String> query = UriUtil.parseQuery(uri);
-        URI u = UriUtil.clearQuery(uri);// FIXME only remove "mimeType" query.
-        String formatString = query.get("mimeType");
-        if (formatString != null) {
-            format = DataFormat.lookupMimeType(formatString);
-        }else{
-            format = null;
-        }
         // Open the file
         try {
-            v.read(u, format, null, false).whenComplete((result, exception) -> {
+            v.read(uri, format, null, false).whenComplete((result, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(this);
                 } else if (exception != null) {
                     handleException(v, exception);
                 } else {
-                    v.setURI(u);
+                    v.setURI(uri);
+                    v.setDataFormat(format);
                     v.clearModified();
                     v.setTitle(UriUtil.getName(uri));
                     v.removeDisabler(this);

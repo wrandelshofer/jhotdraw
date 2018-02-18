@@ -76,7 +76,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
         v.setURI(uri);
        v.clearModified();
         v.setTitle(UriUtil.getName(uri));
-        app.addRecentURI(format == null ? uri : UriUtil.addQuery(uri, "mimeType", format.getIdentifiers().iterator().next()));
+        app.addRecentURI(uri,format);
     }
 
 }

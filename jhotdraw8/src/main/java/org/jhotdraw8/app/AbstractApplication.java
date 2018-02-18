@@ -5,8 +5,11 @@ package org.jhotdraw8.app;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.AbstractMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
@@ -21,6 +24,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import javafx.scene.input.DataFormat;
 import static org.jhotdraw8.app.Disableable.DISABLED_PROPERTY;
 import org.jhotdraw8.collection.Key;
 
@@ -31,6 +35,8 @@ import org.jhotdraw8.collection.Key;
  * @version $Id$
  */
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.app.Application {
+
+    private static final String RECENT_URIS = ".recentUriFormats";
 
     /**
      * Holds the disabled state.
@@ -60,10 +66,10 @@ public abstract class AbstractApplication extends javafx.application.Application
     /**
      * Holds the recent URIs.
      */
-    private final ReadOnlySetProperty<URI> recentUris//
-            = new ReadOnlySetWrapper<URI>(//
+    private final ReadOnlySetProperty<Map.Entry<URI, DataFormat>> recentUris//
+            = new ReadOnlySetWrapper<Map.Entry<URI, DataFormat>>(//
                     this, RECENT_URIS_PROPERTY, //
-                    FXCollections.observableSet(new LinkedHashSet<URI>())).getReadOnlyProperty();
+                    FXCollections.observableSet(new LinkedHashSet<Map.Entry<URI, DataFormat>>())).getReadOnlyProperty();
 
     {
         ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
@@ -73,73 +79,80 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-        public ReadOnlyBooleanProperty disabledProperty() {
+    public ReadOnlyBooleanProperty disabledProperty() {
         return disabled;
     }
 
     @Override
-        public ObservableSet<Object> disablers() {
+    public ObservableSet<Object> disablers() {
         return disablers;
     }
 
     @Override
-        public final ObservableMap<Key<?>, Object> getProperties() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties = FXCollections.observableHashMap();
         }
         return properties;
     }
 
-    protected void loadRecentUris( String applicationId) {
+    protected void loadRecentUris(String applicationId) {
         Preferences prefs = getModel().getPreferences();
-        String recentUrisSerialized = prefs.get(applicationId + ".recentUris", "");
-        for (String str : recentUrisSerialized.split("\t")) {
-            if (str.isEmpty()) {
+        String recentUrisSerialized = prefs.get(applicationId + RECENT_URIS, "");
+        for (String row : recentUrisSerialized.split("\n")) {
+            if (row.isEmpty()) {
                 continue;
             }
             if (recentUris.size() >= getMaxNumberOfRecentUris()) {
                 break;
             }
+            String[] columns = row.split("\t");
+            if (columns.length < 1) {
+                continue;
+            }
             try {
-                URI uri = new URI(str);
-                recentUris.add(uri);
+                URI uri = new URI(columns[0]);
+                DataFormat format = null;
+                if (columns.length > 1 && !columns[1].isEmpty()) {
+                    format = DataFormat.lookupMimeType(columns[1]);
+                    if (format == null) {
+                        format = new DataFormat(columns[1]);
+                    }
+                }
+                recentUris.add(new AbstractMap.SimpleEntry<>(uri,format));
             } catch (URISyntaxException ex) {
                 ex.printStackTrace();
             }
         }
-        recentUris.get().addListener((SetChangeListener.Change<? extends URI> change) -> {
+        recentUris.get().addListener((SetChangeListener.Change<? extends Map.Entry<URI, DataFormat>> change) -> {
             StringBuilder buf = new StringBuilder();
             int skip = recentUris.size() - getMaxNumberOfRecentUris();
-            for (URI uri : recentUris) {
+            for (Map.Entry<URI,DataFormat> entry : recentUris) {
                 if (--skip > 0) {
                     continue;
                 }
                 if (buf.length() != 0) {
-                    buf.append('\t');
+                    buf.append('\n');
                 }
-                String str = uri.toString();
-                if (str.contains("\t")) {
-                    System.err.println("AbstractApplication warning can't store URI in preferences. URI=" + uri);
-                    continue;
-                }
+                String str = entry.getKey().toString()+'\t'+entry.getValue().toString();
                 buf.append(str);
             }
-            prefs.put(applicationId + ".recentUris", buf.toString());
+            prefs.put(applicationId + RECENT_URIS, buf.toString());
         });
     }
 
     @Override
-        public IntegerProperty maxNumberOfRecentUrisProperty() {
+    public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
     }
 
     @Override
-        public ObjectProperty<ApplicationModel> modelProperty() {
+    public ObjectProperty<ApplicationModel> modelProperty() {
         return model;
     }
 
     @Override
-        public ReadOnlySetProperty<URI> recentUrisProperty() {
+    public ReadOnlySetProperty<Map.Entry<URI, DataFormat>> recentUrisProperty() {
         return recentUris;
     }
 
