@@ -6,9 +6,11 @@ package org.jhotdraw8.binding;
 import java.util.function.Function;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.Property;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
+import javafx.util.StringConverter;
 
 /**
  * Provides bindings with conversion functions.
@@ -23,6 +25,77 @@ import javafx.beans.value.WritableValue;
  * @version $Id$
  */
 public class CustomBinding {
+    /**
+     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+     *
+     * @param <T> the type of properties 'a' and 'b'
+     * @param <M> the type of the mediator property
+     * @param propertyA property 'a'
+     * @param mediator the mediator property
+     * @param propertyB property 'b'
+     */
+    public static <T, M> void bindBidirectional(
+            Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
+        
+        final ChangeListener<M> changeListener = (o, oldv, newv) -> {
+            if (oldv != null) {
+                propertyA.unbindBidirectional(propertyB.apply(oldv));
+            }
+            if (newv != null) {
+                propertyA.bindBidirectional(propertyB.apply(newv));
+            }
+        };
+        changeListener.changed(mediator, null, null);
+        mediator.addListener(changeListener);
+    }
+
+    /**
+     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+     *
+     * @param <T> the type of properties 'a' and 'b'
+     * @param <M> the type of the mediator property
+     * @param propertyA property 'a'
+     * @param mediator the mediator property
+     * @param propertyB property 'b'
+     */
+    public static <T, M> void bind(
+            Property<T> propertyA, Property<M> mediator, Function<M, ObservableValue<T>> propertyB) {
+        
+        final ChangeListener<M> changeListener = (o, oldv, newv) -> {
+            if (oldv != null) {
+                propertyA.unbind();
+            }
+            if (newv != null) {
+                propertyA.bind(propertyB.apply(newv));
+            }
+        };
+        changeListener.changed(mediator, null, null);
+        mediator.addListener(changeListener);
+    }
+
+    /**
+     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+     *
+     * @param <T>
+     * @param <S>
+     * @param propertyA
+     * @param mediator
+     * @param propertyB
+     */
+    public static <T, S> void bindBidirectional(StringProperty propertyA, Property<S> mediator, Function<S, Property<T>> propertyB,
+            StringConverter<T> stringConverter) {
+        final ChangeListener<S> changeListener = (o, oldv, newv) -> {
+            if (oldv != null) {
+                propertyA.unbindBidirectional(propertyB.apply(oldv));
+            }
+            if (newv != null) {
+                propertyA.bindBidirectional(propertyB.apply(newv), stringConverter);
+            }
+        };
+        changeListener.changed(mediator, null, null);
+        mediator.addListener(changeListener);
+    }
+
 
     /**
      * Creates a bidirectional binding for properties A and B using the
