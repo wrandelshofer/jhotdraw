@@ -61,6 +61,12 @@ public enum DirtyBits {
      */
     LAYOUT_SUBJECT,
     /**
+     * Affects a figure which is layout subject of other figures.
+     * <p>
+     * Method {@code Figure#layoutObserverChangeNotify} must be called on the figure.
+     */
+    LAYOUT_OBSERVERS_ADDED_OR_REMOVED,
+    /**
      * Affects the transform of the figure and all descendant figures.
      * <p>
      * Method {@code Figure#transformNotify} must be called on the figure and all its descendant figures.

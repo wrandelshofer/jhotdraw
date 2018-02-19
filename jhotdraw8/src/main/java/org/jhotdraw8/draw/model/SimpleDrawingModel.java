@@ -27,10 +27,10 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.FigureKey;
-import static org.jhotdraw8.draw.model.DrawingModel.ROOT_PROPERTY;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.DirectedGraphs;
+import static org.jhotdraw8.tree.TreeModel.ROOT_PROPERTY;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
@@ -132,67 +132,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
     private Set<Figure> layoutSubjectChange = new HashSet<>();
 
-    /**
-     * XXX I am not sure why we need this complicated handling of layout subject
-     * changes.
-     */
-    @SuppressWarnings("unchecked")
-    private void onPropertyChangedOLD(FigurePropertyChangeEvent event) {
-        /* if (event.getType() == FigurePropertyChangeEvent.EventType.WILL_CHANGE) {
-            Key<?> k = event.getKey();
-            if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                layoutSubjectChange.clear();
-                layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
-            }
-        } else*/ if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
-            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
-                    (Key<Object>) event.getKey(), event.getOldValue(),
-                    event.getNewValue()));
-            Key<?> k = event.getKey();
-            if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                // The layout subject may change its style if a layout observer is added/removed
-                if (event.getOldValue() instanceof Figure) {
-                    fireStyleInvalidated((Figure) event.getOldValue());
-                }
-                if (event.getNewValue() instanceof Figure) {
-                    fireStyleInvalidated((Figure) event.getNewValue());
-                }
-                fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged(this, event.getSource()));
-                layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
-                for (Figure f : new ArrayList<>(layoutSubjectChange)) {
-                    fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
-                }
-                layoutSubjectChange.clear();
-            }
-        }
-    }
-
-    /**
-     * XXX I am not sure why we need this complicated handling of layout subject
-     * changes.
-     */
-    @SuppressWarnings("unchecked")
-    private <T> void onPropertyChangedOLD(Figure figure, Key<T> key, T oldValue, T newValue) {
-        {
-            if (key instanceof FigureKey && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                layoutSubjectChange.clear();
-                layoutSubjectChange.addAll(figure.getLayoutSubjects());
-            }
-        }
-        {
-            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
-                    (Key<Object>) key, oldValue, newValue));
-            if (key instanceof FigureKey && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged(this, figure));
-                layoutSubjectChange.addAll(figure.getLayoutSubjects());
-                for (Figure f : new ArrayList<>(layoutSubjectChange)) {
-                    fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
-                }
-                layoutSubjectChange.clear();
-            }
-        }
-    }
-
     @SuppressWarnings("unchecked")
     private void onPropertyChanged(FigurePropertyChangeEvent event) {
         if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED
@@ -208,6 +147,21 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (!Objects.equals(oldValue, newValue)) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                     (Key<Object>) key, oldValue, newValue));
+            
+            // This is sent if a layout subject has been added or removed.
+            // - The event is sent on the observing figure (the layout observer).
+            // - The observed figure (the layout subject) may change its appearance, hence we 
+            //   invoke a notify method on it, and we repaint it.
+            if (key instanceof FigureKey 
+                    && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)
+                    && Figure.class.isAssignableFrom(key.getValueType())) {
+                if (oldValue!=null)
+                markDirty((Figure)oldValue,DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED,DirtyBits.NODE);
+                if (newValue!=null)
+                markDirty((Figure)newValue,DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED,DirtyBits.NODE);
+            }
+            
+            
         }
     }
 
@@ -398,14 +352,33 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (!valid) {
             isValidating = true;
 
+            // all figures with dirty bit LAYOUT_SUBJECT
+            // invoke layoutSubjectChangedNotify
+            // all figures with dirty bit LAYOUT_OBSERVERS
+            // invoke layoutSubjectChangedNotify
+            DirtyMask dmLayoutSubject = DirtyMask.of(DirtyBits.LAYOUT_SUBJECT);
+            DirtyMask dmLayoutObserversAddRemove= DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmLayoutSubject)) {
+                    Figure f = entry.getKey();
+                    f.layoutSubjectChangedNotify();
+                }
+                if (dm.intersects(dmLayoutObserversAddRemove)) {
+                    Figure f = entry.getKey();
+                    f.layoutObserverChangedNotify();
+                }
+            }
+
+
             // all figures with dirty bit "STYLE"
             // invoke stylesheetNotify
             // induce a dirty bit "TRANSFORM", "NODE" and "LAYOUT
             final Set<Figure> visited = new HashSet<>((int) (dirties.size() * 1.4));
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
-                Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
+                Figure f = entry.getKey();
                 if (dm.intersects(dmStyle) && visited.add(f)) {
                     f.stylesheetNotify();
                     markDirty(f, DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT);

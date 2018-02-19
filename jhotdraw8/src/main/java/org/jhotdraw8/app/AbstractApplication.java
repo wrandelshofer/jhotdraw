@@ -6,10 +6,8 @@ package org.jhotdraw8.app;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.AbstractMap;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
@@ -134,7 +132,7 @@ public abstract class AbstractApplication extends javafx.application.Application
                 if (buf.length() != 0) {
                     buf.append('\n');
                 }
-                String str = entry.getKey().toString()+'\t'+entry.getValue().toString();
+                String str = entry.getKey().toString()+'\t'+entry.getValue().getIdentifiers().iterator().next();
                 buf.append(str);
             }
             prefs.put(applicationId + RECENT_URIS, buf.toString());

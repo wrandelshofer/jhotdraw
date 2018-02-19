@@ -4,14 +4,7 @@
 
 package org.jhotdraw8.draw.figure;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.connector.Connector;
-import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END;
-import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END_CONNECTOR;
-import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END_TARGET;
-import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.START;
-import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.START_CONNECTOR;
-import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.START_TARGET;
 
 /**
  * ConnectingFigure.
@@ -30,13 +23,6 @@ public interface ConnectingFigure extends Figure {
      */
     default boolean canConnect( Figure figure,  Connector connector) {
         return true;
-    }
-    
-        /**
-     * This method is called from DrawingModel, when the connected state of a figure has changed. This
-     * implementation is empty.
-     */
-    default void connectNotify() {
     }
 
 

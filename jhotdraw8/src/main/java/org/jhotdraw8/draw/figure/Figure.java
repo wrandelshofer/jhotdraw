@@ -397,13 +397,21 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * This method is invoked on a figure by
      * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that one
-     * or more layout subjects have changed.
+     * or more layout subjects have been added or removed.
      * <p>
      * The default implementation of this method is empty.
      */
     default void layoutSubjectChangedNotify() {
     }
-
+    /**
+     * This method is invoked on a figure by
+     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that one
+     * or more layout observers have been added or removed.
+     * <p>
+     * The default implementation of this method is empty.
+     */
+    default void layoutObserverChangedNotify() {
+    }
     /**
      * Disconnects all layout subjects and layout observers from this figure.
      * <p>
