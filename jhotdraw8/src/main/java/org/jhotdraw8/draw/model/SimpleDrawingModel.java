@@ -147,21 +147,22 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (!Objects.equals(oldValue, newValue)) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                     (Key<Object>) key, oldValue, newValue));
-            
+
             // This is sent if a layout subject has been added or removed.
             // - The event is sent on the observing figure (the layout observer).
             // - The observed figure (the layout subject) may change its appearance, hence we 
             //   invoke a notify method on it, and we repaint it.
-            if (key instanceof FigureKey 
+            if (key instanceof FigureKey
                     && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)
                     && Figure.class.isAssignableFrom(key.getValueType())) {
-                if (oldValue!=null)
-                markDirty((Figure)oldValue,DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED,DirtyBits.NODE);
-                if (newValue!=null)
-                markDirty((Figure)newValue,DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED,DirtyBits.NODE);
+                if (oldValue != null) {
+                    markDirty((Figure) oldValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
+                }
+                if (newValue != null) {
+                    markDirty((Figure) newValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
+                }
             }
-            
-            
+
         }
     }
 
@@ -196,20 +197,20 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             int index = parent.getChildren().indexOf(child);
             if (index != -1) {
                 parent.getChildren().remove(index);
-                fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent((DrawingModel) this, child, parent, index));
-                fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, parent));
+                fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, parent, index));
+                fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
             }
         }
         Figure newRoot = child.getRoot();
         if (oldRoot != newRoot) {
             if (oldRoot != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldRoot, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
                 }
             }
             if (newRoot != null) { // must be null!!!
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newRoot, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree(this, newRoot, f));
                 }
             }
         }
@@ -222,25 +223,25 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (oldParent != null) {
             int oldChildIndex = oldParent.getChildren().indexOf(child);
             oldParent.removeChild(child);
-            fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent((DrawingModel) this, child, oldParent, oldChildIndex));
-            fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, oldParent));
+            fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, oldParent, oldChildIndex));
+            fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, oldParent));
         }
         parent.getChildren().add(index, child);
         Figure newRoot = child.getRoot();
         if (oldRoot != newRoot) {
             if (oldRoot != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldRoot, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
                 }
             }
             if (newRoot != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newRoot, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree(this, newRoot, f));
                 }
             }
         }
-        fireTreeModelEvent(TreeModelEvent.nodeAddedToParent((DrawingModel) this, child, parent, index));
-        fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, parent));
+        fireTreeModelEvent(TreeModelEvent.nodeAddedToParent(this, child, parent, index));
+        fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
     }
 
     @Override
@@ -357,7 +358,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // all figures with dirty bit LAYOUT_OBSERVERS
             // invoke layoutSubjectChangedNotify
             DirtyMask dmLayoutSubject = DirtyMask.of(DirtyBits.LAYOUT_SUBJECT);
-            DirtyMask dmLayoutObserversAddRemove= DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED);
+            DirtyMask dmLayoutObserversAddRemove = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmLayoutSubject)) {
@@ -369,7 +370,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     f.layoutObserverChangedNotify();
                 }
             }
-
 
             // all figures with dirty bit "STYLE"
             // invoke stylesheetNotify
