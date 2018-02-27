@@ -27,38 +27,6 @@ import java.util.function.Function;
 public interface DirectedGraph<V, A> {
 
     /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @return a dump of the directed graph
-     */
-    default String dump() {
-        return dump(Object::toString);
-    }
-
-    /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @param toStringFunction a function which converts a vertex to a string
-     * @return the dumped graph
-     */
-    default String dump(Function<V, String> toStringFunction) {
-        StringBuilder buf = new StringBuilder();
-        for (int ii = 0, nn = getVertexCount(); ii < nn; ii++) {
-            V v = getVertex(ii);
-            if (buf.length()!=0)buf.append("\n");
-            buf.append(toStringFunction.apply(v)).append(" -> ");
-            for (int i = 0, n = getNextCount(v); i < n; i++) {
-                if (i != 0) {
-                    buf.append(", ");
-                }
-                buf.append(toStringFunction.apply(getNext(v, i)));
-            }
-            buf.append('.');
-        }
-        return buf.toString();
-    }
-
-    /**
      * Returns the arrow if b is successor of a.
      *
      * @param a a vertex

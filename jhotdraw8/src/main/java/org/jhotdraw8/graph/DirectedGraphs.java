@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -26,12 +27,10 @@ import org.jhotdraw8.collection.IntArrayList;
  */
 public class DirectedGraphs {
 
-    
     private DirectedGraphs() {
     }
 
-
-    private static <V,A> Map<V, List<V>> createForest(DirectedGraph<V,A> g) {
+    private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> g) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(g.getVertexCount());
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
@@ -55,6 +54,40 @@ public class DirectedGraphs {
     }
 
     /**
+     * Dumps the graph for debugging purposes.
+     *
+     * @return a dumpAsAdjacencyMap of the directed graph
+     */
+    public static <V, A> String dumpAsAdjacencyMap(DirectedGraph<V, A> graph) {
+        return dumpAsAdjacencyMap(graph, Object::toString);
+    }
+
+    /**
+     * Dumps the graph for debugging purposes.
+     *
+     * @param toStringFunction a function which converts a vertex to a string
+     * @return the dumped graph
+     */
+    public static <V, A> String dumpAsAdjacencyMap(DirectedGraph<V, A> graph, Function<V, String> toStringFunction) {
+        StringBuilder buf = new StringBuilder();
+        for (int ii = 0, nn = graph.getVertexCount(); ii < nn; ii++) {
+            V v = graph.getVertex(ii);
+            if (buf.length() != 0) {
+                buf.append("\n");
+            }
+            buf.append(toStringFunction.apply(v)).append(" -> ");
+            for (int i = 0, n = graph.getNextCount(v); i < n; i++) {
+                if (i != 0) {
+                    buf.append(", ");
+                }
+                buf.append(toStringFunction.apply(graph.getNext(v, i)));
+            }
+            buf.append('.');
+        }
+        return buf.toString();
+    }
+
+    /**
      * Dumps a directed graph into a String which can be rendered with the "dot"
      * tool.
      *
@@ -63,20 +96,24 @@ public class DirectedGraphs {
      * @param g the graph
      * @return a "dot" String.
      */
-    public static <V,A> String dump(DirectedGraph<V,A> g) {
+    public static <V, A> String dumpAsDot(DirectedGraph<V, A> g) {
+        return dumpAsDot(g, Object::toString);
+    }
+
+    public static <V, A> String dumpAsDot(DirectedGraph<V, A> g, Function<V, String> toStringFunction) {
         StringBuilder b = new StringBuilder();
 
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
             V v = g.getVertex(i);
             if (g.getNextCount(v) == 0) {
-                b.append(v)
+                b.append(toStringFunction.apply(v))
                         .append('\n');
 
             } else {
                 for (int j = 0, m = g.getNextCount(v); j < m; j++) {
                     b.append(v)
                             .append(" -> ")
-                            .append(g.getNext(v, j))
+                            .append(toStringFunction.apply(g.getNext(v, j)))
                             .append('\n');
                 }
             }
@@ -94,7 +131,7 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static <V,A> List<Set<V>> findDisjointSets(DirectedGraph<V,A> g) {
+    public static <V, A> List<Set<V>> findDisjointSets(DirectedGraph<V, A> g) {
         // Create initial forest
         Map<V, List<V>> forest = createForest(g);
         // Merge sets.
@@ -227,18 +264,18 @@ public class DirectedGraphs {
      * if it is provided.
      * @return the graph builder
      */
-    public static <V, A extends Pair<V>> DirectedGraphBuilder<V,A> findMinimumSpanningTreeGraph(Collection<V> vertices, List<A> orderedArrows, List<A> includedArrows, List<A> rejectedArrows) {
+    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(Collection<V> vertices, List<A> orderedArrows, List<A> includedArrows, List<A> rejectedArrows) {
         List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);
         }
-        DirectedGraphBuilder<V,A> builder = new DirectedGraphBuilder<>();
+        DirectedGraphBuilder<V, A> builder = new DirectedGraphBuilder<>();
         for (V v : vertices) {
             builder.addVertex(v);
         }
         for (A e : includedArrowList) {
-            builder.addArrow(e.getStart(), e.getEnd(),e);
-            builder.addArrow(e.getEnd(), e.getStart(),e);
+            builder.addArrow(e.getStart(), e.getEnd(), e);
+            builder.addArrow(e.getEnd(), e.getStart(), e);
         }
         return builder;
     }
@@ -252,10 +289,10 @@ public class DirectedGraphs {
      * @return the sorted list of vertices
      */
     @SuppressWarnings("unchecked")
-    public static <V,A> List<V> sortTopologically(DirectedGraph<V,A> m) {
+    public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
         final IntDirectedGraph<A> im;
         if (!(m instanceof IntDirectedGraph)) {
-            im =new DirectedGraphBuilder<>(m);
+            im = new DirectedGraphBuilder<>(m);
         } else {
             im = (IntDirectedGraph<A>) m;
         }
@@ -274,7 +311,7 @@ public class DirectedGraphs {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static<A> int[] sortTopologicallyInt(IntDirectedGraph<A> model) {
+    public static <A> int[] sortTopologicallyInt(IntDirectedGraph<A> model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex
@@ -299,7 +336,7 @@ public class DirectedGraphs {
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
         final int[] result = new int[n];// result array
         int done = 0;
-        Random random=null;
+        Random random = null;
         while (done < n) {
             for (; done < n; done++) {
                 if (first == last) {
@@ -320,15 +357,14 @@ public class DirectedGraphs {
             if (done < n) {
                 // Break loop in graph by removing an arbitrary arrow.
                 if (random == null) {
-                    random=new Random(0);
+                    random = new Random(0);
                 }
                 int i;
                 do {
-                    i=random.nextInt(n);
-                }
-                while (deg[i]<=0);
-                        deg[i] = 0;// this can actually remove more than one arrow
-                        queue[last++]=i;
+                    i = random.nextInt(n);
+                } while (deg[i] <= 0);
+                deg[i] = 0;// this can actually remove more than one arrow
+                queue[last++] = i;
             }
         }
 
