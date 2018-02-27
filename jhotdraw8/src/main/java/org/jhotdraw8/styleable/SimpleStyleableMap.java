@@ -41,6 +41,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private final int[] sizes;
     private final ArrayList<Object> values;
     private final SimpleStyleableMap<K, V> originalMap;
+    private final static int AUTO_ORIGIN = -1;
 
     /**
      * Creates a new instance.
@@ -70,7 +71,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         this.keyMap = that.keyMap;
         this.values = that.values;
         this.origin = styleOrigin;
-        this.originOrdinal = (styleOrigin == null) ? -1 : styleOrigin.ordinal();
+        this.originOrdinal = (styleOrigin == null) ? AUTO_ORIGIN : styleOrigin.ordinal();
         this.sizes = that.sizes;
         this.originalMap = that;
     }
@@ -252,6 +253,15 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     private boolean hasValue(int ordinal, int index) {
+        if (ordinal == AUTO_ORIGIN) {
+            for (int i = 0; i < numOrigins; i++) {
+                final int arrayIndex = index + i;
+                if (values.get(arrayIndex) != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
         final int arrayIndex = index * numOrigins + ordinal;
         return arrayIndex < values.size() && values.get(arrayIndex) != null;
     }

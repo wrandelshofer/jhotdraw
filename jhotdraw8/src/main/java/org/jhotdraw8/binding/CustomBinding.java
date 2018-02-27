@@ -99,7 +99,7 @@ public class CustomBinding {
 
     /**
      * Creates a bidirectional binding for properties A and B using the
-     * conversion functions updateB and updateA.
+     * provided conversion functions.
      *
      * @param <A> the type of value A
      * @param <B> the type of value B
@@ -107,13 +107,14 @@ public class CustomBinding {
      * @param <PROPERTY_B> the type of property B
      * @param propertyA property A
      * @param propertyB property B
-     * @param updateB converts a value from A to B
-     * @param updateA converts a value from B to A
+     * @param convertAtoB converts a value from A to B
+     * @param convertBtoA converts a value from B to A
      */
-    public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>> void bindBidirectional(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> updateB, Function<B, A> updateA) {
+    public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>> 
+        void bindBidirectional(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> convertAtoB, Function<B, A> convertBtoA) {
         boolean[] alreadyCalled = new boolean[1];
-        addFlaggedChangeListener(propertyB, propertyA, updateB, alreadyCalled);
-        addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
+        addFlaggedChangeListener(propertyB, propertyA, convertAtoB, alreadyCalled);
+        addFlaggedChangeListener(propertyA, propertyB, convertBtoA, alreadyCalled);
     }
 
     /**

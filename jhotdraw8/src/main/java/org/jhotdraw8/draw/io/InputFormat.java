@@ -51,8 +51,9 @@ public interface InputFormat {
      * @throws java.io.IOException if an IO error occurs
      */ 
     default Figure read( File file,  Drawing drawing) throws IOException {
+        URI documentHome=file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI();
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
-            return read(in, drawing);
+            return read(in, drawing,documentHome);
         }
     }
 
@@ -63,10 +64,11 @@ public interface InputFormat {
      * @param in The input stream.
      * @param drawing If you provide a non-null value, the contents of the file
      * is added to the drawing. Otherwise a new drawing is created.
+     * @param documentHome the URI used to resolve external references from the document
      * @return the drawing
      *
      * @throws java.io.IOException if an IO error occurs
      */ 
-    public Figure read( InputStream in,  Drawing drawing) throws IOException;
+    public Figure read( InputStream in,  Drawing drawing, URI documentHome) throws IOException;
 
 }
