@@ -82,7 +82,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
                 throw new InternalError(ex);
             }
             
-            CustomBinding.bindBidirectional(//
+            CustomBinding.bindBidirectionalAndConvert(//
                     myBackgroundProperty,//
                     backgroundColorPicker.valueProperty(),//
                     (CssColor c) -> c == null ? null : c.getColor(), //

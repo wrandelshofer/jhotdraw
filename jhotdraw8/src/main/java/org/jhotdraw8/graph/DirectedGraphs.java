@@ -56,7 +56,10 @@ public class DirectedGraphs {
     /**
      * Dumps the graph for debugging purposes.
      *
-     * @return a dumpAsAdjacencyMap of the directed graph
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param graph the graph to be dumped
+     * @return a String representation of the graph
      */
     public static <V, A> String dumpAsAdjacencyMap(DirectedGraph<V, A> graph) {
         return dumpAsAdjacencyMap(graph, Object::toString);
@@ -65,8 +68,11 @@ public class DirectedGraphs {
     /**
      * Dumps the graph for debugging purposes.
      *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param graph the graph to be dumped
      * @param toStringFunction a function which converts a vertex to a string
-     * @return the dumped graph
+     * @return a String representation of the graph
      */
     public static <V, A> String dumpAsAdjacencyMap(DirectedGraph<V, A> graph, Function<V, String> toStringFunction) {
         StringBuilder buf = new StringBuilder();
@@ -93,13 +99,23 @@ public class DirectedGraphs {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param g the graph
-     * @return a "dot" String.
+     * @param g the graph to be dumped
+     * @return a String representation of the graph
      */
     public static <V, A> String dumpAsDot(DirectedGraph<V, A> g) {
         return dumpAsDot(g, Object::toString);
     }
 
+    /**
+     * Dumps a directed graph into a String which can be rendered with the "dot"
+     * tool.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param g the graph to be dumped
+     * @param toStringFunction a function which converts a vertex to a string
+     * @return a String representation of the graph
+     */
     public static <V, A> String dumpAsDot(DirectedGraph<V, A> g, Function<V, String> toStringFunction) {
         StringBuilder b = new StringBuilder();
 

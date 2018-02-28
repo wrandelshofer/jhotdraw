@@ -171,11 +171,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         this.namespaceURI = namespaceURI;
     }
 
-    public Function<URI, URI> getUriResolver() {
+    private Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver(Function<URI, URI> uriResolver) {
+    private void setUriResolver(Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 

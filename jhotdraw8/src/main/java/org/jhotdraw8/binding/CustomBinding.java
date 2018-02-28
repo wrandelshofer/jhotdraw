@@ -76,11 +76,12 @@ public class CustomBinding {
     /**
      * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
      *
-     * @param <T>
-     * @param <S>
-     * @param propertyA
-     * @param mediator
-     * @param propertyB
+     * @param <T> the value type of property 'b'
+     * @param <S> the value type of the mediator property
+     * @param propertyA property 'a'
+     * @param mediator the mediator property
+     * @param propertyB property 'b'
+     * @param stringConverter the converter
      */
     public static <T, S> void bindBidirectional(StringProperty propertyA, Property<S> mediator, Function<S, Property<T>> propertyB,
             StringConverter<T> stringConverter) {
@@ -111,7 +112,7 @@ public class CustomBinding {
      * @param convertBtoA converts a value from B to A
      */
     public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>> 
-        void bindBidirectional(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> convertAtoB, Function<B, A> convertBtoA) {
+        void bindBidirectionalAndConvert(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> convertAtoB, Function<B, A> convertBtoA) {
         boolean[] alreadyCalled = new boolean[1];
         addFlaggedChangeListener(propertyB, propertyA, convertAtoB, alreadyCalled);
         addFlaggedChangeListener(propertyA, propertyB, convertBtoA, alreadyCalled);
@@ -127,7 +128,7 @@ public class CustomBinding {
      * @param propertyA property B
      * @param updateA converts a value from B to A
      */
-    public static <A, B> void bind(WritableValue<A> propertyA, ObservableValue<B> propertyB, Function<B, A> updateA) {
+    public static <A, B> void bindAndConvert(WritableValue<A> propertyA, ObservableValue<B> propertyB, Function<B, A> updateA) {
         boolean[] alreadyCalled = new boolean[1];
         addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
     }

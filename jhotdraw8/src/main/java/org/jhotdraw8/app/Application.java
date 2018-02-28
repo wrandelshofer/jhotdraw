@@ -173,6 +173,7 @@ public interface Application extends Disableable, PropertyBean {
      * Adds a recent URI.
      *
      * @param uri a recent URI
+     * @param dataFormat the data format that was used to access the URI
      */
     default void addRecentURI(URI uri, DataFormat dataFormat) {
         // ensures that the last used uri lands at the end of the LinkedHashSet.

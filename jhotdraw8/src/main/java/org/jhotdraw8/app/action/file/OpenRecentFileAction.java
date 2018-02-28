@@ -59,6 +59,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
      *
      * @param app the application
      * @param uri the uri
+     * @param format the data format that should be used to access the URI
      */
     public OpenRecentFileAction(Application app, URI uri, DataFormat format) {
         super(app);

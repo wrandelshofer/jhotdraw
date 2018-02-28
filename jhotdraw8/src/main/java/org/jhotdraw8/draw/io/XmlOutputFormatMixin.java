@@ -23,13 +23,15 @@ import org.w3c.dom.Document;
 
 /**
  * XmlOutputFormatMixin.
+ * <p>
+ * FIXME delete me
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface XmlOutputFormatMixin extends OutputFormat {
 
-    public void setUriResolver( Function<URI,URI> uriResolver);
+   
  
     default Document toDocument( Drawing drawing) throws IOException {
         return toDocument(drawing, drawing.getChildren());
@@ -39,7 +41,6 @@ public interface XmlOutputFormatMixin extends OutputFormat {
 
     @Override
     default void write( File file,  Drawing drawing) throws IOException {
-                setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI()));
         Document doc = toDocument(drawing);
         XmlUtil.write(file, doc);
     }
