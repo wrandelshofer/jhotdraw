@@ -153,7 +153,7 @@ public interface TreeModel<N> extends ObservableMixin {
     /**
      * Fires "node invalidated" event for the specified node.
      *
-     * @param f the figure
+     * @param node the node
      */
     default void fireNodeInvalidated( N node) {
         fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, node));

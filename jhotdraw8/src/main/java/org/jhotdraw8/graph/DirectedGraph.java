@@ -220,6 +220,8 @@ public interface DirectedGraph<V, A> {
     }
     /** Returns all arrows between two vertices.
      *
+     * @param v1 vertex 1
+     * @param v2 vertex 2
      * @return a collection view on all arrows
      */
     default Collection<A> getArrows(V v1, V v2) {

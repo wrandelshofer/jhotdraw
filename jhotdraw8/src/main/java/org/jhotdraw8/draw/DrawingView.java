@@ -512,7 +512,8 @@ public interface DrawingView extends RenderContext {
         return zoomFactorProperty().get();
     }
     
-    /** Tolerance (radius) in view coordinates. */
+    /** Tolerance (radius) in view coordinates.
+     * @return  the tolerance radius */
     default double getTolerance() {
         return 5;
     }

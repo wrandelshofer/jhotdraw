@@ -31,7 +31,6 @@ import org.jhotdraw8.geom.Intersection.Status;
  * Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic
  * Software. Inc.
  * <p>
- * >
  * References:
  * <p>
  * <a href="http://www.kevlindev.com/gui/index.htm">Intersection.js</a>,
@@ -2558,7 +2557,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @param px the x-coordinate of the point
      * @param py the y-coordinate of the point
      * @param tolerance radius around the point which counts as hit.
-     * @return
+     * @return the intersection
      */
     public static Intersection intersectPathIteratorPoint(PathIterator pit, double px, double py, double tolerance) {
         List<Map.Entry<Double, Point2D>> result = new ArrayList<>();

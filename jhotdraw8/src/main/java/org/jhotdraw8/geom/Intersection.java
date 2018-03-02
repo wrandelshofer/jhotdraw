@@ -19,7 +19,7 @@ import javafx.geometry.Point2D;
 
 /**
  * Describes the result of an intersection test.
- * <p>>
+ * <p>
  * This class is a port of Intersection.js by Kevin Lindsey. Part of
  * Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic
  * Software. Inc.

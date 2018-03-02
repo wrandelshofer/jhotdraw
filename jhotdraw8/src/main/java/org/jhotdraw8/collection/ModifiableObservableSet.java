@@ -16,11 +16,12 @@ import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
 /**
- * ModifiableObservableSet.
+ * This ObservableSet implementation provides overridable fire methods, saving one
+ * level of indirection.
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <E>
+ * @param <E> the element type
  */
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 

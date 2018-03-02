@@ -1200,10 +1200,12 @@ public class Shapes {
 
     /**
      * Fits the specified SVGPath into the given bounds.
+     * <p>
+     * FIXME If the pathstr is null, builds a rectangle. That's too much magic.
      *
      * @param pathstr an SVGPath String
      * @param b the desired bounds
-     * @param elems on output contains the reshaped path elements
+     * @param builder the builder into which the path is output
      */
     public static void reshape(String pathstr, Bounds b, PathBuilder builder) {
         if (pathstr != null) {

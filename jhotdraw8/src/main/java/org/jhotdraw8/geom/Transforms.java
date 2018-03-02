@@ -202,7 +202,7 @@ public class Transforms {
      * @param y1 y-coordinate of p1 of the line
      * @param x2 x-coordinate of p2 of the line
      * @param y2 y-coordinate of p2 of the line
-     * @return 
+     * @return the transformation matrix
      */
     public static Transform createProjectPointOnLineTransform(double x1,double y1, double x2, double y2) {
         double vx =x2-x1;

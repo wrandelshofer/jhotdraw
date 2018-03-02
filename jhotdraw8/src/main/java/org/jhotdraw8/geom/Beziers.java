@@ -117,7 +117,7 @@ public class Beziers {
      * @param x123 point P1 of the second curve
      * @param y123 point P1 of the second curve
      * @param x23 point P2 of the second curve
-     * @param y2 3 point P2 of the second curve
+     * @param y23 point P2 of the second curve
      * @param x3 point P3 of the second curve
      * @param y3 point P3 of the second curve
      * @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.

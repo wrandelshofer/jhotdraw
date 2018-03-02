@@ -33,7 +33,6 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> i
      *
      * @param name The name of the key.
      * @param clazz The enum class.
-     * @param mask The mask.
      */
     public EnumStyleableKey(String name, Class<T> clazz) {
         this(name, clazz, true, null);
@@ -45,7 +44,6 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> i
      *
      * @param name The name of the key.
      * @param clazz The enum class.
-     * @param mask The mask.
      * @param nullable Whether the value is nullable
      * @param defaultValue The default value.
      */

@@ -11,6 +11,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import org.jhotdraw8.concurrent.FXWorker;
 
 /**
  * Loads an FXML file asynchronously.
@@ -26,9 +27,6 @@ public class AsyncFXMLLoader {
     /**
      * Asynchronously loads the specified FXML file on the common fork-join pool, and returns a completion
      * stage with the FXMLLoader.
-     * <p>
-     * Same as {@link #load(java.net.URL, java.util.concurrent.Executor)} but executes the loader
-     * on a new thread.
      *
      * @param location the location of the FXML file
      * @return the FXMLLoader.
@@ -53,51 +51,33 @@ public class AsyncFXMLLoader {
      *  BorderPane borderPane = new BordePane();
      * 
      *  AsyncFXMLLoader.load(MainApp.class.getResource("MainMenuBar.fxml"))
-     *         .whenComplete((loader, throwable) -> {
+     *         .whenComplete((loader, throwable) -&gt; {
      *              if (throwable != null) {
      *                  // Loading failed! Put a placeholder into the menu bar.
      *                  borderPane.setTop(new Label(throwable.getMessage()));
      *                  throwable.printStackTrace();
-     *              }
-     *         }).thenApply(loader->{ 
+     *              } else { 
      *                  // Loading succeeded.  
-     *              borderPane.setTop(loader.getRoot());
-     *              loader.<MainMenuBarController>getController().setFileController(fileController);
-     *             return loader.getController();
+     *                  borderPane.setTop(loader.getRoot());
+     *                  loader.&gt;MainMenuBarController&lt;getController().setFileController(fileController);
+     *                 return loader.getController();
+     *              }
      *          });
      * </pre>
      *
      * @param location the location of the FXML file
-     * @param Executor the executor on which the task should be executed
+     * @param resources the resource file for internationalized texts in the FXML file
+     * @param executor the executor on which the task should be executed
      * @return the FXMLLoader.
      */
     public static CompletionStage<FXMLLoader> load(URL location,ResourceBundle resources, Executor executor) {
-        CompletableFuture<FXMLLoader> future = new CompletableFuture<>();
-
-        Task<FXMLLoader> task = new Task<FXMLLoader>() {
-            @Override
-            protected FXMLLoader call() throws Exception {
+        return FXWorker.supply(executor, 
+                () -> {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(location);
                 loader.setResources(resources);
                 loader.load();
                 return loader;
-            }
-
-            @Override
-            protected void failed() {
-                future.completeExceptionally(getException());
-
-            }
-
-            @Override
-            protected void succeeded() {
-                future.complete(getValue());
-            }
-        };
-        executor.execute(task);
-
-        return future;
+            });
     }
-
 }
