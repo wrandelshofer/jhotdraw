@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.beans.ObservableMixin;
 import org.jhotdraw8.event.Listener;
 

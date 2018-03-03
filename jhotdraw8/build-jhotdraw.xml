@@ -69,7 +69,7 @@
     <!-- CheckerFramework-->
       <property environment="env"/>
       <!--property name="checkerframework" value="${env.CHECKERFRAMEWORK}" /-->
-      <property name="checkerframework" value="${lib.compile}/checker-framework-2.2.1" />
+      <property name="checkerframework" value="${lib.compile}/checker-framework-2.4.0" />
     <!-- On Mac/Linux, use the javac shell script; on Windows, use javac.bat -->
     <condition property="cfJavac" value="javac.bat" else="javac">
         <os family="windows" />
@@ -83,7 +83,9 @@
   </presetdef>
     
     <target name="init">
-        <echo message="version: ${version}"/>
+        <echo>app.version: ${version}</echo>
+        <echo>java.home: ${java.home}</echo>
+        <echo>jdk.version: ${jdk.version}</echo>
     </target>
 
     <target name="do-clean.compile" depends="init">

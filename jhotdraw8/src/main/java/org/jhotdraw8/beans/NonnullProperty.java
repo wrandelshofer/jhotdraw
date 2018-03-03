@@ -22,7 +22,7 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
      * @param name The name of the property
      * @param initialValue The initial value. Nonnull.
      */
-    public NonnullProperty( Object bean,  String name, T initialValue) {
+    public NonnullProperty(Object bean, String name, T initialValue) {
         super(bean, name, initialValue);
     }
 
@@ -34,11 +34,11 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
         super.fireValueChangedEvent();
     }
 
-        public T getNonnull() {
+    public T getNonnull() {
         return super.get();
     }
 
-    public void setNonnull( T newValue) {
+    public void setNonnull(T newValue) {
         super.set(newValue);
     }
 

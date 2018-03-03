@@ -14,6 +14,8 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * This ObservableSet implementation provides overridable fire methods, saving one
@@ -26,9 +28,10 @@ import javafx.collections.SetChangeListener;
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
     private Set<E> backingSet;
+    @Nullable
     private List<SetChangeListener<? super E>> changeListeners;
+    @Nullable
     private List<InvalidationListener> invalidationListeners;
-    private InvalidationListener itemHandler = this::itemInvalidated;
 
     public ModifiableObservableSet(Collection<E> copyMe) {
         backingSet = new LinkedHashSet<>(copyMe);
@@ -38,8 +41,6 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         backingSet = new LinkedHashSet<>();
     }
 
-    
-    
     @Override
     public boolean add(E e) {
         boolean modified = backingSet.add(e);
@@ -85,6 +86,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     @Override
     @SuppressWarnings("unchecked")
     public void clear() {
+        @SuppressWarnings("assignment.type.incompatible")
         Object[] values = backingSet.toArray();
         backingSet.clear();
         for (Object v : values) {
@@ -96,7 +98,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(@Nullable Object o) {
         return backingSet.contains(o);
     }
 
@@ -111,21 +113,26 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
 
     private static class Change<EE> extends SetChangeListener.Change<EE> {
 
+        @Nullable
         private final EE value;
         private final boolean wasAdded;
 
-        public Change(ObservableSet<EE> set, EE value, boolean wasAdded) {
+        public Change(ObservableSet<EE> set, @Nullable EE value, boolean wasAdded) {
             super(set);
             this.value = value;
             this.wasAdded = wasAdded;
         }
 
         @Override
+        @Nullable
+        @SuppressWarnings("override.return.invalid")
         public EE getElementAdded() {
             return (wasAdded) ? value : null;
         }
 
         @Override
+        @Nullable
+        @SuppressWarnings("override.return.invalid")
         public EE getElementRemoved() {
             return (!wasAdded) ? value : null;
         }
@@ -142,10 +149,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
 
     }
 
-    protected void fireAdded(E e) {
-        /*if (e instanceof Observable) {
-            ((Observable) e).addListener(itemHandler);
-        }*/
+    protected void fireAdded(@Nullable E e) {
         if (changeListeners != null) {
             SetChangeListener.Change<E> change = new Change<E>(this, e, true);
             for (SetChangeListener<? super E> listener : changeListeners) {
@@ -182,10 +186,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         }
     }
 
-    protected void fireRemoved(E e) {
-        /*if (e instanceof Observable) {
-            ((Observable) e).removeListener(itemHandler);
-        }*/
+    protected void fireRemoved(@Nullable E e) {
         if (changeListeners != null && !changeListeners.isEmpty()) {
             SetChangeListener.Change<E> change = new Change<E>(this, e, false);
             for (SetChangeListener<? super E> listener : changeListeners) {
@@ -194,7 +195,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         }
     }
 
-    public void fireUpdated(E e) {
+    public void fireUpdated(@Nullable E e) {
         fireRemoved(e);
         fireAdded(e);
         fireInvalidated();
@@ -204,6 +205,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     public Iterator<E> iterator() {
         return new Iterator<E>() {
             private final Iterator<? extends E> i = backingSet.iterator();
+            @Nullable
             private E current;
 
             @Override
@@ -226,7 +228,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(@Nullable Object o) {
         boolean modified = backingSet.remove(o);
         if (modified) {
             @SuppressWarnings("unchecked")

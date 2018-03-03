@@ -423,20 +423,18 @@ public interface DrawingView extends RenderContext {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
-    default void setDrawing(@Nullable Drawing newValue) {
+    default void setDrawing(Drawing newValue) {
         getModel().setRoot(newValue);
     }
 
-    @Nullable
     default Drawing getDrawing() {
         return modelProperty().get().getDrawing();
     }
 
-    default void setConstrainer(@Nullable Constrainer newValue) {
+    default void setConstrainer(Constrainer newValue) {
         constrainerProperty().set(newValue);
     }
 
-    @Nullable
     default Constrainer getConstrainer() {
         return constrainerProperty().get();
     }
