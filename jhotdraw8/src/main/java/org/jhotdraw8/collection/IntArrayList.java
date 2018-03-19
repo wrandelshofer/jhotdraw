@@ -206,7 +206,7 @@ public class IntArrayList {
      * @return a stream
      */
     public IntStream stream() {
-        return (size == 0) ? Arrays.stream(new int[0], 0, 0) : Arrays.stream(items, 0, size);
+        return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
     }
     
     
