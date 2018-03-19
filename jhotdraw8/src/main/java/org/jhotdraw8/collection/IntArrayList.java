@@ -31,6 +31,7 @@ public class IntArrayList {
 
     /**
      * Creates a new empty instance with the specified initial capacity.
+     *
      * @param initialCapacity the initial capacity
      */
     public IntArrayList(int initialCapacity) {
@@ -81,6 +82,7 @@ public class IntArrayList {
 
     /**
      * Returns the size of the list.
+     *
      * @return the size
      */
     public int size() {
@@ -156,7 +158,7 @@ public class IntArrayList {
     /**
      * Returns the first index of the item, or -1 if this list does not contain
      * the item.
-     * 
+     *
      * @param item the item
      * @return the index of the item, or -1.
      */
@@ -208,20 +210,31 @@ public class IntArrayList {
     public IntStream stream() {
         return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
     }
-    
-    
-    /** Sets the size of this list. If the new size is greater than the current size,
+
+    /**
+     * Sets the size of this list. If the new size is greater than the current size,
      * new {@code 0} items are added to the end of the list. If the new size is
-     * is less than the current size, all items at indices greater or equal  {@code newSize}
+     * is less than the current size, all items at indices greater or equal {@code newSize}
      * are discarded.
-     * 
+     *
      * @param newSize the new size
      */
     public void setSize(int newSize) {
         increaseCapacity(newSize);
-        if (newSize>size) {
-            Arrays.fill(items, size,newSize,0);
+        if (newSize > size) {
+            Arrays.fill(items, size, newSize, 0);
         }
         size = newSize;
+    }
+
+    /**
+     * Returns a new array containing all of the elements in this collection.
+     *
+     * @return array
+     */
+    public int[] toArray() {
+        int[] result = new int[size];
+        System.arraycopy(items, 0, result, 0, size);
+        return result;
     }
 }
