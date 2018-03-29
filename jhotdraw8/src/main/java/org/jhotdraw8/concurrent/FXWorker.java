@@ -23,9 +23,9 @@ public class FXWorker {
      * completed on the FX Application Thread.
      *
      * @param runnable the runnable
-     * @return the completion stage
+     * @return the CompletableFuture
      */
-    public static CompletionStage<Void> run(CheckedRunnable runnable) {
+    public static CompletableFuture<Void> run(CheckedRunnable runnable) {
         return run(Executors.newSingleThreadExecutor(), runnable);
     }
 
@@ -35,9 +35,9 @@ public class FXWorker {
      *
      * @param runnable the runnable
      * @param executor the executor, if null then a new thread is created
-     * @return the completion stage
+     * @return the CompletableFuture
      */
-    public static CompletionStage<Void> run(Executor executor, CheckedRunnable runnable) {
+    public static CompletableFuture<Void> run(Executor executor, CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
             try {
@@ -57,9 +57,9 @@ public class FXWorker {
      *
      * @param <T> the value type
      * @param supplier the supplier
-     * @return the completion stage
+     * @return the CompletableFuture
      */
-    public static <T> CompletionStage<T> supply(CheckedSupplier<T> supplier) {
+    public static <T> CompletableFuture<T> supply(CheckedSupplier<T> supplier) {
         return supply(Executors.newSingleThreadExecutor(), supplier);
     }
 
@@ -70,9 +70,9 @@ public class FXWorker {
      * @param <T> the value type
      * @param supplier the supplier
      * @param executor the executor
-     * @return the completion stage
+     * @return the CompletableFuture
      */
-    public static <T> CompletionStage<T> supply(Executor executor, CheckedSupplier<T> supplier) {
+    public static <T> CompletableFuture<T> supply(Executor executor, CheckedSupplier<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
         executor.execute(() -> {
             try {
