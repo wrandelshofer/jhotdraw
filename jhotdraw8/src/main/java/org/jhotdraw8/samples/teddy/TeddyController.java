@@ -98,7 +98,7 @@ public class TeddyController extends AbstractDocumentOrientedViewController impl
   }
 
   @Override
-  public CompletionStage<Void> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
+  public CompletionStage<DataFormat> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
     return FXWorker.supply(() -> {
       StringBuilder builder = new StringBuilder();
       char[] cbuf = new char[8192];
@@ -108,12 +108,13 @@ public class TeddyController extends AbstractDocumentOrientedViewController impl
         }
       }
       return builder.toString();
-    }).thenAccept(value -> {
+    }).thenApply(value -> {
       if (append) {
         textArea.appendText(value);
       } else {
         textArea.setText(value);
       }
+      return format;
     });
   }
 

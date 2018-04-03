@@ -111,11 +111,11 @@ public class OpenFileAction extends AbstractApplicationAction {
         final Application app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);
-        final DataFormat dataFormat = chooser.getDataFormat();
-        v.setDataFormat(dataFormat);
+        final DataFormat chosenFormat = chooser.getDataFormat();
+        v.setDataFormat(chosenFormat);
 
         // Open the file
-        v.read(uri, chooser == null ? null : dataFormat, null, false).whenComplete((result, exception) -> {
+        v.read(uri, chooser == null ? null : chosenFormat, null, false).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
             } else if (exception != null) {
@@ -129,13 +129,13 @@ public class OpenFileAction extends AbstractApplicationAction {
                 v.removeDisabler(this);
             } else {
 
-                String mimeType = (dataFormat == null) ? null
-                        : dataFormat.getIdentifiers().iterator().next();
+                String mimeType = (actualFormat == null) ? null
+                        : actualFormat.getIdentifiers().iterator().next();
                 v.setURI(uri);
-                v.setDataFormat(dataFormat);
+                v.setDataFormat(actualFormat);
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
-                getApplication().addRecentURI(uri,dataFormat);
+                getApplication().addRecentURI(uri,actualFormat);
                 v.removeDisabler(this);
             }
         });

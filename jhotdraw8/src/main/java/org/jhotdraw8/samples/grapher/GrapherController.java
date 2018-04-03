@@ -401,7 +401,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
     }
 
     @Override
-    public CompletionStage<Void> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
+    public CompletionStage<DataFormat> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
@@ -409,7 +409,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
             System.out.println("READING..." + uri);
             return drawing;
-        }).thenAccept(drawingView::setDrawing);
+        }).thenApply(drawing->{drawingView.setDrawing(drawing);return format;});
     }
 
     @Override

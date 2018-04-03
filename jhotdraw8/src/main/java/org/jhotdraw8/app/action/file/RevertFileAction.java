@@ -64,7 +64,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
     private void doIt(DocumentOrientedViewModel view, URI uri, DataFormat dataFormat) {
         view.addDisabler(this);
 
-        final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {
+        final BiFunction<DataFormat, Throwable, Void> handler = (actualDataFormat, throwable) -> {
             if (throwable != null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(throwable));
                 alert.getDialogPane().setMaxWidth(640.0);
@@ -77,7 +77,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
         };
 
         if (uri == null) {
-            view.clear().handle(handler);
+            view.clear().handle((ignored,throwable)->handler.apply(null, throwable));
         } else {
             view.read(uri, dataFormat, null, false).handle(handler);
         }

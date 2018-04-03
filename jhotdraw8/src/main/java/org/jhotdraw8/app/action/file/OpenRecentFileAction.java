@@ -119,14 +119,14 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         // Open the file
         try {
-            v.read(uri, format, null, false).whenComplete((result, exception) -> {
+            v.read(uri, format, null, false).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(this);
                 } else if (exception != null) {
                     handleException(v, exception);
                 } else {
                     v.setURI(uri);
-                    v.setDataFormat(format);
+                    v.setDataFormat(actualFormat);
                     v.clearModified();
                     v.setTitle(UriUtil.getName(uri));
                     v.removeDisabler(this);

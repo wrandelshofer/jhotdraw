@@ -74,10 +74,9 @@ public interface DocumentOrientedViewModel extends ViewController {
      * should be used
      * @param options read options
      * @param append whether to append to the current document or to replace it.
-     * @return Returns a CompletionStage which is completed when the read
-     * operation has finished.
+     * @return Returns a CompletionStage with the data format that was actually used to load the file.
      */
-    public CompletionStage<Void> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
+    public CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using

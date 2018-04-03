@@ -22,9 +22,9 @@
                 <root id="src.java.dir"/>
             </source-roots>
             <test-roots>
+                <root id="test.java.dir"/>
                 <root id="test.editorold.dir"/>
                 <root id="test.ferro.dir"/>
-                <root id="test.java.dir"/>
             </test-roots>
         </data>
     </configuration>
