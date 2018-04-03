@@ -106,12 +106,10 @@ public interface Key<T> extends MapAccessor<T> {
     @Override
     default T put(Map<? super Key<?>, Object> a, @Nullable T value) {
         T oldValue;
-        if (!a.containsKey(this) && Objects.equals(value, getDefaultValue())) {
-            oldValue = getDefaultValue();
-        } else {
-            @SuppressWarnings("unchecked")
-            T suppress = oldValue = (T) a.put(this, value);
-        }
+        // Note: we must always put a value even if it is the same as our default value
+        @SuppressWarnings("unchecked")
+        T suppress = oldValue = (T) a.put(this, value);
+
         return oldValue;
     }
 
