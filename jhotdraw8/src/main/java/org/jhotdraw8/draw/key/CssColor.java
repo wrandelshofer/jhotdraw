@@ -23,9 +23,9 @@ public class CssColor implements Paintable {
     private final String name;
     private final Color color;
 
-    public final static CssColor BLACK=CssColor.valueOf("black");
-    public final static CssColor WHITE=CssColor.valueOf("white");
-    
+    public final static CssColor BLACK = CssColor.valueOf("black");
+    public final static CssColor WHITE = CssColor.valueOf("white");
+
     public CssColor(Color color) {
         this(null, color);
     }
@@ -35,20 +35,20 @@ public class CssColor implements Paintable {
         this.color = color;
     }
 
-        public String getName() {
+    public String getName() {
         return name;
     }
 
-        public Color getColor() {
+    public Color getColor() {
         return color;
     }
 
-        @Override
+    @Override
     public Color getPaint() {
         return color;
     }
 
-        public static String toName(Color c) {
+    public static String toName(Color c) {
         if (c.getOpacity() == 1.0) {
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
@@ -60,7 +60,7 @@ public class CssColor implements Paintable {
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
-            float o = (float)c.getOpacity();// Color represents opacity by a float. We must not promote it.
+            float o = (float) c.getOpacity();// Color represents opacity by a float. We must not promote it.
             return formatter.format(r, g, b, o);
             //return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
         }
@@ -91,7 +91,7 @@ public class CssColor implements Paintable {
         return true;
     }
 
-        @Override
+    @Override
     public String toString() {
         return "CColor{" + getName() + '}';
     }
