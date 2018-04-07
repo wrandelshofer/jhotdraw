@@ -1,0 +1,145 @@
+/* @(#)IntArrayDeque
+ * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ */
+package org.jhotdraw8.collection;
+
+import java.util.NoSuchElementException;
+
+/**
+ * IntArrayDeque.
+ *
+ * @author Werner Randelshofer
+ * @version $$Id$$
+ */
+public class IntArrayDeque {
+    /**
+     * The length of this array is always a power of 2.
+     */
+    private int[] elements;
+
+    /**
+     * Index of the element at the head of the queue.
+     */
+    private int head;
+
+    /**
+     * Index at which the next element would be added to the tail of the queue.
+     */
+    private int tail;
+
+    public IntArrayDeque() {
+        this(8);
+    }
+
+    public IntArrayDeque(int capacity) {
+        elements = new int[capacity];
+    }
+
+    /**
+     * Inserts the specified element at the head of this queue.
+     *
+     * @param e the element to add
+     */
+    public void addFirst(int e) {
+        head = (head - 1) & (elements.length - 1);
+        elements[head] = e;
+        if (head == tail) {
+            doubleCapacity();
+        }
+    }
+
+    /**
+     * Inserts the specified element at the tail of this queue.
+     */
+    public void addLast(int e) {
+        elements[tail] = e;
+        tail = (tail + 1) & (elements.length - 1);
+        if (tail == head) {
+            doubleCapacity();
+        }
+    }
+
+    /**
+     * Removes the element at the head of the queue.
+     *
+     * @throws NoSuchElementException {@inheritDoc}
+     */
+    public int removeFirst() {
+        if (head == tail) {
+            throw new NoSuchElementException();
+        }
+        int result = elements[head];
+        elements[head] = 0;
+        head = (head == elements.length - 1) ? 0 : head + 1;
+        return result;
+    }
+
+    /**
+     * @throws NoSuchElementException {@inheritDoc}
+     */
+    public int removeLast() {
+        if (head == tail) {
+            throw new NoSuchElementException();
+        }
+        tail = (tail == 0) ? elements.length - 1 : tail - 1;
+        int result = elements[tail];
+        elements[tail] = 0;
+        return result;
+    }
+    /**
+     * @throws NoSuchElementException {@inheritDoc}
+     */
+    public int getFirst() {
+        if (head==tail)
+            throw new NoSuchElementException();
+        int result = elements[head];
+        return result;
+    }
+
+    /**
+     * @throws NoSuchElementException {@inheritDoc}
+     */
+    public int getLast() {
+        if (head==tail)
+            throw new NoSuchElementException();
+        int result = elements[tail==0?elements.length-1:tail-1];
+        return result;
+    }
+    /**
+     * Increases the capacity of this deque.
+     */
+    private void doubleCapacity() {
+        assert head == tail;
+        int p = head;
+        int n = elements.length;
+        int r = n - p; // number of elements to the right of p
+        int newCapacity = n << 1;
+        if (newCapacity < 0) {
+            throw new IllegalStateException("Sorry, deque too big");
+        }
+        int[] a = new int[newCapacity];
+        System.arraycopy(elements, p, a, 0, r);
+        System.arraycopy(elements, 0, a, r, p);
+        elements = a;
+        head = 0;
+        tail = n;
+    }
+
+    /**
+     * Returns the number of elements in this deque.
+     *
+     * @return the number of elements in this deque
+     */
+    public int size() {
+        return (tail - head) & (elements.length - 1);
+    }
+
+    /**
+     * Returns true if this deque is empty.
+     *
+     * @return {@code true} if this deque contains no elements
+     */
+    public boolean isEmpty() {
+        return head == tail;
+    }
+}
