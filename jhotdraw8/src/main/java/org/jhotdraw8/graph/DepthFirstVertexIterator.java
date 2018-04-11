@@ -13,9 +13,6 @@ import java.util.function.Predicate;
 
 /**
  * DepthFirstVertexIterator.
- * <p>
- * Naive implementation of a depth first iterator which uses a hash set to
- * determine if a node has been visited.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
@@ -72,8 +69,8 @@ public class DepthFirstVertexIterator<V> implements Iterator<V> {
         while (!stack.isEmpty()) {
             V current = stack.pop();
             if (visited.test(current)) {
-                for (V next : graph.getNextVertices(current)) {
-                    stack.push(next);
+                for (V v : graph.getNextVertices(current)) {
+                    stack.push(v);
                 }
                 next = current;
                 return;

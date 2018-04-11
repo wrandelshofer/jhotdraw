@@ -1,5 +1,5 @@
 <#if licenseFirst??>
-${licenseFirst} @(#)${name}
+${licenseFirst} @(#)${name}.java
 </#if>
 ${licensePrefix} Copyright © ${date?date?string("yyyy")} by the authors and contributors of JHotDraw. MIT License.
 <#if licenseLast??>

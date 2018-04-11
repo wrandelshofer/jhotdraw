@@ -1,4 +1,4 @@
-/* @(#)UnorderedPair.java
+/* @(#)OrderedPair.java
  * Copyright (c) systransis Ltd.
 
  */

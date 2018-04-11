@@ -1,4 +1,4 @@
-/* @(#)BreadthFirstIterator.java
+/* @(#)IntBackedBreadthFirstVertexIterator.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
