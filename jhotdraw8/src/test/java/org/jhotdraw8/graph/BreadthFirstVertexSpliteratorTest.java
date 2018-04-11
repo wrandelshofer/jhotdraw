@@ -1,21 +1,23 @@
-/* @(#)BreadthFirstVertexIteratorTest.java
+/* @(#)BreadthFirstVertexSpliteratorTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * BreadthFirstVertexIteratorTest.
+ * BreadthFirstVertexSpliteratorTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class BreadthFirstVertexIteratorTest {
+public class BreadthFirstVertexSpliteratorTest {
 
     private DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
@@ -71,19 +73,15 @@ public class BreadthFirstVertexIteratorTest {
         }
     }
 
-    /**
-     * Test of findAnyVertexPath method, of class
-     * DirectedGraphPathBuilderWithArrows.
-     */
     public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
-        BreadthFirstVertexIterator<Integer> instance = new BreadthFirstVertexIterator<>(graph, start);
+        BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();
             result.add(next);
-            if (next == goal) {
+            if (next.equals( goal)) {
                 break;
             }
         }
@@ -91,4 +89,22 @@ public class BreadthFirstVertexIteratorTest {
         assertEquals(expResult, result);
     }
 
+    @Test
+    @Ignore
+    public void testForEachRemainingWithAnyPathProvider() throws Exception {
+        for (Object[] args : anyPathProvider()) {
+            testForEachRemaining((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
+        }
+    }
+
+    public void testForEachRemaining(Integer start, Integer goal, List<Integer> expResult) throws Exception {
+        System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
+        DirectedGraph<Integer, Double> graph = createGraph();
+        BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
+        List<Integer> result = new ArrayList<>();
+        // FIXME we need java 9
+        instance/*.takeWhile(vertex->!vertex.equals(goal))*/.forEachRemaining(result::add);
+        System.out.println("actual:" + result);
+        assertEquals(expResult, result);
+    }
 }

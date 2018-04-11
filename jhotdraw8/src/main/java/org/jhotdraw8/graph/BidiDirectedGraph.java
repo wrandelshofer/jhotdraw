@@ -81,6 +81,6 @@ public interface BidiDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @return backwards breadth first search
      */
     default Iterable<V> breadthFirstSearchBackwards(V start) {
-        return () -> new InverseBreadthFirstVertexIterator<>(this, start);
+        return () -> new InverseBreadthFirstVertexSpliterator<>(this, start);
     }
 }

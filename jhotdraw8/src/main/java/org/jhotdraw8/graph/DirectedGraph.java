@@ -289,7 +289,7 @@ public interface DirectedGraph<V, A> {
      * @return breadth first search
      */
     default Iterable<V> breadthFirstSearch(V start) {
-        return () -> new BreadthFirstVertexIterator<>(this, start);
+        return () -> new BreadthFirstVertexSpliterator<>(this, start);
     }
 
 }

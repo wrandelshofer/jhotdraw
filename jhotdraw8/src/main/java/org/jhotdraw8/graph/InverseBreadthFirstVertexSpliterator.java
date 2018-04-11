@@ -1,4 +1,4 @@
-/* @(#)InverseBreadthFirstVertexIterator.java
+/* @(#)InverseBreadthFirstVertexSpliterator.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -8,16 +8,21 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Spliterator;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
+import static java.util.Spliterator.ORDERED;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * InverseBreadthFirstVertexIterator.
+ * InverseBreadthFirstVertexSpliterator.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  * @param <V> the vertex type
  */
-public class InverseBreadthFirstVertexIterator<V> implements Iterator<V> {
+public class InverseBreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterator<V> {
 
     private final BidiDirectedGraph<V, ?> graph;
     private final Queue<V> queue;
@@ -29,7 +34,7 @@ public class InverseBreadthFirstVertexIterator<V> implements Iterator<V> {
      * @param graph the graph
      * @param root the root vertex
      */
-    public InverseBreadthFirstVertexIterator(BidiDirectedGraph<V, ?> graph, V root) {
+    public InverseBreadthFirstVertexSpliterator(BidiDirectedGraph<V, ?> graph, V root) {
         if (graph == null) {
             throw new IllegalArgumentException("graph==null");
         }
@@ -53,7 +58,7 @@ public class InverseBreadthFirstVertexIterator<V> implements Iterator<V> {
      * if the specified vertex has been visited, and marks the specified vertex
      * as visited.
      */
-    public InverseBreadthFirstVertexIterator(BidiDirectedGraph<V, ?> graph, V root, Predicate<V> visited) {
+    public InverseBreadthFirstVertexSpliterator(BidiDirectedGraph<V, ?> graph, V root, Predicate<V> visited) {
         if (graph == null) {
             throw new IllegalArgumentException("graph==null");
         }
@@ -84,6 +89,39 @@ public class InverseBreadthFirstVertexIterator<V> implements Iterator<V> {
             }
         }
         return current;
+    }
+        @Override
+    public boolean tryAdvance(Consumer<? super V> action) {
+        V current = queue.poll();
+        if (current == null) {
+            return false;
+        }
+        for (V next : graph.getPrevVertices(current)) {
+            if (visited.test(next)) {
+                queue.add(next);
+            }
+        }
+        action.accept(current);
+        return true;
+    }    
+    
+   @Override
+    public Spliterator<V> trySplit() {
+        return null;
+    }
+    @Override
+    public int characteristics() {
+        return ORDERED | DISTINCT | NONNULL;
+    }
+
+    @Override
+    public long estimateSize() {
+        return Long.MAX_VALUE;
+    }
+
+    @Override
+    public void forEachRemaining(Consumer<? super V> action) {
+        Spliterator.super.forEachRemaining(action); 
     }
 
 }
