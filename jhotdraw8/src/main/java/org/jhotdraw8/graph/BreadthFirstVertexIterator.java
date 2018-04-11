@@ -19,33 +19,49 @@ import java.util.function.Predicate;
  */
 public class BreadthFirstVertexIterator<V> implements Iterator<V> {
 
-    private final DirectedGraph<V,?> graph;
+    private final DirectedGraph<V, ?> graph;
     private final Queue<V> queue;
     private final Predicate<V> visited;
 
     /**
      * Creates a new instance.
-     * 
+     *
      * @param graph the graph
      * @param root the root vertex
      */
-    public BreadthFirstVertexIterator(DirectedGraph<V,?> graph, V root) {
-        this.graph = graph;
+    public BreadthFirstVertexIterator(DirectedGraph<V, ?> graph, V root) {
+        if (graph == null) {
+            throw new IllegalArgumentException("graph==null");
+        }
+        if (root == null) {
+            throw new IllegalArgumentException("root==null");
+        }        this.graph = graph;
         queue = new ArrayDeque<>(16);
         Set<V> vset = new HashSet<>(16);
-        visited=vset::add;
+        visited = vset::add;
         queue.add(root);
         visited.test(root);
     }
+
     /**
      * Creates a new instance.
-     * 
+     *
      * @param graph the graph
      * @param root the root vertex
-     * @param visited a predicate with side effect. The predicate returns true if the specified vertex has been visited, and marks
-     * the specified vertex as visited.
+     * @param visited a predicate with side effect. The predicate returns true
+     * if the specified vertex has been visited, and marks the specified vertex
+     * as visited.
      */
-    public BreadthFirstVertexIterator(DirectedGraph<V,?> graph, V root, Predicate<V> visited) {
+    public BreadthFirstVertexIterator(DirectedGraph<V, ?> graph, V root, Predicate<V> visited) {
+        if (graph == null) {
+            throw new IllegalArgumentException("graph==null");
+        }
+        if (root == null) {
+            throw new IllegalArgumentException("root==null");
+        }
+        if (visited == null) {
+            throw new IllegalArgumentException("visited==null");
+        }
         this.graph = graph;
         queue = new ArrayDeque<>(16);
         this.visited = visited;

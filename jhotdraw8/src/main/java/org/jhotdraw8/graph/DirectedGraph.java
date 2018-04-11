@@ -4,17 +4,12 @@
 package org.jhotdraw8.graph;
 
 import java.util.AbstractCollection;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Deque;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
 
 /**
  * This interface provides read access to a directed graph {@code G = (V, A) }.

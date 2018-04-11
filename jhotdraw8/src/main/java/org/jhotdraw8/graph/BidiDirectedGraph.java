@@ -1,20 +1,29 @@
 /* @(#)BidiDirectedGraph
  *  Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
-
 package org.jhotdraw8.graph;
 
 import java.util.Iterator;
 
 /**
- * BidiDirectedGraph.
+ * This interface provides read access to a directed graph {@code G = (V, A) }.
+ * <p>
+ * This interface provides access to the following data in addition to the data
+ * that interface {@link DirectedGraph} provides:
+ * <ul>
+ * <li>The previous count {@code prevCount_i} of the vertex {@code v_i}.</li>
+ * <li>The {@code k}-th previous vertex of the vertex {@code v_i}, with
+ * {@code k ∈ {0, ..., getPrevCount(i) - 1}}.</li>
+ * </ul>
+ *
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  * @param <V> the vertex type
  * @param <A> the arrow type
  */
-public interface BidiDirectedGraph<V,A> extends DirectedGraph<V,A> {
+public interface BidiDirectedGraph<V, A> extends DirectedGraph<V, A> {
+
     /**
      * Returns the i-th direct predecessor vertex of v.
      *
@@ -64,13 +73,14 @@ public interface BidiDirectedGraph<V,A> extends DirectedGraph<V,A> {
         return () -> new PrevVertexIterator(vertex);
     }
 
-    /** Returns an {@link Iterable} which performs a backwards breadth first search
-     * starting at the given vertex.
-     * 
+    /**
+     * Returns an {@link Iterable} which performs a backwards breadth first
+     * search starting at the given vertex.
+     *
      * @param start the start vertex
      * @return backwards breadth first search
      */
     default Iterable<V> breadthFirstSearchBackwards(V start) {
-        return ()->new InverseBreadthFirstVertexIterator<>(this, start);
+        return () -> new InverseBreadthFirstVertexIterator<>(this, start);
     }
 }
