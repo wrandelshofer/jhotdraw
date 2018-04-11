@@ -4,7 +4,7 @@
 package org.jhotdraw8.graph;
 
 /**
- * Provides read-only indexed access to a directed graph {@code G = (V, A) } with
+ * This interface provides read-only indexed access to a directed graph {@code G = (V, A) } with
  * vertex and arrow attributes of the generic types {@code V} and {@code A}.
  * <p>
  * <ul>
@@ -13,7 +13,7 @@ package org.jhotdraw8.graph;
  * <li>{@code A} is the set of ordered pairs with elements {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1} }.</li>
  * </ul>
  * <p>
- * The API of this class provides access to the following data in addition to the inteface {@link IntDirectedGraph}:
+ * This interface provides access to the following data in addition to the interface {@link IntDirectedGraph}:
  * <ul>
  * <li>The vertex {@code v_i ∈ V} .</li>
  * <li>The arrow {@code a_k ∈ A}.</li>
