@@ -52,7 +52,7 @@ public interface DirectedGraph<V, A> {
     @Nullable
     default A findArrow(V a, V b) {
         int index = findIndexOfNext(a, b);
-        return index == -1 ? null : getArrow(a, index);
+        return index == -1 ? null : getNextArrow(a, index);
     }
 
     /**
@@ -88,7 +88,7 @@ public interface DirectedGraph<V, A> {
      * @return the specified arrow
      */
     @Nullable
-    A getArrow(V vertex, int index);
+    A getNextArrow(V vertex, int index);
 
     /**
      * Returns the number of arrows.
@@ -101,10 +101,10 @@ public interface DirectedGraph<V, A> {
      * Returns the i-th direct successor vertex of v.
      *
      * @param vertex a vertex
-     * @param i index of next vertex
-     * @return the i-th next vertex of v
+     * @param index index of next vertex
+     * @return the i-th next vertex
      */
-    V getNext(V vertex, int i);
+    V getNext(V vertex, int index);
 
     /**
      * Returns the number of direct successor vertices of v.
@@ -263,7 +263,7 @@ public interface DirectedGraph<V, A> {
         List<A> arrows = new ArrayList<>();
         for (int i = 0, n = getNextCount(v1); i < n; i++) {
             if (getNext(v1, i).equals(v2)) {
-                arrows.add(getArrow(v1, i));
+                arrows.add(getNextArrow(v1, i));
             }
         }
         return Collections.unmodifiableList(arrows);

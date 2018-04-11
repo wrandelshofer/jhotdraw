@@ -76,7 +76,7 @@ public class DirectedGraphPathBuilder<V, A> {
             }
             for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
                 V next = graph.getNext(current.vertex, i);
-                A arrow = graph.getArrow(current.vertex, i);
+                A arrow = graph.getNextArrow(current.vertex, i);
                 if (visited.test(next)) {
                     BackLinkWithArrow<V, A> backLink = new BackLinkWithArrow<>(next, current, arrow);
                     queue.add(backLink);
@@ -258,7 +258,7 @@ public class DirectedGraphPathBuilder<V, A> {
             explored.add(node.getVertex());
             for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
                 V next = graph.getNext(vertex, i);
-                final A arrow = graph.getArrow(vertex, i);
+                final A arrow = graph.getNextArrow(vertex, i);
                 double cost = node.cost + costf.applyAsDouble(arrow);
 
                 boolean isInFrontier = frontierMap.containsKey(next);

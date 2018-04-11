@@ -96,11 +96,11 @@ public class DirectedGraphs {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param g the graph to be dumped
-     * @return a String representation of the graph
+     * @param graph the graph
+     * @return a "dot" String.
      */
-    public static <V, A> String dumpAsDot(DirectedGraph<V, A> g) {
-        return dumpAsDot(g, Object::toString);
+    public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph) {
+        return dumpAsDot(graph, v->"\""+v+'"', null,null);
     }
 
     /**
@@ -109,31 +109,63 @@ public class DirectedGraphs {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param g the graph to be dumped
-     * @param toStringFunction a function which converts a vertex to a string
-     * @return a String representation of the graph
+     * @param graph the graph
+     * @return a "dot" String.
      */
-    public static <V, A> String dumpAsDot(DirectedGraph<V, A> g, Function<V, String> toStringFunction) {
+    public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,
+            Function<V, String> vertexToString) {
+        return dumpAsDot(graph, vertexToString, null, null);
+    }
+
+    /**
+     * Dumps a directed graph into a String which can be rendered with the "dot"
+     * tool.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param graph the graph
+     * @param vertexToString
+     * @param vertexAttributes
+     * @param arrowAttributes
+     * @return a "dot" String.
+     */
+    public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,
+            Function<V, String> vertexToString,
+            Function<V, String> vertexAttributes,
+            Function<A, String> arrowAttributes) {
         StringBuilder b = new StringBuilder();
-
-        for (int i = 0, n = g.getVertexCount(); i < n; i++) {
-            V v = g.getVertex(i);
-            if (g.getNextCount(v) == 0) {
-                b.append(toStringFunction.apply(v))
-                        .append('\n');
-
-            } else {
-                for (int j = 0, m = g.getNextCount(v); j < m; j++) {
-                    b.append(v)
-                            .append(" -> ")
-                            .append(toStringFunction.apply(g.getNext(v, j)))
-                            .append('\n');
+        b.append("digraph G {\n");
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            V v = graph.getVertex(i);
+                final String vertexName = vertexToString.apply(v);
+                if (vertexName==null)continue;
+                String vattr=vertexAttributes == null?"":vertexAttributes.apply(v);
+            if (graph.getNextCount(v) == 0||!vattr.isEmpty()) {
+                b.append(vertexName);
+                if (vertexAttributes != null) {
+                    b.append(" [").append(vattr).append("];");
+                }
+                b.append('\n');
+            }
+            if (graph.getNextCount(v) != 0) {
+                for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                    final String nextVertexName = vertexToString.apply(graph.getNext(v, j));
+                    if (nextVertexName==null)continue;
+                     b.append(vertexName);
+                    b.append(" -> ")
+                            .append(nextVertexName);
+                    if (arrowAttributes != null) {
+                        b.append(" [");
+                        b.append(arrowAttributes.apply(graph.getNextArrow(v, j)));
+                        b.append("];");
+                    }
+                    b.append('\n');
                 }
             }
         }
+        b.append("}");
         return b.toString();
     }
-
     /**
      * Given a directed graph, returns all disjoint sets of vertices.
      * <p>

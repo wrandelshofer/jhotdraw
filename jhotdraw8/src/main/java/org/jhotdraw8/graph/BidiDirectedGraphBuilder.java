@@ -39,7 +39,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         }
         for (V v : that.getVertices()) {
             for (int i = 0, n = that.getNextCount(v); i < n; i++) {
-                addArrow(v, that.getNext(v, i), that.getArrow(v, i));
+                addArrow(v, that.getNext(v, i), that.getNextArrow(v, i));
             }
         }
     }
@@ -78,8 +78,13 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
     }
 
     @Override
-    public A getArrow(V vertex, int index) {
+    public A getNextArrow(V vertex, int index) {
         return vertices.get(vertex).next.get(index).arrow;
+    }
+
+    @Override
+    public A getPrevArrow(V vertex, int index) {
+        return vertices.get(vertex).prev.get(index).arrow;
     }
 
     @Override
@@ -130,7 +135,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
      */
     public void removeArrow(V v, A a) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
-            if (a.equals(getArrow(v, i))) {
+            if (a.equals(getNextArrow(v, i))) {
                 removeNext(v, i);
                 break;
             }

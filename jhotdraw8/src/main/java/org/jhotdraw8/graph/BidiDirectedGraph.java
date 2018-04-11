@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * This interface provides read access to a directed graph {@code G = (V, A) }.
@@ -42,7 +43,15 @@ public interface BidiDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @return the number of next vertices of v.
      */
     int getPrevCount(V vertex);
-
+    /**
+     * Returns the specified predecessor (prev) arrow of the specified vertex.
+     *
+     * @param vertex a vertex
+     * @param index index of prev arrow
+     * @return the specified arrow
+     */
+    @Nullable
+    A getPrevArrow(V vertex, int index);
     /**
      * Returns the direct predecessor vertices of the specified vertex.
      *

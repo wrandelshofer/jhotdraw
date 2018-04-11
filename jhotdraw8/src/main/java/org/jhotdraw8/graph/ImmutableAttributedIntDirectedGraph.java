@@ -88,7 +88,7 @@ public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDi
             vertexObjects[vIndex] = graph.getVertex(vIndex);
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
                 arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
-                arrows[arrowCount] = graph.getArrow(vObject, i);
+                arrows[arrowCount] = graph.getNextArrow(vObject, i);
                 arrowCount++;
             }
         }

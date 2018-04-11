@@ -56,7 +56,7 @@ public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirected
             vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
                 arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
-                arrowData[arrowCount] = graph.getArrow(vObject, i);
+                arrowData[arrowCount] = graph.getNextArrow(vObject, i);
                 ++arrowCount;
             }
         }
@@ -80,7 +80,7 @@ public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirected
 
     @Override
     @SuppressWarnings("unchecked")
-    public A getArrow(V vertex, int index) {
+    public A getNextArrow(V vertex, int index) {
         return (A) arrowData[getArrowIndex(vertexToIndexMap.get(vertex), index)];
     }
 

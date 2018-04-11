@@ -40,7 +40,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             V v = graph.getVertex(i);
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(graph.getNext(v, j), v, graph.getArrow(v, j));
+                b.addArrow(graph.getNext(v, j), v, graph.getNextArrow(v, j));
             }
         }
         return b;
@@ -60,7 +60,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
             V v = graph.getVertex(i);
             b.addVertex(v);
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(v, graph.getNext(v, j), graph.getArrow(v, j));
+                b.addArrow(v, graph.getNext(v, j), graph.getNextArrow(v, j));
             }
         }
         return b;
@@ -86,7 +86,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
                 final V u = graph.getNext(v, j);
                 if (vertexPredicate.test(u)) {
-                    b.addArrow(v, u, graph.getArrow(v, j));
+                    b.addArrow(v, u, graph.getNextArrow(v, j));
                 }
             }
         }
@@ -142,7 +142,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         for (int i = 0; i < vcount; i++) {
             V v = graph.getVertex(i);
             for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
-                addArrow(v, graph.getNext(v, j), graph.getArrow(v, j));
+                addArrow(v, graph.getNext(v, j), graph.getNextArrow(v, j));
             }
         }
     }
@@ -214,7 +214,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     }
 
     @Override
-    public A getArrow(V vertex, int index) {
+    public A getNextArrow(V vertex, int index) {
         int arrowId = getArrowIndex(getVertexIndex(vertex), index);
         return getArrow(arrowId);
     }
