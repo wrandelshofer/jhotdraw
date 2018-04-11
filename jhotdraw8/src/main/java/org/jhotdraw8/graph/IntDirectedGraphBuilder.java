@@ -3,16 +3,52 @@
  */
 package org.jhotdraw8.graph;
 
-import javafx.util.Builder;
-
 /**
  * IntDirectedGraphBuilder.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder
-        implements Builder<IntDirectedGraph> {
+public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
+
+    /**
+     * Creates a builder which contains a copy of the specified graph with all
+     * arrows inverted.
+     *
+     * @param graph a graph
+     * @return a new graph with inverted arrows
+     */
+    public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
+        int arrowCount = graph.getArrowCount();
+
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            int v = i;
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                b.addArrow(graph.getNext(v, j), v);
+            }
+        }
+        return b;
+    }
+
+    /**
+     * Creates a builder which contains a copy of the specified graph.
+     *
+     * @param graph a graph
+     * @return a new graph
+     */
+    public static IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
+        int arrowCount = graph.getArrowCount();
+
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            int v = i;
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                b.addArrow(v, graph.getNext(v, j));
+            }
+        }
+        return b;
+    }
 
     public IntDirectedGraphBuilder() {
         this(16, 16);
@@ -38,7 +74,7 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder
     }
 
     /**
-     * Builder-method: adds a directed arrow from 'a' to 'b'.
+     * Adds a directed arrow from vertex 'a' to vertex 'b'.
      * <p>
      * Before you may call this method, you must have called
      * {@link #setVertexCount(int)}.
@@ -51,53 +87,38 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder
     }
 
     /**
-     * Builder-method: adds a vertex.
+     * Adds a vertex.
      */
     public void addVertex() {
         buildAddVertex();
     }
 
+    /**
+     * Builds an ImmutableIntDirectedGraph from this builder.
+     * 
+     * @return the created graph
+     */
     public ImmutableIntDirectedGraph build() {
         return new ImmutableIntDirectedGraph(this);
     }
 
+    /**
+     * Sets the vertex count.
+     * 
+     * @param newValue the new vertex count, must be larger or equal the current vertex count.
+     */
     public void setVertexCount(int newValue) {
         buildSetVertexCount(newValue);
     }
 
-    public void removeArrow(int vi, int i) {
-        buildRemoveArrow(vi, i);
-    }
-
     /**
-     * Creates a graph with all arrows inverted.
+     * Removes the i-th arrow from vertex 'a'.
      *
-     * @param graph a graph
-     * @return a new graph with inverted arrows
+     * @param a vertex 'a'
+     * @param i the index of an arrow from vertex 'a'.
      */
-    public static  IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
-        int arrowCount = graph.getArrowCount();
-
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            int v = i;
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(graph.getNext(v, j), v);
-            }
-        }
-        return b;
+    public void removeArrow(int a, int i) {
+        buildRemoveArrow(a, i);
     }
 
-    public static  IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
-        int arrowCount = graph.getArrowCount();
-
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            int v = i;
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(v, graph.getNext(v, j));
-            }
-        }
-        return b;
-    }
 }

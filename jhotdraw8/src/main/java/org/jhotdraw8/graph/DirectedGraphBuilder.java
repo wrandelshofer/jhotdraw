@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import javafx.util.Builder;
+import java.util.function.Predicate;
+
 
 /**
  * DirectedGraphBuilder.
@@ -19,7 +19,79 @@ import javafx.util.Builder;
  * @param <A> the arrow type
  */
 public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
-        implements DirectedGraph<V, A>, AttributedIntDirectedGraph<V,A>, Builder<DirectedGraph<V, A>> {
+        implements DirectedGraph<V, A>, AttributedIntDirectedGraph<V, A> {
+
+    /**
+     * Creates a builder which contains a copy of the specified graph with all arrows inverted.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param graph a graph
+     * @return a new graph with inverted arrows
+     */
+    public static <V, A> DirectedGraphBuilder<V, A> inverseOfDirectedGraph(DirectedGraph<V, A> graph) {
+        final int arrowCount = graph.getArrowCount();
+
+        DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>(graph.getVertexCount(), arrowCount);
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            V v = graph.getVertex(i);
+            b.addVertex(v);
+        }
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            V v = graph.getVertex(i);
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                b.addArrow(graph.getNext(v, j), v, graph.getArrow(v, j));
+            }
+        }
+        return b;
+    }
+
+    /**
+     * Creates a builder which contains a copy of the specified graph.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param graph a graph
+     * @return a new graph
+     */
+    public static <V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(DirectedGraph<V, A> graph) {
+        DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            V v = graph.getVertex(i);
+            b.addVertex(v);
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                b.addArrow(v, graph.getNext(v, j), graph.getArrow(v, j));
+            }
+        }
+        return b;
+    }
+
+    /**
+     * Creates a builder which contains the specified vertices, and only arrows
+     * from the directed graph, for the specified vertices.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param graph a graph
+     * @param vertexPredicate a predicate for the vertices
+     * @return a subset of the directed graph
+     */
+    public static <V, A> DirectedGraphBuilder<V, A> subsetOfDirectedGraph(DirectedGraph<V, A> graph, Predicate<V> vertexPredicate) {
+        DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
+        for (V v : graph.getVertices()) {
+            if (vertexPredicate.test(v)) 
+            b.addVertex(v);
+        }
+        for (V v : graph.getVertices()) {
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                final V u = graph.getNext(v, j);
+                if (vertexPredicate.test(u)) {
+                    b.addArrow(v, u, graph.getArrow(v, j));
+                }
+            }
+        }
+        return b;
+    }
 
     /**
      * Maps a vertex to a vertex index.
@@ -33,11 +105,17 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * Maps an arrow index to an arrow object.
      */
     private final List<A> arrows;
-    
+
+    /** Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
+     */
     public DirectedGraphBuilder() {
         this(16, 16);
     }
 
+    /** Creates a new instance with the specified initial capacities.
+     * @param vertexCapacity the initial capacity for vertices
+     * @param arrowCapacity the initial capacity for arrows
+     */
     public DirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
         super(vertexCapacity, arrowCapacity);
         this.vertexMap = new HashMap<>(vertexCapacity);
@@ -45,6 +123,11 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         this.arrows = new ArrayList<>(arrowCapacity);
     }
 
+    /**
+     * Creates a new instance which contains a copy of the specified graph.
+     * 
+     * @param graph a graph
+     */
     public DirectedGraphBuilder(DirectedGraph<V, A> graph) {
         super(graph.getVertexCount(), graph.getArrowCount());
         final int vcount = graph.getVertexCount();
@@ -65,7 +148,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     }
 
     /**
-     * Builder-method: adds a directed arrow (arrow from va to vb).
+     * Adds a directed arrow from va to vb.
      *
      * @param va vertex a
      * @param vb vertex b
@@ -81,12 +164,11 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         int a = vertexMap.get(va);
         int b = vertexMap.get(vb);
         super.buildAddArrow(a, b);
-        arrows.add( arrow);
+        arrows.add(arrow);
     }
 
     /**
-     * Builder-method: adds two arrows (arrow from va to vb and arrow from vb to
-     * va).
+     * Adds an arrow from va to vb and an arrow from vb to va.
      *
      * @param va vertex a
      * @param vb vertex b
@@ -98,7 +180,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     }
 
     /**
-     * Builder-method: adds a vertex.
+     * Adds a vertex.
      *
      * @param v vertex
      */
@@ -113,14 +195,22 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         });
     }
 
-    public DirectedGraph<V, A> build() {
+    /**
+     * Builds an ImmutableDirectedGraph from this builder.
+     * 
+     * @return the created graph
+     */
+    public ImmutableDirectedGraph<V, A> build() {
         final ImmutableDirectedGraph<V, A> graph = new ImmutableDirectedGraph<>(this);
         return graph;
     }
 
+    @Override
     public void clear() {
+        super.clear();
         vertexMap.clear();
         vertices.clear();
+        arrows.clear();
     }
 
     @Override
@@ -152,68 +242,6 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return (int) index;
     }
 
-    /**
-     * Creates a graph with all arrows inverted.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param graph a graph
-     * @return a new graph with inverted arrows
-     */
-    public static <V, A> DirectedGraphBuilder<V, A> inverseOfDirectedGraph(DirectedGraph<V, A> graph) {
-        final int arrowCount = graph.getArrowCount();
-
-        DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>(graph.getVertexCount(), arrowCount);
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            V v = graph.getVertex(i);
-            b.addVertex(v);
-        }
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            V v = graph.getVertex(i);
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(graph.getNext(v, j), v, graph.getArrow(v, j));
-            }
-        }
-        return b;
-    }
-
-    public static <V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(DirectedGraph<V, A> model) {
-        DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
-        for (int i = 0, n = model.getVertexCount(); i < n; i++) {
-            V v = model.getVertex(i);
-            b.addVertex(v);
-            for (int j = 0, m = model.getNextCount(v); j < m; j++) {
-                b.addArrow(v, model.getNext(v, j), model.getArrow(v, j));
-            }
-        }
-        return b;
-    }
-
-    /**
-     * Creates a builder which contains the specified vertices, and only arrows
-     * from the directed graph, for the specified vertices.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param model a graph
-     * @param vertices a set of vertices
-     * @return a subset of the directed graph
-     */
-    public static <V, A> DirectedGraphBuilder<V, A> subsetOfDirectedGraph(DirectedGraph<V, A> model, Set<V> vertices) {
-        DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
-        for (V v : vertices) {
-            b.addVertex(v);
-        }
-        for (V v : vertices) {
-            for (int j = 0, m = model.getNextCount(v); j < m; j++) {
-                final V u = model.getNext(v, j);
-                if (vertices.contains(u)) {
-                    b.addArrow(v, u, model.getArrow(v, j));
-                }
-            }
-        }
-        return b;
-    }
     @SuppressWarnings("unchecked")
     public A getArrow(int index) {
         return arrows.get(index);
@@ -225,7 +253,5 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         int arrowId = getArrowIndex(vi, i);
         return arrows.get(arrowId);
     }
-
-
 
 }

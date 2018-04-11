@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.Arrays;
+
 /**
  * DirectedGraphBuilder.
  *
@@ -23,11 +25,11 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
     /**
      * Table of arrow heads.
      * <p>
-     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_VERTEX_FIELD} contains the index
-     * of the vertex of the i-th arrow.
+     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_VERTEX_FIELD} contains the
+     * index of the vertex of the i-th arrow.
      * <p>
-     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD} contains the index of
-     * the next arrow.
+     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD} contains the index
+     * of the next arrow.
      */
     private int[] arrowHeads;
 
@@ -41,7 +43,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * the number of arrows of the i-th vertex.
      */
     private int[] lastArrow;
-    
+
     /**
      * The vertex count.
      */
@@ -106,6 +108,11 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         return arrowCount;
     }
 
+    /**
+     * Builder-method: sets the vertex count.
+     * 
+     * @param newValue the new vertex count, must be larger or equal the current vertex count.
+     */
     protected void buildSetVertexCount(int newValue) {
         if (newValue < vertexCount) {
             throw new IllegalArgumentException("can only add vertices:" + newValue);
@@ -116,26 +123,26 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
             lastArrow = new int[lastArrow.length * LASTARROW_NUM_FIELDS];
             System.arraycopy(tmp, 0, lastArrow, 0, tmp.length);
         }
-        
+
     }
-    
+
     /**
      * Removes the i-th arrow of vertex vi.
      *
-     * @param vi a vertex
+     * @param a a vertex
      * @param i the i-th arrow of vertex vi
      */
-    protected void buildRemoveArrow(int vi, int i) {
-        if (vi < 0 || vi >= getVertexCount()) {
-            throw new IllegalArgumentException("vi:" + i);
+    protected void buildRemoveArrow(int a, int i) {
+        if (a < 0 || a >= getVertexCount()) {
+            throw new IllegalArgumentException("a:" + i);
         }
-        if (i < 0 || i >= getNextCount(vi)) {
+        if (i < 0 || i >= getNextCount(a)) {
             throw new IllegalArgumentException("i:" + i);
         }
 
         // find the arrowId and the previous arrowId
         int prevArrowId = SENTINEL;
-        int arrowId = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
+        int arrowId = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
         for (int j = i - 1; j >= 0; j--) {
             prevArrowId = arrowId;
             arrowId = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
@@ -143,13 +150,13 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
         if (prevArrowId == SENTINEL) {
             // if there is no previous arrowId => make the point from lastArrow point to the arrow after arrowId.
-            lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         } else {
             // if there is a previous arrowId => make the pointer from prevArrowId point to the arrow after arrowId.
             arrowHeads[prevArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
         // Decrease number of arrows for vertex vi
-        lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD]--;
+        lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD]--;
 
         // Decrease total number of arrows
         arrowCount--;
@@ -210,4 +217,10 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         return vertexCount;
     }
 
+    public void clear() {
+        arrowCount = 0;
+        vertexCount = 0;
+        Arrays.fill(arrowHeads, 0);
+        Arrays.fill(lastArrow, 0);
+    }
 }
