@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * This interface provides read access to a directed graph {@code G = (V, A) }.
@@ -48,6 +49,7 @@ public interface DirectedGraph<V, A> {
      * @param b a vertex
      * @return the arrow or null if b is not next of a
      */
+    @Nullable
     default A findArrow(V a, V b) {
         int index = findIndexOfNext(a, b);
         return index == -1 ? null : getArrow(a, index);
@@ -75,6 +77,7 @@ public interface DirectedGraph<V, A> {
      * @param index index of arrow
      * @return arrow
      */
+    @Nullable
     A getArrow(int index);
 
     /**
@@ -84,6 +87,7 @@ public interface DirectedGraph<V, A> {
      * @param index index of next arrow
      * @return the specified arrow
      */
+    @Nullable
     A getArrow(V vertex, int index);
 
     /**
@@ -114,9 +118,9 @@ public interface DirectedGraph<V, A> {
      * Returns the direct successor vertices of the specified vertex.
      *
      * @param vertex a vertex
-     * @return an iterable for the direct successor vertices of vertex
+     * @return a collection view on the direct successor vertices of vertex
      */
-    default Iterable<V> getNextVertices(V vertex) {
+    default Collection<V> getNextVertices(V vertex) {
         class NextVertexIterator implements Iterator<V> {
 
             private int index;
@@ -139,7 +143,17 @@ public interface DirectedGraph<V, A> {
             }
 
         }
-        return () -> new NextVertexIterator(vertex);
+        return new AbstractCollection<V>() {
+            @Override
+            public Iterator<V> iterator() {
+                return new NextVertexIterator(vertex);
+            }
+
+            @Override
+            public int size() {
+                return getNextCount(vertex);
+            }
+        };
     }
 
     /**
@@ -218,6 +232,7 @@ public interface DirectedGraph<V, A> {
             }
 
             @Override
+            @Nullable
             public A next() {
                 return getArrow(index++);
             }

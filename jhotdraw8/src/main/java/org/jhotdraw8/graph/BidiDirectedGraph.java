@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.AbstractCollection;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -45,9 +47,9 @@ public interface BidiDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * Returns the direct predecessor vertices of the specified vertex.
      *
      * @param vertex a vertex
-     * @return an iterable for the direct predecessor vertices of vertex
+     * @return a collection view on the direct predecessor vertices of vertex
      */
-    default Iterable<V> getPrevVertices(V vertex) {
+    default Collection<V> getPrevVertices(V vertex) {
         class PrevVertexIterator implements Iterator<V> {
 
             private int index;
@@ -70,8 +72,18 @@ public interface BidiDirectedGraph<V, A> extends DirectedGraph<V, A> {
             }
 
         }
-        return () -> new PrevVertexIterator(vertex);
-    }
+       return new AbstractCollection<V>() {
+            @Override
+            public Iterator<V> iterator() {
+                return new PrevVertexIterator(vertex);
+            }
+
+            @Override
+            public int size() {
+                return getPrevCount(vertex);
+            }
+        };
+     }
 
     /**
      * Returns an {@link Iterable} which performs a backwards breadth first

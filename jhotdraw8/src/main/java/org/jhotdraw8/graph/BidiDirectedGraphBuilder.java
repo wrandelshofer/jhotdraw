@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * BidiDirectedGraphBuilder.
+ * Provides an API for building a {@code BidiDirectedGraph}.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
@@ -139,8 +140,8 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         vertexList.remove(v);
     }
 
-    public void addArrow(V from, V to, A arrow) {
-        if (from == null || to == null || arrow == null) {
+    public void addArrow(V from, V to, @Nullable A arrow) {
+        if (from == null || to == null) {
             throw new IllegalArgumentException("from=" + from + ", to=" + to + ", arrow=" + arrow);
         }
         final VertexData<V, A> fromVertex = vertices.get(from);
