@@ -168,7 +168,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     }
 
     /**
-     * Adds an arrow from va to vb and an arrow from vb to va.
+     * Adds an arrow from 'va' to 'vb' and an arrow from 'vb' to 'va'.
      *
      * @param va vertex a
      * @param vb vertex b

@@ -10,18 +10,29 @@ import java.util.Map;
 
 /**
  * BidiDirectedGraphBuilder.
- * <p>
- * This is a simple and inefficient implementation.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
+ * @param <V> the vertex type
+ * @param <A> the arrow type
  */
 public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
 
+    private final List<ArrowData<V, A>> arrows;
+    private final Map<V, VertexData<V, A>> vertices;
+    private final List<V> vertexList;
+
     public BidiDirectedGraphBuilder() {
+        arrows = new ArrayList<>();
+        vertices = new LinkedHashMap<>();
+        vertexList = new ArrayList<>();
     }
 
     public BidiDirectedGraphBuilder(DirectedGraph<V, A> that) {
+        arrows = new ArrayList<>(that.getArrowCount());
+        vertices = new LinkedHashMap<>(that.getVertexCount());
+        vertexList = new ArrayList<>(that.getVertexCount());
+
         for (V v : that.getVertices()) {
             addVertex(v);
         }
@@ -38,6 +49,18 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         arrows.clear();
     }
 
+    /**
+     * Adds an arrow from 'va' to 'vb' and an arrow from 'vb' to 'va'.
+     *
+     * @param va vertex a
+     * @param vb vertex b
+     * @param arrow the arrow
+     */
+    public void addBidiArrow(V va, V vb, A arrow) {
+        addArrow(va, vb, arrow);
+        addArrow(vb, va, arrow);
+    }
+
     @Override
     public V getPrev(V vertex, int i) {
         return vertices.get(vertex).prev.get(i).from;
@@ -47,35 +70,6 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
     public int getPrevCount(V vertex) {
         return vertices.get(vertex).prev.size();
     }
-
-    private static class Arrow<V, A> {
-
-        final V from;
-        final V to;
-        final A arrow;
-
-        public Arrow(V from, V to, A arrow) {
-            this.from = from;
-            this.to = to;
-            this.arrow = arrow;
-        }
-
-    }
-
-    private static class Vertex<V, A> {
-
-        final V v;
-        final List<Arrow<V, A>> next = new ArrayList<>();
-        final List<Arrow<V, A>> prev = new ArrayList<>();
-
-        public Vertex(V v) {
-            this.v = v;
-        }
-
-    }
-    private List<Arrow<V, A>> arrows = new ArrayList<>();
-    private Map<V, Vertex<V, A>> vertices = new LinkedHashMap<>();
-    private List<V> vertexList = new ArrayList<>();
 
     @Override
     public A getArrow(int index) {
@@ -116,7 +110,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         if (vertices.containsKey(v)) {
             return;
         }
-        vertices.put(v, new Vertex<>(v));
+        vertices.put(v, new VertexData<>(v));
         vertexList.add(v);
     }
 
@@ -130,7 +124,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
     }
 
     public void removeVertex(V v) {
-        final Vertex<V, A> vertex = vertices.get(v);
+        final VertexData<V, A> vertex = vertices.get(v);
         if (vertex == null) {
             return;
         }
@@ -138,7 +132,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
             removeNext(v, i);
         }
         for (int i = vertex.prev.size() - 1; i >= 0; i--) {
-            Arrow<V, A> arrow = vertex.prev.get(i);
+            ArrowData<V, A> arrow = vertex.prev.get(i);
             removeNext(arrow.from, vertices.get(arrow.from).next.indexOf(arrow));
         }
         vertices.remove(v);
@@ -149,24 +143,50 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         if (from == null || to == null || arrow == null) {
             throw new IllegalArgumentException("from=" + from + ", to=" + to + ", arrow=" + arrow);
         }
-        final Vertex<V, A> fromVertex = vertices.get(from);
-        final Vertex<V, A> toVertex = vertices.get(to);
+        final VertexData<V, A> fromVertex = vertices.get(from);
+        final VertexData<V, A> toVertex = vertices.get(to);
         if (fromVertex == null || toVertex == null) {
             throw new IllegalArgumentException(
                     "from=" + from + ", to=" + to + ", arrow=" + arrow + ", fromVertex=" + fromVertex + ", toVertex=" + toVertex);
         }
-        Arrow<V, A> a = new Arrow<>(from, to, arrow);
+        ArrowData<V, A> a = new ArrowData<>(from, to, arrow);
         fromVertex.next.add(a);
         toVertex.prev.add(a);
         arrows.add(a);
     }
 
     public void removeNext(V from, int i) {
-        final Vertex<V, A> fromVertex = vertices.get(from);
-        Arrow<V, A> a = fromVertex.next.get(i);
-        final Vertex<V, A> toVertex = vertices.get(a.to);
+        final VertexData<V, A> fromVertex = vertices.get(from);
+        ArrowData<V, A> a = fromVertex.next.get(i);
+        final VertexData<V, A> toVertex = vertices.get(a.to);
         fromVertex.next.remove(i);
         toVertex.prev.remove(a);
         arrows.remove(a);
+    }
+
+    private static class ArrowData<V, A> {
+
+        final V from;
+        final V to;
+        final A arrow;
+
+        public ArrowData(V from, V to, A arrow) {
+            this.from = from;
+            this.to = to;
+            this.arrow = arrow;
+        }
+
+    }
+
+    private static class VertexData<V, A> {
+
+        final V v;
+        final List<ArrowData<V, A>> next = new ArrayList<>();
+        final List<ArrowData<V, A>> prev = new ArrayList<>();
+
+        public VertexData(V v) {
+            this.v = v;
+        }
+
     }
 }

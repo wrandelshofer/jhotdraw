@@ -1,4 +1,4 @@
-/* @(#)BreadthFirstVertexIteratorTest.java
+/* @(#)InverseBreadthFirstVertexIteratorTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -10,15 +10,14 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * BreadthFirstVertexIteratorTest.
- *
+InverseBreadthFirstVertexIteratorTest *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class BreadthFirstVertexIteratorTest {
+public class InverseBreadthFirstVertexIteratorTest {
 
-    private DirectedGraph<Integer, Double> createGraph() {
-        DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
+    private BidiDirectedGraph<Integer, Double> createGraph() {
+        BidiDirectedGraphBuilder<Integer, Double> builder = new BidiDirectedGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
         builder.addVertex(3);
