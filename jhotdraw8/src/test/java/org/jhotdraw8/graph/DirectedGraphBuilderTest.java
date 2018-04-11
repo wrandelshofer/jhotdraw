@@ -18,7 +18,7 @@ public class DirectedGraphBuilderTest {
     }
 
     /**
-     * Test of buildAddArrow method, of class ImmutableIntDirectedGraph.
+     * Test of buildAddArrow method, of class DirectedGraphBuilder.
      */
     @Test
     public void testBuildAddArrow() {
@@ -26,23 +26,23 @@ public class DirectedGraphBuilderTest {
         int a = 0;
         int b = 1;
         int c = 1;
-        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<Integer, Double>();
+        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
 
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals("next count", 0, instance.getArrowCount());
 
         instance.addArrow(a, b, 1.0);
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
+        assertEquals("next count", 1, instance.getArrowCount());
+        assertEquals("next count of " + a, 1, instance.getNextCount(a));
         assertEquals("next edge of " + a, b, instance.getNext(a, 0));
     }
 
     /**
-     * Test of getArrowCount method, of class ImmutableIntDirectedGraph.
+     * Test of getArrowCount method, of class DirectedGraphBuilder.
      */
     @Test
     public void testGetArrowCount() {
@@ -56,17 +56,17 @@ public class DirectedGraphBuilderTest {
         instance.addVertex(2);
 
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals("next count", 0, instance.getArrowCount());
 
         instance.addArrow(a, b, 1.0);
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
+        assertEquals("next count", 1, instance.getArrowCount());
+        assertEquals("next count of " + a, 1, instance.getNextCount(a));
         assertEquals("next edge of " + a, b, instance.getNext(a, 0));
     }
 
     /**
-     * Test of getNext method, of class ImmutableIntDirectedGraph.
+     * Test of getNext method, of class DirectedGraphBuilder.
      */
     @Test
     public void testGetNext() {
@@ -74,23 +74,23 @@ public class DirectedGraphBuilderTest {
         int a = 0;
         int b = 1;
         int c = 1;
-        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<Integer, Double>();
+        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
 
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals("arrow count", 0, instance.getArrowCount());
 
         instance.addArrow(a, b, 1.0);
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
+        assertEquals("arrow count", 1, instance.getArrowCount());
+        assertEquals("next count of " + a, 1, instance.getNextCount(a));
         assertEquals("next edge of " + a, b, instance.getNext(a, 0));
     }
 
     /**
-     * Test of getNextCount method, of class ImmutableIntDirectedGraph.
+     * Test of getNextCount method, of class DirectedGraphBuilder.
      */
     @Test
     public void testGetNextCount() {
@@ -98,37 +98,37 @@ public class DirectedGraphBuilderTest {
         int a = 0;
         int b = 1;
         int c = 2;
-        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<Integer, Double>();
+        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
 
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
-        assertEquals("edge count of " + a, 0, instance.getNextCount(a));
-        assertEquals("edge count of " + b, 0, instance.getNextCount(b));
-        assertEquals("edge count of " + c, 0, instance.getNextCount(c));
+        assertEquals("arrow count", 0, instance.getArrowCount());
+        assertEquals("next count of " + a, 0, instance.getNextCount(a));
+        assertEquals("next count of " + b, 0, instance.getNextCount(b));
+        assertEquals("next count of " + c, 0, instance.getNextCount(c));
 
         instance.addArrow(a, b, 1.0);
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
+        assertEquals("arrow count", 1, instance.getArrowCount());
+        assertEquals("next count of " + a, 1, instance.getNextCount(a));
         assertEquals("next edge of " + a, b, instance.getNext(a, 0));
-        assertEquals("edge count of " + b, 0, instance.getNextCount(b));
-        assertEquals("edge count of " + c, 0, instance.getNextCount(c));
+        assertEquals("next count of " + b, 0, instance.getNextCount(b));
+        assertEquals("next count of " + c, 0, instance.getNextCount(c));
 
         instance.addArrow(b, c, 2.0);
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 2, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
+        assertEquals("next count", 2, instance.getArrowCount());
+        assertEquals("next count of " + a, 1, instance.getNextCount(a));
         assertEquals("next edge of " + a, b, instance.getNext(a, 0));
-        assertEquals("edge count of " + b, 1, instance.getNextCount(b));
+        assertEquals("next count of " + b, 1, instance.getNextCount(b));
         assertEquals("next edge of " + b, c, instance.getNext(b, 0));
-        assertEquals("edge count of " + c, 0, instance.getNextCount(c));
+        assertEquals("next count of " + c, 0, instance.getNextCount(c));
     }
 
     /**
-     * Test of getVertexCount method, of class ImmutableIntDirectedGraph.
+     * Test of getVertexCount method, of class DirectedGraphBuilder.
      */
     @Test
     public void testGetVertexCount() {
@@ -136,18 +136,18 @@ public class DirectedGraphBuilderTest {
         int a = 0;
         int b = 1;
         int c = 1;
-        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<Integer, Double>();
+        DirectedGraphBuilder<Integer, Double> instance = new DirectedGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
 
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals("arrow count", 0, instance.getArrowCount());
 
         instance.addArrow(a, b, 1.0);
         assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
+        assertEquals("next count", 1, instance.getArrowCount());
+        assertEquals("next count of " + a, 1, instance.getNextCount(a));
         assertEquals("next edge of " + a, b, instance.getNext(a, 0));
     }
 
