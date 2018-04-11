@@ -18,12 +18,12 @@ import java.util.function.IntFunction;
  */
 public class IntBackedBreadthFirstVertexIterator<V> implements Iterator<V> {
 
-    private final IntDirectedGraph<?> graph;
+    private final IntDirectedGraph graph;
     private final IntFunction<V> intToV;
     private final Queue<Integer> queue;// FIXME should be ArrayQueueInt.
     private final BitSet visited;
 
-    public IntBackedBreadthFirstVertexIterator(IntDirectedGraph<?> graph, IntFunction<V> intToV, int root) {
+    public IntBackedBreadthFirstVertexIterator(IntDirectedGraph graph, IntFunction<V> intToV, int root) {
         this.graph = graph;
         this.intToV=intToV;
         queue = new ArrayDeque<>(16);

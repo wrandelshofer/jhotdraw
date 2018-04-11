@@ -17,7 +17,24 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * DirectedGraph.
+ * Provides read access to a directed graph {@code G = (V, A) } with
+ * vertex and arrow attributes of the generic types {@code V} and {@code A}.
+ * <p>
+ * <ul>
+ * <li>{@code G} is a tuple {@code (V, A) }.</li>
+ * <li>{@code V} is the set of vertices with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
+ * <li>{@code A} is the set of ordered pairs with elements {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1} }.</li>
+ * </ul>
+ * <p>
+ * The API of this class provides access to the following data:
+ * <ul>
+ * <li>The vertex count {@code vertexCount}.</li>
+ * <li>The arrow count {@code arrowCount}.</li>
+ * <li>The vertex {@code v_i ∈ V} .</li>
+ * <li>The arrow {@code a_k ∈ A}.</li>
+ * <li>The next count {@code nextCount_i} of the vertex {@code v_i}.</li>
+ * <li>The {@code k}-th next vertex of the vertex {@code v_i}, with {@code k ∈ {0, ..., getNextCount(i) - 1}}.</li>
+ * </ul>
  *
  * @author Werner Randelshofer
  * @version $$Id$$

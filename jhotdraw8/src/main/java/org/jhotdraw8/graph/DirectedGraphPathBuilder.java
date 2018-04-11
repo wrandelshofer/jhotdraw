@@ -153,7 +153,7 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @SuppressWarnings("rawtypes")
-    private IntNodeWithCost<A> doFindIntShortestPath(int start, PriorityQueue<IntNodeWithCost<A>> frontier, IntNodeWithCost[] frontierMap, int goal, BitSet explored, IntDirectedGraph<A> graph, ToDoubleFunction<A> costf) {
+    private IntNodeWithCost<A> doFindIntShortestPath(int start, PriorityQueue<IntNodeWithCost<A>> frontier, IntNodeWithCost[] frontierMap, int goal, BitSet explored, AttributedIntDirectedGraph<?,A> graph, ToDoubleFunction<A> costf) {
         IntNodeWithCost<A> node = new IntNodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
@@ -195,7 +195,7 @@ public class DirectedGraphPathBuilder<V, A> {
 
     private VertexPath<V> doFindIntShortestVertexPath(DirectedGraph<V, A> graph, V start, V goal, ToDoubleFunction<A> costf) {
         @SuppressWarnings("unchecked")
-        IntDirectedGraph<A> intGraph = (IntDirectedGraph<A>) graph;
+        AttributedIntDirectedGraph<V,A> intGraph = (AttributedIntDirectedGraph<V,A>) graph;
         int startIndex = -1, goalIndex = -1;
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             V v = graph.getVertex(i);
@@ -396,7 +396,7 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public EdgePath<A> findIntShortestEdgePath( IntDirectedGraph<A> graph,
+    public EdgePath<A> findIntShortestEdgePath( AttributedIntDirectedGraph<?,A> graph,
             int start, int goal,  ToDoubleFunction<A> costf) {
 
         IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
@@ -413,7 +413,7 @@ public class DirectedGraphPathBuilder<V, A> {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
-    private IntNodeWithCost<A> findIntShortestPath( IntDirectedGraph< A> graph,
+    private IntNodeWithCost<A> findIntShortestPath( AttributedIntDirectedGraph<?, A> graph,
              int start,  int goal,  ToDoubleFunction<A> costf) {
         final int vertexCount = graph.getVertexCount();
         if (vertexCount == 0) {
@@ -436,7 +436,7 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public VertexPath<Integer> findIntShortestVertexPath( IntDirectedGraph<A> graph,
+    public VertexPath<Integer> findIntShortestVertexPath( AttributedIntDirectedGraph<?,A> graph,
             int start, int goal,  ToDoubleFunction<A> costf) {
 
         IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
@@ -479,7 +479,7 @@ public class DirectedGraphPathBuilder<V, A> {
 
         if (graph instanceof IntDirectedGraph) {
             @SuppressWarnings("unchecked")
-            IntDirectedGraph<A> intGraph = (IntDirectedGraph<A>) graph;
+            AttributedIntDirectedGraph<V,A> intGraph = (AttributedIntDirectedGraph<V,A>) graph;
             int startIndex = -1, goalIndex = -1;
             for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
                 V v = graph.getVertex(i);

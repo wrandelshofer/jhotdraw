@@ -1,25 +1,26 @@
-/* @(#)DirectedGraphWithArrowsPathBuilderNGTest.java
+/* @(#)DirectedGraphPathBuilderTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.graph;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.function.ToDoubleFunction;
-import static org.testng.Assert.*;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
- * DirectedGraphWithArrowsPathBuilderNGTest.
+ * DirectedGraphPathBuilderTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class DirectedGraphWithArrowsPathBuilderNGTest {
+public class DirectedGraphPathBuilderTest {
 
-    public DirectedGraphWithArrowsPathBuilderNGTest() {
+    public DirectedGraphPathBuilderTest() {
     }
-
+    
     private DirectedGraph<Integer,Double>createGraph() {
         DirectedGraphBuilder<Integer,Double> builder=new DirectedGraphBuilder<>();
         builder.addVertex(1);
@@ -29,18 +30,62 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
         builder.addVertex(5);
         builder.addVertex(6);
         builder.addBidiArrow(1, 2, 7.0);
-        builder.addBidiArrow(1, 3, 9.0);
+        builder.addArrow(1, 3, 9.0);
         builder.addBidiArrow(1, 6, 14.0);
-        builder.addBidiArrow(2, 3, 10.0);
-        builder.addBidiArrow(2, 4, 15.0);
-        builder.addBidiArrow(3, 4, 11.0);
-        builder.addBidiArrow(3, 6, 2.0);
-        builder.addBidiArrow(4, 5, 6.0);
+        builder.addArrow(2, 3, 10.0);
+        builder.addArrow(2, 4, 15.0);
+        builder.addArrow(3, 4, 11.0);
+        builder.addArrow(3, 6, 2.0);
+        builder.addArrow(4, 5, 6.0);
         builder.addBidiArrow(5, 6, 9.0);
         return builder;
     }
     
-    @DataProvider
+    public Object[][] anyPathProvider() {
+        return new Object[][] {
+                {1,5, VertexPath.of(1,6,5)},
+            {1,4,VertexPath.of(1,2,4)},
+            {2,6,VertexPath.of(2,1,6)}
+        } ;
+    }
+    
+    @Test
+    public void testCreateGraph() {
+        final DirectedGraph<Integer, Double> graph = createGraph();
+
+        final String expected
+                = "1 -> 2, 3, 6.\n"
+                + "2 -> 1, 3, 4.\n"
+                + "3 -> 4, 6.\n"
+                + "4 -> 5.\n"
+                + "5 -> 6.\n"
+                + "6 -> 1, 5.";
+
+        final String actual = DirectedGraphs.dumpAsAdjacencyMap(graph);
+        System.out.println(actual);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testFindAnyPath_3argsWithAnyPathProvider() throws Exception {
+        for (Object[] args : anyPathProvider()) {
+            testFindAnyPath_3args((Integer) args[0], (Integer) args[1], (VertexPath<Integer>) args[2]);
+        }
+    }
+
+ 
+    /**
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
+     */
+    public void testFindAnyPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
+        System.out.println("findAnyPath start:"+start+" goal:"+goal+" expResult:"+expResult);
+        DirectedGraph<Integer,Double> graph = createGraph();
+        DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
+        VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
+        assertEquals(result, expResult);
+    }
+
     public Object[][] shortestVertexPathProvider() {
         return new Object[][] {
                 {1,5, VertexPath.of(1,3,6,5)},
@@ -48,7 +93,6 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
             {2,6,VertexPath.of(2,3,6)}
         } ;
     }
-    @DataProvider
     public Object[][] shortestEdgePathProvider() {
         return new Object[][] {
                 {1,5,EdgePath.of(9.0,2.0,9.0)},
@@ -57,31 +101,43 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
         } ;
     }
     
+
+    @Test
+    public void testFindShortestVertexPathWithShortestVertexPathProvider() throws Exception {
+        for (Object[] args : shortestVertexPathProvider()) {
+            testFindShortestVertexPath((Integer) args[0], (Integer) args[1], (VertexPath<Integer>) args[2]);
+        }
+    }
     /**
      * Test of findAnyPath method, of class DirectedGraphWithArrowsPathBuilder.
      */
-    @Test(dataProvider = "shortestVertexPathProvider")
     public void testFindShortestVertexPath(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
-        System.out.println("findShortestPath");
+        System.out.println("findShortestVertexPath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
         DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
         VertexPath<Integer> result = instance.findShortestVertexPath(graph, start, goal, costf);
         assertEquals(result, expResult);
     }
+
+    @Test
+    public void testFindShortestEdgePathWithShortestEdgePathProvider() throws Exception {
+        for (Object[] args : shortestEdgePathProvider()) {
+            testFindShortestEdgePath((Integer) args[0], (Integer) args[1], (EdgePath<Double>) args[2]);
+        }
+    }
     /**
      * Test of findAnyPath method, of class DirectedGraphWithArrowsPathBuilder.
      */
-    @Test(dataProvider = "shortestEdgePathProvider")
     public void testFindShortestEdgePath(Integer start, Integer goal, EdgePath<Double> expResult ) throws Exception {
-        System.out.println("findShortestPath");
+        System.out.println("findShortestEdgePath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
         DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
         EdgePath<Double> result = instance.findShortestEdgePath(graph, start, goal, costf);
         assertEquals(result, expResult);
     }
-    @DataProvider
+
     public Object[][] anyVertexPathProvider() {
         return new Object[][] {
                 {1,5, VertexPath.of(1,6,5)},
@@ -91,18 +147,24 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
     }
     
 
+
+    @Test
+    public void testFindAnyVertexPath_3argsWithAnyVertexPathProvider() throws Exception {
+        for (Object[] args : anyVertexPathProvider()) {
+            testFindAnyVertexPath_3args((Integer) args[0], (Integer) args[1], (VertexPath<Integer>) args[2]);
+        }
+    }
     /**
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
-    @Test(dataProvider = "anyVertexPathProvider")
     public void testFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult ) throws Exception {
-        System.out.println("findAnyVertexPath");
+        System.out.println("findAnyVertexPath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer,Double> graph = createGraph();
         DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
         VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
         assertEquals(result, expResult);
     }
-    @DataProvider
+
     public Object[][] anyEdgePathProvider() {
         return new Object[][] {
                 {1,5, EdgePath.of(14.0,9.0)},
@@ -112,17 +174,21 @@ public class DirectedGraphWithArrowsPathBuilderNGTest {
     }
     
 
+    @Test
+    public void testFindAnyEdgePath_3argsWithAnyEdgePathProvider() throws Exception {
+        for (Object[] args : anyEdgePathProvider()) {
+            testFindAnyEdgePath_3args((Integer) args[0], (Integer) args[1], (EdgePath<Double>) args[2]);
+        }
+    }
     /**
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
-    @Test(dataProvider = "anyEdgePathProvider")
     public void testFindAnyEdgePath_3args(Integer start, Integer goal, EdgePath<Double> expResult ) throws Exception {
-        System.out.println("findAnyVertexPath");
+        System.out.println("findAnyVertexPath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer,Double> graph = createGraph();
         DirectedGraphPathBuilder<Integer,Double> instance = new DirectedGraphPathBuilder<>();
         EdgePath<Double> result = instance.findAnyEdgePath(graph, start, goal);
         assertEquals(result, expResult);
     }
-
 
 }

@@ -11,8 +11,10 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <V> the vertex type
+ * @param <A> the arrow type
  */
-public class ImmutableIntDirectedGraph implements IntDirectedGraph {
+public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDirectedGraph<V,A> {
 
     /**
      * Holds the indices of the vertices at the arrow heads.
@@ -24,24 +26,33 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
      */
     protected final int[] vertices;
     
+    /** Holds the arrows. */
+    protected final Object[] arrows;
+    /** Holds the vertices. */
+    protected final Object[] vertexObjects;
+
     /**
      * Creates a new instance from the specified graph.
      *
      * @param graph a graph
      */
-    public ImmutableIntDirectedGraph(IntDirectedGraph graph) {
+    public ImmutableAttributedIntDirectedGraph(AttributedIntDirectedGraph<V,A> graph) {
         int arrowCount = 0;
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
         this.arrowHeads = new int[arrowCapacity];
+        this.arrows = new Object[arrowCapacity];
         this.vertices = new int[vertexCapacity];
+        this.vertexObjects = new Object[vertexCapacity];
 
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             vertices[vIndex] = arrowCount;
+            vertexObjects[vIndex] = graph.getVertex(vIndex);
             for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
                 arrowHeads[arrowCount] = graph.getNext(vIndex, i);
+                arrows[arrowCount] = graph.getArrow(vIndex, i);
                 arrowCount++;
             }
         }
@@ -51,16 +62,17 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
      * Creates a new instance from the specified graph.
      *
      * @param <V> the vertex type
-     * @param <A> the arrow type
      * @param graph a graph
      */
-    public <V,A> ImmutableIntDirectedGraph(DirectedGraph<V,A> graph) {
+    public <V> ImmutableAttributedIntDirectedGraph(DirectedGraph<V,A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
         this.arrowHeads = new int[arrowCapacity];
+        this.arrows = new Object[arrowCapacity];
         this.vertices = new int[vertexCapacity];
+        this.vertexObjects = new Object[vertexCapacity];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
@@ -73,16 +85,35 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
             V vObject = graph.getVertex(vIndex);
 
             vertices[vIndex] = arrowCount;
+            vertexObjects[vIndex] = graph.getVertex(vIndex);
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
                 arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                arrows[arrowCount] = graph.getArrow(vObject, i);
                 arrowCount++;
             }
         }
     }
 
-    protected ImmutableIntDirectedGraph(int vertexCount, int arrowCount) {
+    protected ImmutableAttributedIntDirectedGraph(int vertexCount, int arrowCount) {
         this.arrowHeads = new int[arrowCount];
         this.vertices = new int[vertexCount];
+        this.arrows = new Object[arrowCount];
+        this.vertexObjects = new Object[vertexCount];
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int index) {
+       return (A) arrows[index];
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int vi, int i) {
+        if (i < 0 || i >= getNextCount(vi)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
+        }
+        return (A)arrows[vertices[vi] + i];
     }
 
     @Override
@@ -115,5 +146,10 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
     @Override
     public int getVertexCount() {
         return vertices.length;
+    }
+
+    @Override
+    public V getVertex(int index) {
+        return (V)vertexObjects[index];
     }
 }

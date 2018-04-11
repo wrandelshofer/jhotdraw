@@ -9,13 +9,28 @@ import java.util.Deque;
 import java.util.Objects;
 
 /**
- * DirectedGraphWithArrows.
+ * Provides indexed read access to a directed graph {@code G = (V, A) }.
+ * <p>
+ * <ul>
+ * <li>{@code G} is a tuple {@code (V, A) }.</li>
+ * <li>{@code V} is the set of vertices with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
+ * <li>{@code A} is the set of ordered pairs with elements {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1} }.</li>
+ * </ul>
+ * <p>
+ * The API of this class provides access to the following data:
+ * <ul>
+ * <li>The vertex count {@code vertexCount}.</li>
+ * <li>The arrow count {@code arrowCount}.</li>
+ * <li>The index {@code i} of each vertex {@code v_i ∈ V}.</li>
+ * <li>The index {@code k} of each arrow {@code a_k ∈ A}.</li>
+ * <li>The next count {@code nextCount_i} of the vertex with index {@code i}.</li>
+ * <li>The index of the {@code k}-th next vertex of the vertex with index {@code i}, and with {@code k ∈ {0, ..., nextCount_i - 1}}.</li>
+ * </ul>
  *
  * @author Werner Randelshofer
  * @version $$Id$$
- * @param <A> the arrow type
  */
-public interface IntDirectedGraph< A> {
+public interface IntDirectedGraph {
 
     /**
      * Returns the number of arrows.
@@ -25,13 +40,13 @@ public interface IntDirectedGraph< A> {
     int getArrowCount();
 
     /**
-     * Returns the i-th next vertex of v.
+     * Returns the k-th next vertex of v.
      *
-     * @param v a vertex
-     * @param i the index of the desired next vertex
-     * @return i the index
+     * @param v a vertex index
+     * @param k the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
+     * @return the index of the k-th next vertex of v.
      */
-    int getNext(int v, int i);
+    int getNext(int v, int k);
 
     /**
      * Returns the number of next vertices of v.
@@ -62,35 +77,6 @@ public interface IntDirectedGraph< A> {
             }
         }
         return -1;
-    }
-
-    /**
-     * Returns the specified arrow.
-     *
-     * @param index index of arrow
-     * @return arrow
-     */
-        A getArrow(int index);
-
-    /**
-     * Returns the specified successor (next) arrow of the specified vertex.
-     *
-     * @param vertex a vertex
-     * @param index index of next arrow
-     * @return the specified arrow
-     */
-        A getArrow(int vertex, int index);
-
-    /**
-     * Returns the arrow if b is next of a.
-     *
-     * @param a a vertex
-     * @param b a vertex
-     * @return the arrow or null if b is not next of a
-     */
-        default A findArrow(int a, int b) {
-        int index = findIndexOfNext(a, b);
-        return index == -1 ? null : getArrow(a, index);
     }
 
     /**

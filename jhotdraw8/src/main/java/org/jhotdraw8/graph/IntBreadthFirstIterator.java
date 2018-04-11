@@ -14,13 +14,13 @@ import org.jhotdraw8.collection.IntArrayDeque;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class IntBreadthFirstIterator<A> implements Iterator<Integer> {
+public class IntBreadthFirstIterator implements Iterator<Integer> {
 
-    private final IntDirectedGraph<A> graph;
+    private final IntDirectedGraph graph;
     private final IntArrayDeque queue;
     private final BitSet visited;
 
-    public IntBreadthFirstIterator(IntDirectedGraph<A> graph, int root) {
+    public IntBreadthFirstIterator(IntDirectedGraph graph, int root) {
         this.graph = graph;
         queue = new IntArrayDeque(16);
         visited = new BitSet(graph.getVertexCount());

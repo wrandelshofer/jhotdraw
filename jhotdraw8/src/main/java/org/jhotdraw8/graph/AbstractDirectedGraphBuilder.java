@@ -8,9 +8,8 @@ package org.jhotdraw8.graph;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <A> arrow type
  */
-public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGraph<A> {
+public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
     private final static int ARROWS_NEXT_FIELD = 1;
     private final static int ARROWS_NUM_FIELDS = 2;
@@ -43,8 +42,6 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
      */
     private int[] lastArrow;
     
-    
-    private Object[] arrows;
     /**
      * The vertex count.
      */
@@ -63,7 +60,6 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
         }
         this.arrowHeads = new int[arrowCapacity * ARROWS_NUM_FIELDS];
         this.lastArrow = new int[vertexCapacity * LASTARROW_NUM_FIELDS];
-        this.arrows = new Object[arrowCapacity];
     }
 
     /**
@@ -73,15 +69,11 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
      * @param b vertex b
      * @param arrow the arrow from 'a' to 'b'.
      */
-    protected void buildAddArrow(int a, int b, A arrow) {
+    protected void buildAddArrow(int a, int b) {
         if (arrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {
             int[] tmpArrowHeads = arrowHeads;
             arrowHeads = new int[arrowHeads.length * ARROWS_NUM_FIELDS];
             System.arraycopy(tmpArrowHeads, 0, arrowHeads, 0, tmpArrowHeads.length);
-            
-            Object[] tmpArrows = arrows;
-            arrows = new Object[arrows.length * ARROWS_NUM_FIELDS];
-            System.arraycopy(tmpArrows, 0, arrows, 0, tmpArrows.length);
         }
 
         int arrowCountOfA = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
@@ -94,8 +86,6 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
         lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] = arrowCountOfA + 1;
         lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = newLastArrowIdOfA;
 
-        arrows[newLastArrowIdOfA]=arrow;
-        
         arrowCount++;
     }
 
@@ -109,19 +99,6 @@ public abstract class AbstractDirectedGraphBuilder<A> implements IntDirectedGrap
             lastArrow = new int[lastArrow.length * 2 * LASTARROW_NUM_FIELDS];
             System.arraycopy(tmp, 0, lastArrow, 0, tmp.length);
         }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public A getArrow(int index) {
-        return (A)arrows[index];
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public A getArrow(int vi, int i) {
-        int arrowId = getArrowIndex(vi, i);
-        return (A)arrows[arrowId];
     }
 
     @Override

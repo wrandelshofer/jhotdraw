@@ -6,7 +6,6 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.util.Locale;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.IdFactory;
 

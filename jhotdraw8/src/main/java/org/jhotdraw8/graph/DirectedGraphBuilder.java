@@ -18,8 +18,8 @@ import javafx.util.Builder;
  * @param <V> the vertex type
  * @param <A> the arrow type
  */
-public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
-        implements DirectedGraph<V, A>, IntDirectedGraph<A>, Builder<DirectedGraph<V, A>> {
+public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
+        implements DirectedGraph<V, A>, AttributedIntDirectedGraph<V,A>, Builder<DirectedGraph<V, A>> {
 
     /**
      * Maps a vertex to a vertex index.
@@ -29,7 +29,11 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
      * Maps a vertex index to a vertex object.
      */
     private final List<V> vertices;
-
+    /**
+     * Maps an arrow index to an arrow object.
+     */
+    private final List<A> arrows;
+    
     public DirectedGraphBuilder() {
         this(16, 16);
     }
@@ -38,6 +42,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
         super(vertexCapacity, arrowCapacity);
         this.vertexMap = new HashMap<>(vertexCapacity);
         this.vertices = new ArrayList<>(vertexCapacity);
+        this.arrows = new ArrayList<>(arrowCapacity);
     }
 
     public DirectedGraphBuilder(DirectedGraph<V, A> graph) {
@@ -45,6 +50,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
         final int vcount = graph.getVertexCount();
         this.vertexMap = new HashMap<>(vcount);
         this.vertices = new ArrayList<>(vcount);
+        this.arrows = new ArrayList<>(graph.getArrowCount());
         final int ecount = graph.getArrowCount();
 
         for (int i = 0; i < vcount; i++) {
@@ -74,8 +80,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
         }
         int a = vertexMap.get(va);
         int b = vertexMap.get(vb);
-        buildAddArrow(a, b, arrow);
-
+        super.buildAddArrow(a, b);
+        arrows.add( arrow);
     }
 
     /**
@@ -208,5 +214,18 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder<A>
         }
         return b;
     }
+    @SuppressWarnings("unchecked")
+    public A getArrow(int index) {
+        return arrows.get(index);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public A getArrow(int vi, int i) {
+        int arrowId = getArrowIndex(vi, i);
+        return arrows.get(arrowId);
+    }
+
+
 
 }

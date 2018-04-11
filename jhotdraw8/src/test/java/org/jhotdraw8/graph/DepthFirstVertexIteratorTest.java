@@ -8,17 +8,16 @@ package org.jhotdraw8.graph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import static org.testng.Assert.assertEquals;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
- * DepthFirstIteratorNGTest.
+ * DepthFirstVertexIteratorTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class DepthFirstIteratorNGTest {
+public class DepthFirstVertexIteratorTest {
 
     /**
      * <pre>
@@ -55,7 +54,6 @@ public class DepthFirstIteratorNGTest {
         return builder;
     }
 
-    @DataProvider
     public Object[][] anyPathProvider() {
         return new Object[][]{
             {1, 5, Arrays.asList(1, 6, 5)},
@@ -64,12 +62,36 @@ public class DepthFirstIteratorNGTest {
         };
     }
 
+    @Test
+    public void testCreateGraph() {
+        final DirectedGraph<Integer, Double> graph = createGraph();
+
+        final String expected
+                = "1 -> 2, 3, 6.\n"
+                + "2 -> 1, 3, 4.\n"
+                + "3 -> 4, 6.\n"
+                + "4 -> 5.\n"
+                + "5 -> 6.\n"
+                + "6 -> 1, 5.";
+
+        final String actual = DirectedGraphs.dumpAsAdjacencyMap(graph);
+        System.out.println(actual);
+
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void testIterateWithAnyPathProvider() throws Exception {
+        for (Object[] args : anyPathProvider()) {
+            testIterate((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
+        }
+    }
+    
     /**
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
-    @Test(dataProvider = "anyPathProvider")
     public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
-        System.out.println("testIterate");
+        System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         DepthFirstVertexIterator<Integer> instance = new DepthFirstVertexIterator<>(graph, start);
         List<Integer> result = new ArrayList<>();

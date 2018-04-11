@@ -4,12 +4,9 @@
 package org.jhotdraw8.graph;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -76,17 +73,17 @@ public class DirectedGraphs {
      */
     public static <V, A> String dumpAsAdjacencyMap(DirectedGraph<V, A> graph, Function<V, String> toStringFunction) {
         StringBuilder buf = new StringBuilder();
-        for (int ii = 0, nn = graph.getVertexCount(); ii < nn; ii++) {
-            V v = graph.getVertex(ii);
+        for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
+            V v = graph.getVertex(i);
             if (buf.length() != 0) {
                 buf.append("\n");
             }
             buf.append(toStringFunction.apply(v)).append(" -> ");
-            for (int i = 0, n = graph.getNextCount(v); i < n; i++) {
-                if (i != 0) {
+            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
+                if (j != 0) {
                     buf.append(", ");
                 }
-                buf.append(toStringFunction.apply(graph.getNext(v, i)));
+                buf.append(toStringFunction.apply(graph.getNext(v, j)));
             }
             buf.append('.');
         }
@@ -183,7 +180,7 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static <A> List<Set<Integer>> findDisjointSets(IntDirectedGraph<A> g) {
+    public static <A> List<Set<Integer>> findDisjointSets(AttributedIntDirectedGraph<?,A> g) {
         // Create initial forest.
         final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
@@ -306,11 +303,11 @@ public class DirectedGraphs {
      */
     @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
-        final IntDirectedGraph<A> im;
-        if (!(m instanceof IntDirectedGraph)) {
+        final AttributedIntDirectedGraph<V,A> im;
+        if (!(m instanceof AttributedIntDirectedGraph)) {
             im = new DirectedGraphBuilder<>(m);
         } else {
-            im = (IntDirectedGraph<A>) m;
+            im = (AttributedIntDirectedGraph<V,A>) m;
         }
         int[] a = sortTopologicallyInt(im);
         List<V> result = new ArrayList<>(a.length);
@@ -327,7 +324,7 @@ public class DirectedGraphs {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static <A> int[] sortTopologicallyInt(IntDirectedGraph<A> model) {
+    public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?,A> model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex

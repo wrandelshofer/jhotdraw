@@ -13,16 +13,12 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntImmutableDirectedGraph<A> implements IntDirectedGraph<A> {
+public class IntImmutableDirectedGraph implements IntDirectedGraph {
 
     /**
      * Holds the arrow heads.
      */
     protected final int[] arrowHeads;
-    /**
-     * Holds the arrows.
-     */
-    protected final Object[] arrows;
 
     /**
      * Holds offsets into the arrowHeads table for each vertex.
@@ -34,21 +30,19 @@ public class IntImmutableDirectedGraph<A> implements IntDirectedGraph<A> {
      *
      * @param graph a graph
      */
-    public IntImmutableDirectedGraph(IntDirectedGraph<A> graph) {
+    public IntImmutableDirectedGraph(IntDirectedGraph graph) {
         int arrowCount = 0;
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
         this.arrowHeads = new int[arrowCapacity];
-        this.arrows = new Object[arrowCapacity];
         this.vertices = new int[vertexCapacity];
 
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
                 arrowHeads[arrowCount] = graph.getNext(vIndex, i);
-                arrows[arrowCount] = graph.getArrow(vIndex, i);
                 arrowCount++;
             }
         }
@@ -67,7 +61,6 @@ public class IntImmutableDirectedGraph<A> implements IntDirectedGraph<A> {
         final int vertexCapacity = graph.getVertexCount();
 
         this.arrowHeads = new int[arrowCapacity];
-        this.arrows = new Object[arrowCapacity];
         this.vertices = new int[vertexCapacity];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
@@ -83,25 +76,9 @@ public class IntImmutableDirectedGraph<A> implements IntDirectedGraph<A> {
             vertices[vIndex] = arrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
                 arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
-                arrows[arrowCount] = graph.getArrow(vObject, i);
                 arrowCount++;
             }
         }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public A getArrow(int index) {
-       return (A) arrows[index];
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public A getArrow(int vi, int i) {
-        if (i < 0 || i >= getNextCount(vi)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNext(vi, i));
-        }
-        return (A)arrows[vertices[vi] + i];
     }
 
 

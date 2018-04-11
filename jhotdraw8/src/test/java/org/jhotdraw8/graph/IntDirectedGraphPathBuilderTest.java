@@ -1,0 +1,77 @@
+/* @(#)IntDirectedGraphPathBuilderTest.java
+ * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
+ */
+package org.jhotdraw8.graph;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+
+/**
+ * IntDirectedGraphPathBuilderTest.
+ *
+ * @author Werner Randelshofer
+ * @version $$Id$$
+ */
+public class IntDirectedGraphPathBuilderTest {
+
+    public IntDirectedGraphPathBuilderTest() {
+    }
+
+    private IntDirectedGraph createGraph() {
+        IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
+        builder.setVertexCount(6);
+        builder.addBidiArrow(0, 1);
+        builder.addBidiArrow(0, 2);
+        builder.addBidiArrow(0, 5);
+        builder.addBidiArrow(1, 2);
+        builder.addBidiArrow(1, 3);
+        builder.addBidiArrow(2, 3);
+        builder.addBidiArrow(2, 5);
+        builder.addBidiArrow(3, 4);
+        builder.addBidiArrow(4, 5);
+        return builder;
+    }
+
+    public Object[][] anyPathProvider() {
+        return new Object[][]{
+            {0, 4, VertexPath.of(0, 5, 4)},
+            {0, 3, VertexPath.of(0, 1, 3)},
+            {1, 5, VertexPath.of(1, 0, 5)}
+        };
+    }
+   @Test
+    public void testCreateGraph() {
+        final IntDirectedGraph graph = createGraph();
+
+        final String expected
+                = "1 -> 2, 3, 6.\n"
+                + "2 -> 1, 3, 4.\n"
+                + "3 -> 4, 6.\n"
+                + "4 -> 5.\n"
+                + "5 -> 6.\n"
+                + "6 -> 1, 5.";
+
+        final String actual = IntDirectedGraphs.dumpAsAdjacencyMap(graph);
+        System.out.println(actual);
+
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testFindAnyVertexPath_3argsWithAnyPathProvider() throws Exception {
+        for (Object[] args : anyPathProvider()) {
+            testFindAnyVertexPath_3args((Integer) args[0], (Integer) args[1], (VertexPath<Integer>) args[2]);
+        }
+    }
+    /**
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
+     */
+    public void testFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult) throws Exception {
+        System.out.println("findAnyVertexPath");
+        IntDirectedGraph graph = createGraph();
+        IntDirectedGraphPathBuilder instance = new IntDirectedGraphPathBuilder();
+        VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
+        assertEquals(result, expResult);
+    }
+
+}

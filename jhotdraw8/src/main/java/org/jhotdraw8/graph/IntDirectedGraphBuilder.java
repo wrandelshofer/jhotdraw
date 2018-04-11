@@ -11,8 +11,8 @@ import javafx.util.Builder;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A>
-        implements Builder<IntDirectedGraph<A>> {
+public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder
+        implements Builder<IntDirectedGraph> {
 
     public IntDirectedGraphBuilder() {
         this(16, 16);
@@ -30,11 +30,10 @@ public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A>
      *
      * @param a vertex a
      * @param b vertex b
-     * @param arrow the arrow from 'a' to 'b' and from 'b' to 'a'
      */
-    public void addBidiArrow(int a, int b, A arrow) {
-        addArrow(a, b, arrow);
-        addArrow(b, a, arrow);
+    public void addBidiArrow(int a, int b) {
+        addArrow(a, b);
+        addArrow(b, a);
 
     }
 
@@ -46,10 +45,9 @@ public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A>
      *
      * @param a vertex a
      * @param b vertex b
-     * @param arrow the arrow from 'a' to 'b'
      */
-    public void addArrow(int a, int b, A arrow) {
-        buildAddArrow(a, b, arrow);
+    public void addArrow(int a, int b) {
+        buildAddArrow(a, b);
     }
 
     /**
@@ -59,8 +57,8 @@ public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A>
         buildAddVertex();
     }
 
-    public ImmutableIntDirectedGraph<A> build() {
-        return new ImmutableIntDirectedGraph<>(this);
+    public ImmutableIntDirectedGraph build() {
+        return new ImmutableIntDirectedGraph(this);
     }
 
     public void setVertexCount(int newValue) {
@@ -74,31 +72,30 @@ public class IntDirectedGraphBuilder<A> extends AbstractDirectedGraphBuilder<A>
     /**
      * Creates a graph with all arrows inverted.
      *
-     * @param <A> the arrow type
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
-    public static <A> IntDirectedGraphBuilder<A> inverseOfIntDirectedGraph(IntDirectedGraph<A> graph) {
+    public static  IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
         int arrowCount = graph.getArrowCount();
 
-        IntDirectedGraphBuilder<A> b = new IntDirectedGraphBuilder<>(graph.getVertexCount(), arrowCount);
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             int v = i;
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(graph.getNext(v, j), v, graph.getArrow(v, j));
+                b.addArrow(graph.getNext(v, j), v);
             }
         }
         return b;
     }
 
-    public static <A> IntDirectedGraphBuilder<A> ofIntDirectedGraph(IntDirectedGraph<A> graph) {
+    public static  IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
         int arrowCount = graph.getArrowCount();
 
-        IntDirectedGraphBuilder<A> b = new IntDirectedGraphBuilder<>(graph.getVertexCount(), arrowCount);
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             int v = i;
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(v, graph.getNext(v, j), graph.getArrow(v, j));
+                b.addArrow(v, graph.getNext(v, j));
             }
         }
         return b;

@@ -16,8 +16,8 @@ import java.util.Map;
  * @param <V> the vertex type
  * @param <A> the arrow type
  */
-public class ImmutableDirectedGraph<V, A> extends ImmutableIntDirectedGraph<A>
-        implements DirectedGraph<V, A>, IntDirectedGraph<A> {
+public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirectedGraph<V,A>
+        implements DirectedGraph<V, A> {
 
     /**
      * Maps a vertex index to a vertex object.
