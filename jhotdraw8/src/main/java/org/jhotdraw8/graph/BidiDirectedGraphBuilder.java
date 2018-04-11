@@ -107,6 +107,11 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         return vertexList.size();
     }
 
+    /**
+     * Adds the specified vertex to the graph.
+     *
+     * @param v the vertex
+     */
     public void addVertex(V v) {
         if (vertices.containsKey(v)) {
             return;
@@ -115,6 +120,14 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         vertexList.add(v);
     }
 
+    /**
+     * Removes the specified arrow.
+     * <p>
+     * Note: to remove a null arrow, use method {@link #removeNext(V,int)}.
+     *
+     * @param v the vertex
+     * @param a the arrow, must not be null
+     */
     public void removeArrow(V v, A a) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (a.equals(getArrow(v, i))) {
@@ -124,6 +137,12 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         }
     }
 
+    /**
+     * Removes the specified vertex from the graph and all arrows that start or
+     * end at the vertex.
+     *
+     * @param v the vertex
+     */
     public void removeVertex(V v) {
         final VertexData<V, A> vertex = vertices.get(v);
         if (vertex == null) {
@@ -140,6 +159,13 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         vertexList.remove(v);
     }
 
+    /**
+     * Adds the specified arrow from vertex 'from' to vertex 'to'.
+     *
+     * @param from the vertex
+     * @param to the vertex
+     * @param arrow the arrow, can be null
+     */
     public void addArrow(V from, V to, @Nullable A arrow) {
         if (from == null || to == null) {
             throw new IllegalArgumentException("from=" + from + ", to=" + to + ", arrow=" + arrow);
@@ -156,6 +182,12 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         arrows.add(a);
     }
 
+    /**
+     * Removes the specified arrow from the graph.
+     *
+     * @param from the start vertex of the arrow
+     * @param i the index of the i-th next vertex
+     */
     public void removeNext(V from, int i) {
         final VertexData<V, A> fromVertex = vertices.get(from);
         ArrowData<V, A> a = fromVertex.next.get(i);
@@ -171,7 +203,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         final V to;
         final A arrow;
 
-        public ArrowData(V from, V to, A arrow) {
+        ArrowData(V from, V to, A arrow) {
             this.from = from;
             this.to = to;
             this.arrow = arrow;
@@ -185,7 +217,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         final List<ArrowData<V, A>> next = new ArrayList<>();
         final List<ArrowData<V, A>> prev = new ArrayList<>();
 
-        public VertexData(V v) {
+        VertexData(V v) {
             this.v = v;
         }
 
