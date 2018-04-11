@@ -17,23 +17,26 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * Provides read access to a directed graph {@code G = (V, A) } with
- * vertex and arrow attributes of the generic types {@code V} and {@code A}.
+ * This interface provides read access to a directed graph {@code G = (V, A) }.
  * <p>
  * <ul>
  * <li>{@code G} is a tuple {@code (V, A) }.</li>
- * <li>{@code V} is the set of vertices with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
- * <li>{@code A} is the set of ordered pairs with elements {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1} }.</li>
+ * <li>{@code V} is the set of vertices with elements
+ * {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
+ * <li>{@code A} is the set of ordered pairs with elements
+ * {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1}
+ * }.</li>
  * </ul>
  * <p>
- * The API of this class provides access to the following data:
+ * This interface provides access to the following data:
  * <ul>
  * <li>The vertex count {@code vertexCount}.</li>
  * <li>The arrow count {@code arrowCount}.</li>
  * <li>The vertex {@code v_i ∈ V} .</li>
  * <li>The arrow {@code a_k ∈ A}.</li>
  * <li>The next count {@code nextCount_i} of the vertex {@code v_i}.</li>
- * <li>The {@code k}-th next vertex of the vertex {@code v_i}, with {@code k ∈ {0, ..., getNextCount(i) - 1}}.</li>
+ * <li>The {@code k}-th next vertex of the vertex {@code v_i}, with
+ * {@code k ∈ {0, ..., getNextCount(i) - 1}}.</li>
  * </ul>
  *
  * @author Werner Randelshofer
@@ -159,7 +162,8 @@ public interface DirectedGraph<V, A> {
      */
     int getVertexCount();
 
-    /** Returns all vertices.
+    /**
+     * Returns all vertices.
      *
      * @return a collection view on all vertices
      */
@@ -197,7 +201,9 @@ public interface DirectedGraph<V, A> {
 
         };
     }
-    /** Returns all arrows.
+
+    /**
+     * Returns all arrows.
      *
      * @return a collection view on all arrows
      */
@@ -235,20 +241,22 @@ public interface DirectedGraph<V, A> {
 
         };
     }
-    /** Returns all arrows between two vertices.
+
+    /**
+     * Returns all arrows between two vertices.
      *
      * @param v1 vertex 1
      * @param v2 vertex 2
      * @return a collection view on all arrows
      */
     default Collection<A> getArrows(V v1, V v2) {
-        List<A> arrows=new ArrayList<>();
-                for (int i=0,n=getNextCount(v1);i<n;i++) {
-                    if (getNext(v1, i).equals(v2)) {
-                        arrows.add(getArrow(v1, i));
-                    }
-                }
-                return Collections.unmodifiableList(arrows);
+        List<A> arrows = new ArrayList<>();
+        for (int i = 0, n = getNextCount(v1); i < n; i++) {
+            if (getNext(v1, i).equals(v2)) {
+                arrows.add(getArrow(v1, i));
+            }
+        }
+        return Collections.unmodifiableList(arrows);
     }
 
     /**
@@ -270,31 +278,23 @@ public interface DirectedGraph<V, A> {
      * @return true if b is reachable from a.
      */
     default boolean isReachable(V a, V b) {
-        Deque<V> stack = new ArrayDeque<>(16);
-        Set<V> vset = new HashSet<>(16);
-        stack.push(a);
-        while (!stack.isEmpty()) {
-            V current = stack.pop();
-            if (vset.add(current)) {
-                if (Objects.equals(current, b)) {
-                    return true;
-                }
-                for (V next : this.getNextVertices(current)) {
-                    stack.push(next);
-                }
+        for (V current : breadthFirstSearch(a)) {
+            if (Objects.equals(current, b)) {
+                return true;
             }
         }
         return false;
     }
-    
-    /** Returns an {@link Iterable} which performs a breadth first search
+
+    /**
+     * Returns an {@link Iterable} which performs a breadth first search
      * starting at the given vertex.
-     * 
+     *
      * @param start the start vertex
      * @return breadth first search
      */
-        default Iterable<V> breadthFirstSearch(V start) {
-        return ()->new BreadthFirstVertexIterator<>(this, start);
+    default Iterable<V> breadthFirstSearch(V start) {
+        return () -> new BreadthFirstVertexIterator<>(this, start);
     }
 
 }

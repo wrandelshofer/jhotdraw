@@ -12,9 +12,6 @@ import java.util.function.Predicate;
 
 /**
  * BreadthFirstVertexIterator.
- * <p>
- * Naive implementation of a breadth first iterator which uses a hash set to
- * determine if a node has been visited.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
