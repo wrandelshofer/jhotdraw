@@ -58,8 +58,8 @@ public class DirectedGraphs {
      * @param graph the graph to be dumped
      * @return a String representation of the graph
      */
-    public static <V, A> String dumpAsAdjacencyMap(DirectedGraph<V, A> graph) {
-        return dumpAsAdjacencyMap(graph, Object::toString);
+    public static <V, A> String dumpAsAdjacencyList(DirectedGraph<V, A> graph) {
+        return dumpAsAdjacencyList(graph, Object::toString);
     }
 
     /**
@@ -71,7 +71,7 @@ public class DirectedGraphs {
      * @param toStringFunction a function which converts a vertex to a string
      * @return a String representation of the graph
      */
-    public static <V, A> String dumpAsAdjacencyMap(DirectedGraph<V, A> graph, Function<V, String> toStringFunction) {
+    public static <V, A> String dumpAsAdjacencyList(DirectedGraph<V, A> graph, Function<V, String> toStringFunction) {
         StringBuilder buf = new StringBuilder();
         for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
             V v = graph.getVertex(i);
@@ -110,6 +110,7 @@ public class DirectedGraphs {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param graph the graph
+     * @param vertexToString a function that converts a vertex to a String for use as vertex name
      * @return a "dot" String.
      */
     public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,
@@ -124,9 +125,9 @@ public class DirectedGraphs {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param graph the graph
-     * @param vertexToString
-     * @param vertexAttributes
-     * @param arrowAttributes
+     * @param vertexToString a function that converts a vertex to a String for use as vertex name
+     * @param vertexAttributes a function that converts a vertex to a String for use as vertex attributes
+     * @param arrowAttributes  a function that converts an arrow to a String for use as arrow attributes
      * @return a "dot" String.
      */
     public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,

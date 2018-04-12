@@ -202,6 +202,21 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         arrows.remove(a);
     }
 
+    /**
+     * Removes the specified arrow from the graph.
+     *
+     * @param from the start vertex of the arrow
+     * @param to the end vertex of the arrow
+     */
+    public void removeNext(V from, V to) {
+        for (int i = 0, n = getNextCount(from); i < n; i++) {
+            if (getNext(from, i).equals(to)) {
+                removeNext(from, i);
+                return;
+            }
+        }
+    }
+
     private static class ArrowData<V, A> {
 
         final V from;
