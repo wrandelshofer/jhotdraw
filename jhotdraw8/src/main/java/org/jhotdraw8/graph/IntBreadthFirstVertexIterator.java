@@ -55,7 +55,7 @@ public class IntBreadthFirstVertexIterator implements Iterator<Integer> {
         Integer current = queue.removeFirst();
         for (int i = 0, n = graph.getNextCount(current); i < n; i++) {
             int next = graph.getNext(current, i);
-            if (!visited.test(next)) {
+            if (visited.test(next)) {
                 queue.addLast(next);
             }
         }

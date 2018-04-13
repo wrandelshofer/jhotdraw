@@ -6,7 +6,6 @@ package org.jhotdraw8.graph;
 import java.util.ArrayDeque;
 import java.util.BitSet;
 import java.util.Deque;
-import java.util.Objects;
 
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.

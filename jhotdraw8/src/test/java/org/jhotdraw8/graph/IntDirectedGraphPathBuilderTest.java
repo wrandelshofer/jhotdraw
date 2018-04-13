@@ -45,12 +45,12 @@ public class IntDirectedGraphPathBuilderTest {
         final IntDirectedGraph graph = createGraph();
 
         final String expected
-                = "1 -> 2, 3, 6.\n"
-                + "2 -> 1, 3, 4.\n"
-                + "3 -> 4, 6.\n"
-                + "4 -> 5.\n"
-                + "5 -> 6.\n"
-                + "6 -> 1, 5.";
+                = "0 -> 1, 2, 5.\n"
+                + "1 -> 0, 2, 3.\n"
+                + "2 -> 0, 1, 3, 5.\n"
+                + "3 -> 1, 2, 4.\n"
+                + "4 -> 3, 5.\n"
+                + "5 -> 0, 2, 4.";
 
         final String actual = IntDirectedGraphs.dumpAsAdjacencyMap(graph);
         System.out.println(actual);
@@ -67,7 +67,7 @@ public class IntDirectedGraphPathBuilderTest {
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
     public void testFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult) throws Exception {
-        System.out.println("findAnyVertexPath");
+        System.out.println("findAnyVertexPath start:"+start+" goal:"+goal+" expResult:"+expResult);
         IntDirectedGraph graph = createGraph();
         IntDirectedGraphPathBuilder instance = new IntDirectedGraphPathBuilder();
         VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);

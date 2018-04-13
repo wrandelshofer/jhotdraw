@@ -41,10 +41,11 @@ public class IntBreadthFirstVertexIteratorTest {
     }
 
     public Object[][] anyPathProvider() {
+          IntDirectedGraph graph = createGraph();
         return new Object[][]{
-            {1, 5, Arrays.asList(1, 2, 3, 6, 4, 5)},
-            {1, 4, Arrays.asList(1, 2, 3, 6, 4)},
-            {2, 6, Arrays.asList(2, 1, 3, 4, 6)}
+            {graph,0, 4, Arrays.asList(0, 1, 2, 5, 3, 4)},
+            {graph,0, 3, Arrays.asList(0, 1, 2, 5, 3)},
+            {graph,1, 5, Arrays.asList(1, 0, 2, 3, 5)}
         };
     }
 
@@ -69,7 +70,7 @@ public class IntBreadthFirstVertexIteratorTest {
     @Test
     public void testIterateWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
-            testIterate((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
+            testIterate(( IntDirectedGraph )args[0],(Integer) args[1], (Integer) args[2], (List<Integer>) args[3]);
         }
     }
 
@@ -77,9 +78,9 @@ public class IntBreadthFirstVertexIteratorTest {
      * Test of findAnyVertexPath method, of class
      * DirectedGraphPathBuilderWithArrows.
      */
-    public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testIterate( IntDirectedGraph graph ,Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
-        IntDirectedGraph graph = createGraph();
+      
         IntBreadthFirstVertexIterator instance = new IntBreadthFirstVertexIterator(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {

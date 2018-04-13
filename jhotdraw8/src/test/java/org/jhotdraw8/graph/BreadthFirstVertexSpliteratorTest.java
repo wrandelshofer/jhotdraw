@@ -3,12 +3,16 @@
  */
 package org.jhotdraw8.graph;
 
-
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Queue;
+import java.util.Spliterator;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import static org.junit.Assert.assertEquals;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -41,10 +45,12 @@ public class BreadthFirstVertexSpliteratorTest {
     }
 
     public Object[][] anyPathProvider() {
+        final DirectedGraph<Integer, Double> graph = createGraph();
+
         return new Object[][]{
-            {1, 5, Arrays.asList(1, 2, 3, 6, 4, 5)},
-            {1, 4, Arrays.asList(1, 2, 3, 6, 4)},
-            {2, 6, Arrays.asList(2, 1, 3, 4, 6)}
+            {graph, 1, 5, Arrays.asList(1, 2, 3, 6, 4, 5)},
+            {graph, 1, 4, Arrays.asList(1, 2, 3, 6, 4)},
+            {graph, 2, 6, Arrays.asList(2, 1, 3, 4, 6)}
         };
     }
 
@@ -69,19 +75,18 @@ public class BreadthFirstVertexSpliteratorTest {
     @Test
     public void testIterateWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
-            testIterate((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
+            testIterate((DirectedGraph<Integer, Double>) args[0], (Integer) args[1], (Integer) args[2], (List<Integer>) args[3]);
         }
     }
 
-    public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testIterate(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
-        DirectedGraph<Integer, Double> graph = createGraph();
         BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();
             result.add(next);
-            if (next.equals( goal)) {
+            if (next.equals(goal)) {
                 break;
             }
         }
@@ -90,21 +95,81 @@ public class BreadthFirstVertexSpliteratorTest {
     }
 
     @Test
-    @Ignore
     public void testForEachRemainingWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
-            testForEachRemaining((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
+            testTryAdvance((DirectedGraph<Integer, Double>) args[0], (Integer) args[1], (Integer) args[2], (List<Integer>) args[3]);
         }
     }
 
-    public void testForEachRemaining(Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testTryAdvance(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
-        DirectedGraph<Integer, Double> graph = createGraph();
         BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
-        // FIXME we need java 9
-        instance/*.takeWhile(vertex->!vertex.equals(goal))*/.forEachRemaining(result::add);
+        while (instance.tryAdvance(result::add)) {
+            if (result.get(result.size() - 1).equals(goal)) {
+                break;
+            }
+        }
+
         System.out.println("actual:" + result);
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testTrySplitWithAnyPathProvider() throws Exception {
+        for (Object[] args : anyPathProvider()) {
+            testTrySplit((DirectedGraph<Integer, Double>) args[0], (Integer) args[1], (Integer) args[2], (List<Integer>) args[3]);
+        }
+    }
+
+    public void testTrySplit(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+
+        System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
+
+        Queue<  Spliterator<Integer>> splits = new ArrayDeque<>();
+        splits.add(new BreadthFirstVertexSpliterator<>(graph, start));
+        List<Integer> result = new ArrayList<>();
+        while (!splits.isEmpty()) {
+            Spliterator<Integer> instance = splits.remove();
+            while (instance.tryAdvance(result::add)) {
+                if (result.get(result.size() - 1).equals(goal)) {
+                    break;
+                }
+                final Spliterator<Integer> splitOff = instance.trySplit();
+                if (splitOff != null) {
+                    splits.add(splitOff);
+                }
+            }
+        }
+        System.out.println("actual:    " + result);
+
+        // Splitting changes the order of the iterator. We don't care.
+        expResult.sort(Comparator.naturalOrder());
+        result.sort(Comparator.naturalOrder());
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testTrySplitParallelWithAnyPathProvider() throws Exception {
+        for (Object[] args : anyPathProvider()) {
+            testTrySplitParallel((DirectedGraph<Integer, Double>) args[0], (Integer) args[1], (Integer) args[2], (List<Integer>) args[3]);
+        }
+    }
+
+    public void testTrySplitParallel(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+
+        System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
+
+        Queue<  Spliterator<Integer>> splits = new ArrayDeque<>();
+        final BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
+        List<Integer> result=new ArrayList<>();
+        instance.tryAdvance(result::add);// we can never split at start vertex, because it is the only vertex in the que
+        result.addAll(StreamSupport.stream(instance, true).collect(Collectors.toList()));
+        System.out.println("actual:    " + result);
+
+        // Splitting changes the order of the iterator. We don't care.
+        expResult.sort(Comparator.naturalOrder());
+        result.sort(Comparator.naturalOrder());
+        // assertEquals(expResult, result);
     }
 }

@@ -3,7 +3,11 @@
  */
 package org.jhotdraw8.collection;
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * IntArrayDeque.
@@ -125,6 +129,49 @@ public class IntArrayDeque {
         tail = n;
     }
 
+    public Iterator<Integer> iterator() {
+        return new DeqIterator();
+    }
+    
+    private class DeqIterator implements Iterator<Integer> {
+        /**
+         * Index of element to be returned by subsequent call to next.
+         */
+        private int cursor = head;
+
+        /**
+         * Tail recorded at construction (also in remove), to stop
+         * iterator and also to check for comodification.
+         */
+        private int fence = tail;
+
+        /**
+         * Index of element returned by most recent call to next.
+         * Reset to -1 if element is deleted by a call to remove.
+         */
+        private int lastRet = -1;
+
+        public boolean hasNext() {
+            return cursor != fence;
+        }
+
+        public Integer next() {
+            if (cursor == fence)
+                throw new NoSuchElementException();
+            int result =  elements[cursor];
+            // This check doesn't catch all possible comodifications,
+            // but does catch the ones that corrupt traversal
+            if (tail != fence)
+                throw new ConcurrentModificationException();
+            lastRet = cursor;
+            cursor = (cursor + 1) & (elements.length - 1);
+            return result;
+        }
+
+
+    }
+
+    
     /**
      * Returns the number of elements in this deque.
      *
@@ -141,5 +188,21 @@ public class IntArrayDeque {
      */
     public boolean isEmpty() {
         return head == tail;
+    }
+    
+        public String toString() {
+        Iterator<Integer> it = iterator();
+        if (! it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (;;) {
+            Integer e = it.next();
+            sb.append(e);
+            if (! it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
     }
 }

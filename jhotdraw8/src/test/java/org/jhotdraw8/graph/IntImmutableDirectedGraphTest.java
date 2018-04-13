@@ -1,4 +1,4 @@
-/* @(#)ImmutableIntDirectedGraphTest.java
+/* @(#)IntImmutableDirectedGraphTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -7,18 +7,18 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * ImmutableIntDirectedGraphTest.
+ * IntImmutableDirectedGraphTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class ImmutableIntDirectedGraphTest {
+public class IntImmutableDirectedGraphTest {
 
-    public ImmutableIntDirectedGraphTest() {
+    public IntImmutableDirectedGraphTest() {
     }
 
     /**
-     * Test of buildAddArrow method, of class ImmutableIntDirectedGraph.
+     * Test of buildAddArrow method, of class IntImmutableDirectedGraph.
      */
     @Test
     public void testBuildAddArrow() {
@@ -29,7 +29,7 @@ public class ImmutableIntDirectedGraphTest {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
         builder.setVertexCount(3);
 
-        ImmutableIntDirectedGraph instance = builder.build();
+        IntImmutableDirectedGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 
@@ -42,7 +42,7 @@ public class ImmutableIntDirectedGraphTest {
     }
 
     /**
-     * Test of getArrowCount method, of class ImmutableIntDirectedGraph.
+     * Test of getArrowCount method, of class IntImmutableDirectedGraph.
      */
     @Test
     public void testGetArrowCount() {
@@ -53,7 +53,7 @@ public class ImmutableIntDirectedGraphTest {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
         builder.setVertexCount(3);
 
-        ImmutableIntDirectedGraph instance = builder.build();
+        IntImmutableDirectedGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 
@@ -66,7 +66,7 @@ public class ImmutableIntDirectedGraphTest {
     }
 
     /**
-     * Test of getNext method, of class ImmutableIntDirectedGraph.
+     * Test of getNext method, of class IntImmutableDirectedGraph.
      */
     @Test
     public void testGetNext() {
@@ -77,7 +77,7 @@ public class ImmutableIntDirectedGraphTest {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
         builder.setVertexCount(3);
 
-        ImmutableIntDirectedGraph instance = builder.build();
+        IntImmutableDirectedGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 
@@ -90,7 +90,7 @@ public class ImmutableIntDirectedGraphTest {
     }
 
     /**
-     * Test of getNextCount method, of class ImmutableIntDirectedGraph.
+     * Test of getNextCount method, of class IntImmutableDirectedGraph.
      */
     @Test
     public void testGetNextCount() {
@@ -101,7 +101,7 @@ public class ImmutableIntDirectedGraphTest {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
         builder.setVertexCount(3);
 
-        ImmutableIntDirectedGraph instance = builder.build();
+        IntImmutableDirectedGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
         assertEquals("edge count of " + a, 0, instance.getNextCount(a));
@@ -129,7 +129,7 @@ public class ImmutableIntDirectedGraphTest {
     }
 
     /**
-     * Test of getVertexCount method, of class ImmutableIntDirectedGraph.
+     * Test of getVertexCount method, of class IntImmutableDirectedGraph.
      */
     @Test
     public void testGetVertexCount() {
@@ -140,7 +140,7 @@ public class ImmutableIntDirectedGraphTest {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
         builder.setVertexCount(3);
 
-        ImmutableIntDirectedGraph instance = builder.build();
+        IntImmutableDirectedGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 

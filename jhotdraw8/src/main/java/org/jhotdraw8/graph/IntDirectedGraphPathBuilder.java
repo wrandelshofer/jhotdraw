@@ -19,7 +19,7 @@ import org.jhotdraw8.collection.IntArrayList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphPathBuilder<A> {
+public class IntDirectedGraphPathBuilder {
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start

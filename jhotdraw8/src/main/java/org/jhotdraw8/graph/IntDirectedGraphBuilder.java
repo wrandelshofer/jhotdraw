@@ -98,8 +98,8 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * 
      * @return the created graph
      */
-    public ImmutableIntDirectedGraph build() {
-        return new ImmutableIntDirectedGraph(this);
+    public IntImmutableDirectedGraph build() {
+        return new IntImmutableDirectedGraph(this);
     }
 
     /**

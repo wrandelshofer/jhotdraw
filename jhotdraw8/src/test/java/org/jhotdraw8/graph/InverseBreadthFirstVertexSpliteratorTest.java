@@ -87,20 +87,20 @@ public class InverseBreadthFirstVertexSpliteratorTest {
         assertEquals(expResult, result);
     }
     @Test
-    @Ignore
-    public void testForEachRemainingWithAnyPathProvider() throws Exception {
+    public void testTryAdvanceWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
-            testForEachRemaining((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
+            testTryAdvance((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
         }
     }
 
-    public void testForEachRemaining(Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testTryAdvance(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
-        // FIXME we need java 9
-        instance/*.takeWhile(vertex->!vertex.equals(goal))*/.forEachRemaining(result::add);
+        while (instance.tryAdvance(result::add)) {
+            if (result.get(result.size()-1).equals(goal))break;
+        }
         System.out.println("actual:" + result);
         assertEquals(expResult, result);
     }
