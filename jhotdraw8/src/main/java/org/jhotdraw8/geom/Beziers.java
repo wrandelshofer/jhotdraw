@@ -15,7 +15,7 @@ import org.jhotdraw8.util.function.Double6Consumer;
  * See {@link Intersections} intersection methods with bézier curves.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Beziers {
 

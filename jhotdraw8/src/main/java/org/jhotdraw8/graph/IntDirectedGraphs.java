@@ -10,7 +10,7 @@ import java.util.function.IntFunction;
 /**
  * IntDirectedGraphs.
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntDirectedGraphs {
     /**

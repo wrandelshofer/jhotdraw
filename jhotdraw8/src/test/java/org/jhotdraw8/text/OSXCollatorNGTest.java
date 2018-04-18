@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
  * OSXCollatorNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class OSXCollatorNGTest {
 

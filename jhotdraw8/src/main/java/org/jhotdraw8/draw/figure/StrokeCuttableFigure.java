@@ -14,7 +14,7 @@ import org.jhotdraw8.text.CssSize;
  * A figure which supports cutting off the start and end of a stroked path.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface StrokeCuttableFigure extends Figure {
     /** Cuts off the specified number of pixels from the start of the stroked path. */

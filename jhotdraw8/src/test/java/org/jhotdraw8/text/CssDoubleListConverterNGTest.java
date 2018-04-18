@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
  * CssDoubleListConverterNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssDoubleListConverterNGTest {
 

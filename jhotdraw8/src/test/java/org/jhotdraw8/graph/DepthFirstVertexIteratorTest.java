@@ -15,7 +15,7 @@ import org.junit.Test;
  * DepthFirstVertexIteratorTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DepthFirstVertexIteratorTest {
 

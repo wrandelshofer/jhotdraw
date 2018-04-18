@@ -8,7 +8,7 @@ package org.jhotdraw8.util.function;
  * Double4Consumer.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 @FunctionalInterface
 public interface Double4Consumer {

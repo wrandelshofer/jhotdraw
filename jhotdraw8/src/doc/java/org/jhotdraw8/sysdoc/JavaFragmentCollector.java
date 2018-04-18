@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * JavaFragmentCollector.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 @SuppressWarnings("deprecation")
 public class JavaFragmentCollector {

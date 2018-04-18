@@ -11,7 +11,7 @@ import org.junit.Test;
  * IntDirectedGraphPathBuilderTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntDirectedGraphPathBuilderTest {
 

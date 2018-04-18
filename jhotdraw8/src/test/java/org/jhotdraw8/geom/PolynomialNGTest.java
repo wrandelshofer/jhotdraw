@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
  * PolynomialNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PolynomialNGTest {
 

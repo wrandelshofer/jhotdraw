@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
  * FontTypeface.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FontTypeface {
 

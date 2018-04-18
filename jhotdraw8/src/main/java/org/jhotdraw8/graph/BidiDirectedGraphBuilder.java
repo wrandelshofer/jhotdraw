@@ -7,161 +7,77 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Provides an API for building a {@code BidiDirectedGraph}.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  * @param <V> the vertex type
  * @param <A> the arrow type
  */
 public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
 
     private final List<ArrowData<V, A>> arrows;
-    private final Map<V, VertexData<V, A>> vertices;
     private final List<V> vertexList;
+    private final Map<V, VertexData<V, A>> vertices;
 
+    /**
+     * Creates a new instance with default capacity for vertices and arrows.
+     */
     public BidiDirectedGraphBuilder() {
-        arrows = new ArrayList<>();
-        vertices = new LinkedHashMap<>();
-        vertexList = new ArrayList<>();
+        this(10, 10);
     }
 
+    /**
+     * Creates a new instance with the specified capacities.
+     *
+     * @param vertexCapacity the vertex capacity
+     * @param arrowCapacity the arrow capaicty
+     */
+    public BidiDirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
+        arrows = new ArrayList<>(arrowCapacity);
+        vertices = new LinkedHashMap<>(vertexCapacity);
+        vertexList = new ArrayList<>(vertexCapacity);
+    }
+
+    /**
+     * Creates a new instance which is a clone of the specified graph.
+     *
+     * @param that another graph
+     */
     public BidiDirectedGraphBuilder(DirectedGraph<V, A> that) {
+        this(that, Function.identity(), Function.identity());
+    }
+
+    /**
+     * Creates a new instance which is a clone of the specified graph using the
+     * provided mapping functions.
+     *
+     * @param <VV> the vertex type of that
+     * @param <AA> the arrow type of that
+     * @param that another graph
+     * @param vertexMapper a mapping function from that vertex type to the this
+     * vertex type
+     * @param arrowMapper a mapping function from that arrow type to the this
+     * arrow type
+     */
+    public <VV, AA> BidiDirectedGraphBuilder(DirectedGraph<VV, AA> that, Function<VV, V> vertexMapper, Function<AA, A> arrowMapper) {
         arrows = new ArrayList<>(that.getArrowCount());
         vertices = new LinkedHashMap<>(that.getVertexCount());
         vertexList = new ArrayList<>(that.getVertexCount());
 
-        for (V v : that.getVertices()) {
-            addVertex(v);
+        for (VV vv : that.getVertices()) {
+            addVertex(vertexMapper.apply(vv));
         }
-        for (V v : that.getVertices()) {
-            for (int i = 0, n = that.getNextCount(v); i < n; i++) {
-                addArrow(v, that.getNext(v, i), that.getNextArrow(v, i));
+        for (VV vv : that.getVertices()) {
+            V v = vertexMapper.apply(vv);
+            for (int i = 0, n = that.getNextCount(vv); i < n; i++) {
+                addArrow(v, vertexMapper.apply(that.getNext(vv, i)), arrowMapper.apply(that.getNextArrow(vv, i)));
             }
         }
-    }
-
-    public void clear() {
-        vertices.clear();
-        vertexList.clear();
-        arrows.clear();
-    }
-
-    /**
-     * Adds an arrow from 'va' to 'vb' and an arrow from 'vb' to 'va'.
-     *
-     * @param va vertex a
-     * @param vb vertex b
-     * @param arrow the arrow
-     */
-    public void addBidiArrow(V va, V vb, A arrow) {
-        addArrow(va, vb, arrow);
-        addArrow(vb, va, arrow);
-    }
-
-    @Override
-    public V getPrev(V vertex, int i) {
-        return vertices.get(vertex).prev.get(i).from;
-    }
-
-    @Override
-    public int getPrevCount(V vertex) {
-        return vertices.get(vertex).prev.size();
-    }
-
-    @Override
-    public A getArrow(int index) {
-        return arrows.get(index).arrow;
-    }
-
-    @Override
-    public A getNextArrow(V vertex, int index) {
-        return vertices.get(vertex).next.get(index).arrow;
-    }
-
-    @Override
-    public A getPrevArrow(V vertex, int index) {
-        return vertices.get(vertex).prev.get(index).arrow;
-    }
-
-    @Override
-    public int getArrowCount() {
-        return arrows.size();
-    }
-
-    @Override
-    public V getNext(V vertex, int i) {
-        return vertices.get(vertex).next.get(i).to;
-    }
-
-    @Override
-    public int getNextCount(V vertex) {
-        return vertices.get(vertex).next.size();
-    }
-
-    @Override
-    public V getVertex(int indexOfVertex) {
-        return vertexList.get(indexOfVertex);
-    }
-
-    @Override
-    public int getVertexCount() {
-        return vertexList.size();
-    }
-
-    /**
-     * Adds the specified vertex to the graph.
-     *
-     * @param v the vertex
-     */
-    public void addVertex(V v) {
-        if (vertices.containsKey(v)) {
-            return;
-        }
-        vertices.put(v, new VertexData<>(v));
-        vertexList.add(v);
-    }
-
-    /**
-     * Removes the specified arrow.
-     * <p>
-     * Note: to remove a null arrow, use method {@link #removeNext(V,int)}.
-     *
-     * @param v the vertex
-     * @param a the arrow, must not be null
-     */
-    public void removeArrow(V v, A a) {
-        for (int i = 0, n = getNextCount(v); i < n; i++) {
-            if (a.equals(getNextArrow(v, i))) {
-                removeNext(v, i);
-                break;
-            }
-        }
-    }
-
-    /**
-     * Removes the specified vertex from the graph and all arrows that start or
-     * end at the vertex.
-     *
-     * @param v the vertex
-     */
-    public void removeVertex(V v) {
-        final VertexData<V, A> vertex = vertices.get(v);
-        if (vertex == null) {
-            return;
-        }
-        for (int i = vertex.next.size() - 1; i >= 0; i--) {
-            removeNext(v, i);
-        }
-        for (int i = vertex.prev.size() - 1; i >= 0; i--) {
-            ArrowData<V, A> arrow = vertex.prev.get(i);
-            removeNext(arrow.from, vertices.get(arrow.from).next.indexOf(arrow));
-        }
-        vertices.remove(v);
-        vertexList.remove(v);
     }
 
     /**
@@ -185,6 +101,112 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
         fromVertex.next.add(a);
         toVertex.prev.add(a);
         arrows.add(a);
+    }
+
+    /**
+     * Adds an arrow from 'va' to 'vb' and an arrow from 'vb' to 'va'.
+     *
+     * @param va vertex a
+     * @param vb vertex b
+     * @param arrow the arrow
+     */
+    public void addBidiArrow(V va, V vb, A arrow) {
+        addArrow(va, vb, arrow);
+        addArrow(vb, va, arrow);
+    }
+
+    /**
+     * Adds the specified vertex to the graph.
+     *
+     * @param v the vertex
+     */
+    public void addVertex(V v) {
+        if (vertices.containsKey(v)) {
+            return;
+        }
+        vertices.put(v, new VertexData<>(v));
+        vertexList.add(v);
+    }
+
+    public void clear() {
+        vertices.clear();
+        vertexList.clear();
+        arrows.clear();
+    }
+
+    @Override
+    public A getArrow(int index) {
+        return arrows.get(index).arrow;
+    }
+
+    @Override
+    public int getArrowCount() {
+        return arrows.size();
+    }
+
+    @Override
+    public V getNext(V vertex, int i) {
+        return getVertexDataNotNull(vertex).next.get(i).to;
+    }
+
+    @Override
+    public A getNextArrow(V vertex, int index) {
+        return getVertexDataNotNull(vertex).next.get(index).arrow;
+    }
+
+    @Override
+    public int getNextCount(V vertex) {
+        return getVertexDataNotNull(vertex).next.size();
+    }
+
+    @Override
+    public V getPrev(V vertex, int i) {
+        return getVertexDataNotNull(vertex).prev.get(i).from;
+    }
+
+    @Override
+    public A getPrevArrow(V vertex, int index) {
+        return getVertexDataNotNull(vertex).prev.get(index).arrow;
+    }
+
+    @Override
+    public int getPrevCount(V vertex) {
+        return getVertexDataNotNull(vertex).prev.size();
+    }
+
+    @Override
+    public V getVertex(int indexOfVertex) {
+        return vertexList.get(indexOfVertex);
+    }
+
+    @Override
+    public int getVertexCount() {
+        return vertexList.size();
+    }
+
+    private VertexData<V, A> getVertexDataNotNull(V vertex) {
+        VertexData<V, A> vertexData = vertices.get(vertex);
+        if (vertexData == null) {
+            throw new NullPointerException("vertex is not in graph. vertex=" + vertex);
+        }
+        return vertexData;
+    }
+
+    /**
+     * Removes the specified arrow.
+     * <p>
+     * Note: to remove a null arrow, use method {@link #removeNext(V,int)}.
+     *
+     * @param v the vertex
+     * @param a the arrow, must not be null
+     */
+    public void removeArrow(V v, A a) {
+        for (int i = 0, n = getNextCount(v); i < n; i++) {
+            if (a.equals(getNextArrow(v, i))) {
+                removeNext(v, i);
+                break;
+            }
+        }
     }
 
     /**
@@ -215,6 +237,28 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
                 return;
             }
         }
+    }
+
+    /**
+     * Removes the specified vertex from the graph and all arrows that start or
+     * end at the vertex.
+     *
+     * @param v the vertex
+     */
+    public void removeVertex(V v) {
+        final VertexData<V, A> vertex = vertices.get(v);
+        if (vertex == null) {
+            return;
+        }
+        for (int i = vertex.next.size() - 1; i >= 0; i--) {
+            removeNext(v, i);
+        }
+        for (int i = vertex.prev.size() - 1; i >= 0; i--) {
+            ArrowData<V, A> arrow = vertex.prev.get(i);
+            removeNext(arrow.from, vertices.get(arrow.from).next.indexOf(arrow));
+        }
+        vertices.remove(v);
+        vertexList.remove(v);
     }
 
     private static class ArrowData<V, A> {

@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
  * IntersectionsNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntersectionsNGTest {
 

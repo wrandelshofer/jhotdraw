@@ -20,7 +20,7 @@ import org.jhotdraw8.collection.IntArrayDeque;
  * determine if a node has been visited.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntInverseBreadthFirstVertexSpliterator implements Spliterator.OfInt, Iterator<Integer> {
 

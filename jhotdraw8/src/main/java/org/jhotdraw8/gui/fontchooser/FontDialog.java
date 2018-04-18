@@ -19,7 +19,7 @@ import org.jhotdraw8.util.Resources;
  * FontDialog for selecting a font name.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FontDialog extends Dialog<String> {
 

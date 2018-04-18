@@ -19,7 +19,7 @@ import org.junit.Test;
  * BreadthFirstVertexSpliteratorTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BreadthFirstVertexSpliteratorTest {
 

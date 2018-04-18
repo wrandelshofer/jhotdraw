@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
  * FontCollection.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FontCollection {
 

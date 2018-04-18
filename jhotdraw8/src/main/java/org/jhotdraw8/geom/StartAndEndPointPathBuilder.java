@@ -8,7 +8,7 @@ package org.jhotdraw8.geom;
  * StartAndEndPointPathBuilder gets the start point of a path and its tangent..
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
 private double startX;

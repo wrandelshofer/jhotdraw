@@ -14,7 +14,7 @@ import java.util.Objects;
  * This is a value type.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 class OrderedPair<V> implements Pair<V> {
 

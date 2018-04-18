@@ -27,7 +27,7 @@ import java.util.Deque;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface IntDirectedGraph {
 

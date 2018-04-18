@@ -11,7 +11,7 @@ import java.awt.geom.Point2D;
  * CutEndPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CutEndPathBuilder extends AbstractPathBuilder {
 

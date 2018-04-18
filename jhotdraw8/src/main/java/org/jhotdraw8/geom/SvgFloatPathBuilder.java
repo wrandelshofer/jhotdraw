@@ -7,7 +7,7 @@ package org.jhotdraw8.geom;
  * DoubleSvgPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SvgFloatPathBuilder implements PathBuilder {
 

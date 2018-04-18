@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
  * PreferencesFontChooserModelFactory.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelFactory {
 

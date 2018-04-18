@@ -10,7 +10,7 @@ import org.junit.Test;
  * IntImmutableDirectedGraphTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntImmutableDirectedGraphTest {
 

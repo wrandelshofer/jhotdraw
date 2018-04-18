@@ -20,7 +20,7 @@ import org.jhotdraw8.concurrent.FXWorker;
  * FXML files with Tooltips can't be loaded).
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class AsyncFXMLLoader {
 

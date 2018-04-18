@@ -21,7 +21,7 @@ import java.util.PrimitiveIterator;
  *
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface IntBidiDirectedGraph extends IntDirectedGraph {
 

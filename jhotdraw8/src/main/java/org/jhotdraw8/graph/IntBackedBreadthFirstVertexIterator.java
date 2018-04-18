@@ -13,7 +13,7 @@ import java.util.function.IntFunction;
  * BreadthFirstIterator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  * @param <V> the vertex type
  */
 public class IntBackedBreadthFirstVertexIterator<V> implements Iterator<V> {

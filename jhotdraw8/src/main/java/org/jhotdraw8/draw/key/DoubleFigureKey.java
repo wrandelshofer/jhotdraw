@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
  * DoubleFigureKey.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DoubleFigureKey extends SimpleFigureKey<Double> {
 

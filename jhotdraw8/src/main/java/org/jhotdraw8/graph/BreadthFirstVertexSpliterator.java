@@ -19,7 +19,6 @@ import java.util.function.Predicate;
  * BreadthFirstVertexSpliterator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
  * @param <V> the vertex type
  */
 public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterator<V> {

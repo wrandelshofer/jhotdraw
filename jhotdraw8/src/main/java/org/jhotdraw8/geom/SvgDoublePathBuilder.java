@@ -7,7 +7,7 @@ package org.jhotdraw8.geom;
  * SvgDoublePathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SvgDoublePathBuilder implements PathBuilder {
 

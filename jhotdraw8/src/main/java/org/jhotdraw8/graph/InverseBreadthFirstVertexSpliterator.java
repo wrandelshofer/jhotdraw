@@ -19,7 +19,6 @@ import java.util.function.Predicate;
  * InverseBreadthFirstVertexSpliterator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
  * @param <V> the vertex type
  */
 public class InverseBreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterator<V> {
@@ -75,6 +74,15 @@ public class InverseBreadthFirstVertexSpliterator<V> implements Iterator<V>, Spl
         visited.test(root);
     }
 
+    /**
+     * Creates a new split off from the current instance..
+     */
+    private InverseBreadthFirstVertexSpliterator(BidiDirectedGraph<V, ?> graph, Queue<V> queue, Predicate<V> visited) {
+        this.graph = graph;
+        this.queue = queue;
+        this.visited = visited;
+    }
+
     @Override
     public boolean hasNext() {
         return !queue.isEmpty();
@@ -103,12 +111,21 @@ public class InverseBreadthFirstVertexSpliterator<V> implements Iterator<V>, Spl
         }
         action.accept(current);
         return true;
-    }    
-    
-   @Override
+    }        
+
+    @Override
     public Spliterator<V> trySplit() {
+        int mid = queue.size() >>> 1;
+        if (mid > 0) {
+            Queue<V> splitQueue = new ArrayDeque<>(queue.size());
+            for (int i = 0; i < mid; i++) {
+                splitQueue.add(queue.remove());
+            }
+            return new InverseBreadthFirstVertexSpliterator<>(graph, splitQueue, visited);
+        }
         return null;
     }
+
     @Override
     public int characteristics() {
         return ORDERED | DISTINCT | NONNULL;

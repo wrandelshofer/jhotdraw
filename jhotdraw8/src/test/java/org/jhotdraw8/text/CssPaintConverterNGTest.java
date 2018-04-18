@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
  * CssPaintConverterNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssPaintConverterNGTest {
 

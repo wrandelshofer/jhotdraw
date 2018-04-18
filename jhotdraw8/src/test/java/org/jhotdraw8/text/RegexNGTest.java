@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
  * RegexNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class RegexNGTest {
 

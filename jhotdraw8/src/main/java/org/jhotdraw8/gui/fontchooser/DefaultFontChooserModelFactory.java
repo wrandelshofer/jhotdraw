@@ -22,7 +22,7 @@ import org.jhotdraw8.util.Resources;
  * DefaultFontChooserModelFactory.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DefaultFontChooserModelFactory {
 

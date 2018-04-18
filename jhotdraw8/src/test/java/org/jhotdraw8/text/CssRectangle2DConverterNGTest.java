@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
  * CssRectangle2DConverterNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssRectangle2DConverterNGTest {
 

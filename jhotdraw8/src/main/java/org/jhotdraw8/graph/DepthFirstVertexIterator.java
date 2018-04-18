@@ -15,7 +15,7 @@ import java.util.function.Predicate;
  * DepthFirstVertexIterator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  * @param <V> the vertex type
  */
 public class DepthFirstVertexIterator<V> implements Iterator<V> {

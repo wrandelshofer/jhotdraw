@@ -10,7 +10,7 @@ import org.junit.Test;
  * BidiDirectedGraphBuilderTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BidiDirectedGraphBuilderTest {
 

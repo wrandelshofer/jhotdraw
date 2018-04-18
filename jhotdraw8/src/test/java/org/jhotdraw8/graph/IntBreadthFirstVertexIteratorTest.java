@@ -15,7 +15,7 @@ import org.junit.Test;
  * IntBreadthFirstVertexIteratorTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntBreadthFirstVertexIteratorTest {
 

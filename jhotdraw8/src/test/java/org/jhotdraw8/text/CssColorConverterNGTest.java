@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
  * CssColorConverterNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssColorConverterNGTest {
 

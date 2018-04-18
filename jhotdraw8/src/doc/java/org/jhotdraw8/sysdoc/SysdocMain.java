@@ -31,7 +31,7 @@ import java.util.List;
  *
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 @SuppressWarnings("deprecation")
 public class SysdocMain {

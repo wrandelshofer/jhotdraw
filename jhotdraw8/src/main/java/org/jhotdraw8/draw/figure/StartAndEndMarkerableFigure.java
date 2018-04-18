@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
  * A figure which supports start and end markers.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface StartAndEndMarkerableFigure extends Figure {
 

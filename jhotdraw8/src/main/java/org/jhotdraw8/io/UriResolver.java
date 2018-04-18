@@ -12,7 +12,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * relativizes it against the specified external URI.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class UriResolver implements Function<URI, URI> {
 

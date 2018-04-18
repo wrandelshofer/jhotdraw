@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -36,7 +39,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  * @param <V> the vertex type
  * @param <A> the arrow type
  */
@@ -147,6 +150,48 @@ public interface DirectedGraph<V, A> {
             @Override
             public Iterator<V> iterator() {
                 return new NextVertexIterator(vertex);
+            }
+
+            @Override
+            public int size() {
+                return getNextCount(vertex);
+            }
+        };
+    }
+    
+    /**
+     * Returns the direct successor arrows of the specified vertex.
+     *
+     * @param vertex a vertex
+     * @return a collection view on the direct successor arrows of vertex
+     */
+    default Collection<A> getNextArrows(V vertex) {
+        class NextArrowIterator implements Iterator<A> {
+
+            private int index;
+            private final V vertex;
+            private final int nextCount;
+
+            public NextArrowIterator(V vertex) {
+                this.vertex = vertex;
+                this.nextCount = getNextCount(vertex);
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index < nextCount;
+            }
+
+            @Override
+            public A next() {
+                return getNextArrow(vertex, index++);
+            }
+        }
+        
+        return new AbstractCollection<A>() {
+            @Override
+            public Iterator<A> iterator() {
+                return new NextArrowIterator(vertex);
             }
 
             @Override
@@ -288,12 +333,21 @@ public interface DirectedGraph<V, A> {
      * @return true if b is reachable from a.
      */
     default boolean isReachable(V a, V b) {
-        for (V current : breadthFirstSearch(a)) {
-            if (Objects.equals(current, b)) {
-                return true;
-            }
-        }
-        return false;
+        return breadthFirstSearch(a).anyMatch(v->Objects.equals(v,b));
+    }
+
+    /**
+     * Returns true if b is reachable from a.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @param visited  a predicate with side effect. The predicate returns true
+     * if the specified vertex has been visited, and marks the specified vertex
+     * as visited.
+     * @return true if b is reachable from a.
+     */
+    default boolean isReachable(V a, V b, Predicate<V> visited) {
+        return breadthFirstSearch(a, visited).anyMatch(v->Objects.equals(v,b));
     }
 
     /**
@@ -301,10 +355,23 @@ public interface DirectedGraph<V, A> {
      * starting at the given vertex.
      *
      * @param start the start vertex
+     * @param visited  a predicate with side effect. The predicate returns true
+     * if the specified vertex has been visited, and marks the specified vertex
+     * as visited.
      * @return breadth first search
      */
-    default Iterable<V> breadthFirstSearch(V start) {
-        return () -> new BreadthFirstVertexSpliterator<>(this, start);
+    default Stream<V> breadthFirstSearch(V start, Predicate<V> visited) {
+        return StreamSupport.stream( new BreadthFirstVertexSpliterator<>(this, start, visited),false);
     }
-
+    
+    /**
+     * Returns an {@link Iterable} which performs a breadth first search
+     * starting at the given vertex.
+     *
+     * @param start the start vertex
+     * @return breadth first search
+     */
+    default Stream<V> breadthFirstSearch(V start) {
+        return StreamSupport.stream( new BreadthFirstVertexSpliterator<>(this, start),false);
+    }
 }

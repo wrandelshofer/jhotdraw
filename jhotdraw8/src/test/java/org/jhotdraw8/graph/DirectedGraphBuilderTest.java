@@ -10,7 +10,7 @@ import org.junit.Test;
  * DirectedGraphBuilderTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DirectedGraphBuilderTest {
 

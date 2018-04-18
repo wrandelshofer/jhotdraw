@@ -27,7 +27,7 @@ import javafx.geometry.Bounds;
  *
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BoundsCalculator {
     private double minX = Double.POSITIVE_INFINITY;

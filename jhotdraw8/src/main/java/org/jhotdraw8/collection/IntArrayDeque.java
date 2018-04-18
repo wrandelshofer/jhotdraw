@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  * IntArrayDeque.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntArrayDeque {
     /**

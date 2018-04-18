@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
  * FontChooserModel.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FontChooserModel {
 

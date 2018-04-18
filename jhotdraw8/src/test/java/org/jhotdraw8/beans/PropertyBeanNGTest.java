@@ -14,7 +14,7 @@ import org.junit.Test;
  * PropertyBeanNGTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PropertyBeanNGTest {
 

@@ -9,7 +9,7 @@ import javafx.geometry.Point2D;
  * Clips the start of the path on the specified circle.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CutStartPathBuilder extends AbstractPathBuilder {
 
