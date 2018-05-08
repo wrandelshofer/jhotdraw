@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,9 +25,6 @@ import org.jhotdraw8.collection.IntArrayList;
  * @version $Id$
  */
 public class DirectedGraphs {
-
-    private DirectedGraphs() {
-    }
 
     private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> g) {
         // Create initial forest.
@@ -56,10 +55,16 @@ public class DirectedGraphs {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param graph the graph to be dumped
-     * @return a String representation of the graph
+     * @return the dump
      */
     public static <V, A> String dumpAsAdjacencyList(DirectedGraph<V, A> graph) {
-        return dumpAsAdjacencyList(graph, Object::toString);
+        StringWriter w = new StringWriter();
+        try {
+            dumpAsAdjacencyList(w, graph, Object::toString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return w.toString();
     }
 
     /**
@@ -67,40 +72,56 @@ public class DirectedGraphs {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
+     * @param w the writer
+     * @param graph the graph to be dumped
+     */
+    public static <V, A> void dumpAsAdjacencyList(Appendable w, DirectedGraph<V, A> graph) throws IOException {
+        dumpAsAdjacencyList(w, graph, Object::toString);
+    }
+
+    /**
+     * Dumps the graph for debugging purposes.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param w the writer
      * @param graph the graph to be dumped
      * @param toStringFunction a function which converts a vertex to a string
-     * @return a String representation of the graph
      */
-    public static <V, A> String dumpAsAdjacencyList(DirectedGraph<V, A> graph, Function<V, String> toStringFunction) {
-        StringBuilder buf = new StringBuilder();
+    public static <V, A> void dumpAsAdjacencyList(Appendable w, DirectedGraph<V, A> graph, Function<V, String> toStringFunction) throws IOException {
         for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
             V v = graph.getVertex(i);
-            if (buf.length() != 0) {
-                buf.append("\n");
+            if (i != 0) {
+                w.append("\n");
             }
-            buf.append(toStringFunction.apply(v)).append(" -> ");
+            w.append(toStringFunction.apply(v)).append(" -> ");
             for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
                 if (j != 0) {
-                    buf.append(", ");
+                    w.append(", ");
                 }
-                buf.append(toStringFunction.apply(graph.getNext(v, j)));
+                w.append(toStringFunction.apply(graph.getNext(v, j)));
             }
-            buf.append('.');
+            w.append('.');
         }
-        return buf.toString();
     }
 
     /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
+     * Dumps the graph graph into a String which can be rendered with the "dot"
      * tool.
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param graph the graph
-     * @return a "dot" String.
+     * @param graph the graph to be dumped
+     * @return the dump
      */
     public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph) {
-        return dumpAsDot(graph, v->"\""+v+'"', null,null);
+        StringWriter w = new StringWriter();
+        try {
+            dumpAsDot(w, graph, Object::toString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return w.toString();
     }
 
     /**
@@ -109,13 +130,12 @@ public class DirectedGraphs {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
+     * @param w the writer
      * @param graph the graph
-     * @param vertexToString a function that converts a vertex to a String for use as vertex name
      * @return a "dot" String.
      */
-    public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,
-            Function<V, String> vertexToString) {
-        return dumpAsDot(graph, vertexToString, null, null);
+    public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph) throws IOException {
+        dumpAsDot(w, graph, v -> "\"" + v + '"', null, null);
     }
 
     /**
@@ -124,49 +144,99 @@ public class DirectedGraphs {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
+     * @param w the writer
      * @param graph the graph
-     * @param vertexToString a function that converts a vertex to a String for use as vertex name
-     * @param vertexAttributes a function that converts a vertex to a String for use as vertex attributes
-     * @param arrowAttributes  a function that converts an arrow to a String for use as arrow attributes
-     * @return a "dot" String.
+     * @param vertexToString a function that converts a vertex to a String for
+     * use as vertex name
+     */
+    public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph,
+            Function<V, String> vertexToString) throws IOException {
+        dumpAsDot(w, graph, vertexToString, null, null);
+    }
+
+    /**
+     * Dumps a directed graph into a String which can be rendered with the "dot"
+     * tool.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param w the writer
+     * @param graph the graph
+     * @param vertexToString a function that converts a vertex to a String for
+     * use as vertex name
+     * @param vertexAttributes a function that converts a vertex to a String for
+     * use as vertex attributes
+     * @param arrowAttributes a function that converts an arrow to a String for
+     * use as arrow attributes
      */
     public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,
             Function<V, String> vertexToString,
             Function<V, String> vertexAttributes,
             Function<A, String> arrowAttributes) {
-        StringBuilder b = new StringBuilder();
-        b.append("digraph G {\n");
+        StringWriter w = new StringWriter();
+        try {
+            dumpAsDot(w, graph, vertexToString, vertexAttributes, arrowAttributes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return w.toString();
+    }
+
+    /**
+     * Dumps a directed graph into a String which can be rendered with the "dot"
+     * tool.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
+     * @param w the writer
+     * @param graph the graph
+     * @param vertexToString a function that converts a vertex to a String for
+     * use as vertex name
+     * @param vertexAttributes a function that converts a vertex to a String for
+     * use as vertex attributes
+     * @param arrowAttributes a function that converts an arrow to a String for
+     * use as arrow attributes
+     */
+    public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph,
+            Function<V, String> vertexToString,
+            Function<V, String> vertexAttributes,
+            Function<A, String> arrowAttributes) throws IOException {
+        w.append("digraph G {\n");
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             V v = graph.getVertex(i);
-                final String vertexName = vertexToString.apply(v);
-                if (vertexName==null)continue;
-                String vattr=vertexAttributes == null?"":vertexAttributes.apply(v);
-            if (graph.getNextCount(v) == 0||!vattr.isEmpty()) {
-                b.append(vertexName);
+            final String vertexName = vertexToString.apply(v);
+            if (vertexName == null) {
+                continue;
+            }
+            String vattr = vertexAttributes == null ? "" : vertexAttributes.apply(v);
+            if (graph.getNextCount(v) == 0 || !vattr.isEmpty()) {
+                w.append(vertexName);
                 if (vertexAttributes != null) {
-                    b.append(" [").append(vattr).append("];");
+                    w.append(" [").append(vattr).append("];");
                 }
-                b.append('\n');
+                w.append('\n');
             }
             if (graph.getNextCount(v) != 0) {
                 for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
                     final String nextVertexName = vertexToString.apply(graph.getNext(v, j));
-                    if (nextVertexName==null)continue;
-                     b.append(vertexName);
-                    b.append(" -> ")
+                    if (nextVertexName == null) {
+                        continue;
+                    }
+                    w.append(vertexName);
+                    w.append(" -> ")
                             .append(nextVertexName);
                     if (arrowAttributes != null) {
-                        b.append(" [");
-                        b.append(arrowAttributes.apply(graph.getNextArrow(v, j)));
-                        b.append("];");
+                        w.append(" [");
+                        w.append(arrowAttributes.apply(graph.getNextArrow(v, j)));
+                        w.append("];");
                     }
-                    b.append('\n');
+                    w.append('\n');
                 }
             }
         }
-        b.append("}");
-        return b.toString();
+        w.append("}");
     }
+
     /**
      * Given a directed graph, returns all disjoint sets of vertices.
      * <p>
@@ -213,7 +283,7 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static <A> List<Set<Integer>> findDisjointSets(AttributedIntDirectedGraph<?,A> g) {
+    public static <A> List<Set<Integer>> findDisjointSets(AttributedIntDirectedGraph<?, A> g) {
         // Create initial forest.
         final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
@@ -266,8 +336,8 @@ public class DirectedGraphs {
      * @param vertices a directed graph
      * @param orderedArrows list of arrows sorted by cost in ascending order
      * (lowest cost first, highest cost last).
-     * @param rejectedArrows optional, all excluded arrows are added to this list,
-     * if it is provided.
+     * @param rejectedArrows optional, all excluded arrows are added to this
+     * list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
     public static <V, A extends Pair<V>> List<A> findMinimumSpanningTree(Collection<V> vertices, List<A> orderedArrows, List<A> rejectedArrows) {
@@ -305,9 +375,10 @@ public class DirectedGraphs {
      * @param vertices the list of vertices
      * @param orderedArrows list of arrows sorted by cost in ascending order
      * (lowest cost first, highest cost last)
-     * @param includedArrows optional, all included arrows are added to this list, if it is provided.
-     * @param rejectedArrows optional, all excluded arrows are added to this list,
-     * if it is provided.
+     * @param includedArrows optional, all included arrows are added to this
+     * list, if it is provided.
+     * @param rejectedArrows optional, all excluded arrows are added to this
+     * list, if it is provided.
      * @return the graph builder
      */
     public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(Collection<V> vertices, List<A> orderedArrows, List<A> includedArrows, List<A> rejectedArrows) {
@@ -336,11 +407,11 @@ public class DirectedGraphs {
      */
     @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
-        final AttributedIntDirectedGraph<V,A> im;
+        final AttributedIntDirectedGraph<V, A> im;
         if (!(m instanceof AttributedIntDirectedGraph)) {
             im = new DirectedGraphBuilder<>(m);
         } else {
-            im = (AttributedIntDirectedGraph<V,A>) m;
+            im = (AttributedIntDirectedGraph<V, A>) m;
         }
         int[] a = sortTopologicallyInt(im);
         List<V> result = new ArrayList<>(a.length);
@@ -357,7 +428,7 @@ public class DirectedGraphs {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?,A> model) {
+    public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?, A> model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex
@@ -431,6 +502,12 @@ public class DirectedGraphs {
                 uset.addAll(vset);
             }
         }
+    }
+
+    /**
+     * Prevents instance creation.
+     */
+    private DirectedGraphs() {
     }
 
 }
