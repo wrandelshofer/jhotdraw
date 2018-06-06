@@ -9,6 +9,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Map;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -21,6 +24,11 @@ import org.jhotdraw8.draw.figure.Figure;
  * @version $Id$
  */
 public interface InputFormat {
+    /**
+     * Sets options that affect the read operations of this format.
+     * @param options a map of options
+     */
+    public void setOptions(@Nullable Map<? super Key<?>, Object> options);
 
     /**
      * Reads a figure from an URI
