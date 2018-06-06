@@ -47,9 +47,20 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
      * @param saveAs whether to force a file dialog
      */
     public AbstractSaveFileAction(Application app, DocumentOrientedViewModel view, String id, boolean saveAs) {
+        this(app, view, id, saveAs, Resources.getResources("org.jhotdraw8.app.Labels"));
+    }
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     * @param view the view
+     * @param id the id
+     * @param saveAs whether to force a file dialog
+     */
+    public AbstractSaveFileAction(Application app, DocumentOrientedViewModel view, String id, boolean saveAs, Resources resources) {
         super(app, view, DocumentOrientedViewModel.class);
         this.saveAs = saveAs;
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
+        resources.configureAction(this, id);
     }
 
     protected URIChooser getChooser(DocumentOrientedViewModel view) {
@@ -101,7 +112,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
             }
             if (uri != null) {
                 saveFileChooseOptions(v, uri, chsr.getDataFormat());
-            }else{
+            } else {
                 v.removeDisabler(this);
             }
             if (oldFocusOwner != null) {
