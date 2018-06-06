@@ -10,6 +10,7 @@ import java.util.List;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * An immutable observable list.
@@ -116,7 +117,7 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
         return array.length;
     }
 
-    public static <T> ImmutableList<T> add(Collection<T> collection, T item) {
+    public static <T> ImmutableList<T> add(@Nullable Collection<T> collection, T item) {
         if (collection==null||collection.isEmpty()) {
             return ImmutableList.of(item);
         }
