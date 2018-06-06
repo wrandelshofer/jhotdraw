@@ -9,6 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jhotdraw8.collection.BooleanKey;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 
 /**
@@ -20,6 +25,11 @@ import org.jhotdraw8.draw.figure.Drawing;
  * @version $Id$
  */
 public interface OutputFormat {
+    /**
+     * Sets options that affect the write operations of this format.
+     * @param options a map of options
+     */
+    public void setOptions(@Nullable Map<? super Key<?>, Object> options);
 
     /**
      * Writes a Drawing into an URI.

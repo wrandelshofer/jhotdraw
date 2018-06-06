@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import java.util.regex.Pattern;
 import javafx.css.StyleOrigin;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -73,6 +76,15 @@ import org.w3c.dom.ProcessingInstruction;
  * @version $Id$
  */
 public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMixin, ClipboardOutputFormat, ClipboardInputFormat {
+    /**
+     * Holds the current options.
+     */
+    private Map<? super Key<?>, Object> options = Collections.emptyMap();
+
+    @Override
+    public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
+        this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
+    }
 
     /**
      * Comments which appear inside an XML element, that can not be associated

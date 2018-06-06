@@ -6,11 +6,13 @@ package org.jhotdraw8.draw.io;
 import java.beans.XMLEncoder;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.FigurePersistenceDelegate;
-import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 
 /**
  * XMLEncoderOutputFormat.
@@ -19,6 +21,15 @@ import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
  * @version $Id$
  */
 public class XMLEncoderOutputFormat implements OutputFormat {
+    /**
+     * Holds the current options.
+     */
+    private Map<? super Key<?>, Object> options = Collections.emptyMap();
+
+    @Override
+    public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
+        this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
+    }
 
     public final static DataFormat XML_SERIALIZER_FORMAT;
 
