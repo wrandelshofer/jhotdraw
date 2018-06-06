@@ -34,6 +34,7 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -104,6 +105,7 @@ public class XmlUtil {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.read(inputSource, namespaceAware);
     }
+
     public static Document readWithLocations(Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.readWithLocations(inputSource, namespaceAware);
@@ -124,12 +126,14 @@ public class XmlUtil {
     }
 
     /**
-     * Reds the specified input into a document. Each Node contains a "location" attribute
-     * specifying the file, the line number and the column number of the node.
-     * 
+     * Reads the specified input into a document. Each Node contains a "location"
+     * attribute specifying the file, the line number and the column number of
+     * the node.
+     *
      * References:
      * <a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">
      * Stackoverflow</a>.
+     *
      * @param inputSource the input source
      * @param namespaceAware whether to be name space aware
      * @return the document
@@ -150,7 +154,7 @@ public class XmlUtil {
             transformer.transform(saxSource, domResult);
             Node root = domResult.getNode();
             return (Document) root;
-        } catch (TransformerException | SAXException|ParserConfigurationException ex) {
+        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }
@@ -158,7 +162,8 @@ public class XmlUtil {
     private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
 
     public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
-private final static String SEPARATOR="\0";
+    private final static String SEPARATOR = "\0";
+
     private static class LocationFilter extends XMLFilterImpl {
 
         LocationFilter(XMLReader xmlReader) {
@@ -179,12 +184,13 @@ private final static String SEPARATOR="\0";
             // Add extra attribute to elements to hold location
             Attributes2Impl attrs = new Attributes2Impl(attributes);
             attrs.addAttribute(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE, QUALIFIED_LOCATION_ATTRIBUTE, "CDATA",
-                                 locator.getLineNumber()+SEPARATOR+     locator.getColumnNumber()+SEPARATOR+locator.getSystemId()+SEPARATOR+locator.getPublicId());
+                    locator.getLineNumber() + SEPARATOR + locator.getColumnNumber() + SEPARATOR + locator.getSystemId() + SEPARATOR + locator.getPublicId());
             super.startElement(uri, localName, qName, attrs);
         }
     }
-    
+
     private static class MyLocator implements Locator {
+
         private final int line;
         private final int column;
         private final String systemId;
@@ -194,13 +200,12 @@ private final static String SEPARATOR="\0";
             this.line = line;
             this.column = column;
             this.systemId = systemId;
-            this.publicId=publicId;
+            this.publicId = publicId;
         }
-
 
         @Override
         public int getColumnNumber() {
-          return column;
+            return column;
         }
 
         @Override
@@ -217,15 +222,16 @@ private final static String SEPARATOR="\0";
         public String getSystemId() {
             return systemId;
         }
-        
+
     }
-    
+
     public static Locator getLocator(Node node) {
-        Node attrNode=node.getAttributes().getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
-        if (attrNode!=null) {
-            String[] parts=attrNode.getNodeValue().split(SEPARATOR);
-            if (parts.length==4) {
-                return new MyLocator(Integer.parseInt(parts[0]),Integer.parseInt(parts[1]),parts[2],parts[3]);
+        final NamedNodeMap attributes = node.getAttributes();
+        Node attrNode = attributes==null?null:attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
+        if (attrNode != null) {
+            String[] parts = attrNode.getNodeValue().split(SEPARATOR);
+            if (parts.length == 4) {
+                return new MyLocator(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), parts[2], parts[3]);
             }
         }
         return null;
@@ -238,7 +244,7 @@ private final static String SEPARATOR="\0";
     public static void validate(Document doc, URL schemaUrl) throws IOException {
         SchemaFactory factory = SchemaFactory
                 .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        try (InputStream schemaStream = schemaUrl.openStream()) {
+        try ( InputStream schemaStream = schemaUrl.openStream()) {
             Schema schema
                     = factory.newSchema(new StreamSource(schemaStream));
             Validator validator = schema.newValidator();
@@ -257,9 +263,9 @@ private final static String SEPARATOR="\0";
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(new File(xmlUri)));
         } catch (SAXParseException e) {
-            throw new IOException("Invalid XML file: "+e.getSystemId()+"\nError in line: "+e.getLineNumber()+", column: "+e.getColumnNumber()+".\n"+e.getMessage(),e);
+            throw new IOException("Invalid XML file: " + e.getSystemId() + "\nError in line: " + e.getLineNumber() + ", column: " + e.getColumnNumber() + ".\n" + e.getMessage(), e);
         } catch (SAXException e) {
-            
+
             throw new IOException("Invalid XML file: " + xmlUri, e);
         }
     }
