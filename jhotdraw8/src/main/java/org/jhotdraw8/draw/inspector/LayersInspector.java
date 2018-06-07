@@ -226,7 +226,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             listView.setFixedCellSize(24.0);
             listView.setCellFactory(addSelectionLabelDndSupport(listView, this::createCell, io));
-            ListViewUtil.addReorderingSupport(listView, io);
+            ListViewUtil.addReorderingSupport(listView);
         });
     }
 

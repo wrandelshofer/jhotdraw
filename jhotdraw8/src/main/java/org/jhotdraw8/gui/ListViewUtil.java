@@ -4,17 +4,21 @@
 package org.jhotdraw8.gui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * ListViewUtil.
@@ -211,7 +215,16 @@ public class ListViewUtil {
     }
 
     /**
-     * Adds reordering support to the list view
+     * Adds reordering support to the list view.
+     *
+     * @param <T> the data type of the list view
+     * @param listView the list view
+     */
+    public static <T> void addReorderingSupport(ListView<T> listView) {
+        addReorderingSupport(listView, listView.getCellFactory(), null);
+    }
+    /**
+     * Adds reordering support to the list view.
      *
      * @param <T> the data type of the list view
      * @param listView the list view
@@ -222,16 +235,45 @@ public class ListViewUtil {
     }
 
     /**
-     * Adds drag and drop support to the list view
-     *
-     * FIXME should also add support for cut, copy and paste keys
+     * Adds reordering support to the list view.
+     * <p>
+     * FIXME should also add support for cut, copy and paste keys.
+     * <p>
+     * FIXME only supports lists with single item selection (no multiple item selection yet!).
      *
      * @param <T> the data type of the list view
      * @param listView the list view
      * @param cellFactory the cell factory of the list view
-     * @param clipboardIO a reader/writer for the clipboard.
+     * @param clipboardIO a reader/writer for the clipboard. You can provide null if you don't want cut/copy/paste functionality.
      */
-    public static <T> void addReorderingSupport(ListView<T> listView, Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO) {
+    public static <T> void addReorderingSupport(ListView<T> listView, Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO) {
+        if (clipboardIO==null) {
+                clipboardIO = new ClipboardIO<T>() {
+                @Override
+                public void write(Clipboard clipboard, List<T> items) {
+        // We just write the index of the selected item in the clipboard.
+                    if (items.size() != 1) {
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }
+                   ClipboardContent content = new ClipboardContent();
+                     content.putString(""+listView.getSelectionModel().getSelectedIndex());
+                    clipboard.setContent(content);
+                }
+
+                @Override
+                public List<T> read(Clipboard clipboard) {
+                    // We are not actually interested in the clipboard content.
+                    return Collections.emptyList();
+                }
+
+                @Override
+                public boolean canRead(Clipboard clipboard) {
+                    return clipboard.hasString();
+                }
+            };
+        }
         addDragAndDropSupport(listView, cellFactory, clipboardIO, true);
     }
+    
+
 }
