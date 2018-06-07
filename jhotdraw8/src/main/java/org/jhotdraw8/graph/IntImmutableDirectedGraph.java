@@ -9,7 +9,6 @@ import java.util.Map;
 /**
  * IntImmutableDirectedGraph.
  *
- * @param <A> the arrow type
  * @author Werner Randelshofer
  * @version $Id$
  */

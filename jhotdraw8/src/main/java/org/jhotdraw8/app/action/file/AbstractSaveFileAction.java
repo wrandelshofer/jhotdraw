@@ -56,6 +56,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
      * @param view the view
      * @param id the id
      * @param saveAs whether to force a file dialog
+     * @param resources the resources are used for setting labels and icons for the action
      */
     public AbstractSaveFileAction(Application app, DocumentOrientedViewModel view, String id, boolean saveAs, Resources resources) {
         super(app, view, DocumentOrientedViewModel.class);

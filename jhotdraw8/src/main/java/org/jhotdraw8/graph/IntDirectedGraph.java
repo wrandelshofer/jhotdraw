@@ -9,7 +9,6 @@ import java.util.Deque;
 
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.
- * <p>
  * <ul>
  * <li>{@code G} is a tuple {@code (V, A) }.</li>
  * <li>{@code V} is the set of vertices with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>

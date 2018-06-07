@@ -54,6 +54,7 @@ public class IntArrayDeque {
 
     /**
      * Inserts the specified element at the tail of this queue.
+     * @param e the element
      */
     public void addLast(int e) {
         elements[tail] = e;

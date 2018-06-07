@@ -74,6 +74,7 @@ public class DirectedGraphs {
      * @param <A> the arrow type
      * @param w the writer
      * @param graph the graph to be dumped
+     * @throws java.io.IOException if writing fails
      */
     public static <V, A> void dumpAsAdjacencyList(Appendable w, DirectedGraph<V, A> graph) throws IOException {
         dumpAsAdjacencyList(w, graph, Object::toString);
@@ -87,6 +88,7 @@ public class DirectedGraphs {
      * @param w the writer
      * @param graph the graph to be dumped
      * @param toStringFunction a function which converts a vertex to a string
+     * @throws java.io.IOException if writing fails
      */
     public static <V, A> void dumpAsAdjacencyList(Appendable w, DirectedGraph<V, A> graph, Function<V, String> toStringFunction) throws IOException {
         for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
@@ -132,7 +134,7 @@ public class DirectedGraphs {
      * @param <A> the arrow type
      * @param w the writer
      * @param graph the graph
-     * @return a "dot" String.
+     * @throws java.io.IOException if writing fails
      */
     public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph) throws IOException {
         dumpAsDot(w, graph, v -> "\"" + v + '"', null, null);
@@ -148,6 +150,7 @@ public class DirectedGraphs {
      * @param graph the graph
      * @param vertexToString a function that converts a vertex to a String for
      * use as vertex name
+     * @throws java.io.IOException if writing fails
      */
     public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph,
             Function<V, String> vertexToString) throws IOException {
@@ -160,7 +163,6 @@ public class DirectedGraphs {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param w the writer
      * @param graph the graph
      * @param vertexToString a function that converts a vertex to a String for
      * use as vertex name
@@ -168,6 +170,7 @@ public class DirectedGraphs {
      * use as vertex attributes
      * @param arrowAttributes a function that converts an arrow to a String for
      * use as arrow attributes
+     * @return the "dot" string
      */
     public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,
             Function<V, String> vertexToString,
@@ -196,6 +199,7 @@ public class DirectedGraphs {
      * use as vertex attributes
      * @param arrowAttributes a function that converts an arrow to a String for
      * use as arrow attributes
+     * @throws java.io.IOException if writing fails
      */
     public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph,
             Function<V, String> vertexToString,

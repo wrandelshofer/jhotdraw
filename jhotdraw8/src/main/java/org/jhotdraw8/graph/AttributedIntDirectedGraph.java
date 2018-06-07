@@ -6,7 +6,6 @@ package org.jhotdraw8.graph;
 /**
  * This interface provides read-only indexed access to a directed graph {@code G = (V, A) } with
  * vertex and arrow attributes of the generic types {@code V} and {@code A}.
- * <p>
  * <ul>
  * <li>{@code G} is a tuple {@code (V, A) }.</li>
  * <li>{@code V} is the set of vertices with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>

@@ -8,7 +8,10 @@
     <!-- ignore system classpath to get consistent builds on different platforms -->
     <property name="build.sysclasspath" value="ignore"/>
 
-    <property name="jdk" value="${java.home}/.."/>
+    <!--
+    <property name="jdk" value="${java.home}"/>
+    -->
+    <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home"/>
     <property name="jdk.version" value="8"/>
 
         <exec executable="git" outputproperty="git.hash.date.author" failifexecutionfails="false" errorproperty="">
@@ -85,6 +88,7 @@
     <target name="init">
         <echo>app.version: ${version}</echo>
         <echo>java.home: ${java.home}</echo>
+        <echo>jdk       : ${jdk}</echo>
         <echo>jdk.version: ${jdk.version}</echo>
     </target>
 
@@ -118,7 +122,7 @@
      <src path="${src.main.java}"/>
             <classpath>
                 <fileset dir="${lib.compile}" />
-                <fileset file="${java.home}/../lib/tools.jar" />
+                <fileset file="${jdk}/../lib/tools.jar" />
             </classpath>
             <compilerarg value="-version"/>
     </jsr308.javac>
@@ -136,7 +140,7 @@
             <src path="${src.main.java}"/>
             <classpath>
                 <fileset dir="${lib.compile}" />
-                <fileset file="${java.home}/../lib/tools.jar" />
+                <fileset file="${jdk}/lib/tools.jar" />
             </classpath>
             <compilerarg value="-version"/>
         </javac>
@@ -696,7 +700,7 @@
             <src path="${src.doc.java}"/>
             <classpath>
                 <fileset dir="${lib.doc}" />
-                <fileset file="${java.home}/../lib/tools.jar" />
+                <fileset file="${jdk}/lib/tools.jar" />
             </classpath>
             <compilerarg value="-version"/>
         </javac>
@@ -719,6 +723,7 @@
                  maxmemory="256M"
                  overview="${src.main.java}/org/jhotdraw8/overview.html"
                  charset="UTF-8"
+                 executable="${jdk}/bin/javadoc"
         >
             <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
             <taglet name="org.jhotdraw8.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
@@ -730,7 +735,7 @@
             </sourcepath>
             <classpath>
                 <pathelement path="${lib.runtime}"/>
-                <fileset file="${java.home}/../lib/tools.jar" />
+                <fileset file="${jdk}/lib/tools.jar" />
                 <!--pathelement path="${build.javadoc}"/-->
             </classpath>
         </javadoc>
@@ -745,7 +750,7 @@
                 <pathelement location="lib/doc/asm-analysis-4.0.jar"/>
                 <pathelement location="lib/doc/asm-tree-4.0.jar"/>
                 <pathelement location="${build.doc.classes}"/>
-                <pathelement location="${java.home}/../lib/tools.jar"/>
+                <pathelement location="${jdk}/../lib/tools.jar"/>
             </classpath>           
             <arg value="-docdir"/>
             <arg value="${doc}/introduction"/>

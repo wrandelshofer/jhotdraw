@@ -149,6 +149,7 @@ public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDi
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V getVertex(int index) {
         return (V)vertexObjects[index];
     }

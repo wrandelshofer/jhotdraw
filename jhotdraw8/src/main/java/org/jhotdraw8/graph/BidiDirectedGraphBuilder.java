@@ -193,12 +193,10 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
     }
 
     /**
-     * Removes the specified arrow.
-     * <p>
-     * Note: to remove a null arrow, use method {@link #removeNext(V,int)}.
+     * Removes the specified "next" arrow.
      *
-     * @param v the vertex
-     * @param a the arrow, must not be null
+     * @param v a vertex
+     * @param a an arrow starting at the vertex, must not be null
      */
     public void removeArrow(V v, A a) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {

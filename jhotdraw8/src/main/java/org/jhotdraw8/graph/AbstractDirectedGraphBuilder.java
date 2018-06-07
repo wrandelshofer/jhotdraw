@@ -69,7 +69,6 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      *
      * @param a vertex a
      * @param b vertex b
-     * @param arrow the arrow from 'a' to 'b'.
      */
     protected void buildAddArrow(int a, int b) {
         if (arrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {

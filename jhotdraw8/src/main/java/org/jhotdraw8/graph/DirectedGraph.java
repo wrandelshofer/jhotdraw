@@ -17,7 +17,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * This interface provides read access to a directed graph {@code G = (V, A) }.
- * <p>
  * <ul>
  * <li>{@code G} is a tuple {@code (V, A) }.</li>
  * <li>{@code V} is the set of vertices with elements
