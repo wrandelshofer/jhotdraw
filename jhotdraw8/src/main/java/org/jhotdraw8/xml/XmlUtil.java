@@ -12,11 +12,12 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -31,11 +32,14 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.jhotdraw8.tree.ChildIterator;
+import org.jhotdraw8.tree.PreorderSpliterator;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -126,9 +130,9 @@ public class XmlUtil {
     }
 
     /**
-     * Reads the specified input into a document. Each Node contains a "location"
-     * attribute specifying the file, the line number and the column number of
-     * the node.
+     * Reads the specified input into a document. Each Node contains a
+     * "location" attribute specifying the file, the line number and the column
+     * number of the node.
      *
      * References:
      * <a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">
@@ -227,7 +231,7 @@ public class XmlUtil {
 
     public static Locator getLocator(Node node) {
         final NamedNodeMap attributes = node.getAttributes();
-        Node attrNode = attributes==null?null:attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
+        Node attrNode = attributes == null ? null : attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
         if (attrNode != null) {
             String[] parts = attrNode.getNodeValue().split(SEPARATOR);
             if (parts.length == 4) {
@@ -297,6 +301,20 @@ public class XmlUtil {
         } catch (TransformerException ex) {
             throw new IOException(ex);
         }
+    }
+
+    /**
+     * Returns a stream which iterates over the subtree starting at the
+     * specified node in preorder sequence.
+     *
+     * @param node a node
+     * @return a stream
+     */
+    public static Stream<Node> preorderStream(Node node) {
+        return StreamSupport.stream(new PreorderSpliterator<>(node, n -> {
+            final NodeList childNodes = n.getChildNodes();
+            return new ChildIterator<>(childNodes.getLength(), childNodes::item);
+        }), true);
     }
 
 }
