@@ -72,8 +72,8 @@ public class PreorderSpliterator<T> implements Iterator<T>, Spliterator<T> {
     }
 
     @Override
-    public void forEachRemaining(Consumer<? super T> arg0) {
-        Spliterator.super.forEachRemaining(arg0);
+    public void forEachRemaining(Consumer<? super T> action) {
+        Spliterator.super.forEachRemaining(action);
     }
 
     @Override

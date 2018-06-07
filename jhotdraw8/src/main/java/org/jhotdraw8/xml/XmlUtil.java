@@ -314,7 +314,7 @@ public class XmlUtil {
         return StreamSupport.stream(new PreorderSpliterator<>(node, n -> {
             final NodeList childNodes = n.getChildNodes();
             return new ChildIterator<>(childNodes.getLength(), childNodes::item);
-        }), true);
+        }), false);
     }
 
 }
