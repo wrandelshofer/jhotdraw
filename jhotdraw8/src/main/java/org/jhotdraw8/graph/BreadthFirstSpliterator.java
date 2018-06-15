@@ -1,4 +1,4 @@
-/* @(#)BreadthFirstVertexSpliterator.java
+/* @(#)BreadthFirstSpliterator.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -13,17 +13,18 @@ import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.ORDERED;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * BreadthFirstVertexSpliterator.
+ * BreadthFirstSpliterator.
  *
  * @author Werner Randelshofer
  * @param <V> the vertex type
  */
-public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterator<V> {
+public class BreadthFirstSpliterator<V> implements Iterator<V>, Spliterator<V> {
 
-    private final DirectedGraph<V, ?> graph;
+    private final Function<V, Iterable<V>>graph;
     private final Queue<V> queue;
     private final Predicate<V> visited;
 
@@ -33,7 +34,7 @@ public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterato
      * @param graph the graph
      * @param root the root vertex
      */
-    public BreadthFirstVertexSpliterator(DirectedGraph<V, ?> graph, V root) {
+    public BreadthFirstSpliterator(Function<V, Iterable<V>> graph, V root) {
         if (graph == null) {
             throw new IllegalArgumentException("graph==null");
         }
@@ -57,7 +58,7 @@ public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterato
      * if the specified vertex has been visited, and marks the specified vertex
      * as visited.
      */
-    public BreadthFirstVertexSpliterator(DirectedGraph<V, ?> graph, V root, Predicate<V> visited) {
+    public BreadthFirstSpliterator(Function<V, Iterable<V>> graph, V root, Predicate<V> visited) {
         if (graph == null) {
             throw new IllegalArgumentException("graph==null");
         }
@@ -77,7 +78,7 @@ public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterato
     /**
      * Creates a new split off from the current instance..
      */
-    private BreadthFirstVertexSpliterator(DirectedGraph<V, ?> graph, Queue<V> queue, Predicate<V> visited) {
+    private BreadthFirstSpliterator(Function<V, Iterable<V>> graph, Queue<V> queue, Predicate<V> visited) {
         this.graph = graph;
         this.queue = queue;
         this.visited = visited;
@@ -91,7 +92,7 @@ public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterato
     @Override
     public V next() {
         V current = queue.remove();
-        for (V next : graph.getNextVertices(current)) {
+        for (V next : graph.apply(current)) {
             if (visited.test(next)) {
                 queue.add(next);
             }
@@ -105,7 +106,7 @@ public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterato
         if (current == null) {
             return false;
         }
-        for (V next : graph.getNextVertices(current)) {
+        for (V next : graph.apply(current)) {
             if (visited.test(next)) {
                 queue.add(next);
             }
@@ -122,7 +123,7 @@ public class BreadthFirstVertexSpliterator<V> implements Iterator<V>, Spliterato
             for (int i = 0; i < mid; i++) {
                 splitQueue.add(queue.remove());
             }
-            return new BreadthFirstVertexSpliterator<>(graph, splitQueue, visited);
+            return new BreadthFirstSpliterator<>(graph, splitQueue, visited);
         }
         return null;
     }

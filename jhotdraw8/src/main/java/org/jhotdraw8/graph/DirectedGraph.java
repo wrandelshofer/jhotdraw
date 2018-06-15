@@ -360,7 +360,7 @@ public interface DirectedGraph<V, A> {
      * @return breadth first search
      */
     default Stream<V> breadthFirstSearch(V start, Predicate<V> visited) {
-        return StreamSupport.stream( new BreadthFirstVertexSpliterator<>(this, start, visited),false);
+        return StreamSupport.stream( new BreadthFirstSpliterator<>(this::getNextVertices, start, visited),false);
     }
     
     /**
@@ -371,6 +371,6 @@ public interface DirectedGraph<V, A> {
      * @return breadth first search
      */
     default Stream<V> breadthFirstSearch(V start) {
-        return StreamSupport.stream( new BreadthFirstVertexSpliterator<>(this, start),false);
+        return StreamSupport.stream( new BreadthFirstSpliterator<>(this::getNextVertices, start),false);
     }
 }

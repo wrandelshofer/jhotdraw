@@ -73,7 +73,7 @@ public class InverseBreadthFirstVertexSpliteratorTest {
     public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
-        BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
+        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();
@@ -95,7 +95,7 @@ public class InverseBreadthFirstVertexSpliteratorTest {
     public void testTryAdvance(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
-        BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
+        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
             if (result.get(result.size()-1).equals(goal))break;

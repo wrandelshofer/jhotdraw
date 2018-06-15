@@ -81,7 +81,7 @@ public class BreadthFirstVertexSpliteratorTest {
 
     public void testIterate(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
-        BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
+        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();
@@ -103,7 +103,7 @@ public class BreadthFirstVertexSpliteratorTest {
 
     public void testTryAdvance(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
-        BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
+        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
         List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
             if (result.get(result.size() - 1).equals(goal)) {
@@ -127,7 +127,7 @@ public class BreadthFirstVertexSpliteratorTest {
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<  Spliterator<Integer>> splits = new ArrayDeque<>();
-        splits.add(new BreadthFirstVertexSpliterator<>(graph, start));
+        splits.add(new BreadthFirstSpliterator<>(graph, start));
         List<Integer> result = new ArrayList<>();
         while (!splits.isEmpty()) {
             Spliterator<Integer> instance = splits.remove();
@@ -161,7 +161,7 @@ public class BreadthFirstVertexSpliteratorTest {
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<  Spliterator<Integer>> splits = new ArrayDeque<>();
-        final BreadthFirstVertexSpliterator<Integer> instance = new BreadthFirstVertexSpliterator<>(graph, start);
+        final BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
         List<Integer> result=new ArrayList<>();
         instance.tryAdvance(result::add);// we can never split at start vertex, because it is the only vertex in the que
         result.addAll(StreamSupport.stream(instance, true).collect(Collectors.toList()));
