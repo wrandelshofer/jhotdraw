@@ -1,4 +1,4 @@
-/* @(#)BidiDirectedGraphBuilder.java
+/* @(#)BidiGraphBuilder.java
  *  Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -11,14 +11,14 @@ import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Provides an API for building a {@code BidiDirectedGraph}.
+ * Provides an API for building a {@code BidiGraph}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the vertex type
  * @param <A> the arrow type
  */
-public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
+public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     private final List<ArrowData<V, A>> arrows;
     private final List<V> vertexList;
@@ -27,7 +27,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
     /**
      * Creates a new instance with default capacity for vertices and arrows.
      */
-    public BidiDirectedGraphBuilder() {
+    public BidiGraphBuilder() {
         this(10, 10);
     }
 
@@ -37,7 +37,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
      * @param vertexCapacity the vertex capacity
      * @param arrowCapacity the arrow capaicty
      */
-    public BidiDirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
+    public BidiGraphBuilder(int vertexCapacity, int arrowCapacity) {
         arrows = new ArrayList<>(arrowCapacity);
         vertices = new LinkedHashMap<>(vertexCapacity);
         vertexList = new ArrayList<>(vertexCapacity);
@@ -48,7 +48,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
      *
      * @param that another graph
      */
-    public BidiDirectedGraphBuilder(DirectedGraph<V, A> that) {
+    public BidiGraphBuilder(DirectedGraph<V, A> that) {
         this(that, Function.identity(), Function.identity());
     }
 
@@ -64,7 +64,7 @@ public class BidiDirectedGraphBuilder<V, A> implements BidiDirectedGraph<V, A> {
      * @param arrowMapper a mapping function from that arrow type to the this
      * arrow type
      */
-    public <VV, AA> BidiDirectedGraphBuilder(DirectedGraph<VV, AA> that, Function<VV, V> vertexMapper, Function<AA, A> arrowMapper) {
+    public <VV, AA> BidiGraphBuilder(DirectedGraph<VV, AA> that, Function<VV, V> vertexMapper, Function<AA, A> arrowMapper) {
         arrows = new ArrayList<>(that.getArrowCount());
         vertices = new LinkedHashMap<>(that.getVertexCount());
         vertexList = new ArrayList<>(that.getVertexCount());

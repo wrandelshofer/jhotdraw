@@ -1,4 +1,4 @@
-/* @(#)IndexedSetNGTest.java
+/* @(#)IndexedSetTest.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,9 +15,9 @@ import org.testng.annotations.Test;
  *
  * @author werni
  */
-public class IndexedSetNGTest {
+public class IndexedSetTest {
 
-    public IndexedSetNGTest() {
+    public IndexedSetTest() {
     }
 
     @Test(dataProvider = "addData")

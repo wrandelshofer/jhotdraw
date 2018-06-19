@@ -16,8 +16,8 @@ InverseBreadthFirstVertexSpliteratorTest *
  */
 public class InverseBreadthFirstVertexSpliteratorTest {
 
-    private BidiDirectedGraph<Integer, Double> createGraph() {
-        BidiDirectedGraphBuilder<Integer, Double> builder = new BidiDirectedGraphBuilder<>();
+    private BidiGraph<Integer, Double> createGraph() {
+        BidiGraphBuilder<Integer, Double> builder = new BidiGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
         builder.addVertex(3);

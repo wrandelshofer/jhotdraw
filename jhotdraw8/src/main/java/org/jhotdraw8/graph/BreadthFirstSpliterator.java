@@ -12,6 +12,7 @@ import java.util.Spliterator;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.ORDERED;
+import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,7 +23,7 @@ import java.util.function.Predicate;
  * @author Werner Randelshofer
  * @param <V> the vertex type
  */
-public class BreadthFirstSpliterator<V> implements Iterator<V>, Spliterator<V> {
+public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> implements Iterator<V> {
 
     private final Function<V, Iterable<V>>graph;
     private final Queue<V> queue;
@@ -35,6 +36,8 @@ public class BreadthFirstSpliterator<V> implements Iterator<V>, Spliterator<V> {
      * @param root the root vertex
      */
     public BreadthFirstSpliterator(Function<V, Iterable<V>> graph, V root) {
+                super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+
         if (graph == null) {
             throw new IllegalArgumentException("graph==null");
         }
@@ -59,6 +62,7 @@ public class BreadthFirstSpliterator<V> implements Iterator<V>, Spliterator<V> {
      * as visited.
      */
     public BreadthFirstSpliterator(Function<V, Iterable<V>> graph, V root, Predicate<V> visited) {
+        super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         if (graph == null) {
             throw new IllegalArgumentException("graph==null");
         }
@@ -73,15 +77,6 @@ public class BreadthFirstSpliterator<V> implements Iterator<V>, Spliterator<V> {
         this.visited = visited;
         queue.add(root);
         visited.test(root);
-    }
-
-    /**
-     * Creates a new split off from the current instance..
-     */
-    private BreadthFirstSpliterator(Function<V, Iterable<V>> graph, Queue<V> queue, Predicate<V> visited) {
-        this.graph = graph;
-        this.queue = queue;
-        this.visited = visited;
     }
 
     @Override
@@ -115,32 +110,10 @@ public class BreadthFirstSpliterator<V> implements Iterator<V>, Spliterator<V> {
         return true;
     }
 
-    @Override
-    public Spliterator<V> trySplit() {
-        int mid = queue.size() >>> 1;
-        if (mid > 0) {
-            Queue<V> splitQueue = new ArrayDeque<>(queue.size());
-            for (int i = 0; i < mid; i++) {
-                splitQueue.add(queue.remove());
-            }
-            return new BreadthFirstSpliterator<>(graph, splitQueue, visited);
-        }
-        return null;
-    }
-
-    @Override
-    public int characteristics() {
-        return ORDERED | DISTINCT | NONNULL;
-    }
-
-    @Override
-    public long estimateSize() {
-        return Long.MAX_VALUE;
-    }
 
     @Override
     public void forEachRemaining(Consumer<? super V> action) {
-        Spliterator.super.forEachRemaining(action);
+        super.forEachRemaining(action);
     }
 
 }

@@ -1,4 +1,4 @@
-/* @(#)BidiDirectedGraph.java
+/* @(#)BidiGraph.java
  *  Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -29,7 +29,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <V> the vertex type
  * @param <A> the arrow type
  */
-public interface BidiDirectedGraph<V, A> extends DirectedGraph<V, A> {
+public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
 
     /**
      * Returns an {@link Iterable} which performs a backwards breadth first

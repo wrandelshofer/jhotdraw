@@ -4,8 +4,16 @@
 package org.jhotdraw8.graph;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Deque;
+import java.util.Spliterator;
+import static java.util.Spliterator.NONNULL;
+import static java.util.Spliterator.ORDERED;
+import static java.util.Spliterator.SIZED;
+import static java.util.Spliterator.SUBSIZED;
+import java.util.Spliterators.AbstractIntSpliterator;
+import java.util.function.IntConsumer;
 
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.
@@ -40,19 +48,19 @@ public interface IntDirectedGraph {
     /**
      * Returns the k-th next vertex of v.
      *
-     * @param v a vertex index
+     * @param vids a vertex index
      * @param k the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
      * @return the index of the k-th next vertex of v.
      */
-    int getNext(int v, int k);
+    int getNext(int vids, int k);
 
     /**
      * Returns the number of next vertices of v.
      *
-     * @param v a vertex
+     * @param vids a vertex
      * @return the number of next vertices of v.
      */
-    int getNextCount(int v);
+    int getNextCount(int vids);
 
     /**
      * Returns the number of vertices {@code V}.
@@ -64,13 +72,13 @@ public interface IntDirectedGraph {
     /**
      * Returns the index of vertex b.
      *
-     * @param a a vertex
-     * @param b another vertex
+     * @param vidxa a vertex
+     * @param vidxb another vertex
      * @return index of vertex b. Returns -1 if b is not next index of a.
      */
-    default int findIndexOfNext(int a, int b) {
-        for (int i = 0, n = getNextCount(a); i < n; i++) {
-            if (b == getNext(a, i)) {
+    default int findIndexOfNext(int vidxa, int vidxb) {
+        for (int i = 0, n = getNextCount(vidxa); i < n; i++) {
+            if (vidxb == getNext(vidxa, i)) {
                 return i;
             }
         }
@@ -80,29 +88,29 @@ public interface IntDirectedGraph {
     /**
      * Returns true if b is next of a.
      *
-     * @param a a vertex
-     * @param b another vertex
+     * @param vidxa a vertex
+     * @param vidxb another vertex
      * @return true if b is next of a.
      */
-    default boolean isNext(int a, int b) {
-        return findIndexOfNext(a, b) != -1;
+    default boolean isNext(int vidxa, int vidxb) {
+        return findIndexOfNext(vidxa, vidxb) != -1;
     }
 
     /**
      * Returns true if b is reachable from a.
      *
-     * @param a a vertex
-     * @param b another vertex
+     * @param vidxa a vertex
+     * @param vidxb another vertex
      * @return true if b is next of a.
      */
-    default boolean isReachable(int a, int b) {
+    default boolean isReachable(int vidxa, int vidxb) {
         Deque<Integer> stack = new ArrayDeque<>(16);
         BitSet vset = new BitSet(getVertexCount());
         while (!stack.isEmpty()) {
             int current = stack.pop();
             if (!vset.get(current)) {
                 vset.set(current);
-                if (current == b) {
+                if (current == vidxb) {
                     return true;
                 }
                 for (int i = 0, n = this.getNextCount(current); i < n; i++) {
@@ -113,4 +121,38 @@ public interface IntDirectedGraph {
         }
         return false;
     }
+    
+        /**
+     * Returns the direct successor vertices of the specified vertex.
+     *
+     * @param vidx a vertex index
+     * @return a collection view on the direct successor vertices of vertex
+     */
+    default Spliterator.OfInt getNextVertices(int vidx) {
+        class MySpliterator extends AbstractIntSpliterator{
+            int index;
+            int limit;
+           public MySpliterator (int vidx, int lo, int hi) {
+               super(hi,ORDERED|NONNULL|SIZED|SUBSIZED);
+               limit=hi;
+               index=lo;
+           }
+            @Override
+            public boolean tryAdvance(IntConsumer action) {
+                if (index<limit) {
+                    action.accept(getNext(vidx,index++));
+                    return true;
+                }
+                return false;
+            }
+        public MySpliterator trySplit() {
+            int hi = limit, lo = index, mid = (lo + hi) >>> 1;
+            return (lo >= mid) ? null : // divide range in half unless too small
+                new MySpliterator(vidx, lo, index = mid);
+        }
+            
+        }
+        return new MySpliterator(vidx,0,getNextCount(vidx));
+    }
+
 }

@@ -12,12 +12,12 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * IntBreadthFirstVertexIteratorTest.
+ * IntBreadthFirstSpliteratorTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntBreadthFirstVertexIteratorTest {
+public class IntBreadthFirstSpliteratorTest {
 
     private IntDirectedGraph createGraph() {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
@@ -81,7 +81,7 @@ public class IntBreadthFirstVertexIteratorTest {
     public void testIterate( IntDirectedGraph graph ,Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
       
-        IntBreadthFirstVertexIterator instance = new IntBreadthFirstVertexIterator(graph, start);
+        IntBreadthFirstSpliterator instance = new IntBreadthFirstSpliterator(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();

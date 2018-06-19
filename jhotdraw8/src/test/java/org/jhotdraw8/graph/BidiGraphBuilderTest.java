@@ -1,4 +1,4 @@
-/* @(#)BidiDirectedGraphBuilderTest.java
+/* @(#)BidiGraphBuilderTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -7,18 +7,18 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * BidiDirectedGraphBuilderTest.
+ * BidiGraphBuilderTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BidiDirectedGraphBuilderTest {
+public class BidiGraphBuilderTest {
 
-    public BidiDirectedGraphBuilderTest() {
+    public BidiGraphBuilderTest() {
     }
 
     /**
-     * Test of buildAddArrow method, of class BidiDirectedGraphBuilder.
+     * Test of buildAddArrow method, of class BidiGraphBuilder.
      */
     @Test
     public void testBuildAddArrow() {
@@ -26,7 +26,7 @@ public class BidiDirectedGraphBuilderTest {
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
-        BidiDirectedGraphBuilder<Integer, Double> instance = new BidiDirectedGraphBuilder<>();
+        BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
@@ -50,7 +50,7 @@ public class BidiDirectedGraphBuilderTest {
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
-        BidiDirectedGraphBuilder<Integer, Double> instance = new BidiDirectedGraphBuilder<>();
+        BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
@@ -66,7 +66,7 @@ public class BidiDirectedGraphBuilderTest {
     }
 
     /**
-     * Test of getNext method, of class BidiDirectedGraphBuilder.
+     * Test of getNext method, of class BidiGraphBuilder.
      */
     @Test
     public void testGetNext() {
@@ -74,7 +74,7 @@ public class BidiDirectedGraphBuilderTest {
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
-        BidiDirectedGraphBuilder<Integer, Double> instance = new BidiDirectedGraphBuilder<>();
+        BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
@@ -90,7 +90,7 @@ public class BidiDirectedGraphBuilderTest {
     }
 
     /**
-     * Test of getPrev method, of class BidiDirectedGraphBuilder.
+     * Test of getPrev method, of class BidiGraphBuilder.
      */
     @Test
     public void testGetPrev() {
@@ -98,7 +98,7 @@ public class BidiDirectedGraphBuilderTest {
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
-        BidiDirectedGraphBuilder<Integer, Double> instance = new BidiDirectedGraphBuilder<>();
+        BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
@@ -114,7 +114,7 @@ public class BidiDirectedGraphBuilderTest {
     }
 
     /**
-     * Test of getNextCount method, of class BidiDirectedGraphBuilder.
+     * Test of getNextCount method, of class BidiGraphBuilder.
      */
     @Test
     public void testGetNextCount() {
@@ -122,7 +122,7 @@ public class BidiDirectedGraphBuilderTest {
         Integer a = 0;
         Integer b = 1;
         Integer c = 2;
-        BidiDirectedGraphBuilder<Integer, Double> instance = new BidiDirectedGraphBuilder<>();
+        BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
@@ -152,7 +152,7 @@ public class BidiDirectedGraphBuilderTest {
     }
 
     /**
-     * Test of getNextCount method, of class BidiDirectedGraphBuilder.
+     * Test of getNextCount method, of class BidiGraphBuilder.
      */
     @Test
     public void testGetPrevCount() {
@@ -160,7 +160,7 @@ public class BidiDirectedGraphBuilderTest {
         Integer a = 0;
         Integer b = 1;
         Integer c = 2;
-        BidiDirectedGraphBuilder<Integer, Double> instance = new BidiDirectedGraphBuilder<>();
+        BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);
@@ -190,7 +190,7 @@ public class BidiDirectedGraphBuilderTest {
     }
 
     /**
-     * Test of getVertexCount method, of class BidiDirectedGraphBuilder.
+     * Test of getVertexCount method, of class BidiGraphBuilder.
      */
     @Test
     public void testGetVertexCount() {
@@ -198,7 +198,7 @@ public class BidiDirectedGraphBuilderTest {
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
-        BidiDirectedGraphBuilder<Integer, Double> instance = new BidiDirectedGraphBuilder<>();
+        BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(0);
         instance.addVertex(1);
         instance.addVertex(2);

@@ -23,7 +23,7 @@ import java.util.PrimitiveIterator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface IntBidiDirectedGraph extends IntDirectedGraph {
+public interface IntBidiGraph extends IntDirectedGraph {
 
     /**
      * Returns the i-th direct predecessor vertex of v.

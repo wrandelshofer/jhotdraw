@@ -215,7 +215,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
 
     @Override
     public A getNextArrow(V vertex, int index) {
-        int arrowId = getArrowIndex(getVertexIndex(vertex), index);
+        int arrowId = getNextArrowIndex(getVertexIndex(vertex), index);
         return getArrow(arrowId);
     }
 
@@ -250,7 +250,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     @Override
     @SuppressWarnings("unchecked")
     public A getArrow(int vi, int i) {
-        int arrowId = getArrowIndex(vi, i);
+        int arrowId = getNextArrowIndex(vi, i);
         return arrows.get(arrowId);
     }
 

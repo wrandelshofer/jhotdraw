@@ -1,4 +1,4 @@
-/* @(#)BreadthFirstVertexSpliteratorTest.java
+/* @(#)BreadthFirstSpliteratorTest.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -16,12 +16,12 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * BreadthFirstVertexSpliteratorTest.
+ * BreadthFirstSpliteratorTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BreadthFirstVertexSpliteratorTest {
+public class BreadthFirstSpliteratorTest {
 
     private DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
@@ -81,7 +81,7 @@ public class BreadthFirstVertexSpliteratorTest {
 
     public void testIterate(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
-        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
+        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         while (instance.hasNext()) {
             final Integer next = instance.next();
@@ -103,7 +103,7 @@ public class BreadthFirstVertexSpliteratorTest {
 
     public void testTryAdvance(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
-        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
+        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
             if (result.get(result.size() - 1).equals(goal)) {
@@ -127,7 +127,7 @@ public class BreadthFirstVertexSpliteratorTest {
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<  Spliterator<Integer>> splits = new ArrayDeque<>();
-        splits.add(new BreadthFirstSpliterator<>(graph, start));
+        splits.add(new BreadthFirstSpliterator<>(graph::getNextVertices, start));
         List<Integer> result = new ArrayList<>();
         while (!splits.isEmpty()) {
             Spliterator<Integer> instance = splits.remove();
@@ -161,7 +161,7 @@ public class BreadthFirstVertexSpliteratorTest {
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<  Spliterator<Integer>> splits = new ArrayDeque<>();
-        final BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
+        final BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result=new ArrayList<>();
         instance.tryAdvance(result::add);// we can never split at start vertex, because it is the only vertex in the que
         result.addAll(StreamSupport.stream(instance, true).collect(Collectors.toList()));

@@ -1,5 +1,5 @@
-/* @(#)IntImmutableDirectedGraphTest.java
- * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
+/* @(#)IntImmutableBidiGraphTest.java
+ * Copyright (c) 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
 
@@ -7,29 +7,29 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * IntImmutableDirectedGraphTest.
+ * IntImmutableBidiGraphTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntImmutableDirectedGraphTest {
+public class IntImmutableBidiGraphTest {
 
-    public IntImmutableDirectedGraphTest() {
+    public IntImmutableBidiGraphTest() {
     }
 
     /**
-     * Test of buildAddArrow method, of class IntImmutableDirectedGraph.
+     * Test of buildAddArrow method, of class IntImmutableBidiGraph.
      */
     @Test
     public void testBuildAddArrow() {
         System.out.println("buildAddArrow");
         int a = 0;
         int b = 1;
-        int c = 2;
-        IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
+        int c = 1;
+        IntBidiGraphBuilder builder = new IntBidiGraphBuilder();
         builder.setVertexCount(3);
 
-        IntImmutableDirectedGraph instance = builder.build();
+        IntImmutableBidiGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 
@@ -42,18 +42,18 @@ public class IntImmutableDirectedGraphTest {
     }
 
     /**
-     * Test of getArrowCount method, of class IntImmutableDirectedGraph.
+     * Test of getArrowCount method, of class IntImmutableBidiGraph.
      */
     @Test
     public void testGetArrowCount() {
         System.out.println("getArrowCount");
         int a = 0;
         int b = 1;
-        int c = 2;
-        IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
+        int c = 1;
+        IntBidiGraphBuilder builder = new IntBidiGraphBuilder();
         builder.setVertexCount(3);
 
-        IntImmutableDirectedGraph instance = builder.build();
+        IntImmutableBidiGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 
@@ -66,18 +66,18 @@ public class IntImmutableDirectedGraphTest {
     }
 
     /**
-     * Test of getNext method, of class IntImmutableDirectedGraph.
+     * Test of getNext method, of class IntImmutableBidiGraph.
      */
     @Test
     public void testGetNext() {
         System.out.println("getNext");
         int a = 0;
         int b = 1;
-        int c = 2;
-        IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
+        int c = 1;
+        IntBidiGraphBuilder builder = new IntBidiGraphBuilder();
         builder.setVertexCount(3);
 
-        IntImmutableDirectedGraph instance = builder.build();
+        IntImmutableBidiGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 
@@ -90,7 +90,7 @@ public class IntImmutableDirectedGraphTest {
     }
 
     /**
-     * Test of getNextCount method, of class IntImmutableDirectedGraph.
+     * Test of getNextCount method, of class IntImmutableBidiGraph.
      */
     @Test
     public void testGetNextCount() {
@@ -98,10 +98,10 @@ public class IntImmutableDirectedGraphTest {
         int a = 0;
         int b = 1;
         int c = 2;
-        IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
+        IntBidiGraphBuilder builder = new IntBidiGraphBuilder();
         builder.setVertexCount(3);
 
-        IntImmutableDirectedGraph instance = builder.build();
+        IntImmutableBidiGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
         assertEquals("edge count of " + a, 0, instance.getNextCount(a));
@@ -129,7 +129,7 @@ public class IntImmutableDirectedGraphTest {
     }
 
     /**
-     * Test of getVertexCount method, of class IntImmutableDirectedGraph.
+     * Test of getVertexCount method, of class IntImmutableBidiGraph.
      */
     @Test
     public void testGetVertexCount() {
@@ -137,10 +137,10 @@ public class IntImmutableDirectedGraphTest {
         int a = 0;
         int b = 1;
         int c = 1;
-        IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
+        IntBidiGraphBuilder builder = new IntBidiGraphBuilder();
         builder.setVertexCount(3);
 
-        IntImmutableDirectedGraph instance = builder.build();
+        IntImmutableBidiGraph instance = builder.build();
         assertEquals("vertex count", 3, instance.getVertexCount());
         assertEquals("edge count", 0, instance.getArrowCount());
 
