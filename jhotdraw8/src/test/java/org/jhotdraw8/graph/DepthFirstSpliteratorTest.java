@@ -1,30 +1,49 @@
-/* @(#)InverseBreadthFirstVertexSpliteratorTest.java
- * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package org.jhotdraw8.graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterators;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
-InverseBreadthFirstVertexSpliteratorTest *
+ * DepthFirstSpliteratorTest.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class InverseBreadthFirstVertexSpliteratorTest {
+public class DepthFirstSpliteratorTest {
 
-    private BidiGraph<Integer, Double> createGraph() {
-        BidiGraphBuilder<Integer, Double> builder = new BidiGraphBuilder<>();
+    /**
+     * <pre>
+     * 1 ←→ 2
+     * 1 → 3
+     * 1 ←→ 6
+     * 2 → 3
+     * 2 → 4
+     * 3 → 4
+     * 3 → 6
+     * 4 → 5
+     * 5 ←→ 6
+     * </pre>
+     *
+     * @return
+     */
+    private DirectedGraph<Integer, Double> createGraph() {
+        DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
         builder.addVertex(3);
         builder.addVertex(4);
         builder.addVertex(5);
         builder.addVertex(6);
-
         builder.addBidiArrow(1, 2, 7.0);
         builder.addArrow(1, 3, 9.0);
         builder.addBidiArrow(1, 6, 14.0);
@@ -39,9 +58,9 @@ public class InverseBreadthFirstVertexSpliteratorTest {
 
     public Object[][] anyPathProvider() {
         return new Object[][]{
-            {1, 5, Arrays.asList(1, 2, 3, 6, 4, 5)},
-            {1, 4, Arrays.asList(1, 2, 3, 6, 4)},
-            {2, 6, Arrays.asList(2, 1, 3, 4, 6)}
+            {1, 5, Arrays.asList(1, 6, 5)},
+            {1, 4, Arrays.asList(1, 6, 5, 3, 4)},
+            {2, 6, Arrays.asList(2, 4, 5, 6)}
         };
     }
 
@@ -62,46 +81,32 @@ public class InverseBreadthFirstVertexSpliteratorTest {
 
         assertEquals(expected, actual);
     }
-
+    
     @Test
     public void testIterateWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
             testIterate((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
         }
     }
-
+    
+    /**
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
+     */
     public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
-        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
+        DepthFirstSpliterator<Integer> instance = new DepthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
-        while (instance.hasNext()) {
-            final Integer next = instance.next();
+        Iterator<Integer> iter=Spliterators.iterator(instance);
+        while (iter.hasNext()) {
+            final Integer next = iter.next();
             result.add(next);
             if (next == goal) {
                 break;
             }
         }
         System.out.println("actual:" + result);
-        assertEquals(expResult, result);
-    }
-    @Test
-    public void testTryAdvanceWithAnyPathProvider() throws Exception {
-        for (Object[] args : anyPathProvider()) {
-            testTryAdvance((Integer) args[0], (Integer) args[1], (List<Integer>) args[2]);
-        }
-    }
-
-    public void testTryAdvance(Integer start, Integer goal, List<Integer> expResult) throws Exception {
-        System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
-        DirectedGraph<Integer, Double> graph = createGraph();
-        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph, start);
-        List<Integer> result = new ArrayList<>();
-        while (instance.tryAdvance(result::add)) {
-            if (result.get(result.size()-1).equals(goal))break;
-        }
-        System.out.println("actual:" + result);
-        assertEquals(expResult, result);
+        assertEquals(result, expResult);
     }
 
 }

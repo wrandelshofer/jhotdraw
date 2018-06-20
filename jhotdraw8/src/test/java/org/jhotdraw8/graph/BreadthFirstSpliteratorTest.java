@@ -7,9 +7,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import static org.junit.Assert.assertEquals;
@@ -83,8 +85,9 @@ public class BreadthFirstSpliteratorTest {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
-        while (instance.hasNext()) {
-            final Integer next = instance.next();
+        Iterator<Integer> iter=Spliterators.iterator(instance);
+        while (iter.hasNext()) {
+            final Integer next = iter.next();
             result.add(next);
             if (next.equals(goal)) {
                 break;

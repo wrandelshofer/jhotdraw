@@ -8,6 +8,8 @@ package org.jhotdraw8.graph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.PrimitiveIterator;
+import java.util.Spliterators;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -83,8 +85,9 @@ public class IntBreadthFirstSpliteratorTest {
       
         IntBreadthFirstSpliterator instance = new IntBreadthFirstSpliterator(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
-        while (instance.hasNext()) {
-            final Integer next = instance.next();
+        PrimitiveIterator.OfInt iter=Spliterators.iterator(instance);
+        while (iter.hasNext()) {
+            final int next = iter.nextInt();
             result.add(next);
             if (next == goal) {
                 break;

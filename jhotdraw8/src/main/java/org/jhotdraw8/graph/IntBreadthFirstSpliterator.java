@@ -22,7 +22,7 @@ import org.jhotdraw8.collection.IntArrayDeque;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class IntBreadthFirstSpliterator extends AbstractIntSpliterator implements Iterator<Integer> {
+public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
 
     private final IntFunction< Spliterator.OfInt> graph;
     private final IntArrayDeque queue;
@@ -49,28 +49,6 @@ public class IntBreadthFirstSpliterator extends AbstractIntSpliterator implement
         };
         queue.addLast(root);
         visited.test(root);
-    }
-
-    @Override
-    public void forEachRemaining(Consumer<? super Integer> action) {
-        super.forEachRemaining(action);
-    }
-
-    @Override
-    public boolean hasNext() {
-        return !queue.isEmpty();
-    }
-
-    @Override
-    public Integer next() {
-        int current = queue.removeFirst();
-        final OfInt it = graph.apply(current);
-        while (it.tryAdvance((int next) -> {
-            if (visited.test(next)) {
-                queue.addLast(next);
-            }
-        }));
-        return current;
     }
 
     @Override
