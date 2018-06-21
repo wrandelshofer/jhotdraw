@@ -13,18 +13,6 @@
     <splitter split-orientation="horizontal" split-proportion="0.6512126">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="PolynomialTest.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/geom/PolynomialTest.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="74">
-                  <caret line="41" selection-start-line="41" selection-end-line="44" selection-end-column="62" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="Polynomial.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/geom/Polynomial.java">
               <provider selected="true" editor-type-id="text-editor">
@@ -118,11 +106,23 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="PatternConverterTest.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="PatternConverterTest.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/PatternConverterTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-327">
-                  <caret line="48" column="28" selection-start-line="48" selection-start-column="17" selection-end-line="48" selection-end-column="28" />
+                <state relative-caret-position="231">
+                  <caret line="83" column="10" selection-start-line="83" selection-start-column="10" selection-end-line="83" selection-end-column="10" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="CssPaintConverterTest.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssPaintConverterTest.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="271">
+                  <caret line="67" column="31" selection-start-line="67" selection-start-column="31" selection-end-line="67" selection-end-column="31" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -158,11 +158,11 @@
     <findStrings>
       <find>(assert\w+)\((&quot;[^&quot;]+&quot;+[^,]*),(.*)\);</find>
       <find>|</find>
-      <find>^ +\{</find>
       <find>},</find>
       <find>}</find>
       <find>},\n</find>
       <find>{</find>
+      <find>^ +\{</find>
     </findStrings>
     <replaceStrings>
       <replace>$1($3,$2);</replace>
@@ -174,10 +174,10 @@
       <replace>dynamicTest(&quot;1&quot;, () -&gt; toString(</replace>
       <replace>dynamicTest(&quot;1&quot;, () -&gt; testToFromString(</replace>
       <replace>dynamicTest(&quot;1&quot;, () -&gt; testRegexFromStringReplace(</replace>
-      <replace>dynamicTest(&quot;1&quot;, () -&gt; testToString(</replace>
       <replace>))</replace>
       <replace>)),\n</replace>
       <replace>dynamicTest(&quot;1&quot;, () -&gt; testFromString(</replace>
+      <replace>dynamicTest(&quot;1&quot;, () -&gt; testToString(</replace>
     </replaceStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -199,7 +199,6 @@
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/graph/DirectedGraphPathBuilderTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssRectangle2DConverterNGTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssPaintConverterNGTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssPaintConverterTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/graph/DirectedGraphBuilderTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssColorConverterNGTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/styleable/StyleableMapNGTest.java" />
@@ -234,12 +233,13 @@
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssDoubleListConverterTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssColorConverterTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/PatternConverterTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssPaintConverterTest.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="190" />
-    <option name="y" value="104" />
+    <option name="x" value="393" />
+    <option name="y" value="143" />
     <option name="width" value="1794" />
     <option name="height" value="1137" />
   </component>
@@ -619,21 +619,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="CssRegexConverterTest - 2018.06.21 at 17h 38m 42s.xml">
-      <configuration name="CssRegexConverterTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_jhotdraw8 - 2018.06.21 at 17h 38m 58s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="CssSizeConverterTest - 2018.06.21 at 17h 41m 36s.xml">
-      <configuration name="CssSizeConverterTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_jhotdraw8 - 2018.06.21 at 17h 41m 45s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="CssDoubleListConverterTest - 2018.06.21 at 17h 43m 32s.xml">
-      <configuration name="CssDoubleListConverterTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="All_in_jhotdraw8 - 2018.06.21 at 17h 43m 45s.xml">
       <configuration name="All in jhotdraw8" configurationId="JUnit" />
     </history-entry>
@@ -649,9 +634,24 @@
     <history-entry file="All_in_jhotdraw8 - 2018.06.21 at 17h 48m 29s.xml">
       <configuration name="All in jhotdraw8" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="All_in_jhotdraw8 - 2018.06.21 at 17h 52m 47s.xml">
+      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_jhotdraw8 - 2018.06.21 at 17h 54m 12s.xml">
+      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="CssPaintConverterTest_testFromStringFactory - 2018.06.21 at 17h 55m 27s.xml">
+      <configuration name="CssPaintConverterTest.testFromStringFactory" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="CssPaintConverterTest_testFromStringFactory - 2018.06.21 at 17h 55m 51s.xml">
+      <configuration name="CssPaintConverterTest.testFromStringFactory" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_jhotdraw8 - 2018.06.21 at 17h 56m 14s.xml">
+      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="253" y="145" width="1794" height="1134" extended-state="0" />
+    <frame x="393" y="143" width="1794" height="1137" extended-state="0" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -659,7 +659,7 @@
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.46480232" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4644231" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Designer" order="2" />
@@ -818,16 +818,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="51" selection-start-line="51" selection-end-line="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssPaintConverterTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="472">
-          <caret line="46" column="10" selection-start-line="46" selection-start-column="10" selection-end-line="46" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1148,8 +1138,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/PatternConverterTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-327">
-          <caret line="48" column="28" selection-start-line="48" selection-start-column="17" selection-end-line="48" selection-end-column="28" />
+        <state relative-caret-position="231">
+          <caret line="83" column="10" selection-start-line="83" selection-start-column="10" selection-end-line="83" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssPaintConverterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="67" column="31" selection-start-line="67" selection-start-column="31" selection-end-line="67" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

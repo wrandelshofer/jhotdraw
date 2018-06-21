@@ -23,7 +23,7 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    protected final int[] nextArrows;
+    protected final int[] nextArrowOffsets;
     /**
      * Holds the arrow heads.
      */
@@ -32,7 +32,7 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    protected final int[] prevArrows;
+    protected final int[] prevArrowOffsets;
 
     /**
      * Creates a new instance from the specified graph.
@@ -47,17 +47,17 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
         final int vertexCapacity = graph.getVertexCount();
 
         this.nextArrowHeads = new int[arrowCapacity ];
-        this.nextArrows = new int[vertexCapacity ];
+        this.nextArrowOffsets = new int[vertexCapacity ];
         this.prevArrowHeads = new int[arrowCapacity ];
-        this.prevArrows = new int[vertexCapacity];
+        this.prevArrowOffsets = new int[vertexCapacity];
 
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            nextArrows[vIndex] = nextArrowCount;
+            nextArrowOffsets[vIndex] = nextArrowCount;
             for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
                 nextArrowHeads[nextArrowCount] = graph.getNext(vIndex, i);
                 nextArrowCount++;
             }
-            prevArrows[vIndex] = prevArrowCount;
+            prevArrowOffsets[vIndex] = prevArrowCount;
             for (int i = 0, n = graph.getPrevCount(vIndex); i < n; i++) {
                 prevArrowHeads[prevArrowCount] = graph.getPrev(vIndex, i);
                 prevArrowCount++;
@@ -78,9 +78,9 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
         final int vertexCapacity = graph.getVertexCount();
 
         this.nextArrowHeads = new int[arrowCapacity ];
-        this.nextArrows = new int[vertexCapacity ];
+        this.nextArrowOffsets = new int[vertexCapacity ];
         this.prevArrowHeads = new int[arrowCapacity ];
-        this.prevArrows = new int[vertexCapacity ];
+        this.prevArrowOffsets = new int[vertexCapacity ];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
@@ -93,12 +93,12 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             V vObject = graph.getVertex(vIndex);
 
-            nextArrows[vIndex] = nextArrowCount;
+            nextArrowOffsets[vIndex] = nextArrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
                 nextArrowHeads[nextArrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
                 nextArrowCount++;
             }
-            prevArrows[vIndex] = prevArrowCount;
+            prevArrowOffsets[vIndex] = prevArrowCount;
             for (int i = 0, n = graph.getPrevCount(vObject); i < n; i++) {
                 prevArrowHeads[prevArrowCount] = vertexToIndexMap.get(graph.getPrev(vObject, i));
                 prevArrowCount++;
@@ -113,11 +113,11 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
 
     @Override
     public int getNext(int vi, int i) {
-        return getNextPrev(vi,i,nextArrows,nextArrowHeads);
+        return getNextPrev(vi,i,nextArrowOffsets,nextArrowHeads);
     }
     @Override
     public int getPrev(int vi, int i) {
-        return getNextPrev(vi,i,prevArrows,prevArrowHeads);
+        return getNextPrev(vi,i,prevArrowOffsets,prevArrowHeads);
     }
        private int getNextPrev(int vi, int i, int[] arrows, int[] arrowHeads) {
         if (i < 0 || i >= getNextCount(vi)) {
@@ -128,11 +128,11 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
 
     @Override
     public int getNextCount(int vi) {
-        return getNextPrevCount(vi,nextArrows,nextArrowHeads);
+        return getNextPrevCount(vi,nextArrowOffsets,nextArrowHeads);
     }
     @Override
     public int getPrevCount(int vi) {
-        return getNextPrevCount(vi,prevArrows,prevArrowHeads);
+        return getNextPrevCount(vi,prevArrowOffsets,prevArrowHeads);
     }
         private int getNextPrevCount(int vi, int[] arrows, int[] arrowHeads) {
         final int vertexCount = getVertexCount();
@@ -146,6 +146,6 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
 
     @Override
     public int getVertexCount() {
-        return nextArrows.length;
+        return nextArrowOffsets.length;
     }
 }
