@@ -125,7 +125,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      */
     protected void buildSetVertexCount(int newValue) {
         if (newValue < vertexCount) {
-            throw new IllegalArgumentException("can only add vertices:" + newValue);
+            throw new IllegalArgumentException("can only add nextArrows:" + newValue);
         }
         vertexCount = newValue;
         if (nextLastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
@@ -215,9 +215,6 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
     }
 
     protected int getArrowIndex(int vi, int i, int[] lastArrow, int[] arrowHeads) {
-        if (i < 0 || i >= getNextCount(vi)) {
-            throw new IllegalArgumentException("0 <= i(" + i + ") <= " + getNextCount(vi));
-        }
         int arrowId = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
         int nextCount = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
         for (int j = nextCount - 1; j > i; j--) {

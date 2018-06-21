@@ -19,7 +19,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * This interface provides read access to a directed graph {@code G = (V, A) }.
  * <ul>
  * <li>{@code G} is a tuple {@code (V, A) }.</li>
- * <li>{@code V} is the set of vertices with elements
+ * <li>{@code V} is the set of nextArrows with elements
  * {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
  * <li>{@code A} is the set of ordered pairs with elements
  * {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1}
@@ -109,18 +109,18 @@ public interface DirectedGraph<V, A> {
     V getNext(V vertex, int index);
 
     /**
-     * Returns the number of direct successor vertices of v.
+     * Returns the number of direct successor nextArrows of v.
      *
      * @param vertex a vertex
-     * @return the number of next vertices of v.
+     * @return the number of next nextArrows of v.
      */
     int getNextCount(V vertex);
 
     /**
-     * Returns the direct successor vertices of the specified vertex.
+     * Returns the direct successor nextArrows of the specified vertex.
      *
      * @param vertex a vertex
-     * @return a collection view on the direct successor vertices of vertex
+     * @return a collection view on the direct successor nextArrows of vertex
      */
     default Collection<V> getNextVertices(V vertex) {
         class NextVertexIterator implements Iterator<V> {
@@ -209,16 +209,16 @@ public interface DirectedGraph<V, A> {
     V getVertex(int indexOfVertex);
 
     /**
-     * Returns the number of vertices {@code V}.
+     * Returns the number of nextArrows {@code V}.
      *
      * @return vertex count
      */
     int getVertexCount();
 
     /**
-     * Returns all vertices.
+     * Returns all nextArrows.
      *
-     * @return a collection view on all vertices
+     * @return a collection view on all nextArrows
      */
     default Collection<V> getVertices() {
         class VertexIterator implements Iterator<V> {
@@ -297,7 +297,7 @@ public interface DirectedGraph<V, A> {
     }
 
     /**
-     * Returns all arrows between two vertices.
+     * Returns all arrows between two nextArrows.
      *
      * @param v1 vertex 1
      * @param v2 vertex 2

@@ -3,8 +3,10 @@
  */
 package org.jhotdraw8.graph;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * DirectedGraphBuilderTest.
@@ -31,14 +33,14 @@ public class DirectedGraphBuilderTest {
         instance.addVertex(1);
         instance.addVertex(2);
 
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("next count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"next count");
 
         instance.addArrow(a, b, 1.0);
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("next count", 1, instance.getArrowCount());
-        assertEquals("next count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"next count");
+        assertEquals( 1, instance.getNextCount(a),"next count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
     /**
@@ -55,14 +57,14 @@ public class DirectedGraphBuilderTest {
         instance.addVertex(1);
         instance.addVertex(2);
 
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("next count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"next count");
 
         instance.addArrow(a, b, 1.0);
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("next count", 1, instance.getArrowCount());
-        assertEquals("next count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"next count");
+        assertEquals( 1, instance.getNextCount(a),"next count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
     /**
@@ -79,14 +81,14 @@ public class DirectedGraphBuilderTest {
         instance.addVertex(1);
         instance.addVertex(2);
 
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("arrow count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"arrow count");
 
         instance.addArrow(a, b, 1.0);
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("arrow count", 1, instance.getArrowCount());
-        assertEquals("next count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"arrow count");
+        assertEquals( 1, instance.getNextCount(a),"next count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
     /**
@@ -103,28 +105,28 @@ public class DirectedGraphBuilderTest {
         instance.addVertex(1);
         instance.addVertex(2);
 
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("arrow count", 0, instance.getArrowCount());
-        assertEquals("next count of " + a, 0, instance.getNextCount(a));
-        assertEquals("next count of " + b, 0, instance.getNextCount(b));
-        assertEquals("next count of " + c, 0, instance.getNextCount(c));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"arrow count");
+        assertEquals( 0, instance.getNextCount(a),"next count of " + a);
+        assertEquals( 0, instance.getNextCount(b),"next count of " + b);
+        assertEquals( 0, instance.getNextCount(c),"next count of " + c);
 
         instance.addArrow(a, b, 1.0);
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("arrow count", 1, instance.getArrowCount());
-        assertEquals("next count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
-        assertEquals("next count of " + b, 0, instance.getNextCount(b));
-        assertEquals("next count of " + c, 0, instance.getNextCount(c));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"arrow count");
+        assertEquals( 1, instance.getNextCount(a),"next count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
+        assertEquals( 0, instance.getNextCount(b),"next count of " + b);
+        assertEquals( 0, instance.getNextCount(c),"next count of " + c);
 
         instance.addArrow(b, c, 2.0);
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("next count", 2, instance.getArrowCount());
-        assertEquals("next count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
-        assertEquals("next count of " + b, 1, instance.getNextCount(b));
-        assertEquals("next edge of " + b, c, instance.getNext(b, 0));
-        assertEquals("next count of " + c, 0, instance.getNextCount(c));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 2, instance.getArrowCount(),"next count");
+        assertEquals( 1, instance.getNextCount(a),"next count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
+        assertEquals( 1, instance.getNextCount(b),"next count of " + b);
+        assertEquals( c, instance.getNext(b, 0),"next edge of " + b);
+        assertEquals( 0, instance.getNextCount(c),"next count of " + c);
     }
 
     /**
@@ -141,14 +143,14 @@ public class DirectedGraphBuilderTest {
         instance.addVertex(1);
         instance.addVertex(2);
 
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("arrow count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"arrow count");
 
         instance.addArrow(a, b, 1.0);
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("next count", 1, instance.getArrowCount());
-        assertEquals("next count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"next count");
+        assertEquals( 1, instance.getNextCount(a),"next count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
 }

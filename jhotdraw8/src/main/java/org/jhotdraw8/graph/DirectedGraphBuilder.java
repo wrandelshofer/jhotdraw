@@ -67,13 +67,13 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     }
 
     /**
-     * Creates a builder which contains the specified vertices, and only arrows
-     * from the directed graph, for the specified vertices.
+     * Creates a builder which contains the specified nextArrows, and only arrows
+     * from the directed graph, for the specified nextArrows.
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param graph a graph
-     * @param vertexPredicate a predicate for the vertices
+     * @param vertexPredicate a predicate for the nextArrows
      * @return a subset of the directed graph
      */
     public static <V, A> DirectedGraphBuilder<V, A> subsetOfDirectedGraph(DirectedGraph<V, A> graph, Predicate<V> vertexPredicate) {
@@ -106,14 +106,14 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      */
     private final List<A> arrows;
 
-    /** Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
+    /** Creates a new instance with an initial capacity for 16 nextArrows and 16 arrows.
      */
     public DirectedGraphBuilder() {
         this(16, 16);
     }
 
     /** Creates a new instance with the specified initial capacities.
-     * @param vertexCapacity the initial capacity for vertices
+     * @param vertexCapacity the initial capacity for nextArrows
      * @param arrowCapacity the initial capacity for arrows
      */
     public DirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {

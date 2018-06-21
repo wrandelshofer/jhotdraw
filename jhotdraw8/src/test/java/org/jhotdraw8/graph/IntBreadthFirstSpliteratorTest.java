@@ -5,13 +5,15 @@
  */
 package org.jhotdraw8.graph;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.Spliterators;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * IntBreadthFirstSpliteratorTest.

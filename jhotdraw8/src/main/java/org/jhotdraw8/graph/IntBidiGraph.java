@@ -35,17 +35,17 @@ public interface IntBidiGraph extends IntDirectedGraph {
     int getPrev(int vertex, int i);
 
     /**
-     * Returns the number of direct predecessor vertices of v.
+     * Returns the number of direct predecessor nextArrows of v.
      *
      * @param vertex a vertex
-     * @return the number of next vertices of v.
+     * @return the number of next nextArrows of v.
      */
     int getPrevCount(int vertex);
     /**
-     * Returns the direct predecessor vertices of the specified vertex.
+     * Returns the direct predecessor nextArrows of the specified vertex.
      *
      * @param vertex a vertex
-     * @return an iterable for the direct predecessor vertices of vertex
+     * @return an iterable for the direct predecessor nextArrows of vertex
      */
     default PrimitiveIterator.OfInt getPrevVertexIndicesIterator(int vertex) {
         class PrevVertexIterator implements PrimitiveIterator.OfInt {
@@ -74,10 +74,10 @@ public interface IntBidiGraph extends IntDirectedGraph {
     }
 
     /**
-     * Returns the direct predecessor vertices of the specified vertex.
+     * Returns the direct predecessor nextArrows of the specified vertex.
      *
      * @param vertex a vertex
-     * @return a collection view on the direct predecessor vertices of vertex
+     * @return a collection view on the direct predecessor nextArrows of vertex
      */
     default Collection<Integer> getPrevVertices(int vertex) {
 

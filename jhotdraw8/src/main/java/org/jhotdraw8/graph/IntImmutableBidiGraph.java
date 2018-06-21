@@ -14,17 +14,25 @@ import java.util.Map;
  */
 public class IntImmutableBidiGraph implements IntBidiGraph {
 
-    /**
-     * Holds the arrow heads pointing to the previous vertex. Odd indices point
-     * to next vertex, even indices to previous vertex.
-     */
-    protected final int[] arrowHeads;
 
     /**
-     * Holds offsets into the arrowHeads table for each vertex. Odd indices
-     * point to next vertex, even indices to previous vertex.
+     * Holds the arrow heads.
      */
-    protected final int[] vertices;
+    protected final int[] nextArrowHeads;
+
+    /**
+     * Holds offsets into the nextArrowHeads table for each vertex.
+     */
+    protected final int[] nextArrows;
+    /**
+     * Holds the arrow heads.
+     */
+    protected final int[] prevArrowHeads;
+
+    /**
+     * Holds offsets into the nextArrowHeads table for each vertex.
+     */
+    protected final int[] prevArrows;
 
     /**
      * Creates a new instance from the specified graph.
@@ -32,24 +40,27 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
      * @param graph a graph
      */
     public IntImmutableBidiGraph(IntBidiGraph graph) {
-        int arrowCount = 0;
+        int nextArrowCount = 0;
+        int prevArrowCount = 0;
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
-        this.arrowHeads = new int[arrowCapacity * 2];
-        this.vertices = new int[vertexCapacity * 2];
+        this.nextArrowHeads = new int[arrowCapacity ];
+        this.nextArrows = new int[vertexCapacity ];
+        this.prevArrowHeads = new int[arrowCapacity ];
+        this.prevArrows = new int[vertexCapacity];
 
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            vertices[vIndex * 2] = arrowCount;
+            nextArrows[vIndex] = nextArrowCount;
             for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
-                arrowHeads[arrowCount * 2] = graph.getNext(vIndex, i);
-                arrowCount++;
+                nextArrowHeads[nextArrowCount] = graph.getNext(vIndex, i);
+                nextArrowCount++;
             }
-            vertices[vIndex * 2 + 1] = arrowCount;
+            prevArrows[vIndex] = prevArrowCount;
             for (int i = 0, n = graph.getPrevCount(vIndex); i < n; i++) {
-                arrowHeads[arrowCount * 2 + 1] = graph.getPrev(vIndex, i);
-                arrowCount++;
+                prevArrowHeads[prevArrowCount] = graph.getPrev(vIndex, i);
+                prevArrowCount++;
             }
         }
     }
@@ -66,8 +77,10 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
 
-        this.arrowHeads = new int[arrowCapacity * 2];
-        this.vertices = new int[vertexCapacity * 2];
+        this.nextArrowHeads = new int[arrowCapacity ];
+        this.nextArrows = new int[vertexCapacity ];
+        this.prevArrowHeads = new int[arrowCapacity ];
+        this.prevArrows = new int[vertexCapacity ];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
@@ -75,68 +88,64 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
             vertexToIndexMap.put(vObject, vIndex);
         }
 
-        int arrowCount = 0;
+        int prevArrowCount = 0;
+        int nextArrowCount = 0;
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             V vObject = graph.getVertex(vIndex);
 
-            vertices[vIndex * 2] = arrowCount;
+            nextArrows[vIndex] = nextArrowCount;
             for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                arrowHeads[arrowCount * 2] = vertexToIndexMap.get(graph.getNext(vObject, i));
-                arrowCount++;
+                nextArrowHeads[nextArrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+                nextArrowCount++;
             }
-            vertices[vIndex * 2 + 1] = arrowCount;
-            for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                arrowHeads[arrowCount * 2 + 1] = vertexToIndexMap.get(graph.getPrev(vObject, i));
-                arrowCount++;
+            prevArrows[vIndex] = prevArrowCount;
+            for (int i = 0, n = graph.getPrevCount(vObject); i < n; i++) {
+                prevArrowHeads[prevArrowCount] = vertexToIndexMap.get(graph.getPrev(vObject, i));
+                prevArrowCount++;
             }
         }
     }
 
     @Override
     public int getArrowCount() {
-        return arrowHeads.length / 2;
+        return nextArrowHeads.length;
     }
 
     @Override
     public int getNext(int vi, int i) {
+        return getNextPrev(vi,i,nextArrows,nextArrowHeads);
+    }
+    @Override
+    public int getPrev(int vi, int i) {
+        return getNextPrev(vi,i,prevArrows,prevArrowHeads);
+    }
+       private int getNextPrev(int vi, int i, int[] arrows, int[] arrowHeads) {
         if (i < 0 || i >= getNextCount(vi)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNext(vi, i));
         }
-        return arrowHeads[vertices[vi * 2] + i];
+        return arrowHeads[arrows[vi] + i];
     }
 
     @Override
     public int getNextCount(int vi) {
-        final int vertexCount = getVertexCount();
-        if (vi < 0 || vi >= vertexCount) {
-            throw new IllegalArgumentException("vi(" + vi + ") < 0 || vi >= " + vertexCount);
-        }
-        final int offset = vertices[vi * 2];
-        final int nextOffset = (vi == vertexCount - 1) ? arrowHeads.length : vertices[vi + 1];
-        return nextOffset - offset;
+        return getNextPrevCount(vi,nextArrows,nextArrowHeads);
     }
-
-    @Override
-    public int getPrev(int vi, int i) {
-        if (i < 0 || i >= getNextCount(vi)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNext(vi, i));
-        }
-        return arrowHeads[vertices[vi * 2 + 1] + i];
-    }
-
     @Override
     public int getPrevCount(int vi) {
+        return getNextPrevCount(vi,prevArrows,prevArrowHeads);
+    }
+        private int getNextPrevCount(int vi, int[] arrows, int[] arrowHeads) {
         final int vertexCount = getVertexCount();
         if (vi < 0 || vi >= vertexCount) {
             throw new IllegalArgumentException("vi(" + vi + ") < 0 || vi >= " + vertexCount);
         }
-        final int offset = vertices[vi * 2 * 1];
-        final int nextOffset = (vi == vertexCount - 1) ? arrowHeads.length : vertices[(vi + 1) * 2 + 1];
+        final int offset = arrows[vi];
+        final int nextOffset = (vi == vertexCount - 1) ? arrowHeads.length : arrows[vi + 1];
         return nextOffset - offset;
     }
 
     @Override
     public int getVertexCount() {
-        return vertices.length / 2;
+        return nextArrows.length;
     }
 }

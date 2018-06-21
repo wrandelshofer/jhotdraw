@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="ext">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ext/lib/annotations-12.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-ARL-rev9524-STI-ARL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-LIB-APPL-rev9506-STI-LIB-APPL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-LIB-TESTTOOL-rev9506-STI-LIB-TESTTOOL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-LIB-UTIL-rev9506-STI-LIB-UTIL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-LIB-ZIP-rev9506-STI-LIB-ZIP.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/com.intellij-forms_rt-from-IDEA-14.1.5-forms_rt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/com.prosysopc-OPC-UA-Java-SDK-Client-Server-Binary-1.4.6-8021-OPC-UA-Java-SDK-Client-Server-Binary.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/commons-codec-commons-codec-1.2-commons-codec.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/log4j-log4j-1.2.16-log4j.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/org.apache.ant-ant-1.9.6-ant.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/org.apache.ant-ant-launcher-1.9.6-ant-launcher.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/org.apache.log4j-log4j-1.2.16-log4j.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/org.bouncycastle-bcprov-jdk16-1.46-bcprov-jdk16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/org.jetbrains-annotations-13.0-annotations.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/org.opcfoundation-Opc.Ua.Stack-1.01.330.12-Opc.Ua.Stack.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/poi-poi-2.5.1-final-20040804-poi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -8,7 +8,7 @@ package org.jhotdraw8.graph;
  * vertex and arrow attributes of the generic types {@code V} and {@code A}.
  * <ul>
  * <li>{@code G} is a tuple {@code (V, A) }.</li>
- * <li>{@code V} is the set of vertices with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
+ * <li>{@code V} is the set of nextArrows with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
  * <li>{@code A} is the set of ordered pairs with elements {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1} }.</li>
  * </ul>
  * <p>

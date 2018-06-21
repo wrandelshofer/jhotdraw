@@ -10,8 +10,10 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import static org.testng.Assert.*;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  *

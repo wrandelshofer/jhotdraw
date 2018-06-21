@@ -3,8 +3,10 @@
  */
 package org.jhotdraw8.graph;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * IntImmutableBidiGraphTest.
@@ -30,15 +32,15 @@ public class IntImmutableBidiGraphTest {
         builder.setVertexCount(3);
 
         IntImmutableBidiGraph instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"edge count");
 
         builder.addArrow(a, b);
         instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"edge count");
+        assertEquals( 1, instance.getNextCount(a),"edge count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
     /**
@@ -54,15 +56,15 @@ public class IntImmutableBidiGraphTest {
         builder.setVertexCount(3);
 
         IntImmutableBidiGraph instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"edge count");
 
         builder.addArrow(a, b);
         instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"edge count");
+        assertEquals( 1, instance.getNextCount(a),"edge count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
     /**
@@ -78,15 +80,15 @@ public class IntImmutableBidiGraphTest {
         builder.setVertexCount(3);
 
         IntImmutableBidiGraph instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"edge count");
 
         builder.addArrow(a, b);
         instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"edge count");
+        assertEquals( 1, instance.getNextCount(a),"edge count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
     /**
@@ -102,30 +104,30 @@ public class IntImmutableBidiGraphTest {
         builder.setVertexCount(3);
 
         IntImmutableBidiGraph instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
-        assertEquals("edge count of " + a, 0, instance.getNextCount(a));
-        assertEquals("edge count of " + b, 0, instance.getNextCount(b));
-        assertEquals("edge count of " + c, 0, instance.getNextCount(c));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"edge count");
+        assertEquals( 0, instance.getNextCount(a),"edge count of " + a);
+        assertEquals( 0, instance.getNextCount(b),"edge count of " + b);
+        assertEquals( 0, instance.getNextCount(c),"edge count of " + c);
 
         builder.addArrow(a, b);
         instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
-        assertEquals("edge count of " + b, 0, instance.getNextCount(b));
-        assertEquals("edge count of " + c, 0, instance.getNextCount(c));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"edge count");
+        assertEquals( 1, instance.getNextCount(a),"edge count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
+        assertEquals( 0, instance.getNextCount(b),"edge count of " + b);
+        assertEquals( 0, instance.getNextCount(c),"edge count of " + c);
 
         builder.addArrow(b, c);
         instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 2, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
-        assertEquals("edge count of " + b, 1, instance.getNextCount(b));
-        assertEquals("next edge of " + b, c, instance.getNext(b, 0));
-        assertEquals("edge count of " + c, 0, instance.getNextCount(c));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 2, instance.getArrowCount(),"edge count");
+        assertEquals( 1, instance.getNextCount(a),"edge count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
+        assertEquals( 1, instance.getNextCount(b),"edge count of " + b);
+        assertEquals( c, instance.getNext(b, 0),"next edge of " + b);
+        assertEquals( 0, instance.getNextCount(c),"edge count of " + c);
     }
 
     /**
@@ -141,15 +143,15 @@ public class IntImmutableBidiGraphTest {
         builder.setVertexCount(3);
 
         IntImmutableBidiGraph instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 0, instance.getArrowCount());
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 0, instance.getArrowCount(),"edge count");
 
         builder.addArrow(a, b);
         instance = builder.build();
-        assertEquals("vertex count", 3, instance.getVertexCount());
-        assertEquals("edge count", 1, instance.getArrowCount());
-        assertEquals("edge count of " + a, 1, instance.getNextCount(a));
-        assertEquals("next edge of " + a, b, instance.getNext(a, 0));
+        assertEquals( 3, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"edge count");
+        assertEquals( 1, instance.getNextCount(a),"edge count of " + a);
+        assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
 
 }

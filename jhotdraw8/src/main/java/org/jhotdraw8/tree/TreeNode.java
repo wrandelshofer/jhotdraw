@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jhotdraw8.util.SpliteratorIterable;
 
 /**
  * Represents a node of a tree structure.
@@ -220,9 +221,9 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @return the iterable
      */
     default public Iterable<T> preorderIterable() {
-        @SuppressWarnings("unchecked")
-        Iterable<T> i = () -> new PreorderSpliterator<>((T) this, n -> n.getChildren().iterator());
-        return i;
+        return new SpliteratorIterable<>(
+                () -> new PreorderSpliterator<>((T) this, n -> n.getChildren())
+        );
     }
 
     /**

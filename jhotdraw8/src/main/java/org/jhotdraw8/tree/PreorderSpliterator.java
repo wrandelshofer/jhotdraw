@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.Spliterator;
+import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -17,67 +18,33 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class PreorderSpliterator<T> implements Iterator<T>, Spliterator<T> {
+public class PreorderSpliterator<T> extends AbstractSpliterator<T> {
 
     private final Deque<Iterator<T>> stack = new ArrayDeque<>();
-    private final Function<T, Iterator<T>> getChildrenFunction;
+    private final Function<T, Iterable<T>> getChildrenFunction;
 
-    public PreorderSpliterator(T root, Function<T, Iterator<T>> getChildrenFunction) {
+    public PreorderSpliterator(T root, Function<T, Iterable<T>> getChildrenFunction) {
+        super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         stack.push(Collections.singleton(root).iterator());
         this.getChildrenFunction = getChildrenFunction;
     }
 
     @Override
-    public int characteristics() {
-        return ORDERED|NONNULL;
-    }
-
-    @Override
-    public long estimateSize() {
-        return Long.MAX_VALUE;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return (!stack.isEmpty() && stack.peek().hasNext());
-    }
-
-    @Override
-    public T next() {
+    public boolean tryAdvance(Consumer<? super T> consumer) {
         Iterator<T> iter = stack.peek();
-        T node = iter.next();
-        Iterator<T> children = getChildrenFunction.apply(node);
+        if (iter == null) {
+            return false;
+        }
 
+        T node = iter.next();
         if (!iter.hasNext()) {
             stack.pop();
         }
+        Iterator<T> children = getChildrenFunction.apply(node).iterator();
         if (children.hasNext()) {
             stack.push(children);
         }
-        return node;
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean tryAdvance(Consumer<? super T> consumer) {
-        if (hasNext()){
-            consumer.accept(next());
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void forEachRemaining(Consumer<? super T> action) {
-        Spliterator.super.forEachRemaining(action);
-    }
-
-    @Override
-    public Spliterator<T> trySplit() {
-        return null;
+        consumer.accept(node);
+        return true;
     }
 }

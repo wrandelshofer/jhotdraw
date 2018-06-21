@@ -509,7 +509,7 @@ public class DirectedGraphPathBuilder<V, A> {
         // We use a size that is smaller than 256 bytes (assuming 12 bytes for object header).
         PriorityQueue< NodeWithCost<V, A>> frontier = new PriorityQueue<>(61);
         Map<V, NodeWithCost<V, A>> frontierMap = new HashMap<>(61);
-        // Size of explored is the expected number of vertices that we need to explore.
+        // Size of explored is the expected number of nextArrows that we need to explore.
         Set<V> explored = new HashSet<>(61);
         return doFindShortestPath(start, frontier, frontierMap, goal, explored, graph, costf);
     }

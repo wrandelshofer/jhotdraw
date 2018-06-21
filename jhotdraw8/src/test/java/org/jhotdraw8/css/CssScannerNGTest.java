@@ -4,10 +4,13 @@
  */
 package org.jhotdraw8.css;
 
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.io.StringReader;
-import static org.testng.Assert.*;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * CssScannerNGTest.
@@ -23,7 +26,8 @@ public class CssScannerNGTest {
     /**
      * Test of nextChar method, of class CssScanner.
      */
-    @Test(dataProvider="scannerData")
+    @ParameterizedTest
+    @MethodSource( "scannerData")
     public void testScanner(String inputData, String expectedValue) throws Exception {
         CssScanner s = new CssScanner(new StringReader(inputData));
         //
@@ -46,8 +50,9 @@ public class CssScannerNGTest {
     }
 
 
-     @DataProvider
-    public Object[][] scannerData() {
+
+
+    public static Object[][] scannerData() {
         return new Object[][]{
             {"abcd", "abcd"},
             //

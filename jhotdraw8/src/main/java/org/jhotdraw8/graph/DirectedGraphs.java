@@ -242,7 +242,7 @@ public class DirectedGraphs {
     }
 
     /**
-     * Given a directed graph, returns all disjoint sets of vertices.
+     * Given a directed graph, returns all disjoint sets of nextArrows.
      * <p>
      * Uses Kruskal's algorithm.
      *
@@ -279,7 +279,7 @@ public class DirectedGraphs {
     }
 
     /**
-     * Given an int directed graph, returns all disjoint sets of vertices.
+     * Given an int directed graph, returns all disjoint sets of nextArrows.
      * <p>
      * Uses Kruskal's algorithm.
      *
@@ -330,7 +330,7 @@ public class DirectedGraphs {
     }
 
     /**
-     * Given a set of vertices and a list of arrows ordered by cost, returns the
+     * Given a set of nextArrows and a list of arrows ordered by cost, returns the
      * minimum spanning tree.
      * <p>
      * Uses Kruskal's algorithm.
@@ -369,14 +369,14 @@ public class DirectedGraphs {
     }
 
     /**
-     * Given a set of vertices and a list of arrows ordered by cost, returns a
+     * Given a set of nextArrows and a list of arrows ordered by cost, returns a
      * builder with the minimum spanning tree. This is an undirected graph with
      * an arrow in each direction.
      * <p>
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param vertices the list of vertices
+     * @param vertices the list of nextArrows
      * @param orderedArrows list of arrows sorted by cost in ascending order
      * (lowest cost first, highest cost last)
      * @param includedArrows optional, all included arrows are added to this
@@ -407,7 +407,7 @@ public class DirectedGraphs {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param m the graph
-     * @return the sorted list of vertices
+     * @return the sorted list of nextArrows
      */
     @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
@@ -430,7 +430,7 @@ public class DirectedGraphs {
      *
      * @param <A> the arrow type
      * @param model the graph
-     * @return the sorted list of vertices
+     * @return the sorted list of nextArrows
      */
     public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?, A> model) {
         final int n = model.getVertexCount();
@@ -445,7 +445,7 @@ public class DirectedGraphs {
             }
         }
 
-        // Step 2: put all vertices with degree zero into queue
+        // Step 2: put all nextArrows with degree zero into queue
         final int[] queue = new int[n]; // todo queue
         int first = 0, last = 0; // first and last indices in queue
         for (int i = 0; i < n; i++) {
@@ -454,7 +454,7 @@ public class DirectedGraphs {
             }
         }
 
-        // Step 3: Repeat until all vertices have been processed or a loop has been detected
+        // Step 3: Repeat until all nextArrows have been processed or a loop has been detected
         final int[] result = new int[n];// result array
         int done = 0;
         Random random = null;

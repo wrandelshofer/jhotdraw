@@ -593,14 +593,14 @@ public class BezierFit {
         /* Compute Q(u)	*/
         Q_u = bezierII(3, Q, u);
 
-        /* Generate control vertices for Q'	*/
+        /* Generate control nextArrows for Q'	*/
         for (i = 0; i <= 2; i++) {
             Q1[i] = new Point2D(
                     (Q[i + 1].getX() - Q[i].getX()) * 3.0,
                     (Q[i + 1].getY() - Q[i].getY()) * 3.0);
         }
 
-        /* Generate control vertices for Q'' */
+        /* Generate control nextArrows for Q'' */
         for (i = 0; i <= 1; i++) {
             Q2[i] = new Point2D(
                     (Q1[i + 1].getX() - Q1[i].getX()) * 2.0,

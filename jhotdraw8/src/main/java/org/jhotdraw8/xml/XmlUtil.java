@@ -313,7 +313,7 @@ public class XmlUtil {
     public static Stream<Node> preorderStream(Node node) {
         return StreamSupport.stream(new PreorderSpliterator<>(node, n -> {
             final NodeList childNodes = n.getChildNodes();
-            return new ChildIterator<>(childNodes.getLength(), childNodes::item);
+            return () -> new ChildIterator<>(childNodes.getLength(), childNodes::item);
         }), false);
     }
 

@@ -16,8 +16,9 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
-import static org.testng.Assert.*;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *

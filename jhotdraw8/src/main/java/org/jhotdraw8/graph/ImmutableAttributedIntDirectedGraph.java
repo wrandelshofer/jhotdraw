@@ -17,18 +17,18 @@ import java.util.Map;
 public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDirectedGraph<V,A> {
 
     /**
-     * Holds the indices of the vertices at the arrow heads.
+     * Holds the indices of the nextArrows at the arrow heads.
      */
     protected final int[] arrowHeads;
 
     /**
-     * Holds offsets into the arrowHeads table for each vertex.
+     * Holds offsets into the nextArrowHeads table for each vertex.
      */
     protected final int[] vertices;
     
     /** Holds the arrows. */
     protected final Object[] arrows;
-    /** Holds the vertices. */
+    /** Holds the nextArrows. */
     protected final Object[] vertexObjects;
 
     /**

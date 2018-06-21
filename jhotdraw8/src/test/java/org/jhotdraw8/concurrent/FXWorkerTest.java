@@ -3,9 +3,10 @@
  */
 package org.jhotdraw8.concurrent;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import org.junit.Test;
 
 /**
  *
