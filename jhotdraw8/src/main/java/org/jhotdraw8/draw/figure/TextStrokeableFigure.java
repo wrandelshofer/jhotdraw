@@ -10,6 +10,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -78,6 +80,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
+    @Nullable
     public static PaintableStyleableFigureKey TEXT_STROKE_COLOR = new PaintableStyleableFigureKey("text-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
@@ -125,7 +128,7 @@ public interface TextStrokeableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyTextStrokeableFigureProperties( Shape shape) {
+    default void applyTextStrokeableFigureProperties(@NonNull Shape shape) {
         Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE_COLOR));
         double strokeWidth = getStyled(TEXT_STROKE_WIDTH);
         if (!Objects.equals(shape.getStroke(), paint)) {

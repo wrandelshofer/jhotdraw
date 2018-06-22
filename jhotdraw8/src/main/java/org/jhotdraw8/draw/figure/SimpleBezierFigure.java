@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -60,7 +61,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
@@ -81,16 +82,19 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         }
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
         return new Path();
     }
 
+    @NonNull
     @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new PathConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         // XXX should be cached
@@ -116,14 +120,17 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         return new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
+    @NonNull
     public Point2D getPoint(int index, int coord) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     public Point2D getPointOnPath(float f, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -144,7 +151,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Path pathNode = (Path) node;
 
         applyHideableFigureProperties(node);

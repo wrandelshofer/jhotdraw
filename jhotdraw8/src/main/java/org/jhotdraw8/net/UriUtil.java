@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.net;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -47,7 +50,7 @@ public class UriUtil {
      * @param value the value
      * @return the updated query
      */
-    public static URI addQuery(URI uri, String key, String value) {
+    public static URI addQuery(@NonNull URI uri, @Nullable String key, @Nullable String value) {
         if (key == null || value == null) {
             return uri;
         }
@@ -69,7 +72,7 @@ public class UriUtil {
      * @param query the query
      * @return the updated query
      */
-    public static URI addQuery(URI uri, String query) {
+    public static URI addQuery(@NonNull URI uri, @Nullable String query) {
         if (query == null) {
             return uri;
         }
@@ -116,6 +119,7 @@ public class UriUtil {
      * @param uri an URI
      * @return a map
      */
+    @NonNull
     public static Map<String, String> parseQuery(URI uri) {
         String query = uri.getQuery();
         Map<String, String> map = new LinkedHashMap<>();

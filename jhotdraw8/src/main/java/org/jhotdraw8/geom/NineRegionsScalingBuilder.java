@@ -9,6 +9,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * This builder slices the input path into 9 regions, and scales them by the
@@ -41,6 +43,7 @@ import javafx.scene.transform.Translate;
 public class NineRegionsScalingBuilder extends AbstractPathBuilder {
 
     private final double minX, minY, maxX, maxY;
+    @Nullable
     private final Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
     private final PathBuilder target;
 
@@ -52,7 +55,7 @@ public class NineRegionsScalingBuilder extends AbstractPathBuilder {
      * @param srcInsets The nine regions in the bounds of the source image.
      * @param destBounds The bounds of the destination image.
      */
-    public NineRegionsScalingBuilder(PathBuilder dest, Bounds srcBounds, Insets srcInsets, Bounds destBounds) {
+    public NineRegionsScalingBuilder(PathBuilder dest, @NonNull Bounds srcBounds, Insets srcInsets, Bounds destBounds) {
         this.target = dest;
 
         double it = srcInsets.getTop(), ib = srcInsets.getBottom(), ir = srcInsets.getRight(), il = srcInsets.getLeft();

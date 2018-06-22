@@ -5,6 +5,7 @@ package org.jhotdraw8.gui.dock;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -20,6 +21,7 @@ import javafx.scene.control.TabPane;
  */
 public class TabPaneDock extends Control implements Dock {
 
+    @NonNull
     private TabPane tabPane = new TabPane();
 
     public TabPaneDock() {
@@ -57,6 +59,7 @@ public class TabPaneDock extends Control implements Dock {
         return tabPane.prefWidth(height);
     }
 
+    @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public ObservableList<DockItem> getItems() {
@@ -73,8 +76,10 @@ public class TabPaneDock extends Control implements Dock {
         super.layoutChildren();
         tabPane.resizeRelocate(0, 0, getWidth(), getHeight());
     }
+    @NonNull
     private ObjectProperty<Track> track = new SimpleObjectProperty<>();
 
+    @NonNull
     @Override
     public ObjectProperty<Track> trackProperty() {
         return track;

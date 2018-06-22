@@ -11,6 +11,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * This class is similar to TextInputDialog, but allows to specify an arbitrary JavaFX node as input form.
@@ -30,7 +31,7 @@ private Supplier<R> resultSupplier;
      * @param inputForm the input form
      * @param resultSupplier the result supplier
      */
-    public InputDialog(String title, String headerText, Node inputForm, Supplier<R> resultSupplier) {
+    public InputDialog(String title, String headerText, Node inputForm, @NonNull Supplier<R> resultSupplier) {
         final DialogPane dialogPane = getDialogPane();
 
         // -- textfield

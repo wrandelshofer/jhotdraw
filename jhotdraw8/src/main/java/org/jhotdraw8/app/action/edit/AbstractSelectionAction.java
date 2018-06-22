@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextInputControl;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
@@ -25,6 +27,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
     private static final long serialVersionUID = 1L;
     private Node target;
+    @Nullable
     private final ChangeListener<ViewController> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode() == null) {
@@ -46,7 +49,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
      *
      * @param app the application
      */
-    public AbstractSelectionAction(Application app) {
+    public AbstractSelectionAction(@NonNull Application app) {
         this(app, null);
     }
 
@@ -56,7 +59,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
      * @param app the application
      * @param target the target node
      */
-    public AbstractSelectionAction(Application app, Node target) {
+    public AbstractSelectionAction(@NonNull Application app, Node target) {
         super(app);
         this.target = target;
 
@@ -65,6 +68,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
     }
 
+    @Nullable
     public EditableComponent getEditableComponent() {
         ViewController v = app.getActiveView();
         if (v != null && !v.isDisabled()) {
@@ -139,6 +143,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
             control.selectAll();
         }
 
+        @NonNull
         @Override
         public ReadOnlyBooleanProperty selectionEmptyProperty() {
             throw new UnsupportedOperationException("unsupported");

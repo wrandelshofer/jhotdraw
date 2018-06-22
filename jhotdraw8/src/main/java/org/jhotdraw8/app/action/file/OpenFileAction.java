@@ -8,6 +8,7 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
@@ -52,7 +53,7 @@ public class OpenFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, Application app) {
+    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
         {
             app.addDisabler(this);
             // Search for an empty view
@@ -76,7 +77,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(DocumentOrientedViewModel view, boolean disposeView) {
+    public void doIt(@NonNull DocumentOrientedViewModel view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -107,7 +108,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final DocumentOrientedViewModel v, final URI uri, final URIChooser chooser) {
+    protected void openViewFromURI(@NonNull final DocumentOrientedViewModel v, @NonNull final URI uri, @NonNull final URIChooser chooser) {
         final Application app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);

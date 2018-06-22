@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
@@ -42,7 +44,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, DocumentOrientedViewModel view) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentOrientedViewModel view) {
         if (isDisabled()) {
             return;
         }
@@ -61,7 +63,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
         }
     }
 
-    private void doIt(DocumentOrientedViewModel view, URI uri, DataFormat dataFormat) {
+    private void doIt(DocumentOrientedViewModel view, @Nullable URI uri, DataFormat dataFormat) {
         view.addDisabler(this);
 
         final BiFunction<DataFormat, Throwable, Void> handler = (actualDataFormat, throwable) -> {

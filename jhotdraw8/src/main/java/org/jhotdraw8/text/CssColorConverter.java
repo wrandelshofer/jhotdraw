@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -43,8 +45,9 @@ public class CssColorConverter implements Converter<CssColor> {
     this.optional = optional;
   }
 
+  @Nullable
   @Override
-  public CssColor fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+  public CssColor fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     CssColor c;
     CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
     tt.setSkipWhitespaces(true);
@@ -56,11 +59,13 @@ public class CssColorConverter implements Converter<CssColor> {
     return c;
   }
 
+  @Nullable
   @Override
   public CssColor getDefaultValue() {
     return null;
   }
 
+  @NonNull
   @Override
   public String getHelpText() {
     return "Format of ⟨Color⟩: " + (optional ? "none｜" : "") + "⟨name⟩｜#⟨hex⟩｜rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)";
@@ -74,7 +79,8 @@ public class CssColorConverter implements Converter<CssColor> {
    * @throws ParseException if parsing fails
    * @throws IOException if IO fails
    */
-  public CssColor parseColor(CssTokenizerInterface tt) throws ParseException, IOException {
+  @Nullable
+  public CssColor parseColor(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
     CssColor color = null;
     tt.setSkipWhitespaces(true);
 
@@ -243,7 +249,7 @@ public class CssColorConverter implements Converter<CssColor> {
     return color;
   }
 
-  private CssColor parseColorHexDigits(String hexdigits, int startpos) throws ParseException {
+  private CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
     try {
       int v = (int) Long.parseLong(hexdigits, 16);
       int r, g, b, a;
@@ -285,7 +291,7 @@ public class CssColorConverter implements Converter<CssColor> {
   }
 
   @Override
-  public void toString(Appendable out, IdFactory idFactory, CssColor value) throws IOException {
+  public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable CssColor value) throws IOException {
     if (value == null) {
       out.append("none");
     } else {

@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.key;
 
 import java.util.Map;
 import javafx.geometry.BoundingBox;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -18,9 +19,13 @@ public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBo
 
     private final static long serialVersionUID = 1L;
 
+    @NonNull
     private final MapAccessor<Double> xKey;
+    @NonNull
     private final MapAccessor<Double> yKey;
+    @NonNull
     private final MapAccessor<Double> widthKey;
+    @NonNull
     private final MapAccessor<Double> heightKey;
 
     /**
@@ -41,13 +46,15 @@ public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBo
         this.heightKey = heightKey;
     }
 
+    @NonNull
     @Override
     public BoundingBox get(Map<? super Key<?>, Object> a) {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
+    @NonNull
     @Override
-    public BoundingBox put(Map<? super Key<?>, Object> a, BoundingBox value) {
+    public BoundingBox put(Map<? super Key<?>, Object> a, @NonNull BoundingBox value) {
         BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
@@ -56,6 +63,7 @@ public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBo
         return oldValue;
     }
 
+    @NonNull
     @Override
     public BoundingBox remove(Map<? super Key<?>, Object> a) {
         BoundingBox oldValue = get(a);

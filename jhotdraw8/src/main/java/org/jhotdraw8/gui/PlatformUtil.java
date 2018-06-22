@@ -6,6 +6,7 @@ package org.jhotdraw8.gui;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import javafx.application.Platform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * PlatformUtil.
@@ -15,7 +16,7 @@ import javafx.application.Platform;
  */
 public class PlatformUtil {
 
-    public static void invokeAndWait(Runnable r) {
+    public static void invokeAndWait(@NonNull Runnable r) {
         if (Platform.isFxApplicationThread()) {
             r.run();
         } else {
@@ -23,7 +24,7 @@ public class PlatformUtil {
             Platform.runLater(task);
             try {
                 task.get();
-            } catch (InterruptedException | ExecutionException ex) {
+            } catch (@NonNull InterruptedException | ExecutionException ex) {
                 throw new InternalError(ex);
             }
         }

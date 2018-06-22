@@ -6,6 +6,7 @@ package org.jhotdraw8.app.action.edit;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractFocusOwnerAction;
@@ -47,7 +48,7 @@ public class PasteAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, EditableComponent c) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull EditableComponent c) {
         c.paste();
     }
 }

@@ -12,6 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -34,7 +36,7 @@ public class SimpleLayer extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, Node node) {
         Group n = (Group) node;
         applyHideableFigureProperties(n);
         if (!isVisible()) {
@@ -81,6 +83,7 @@ public class SimpleLayer extends AbstractCompositeFigure
         }
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
         Group n = new Group();
@@ -93,7 +96,7 @@ public class SimpleLayer extends AbstractCompositeFigure
      *
      * @param newValue the desired parent
      */
-    protected void checkNewParent(Figure newValue) {
+    protected void checkNewParent(@Nullable Figure newValue) {
         if (newValue != null && !(newValue instanceof Drawing) && !(newValue instanceof Clipping)) {
             throw new IllegalArgumentException("A Layer can only be added as a child to a Drawing. Illegal parent: "
                     + newValue);

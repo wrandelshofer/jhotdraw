@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -48,7 +49,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends AbstractStyleable
      * @param nullable Whether the value is nullable
      * @param defaultValue The default value.
      */
-    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, boolean nullable, T defaultValue) {
+    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, boolean nullable, @Nullable T defaultValue) {
         super(name, clazz, mask, defaultValue);
 
         this.nullable = nullable;

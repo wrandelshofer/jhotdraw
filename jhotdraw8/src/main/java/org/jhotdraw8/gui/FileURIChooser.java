@@ -11,6 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * FileURIChooser.
@@ -58,10 +60,12 @@ public class FileURIChooser implements URIChooser {
         return mode;
     }
 
+    @NonNull
     public FileChooser getFileChooser() {
         return chooser;
     }
 
+    @Nullable
     @Override
     public URI showDialog(Window parent) {
         updateFilters();
@@ -81,6 +85,7 @@ public class FileURIChooser implements URIChooser {
         this.filters.setAll(filters);
     }
 
+    @Nullable
     @Override
     public DataFormat getDataFormat() {
         for (URIExtensionFilter f : filters) {

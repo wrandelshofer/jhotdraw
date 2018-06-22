@@ -4,6 +4,7 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.StyleablePropertyFactory;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.text.CssBooleanConverter;
 
 /**
@@ -27,7 +28,7 @@ public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> {
         this(key,  ReadOnlyStyleableMapAccessor.toCssName(key),null);
     }
 
-    public BooleanStyleableKey(String key, String cssName, Boolean defaultValue) {
+    public BooleanStyleableKey(String key, @NonNull String cssName, Boolean defaultValue) {
         super(key, Boolean.class, null, new CssBooleanConverter(),defaultValue);
         setCssMetaData(
                 new StyleablePropertyFactory<>(null).createBooleanCssMetaData(

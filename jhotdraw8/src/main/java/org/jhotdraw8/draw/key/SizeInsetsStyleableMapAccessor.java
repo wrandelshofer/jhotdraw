@@ -9,6 +9,8 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -29,10 +31,15 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
 
     private final static long serialVersionUID = 1L;
 
+    @NonNull
     private final CssMetaData<?, CssSizeInsets> cssMetaData;
+    @NonNull
     private final MapAccessor<CssSize> topKey;
+    @NonNull
     private final MapAccessor<CssSize> rightKey;
+    @NonNull
     private final MapAccessor<CssSize> bottomKey;
+    @NonNull
     private final MapAccessor<CssSize> leftKey;
 
     /**
@@ -66,6 +73,7 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
         this.leftKey = leftKey;
     }
 
+    @NonNull
     @Override
     public CssMetaData<?, CssSizeInsets> getCssMetaData() {
         return cssMetaData;
@@ -82,6 +90,7 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
         return converter;
     }
 
+    @Nullable
     @Override
     public CssSizeInsets get(Map<? super Key<?>, Object> a) {
         final CssSize top = topKey.get(a);
@@ -99,8 +108,9 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
         );
     }
 
+    @Nullable
     @Override
-    public CssSizeInsets put(Map<? super Key<?>, Object> a, CssSizeInsets value) {
+    public CssSizeInsets put(Map<? super Key<?>, Object> a, @Nullable CssSizeInsets value) {
         CssSizeInsets oldValue = get(a);
         if (value == null) {
             topKey.put(a, null);
@@ -116,6 +126,7 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
         return oldValue;
     }
 
+    @Nullable
     @Override
     public CssSizeInsets remove(Map<? super Key<?>, Object> a) {
         CssSizeInsets oldValue = get(a);

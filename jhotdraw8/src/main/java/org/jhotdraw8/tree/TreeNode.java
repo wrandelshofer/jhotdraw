@@ -4,13 +4,14 @@
 package org.jhotdraw8.tree;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jhotdraw8.graph.BreadthFirstSpliterator;
 import org.jhotdraw8.util.SpliteratorIterable;
 
 /**
@@ -31,14 +32,12 @@ import org.jhotdraw8.util.SpliteratorIterable;
  * runtime.
  *
  * @param <T> the type of the tree node
- * @design.pattern TreeNode Composite, Component. The composite pattern is used
- * to model a tree structure.
- *
- * @design.pattern TreeNode Iterator, Aggregate. The iterator pattern is used to
- * provide a choice of iteration strategies over an aggregate structure.
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern TreeNode Composite, Component. The composite pattern is used
+ * to model a tree structure.
+ * @design.pattern TreeNode Iterator, Aggregate. The iterator pattern is used to
+ * provide a choice of iteration strategies over an aggregate structure.
  */
 public interface TreeNode<T extends TreeNode<T>> {
 
@@ -48,6 +47,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
+    @NonNull
     default Iterable<T> ancestorIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.AncestorIterator<>((T) this);
@@ -60,10 +60,11 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default public Iterable<T> breadthFirstIterable() {
-        @SuppressWarnings("unchecked")
-        Iterable<T> i = () -> new TreeNode.BreadthFirstIterator<>((T) this);
-        return i;
+    @NonNull
+    default Iterable<T> breadthFirstIterable() {
+        //noinspection unchecked
+        return new SpliteratorIterable<>(
+                () -> new BreadthFirstSpliterator<>(TreeNode::getChildren, (T) this, n -> true));
     }
 
     /**
@@ -80,11 +81,11 @@ public interface TreeNode<T extends TreeNode<T>> {
     /**
      * Dumps the figure and its descendants.
      *
-     * @param out an output stream
+     * @param out   an output stream
      * @param depth the indentation depth
      * @throws java.io.IOException from appendable
      */
-    default void dumpTree(Appendable out, int depth) throws IOException {
+    default void dumpTree(@NonNull Appendable out, int depth) throws IOException {
         for (int i = 0; i < depth; i++) {
             out.append('.');
         }
@@ -98,14 +99,15 @@ public interface TreeNode<T extends TreeNode<T>> {
     /**
      * Returns the nearest ancestor of the specified type.
      *
-     * @param <TT> The ancestor type
+     * @param <TT>         The ancestor type
      * @param ancestorType The ancestor type
      * @return Nearest ancestor of type {@literal <T>} or null if no ancestor of
      * this type is present. Returns {@code this} if this object is of type
      * {@literal <T>}.
      */
+    @NonNull
     @Nullable
-    default <TT> TT getAncestor(Class<TT> ancestorType) {
+    default <TT> TT getAncestor(@NonNull Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
         while (ancestor != null && !ancestorType.isInstance(ancestor)) {
@@ -129,7 +131,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     /**
      * Sets the child with the specified index from the node.
      *
-     * @param index the index
+     * @param index    the index
      * @param newChild the new child
      * @return the old child
      */
@@ -193,6 +195,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return path including this node
      */
+    @NonNull
     @SuppressWarnings("unchecked")
     default List<T> getPath() {
         LinkedList<T> path = new LinkedList<>();
@@ -208,10 +211,24 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default public Iterable<T> postorderIterable() {
-        @SuppressWarnings("unchecked")
-        Iterable<T> i = () -> new TreeNode.PostorderIterator<>((T) this);
-        return i;
+    @NonNull
+    default Iterable<T> postorderIterable() {
+        //noinspection unchecked
+        return new SpliteratorIterable<>(
+                () -> new PostorderSpliterator<>(TreeNode::getChildren, (T) this)
+        );
+    }
+
+    /**
+     * Returns an iterable which can iterate through this figure and all its
+     * descendants in postorder sequence.
+     *
+     * @return the iterable
+     */
+    @NonNull
+    default Iterable<T> depthFirstIterable() {
+        //noinspection unchecked
+        return postorderIterable();
     }
 
     /**
@@ -220,16 +237,17 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default public Iterable<T> preorderIterable() {
+    @NonNull
+    default Iterable<T> preorderIterable() {
+        //noinspection unchecked
         return new SpliteratorIterable<>(
-                () -> new PreorderSpliterator<>((T) this, n -> n.getChildren())
+                () -> new PreorderSpliterator<>(TreeNode::getChildren, (T) this)
         );
     }
 
     /**
-     * @design.pattern TreeNode Iterator, Iterator.
-     *
      * @param <T> the type of the tree nodes
+     * @design.pattern TreeNode Iterator, Iterator.
      */
     static class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
 
@@ -257,85 +275,5 @@ public interface TreeNode<T extends TreeNode<T>> {
         }
     }
 
-    /**
-     * @param <T> the tree node type
-     * @design.pattern TreeNode Iterator, Iterator.
-     */
-    static class BreadthFirstIterator<T extends TreeNode<T>> implements Iterator<T> {
 
-        protected Deque<Iterator<T>> queue = new ArrayDeque<>();
-
-        public BreadthFirstIterator(T root) {
-            queue.addLast(Collections.singleton(root).iterator());
-        }
-
-        @Override
-        public boolean hasNext() {
-            return !queue.isEmpty()
-                    && queue.peekFirst().hasNext();
-        }
-
-        @Override
-        public T next() {
-            Iterator<T> iter = queue.peekFirst();
-            T node = iter.next();
-            Iterator<T> children = node.getChildren().iterator();
-
-            if (!iter.hasNext()) {
-                queue.removeFirst();
-            }
-            if (children.hasNext()) {
-                queue.addLast(children);
-            }
-            return node;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-    }
-
-    /**
-     * @design.pattern TreeNode Iterator, Iterator.
-     *
-     * @param <T> the type of the tree nodes
-     */
-    static class PostorderIterator<T extends TreeNode<T>> implements Iterator<T> {
-
-        private T root;
-        private Iterator<T> subtree;
-        private Iterator<T> children;
-
-        private PostorderIterator(T root) {
-            this.root = root;
-            children = root.getChildren().iterator();
-            subtree = Collections.emptyIterator();
-        }
-
-        @Override
-        public boolean hasNext() {
-            return root != null;
-        }
-
-        @Override
-        public T next() {
-            T result;
-            if (subtree.hasNext()) {
-                result = subtree.next();
-            } else if (children.hasNext()) {
-                subtree = new PostorderIterator<>(children.next());
-                result = subtree.next();
-            } else {
-                result = root;
-                root = null;
-            }
-            return result;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-    }
 }

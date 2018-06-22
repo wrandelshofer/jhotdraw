@@ -25,6 +25,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
@@ -190,7 +191,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     static Map<Class<?>, Set<MapAccessor<?>>> declaredAndInheritedKeys = new HashMap<>();
 
-    public static void getDeclaredMapAccessors( Class<?> clazz,  Collection<MapAccessor<?>> keys) {
+    public static void getDeclaredMapAccessors(Class<?> clazz, @NonNull Collection<MapAccessor<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (MapAccessor.class.isAssignableFrom(f.getType())) {
@@ -198,12 +199,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     keys.add(k);
                 }
             }
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
+        } catch (@NonNull IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys",ex);
         }
     }
 
-    public static void getDeclaredKeys( Class<?> clazz,  Collection<Key<?>> keys) {
+    public static void getDeclaredKeys(Class<?> clazz, @NonNull Collection<Key<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
@@ -211,7 +212,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     keys.add(k);
                 }
             }
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
+        } catch (@NonNull IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
         }
     }
@@ -256,7 +257,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param selection a set of figures
      * @return bounds
      */
-        public static Bounds visualBounds( Collection<Figure> selection) {
+        @org.checkerframework.checker.nullness.qual.Nullable
+        public static Bounds visualBounds(Collection<Figure> selection) {
         Bounds b = null;
 
         for (Figure f : selection) {
@@ -327,7 +329,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param handleType The desired handle type
      * @param list The handles.
      */
-    default void createHandles( HandleType handleType,  List<Handle> list) {
+    default void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.ANCHOR) {
@@ -534,6 +536,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return The center of the figure
      */
+        @NonNull
         default Point2D getCenterInLocal() {
         Bounds b = getBoundsInLocal();
         return Geom.center(b);
@@ -544,6 +547,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return The center of the figure
      */
+        @NonNull
         default Point2D getCenterInParent() {
         Bounds b = getBoundsInParent();
         return Geom.center(b);
@@ -918,7 +922,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param p point in local coordinates
      * @return point in world coordinates
      */
-        default Point2D localToWorld( Point2D p) {
+        @NonNull
+        default Point2D localToWorld(@NonNull Point2D p) {
         final Transform ltw = getLocalToWorld();
         return ltw == null ? p : ltw.transform(p);
     }
@@ -933,7 +938,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param p bounds in local coordinates
      * @return bounds in world coordinates
      */
-        default Bounds localToWorld( Bounds p) {
+        @NonNull
+        default Bounds localToWorld(@NonNull Bounds p) {
         final Transform ltw = getLocalToWorld();
         return ltw == null ? p : ltw.transform(p);
     }
@@ -1013,7 +1019,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param bounds the desired bounds
      */
-    default void reshapeInLocal( Bounds bounds) {
+    default void reshapeInLocal(@NonNull Bounds bounds) {
         reshapeInLocal(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
     }
 
@@ -1150,7 +1156,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-        default Point2D worldToLocal( Point2D pointInWorld) {
+        @NonNull
+        default Point2D worldToLocal(@NonNull Point2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
         return wtl == null ? pointInWorld : wtl.transform(pointInWorld);
     }
@@ -1165,7 +1172,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-        default Point2D worldToParent( Point2D pointInWorld) {
+        @NonNull
+        default Point2D worldToParent(@NonNull Point2D pointInWorld) {
         final Transform wtp = getWorldToParent();
         return wtp == null ? pointInWorld : wtp.transform(pointInWorld);
     }

@@ -4,6 +4,8 @@
 package org.jhotdraw8.draw.figure;
 
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Defines a <i>clipping</i> of a {@link Drawing}.
  * <p>
@@ -31,6 +33,7 @@ public interface Clipping extends Figure {
         return false;
     }
 
+    @NonNull
     @Override     default String getTypeSelector() {
         return TYPE_SELECTOR;
     }

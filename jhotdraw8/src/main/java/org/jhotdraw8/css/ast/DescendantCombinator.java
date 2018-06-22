@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -19,13 +20,14 @@ public class DescendantCombinator extends Combinator {
         super(simpleSelector, selector);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return firstSelector + ".isAncestorOf(" + secondSelector + ")";
     }
 
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
+    public <T> T match(@NonNull SelectorModel<T> model, T element) {
         T result = secondSelector.match(model, element);
         T siblingElement = result == null ? null : result;
         while (siblingElement != null) {

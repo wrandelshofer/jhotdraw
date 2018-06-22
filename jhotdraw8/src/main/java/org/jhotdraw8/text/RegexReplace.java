@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +18,9 @@ import java.util.regex.Pattern;
  */
 public class RegexReplace {
 
+    @Nullable
     private final String find;
+    @Nullable
     private final String replace;
     private transient Pattern pattern;
 
@@ -29,20 +34,23 @@ public class RegexReplace {
         this.replace = replace;
     }
 
+    @Nullable
     public String getFind() {
         return find;
     }
 
+    @Nullable
     public String getReplace() {
         return replace;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "/" + escape(find) + "/" + escape(replace) + "/";
     }
 
-    private String escape(String str) {
+    private String escape(@Nullable String str) {
         return str == null ? "" : str.replace("/", "\\/");
     }
 
@@ -52,7 +60,8 @@ public class RegexReplace {
      * @param str the string
      * @return the replaced string
      */
-    public String apply(String str) {
+    @Nullable
+    public String apply(@Nullable String str) {
         if (str == null) {
             return str;
         }
@@ -81,7 +90,7 @@ public class RegexReplace {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

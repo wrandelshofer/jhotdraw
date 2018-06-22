@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Map;
 
 /**
@@ -19,7 +21,8 @@ public interface NonnullMapAccessor<T> extends MapAccessor<T> {
      * @param a A Map.
      * @return The value of the attribute.
      */
-        default T getNonnull( Map<? super Key<?>, Object> a) {
+        @Nullable
+        default T getNonnull(Map<? super Key<?>, Object> a) {
         T t = get(a);
         assert t != null;
         return t;
@@ -32,7 +35,8 @@ public interface NonnullMapAccessor<T> extends MapAccessor<T> {
      * @param value The new value.
      * @return The old value.
      */
-        default T putNonnull( Map<? super Key<?>, Object> a,  T value) {
+        @Nullable
+        default T putNonnull(Map<? super Key<?>, Object> a, T value) {
         T t = put(a, value);
         assert t != null;
         return t;

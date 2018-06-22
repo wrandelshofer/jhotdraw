@@ -10,6 +10,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point3D;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -28,9 +29,13 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     private final static long serialVersionUID = 1L;
 
+    @NonNull
     private final CssMetaData<?, Point3D> cssMetaData;
+    @NonNull
     private final MapAccessor<Double> xKey;
+    @NonNull
     private final MapAccessor<Double> yKey;
+    @NonNull
     private final MapAccessor<Double> zKey;
 
     /**
@@ -62,6 +67,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         this.zKey = zKey;
     }
 
+    @NonNull
     @Override
     public CssMetaData<?, Point3D> getCssMetaData() {
         return cssMetaData;
@@ -78,13 +84,15 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         return converter;
     }
 
+    @NonNull
     @Override
     public Point3D get(Map<? super Key<?>, Object> a) {
         return new Point3D(xKey.get(a), yKey.get(a), zKey.get(a));
     }
 
+    @NonNull
     @Override
-    public Point3D put(Map<? super Key<?>, Object> a, Point3D value) {
+    public Point3D put(Map<? super Key<?>, Object> a, @NonNull Point3D value) {
         Point3D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
@@ -92,6 +100,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         return oldValue;
     }
 
+    @NonNull
     @Override
     public Point3D remove(Map<? super Key<?>, Object> a) {
         Point3D oldValue = get(a);

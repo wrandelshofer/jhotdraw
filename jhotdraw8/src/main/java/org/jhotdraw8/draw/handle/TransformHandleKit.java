@@ -14,6 +14,8 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.draw.locator.RelativeLocator;
@@ -43,7 +45,9 @@ import org.jhotdraw8.geom.Transforms;
 public class TransformHandleKit {
 
     private static final Shape REGION_SHAPE = new Circle(3);
+    @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
 
     /**
@@ -88,7 +92,7 @@ public class TransformHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addResizeHandles(TransformableFigure f, Collection<Handle> handles) {
+    static public void addResizeHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
         addCornerTransformHandles(f, handles);
         addEdgeTransformHandles(f, handles);
     }
@@ -187,7 +191,7 @@ public class TransformHandleKit {
             startTransforms = owner.get(TRANSFORMS);
         }
 
-        protected void transform(DrawingModel model, Figure o, double x, double y, double width, double height) {
+        protected void transform(@NonNull DrawingModel model, Figure o, double x, double y, double width, double height) {
             if (width == 0 || height == 0) {
                 return;
             }
@@ -229,7 +233,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = max(bounds.getMinX(), newPoint.getX());
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
@@ -260,7 +264,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newWidth = max(newPoint.getX(), bounds.getMinX()) - bounds.getMinX();
             double newHeight = bounds.getMaxY() - bounds.getMinY();
             if (keepAspect) {
@@ -284,7 +288,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
             double newHeight = bounds.getMaxY() - newY;
@@ -308,7 +312,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - newX;
@@ -338,7 +342,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = max(bounds.getMinX(), newPoint.getX());
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
@@ -367,7 +371,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
             double newHeight = newY - bounds.getMinY();
@@ -390,7 +394,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - min(bounds.getMaxX(), newX);
@@ -419,7 +423,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newWidth = bounds.getMaxX() - newX;
             double newHeight = bounds.getHeight();

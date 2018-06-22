@@ -14,6 +14,8 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.Handle;
@@ -50,7 +52,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    protected <T> void changed(Key<T> key, T oldValue, T newValue) {
+    protected <T> void changed(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (key == START_TARGET) {
             if (oldValue != null && get(END_TARGET) != oldValue) {
                 ((Figure) oldValue).getLayoutObservers().remove(AbstractLineConnectionFigure.this);
@@ -74,7 +76,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -104,6 +106,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         }
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         Point2D start = get(START);
@@ -121,6 +124,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      *
      * @return an unmodifiable set of connected figures
      */
+    @NonNull
     @Override
     public Set<Figure> getLayoutSubjects() {
         final Figure startTarget = get(START_TARGET);
@@ -143,7 +147,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public boolean isGroupReshapeableWith(Set<Figure> others) {
+    public boolean isGroupReshapeableWith(@NonNull Set<Figure> others) {
         for (Figure f : getLayoutSubjects()) {
             if (others.contains(f)) {
                 return false;
@@ -207,7 +211,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         if (get(START_TARGET) == null) {
             set(START, transform.transform(get(START)));
         }

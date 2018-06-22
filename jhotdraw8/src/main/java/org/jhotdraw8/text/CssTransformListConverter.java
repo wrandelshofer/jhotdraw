@@ -15,6 +15,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import javafx.geometry.Point3D;
@@ -69,7 +70,7 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
     private final CssDoubleConverter nb = new CssDoubleConverter();
 
     @Override
-    public void toString(Appendable buf, IdFactory idFactory, ImmutableList<Transform> txs) throws IOException {
+    public void toString(@NonNull Appendable buf, IdFactory idFactory, @NonNull ImmutableList<Transform> txs) throws IOException {
         if (txs.isEmpty()) {
             buf.append("none");
             return;
@@ -207,7 +208,7 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
     }
 
     @Override
-    public ImmutableList<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Transform> fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
@@ -439,6 +440,7 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
         return ImmutableList.emptyList();
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Transform⟩: none｜（⟨Translate⟩｜ ⟨Scale⟩｜ ⟨Rotate⟩｜ ⟨Shear⟩｜ ⟨Matrix⟩）｛, ⟨Transform⟩｝"

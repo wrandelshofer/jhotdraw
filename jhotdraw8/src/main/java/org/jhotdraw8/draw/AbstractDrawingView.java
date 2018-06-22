@@ -18,6 +18,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.beans.SimplePropertyBean;
 import static org.jhotdraw8.draw.DrawingView.ACTIVE_HANDLE_PROPERTY;
@@ -43,7 +45,9 @@ import org.jhotdraw8.draw.tool.Tool;
  */
 public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
 
+    @NonNull
     private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
+    @NonNull
     private ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
     /**
      * The selectedFiguresProperty holds the list of selected figures in the
@@ -82,11 +86,13 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         });
     }
 
+    @NonNull
     @Override
     public ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
         return clipboardInputFormat;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
         return clipboardOutputFormat;
@@ -115,7 +121,7 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
                 private final static long serialVersionUID = 0L;
 
                 @Override
-                public Object put(DataFormat key, Object value) {
+                public Object put(@Nullable DataFormat key, Object value) {
                     if (key == null) {
                         throw new IllegalArgumentException("key == null");
                     }
@@ -160,31 +166,37 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         }
     }
 
+    @NonNull
     @Override
     public ObjectProperty<Tool> toolProperty() {
         return tool;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
 
+    @NonNull
     @Override
     public NonnullProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<HandleType> leadHandleTypeProperty() {
         return leadHandleType;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<HandleType> anchorHandleTypeProperty() {
         return anchorHandleType;
     }
 
+    @NonNull
     @Override
     public NonnullProperty<HandleType> multiHandleTypeProperty() {
         return multiHandleType;

@@ -4,6 +4,8 @@
 
 package org.jhotdraw8.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -17,7 +19,7 @@ public class DirectedGraphValidator<V,A> {
 
     public DirectedGraphValidator() {
     }
-    public boolean validate(DirectedGraph<V,A> graph) {
+    public boolean validate(@NonNull DirectedGraph<V,A> graph) {
         Set<V> vertices=new LinkedHashSet<>();
         for (int i=0,n=graph.getVertexCount();i<n;i++) {
             if (!vertices.add(graph.getVertex(i))) {

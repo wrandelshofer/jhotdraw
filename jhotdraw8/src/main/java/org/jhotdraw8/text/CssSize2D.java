@@ -5,6 +5,8 @@ package org.jhotdraw8.text;
 
 import java.util.Objects;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * CssSize2D.
@@ -27,7 +29,7 @@ public class CssSize2D {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -47,6 +49,7 @@ public class CssSize2D {
         return true;
     }
 
+    @NonNull
     public Point2D getConvertedValue() {
         return new Point2D(x.getConvertedValue(), y.getConvertedValue());
     }

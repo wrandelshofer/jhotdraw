@@ -16,6 +16,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -33,9 +35,12 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class RelativeControlPointHandle extends AbstractHandle {
 
+    @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+    @NonNull
     private final Region node;
     /** Relative origin.
      * <ul>
@@ -45,6 +50,7 @@ public class RelativeControlPointHandle extends AbstractHandle {
      * <li>1,1=bottom right</li>
      * </ul>
      */
+@NonNull
 private Point2D origin=new Point2D(0,0);
     private Point2D pickLocation;
     private final MapAccessor<Point2D> pointKey;
@@ -87,13 +93,14 @@ private Point2D origin=new Point2D(0,0);
         return pickLocation;
     }
 
+    @NonNull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void handleMouseDragged(MouseEvent event, DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -122,7 +129,7 @@ private Point2D origin=new Point2D(0,0);
     }
 
     @Override
-    public void updateNode(DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D point = f.get(pointKey);

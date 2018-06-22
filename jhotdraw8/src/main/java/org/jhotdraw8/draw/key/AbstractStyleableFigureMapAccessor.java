@@ -9,6 +9,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -23,30 +26,37 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractStyleableFigureMapAccessor<T> implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
 
+    @NonNull
     private final String cssName;
     private static final long serialVersionUID = 1L;
 
     /**
      * Holds a String representation of the name.
      */
+    @Nullable
     private final String name;
     /**
      * Holds the default value.
      */
+    @Nullable
     private final T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
+    @Nullable
     private final Class<?> clazz;
     /**
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
+    @NonNull
     private final List<Class<?>> typeParameters;
 
+    @NonNull
     private final Set<MapAccessor<?>> subAccessors;
 
+    @NonNull
     private final DirtyMask dirtyMask;
 
     /**
@@ -58,7 +68,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractStyleableFigureMapAccessor(String name, Class<T> clazz, MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractStyleableFigureMapAccessor(String name, Class<T> clazz, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, clazz, null, subAccessors, defaultValue);
     }
 
@@ -73,7 +83,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractStyleableFigureMapAccessor(String name, Class<?> clazz, Class<?>[] typeParameters, MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractStyleableFigureMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -110,11 +120,13 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      *
      * @return name string.
      */
+    @Nullable
     @Override
     public String getName() {
         return name;
     }
 
+    @NonNull
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
@@ -122,11 +134,13 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
         return ret;
     }
 
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
+    @NonNull
     public String getFullValueType() {
         StringBuilder buf = new StringBuilder();
         buf.append(clazz.getName());
@@ -151,6 +165,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      *
      * @return the default value.
      */
+    @Nullable
     @Override
     public T getDefaultValue() {
         return defaultValue;
@@ -159,17 +174,20 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
     /**
      * Returns the name string.
      */
+    @NonNull
     @Override
     public String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getFullValueType() + "}";
     }
 
+    @NonNull
     @Override
     public Set<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 
+    @NonNull
     @Override
     public DirtyMask getDirtyMask() {
         return dirtyMask;
@@ -180,6 +198,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
         return false;
     }
 
+    @NonNull
     public String getCssName() {
         return cssName;
     }

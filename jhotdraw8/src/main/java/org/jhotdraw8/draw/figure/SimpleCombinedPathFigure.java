@@ -15,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -42,24 +44,27 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 
+    @Nullable
     public final static EnumStyleableFigureKey<CagOperation> CAG_OPERATION = new EnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "CombinedPath";
 
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
 
         return new Path();
     }
 
+    @NonNull
     @Override
     public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    private PathIterator getStyledPathIteratorInParent(PathIterableFigure f, AffineTransform tx) {
+    private PathIterator getStyledPathIteratorInParent(PathIterableFigure f, @Nullable AffineTransform tx) {
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
         if (localToParent != null) {
@@ -105,6 +110,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
@@ -122,7 +128,8 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
 
     }
 
-    private PathIterator getPathIteratorCAG(AffineTransform tx, CagOperation op) {
+    @NonNull
+    private PathIterator getPathIteratorCAG(AffineTransform tx, @NonNull CagOperation op) {
         Area area = null;
         boolean first = true;
         for (Figure child : getChildren()) {
@@ -155,6 +162,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -189,7 +197,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, Node node) {
         Path n = (Path) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);

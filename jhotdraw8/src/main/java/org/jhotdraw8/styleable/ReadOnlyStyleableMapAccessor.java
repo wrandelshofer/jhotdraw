@@ -5,6 +5,8 @@ package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.text.Converter;
 
@@ -22,14 +24,16 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * Returns the name string.
      *
      * @return name string.
-     */ 
+     */
+    @Nullable
     String getName();
 
     /**
      * Gets the CssMetaData.
      *
      * @return the meta data
-     */ 
+     */
+    @Nullable
     CssMetaData<? extends Styleable, T> getCssMetaData();
 
     /**
@@ -46,7 +50,8 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * separated words".
      *
      * @return name string.
-     */ 
+     */
+    @NonNull
     String getCssName();
 
     /**

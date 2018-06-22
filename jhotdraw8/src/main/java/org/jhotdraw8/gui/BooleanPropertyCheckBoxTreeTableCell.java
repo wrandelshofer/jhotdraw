@@ -9,6 +9,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.util.Callback;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * BooleanPropertyCheckBoxTreeTableCell.
@@ -26,7 +27,7 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
     }
 
     @Override
-    public void updateItem(Boolean item, boolean empty) {
+    public void updateItem(@Nullable Boolean item, boolean empty) {
         super.updateItem(item, empty);
         if (empty || item == null) {
             setText(null);

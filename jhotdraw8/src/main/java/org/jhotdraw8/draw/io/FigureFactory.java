@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.io;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.io.IdFactory;
 import java.io.IOException;
 import java.net.URI;
@@ -180,7 +181,7 @@ public interface FigureFactory {
      * @param value the value
      * @return true if the value is the default value
      */
-    default <T> boolean isDefaultValue( Figure f,  MapAccessor<T> key, @Nullable T value) {
+    default <T> boolean isDefaultValue(Figure f, @NonNull MapAccessor<T> key, @Nullable T value) {
         T defaultValue = key.getDefaultValue();
         return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
     }

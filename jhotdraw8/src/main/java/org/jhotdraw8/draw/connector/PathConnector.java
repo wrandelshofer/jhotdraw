@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.connector;
 
 import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
@@ -32,8 +34,9 @@ public class PathConnector extends LocatorConnector {
     }
 
 
+    @Nullable
     @Override
-    public Double intersect(Figure connection, Figure target, Point2D start, Point2D end) {
+    public Double intersect(Figure connection, Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
             return super.intersect(connection, target, start, end);
         }

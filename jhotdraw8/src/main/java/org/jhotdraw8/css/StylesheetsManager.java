@@ -6,6 +6,7 @@ package org.jhotdraw8.css;
 import java.net.URI;
 import java.util.List;
 import javafx.css.StyleOrigin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 
@@ -105,7 +106,7 @@ public interface StylesheetsManager<E> {
      * @param elem the element
      * @return true the element was selected
      */
-    default boolean matchesElement(Stylesheet s, E elem) {
+    default boolean matchesElement(@NonNull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
             if (null != r.getSelectorGroup().match(selectorModel, elem)) {

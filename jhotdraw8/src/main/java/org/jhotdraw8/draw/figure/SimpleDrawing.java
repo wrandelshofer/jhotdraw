@@ -14,6 +14,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
@@ -33,6 +35,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     /**
      * The style manager is created lazily.
      */
+    @Nullable
     private StylesheetsManager<Figure> styleManager = null;
 
     public SimpleDrawing() {
@@ -43,6 +46,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
         set(HEIGHT, height);
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
@@ -66,12 +70,14 @@ public class SimpleDrawing extends AbstractCompositeFigure
      *
      * @return bounding box (0, 0, WIDTH, HEIGHT).
      */
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(0.0, 0.0, get(WIDTH), get(HEIGHT));
 
     }
 
+    @Nullable
     @Override
     public StylesheetsManager<Figure> getStyleManager() {
         if (styleManager == null) {
@@ -84,7 +90,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
@@ -108,7 +114,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(RenderContext v, Node n) {
+    public void updateNode(@NonNull RenderContext v, Node n) {
         Group g = (Group) n;
         //applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(v, n);

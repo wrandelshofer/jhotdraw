@@ -9,6 +9,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * SimpleCssMetaData.
@@ -43,8 +44,9 @@ public class SimpleCssMetaData<S extends Styleable, V> extends CssMetaData<S, V>
     /**
      * {@inheritDoc}
      */
+    @Nullable
     @Override
-    public final StyleableProperty<V> getStyleableProperty(S styleable) {
+    public final StyleableProperty<V> getStyleableProperty(@Nullable S styleable) {
         if (styleable != null) {
             StyleableProperty<V> property = function.apply(styleable);
             return property;

@@ -3,13 +3,12 @@
  */
 package org.jhotdraw8.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
-import java.util.Set;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
-import static java.util.Spliterator.ORDERED;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -23,46 +22,36 @@ import java.util.function.Predicate;
  */
 public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
-    private final Function<V, Iterable<V>>graph;
+    @Nullable
+    private final Function<V, Iterable<V>> nextNodesFunction;
+    @NonNull
     private final Deque<V> stack;
+    @Nullable
     private final Predicate<V> visited;
 
     /**
      * Creates a new instance.
      *
-     * @param graph the graph
+     * @param nextNodesFuncction the nextNodesFunction
      * @param root the root vertex
      */
-    public DepthFirstSpliterator(Function<V, Iterable<V>> graph, V root) {
-                super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-
-        if (graph == null) {
-            throw new IllegalArgumentException("graph==null");
-        }
-        if (root == null) {
-            throw new IllegalArgumentException("root==null");
-        }
-        this.graph = graph;
-        stack = new ArrayDeque<>(16);
-        Set<V> vset = new HashSet<>(16);
-        visited = vset::add;
-        stack.push(root);
-        visited.test(root);
+    public DepthFirstSpliterator(Function<V, Iterable<V>> nextNodesFuncction, V root) {
+        this(nextNodesFuncction,root,new HashSet<>()::add);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param graph the graph
+     * @param nextNodesFunction the nextNodesFunction
      * @param root the root vertex
      * @param visited a predicate with side effect. The predicate returns true
      * if the specified vertex has been visited, and marks the specified vertex
      * as visited.
      */
-    public DepthFirstSpliterator(Function<V, Iterable<V>> graph, V root, Predicate<V> visited) {
+    public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextNodesFunction, @Nullable V root, @Nullable Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        if (graph == null) {
-            throw new IllegalArgumentException("graph==null");
+        if (nextNodesFunction == null) {
+            throw new IllegalArgumentException("nextNodesFunction==null");
         }
         if (root == null) {
             throw new IllegalArgumentException("root==null");
@@ -70,7 +59,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
         if (visited == null) {
             throw new IllegalArgumentException("visited==null");
         }
-        this.graph = graph;
+        this.nextNodesFunction = nextNodesFunction;
         stack = new ArrayDeque<>(16);
         this.visited = visited;
         stack.push(root);
@@ -79,12 +68,12 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
 
     @Override
-    public boolean tryAdvance(Consumer<? super V> action) {
-        V current = stack.pop();
+    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
+        V current = stack.pollFirst();
         if (current == null) {
             return false;
         }
-        for (V next : graph.apply(current)) {
+        for (V next : nextNodesFunction.apply(current)) {
             if (visited.test(next)) {
                 stack.push(next);
             }

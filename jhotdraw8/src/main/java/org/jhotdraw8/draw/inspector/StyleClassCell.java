@@ -14,6 +14,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -27,6 +29,7 @@ import org.jhotdraw8.util.Resources;
 public class StyleClassCell extends ListCell<StyleClassItem> {
 
     private HBox node;
+    @Nullable
     private StyleClassItem item;
     private boolean isUpdating;
 
@@ -38,7 +41,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
         this(LayersInspector.class.getResource("StyleClassCell.fxml"), inspector);
     }
 
-    public StyleClassCell(URL fxmlUrl, StyleClassesInspector inspector) {
+    public StyleClassCell(@NonNull URL fxmlUrl, StyleClassesInspector inspector) {
         init(fxmlUrl);
         this.inspector = inspector;
     }
@@ -61,7 +64,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
     }
 
     @Override
-    protected void updateItem(StyleClassItem item, boolean empty) {
+    protected void updateItem(@Nullable StyleClassItem item, boolean empty) {
         super.updateItem(item, empty);
 
         if (empty || item == null) {

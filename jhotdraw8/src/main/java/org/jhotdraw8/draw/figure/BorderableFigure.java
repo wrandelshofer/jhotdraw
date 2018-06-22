@@ -11,6 +11,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -82,6 +84,7 @@ public interface BorderableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
+    @Nullable
     public static PaintableStyleableFigureKey BORDER_STROKE = new PaintableStyleableFigureKey("border-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
@@ -124,7 +127,7 @@ public interface BorderableFigure extends Figure {
      */
     public static DoubleListStyleableFigureKey BORDER_STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("border-stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableList.emptyList());
 
-    default void applyBorderStrokeCapAndJoinProperties( Shape shape) {
+    default void applyBorderStrokeCapAndJoinProperties(@NonNull Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(BORDER_STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -140,7 +143,7 @@ public interface BorderableFigure extends Figure {
         }
     }
 
-    default void applyBorderStrokeDashProperties( Shape shape) {
+    default void applyBorderStrokeDashProperties(@NonNull Shape shape) {
         double d = getStyled(BORDER_STROKE_DASH_OFFSET);
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -151,7 +154,7 @@ public interface BorderableFigure extends Figure {
         }
     }
 
-    default void applyBorderStrokeTypeProperties( Shape shape) {
+    default void applyBorderStrokeTypeProperties(@NonNull Shape shape) {
         StrokeType st = getStyled(BORDER_STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -163,7 +166,7 @@ public interface BorderableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyBorderStrokeableFigureProperties( Shape shape) {
+    default void applyBorderStrokeableFigureProperties(@NonNull Shape shape) {
          applyBorderStrokeColorProperties( shape) ;
          applyBorderStrokeWidthProperties( shape) ;
         applyBorderStrokeCapAndJoinProperties(shape);
@@ -171,13 +174,13 @@ public interface BorderableFigure extends Figure {
         applyBorderStrokeTypeProperties(shape);
         applyBorderStrokeDashProperties(shape);
     }
-    default void applyBorderStrokeColorProperties( Shape shape) {
+    default void applyBorderStrokeColorProperties(@NonNull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(BORDER_STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
-    default void applyBorderStrokeWidthProperties( Shape shape) {
+    default void applyBorderStrokeWidthProperties(@NonNull Shape shape) {
        double d = getStyled(BORDER_STROKE_WIDTH);
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);

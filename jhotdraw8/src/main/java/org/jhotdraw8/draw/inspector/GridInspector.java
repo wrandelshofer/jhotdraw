@@ -21,6 +21,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
@@ -55,6 +57,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @FXML
     private TextField majorYField;
 
+    @NonNull
     private Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
     private Node node;
 
@@ -71,7 +74,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         this(LayersInspector.class.getResource("GridInspector.fxml"));
     }
 
-    public GridInspector(URL fxmlUrl) {
+    public GridInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -80,7 +83,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         return node;
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -113,7 +116,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+    protected void onDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
         ChangeListener<Number> prefsGridX = (o, oldv, newv) -> prefs.putDouble("gridX", newv.doubleValue());
         ChangeListener<Number> prefsGridY = (o, oldv, newv) -> prefs.putDouble("gridY", newv.doubleValue());
@@ -149,7 +152,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 CssColorConverter converter=new CssColorConverter(true);
                 try {
                     gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor",gridConstrainer.getGridColor().getName())));
-                } catch (ParseException|IOException ex) {
+                } catch (@NonNull ParseException|IOException ex) {
                     // don't set color if preferences is bogus
                 }
                 newValue.setConstrainer(gridConstrainer);

@@ -8,6 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -27,6 +28,7 @@ public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<
 
     private final static long serialVersionUID = 1L;
 
+    @NonNull
     private final CssMetaData<?, ImmutableList<Transform>> cssMetaData;
 
     /**
@@ -73,6 +75,7 @@ public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<
         cssMetaData = md;
     }
 
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<Transform>> getCssMetaData() {
         return cssMetaData;

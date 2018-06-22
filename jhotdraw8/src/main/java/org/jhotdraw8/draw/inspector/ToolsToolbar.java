@@ -14,6 +14,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.tool.Tool;
 
@@ -25,20 +27,23 @@ import org.jhotdraw8.draw.tool.Tool;
  */
 public class ToolsToolbar extends GridPane {
 
+    @NonNull
     private ToggleGroup group = new ToggleGroup();
+    @NonNull
     private ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, "editor");
 
     {
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 
             @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, @Nullable Toggle newValue) {
                 if (newValue != null && getDrawingEditor() != null) {
                     getDrawingEditor().setActiveTool((Tool) newValue.getUserData());
                 }
             }
         });
     }
+    @NonNull
     private ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {
@@ -53,7 +58,7 @@ public class ToolsToolbar extends GridPane {
         editor.addListener(new ChangeListener<DrawingEditor>() {
 
             @Override
-            public void changed(ObservableValue<? extends DrawingEditor> observable, DrawingEditor oldValue, DrawingEditor newValue) {
+            public void changed(ObservableValue<? extends DrawingEditor> observable, @Nullable DrawingEditor oldValue, @Nullable DrawingEditor newValue) {
                 if (oldValue != null) {
                     oldValue.activeToolProperty().removeListener(activeToolHandler);
                 }
@@ -71,10 +76,12 @@ public class ToolsToolbar extends GridPane {
         setDrawingEditor(editor);
     }
 
-    public ToggleButton addTool(Tool tool, int gridx, int gridy) {
+    @NonNull
+    public ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy) {
      return   addTool(tool,gridx,gridy,0);
     }
-    public ToggleButton addTool(Tool tool, int gridx, int gridy, double marginLeft) {
+    @NonNull
+    public ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy, double marginLeft) {
         ToggleButton button = new ToggleButton();
         if (tool.get(Tool.LARGE_ICON_KEY) != null) {
             button.setGraphic(tool.get(Tool.LARGE_ICON_KEY));
@@ -95,6 +102,7 @@ public class ToolsToolbar extends GridPane {
         return button;
     }
 
+    @NonNull
     public ObjectProperty<DrawingEditor> drawingEditor() {
         return editor;
     }

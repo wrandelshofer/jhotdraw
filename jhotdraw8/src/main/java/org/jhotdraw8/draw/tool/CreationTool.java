@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.tool;
 import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static java.lang.Math.*;
@@ -77,7 +78,7 @@ private double defaultHeight=10;
     }
 
     @Override
-    protected void handleMousePressed(MouseEvent event, DrawingView view) {
+    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
@@ -101,7 +102,7 @@ private double defaultHeight=10;
     }
 
     @Override
-    protected void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
                 Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x1, y1));
@@ -123,7 +124,7 @@ private double defaultHeight=10;
     }
 
     @Override
-    protected void handleMouseDragged(MouseEvent event, DrawingView dv) {
+    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();

@@ -44,6 +44,7 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @return the root
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     ObjectProperty<N> rootProperty();
 
     /**

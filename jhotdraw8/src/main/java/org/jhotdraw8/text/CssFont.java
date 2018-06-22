@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * CssFont same as {@code javafx.scene.text.Font} but allows to get all
@@ -22,12 +24,15 @@ import javafx.scene.text.FontWeight;
 public class CssFont {
 
     private final String family;
+    @Nullable
     private final FontWeight weight;
+    @Nullable
     private final FontPosture posture;
     private final double size;
+    @NonNull
     private final Font font;
 
-    public CssFont(String family, FontWeight weight, FontPosture posture, double size) {
+    public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, double size) {
         this.family = family;
         this.weight = weight;
         this.posture = posture;
@@ -42,10 +47,12 @@ public class CssFont {
         return family;
     }
 
+    @Nullable
     public FontWeight getWeight() {
         return weight;
     }
 
+    @Nullable
     public FontPosture getPosture() {
         return posture;
     }
@@ -54,6 +61,7 @@ public class CssFont {
         return size;
     }
 
+    @NonNull
     public Font getFont() {
         return font;
     }
@@ -77,7 +85,7 @@ private final static Map<String,CssFont> cachedFonts=new ConcurrentHashMap<>();
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

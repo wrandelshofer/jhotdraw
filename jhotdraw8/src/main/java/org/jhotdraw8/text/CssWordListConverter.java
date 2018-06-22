@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.Comparator;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.io.IdFactory;
 
@@ -43,7 +45,7 @@ public class CssWordListConverter implements Converter<ImmutableList<String>> {
                     Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableList<String> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nullable ImmutableList<String> value) throws IOException {
         if (value == null) {
             return;
         }

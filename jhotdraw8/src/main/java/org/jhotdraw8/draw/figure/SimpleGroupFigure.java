@@ -8,6 +8,7 @@ import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Transforms;
 
@@ -26,6 +27,7 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
      */
     public final static String TYPE_SELECTOR = "Group";
 
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
@@ -33,6 +35,7 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
         return g;
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -61,7 +64,7 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node n) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(ctx, n);

@@ -16,6 +16,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
 import org.jhotdraw8.util.function.Double6Consumer;
@@ -98,7 +99,7 @@ public class Geom {
      * @param angle the angle of the ray starting at the center of the rectangle
      * @return a point on the rectangle
      */
-    public static Point2D angleToPoint(Rectangle2D r, double angle) {
+    public static Point2D angleToPoint(@NonNull Rectangle2D r, double angle) {
         double si = sin(angle);
         double co = cos(angle);
         double e = 0.0001;
@@ -156,6 +157,7 @@ public class Geom {
      * @param radius the radius
      * @return A new end point for the line.
      */
+    @NonNull
     public static Point2D cap(Point2D p1, Point2D p2, double radius) {
         double angle = PI / 2 - atan2(p2.getX() - p1.getX(), p2.getY()
                 - p1.getY());
@@ -203,7 +205,7 @@ public class Geom {
      * @param p the point
      * @return a point on the shape
      */
-    public static Point2D chop(Shape shape, Point2D p) {
+    public static Point2D chop(Shape shape, @NonNull Point2D p) {
         java.awt.geom.Rectangle2D bounds = shape.getBounds2D();
         java.awt.geom.Point2D.Double ctr = new java.awt.geom.Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 
@@ -331,7 +333,7 @@ public class Geom {
      * @param tolerance the tolerance
      * @return true if inside
      */
-    public static boolean contains(Bounds r, Point2D p, double tolerance) {
+    public static boolean contains(@NonNull Bounds r, Point2D p, double tolerance) {
         return contains(r, p.getX(), p.getY(), tolerance);
     }
 
@@ -971,7 +973,7 @@ public class Geom {
      * @param angle the angle
      * @return a point on the oval
      */
-    public static Point2D ovalAngleToPoint(Rectangle2D r, double angle) {
+    public static Point2D ovalAngleToPoint(@NonNull Rectangle2D r, double angle) {
         Point2D center = Geom.center(r);
         Point2D p = Geom.polarToPoint(angle, r.getWidth() / 2.0, r.getHeight() / 2.0);
         return new Point2D(center.getX() + p.getX(), center.getY() + p.getY());
@@ -1135,17 +1137,18 @@ public class Geom {
         );
     }
 
+    @NonNull
     public static Transform toDeltaTransform(Transform t) {
         Transform d = new Affine(t.getMxx(), t.getMxy(), 0.0,
                 t.getMyx(), t.getMyy(), 0.0);
         return d;
     }
 
-    public static String toString(Bounds b) {
+    public static String toString(@org.checkerframework.checker.nullness.qual.Nullable Bounds b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
-    public static String toString(Rectangle2D b) {
+    public static String toString(@org.checkerframework.checker.nullness.qual.Nullable Rectangle2D b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
@@ -1221,8 +1224,8 @@ public class Geom {
      * @param rightLineTo if not null, accepts the curve from t to x2,y2
      */
     public static void splitLine(double x0, double y0, double x1, double y1, double t,
-            Double2Consumer leftLineTo,
-            Double2Consumer rightLineTo) {
+                                 @org.checkerframework.checker.nullness.qual.Nullable Double2Consumer leftLineTo,
+                                 @org.checkerframework.checker.nullness.qual.Nullable Double2Consumer rightLineTo) {
         final double x12 = (x1 - x0) * t + x0;
         final double y12 = (y1 - y0) * t + y0;
 

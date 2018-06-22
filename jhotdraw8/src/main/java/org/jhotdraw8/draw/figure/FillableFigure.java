@@ -9,6 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -45,7 +46,7 @@ public interface FillableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyFillableFigureProperties( Shape shape) {
+    default void applyFillableFigureProperties(@NonNull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(FILL));
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);

@@ -25,6 +25,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.AbstractDocumentOrientedViewController;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -49,6 +50,7 @@ public class TeddyController extends AbstractDocumentOrientedViewController impl
   @FXML
   private TextArea textArea;
 
+  @NonNull
   @Override
   public CompletionStage<Void> clear() {
     textArea.setText(null);
@@ -92,13 +94,14 @@ public class TeddyController extends AbstractDocumentOrientedViewController impl
     textArea.textProperty().addListener((observable -> modified.set(true)));
   }
 
+  @NonNull
   @Override
   public CompletionStage<Void> print(PrinterJob job) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public CompletionStage<DataFormat> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
+  public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
     return FXWorker.supply(() -> {
       StringBuilder builder = new StringBuilder();
       char[] cbuf = new char[8192];
@@ -119,7 +122,7 @@ public class TeddyController extends AbstractDocumentOrientedViewController impl
   }
 
   @Override
-  public CompletionStage<Void> write(URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
+  public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
     final String text = textArea.getText();
     return FXWorker.run(() -> {
       try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {

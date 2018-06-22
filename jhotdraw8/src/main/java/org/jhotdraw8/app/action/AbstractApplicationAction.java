@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.net.UriUtil;
 
@@ -25,6 +27,7 @@ import org.jhotdraw8.net.UriUtil;
 public abstract class AbstractApplicationAction extends AbstractAction {
 
     private static final long serialVersionUID = 1L;
+    @Nullable
     protected Application app;
 
     /**
@@ -32,7 +35,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      *
      * @param app the application
      */
-    public AbstractApplicationAction(Application app) {
+    public AbstractApplicationAction(@Nullable Application app) {
         if (app == null) {
             throw new IllegalArgumentException("app is null");
         }
@@ -41,7 +44,8 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
-    protected String createErrorMessage(Throwable t) {
+    @NonNull
+    protected String createErrorMessage(@Nullable Throwable t) {
         StringBuilder buf = new StringBuilder();
         for (; t != null; t = t.getCause()) {
             if ((t instanceof CompletionException) && t.getCause() != null) {
@@ -60,6 +64,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         return buf.toString();
     }
 
+    @Nullable
     public final Application getApplication() {
         return app;
     }
@@ -78,6 +83,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      */
     protected abstract void handleActionPerformed(ActionEvent event, Application app);
 
+    @NonNull
     protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {
         TextArea textArea = new TextArea(message);
         textArea.setEditable(false);

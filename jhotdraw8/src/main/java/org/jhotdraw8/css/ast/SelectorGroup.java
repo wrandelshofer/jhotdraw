@@ -6,6 +6,9 @@ package org.jhotdraw8.css.ast;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -17,16 +20,18 @@ import org.jhotdraw8.css.SelectorModel;
  */
 public class SelectorGroup extends AST {
 
+    @NonNull
     private final List<Selector> selectors;
 
     public SelectorGroup(Selector selector) {
         this.selectors = Arrays.asList(new Selector[]{selector});
     }
 
-    public SelectorGroup(List<Selector> selectors) {
+    public SelectorGroup(@NonNull List<Selector> selectors) {
         this.selectors = Collections.unmodifiableList(selectors);
     }
 
+    @NonNull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("( ");
@@ -66,6 +71,7 @@ public class SelectorGroup extends AST {
      * @return the selector which matches the specified element, returns null if
      * no selector matches
      */
+    @Nullable
     public <T> Selector match(SelectorModel<T> model, T element) {
         for (Selector s : selectors) {
             T result = s.match(model, element);

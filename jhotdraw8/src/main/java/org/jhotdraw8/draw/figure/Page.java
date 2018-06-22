@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.text.CssSize2D;
 
@@ -52,7 +53,7 @@ public interface Page extends Figure {
                   || (Math.abs(p.getHeight() - w) < 1 && Math.abs(p.getWidth() - h) < 1)) {
             return p;
           }
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
+        } catch (@NonNull IllegalArgumentException | IllegalAccessException ex) {
           // continue
         }
       }

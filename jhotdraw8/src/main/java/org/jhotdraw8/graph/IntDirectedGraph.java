@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -138,13 +141,14 @@ public interface IntDirectedGraph {
                index=lo;
            }
             @Override
-            public boolean tryAdvance(IntConsumer action) {
+            public boolean tryAdvance(@NonNull IntConsumer action) {
                 if (index<limit) {
                     action.accept(getNext(vidx,index++));
                     return true;
                 }
                 return false;
             }
+        @Nullable
         public MySpliterator trySplit() {
             int hi = limit, lo = index, mid = (lo + hi) >>> 1;
             return (lo >= mid) ? null : // divide range in half unless too small

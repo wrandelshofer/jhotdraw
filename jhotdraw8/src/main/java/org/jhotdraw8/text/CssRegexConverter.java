@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -38,6 +41,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         this.nullable = nullable;
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨RegReplace⟩: none | replace(⟨Match⟩, ⟨Replace⟩)"
@@ -46,7 +50,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, RegexReplace value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable RegexReplace value) throws IOException {
         if (value == null) {
             if (nullable) {
                 out.append("none");
@@ -72,8 +76,9 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         out.append(')');
     }
 
+    @Nullable
     @Override
-    public RegexReplace fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public RegexReplace fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         String find = null;
@@ -139,6 +144,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         return new RegexReplace(find, replace);
     }
 
+    @Nullable
     @Override
     public RegexReplace getDefaultValue() {
         return null;

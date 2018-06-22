@@ -5,6 +5,7 @@ package org.jhotdraw8.gui;
 
 import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A custom skin without behavior.
@@ -14,7 +15,7 @@ import javafx.scene.control.SkinBase;
  */
 public class CustomSkin<C extends Control> extends SkinBase<C> {
 
-    public CustomSkin(C control) {
+    public CustomSkin(@NonNull C control) {
         super(control);
     }
 

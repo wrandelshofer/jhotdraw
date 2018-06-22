@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -24,7 +27,7 @@ public class XmlEnumConverter<E extends Enum<E>> implements Converter<E> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, E value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable E value) throws IOException {
         if (value == null) {
             out.append("null");
         } else {
@@ -37,8 +40,9 @@ public class XmlEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
+    @Nullable
     @Override
-    public E fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public E fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
@@ -58,6 +62,7 @@ public class XmlEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
+    @Nullable
     @Override
     public E getDefaultValue() {
         try {

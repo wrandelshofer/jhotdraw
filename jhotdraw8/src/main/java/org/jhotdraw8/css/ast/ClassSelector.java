@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -20,13 +22,15 @@ public class ClassSelector extends SimpleSelector {
         this.clazz = clazz;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Class:" + clazz;
     }
 
+    @Nullable
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
+    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasStyleClass(element, clazz)) //
                 ? element : null;
     }

@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 import java.util.stream.Collector;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A state object for finding the combined bounds of a stream of Bounds objects.
@@ -44,7 +45,7 @@ public class BoundsCalculator {
      *
      * @param value the input value
      */
-    public void accept(Bounds value) {
+    public void accept(@NonNull Bounds value) {
         minX = Math.min(minX, value.getMinX());
         maxX = Math.max(maxX, value.getMaxX());
         minY = Math.min(minY, value.getMinY());
@@ -58,7 +59,7 @@ public class BoundsCalculator {
      * @param other another {@code BoundsCalculator}
      * @throws NullPointerException if {@code other} is null
      */
-    public void combine(BoundsCalculator other) {
+    public void combine(@NonNull BoundsCalculator other) {
         minX = Math.min(minX, other.minX);
         maxX = Math.max(maxX, other.maxX);
         minY = Math.min(minY, other.minY);
@@ -69,6 +70,7 @@ public class BoundsCalculator {
      * Getter.
      * @return the calculated bounds 
      */
+    @NonNull
     public Bounds getBounds() {
         return new BoundingBox(minX,minY,maxX-minX,maxY-minY);
     }

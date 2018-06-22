@@ -6,6 +6,8 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -56,16 +58,18 @@ public class XmlIntegerConverter implements Converter<Integer> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Integer value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, Integer value) throws IOException {
         c.toString(out, idFactory, value);
     }
 
+    @NonNull
     @Override
     public Integer fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         Number n = c.fromString(in, idFactory);
         return (n == null || n instanceof Integer) ? (Integer) n : n.intValue();
     }
 
+    @NonNull
     @Override
     public Integer getDefaultValue() {
         Number n = c.getDefaultValue();

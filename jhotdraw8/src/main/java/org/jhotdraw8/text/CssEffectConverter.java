@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
 import java.io.StringReader;
@@ -91,13 +93,17 @@ public class CssEffectConverter implements Converter<Effect> {
     private static final String INNER_SHADOW = "inner-shadow";
     private static final String SHADOW = "shadow";
 
+    @NonNull
     private CssEnumConverter<BlurType> blurTypeConverter = new CssEnumConverter<>(BlurType.class,false);
+    @NonNull
     private CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class,false);
+    @NonNull
     private CssColorConverter colorConverter = new CssColorConverter(false);
+    @NonNull
     private CssDoubleConverter nb = new CssDoubleConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Effect value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, Effect value) throws IOException {
         if (value instanceof Blend) {
             Blend fx = (Blend) value;
             out.append(BLEND).append('(');
@@ -262,8 +268,9 @@ public class CssEffectConverter implements Converter<Effect> {
         }
     }
 
+    @Nullable
     @Override
-    public Effect fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public Effect fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
@@ -282,6 +289,7 @@ public class CssEffectConverter implements Converter<Effect> {
         return effect;
     }
 
+    @Nullable
     private Effect parseEffect(CssTokenizerInterface tt) throws ParseException, IOException {
         Effect first = null;
         Effect previous = null;
@@ -324,7 +332,7 @@ public class CssEffectConverter implements Converter<Effect> {
             } else {
                 try {
                     previous.getClass().getDeclaredMethod("setInput", Effect.class).invoke(previous, current);
-                } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                } catch (@NonNull NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     ParseException pe = new ParseException("CSS Effect: can not combine effects", tt.getStartPosition());
                     pe.initCause(ex);
                     throw pe;
@@ -452,7 +460,8 @@ public class CssEffectConverter implements Converter<Effect> {
         return new ColorAdjust(hue, saturation, brightness, contrast);
     }
 
-    private Effect parseDropShadow(CssTokenizerInterface tt) throws ParseException, IOException {
+    @NonNull
+    private Effect parseDropShadow(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, true);
     }
 
@@ -471,7 +480,8 @@ public class CssEffectConverter implements Converter<Effect> {
         return new GaussianBlur(radius);
     }
 
-    private Effect parseInnerShadow(CssTokenizerInterface tt) throws ParseException, IOException {
+    @NonNull
+    private Effect parseInnerShadow(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, false);
     }
 
@@ -493,6 +503,7 @@ public class CssEffectConverter implements Converter<Effect> {
         return new Glow(Geom.clamp(level, 0, 1));
     }
 
+    @NonNull
     private Effect parseDropShadowOrInnerShadow(CssTokenizerInterface tt, boolean isDropShadow) throws ParseException, IOException {
         String func = isDropShadow ? DROP_SHADOW : INNER_SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
@@ -628,11 +639,13 @@ public class CssEffectConverter implements Converter<Effect> {
         return new Shadow(blurType, color, Geom.clamp(radius, 0, 127));
     }
 
+    @Nullable
     @Override
     public Effect getDefaultValue() {
         return null;
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Effect⟩: none｜（⟨Blend⟩｜⟨Bloom⟩｜⟨BoxBlur⟩｜⟨ColorAdjust⟩｜⟨DropShadow⟩｜⟨GaussianBlur⟩｜ ⟨InnerShadow⟩）｛, ⟨Effect⟩｝"

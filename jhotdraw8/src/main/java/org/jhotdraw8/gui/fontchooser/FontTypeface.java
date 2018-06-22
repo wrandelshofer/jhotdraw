@@ -7,6 +7,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * FontTypeface.
@@ -44,14 +45,17 @@ public class FontTypeface {
         regular.set(value);
     }
 
+    @NonNull
     public StringProperty nameProperty() {
         return name;
     }
 
+    @NonNull
     public BooleanProperty regularProperty() {
         return regular;
     }
 
+    @NonNull
     public StringProperty shortNameProperty() {
         return shortName;
     }

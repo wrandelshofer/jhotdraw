@@ -11,6 +11,7 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * An immutable observable list.
@@ -25,15 +26,15 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
 
     private final Object[] array;
 
-    private ImmutableList(Collection<E> copyItems) {
+    private ImmutableList(@org.checkerframework.checker.nullness.qual.Nullable Collection<E> copyItems) {
         this.array = copyItems == null||copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
     }
 
-    private ImmutableList(Object[] array) {
+    private ImmutableList(@NonNull Object[] array) {
         this(array, 0, array.length);
     }
 
-    private ImmutableList(Object[] a, int offset, int length) {
+    private ImmutableList(@NonNull Object[] a, int offset, int length) {
         this.array = new Object[length];
         System.arraycopy(a, offset, array, 0, length);
     }
@@ -58,7 +59,7 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
         // nothing to do
     }
 
-    public void copyInto(Object[] out, int offset) {
+    public void copyInto(@NonNull Object[] out, int offset) {
         System.arraycopy(array, 0, out, offset, array.length);
     }
     @Override
@@ -67,6 +68,7 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
             if (array[i].equals(o))return true;
         return false;
     }
+    @NonNull
     @Override
     public E get(int index) {
         @SuppressWarnings("unchecked")
@@ -117,6 +119,7 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
         return array.length;
     }
 
+    @NonNull
     public static <T> ImmutableList<T> add(@Nullable Collection<T> collection, T item) {
         if (collection==null||collection.isEmpty()) {
             return ImmutableList.of(item);
@@ -127,7 +130,8 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
         return new ImmutableList<>(true, a);
     }
 
-    public static <T> ImmutableList<T> add(Collection<T> collection, int index, T item) {
+    @NonNull
+    public static <T> ImmutableList<T> add(@org.checkerframework.checker.nullness.qual.Nullable Collection<T> collection, int index, T item) {
         if (collection==null||collection.isEmpty() && index == 0) {
             return ImmutableList.of(item);
         }
@@ -140,11 +144,13 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
         return new ImmutableList<>(true, b);
     }
 
+    @NonNull
     @SuppressWarnings("unchecked")
     public static <T> ImmutableList<T> emptyList() {
         return (ImmutableList<T>) EMPTY;
     }
 
+    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <T> ImmutableList<T> of(T... items) {
@@ -152,15 +158,18 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
         return items.length == 0 ? emptyList() : new ImmutableList<>(true, items);
     }
 
+    @NonNull
     public static <T> ImmutableList<T> ofCollection(Collection<T> collection) {
         return collection.isEmpty() ? emptyList() : new ImmutableList<>(collection);
     }
     
-    public static <T> ImmutableList<T> ofArray(  Object[] a, int offset, int length) {
+    @NonNull
+    public static <T> ImmutableList<T> ofArray(@NonNull Object[] a, int offset, int length) {
         return length==0?emptyList():new ImmutableList<>(a,offset,length);
     }
 
-    public static <T> ImmutableList<T> remove(Collection<T> collection, int index) {
+    @NonNull
+    public static <T> ImmutableList<T> remove(@org.checkerframework.checker.nullness.qual.Nullable Collection<T> collection, int index) {
         if (collection==null||collection.size() == 1 && index == 0) {
             return ImmutableList.emptyList();
         }
@@ -172,7 +181,8 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
         return new ImmutableList<>(true, b);
     }
 
-    public static <T> ImmutableList<T> remove(Collection<T> collection, T item) {
+    @NonNull
+    public static <T> ImmutableList<T> remove(@org.checkerframework.checker.nullness.qual.Nullable Collection<T> collection, T item) {
         if (collection==null||collection.size() == 1 && collection.contains(item)) {
             return ImmutableList.emptyList();
         }

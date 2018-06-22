@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import static org.jhotdraw8.draw.figure.AbstractLabelFigure.ORIGIN;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -47,7 +49,7 @@ public class SimplePageLabelFigure extends AbstractLabelFigure implements Hideab
     }
 
     @Override
-    protected String getText(RenderContext ctx) {
+    protected String getText(@Nullable RenderContext ctx) {
         String text = get(TEXT_WITH_PLACEHOLDERS);
         final Integer pageNumber = ctx==null?0:ctx.get(RenderContext.RENDER_PAGE_NUMBER);
         final Integer numPages =ctx==null?0:ctx.get(RenderContext.RENDER_NUMBER_OF_PAGES);
@@ -62,7 +64,8 @@ public class SimplePageLabelFigure extends AbstractLabelFigure implements Hideab
         return text;
     }
 
-    private String replaceAll(String text, String placeholder, String replace) {
+    @NonNull
+    private String replaceAll(String text, @NonNull String placeholder, String replace) {
         for (int p = text.indexOf(placeholder); p != -1; p = text.indexOf(placeholder)) {
             text = text.substring(0, p) + replace + text.substring(p + placeholder.length());
         }
@@ -70,13 +73,14 @@ public class SimplePageLabelFigure extends AbstractLabelFigure implements Hideab
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         super.updateNode(ctx, node);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
         applyHideableFigureProperties(node);                
     }
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

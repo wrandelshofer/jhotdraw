@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
@@ -47,9 +48,11 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     protected double pagesDpi = 72.0;
     protected double slicesDpi = 72.0;
 
+    @NonNull
     protected abstract String getExtension();
 
          
+    @org.checkerframework.checker.nullness.qual.Nullable
     private  Function<URI,URI> uriResolver = new UriResolver(null,null);
 
     @Override
@@ -66,6 +69,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
     }
 
+        @org.checkerframework.checker.nullness.qual.Nullable
         public Function<URI,URI> getUriResolver() {
         return uriResolver;
     }
@@ -108,7 +112,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      */
     protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
-    protected void writePages(File dir, String basename, Drawing drawing) throws IOException {
+    protected void writePages(@org.checkerframework.checker.nullness.qual.Nullable File dir, String basename, @NonNull Drawing drawing) throws IOException {
         setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
@@ -133,7 +137,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param hints the hints
      * @throws java.io.IOException in case of failure
      */
-    protected void writePages(File dir, String basename, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
+    protected void writePages(@org.checkerframework.checker.nullness.qual.Nullable File dir, String basename, @NonNull Drawing drawing, @NonNull List<Page> pages, @NonNull Map<Key<?>, Object> hints) throws IOException {
         setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
@@ -198,7 +202,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      */
     protected abstract boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
 
-    protected void writeSlices(File dir, Drawing drawing) throws IOException {
+    protected void writeSlices(@org.checkerframework.checker.nullness.qual.Nullable File dir, @NonNull Drawing drawing) throws IOException {
         setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {

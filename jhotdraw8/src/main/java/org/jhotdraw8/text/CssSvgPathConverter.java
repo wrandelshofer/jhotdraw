@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.shape.SVGPath;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -28,8 +30,9 @@ public class CssSvgPathConverter implements Converter<String> {
         this.nullable = nullable;
     }
 
+    @Nullable
     @Override
-    public String fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
         String p = null;
@@ -52,6 +55,7 @@ public class CssSvgPathConverter implements Converter<String> {
         return p;
     }
 
+  @NonNull
   @Override
     public String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨SvgPath⟩: \" ⟨moveTo ⟩｛ moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ ｝ \"");
@@ -65,7 +69,7 @@ public class CssSvgPathConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is null");
@@ -104,6 +108,7 @@ public class CssSvgPathConverter implements Converter<String> {
         out.append('"');
     }
 
+    @Nullable
     @Override
     public String getDefaultValue() {
         

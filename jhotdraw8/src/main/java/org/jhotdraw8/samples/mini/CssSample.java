@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -37,7 +38,7 @@ import org.jhotdraw8.draw.tool.Tool;
 public class CssSample extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(@NonNull Stage primaryStage) throws Exception {
         Drawing drawing = new SimpleDrawing();
 
         SimpleRectangleFigure vertex1 = new SimpleRectangleFigure(10, 10, 30, 20);

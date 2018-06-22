@@ -4,6 +4,7 @@
 package org.jhotdraw8.app.action.file;
 
 import javafx.event.ActionEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
@@ -36,7 +37,7 @@ public class NewFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, Application app) {
+    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
         app.createView().thenAccept(newView-> {
             DocumentOrientedViewModel newDOView= (DocumentOrientedViewModel) newView;
             app.add(newDOView);

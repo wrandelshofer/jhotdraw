@@ -8,6 +8,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.util.Builder;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * PathBuilder.
@@ -218,7 +219,7 @@ public interface PathBuilder {
      * @param c2 the control point 2
      * @param p the end point
      */
-    default void curveTo( Point2D c1,  Point2D c2,  Point2D p) {
+    default void curveTo(@NonNull Point2D c1, @NonNull Point2D c2, @NonNull Point2D p) {
         curveTo(c1.getX(), c1.getY(), c2.getX(), c2.getY(), p.getX(), p.getY());
     }
 
@@ -267,7 +268,7 @@ public interface PathBuilder {
      *
      * @param p the end point
      */
-    default void lineTo( Point2D p) {
+    default void lineTo(@NonNull Point2D p) {
         lineTo(p.getX(), p.getY());
     }
 
@@ -287,7 +288,7 @@ public interface PathBuilder {
      *
      * @param p the end point
      */
-    default void moveTo( Point2D p) {
+    default void moveTo(@NonNull Point2D p) {
         moveTo(p.getX(), p.getY());
     }
 
@@ -331,7 +332,7 @@ public interface PathBuilder {
      * @param c the control point
      * @param p the end point
      */
-    default void quadTo( Point2D c,  Point2D p) {
+    default void quadTo(@NonNull Point2D c, @NonNull Point2D p) {
         quadTo(c.getX(), c.getY(), p.getX(), p.getY());
     }
 
@@ -348,7 +349,7 @@ public interface PathBuilder {
      * @param c2 the control point 2
      * @param p the end point
      */
-    default void smoothCurveTo( Point2D c2,  Point2D p) {
+    default void smoothCurveTo(@NonNull Point2D c2, @NonNull Point2D p) {
         smoothCurveTo(c2.getX(), c2.getY(), p.getX(), p.getY());
     }
 
@@ -380,7 +381,7 @@ public interface PathBuilder {
      *
      * @param p the end point
      */
-    default void smoothQuadTo( Point2D p) {
+    default void smoothQuadTo(@NonNull Point2D p) {
         smoothQuadTo(p.getX(), p.getY());
     }
 

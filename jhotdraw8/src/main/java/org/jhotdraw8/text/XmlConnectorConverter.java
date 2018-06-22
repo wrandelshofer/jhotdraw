@@ -9,6 +9,9 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.connector.Connector;
@@ -35,6 +38,7 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class XmlConnectorConverter implements Converter<Connector> {
 
+    @NonNull
     private CssLocatorConverter locatorConverter = new CssLocatorConverter();
 
     private final static HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
@@ -50,7 +54,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Connector value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Connector value) throws IOException {
         if (value == null) {
             out.append("none");
         }
@@ -66,8 +70,9 @@ public class XmlConnectorConverter implements Converter<Connector> {
         }
     }
 
+    @Nullable
     @Override
-    public Connector fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Connector fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Connector c;
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
         tt.setSkipWhitespaces(true);
@@ -79,6 +84,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
         return c;
     }
 
+    @Nullable
     @Override
     public Connector getDefaultValue() {
         return null;
@@ -92,7 +98,8 @@ public class XmlConnectorConverter implements Converter<Connector> {
      * @throws ParseException if parsing fails
      * @throws IOException if IO fails
      */
-    public Connector parseConnector(CssTokenizerInterface tt) throws ParseException, IOException {
+    @Nullable
+    public Connector parseConnector(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
         Locator locator = null;
         Function<Locator, Connector> supplier;
         tt.setSkipWhitespaces(true);

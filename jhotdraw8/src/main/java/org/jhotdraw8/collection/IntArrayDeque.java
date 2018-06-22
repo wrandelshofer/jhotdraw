@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -130,6 +132,7 @@ public class IntArrayDeque {
         tail = n;
     }
 
+    @NonNull
     public Iterator<Integer> iterator() {
         return new DeqIterator();
     }
@@ -191,6 +194,7 @@ public class IntArrayDeque {
         return head == tail;
     }
     
+        @NonNull
         public String toString() {
         Iterator<Integer> it = iterator();
         if (! it.hasNext())

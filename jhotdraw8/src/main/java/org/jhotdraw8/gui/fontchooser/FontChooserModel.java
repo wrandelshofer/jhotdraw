@@ -6,6 +6,8 @@ package org.jhotdraw8.gui.fontchooser;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * FontChooserModel.
@@ -17,6 +19,7 @@ public class FontChooserModel {
 
     private final ListProperty<FontCollection> fontCollections = new SimpleListProperty<>();
 
+    @NonNull
     public ListProperty<FontCollection> fontCollectionsProperty() {
         return fontCollections;
     }
@@ -29,6 +32,7 @@ public class FontChooserModel {
         fontCollections.set(value);
     }
     
+    @Nullable
     public FontCollection getAllFonts() {
         return fontCollections.isEmpty()?null:fontCollections.get(0);
     }

@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.collection.Key;
@@ -76,6 +77,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         // XXX should be supplied to the action?
         return app.getModel().createExportChooser();
     }
+@Nullable
 @Override
     protected Dialog<Map<? super Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return optionsDialogFactory==null?null:optionsDialogFactory.apply(format);

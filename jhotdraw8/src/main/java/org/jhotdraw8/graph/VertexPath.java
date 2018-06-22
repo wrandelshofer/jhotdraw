@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,14 +23,15 @@ import java.util.Objects;
  */
 public class VertexPath<V> {
 
+    @NonNull
     private final List<V> vertices;
 
-    public VertexPath(Collection<V> elements) {
+    public VertexPath(@NonNull Collection<V> elements) {
         this.vertices = Collections.unmodifiableList(new ArrayList<>(elements));
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -44,6 +48,7 @@ public class VertexPath<V> {
         return true;
     }
 
+    @NonNull
     public List<V> getVertices() {
         return vertices;
     }
@@ -55,6 +60,7 @@ public class VertexPath<V> {
         return hash;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "VertexPath{" + vertices + '}';

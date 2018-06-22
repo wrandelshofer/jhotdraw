@@ -16,6 +16,8 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -46,11 +48,13 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
     /**
      *
      */
+    @Nullable
     public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<URIChooser>(
             "saveChooser", URIChooser.class, null);
 
     private static final long serialVersionUID = 1L;
 
+    @Nullable
     private Node oldFocusOwner = null;
 
     /**
@@ -59,7 +63,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
      * @param app the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(Application app, DocumentOrientedViewModel view) {
+    public AbstractSaveUnsavedChangesAction(@NonNull Application app, DocumentOrientedViewModel view) {
         super(app, view, DocumentOrientedViewModel.class);
     }
 
@@ -76,7 +80,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         }
     }
 
-    public void handleActionOnViewPerformed(DocumentOrientedViewModel v) {
+    public void handleActionOnViewPerformed(@NonNull DocumentOrientedViewModel v) {
         if (!v.isDisabled()) {
             final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
@@ -148,13 +152,14 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         }
     }
 
-    protected Node getFocusOwner(Node node) {
+    @Nullable
+    protected Node getFocusOwner(@NonNull Node node) {
 
         Scene scene = node.getScene();
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected URIChooser getChooser(DocumentOrientedViewModel view) {
+    protected URIChooser getChooser(@NonNull DocumentOrientedViewModel view) {
         URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -163,7 +168,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         return chsr;
     }
 
-    protected void saveView(final DocumentOrientedViewModel v) {
+    protected void saveView(@NonNull final DocumentOrientedViewModel v) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -201,7 +206,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         }
     }
 
-    protected void saveViewToURI(final DocumentOrientedViewModel v, final URI uri, final URIChooser chooser, final DataFormat dataFormat) {
+    protected void saveViewToURI(@NonNull final DocumentOrientedViewModel v, @NonNull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat) {
         v.write(uri, chooser == null ? null : dataFormat, null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);

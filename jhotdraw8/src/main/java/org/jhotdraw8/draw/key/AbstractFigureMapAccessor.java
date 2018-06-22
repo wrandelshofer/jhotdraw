@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -25,22 +28,27 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
     /**
      * Holds a String representation of the name.
      */
+    @Nullable
     private final String name;
     /**
      * Holds the default value.
      */
+    @Nullable
     private final T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
+    @Nullable
     private final Class<?> clazz;
     /**
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
+    @NonNull
     private final List<Class<?>> typeParameters;
 
+    @NonNull
     private final List<MapAccessor<?>> subAccessors;
 
     /**
@@ -52,7 +60,7 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractFigureMapAccessor(String name, Class<T> clazz, MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractFigureMapAccessor(String name, Class<T> clazz, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, clazz, null, subAccessors, defaultValue);
     }
 
@@ -67,7 +75,7 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractFigureMapAccessor(String name, Class<?> clazz, Class<?>[] typeParameters, MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractFigureMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -90,11 +98,13 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
      *
      * @return name string.
      */
+    @Nullable
     @Override
     public String getName() {
         return name;
     }
 
+    @NonNull
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
@@ -102,11 +112,13 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
         return ret;
     }
 
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
+    @NonNull
     @Override
     public String getFullValueType() {
         StringBuilder buf = new StringBuilder();
@@ -132,6 +144,7 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
      *
      * @return the default value.
      */
+    @Nullable
     @Override
     public T getDefaultValue() {
         return defaultValue;
@@ -140,12 +153,14 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
     /**
      * Returns the name string.
      */
+    @NonNull
     @Override
     public String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getFullValueType() + "}";
     }
 
+    @NonNull
     @Override
     public Collection<MapAccessor<?>> getSubAccessors() {
         return subAccessors;

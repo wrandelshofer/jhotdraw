@@ -11,6 +11,8 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * MessageStringFormatter.
@@ -35,6 +37,7 @@ public abstract class MessageStringFormatter extends StringBinding {
         return value;
     }
 
+    @NonNull
     private static Object[] extractValues(Object[] objs) {
         final int n = objs.length;
         final Object[] values = new Object[n];
@@ -54,7 +57,8 @@ public abstract class MessageStringFormatter extends StringBinding {
         return dependencies.toArray(new ObservableValue<?>[dependencies.size()]);
     }
 
-    public static StringExpression format(final String format, final Object... args) {
+    @NonNull
+    public static StringExpression format(@Nullable final String format, @NonNull final Object... args) {
         if (format == null) {
             throw new NullPointerException("Format cannot be null.");
         }

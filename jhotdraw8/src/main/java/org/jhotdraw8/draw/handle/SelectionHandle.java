@@ -18,6 +18,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
@@ -36,10 +38,13 @@ import org.jhotdraw8.geom.Transforms;
 public class SelectionHandle extends LocatorHandle {
 
     private Point2D pickLocation;
+    @NonNull
     private final Region node;
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
 
@@ -68,13 +73,14 @@ public class SelectionHandle extends LocatorHandle {
         return Cursor.DEFAULT;
     }
 
+    @NonNull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void updateNode(DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();

@@ -4,6 +4,9 @@
 package org.jhotdraw8.text;
 
 import java.util.Objects;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.DefaultUnitConverter;
 
 /**
@@ -14,6 +17,7 @@ import org.jhotdraw8.io.DefaultUnitConverter;
  */
 public class CssSize {
 
+    @Nullable
     public final static CssSize ZERO = new CssSize(0, null);
     private final String units;
     private final double value;
@@ -24,7 +28,7 @@ public class CssSize {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -64,6 +68,7 @@ public class CssSize {
         return hash;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssSize{" + value + units + '}';

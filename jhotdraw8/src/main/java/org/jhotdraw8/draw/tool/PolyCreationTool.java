@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.tool;
 import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     /**
      * The rubber band.
      */
+    @Nullable
     private ArrayList<Point2D> points;
 
     private final Point2DListStyleableFigureKey key;
@@ -59,7 +62,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMousePressed(MouseEvent event, DrawingView view) {
+    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.getClickCount() != 1) {
             return;
         }
@@ -91,14 +94,14 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseMoved(MouseEvent event, DrawingView dv) {
+    protected void handleMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             handleMouseDragged(event, dv);
         }
     }
 
     @Override
-    protected void handleMouseDragged(MouseEvent event, DrawingView dv) {
+    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             double x2 = event.getX();
             double y2 = event.getY();
@@ -111,7 +114,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.getClickCount() > 1) {
             if (createdFigure != null) {
                 for (int i = points.size() - 1; i > 0; i--) {

@@ -9,6 +9,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * VBoxTrack.
@@ -48,6 +49,7 @@ getItems().addListener(new ListChangeListener<Node>() {
         return getChildren();
     }
 
+    @NonNull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

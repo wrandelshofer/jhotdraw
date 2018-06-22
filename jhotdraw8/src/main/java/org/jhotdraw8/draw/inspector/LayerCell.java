@@ -18,6 +18,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -52,6 +54,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private boolean isUpdating;
 
+    @Nullable
     private Figure item;
 
     private TextField editField;
@@ -62,7 +65,7 @@ public class LayerCell extends ListCell<Figure> {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);
     }
 
-    public LayerCell(URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
+    public LayerCell(@NonNull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
         this.drawingModel = drawingModel;
         this.inspector = inspector;
         init(fxmlUrl);
@@ -89,7 +92,7 @@ public class LayerCell extends ListCell<Figure> {
     }
 
     @Override
-    protected void updateItem(Figure item, boolean empty) {
+    protected void updateItem(@Nullable Figure item, boolean empty) {
         super.updateItem(item, empty);
 
         if (empty || item == null) {
@@ -181,10 +184,12 @@ public class LayerCell extends ListCell<Figure> {
         updateItem(getItem(), false);
     }
 
+    @NonNull
     private String getItemText() {
         return getItem() == null ? "" : getItem().get(StyleableFigure.ID);
     }
 
+    @NonNull
     private TextField createTextField() {
         final TextField textField = new TextField();
 

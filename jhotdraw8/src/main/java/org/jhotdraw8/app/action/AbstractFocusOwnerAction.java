@@ -8,6 +8,8 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ViewController;
 
@@ -20,8 +22,10 @@ import org.jhotdraw8.app.ViewController;
 public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
+    @Nullable
     private Node target = null;
 
+    @Nullable
     private final ChangeListener<ViewController> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode() == null) {
@@ -43,7 +47,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
      *
      * @param app the application
      */
-    public AbstractFocusOwnerAction(Application app) {
+    public AbstractFocusOwnerAction(@NonNull Application app) {
         this(app, null);
     }
 
@@ -53,7 +57,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
      * @param app the application
      * @param target the target node
      */
-    public AbstractFocusOwnerAction(Application app, Node target) {
+    public AbstractFocusOwnerAction(@NonNull Application app, Node target) {
         super(app);
         this.target = target;
 

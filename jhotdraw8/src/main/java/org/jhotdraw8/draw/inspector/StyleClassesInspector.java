@@ -27,6 +27,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
@@ -60,6 +62,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
     @FXML
     private ListView<StyleClassItem> listView;
+    @Nullable
     private final ChangeListener<DrawingModel> modelListener = (o, oldv, newv) -> {
         if (oldv != null) {
             oldv.removeDrawingModelListener(drawingModelEventListener);
@@ -73,6 +76,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     @FXML
     private Button removeButton;
 
+    @NonNull
     @SuppressWarnings("unchecked")
     private Key<Collection<String>> tagsKey = (Key<Collection<String>>) (Key<?>) StyleableFigure.STYLE_CLASS;
     @FXML
@@ -83,11 +87,11 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         this(StyleClassesInspector.class.getResource("StyleClassesInspector.fxml"));
     }
 
-    public StyleClassesInspector(URL fxmlUrl) {
+    public StyleClassesInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    public void addTag(String wordList) {
+    public void addTag(@NonNull String wordList) {
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
                 tagName = tagName.trim();
@@ -113,7 +117,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     }
 
     @Override
-    public void setDrawingView(DrawingView newValue) {
+    public void setDrawingView(@Nullable DrawingView newValue) {
         DrawingView oldValue = drawingView;
         super.setDrawingView(newValue);
         if (oldValue != null) {
@@ -138,7 +142,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
        updateListLater();
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -169,7 +173,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         });
     }
 
-    public void removeTag(String wordList) {
+    public void removeTag(@NonNull String wordList) {
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
                 tagName = tagName.trim();

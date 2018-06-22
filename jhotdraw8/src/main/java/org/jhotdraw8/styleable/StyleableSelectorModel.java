@@ -19,6 +19,8 @@ import javafx.css.StyleConverter;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.draw.figure.Figure;
 import org.w3c.dom.Element;
@@ -33,12 +35,14 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
     private final MapProperty<String, Set<Element>> additionalPseudoClassStates = new SimpleMapProperty<>();
 
+    @NonNull
     public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
         return additionalPseudoClassStates;
     }
 
+    @Nullable
     @Override
-    public String getAttribute(Styleable element, StyleOrigin origin, String name) {
+    public String getAttribute(@NonNull Styleable element, StyleOrigin origin, @NonNull String name) {
         if (origin == StyleOrigin.USER) {
             return getAttribute(element, name);
         } else {
@@ -47,52 +51,54 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean hasId(Styleable element, String id) {
+    public boolean hasId(@NonNull Styleable element, @NonNull String id) {
         return id.equals(element.getId());
     }
 
     @Override
-    public String getId(Styleable element) {
+    public String getId(@NonNull Styleable element) {
         return element.getId();
     }
 
     @Override
-    public boolean hasType(Styleable element, String type) {
+    public boolean hasType(@NonNull Styleable element, @NonNull String type) {
         return type.equals(element.getTypeSelector());
     }
 
     @Override
-    public String getType(Styleable element) {
+    public String getType(@NonNull Styleable element) {
         return element.getTypeSelector();
     }
 
     @Override
-    public boolean hasStyleClass(Styleable element, String clazz) {
+    public boolean hasStyleClass(@NonNull Styleable element, String clazz) {
         return element.getStyleClass().contains(clazz);
     }
 
+    @NonNull
     @Override
-    public Set<String> getStyleClasses(Styleable element) {
+    public Set<String> getStyleClasses(@NonNull Styleable element) {
         return new HashSet<String>(element.getStyleClass());
     }
 
     @Override
-    public boolean hasPseudoClass(Styleable element, String pseudoClass) {
+    public boolean hasPseudoClass(@NonNull Styleable element, @NonNull String pseudoClass) {
         return element.getPseudoClassStates().contains(PseudoClass.getPseudoClass(pseudoClass));
     }
 
     @Override
-    public Styleable getParent(Styleable element) {
+    public Styleable getParent(@NonNull Styleable element) {
         return element.getStyleableParent();
     }
 
+    @Nullable
     @Override
     public Styleable getPreviousSibling(Styleable element) {
         return null;
     }
 
     @Override
-    public boolean hasAttribute(Styleable element, String attributeName) {
+    public boolean hasAttribute(@NonNull Styleable element, @NonNull String attributeName) {
         // XXX linear time!
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         for (CssMetaData<? extends Styleable, ?> item : list) {
@@ -103,7 +109,8 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return false;
     }
 
-    public String getAttribute(Styleable element, String attributeName) {
+    @Nullable
+    public String getAttribute(@NonNull Styleable element, @NonNull String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -120,7 +127,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return null;
     }
 
-    private Set<String> getWordListAttribute(Styleable element, String attributeName) {
+    private Set<String> getWordListAttribute(Styleable element, @NonNull String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -154,38 +161,39 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean attributeValueEquals(Styleable element, String attributeName, String attributeValue) {
+    public boolean attributeValueEquals(@NonNull Styleable element, @NonNull String attributeName, String attributeValue) {
         String actualValue = getAttribute(element, attributeName);
         return actualValue != null && actualValue.equals(attributeValue);
     }
 
     @Override
-    public boolean attributeValueStartsWith(Styleable element, String attributeName, String substring) {
+    public boolean attributeValueStartsWith(@NonNull Styleable element, @NonNull String attributeName, @NonNull String substring) {
         String actualValue = getAttribute(element, attributeName);
         return actualValue != null && actualValue.startsWith(substring);
     }
 
     @Override
-    public boolean attributeValueContainsWord(Styleable element, String attributeName, String word) {
+    public boolean attributeValueContainsWord(@NonNull Styleable element, @NonNull String attributeName, String word) {
         Set<String> value = getWordListAttribute(element, attributeName);
 
         return value != null && value.contains(word);
     }
 
     @Override
-    public boolean attributeValueEndsWith(Styleable element, String attributeName, String substring) {
+    public boolean attributeValueEndsWith(@NonNull Styleable element, @NonNull String attributeName, @NonNull String substring) {
         String actualValue = getAttribute(element, attributeName);
         return actualValue != null && actualValue.endsWith(substring);
     }
 
     @Override
-    public boolean attributeValueContains(Styleable element, String attributeName, String substring) {
+    public boolean attributeValueContains(@NonNull Styleable element, @NonNull String attributeName, @NonNull String substring) {
         String actualValue = getAttribute(element, attributeName);
         return actualValue != null && actualValue.contains(substring);
     }
 
+    @NonNull
     @Override
-    public Set<String> getAttributeNames(Styleable element) {
+    public Set<String> getAttributeNames(@NonNull Styleable element) {
         Set<String> attr = new HashSet<>();
         for (CssMetaData<? extends Styleable, ?> item : element.getCssMetaData()) {
             attr.add(item.getProperty());
@@ -193,20 +201,22 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return attr;
     }
 
+    @NonNull
     @Override
-    public Set<String> getComposedAttributeNames(Styleable element) {
+    public Set<String> getComposedAttributeNames(@NonNull Styleable element) {
+        // FIXME we actually can do this!
+        return getAttributeNames(element);
+    }
+
+    @NonNull
+    @Override
+    public Set<String> getDecomposedAttributeNames(@NonNull Styleable element) {
         // FIXME we actually can do this!
         return getAttributeNames(element);
     }
 
     @Override
-    public Set<String> getDecomposedAttributeNames(Styleable element) {
-        // FIXME we actually can do this!
-        return getAttributeNames(element);
-    }
-
-    @Override
-    public void setAttribute(Styleable elem, StyleOrigin origin, String name, String value) {
+    public void setAttribute(@NonNull Styleable elem, StyleOrigin origin, String name, String value) {
         List<CssMetaData<? extends Styleable, ?>> metaList = elem.getCssMetaData();
         HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
         for (CssMetaData<? extends Styleable, ?> m : metaList) {

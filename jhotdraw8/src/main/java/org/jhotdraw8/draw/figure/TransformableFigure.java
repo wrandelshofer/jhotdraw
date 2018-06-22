@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
@@ -123,7 +124,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformableFigureProperties( Node node) {
+    default void applyTransformableFigureProperties(@NonNull Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
         if (t.isIdentity()) {
@@ -140,7 +141,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
-    default void applyTransformableFigureProperties( RenderContext ctx,  Node node) {
+    default void applyTransformableFigureProperties(RenderContext ctx, @NonNull Node node) {
         applyTransformableFigureProperties(node);
     }
 
@@ -167,6 +168,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
+    @org.checkerframework.checker.nullness.qual.Nullable
     default Transform getInverseTransform() {
         List<Transform> list = getStyled(TRANSFORMS);
         Transform t;
@@ -185,11 +187,13 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return t;
     }
 
+    @org.checkerframework.checker.nullness.qual.Nullable
     @Override
     default Transform getLocalToParent() {
         return getLocalToParent(true);
     }
 
+    @org.checkerframework.checker.nullness.qual.Nullable
     default Transform getLocalToParent(boolean styled) {
         Transform l2p = CACHE && styled ? getCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
         if (l2p == null) {
@@ -227,6 +231,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return l2p;
     }
 
+        @NonNull
         default List<Transform> getLocalToParentAsList(boolean styled) {
         ArrayList<Transform> list = new ArrayList<>();
 
@@ -331,7 +336,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      *
      * @param transforms new value
      */
-    default void setTransforms( Transform... transforms) {
+    default void setTransforms(@NonNull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
             set(TRANSFORMS, ImmutableList.emptyList());
         } else {
@@ -449,7 +454,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void transformInParent( Transform t) {
+    default void transformInParent(@org.checkerframework.checker.nullness.qual.Nullable Transform t) {
         if (t == null || t.isIdentity()) {
             return;
         }
@@ -469,6 +474,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
+        @NonNull
         public static Set<Key<?>> getDeclaredKeys() {
         Set<Key<?>> keys = new LinkedHashSet<>();
         Figure.getDeclaredKeys(TransformableFigure.class, keys);

@@ -16,6 +16,7 @@ import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * TransformFlattener.
@@ -40,6 +41,7 @@ public class TransformFlattener {
 
     }
 
+    @NonNull
     private Translate flattenTranslate(Node node) {
         Translate translate = new Translate(node.getTranslateX(), node.getTranslateY());
         for (Transform t : node.getTransforms()) {
@@ -70,7 +72,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInGroup(Group group) {
+    private void flattenTranslatesInGroup(@NonNull Group group) {
         if (!canFlattenTranslate(group)) {
             return;
         }
@@ -90,7 +92,7 @@ public class TransformFlattener {
 
     }
 
-    private void flattenTranslatesInPath(Path path) {
+    private void flattenTranslatesInPath(@NonNull Path path) {
         if (!canFlattenTranslate(path)) {
             return;
         }

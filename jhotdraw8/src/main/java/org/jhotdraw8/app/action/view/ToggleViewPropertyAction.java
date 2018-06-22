@@ -7,6 +7,8 @@ import java.util.function.Function;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
@@ -21,10 +23,12 @@ import org.jhotdraw8.app.ViewController;
 public class ToggleViewPropertyAction extends AbstractViewControllerAction<ViewController> {
 
     private static final long serialVersionUID = 1L;
+    @Nullable
     private BooleanProperty property;
+    @Nullable
     private final Function<ViewController, Node> nodeGetter;
 
-    public ToggleViewPropertyAction(Application app, ViewController view, BooleanProperty property, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application app, ViewController view, @NonNull BooleanProperty property, String id, Resources labels) {
         super(app, view,null);
         labels.configureAction(this, id);
         this.property = property;

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javafx.event.ActionEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -50,7 +51,7 @@ public class SelectChildrenAction extends AbstractSelectedAction {
 
     }
 
-    public static void selectChildren(DrawingView view, Collection<Figure> figures) {
+    public static void selectChildren(@NonNull DrawingView view, Collection<Figure> figures) {
         List<Figure> selectedChildren=new ArrayList<>();
         for (Figure f : figures) { 
             for (Figure child:f.getChildren()) {

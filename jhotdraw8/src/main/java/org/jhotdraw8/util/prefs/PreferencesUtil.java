@@ -19,6 +19,8 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * {@code PreferencesUtil} provides utility methods for {@code
@@ -31,6 +33,7 @@ import javafx.stage.Stage;
 public class PreferencesUtil
         extends Preferences {
 
+    @NonNull
     private HashMap<String, Object> map = new HashMap<String, Object>();
     private boolean isUserNode;
     private static HashMap<Package, Preferences> systemNodes;
@@ -45,6 +48,7 @@ public class PreferencesUtil
         map.put(key, value);
     }
 
+    @NonNull
     @Override
     public String get(String key, String def) {
         return (String) (map.containsKey(key) ? map.get(key) : def);
@@ -115,26 +119,31 @@ public class PreferencesUtil
         map.put(key, value);
     }
 
+    @NonNull
     @Override
     public byte[] getByteArray(String key, byte[] def) {
         return (byte[]) (map.containsKey(key) ? map.get(key) : def);
     }
 
+    @NonNull
     @Override
     public String[] keys() throws BackingStoreException {
         return map.keySet().toArray(new String[map.keySet().size()]);
     }
 
+    @NonNull
     @Override
     public String[] childrenNames() throws BackingStoreException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Nullable
     @Override
     public Preferences parent() {
         return null;
     }
 
+    @Nullable
     @Override
     public Preferences node(String pathName) {
         return null;
@@ -150,11 +159,13 @@ public class PreferencesUtil
         // empty
     }
 
+    @NonNull
     @Override
     public String name() {
         return "Dummy";
     }
 
+    @NonNull
     @Override
     public String absolutePath() {
         return "Dummy";
@@ -165,6 +176,7 @@ public class PreferencesUtil
         return isUserNode;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Dummy";
@@ -279,7 +291,7 @@ public class PreferencesUtil
      * @param name Base name of the preference.
      * @param stage The window for which to track preferences.
      */
-    public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage) {
+    public static void installStagePrefsHandler(@NonNull final Preferences prefs, final String name, @NonNull Stage stage) {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
     }
 
@@ -330,7 +342,7 @@ public class PreferencesUtil
      * @param splitPane splitPane to which the node is added or removed
      * @param side on which side of the split pane the element should be added
      */
-    public static void installVisibilityPrefsHandlers(Preferences prefs, Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
+    public static void installVisibilityPrefsHandlers(Preferences prefs, @NonNull Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
         ChangeListener<? super Number> positionListener = (o, oldValue, newValue) -> {
             prefs.putDouble(visibilityProperty.getName() + ".dividerPosition", newValue.doubleValue());
         };

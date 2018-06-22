@@ -9,6 +9,8 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.WeakMapChangeListener;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * This property is weakly bound to an entry in a map.
@@ -21,9 +23,12 @@ import javafx.collections.WeakMapChangeListener;
 public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T> 
 implements MapChangeListener< K, V> {
 
+    @Nullable
     protected K key;
+    @Nullable
     protected ObservableMap<K, V> map;
     protected Class<T> tClazz;
+    @Nullable
     private WeakMapChangeListener<K, V> weakListener;
 
     public MapEntryProperty(ObservableMap<K, V> map, K key, Class<T> tClazz) {
@@ -42,7 +47,7 @@ implements MapChangeListener< K, V> {
     }
 
     @Override
-    public void set(T value) {
+    public void set(@Nullable T value) {
         if (value != null && !tClazz.isAssignableFrom(value.getClass())) {
             throw new IllegalArgumentException("value is not assignable " + value);
         }
@@ -54,6 +59,7 @@ implements MapChangeListener< K, V> {
         super.set(value);
     }
 
+    @Nullable
     @Override
     public Object getBean() {
         return map;
@@ -65,7 +71,7 @@ implements MapChangeListener< K, V> {
     }
 
     @Override
-    public void onChanged(Change<? extends K, ? extends V> change) {
+    public void onChanged(@NonNull Change<? extends K, ? extends V> change) {
  if (this.key.equals(change.getKey())) {
                 if (change.wasAdded()) {// was added, or removed and then added
                     @SuppressWarnings("unchecked")

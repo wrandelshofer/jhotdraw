@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * This interface provides read access to a directed graph {@code G = (V, A) }.
@@ -34,6 +35,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
     /**
      * Returns an {@link Iterable} which performs a backwards breadth first
      * search starting at the given vertex.
+     * <p>
+     * The default implementation provided by this interface is not optimized for performance.
      *
      * @param start the start vertex
      * @param visited a predicate with side effect. The predicate returns true
@@ -41,6 +44,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * as visited.
      * @return breadth first search
      */
+    @NonNull
     default Stream<V> breadthFirstSearchBackwards(V start, Predicate<V> visited) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start, visited), false);
     }
@@ -48,10 +52,13 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
     /**
      * Returns an {@link Iterable} which performs a backwards breadth first
      * search starting at the given vertex.
+     * <p>
+     * The default implementation provided by this interface is not optimized for performance.
      *
      * @param start the start vertex
      * @return breadth first search
      */
+    @NonNull
     default Stream<V> breadthFirstSearchBackwards(V start) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start), false);
     }
@@ -81,6 +88,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct predecessor arrows of vertex
      */
+    @NonNull
     default Collection<A> getPrevArrows(V vertex) {
         class PrevArrowIterator implements Iterator<A> {
 
@@ -105,6 +113,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
         }
 
         return new AbstractCollection<A>() {
+            @NonNull
             @Override
             public Iterator<A> iterator() {
                 return new PrevArrowIterator(vertex);
@@ -131,6 +140,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct predecessor nextArrows of vertex
      */
+    @NonNull
     default Collection<V> getPrevVertices(V vertex) {
         class PrevVertexIterator implements Iterator<V> {
 
@@ -155,6 +165,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
 
         }
         return new AbstractCollection<V>() {
+            @NonNull
             @Override
             public Iterator<V> iterator() {
                 return new PrevVertexIterator(vertex);

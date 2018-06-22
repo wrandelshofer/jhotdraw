@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,16 +21,20 @@ public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDi
     /**
      * Holds the indices of the nextArrows at the arrow heads.
      */
+    @NonNull
     protected final int[] arrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
+    @NonNull
     protected final int[] vertices;
     
     /** Holds the arrows. */
+    @NonNull
     protected final Object[] arrows;
     /** Holds the nextArrows. */
+    @NonNull
     protected final Object[] vertexObjects;
 
     /**
@@ -101,12 +107,14 @@ public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDi
         this.vertexObjects = new Object[vertexCount];
     }
 
+    @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public A getArrow(int index) {
        return (A) arrows[index];
     }
 
+    @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public A getArrow(int vi, int i) {

@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.CssLinearGradient;
@@ -35,12 +37,16 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssPaintableConverter implements Converter<Paintable> {
 
+    @NonNull
     private CssColorConverter colorConverter = new CssColorConverter(false);
+    @NonNull
     private CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
+    @NonNull
     private CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter();
+    @NonNull
     private XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
-    public void toString(Appendable out, IdFactory idFactory, Paintable value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Paintable value) throws IOException {
         if (value == null) {
             out.append("none");
         } else if (Color.TRANSPARENT.equals(value)) {
@@ -59,8 +65,9 @@ public class CssPaintableConverter implements Converter<Paintable> {
         }
     }
 
+    @Nullable
     @Override
-    public Paintable fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Paintable fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
 
         if ("none".equals(str)) {
@@ -94,11 +101,13 @@ public class CssPaintableConverter implements Converter<Paintable> {
         throw pe;
     }
 
+    @Nullable
     @Override
     public Paintable getDefaultValue() {
         return null;
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"

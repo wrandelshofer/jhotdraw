@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
@@ -25,7 +26,7 @@ import org.jhotdraw8.draw.tool.Tool;
 public class ConnectingFiguresSampleMain extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(@NonNull Stage primaryStage) throws Exception {
 
         // Create a drawing view.
         DrawingView drawingView = new SimpleDrawingView();

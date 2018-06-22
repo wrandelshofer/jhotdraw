@@ -17,6 +17,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Represents an item which can be added to a {@code Dock}.
@@ -26,6 +28,7 @@ import javafx.scene.text.Text;
  */
 public class DockItem extends Tab {
 
+    @Nullable
     static DockItem draggedTab;
     private final ObjectProperty<Dock> dock = new SimpleObjectProperty<>();
     public final static DataFormat DOCKABLE_TAB_FORMAT = new DataFormat("application/x-java-dockabletab");
@@ -51,6 +54,7 @@ public class DockItem extends Tab {
         selectedProperty().addListener(this::selectionChanged);
     }
 
+    @NonNull
     public ObjectProperty<Dock> dockProperty() {
         return dock;
     }
@@ -68,7 +72,7 @@ public class DockItem extends Tab {
         prefs.putBoolean(getId()+".selected", newv);
     }
     
-    private void graphicChanged(Observable o, Node oldv, Node newv) {
+    private void graphicChanged(Observable o, @Nullable Node oldv, @Nullable Node newv) {
         if (oldv != null) {
             oldv.setOnDragDetected(null);
             oldv.setOnDragDone(null);
@@ -83,7 +87,7 @@ public class DockItem extends Tab {
         draggedTab = null;
     }
 
-    public void handleDragDetected(MouseEvent e) {
+    public void handleDragDetected(@NonNull MouseEvent e) {
         Node graphic = getGraphic();
         draggedTab = this;
         Dragboard db = graphic.startDragAndDrop(TransferMode.MOVE);

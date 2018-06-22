@@ -12,6 +12,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.EllipseConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -55,16 +56,19 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Ellipse();
     }
 
+    @NonNull
     @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new EllipseConnector(new RelativeLocator(getBoundsInLocal(),p));
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         double rx = get(RADIUS_X);
@@ -98,6 +102,7 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
        return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -114,7 +119,7 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Ellipse n = (Ellipse) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);

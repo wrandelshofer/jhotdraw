@@ -3,11 +3,12 @@
  */
 package org.jhotdraw8.tree;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -19,18 +20,17 @@ import java.util.function.Function;
  * @version $$Id$$
  */
 public class PreorderSpliterator<T> extends AbstractSpliterator<T> {
-
-    private final Deque<Iterator<T>> stack = new ArrayDeque<>();
     private final Function<T, Iterable<T>> getChildrenFunction;
+    private final Deque<Iterator<T>> stack = new ArrayDeque<>();
 
-    public PreorderSpliterator(T root, Function<T, Iterable<T>> getChildrenFunction) {
+    public PreorderSpliterator(Function<T, Iterable<T>> getChildrenFunction, T root) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         stack.push(Collections.singleton(root).iterator());
         this.getChildrenFunction = getChildrenFunction;
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super T> consumer) {
+    public boolean tryAdvance(@NonNull Consumer<? super T> consumer) {
         Iterator<T> iter = stack.peek();
         if (iter == null) {
             return false;

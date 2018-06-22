@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -33,7 +34,7 @@ public interface HideableFigure extends Figure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyHideableFigureProperties( Node node) {
+    default void applyHideableFigureProperties(@NonNull Node node) {
         node.setVisible(getStyled(VISIBLE));
     }
 

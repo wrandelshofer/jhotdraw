@@ -14,6 +14,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
@@ -63,6 +64,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
         set(END, end);
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         Point2D start = get(START);
@@ -80,7 +82,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         set(START, transform.transform(get(START)));
         set(END, transform.transform(get(END)));
     }
@@ -91,13 +93,14 @@ public class SimpleLineFigure extends AbstractLeafFigure
         set(END, new Point2D(x + width, y + height));
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Line();
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Line lineNode = (Line) node;
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
@@ -114,7 +117,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
@@ -134,6 +137,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
         }
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

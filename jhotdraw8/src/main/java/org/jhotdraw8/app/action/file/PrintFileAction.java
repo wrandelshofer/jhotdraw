@@ -8,6 +8,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
@@ -50,7 +51,7 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentOrient
     }
 
     @Override
-    protected void handleActionPerformed( ActionEvent event, DocumentOrientedViewModel view) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentOrientedViewModel view) {
         view.addDisabler(this);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(view.getNode().getScene().getWindow())) {

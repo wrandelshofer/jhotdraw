@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Builder;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 
 /**
@@ -16,6 +17,7 @@ import org.jhotdraw8.collection.ImmutableList;
  */
 public class BezierNodePathBuilder extends AbstractPathBuilder implements Builder<List<BezierNode>> {
 
+    @NonNull
     private List<BezierNode> nodes = new ArrayList<BezierNode>();
 
     private void add(BezierNode newValue) {

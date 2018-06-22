@@ -9,6 +9,8 @@ import java.util.Deque;
 import java.util.EnumMap;
 import java.util.List;
 import javafx.scene.shape.FillRule;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Concatenates multiple path iterators.
@@ -18,15 +20,16 @@ import javafx.scene.shape.FillRule;
  */
 public class ConcatenatedPathIterator implements PathIterator {
 
+    @Nullable
     private PathIterator current;
     private Deque<PathIterator> iterators;
     private final int windingRule;
 
-    public ConcatenatedPathIterator(FillRule fillRule, List<PathIterator> iteratorList) {
+    public ConcatenatedPathIterator(FillRule fillRule, @NonNull List<PathIterator> iteratorList) {
         this(fillRule == FillRule.EVEN_ODD ? WIND_EVEN_ODD : WIND_NON_ZERO, iteratorList);
     }
 
-    public ConcatenatedPathIterator(int windingRule, List<PathIterator> iteratorList) {
+    public ConcatenatedPathIterator(int windingRule, @NonNull List<PathIterator> iteratorList) {
         this.windingRule = windingRule;
         this.iterators = new ArrayDeque<>(iteratorList);
         current = iteratorList.isEmpty() ? null : this.iterators.removeFirst();

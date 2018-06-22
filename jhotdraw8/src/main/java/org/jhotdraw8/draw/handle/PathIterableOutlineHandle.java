@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import static org.jhotdraw8.draw.handle.Handle.STYLECLASS_HANDLE;
@@ -27,6 +29,7 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class PathIterableOutlineHandle extends AbstractHandle {
 
+    @NonNull
     private final Path node;
     private final String styleclass;
     private final boolean selectable;
@@ -48,17 +51,19 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         return node.contains(x,y);
     }
 
+    @Nullable
     @Override
     public Cursor getCursor() {
         return null;
     }
 
+    @NonNull
     @Override
     public Node getNode() {
         return node;
     }
 
-    protected void initNode(Path r) {
+    protected void initNode(@NonNull Path r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
@@ -74,13 +79,14 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         return selectable;
     }
 
+    @NonNull
     @Override
     public PathIterableFigure getOwner() {
         return (PathIterableFigure) super.getOwner();
     }
 
     @Override
-    public void updateNode(DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         PathIterableFigure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();

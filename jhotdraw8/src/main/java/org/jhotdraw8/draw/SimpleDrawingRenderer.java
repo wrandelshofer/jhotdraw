@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.draw;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.figure.Drawing;
 import java.util.Collection;
@@ -32,7 +34,7 @@ public class SimpleDrawingRenderer extends SimplePropertyBean implements RenderC
     // Behavior
     // ---
     @Override
-    public Node getNode(Figure f) {
+    public Node getNode(@NonNull Figure f) {
         Node n = figureToNodeMap.get(f);
         if (n == null) {
             n = f.createNode(this);
@@ -47,7 +49,7 @@ public class SimpleDrawingRenderer extends SimplePropertyBean implements RenderC
      * @param figure The figure
      * @return the rendered node
      */
-    public Node render(Figure figure) {
+    public Node render(@NonNull Figure figure) {
         figureToNodeMap.clear();
         renderRecursive(figure);
         return getNode(figure);
@@ -65,7 +67,7 @@ public class SimpleDrawingRenderer extends SimplePropertyBean implements RenderC
         }
     }
 
-    public static Node toNode(Drawing external, Collection<Figure> selection, Map<Key<?>, Object> renderingHints) {
+    public static Node toNode(@NonNull Drawing external, @NonNull Collection<Figure> selection, @Nullable Map<Key<?>, Object> renderingHints) {
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         if (renderingHints != null) {
             r.getProperties().putAll(renderingHints);

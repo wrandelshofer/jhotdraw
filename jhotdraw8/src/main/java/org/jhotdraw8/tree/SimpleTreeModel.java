@@ -4,6 +4,7 @@
 
 package org.jhotdraw8.tree;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.tree.TreeModel;
 import org.jhotdraw8.tree.TreeModelEvent;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.jhotdraw8.event.Listener;
  */
 public class SimpleTreeModel<E> implements TreeModel<E> {
 
+    @NonNull
     @Override
     public E getChildAt(E parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -30,16 +32,19 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     @Override
     public List<E> getChildren(E node) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     @Override
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     @Override
     public CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -55,6 +60,7 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     @Override
     public ObjectProperty<E> rootProperty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

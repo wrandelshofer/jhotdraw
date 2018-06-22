@@ -14,6 +14,8 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -76,7 +78,7 @@ public class ResizeHandleKit {
      * @param handles the list to which the handles should be added
      * @param styleclass the style class that should be assigned to the handles
      */
-    static public void addResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
+    static public void addResizeHandles(Figure f, @NonNull Collection<Handle> handles, String styleclass) {
         addCornerResizeHandles(f, handles, styleclass);
         addEdgeResizeHandles(f, handles, styleclass);
     }
@@ -183,7 +185,9 @@ public class ResizeHandleKit {
         SOUTH_EAST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,2.5 -5.5,2.5 -5.5,-2.5 -2.5,-2.5 Z M 5.5,5.5");
         SOUTH_WEST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,-2.5 5.5,-2.5 5.5,2.5 -2.5,2.5 Z M -5.5,5.5");
     }
+    @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
 
     private static class NorthEastHandle extends AbstractResizeTransformHandle {
@@ -198,7 +202,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = max(bounds.getMinX(), newPoint.getX());
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
@@ -228,7 +232,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newWidth = max(newPoint.getX(), bounds.getMinX()) - bounds.getMinX();
             double newHeight = bounds.getMaxY() - bounds.getMinY();
             if (keepAspect) {
@@ -251,7 +255,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
             double newHeight = bounds.getMaxY() - newY;
@@ -275,7 +279,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - newX;
@@ -305,7 +309,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = max(bounds.getMinX(), newPoint.getX());
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
@@ -334,7 +338,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = bounds.getWidth();
             double newHeight = newY - bounds.getMinY();
@@ -357,7 +361,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - min(bounds.getMaxX(), newX);
@@ -386,7 +390,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newWidth = bounds.getMaxX() - newX;
             double newHeight = bounds.getHeight();

@@ -14,6 +14,8 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.IntArrayDeque;
 
 /**
@@ -25,7 +27,9 @@ import org.jhotdraw8.collection.IntArrayDeque;
 public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
 
     private final IntFunction< Spliterator.OfInt> graph;
+    @NonNull
     private final IntArrayDeque queue;
+    @NonNull
     private final IntPredicate visited;
 
     /**
@@ -52,7 +56,7 @@ public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
     }
 
     @Override
-    public boolean tryAdvance(IntConsumer action) {
+    public boolean tryAdvance(@NonNull IntConsumer action) {
         if (queue.isEmpty()) {
             return false;
         }

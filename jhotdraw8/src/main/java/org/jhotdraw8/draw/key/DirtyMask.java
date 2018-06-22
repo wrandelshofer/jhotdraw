@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.draw.key;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Represents a bitmask of {@code DirtyBits}.
  *
@@ -41,7 +43,7 @@ public class DirtyMask {
         return bitmask;
     }
 
-    public boolean containsOneOf(DirtyBits... bits) {
+    public boolean containsOneOf(@NonNull DirtyBits... bits) {
         for (DirtyBits bit : bits) {
             if ((bitmask & bit.getMask()) == bit.getMask()) {
                 return true;
@@ -54,7 +56,7 @@ public class DirtyMask {
         return intersects(of(bits));
     }
 
-    public boolean intersects(DirtyMask that) {
+    public boolean intersects(@NonNull DirtyMask that) {
         return (this.bitmask & that.bitmask) != 0;
     }
 
@@ -68,10 +70,12 @@ public class DirtyMask {
      * @param that that mask
      * @return a new mask
      */
-    public DirtyMask add(DirtyMask that) {
+    @NonNull
+    public DirtyMask add(@NonNull DirtyMask that) {
         return new DirtyMask(this.bitmask | that.bitmask);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "DirtyMask{" + "bitmask=" + Integer.toBinaryString(bitmask) + '}';

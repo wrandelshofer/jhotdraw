@@ -10,6 +10,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.css.StyleablePropertyFactory;
 import javafx.geometry.Rectangle2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -27,7 +28,9 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 public class RegexStyleableFigureKey extends AbstractStyleableFigureKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
 
     final static long serialVersionUID = 1L;
+    @NonNull
     private final CssRegexConverter converter;
+    @NonNull
     private final CssMetaData<? extends Styleable, RegexReplace> cssMetaData;
 
     /**
@@ -88,12 +91,14 @@ public class RegexStyleableFigureKey extends AbstractStyleableFigureKey<RegexRep
         converter = new CssRegexConverter(isNullable());
     }
 
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, RegexReplace> getCssMetaData() {
         return cssMetaData;
 
     }
 
+    @NonNull
     @Override
     public Converter<RegexReplace> getConverter() {
         return converter;

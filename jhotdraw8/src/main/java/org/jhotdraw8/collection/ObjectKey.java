@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
@@ -37,20 +38,24 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Holds a String representation of the name.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     private final String name;
     /**
      * Holds the default value.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     private final T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     private final Class<?> clazz;
     /**
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
+    @NonNull
     private final List<Class<?>> typeParameters;
 
     /**
@@ -110,7 +115,7 @@ public class ObjectKey<T> implements Key<T> {
     public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
         this(name,clazz,typeParameters,isNullable,false,defaultValue);
     }
-    public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable,boolean isTransient, T defaultValue) {
+    public ObjectKey(@org.checkerframework.checker.nullness.qual.Nullable String name, @org.checkerframework.checker.nullness.qual.Nullable Class<?> clazz, @org.checkerframework.checker.nullness.qual.Nullable Class<?>[] typeParameters, boolean isNullable, boolean isTransient, @org.checkerframework.checker.nullness.qual.Nullable T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -134,11 +139,13 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return name string.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     @Override
     public String getName() {
         return name;
     }
 
+    @NonNull
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
@@ -146,11 +153,13 @@ public class ObjectKey<T> implements Key<T> {
         return ret;
     }
 
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
+    @NonNull
     @Override
     public String getFullValueType() {
         StringBuilder buf = new StringBuilder();
@@ -176,6 +185,7 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return the default value.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     @Override
     public T getDefaultValue() {
         return defaultValue;
@@ -193,6 +203,7 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Returns the name string.
      */
+    @NonNull
     @Override
     public String toString() {
         String keyClass = getClass().getName();

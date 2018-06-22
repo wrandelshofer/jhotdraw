@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -22,7 +25,9 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
 
+    @NonNull
     private final Class<E> enumClass;
+    @NonNull
     private final String name;
     private final boolean nullable;
 
@@ -33,7 +38,7 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, E value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable E value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is not nullable. enum type:" + enumClass + " value:" + value);
@@ -49,8 +54,9 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
+    @Nullable
     @Override
-    public E fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public E fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
@@ -70,7 +76,8 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
-    public E parse(CssTokenizerInterface tt) throws ParseException, IOException {
+    @NonNull
+    public E parse(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
         if (tt.nextToken() != CssTokenizer.TT_IDENT) {
             throw new ParseException("identifier expected", tt.getStartPosition());
         }
@@ -83,6 +90,7 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
+    @Nullable
     @Override
     public E getDefaultValue() {
         try {
@@ -101,6 +109,7 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨");

@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class Iterators {
      * @param iterable the iterable
      * @return the list
      */
+    @NonNull
     public static <T> List<T> toList(Iterable<T> iterable) {
         if (iterable instanceof List<?>) return (List<T>)iterable;
         ArrayList<T> list = new ArrayList<>();

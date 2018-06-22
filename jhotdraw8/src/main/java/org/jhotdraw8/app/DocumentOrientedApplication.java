@@ -45,6 +45,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.Actions;
 import org.jhotdraw8.app.action.ScreenMenuBarProxyAction;
@@ -69,6 +71,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
  */
 public class DocumentOrientedApplication extends AbstractApplication {
 
+    @Nullable
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
 
@@ -91,6 +94,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
     private final SetProperty<ViewController> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    @NonNull
     private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
@@ -131,7 +135,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @param actions the action map
      * @return the menu bar
      */
-    protected MenuBar createMenuBar(Stage stage, HierarchicalMap<String, Action> actions) {
+    protected MenuBar createMenuBar(@Nullable Stage stage, @NonNull HierarchicalMap<String, Action> actions) {
         MenuBar mb = model.createMenuBar();
         Deque<Menu> todo = new LinkedList<>(mb.getMenus());
         final List<KeyCombination> accelerators = new ArrayList<>();
@@ -217,7 +221,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public void execute(Runnable r) {
+    public void execute(@NonNull Runnable r) {
         executor.execute(r);
     }
 
@@ -255,7 +259,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(DocumentOrientedViewModel view) {
+    protected void handleViewActivated(@NonNull DocumentOrientedViewModel view) {
         view.activate();
     }
 
@@ -265,7 +269,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(DocumentOrientedViewModel view) {
+    protected void handleViewAdded(@NonNull DocumentOrientedViewModel view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -367,7 +371,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(DocumentOrientedViewModel view) {
+    protected void handleViewDeactivated(@NonNull DocumentOrientedViewModel view) {
         view.deactivate();
     }
 
@@ -377,7 +381,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(DocumentOrientedViewModel view) {
+    protected void handleViewRemoved(@NonNull DocumentOrientedViewModel view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -409,6 +413,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
         disambiguateViews();
     }
 
+    @NonNull
     @Override
     public SetProperty<ViewController> viewsProperty() {
         return views;

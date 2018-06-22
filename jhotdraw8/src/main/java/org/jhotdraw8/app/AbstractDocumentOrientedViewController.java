@@ -9,6 +9,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * AbstractDocumentOrientedViewController.
@@ -29,6 +30,7 @@ public abstract class AbstractDocumentOrientedViewController extends AbstractAct
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
     protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>();
 
+    @NonNull
     @Override
     public BooleanProperty modifiedProperty() {
         return modified;
@@ -43,11 +45,13 @@ public abstract class AbstractDocumentOrientedViewController extends AbstractAct
         modified.set(true);
     }
 
+    @NonNull
     @Override
     public ObjectProperty<URI> uriProperty() {
         return uri;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<DataFormat> dataFormatProperty() {
         return dataFormat;

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Set;
 import javafx.event.ActionEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -33,7 +34,7 @@ public class RemoveTransformationsAction extends AbstractSelectedAction {
      * @param app the application
      * @param editor the drawing editor
      */
-    public RemoveTransformationsAction(Application app, DrawingEditor editor) {
+    public RemoveTransformationsAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

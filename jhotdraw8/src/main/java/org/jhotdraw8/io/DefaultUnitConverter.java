@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.io;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * DefaultUnitConverter.
  *
@@ -13,6 +15,7 @@ public class DefaultUnitConverter implements UnitConverter {
 
     final static DefaultUnitConverter instance = new DefaultUnitConverter(90);
 
+    @NonNull
     public static DefaultUnitConverter getInstance() {
         return instance;
     }

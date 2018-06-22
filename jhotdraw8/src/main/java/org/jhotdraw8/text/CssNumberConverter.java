@@ -6,6 +6,9 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.CharBufferReader;
@@ -40,8 +43,9 @@ public class CssNumberConverter implements Converter<Number> {
         this.nullable = nullable;
     }
 
+    @Nullable
     @Override
-    public Number fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Number fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         if (buf == null) {
             return null;
         }
@@ -52,12 +56,14 @@ public class CssNumberConverter implements Converter<Number> {
         return sz;
     }
 
+    @NonNull
     @Override
     public Number getDefaultValue() {
         return 0;
     }
 
-    public Number parseNumber(CssTokenizerInterface tt) throws ParseException, IOException {
+    @Nullable
+    public Number parseNumber(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
         tt.skipWhitespace();
         if (nullable && tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
             //tt.skipWhitespace();
@@ -93,7 +99,7 @@ public class CssNumberConverter implements Converter<Number> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Number value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Number value) throws IOException {
         if (value == null) {
             if (nullable) {
                 out.append("none");
@@ -105,6 +111,7 @@ public class CssNumberConverter implements Converter<Number> {
         numberConverter.toString(out, idFactory, value);
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Numer⟩: ⟨number⟩";

@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -26,6 +29,7 @@ import org.jhotdraw8.collection.IntArrayList;
  */
 public class DirectedGraphs {
 
+    @NonNull
     private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> g) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(g.getVertexCount());
@@ -38,6 +42,7 @@ public class DirectedGraphs {
         return forest;
     }
 
+    @NonNull
     private static <V> Map<V, List<V>> createForest(Collection<V> vertices) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(vertices.size());
@@ -57,7 +62,7 @@ public class DirectedGraphs {
      * @param graph the graph to be dumped
      * @return the dump
      */
-    public static <V, A> String dumpAsAdjacencyList(DirectedGraph<V, A> graph) {
+    public static <V, A> String dumpAsAdjacencyList(@NonNull DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {
             dumpAsAdjacencyList(w, graph, Object::toString);
@@ -76,7 +81,7 @@ public class DirectedGraphs {
      * @param graph the graph to be dumped
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsAdjacencyList(Appendable w, DirectedGraph<V, A> graph) throws IOException {
+    public static <V, A> void dumpAsAdjacencyList(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
         dumpAsAdjacencyList(w, graph, Object::toString);
     }
 
@@ -90,7 +95,7 @@ public class DirectedGraphs {
      * @param toStringFunction a function which converts a vertex to a string
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsAdjacencyList(Appendable w, DirectedGraph<V, A> graph, Function<V, String> toStringFunction) throws IOException {
+    public static <V, A> void dumpAsAdjacencyList(@NonNull Appendable w, DirectedGraph<V, A> graph, @NonNull Function<V, String> toStringFunction) throws IOException {
         for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
             V v = graph.getVertex(i);
             if (i != 0) {
@@ -116,7 +121,7 @@ public class DirectedGraphs {
      * @param graph the graph to be dumped
      * @return the dump
      */
-    public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph) {
+    public static <V, A> String dumpAsDot(@NonNull DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {
             dumpAsDot(w, graph, Object::toString);
@@ -136,7 +141,7 @@ public class DirectedGraphs {
      * @param graph the graph
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph) throws IOException {
+    public static <V, A> void dumpAsDot(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
         dumpAsDot(w, graph, v -> "\"" + v + '"', null, null);
     }
 
@@ -152,8 +157,8 @@ public class DirectedGraphs {
      * use as vertex name
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph,
-            Function<V, String> vertexToString) throws IOException {
+    public static <V, A> void dumpAsDot(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph,
+                                        @NonNull Function<V, String> vertexToString) throws IOException {
         dumpAsDot(w, graph, vertexToString, null, null);
     }
 
@@ -172,10 +177,10 @@ public class DirectedGraphs {
      * use as arrow attributes
      * @return the "dot" string
      */
-    public static <V, A> String dumpAsDot(DirectedGraph<V, A> graph,
-            Function<V, String> vertexToString,
-            Function<V, String> vertexAttributes,
-            Function<A, String> arrowAttributes) {
+    public static <V, A> String dumpAsDot(@NonNull DirectedGraph<V, A> graph,
+                                          @NonNull Function<V, String> vertexToString,
+                                          Function<V, String> vertexAttributes,
+                                          Function<A, String> arrowAttributes) {
         StringWriter w = new StringWriter();
         try {
             dumpAsDot(w, graph, vertexToString, vertexAttributes, arrowAttributes);
@@ -202,9 +207,9 @@ public class DirectedGraphs {
      * @throws java.io.IOException if writing fails
      */
     public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph,
-            Function<V, String> vertexToString,
-            Function<V, String> vertexAttributes,
-            Function<A, String> arrowAttributes) throws IOException {
+                                        @NonNull Function<V, String> vertexToString,
+                                        @Nullable Function<V, String> vertexAttributes,
+                                        @Nullable Function<A, String> arrowAttributes) throws IOException {
         w.append("digraph G {\n");
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             V v = graph.getVertex(i);
@@ -251,7 +256,8 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static <V, A> List<Set<V>> findDisjointSets(DirectedGraph<V, A> g) {
+    @NonNull
+    public static <V, A> List<Set<V>> findDisjointSets(@NonNull DirectedGraph<V, A> g) {
         // Create initial forest
         Map<V, List<V>> forest = createForest(g);
         // Merge sets.
@@ -287,6 +293,7 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
+    @NonNull
     public static <A> List<Set<Integer>> findDisjointSets(AttributedIntDirectedGraph<?, A> g) {
         // Create initial forest.
         final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
@@ -344,7 +351,8 @@ public class DirectedGraphs {
      * list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
-    public static <V, A extends Pair<V>> List<A> findMinimumSpanningTree(Collection<V> vertices, List<A> orderedArrows, List<A> rejectedArrows) {
+    @NonNull
+    public static <V, A extends Pair<V>> List<A> findMinimumSpanningTree(@NonNull Collection<V> vertices, List<A> orderedArrows, @Nullable List<A> rejectedArrows) {
         List<A> minimumSpanningTree = new ArrayList<>(orderedArrows.size());
         if (rejectedArrows == null) {
             rejectedArrows = new ArrayList<>(orderedArrows.size());
@@ -385,7 +393,8 @@ public class DirectedGraphs {
      * list, if it is provided.
      * @return the graph builder
      */
-    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(Collection<V> vertices, List<A> orderedArrows, List<A> includedArrows, List<A> rejectedArrows) {
+    @NonNull
+    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@NonNull Collection<V> vertices, @NonNull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
         List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);
@@ -409,6 +418,7 @@ public class DirectedGraphs {
      * @param m the graph
      * @return the sorted list of nextArrows
      */
+    @NonNull
     @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
         final AttributedIntDirectedGraph<V, A> im;
@@ -432,6 +442,7 @@ public class DirectedGraphs {
      * @param model the graph
      * @return the sorted list of nextArrows
      */
+    @NonNull
     public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?, A> model) {
         final int n = model.getVertexCount();
 
@@ -492,7 +503,7 @@ public class DirectedGraphs {
         return result;
     }
 
-    private static <V> void union(List<V> uset, List<V> vset, Map<V, List<V>> forest) {
+    private static <V> void union(@NonNull List<V> uset, @NonNull List<V> vset, @NonNull Map<V, List<V>> forest) {
         if (uset != vset) {
             if (uset.size() < vset.size()) {
                 for (V uu : uset) {

@@ -6,6 +6,7 @@ package org.jhotdraw8.gui;
 import java.util.List;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * URIExtensionFilter.
@@ -16,15 +17,16 @@ import javafx.stage.FileChooser;
 public class URIExtensionFilter {
 
     private final DataFormat format;
+
     private final FileChooser.ExtensionFilter extensionFilter;
 
-    public URIExtensionFilter(String description, DataFormat format, String... extensions) {
+    public URIExtensionFilter(@NonNull String description, DataFormat format, String... extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
         this.format = format;
     }
 
-    public URIExtensionFilter(final String description, DataFormat format,
-            final List<String> extensions) {
+    public URIExtensionFilter(@NonNull final String description, DataFormat format,
+                              final List<String> extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
         this.format = format;
     }

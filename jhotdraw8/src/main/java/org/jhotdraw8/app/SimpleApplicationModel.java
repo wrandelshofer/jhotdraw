@@ -14,6 +14,8 @@ import java.util.prefs.Preferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.app.AboutAction;
 import org.jhotdraw8.app.action.app.ExitAction;
@@ -100,18 +102,22 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.menuFxml = menuFxml;
     }
 
+    @NonNull
     public List<URIExtensionFilter> getOpenExtensionFilters() {
         return openExtensionFilters;
     }
 
+    @NonNull
     public List<URIExtensionFilter> getSaveExtensionFilters() {
         return saveExtensionFilters;
     }
 
+    @NonNull
     public List<URIExtensionFilter> getImportExtensionFilters() {
         return importExtensionFilters;
     }
 
+    @NonNull
     public List<URIExtensionFilter> getExportExtensionFilters() {
         return exportExtensionFilters;
     }
@@ -121,6 +127,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return viewFactory.get();
     }
 
+    @NonNull
     @Override
     public URIChooser createOpenChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -129,6 +136,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
+    @NonNull
     @Override
     public URIChooser createSaveChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -137,6 +145,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
+    @NonNull
     @Override
     public URIChooser createImportChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -145,6 +154,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
+    @NonNull
     @Override
     public URIChooser createExportChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -177,6 +187,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return false;
     }
 
+    @Nullable
     @Override
     public MenuBar createMenuBar() {
         if (menuFxml == null) {

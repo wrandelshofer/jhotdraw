@@ -21,6 +21,8 @@ import javafx.scene.transform.Translate;
 import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimplePageFigure;
@@ -41,6 +43,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     private final static double INCH_2_MM = 25.4;
 
+    @NonNull
     @Override
     protected String getExtension() {
         return "png";
@@ -51,7 +54,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return false;
     }
 
-    public Paper findPaper(CssSize2D paperSize) {
+    public Paper findPaper(@NonNull CssSize2D paperSize) {
         UnitConverter uc = new DefaultUnitConverter(72.0);
         double w = uc.convert(paperSize.getX(), UnitConverter.POINTS);
         double h = uc.convert(paperSize.getY(), UnitConverter.POINTS);
@@ -65,7 +68,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    private void printSlice(CssSize2D pageSize, Figure slice, Bounds viewportBounds, Node node, double dpi) throws IOException {
+    private void printSlice(@NonNull CssSize2D pageSize, @NonNull Figure slice, @NonNull Bounds viewportBounds, @NonNull Node node, double dpi) throws IOException {
         Paper paper = findPaper(pageSize);
         Point2D psize = pageSize.getConvertedValue();
         PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX() <= psize.getY() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
@@ -142,7 +145,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
     }
 
     @Override
-    protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(File file, @NonNull Page page, @NonNull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
@@ -151,7 +154,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         printSlice(page.get(SimplePageFigure.PAPER_SIZE), page, pageBounds, node, pagesDpi * factor);
     }
 
-    protected boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
+    protected boolean writeSlice(File file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
         printSlice(null, slice, slice.getBoundsInLocal(), node, dpi);
         return false;
     }

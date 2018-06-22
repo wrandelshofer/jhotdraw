@@ -9,6 +9,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -39,7 +41,7 @@ public class XmlFFontConverter implements Converter<CssFont> {
     private final XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, CssFont font) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull CssFont font) throws IOException {
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
 
@@ -78,7 +80,7 @@ public class XmlFFontConverter implements Converter<CssFont> {
     }
 
     @Override
-    public CssFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssFont fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
         tt.setSkipWhitespaces(true);
@@ -206,6 +208,7 @@ public class XmlFFontConverter implements Converter<CssFont> {
         return font;
     }
 
+    @Nullable
     @Override
     public CssFont getDefaultValue() {
         return null;

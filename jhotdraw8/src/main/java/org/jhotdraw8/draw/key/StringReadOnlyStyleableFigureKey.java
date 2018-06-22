@@ -8,6 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
@@ -24,6 +25,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
+    @NonNull
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
@@ -88,14 +90,17 @@ public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey
         cssMetaData = md;
     }
 
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }
 
+    @NonNull
     private final CssStringConverter converter;
 
+    @NonNull
     @Override
     public Converter<String> getConverter() {
 

@@ -32,6 +32,9 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.tree.ChildIterator;
 import org.jhotdraw8.tree.PreorderSpliterator;
 import org.w3c.dom.DOMImplementation;
@@ -71,7 +74,7 @@ public class XmlUtil {
      * @return a new Document
      * @throws IOException if the parser configuration fails
      */
-    public static Document createDocument(String nsURI, String nsQualifier, String docElemName) throws IOException {
+    public static Document createDocument(@Nullable String nsURI, @Nullable String nsQualifier, String docElemName) throws IOException {
         try {
             Document doc;
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -110,6 +113,7 @@ public class XmlUtil {
         return XmlUtil.read(inputSource, namespaceAware);
     }
 
+    @NonNull
     public static Document readWithLocations(Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.readWithLocations(inputSource, namespaceAware);
@@ -124,7 +128,7 @@ public class XmlUtil {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(inputSource);
             return doc;
-        } catch (SAXException | ParserConfigurationException ex) {
+        } catch (@NonNull SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }
@@ -143,6 +147,7 @@ public class XmlUtil {
      * @return the document
      * @throws java.io.IOException in case of failure
      */
+    @NonNull
     public static Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
             // Create transformer SAX source that adds current element position to
@@ -158,7 +163,7 @@ public class XmlUtil {
             transformer.transform(saxSource, domResult);
             Node root = domResult.getNode();
             return (Document) root;
-        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
+        } catch (@NonNull TransformerException | SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }
@@ -174,6 +179,7 @@ public class XmlUtil {
             super(xmlReader);
         }
 
+        @Nullable
         private Locator locator = null;
 
         @Override
@@ -258,7 +264,7 @@ public class XmlUtil {
         }
     }
 
-    public static void validate(URI xmlUri, URI schemaUri) throws IOException {
+    public static void validate(@NonNull URI xmlUri, URI schemaUri) throws IOException {
         try {
             SchemaFactory factory = SchemaFactory
                     .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -284,7 +290,7 @@ public class XmlUtil {
         write(result, doc);
     }
 
-    public static void write(File out, Document doc) throws IOException {
+    public static void write(@NonNull File out, Document doc) throws IOException {
         StreamResult result = new StreamResult(out);
         write(result, doc);
     }
@@ -311,10 +317,10 @@ public class XmlUtil {
      * @return a stream
      */
     public static Stream<Node> preorderStream(Node node) {
-        return StreamSupport.stream(new PreorderSpliterator<>(node, n -> {
+        return StreamSupport.stream(new PreorderSpliterator<>(n -> {
             final NodeList childNodes = n.getChildNodes();
             return () -> new ChildIterator<>(childNodes.getLength(), childNodes::item);
-        }), false);
+        }, node), false);
     }
 
 }

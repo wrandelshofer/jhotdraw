@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -57,7 +58,9 @@ public class FontDialog extends Dialog<String> {
         
     }
     /** This model is shared by all font dialogs. */
+@Nullable
 private static FontChooserModel model=null;
+    @Nullable
     public static FontChooserModel getModel() {
         if (model==null) {
             model=new PreferencesFontChooserModelFactory().create();
@@ -65,7 +68,7 @@ private static FontChooserModel model=null;
         return model;
     }
     
-    private String handleButton(ButtonType buttonType) {
+    private String handleButton(@Nullable ButtonType buttonType) {
          new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType !=null&&buttonType.getButtonData() == ButtonData.OK_DONE) {
             return controller == null ? null : controller.getSelectedFontName();

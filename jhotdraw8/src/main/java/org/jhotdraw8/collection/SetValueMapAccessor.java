@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.collection;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +20,13 @@ import java.util.Set;
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 private final static long serialVersionUID=1L;
     private final MapAccessor<ImmutableSet<E>> setAccessor;
+    @Nullable
     private final E value;
     private boolean defaultValue;
     private final String name;
     private final boolean isTransient;
 
-    public SetValueMapAccessor(String name, boolean isTransient, MapAccessor<ImmutableSet<E>> setAccessor, E value, boolean defaultValue) {
+    public SetValueMapAccessor(String name, boolean isTransient, MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
         if (value == null) {
             throw new IllegalArgumentException("value is null");
         }
@@ -57,16 +61,19 @@ private final static long serialVersionUID=1L;
         return name;
     }
 
+    @NonNull
     @Override
     public Set<MapAccessor<?>> getSubAccessors() {
         return Collections.singleton(setAccessor);
     }
 
+    @NonNull
     @Override
     public Class<Boolean> getValueType() {
         return Boolean.class;
     }
 
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return Collections.emptyList();
@@ -78,7 +85,7 @@ private final static long serialVersionUID=1L;
     }
 
     @Override
-    public Boolean put(Map<? super Key<?>, Object> a, Boolean value) {
+    public Boolean put(Map<? super Key<?>, Object> a, @Nullable Boolean value) {
         ImmutableSet<E> set = setAccessor.get(a);
         boolean oldValue = set.contains(this.value);
         if (value != null && value.booleanValue()) {

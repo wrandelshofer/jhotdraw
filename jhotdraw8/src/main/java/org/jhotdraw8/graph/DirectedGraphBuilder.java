@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +32,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
+    @NonNull
     public static <V, A> DirectedGraphBuilder<V, A> inverseOfDirectedGraph(DirectedGraph<V, A> graph) {
         final int arrowCount = graph.getArrowCount();
 
@@ -54,6 +58,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param graph a graph
      * @return a new graph
      */
+    @NonNull
     public static <V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(DirectedGraph<V, A> graph) {
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
@@ -76,7 +81,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param vertexPredicate a predicate for the nextArrows
      * @return a subset of the directed graph
      */
-    public static <V, A> DirectedGraphBuilder<V, A> subsetOfDirectedGraph(DirectedGraph<V, A> graph, Predicate<V> vertexPredicate) {
+    @NonNull
+    public static <V, A> DirectedGraphBuilder<V, A> subsetOfDirectedGraph(DirectedGraph<V, A> graph, @NonNull Predicate<V> vertexPredicate) {
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
         for (V v : graph.getVertices()) {
             if (vertexPredicate.test(v)) 
@@ -96,14 +102,17 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     /**
      * Maps a vertex to a vertex index.
      */
+    @NonNull
     private final Map<V, Integer> vertexMap;
     /**
      * Maps a vertex index to a vertex object.
      */
+    @NonNull
     private final List<V> vertices;
     /**
      * Maps an arrow index to an arrow object.
      */
+    @NonNull
     private final List<A> arrows;
 
     /** Creates a new instance with an initial capacity for 16 nextArrows and 16 arrows.
@@ -154,7 +163,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param vb vertex b
      * @param arrow the arrow
      */
-    public void addArrow(V va, V vb, A arrow) {
+    public void addArrow(@Nullable V va, @Nullable V vb, A arrow) {
         if (va == null) {
             throw new IllegalArgumentException("va=null");
         }
@@ -184,7 +193,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      *
      * @param v vertex
      */
-    public void addVertex(V v) {
+    public void addVertex(@Nullable V v) {
         if (v == null) {
             throw new IllegalArgumentException("v=null");
         }
@@ -200,6 +209,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * 
      * @return the created graph
      */
+    @NonNull
     public ImmutableDirectedGraph<V, A> build() {
         final ImmutableDirectedGraph<V, A> graph = new ImmutableDirectedGraph<>(this);
         return graph;

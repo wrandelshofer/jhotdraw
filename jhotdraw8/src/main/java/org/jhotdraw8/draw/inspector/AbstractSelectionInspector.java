@@ -8,6 +8,8 @@ import java.util.Set;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -24,6 +26,7 @@ import org.jhotdraw8.event.Listener;
  */
 public abstract class AbstractSelectionInspector implements Inspector {
 
+    @Nullable
     protected DrawingView drawingView;
 
     private final SetChangeListener<Figure> selectionListener = change -> {
@@ -35,7 +38,7 @@ public abstract class AbstractSelectionInspector implements Inspector {
     }
 
     @Override
-    public void setDrawingView(DrawingView newValue) {
+    public void setDrawingView(@Nullable DrawingView newValue) {
         DrawingView oldValue = drawingView;
         if (oldValue != null) {
             oldValue.selectedFiguresProperty().removeListener(selectionListener);
@@ -47,6 +50,7 @@ public abstract class AbstractSelectionInspector implements Inspector {
         handleDrawingViewChanged(oldValue, newValue);
     }
 
+    @NonNull
     protected Set<Figure> getSelectedFigures() {
         return drawingView == null ? Collections.emptySet() : drawingView.getSelectedFigures();
     }

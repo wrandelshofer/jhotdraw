@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.model;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.tree.AbstractTreeModel;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
@@ -19,6 +20,7 @@ public abstract class AbstractDrawingModel extends AbstractTreeModel<Figure> imp
 
     private final CopyOnWriteArrayList<Listener<DrawingModelEvent>> drawingModelListeners = new CopyOnWriteArrayList<>();
 
+    @NonNull
     @Override
     final public CopyOnWriteArrayList<Listener<DrawingModelEvent>> getDrawingModelListeners() {
         return drawingModelListeners;

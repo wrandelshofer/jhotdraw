@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_WIDTH;
@@ -31,8 +33,9 @@ public class RectangleConnector extends LocatorConnector {
         super(locator);
     }
 
+    @Nullable
     @Override
-    public Double intersect(Figure connection, Figure target, Point2D start, Point2D end) {
+    public Double intersect(Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds bounds = target.getBoundsInLocal();

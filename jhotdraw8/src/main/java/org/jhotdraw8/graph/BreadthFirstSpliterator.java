@@ -3,15 +3,10 @@
  */
 package org.jhotdraw8.graph;
 
-import java.util.ArrayDeque;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Spliterator;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
-import static java.util.Spliterator.ORDERED;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.*;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -25,54 +20,38 @@ import java.util.function.Predicate;
  */
 public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
-    private final Function<V, Iterable<V>>graph;
+    @Nullable
+    private final Function<V, Iterable<V>> nextNodesFunction;
+    @NonNull
     private final Queue<V> queue;
+    @Nullable
     private final Predicate<V> visited;
 
     /**
      * Creates a new instance.
      *
-     * @param graph the graph
+     * @param nextNodesFunction the nextNodesFunction
      * @param root the root vertex
      */
-    public BreadthFirstSpliterator(Function<V, Iterable<V>> graph, V root) {
-                super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-
-        if (graph == null) {
-            throw new IllegalArgumentException("graph==null");
-        }
-        if (root == null) {
-            throw new IllegalArgumentException("root==null");
-        }
-        this.graph = graph;
-        queue = new ArrayDeque<>(16);
-        Set<V> vset = new HashSet<>(16);
-        visited = vset::add;
-        queue.add(root);
-        visited.test(root);
+    public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextNodesFunction,@NonNull V root) {
+        this(nextNodesFunction,root,new HashSet<>()::add);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param graph the graph
+     * @param nextNodesFunction the nextNodesFunction
      * @param root the root vertex
      * @param visited a predicate with side effect. The predicate returns true
      * if the specified vertex has been visited, and marks the specified vertex
      * as visited.
      */
-    public BreadthFirstSpliterator(Function<V, Iterable<V>> graph, V root, Predicate<V> visited) {
+    public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextNodesFunction, @NonNull V root, @NonNull Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        if (graph == null) {
-            throw new IllegalArgumentException("graph==null");
-        }
-        if (root == null) {
-            throw new IllegalArgumentException("root==null");
-        }
-        if (visited == null) {
-            throw new IllegalArgumentException("visited==null");
-        }
-        this.graph = graph;
+        Objects.requireNonNull(nextNodesFunction,"nextNodesFunction");
+        Objects.requireNonNull(root,"root");
+        Objects.requireNonNull(visited,"vistied");
+        this.nextNodesFunction = nextNodesFunction;
         queue = new ArrayDeque<>(16);
         this.visited = visited;
         queue.add(root);
@@ -81,12 +60,12 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
 
     @Override
-    public boolean tryAdvance(Consumer<? super V> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
         V current = queue.poll();
         if (current == null) {
             return false;
         }
-        for (V next : graph.apply(current)) {
+        for (V next : nextNodesFunction.apply(current)) {
             if (visited.test(next)) {
                 queue.add(next);
             }
@@ -94,4 +73,6 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
         action.accept(current);
         return true;
     }
+
+
 }

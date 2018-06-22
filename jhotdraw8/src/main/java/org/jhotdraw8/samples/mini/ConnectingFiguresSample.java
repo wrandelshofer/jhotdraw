@@ -1,5 +1,6 @@
 package org.jhotdraw8.samples.mini;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Layer;
@@ -10,6 +11,7 @@ import org.jhotdraw8.draw.figure.SimpleLayer;
 
 public class ConnectingFiguresSample  {
 
+    @NonNull
     public Drawing createDrawing() {
         SimpleRectangleFigure a = new SimpleRectangleFigure(100, 80, 150, 100);  // 1
         SimpleRectangleFigure b = new SimpleRectangleFigure(300, 230, 150, 100);

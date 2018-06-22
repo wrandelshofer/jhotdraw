@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 
@@ -37,13 +38,13 @@ public class LocatorConnector extends AbstractConnector {
     }
 
     @Override
-    public Point2D getPositionInLocal(Figure connection, Figure target) {
+    public Point2D getPositionInLocal(Figure connection, @NonNull Figure target) {
         final Bounds b = target.getBoundsInLocal();
         return locator.locate(target);
     }
 
     @Override
-    public Point2D chopStart(Figure connection, Figure target, double startX, double startY, double endX, double endY) {
+    public Point2D chopStart(Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
         return getPositionInWorld(connection, target);
     }
 }

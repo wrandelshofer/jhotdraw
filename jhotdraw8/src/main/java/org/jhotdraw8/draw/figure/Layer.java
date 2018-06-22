@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
@@ -43,7 +44,7 @@ public interface Layer extends Figure {
     }
     
    @Override
-    default boolean isSuitableParent( Figure newParent) {
+    default boolean isSuitableParent(@Nullable Figure newParent) {
         return newParent == null || (newParent instanceof Drawing) || (newParent instanceof Clipping);
     }
 }

@@ -13,6 +13,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.handle.Handle;
@@ -58,7 +59,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PolylineOutlineHandle(this, POINTS,false, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
@@ -76,11 +77,13 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         }
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Polyline();
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         // XXX should be cached
@@ -97,18 +100,20 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
        return Shapes.pathIteratorFromPoints(get(POINTS), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         ArrayList<Point2D> newP = new ArrayList<>(get(POINTS));
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
@@ -117,7 +122,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Polyline lineNode = (Polyline) node;
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
@@ -135,7 +140,8 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    public static double[] toPointArray(Figure f,MapAccessor<ImmutableList<Point2D>> key) {
+    @NonNull
+    public static double[] toPointArray(Figure f, MapAccessor<ImmutableList<Point2D>> key) {
         List<Point2D> points = f.get(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {

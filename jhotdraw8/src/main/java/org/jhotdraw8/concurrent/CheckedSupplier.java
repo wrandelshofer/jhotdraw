@@ -4,6 +4,7 @@
 package org.jhotdraw8.concurrent;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A Supplier which can throw a checked exception.
@@ -13,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @version $Id$
  */
 public interface CheckedSupplier<T> {
+@NonNull
 @Nullable
     T supply() throws Exception;
 }

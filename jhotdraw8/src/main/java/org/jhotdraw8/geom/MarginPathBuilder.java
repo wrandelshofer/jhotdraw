@@ -4,6 +4,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * MarginPathBuilder.
@@ -17,6 +18,7 @@ public class MarginPathBuilder extends AbstractPathBuilder {
 
     private final int marginEnd, marginStart;
     private double fromX, fromY;
+    @Nullable
     private Op prevOp = null;
     private final PathBuilder target;
 

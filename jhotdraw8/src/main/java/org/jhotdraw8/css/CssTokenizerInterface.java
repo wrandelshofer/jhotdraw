@@ -46,6 +46,7 @@ public interface CssTokenizerInterface {
      * The returned value can be used for String comparisons of the value.
      * @return the current value
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     default String currentValue() {
         switch (currentToken()) {
             case TT_AT_KEYWORD:

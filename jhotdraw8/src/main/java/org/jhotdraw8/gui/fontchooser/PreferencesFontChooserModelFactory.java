@@ -6,6 +6,7 @@ package org.jhotdraw8.gui.fontchooser;
 import java.util.Iterator;
 import java.util.prefs.Preferences;
 import javafx.collections.ObservableList;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * PreferencesFontChooserModelFactory.
@@ -27,7 +28,7 @@ public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelF
     private final static char UNIT_ESCAPE_CHAR = 't';
     private final static char RECORD_ESCAPE_CHAR = 'n';
 
-    private void escape(String string, StringBuilder buf) {
+    private void escape(String string, @NonNull StringBuilder buf) {
         for (char ch : string.toCharArray()) {
             switch (ch) {
                 case ESCAPE_CHAR:
@@ -49,12 +50,12 @@ public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelF
         }
     }
 
-    private String resetAndUnescape(String string, StringBuilder buf) {
+    private String resetAndUnescape(@NonNull String string, StringBuilder buf) {
       buf.setLength(0);
       unescape(string,buf);
       return buf.toString();
     }
-    private void unescape(String string, StringBuilder buf) {
+    private void unescape(String string, @NonNull StringBuilder buf) {
         char[] chars = string.toCharArray();
         for (int i = 0, n = chars.length; i < n; i++) {
             char ch = chars[i];
@@ -84,7 +85,7 @@ public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelF
         }
     }
 
-    public void writeModelToPrefs(FontChooserModel model) {
+    public void writeModelToPrefs(@NonNull FontChooserModel model) {
         StringBuilder buf = new StringBuilder();
         for (FontCollection fontCollection : model.getFontCollections()) {
             if (fontCollection.isSmartCollection()) {
@@ -103,7 +104,7 @@ public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelF
         prefs.put("FontCollections", buf.toString());
     }
 
-    public void updateModelFromPrefs(FontChooserModel model) {
+    public void updateModelFromPrefs(@NonNull FontChooserModel model) {
         Preferences prefs = Preferences.userNodeForPackage(PreferencesFontChooserModelFactory.class);
         String persisted = prefs.get("FontCollections", null);
         if (persisted == null) {

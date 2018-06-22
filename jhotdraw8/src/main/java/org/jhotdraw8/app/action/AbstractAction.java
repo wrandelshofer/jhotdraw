@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.collection.Key;
 
@@ -45,6 +46,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
 
     }
 
+    @NonNull
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
@@ -58,7 +60,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      * @param event the action event
      */
     @Override
-    public final void handle(ActionEvent event) {
+    public final void handle(@NonNull ActionEvent event) {
         if (!isDisabled() && !event.isConsumed()) {
             handleActionPerformed(event);
             event.consume();
@@ -73,6 +75,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      */
     protected abstract void handleActionPerformed(ActionEvent event);
 
+    @NonNull
     @Override
     public BooleanProperty selectedProperty() {
         return selected;

@@ -76,8 +76,8 @@ public class FigureTest {
     public List<DynamicTest> testdataReshape_4argsFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testReshape_4args(new Rectangle(10, 20, 30, 40), new Rectangle(10, 20, 30, 40), new Rectangle(10, 20, 30, 40))),
-                dynamicTest("1", () -> testReshape_4args(new Rectangle(10, 20, 30, 40), new Rectangle(50, 60, 70, 80), new Rectangle(50, 60, 70, 80))),
-                dynamicTest("1", () -> testReshape_4args(new Rectangle(50, 60, 70, 80), new Rectangle(10, 20, 30, 40), new Rectangle(10, 20, 30, 40)))
+                dynamicTest("2", () -> testReshape_4args(new Rectangle(10, 20, 30, 40), new Rectangle(50, 60, 70, 80), new Rectangle(50, 60, 70, 80))),
+                dynamicTest("3", () -> testReshape_4args(new Rectangle(50, 60, 70, 80), new Rectangle(10, 20, 30, 40), new Rectangle(10, 20, 30, 40)))
         );
     }
 

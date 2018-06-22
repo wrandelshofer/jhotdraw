@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -54,6 +55,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
         set(ORIGIN, new Point2D(x, y));
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         if (textNode == null) {
@@ -66,7 +68,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         Point2D o = get(ORIGIN);
         o = transform.transform(o);
         set(ORIGIN, o);
@@ -77,13 +79,14 @@ public class SimpleTextFigure extends AbstractLeafFigure
         set(ORIGIN, new Point2D(x, y));
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Text();
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Text tn = (Text) node;
         tn.setText(get(TEXT));
         tn.setX(getStyled(ORIGIN).getX());
@@ -100,11 +103,13 @@ public class SimpleTextFigure extends AbstractLeafFigure
         tn.applyCss();// really??
     }
 
+    @NonNull
     @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

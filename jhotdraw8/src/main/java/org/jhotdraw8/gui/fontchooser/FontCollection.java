@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * FontCollection.
@@ -26,15 +27,16 @@ public class FontCollection {
 
     public FontCollection() {
     }
-    public FontCollection(String name, List<FontFamily> families) {
+    public FontCollection(String name, @NonNull List<FontFamily> families) {
         this(name,false,families);
     }
-    public FontCollection(String name, boolean isSmart,List<FontFamily> families) {
+    public FontCollection(String name, boolean isSmart, @NonNull List<FontFamily> families) {
         setName(name);
         setSmartCollection(isSmart);
         this.families.addAll(families);
     }
 
+    @NonNull
     public ObservableList<FontFamily> getFamilies() {
         return families;
     }
@@ -55,10 +57,12 @@ public class FontCollection {
         smartCollection.set(value);
     }
 
+    @NonNull
     public StringProperty nameProperty() {
         return name;
     }
 
+    @NonNull
     public BooleanProperty smartCollectionProperty() {
         return smartCollection;
     }

@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -23,7 +25,7 @@ import org.jhotdraw8.collection.Key;
 public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
 
-    protected void initialixze(Class<?> type, Object oldInstance, Object newInstance, Encoder out) {
+    protected void initialixze(Class<?> type, Object oldInstance, Object newInstance, @NonNull Encoder out) {
         if (true) return;
         Figure f =(Figure)oldInstance;
       HashMap<String,Object> result=new HashMap<>();

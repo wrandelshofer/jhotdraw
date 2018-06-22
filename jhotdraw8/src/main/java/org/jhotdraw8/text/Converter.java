@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -88,7 +89,7 @@ public interface Converter<T> {
      * @throws ParseException on conversion failure
      * @throws IOException on IO failure
      */@Nullable
-    default T fromString( CharSequence in) throws ParseException, IOException {
+    default T fromString(@NonNull CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
         if (buf.remaining() != 0 && !buf.toString().trim().isEmpty()) {
@@ -132,7 +133,8 @@ public interface Converter<T> {
      * </pre>
      *
      * @return help text. Returns null if no help text is available.
-     */@Nullable
+     */
+    @Nullable
     default String getHelpText() {
         return null;
     }

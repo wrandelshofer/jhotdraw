@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
@@ -22,6 +23,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
  * @version $Id$
  */
 public class MultiClipboardInputFormat implements ClipboardInputFormat {
+    @Nullable
     private Supplier<ClipboardInputFormat>[] formatSuppliers;
 
     private ClipboardInputFormat[] formats;

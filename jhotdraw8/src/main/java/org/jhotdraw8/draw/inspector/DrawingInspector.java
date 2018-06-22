@@ -15,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.PlatformUtil;
@@ -38,24 +40,29 @@ public class DrawingInspector extends AbstractDrawingInspector {
     @FXML
     private ColorPicker backgroundColorPicker;
 
+    @NonNull
     private Property<CssColor> myBackgroundProperty=new SimpleObjectProperty<>();
+    @Nullable
     private Property<CssColor> boundBackgroundProperty;
 
+    @NonNull
     private InvalidationListener commitHandler = o -> commitEdits();
     @FXML
     private TextField heightField;
+    @Nullable
     private Property<Double> heightProperty;
 
     private Node node;
     @FXML
     private TextField widthField;
+    @Nullable
     private Property<Double> widthProperty;
 
     public DrawingInspector() {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));
     }
 
-    public DrawingInspector(URL fxmlUrl) {
+    public DrawingInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -68,7 +75,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         return node;
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -97,7 +104,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
+    protected void onDrawingChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (widthProperty != null) {
             widthField.textProperty().unbindBidirectional(widthProperty);
             widthProperty.removeListener(commitHandler);

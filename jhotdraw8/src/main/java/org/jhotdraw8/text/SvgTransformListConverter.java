@@ -14,6 +14,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import static java.lang.Math.*;
@@ -51,7 +52,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
     private final CssDoubleConverter nb = new CssDoubleConverter();
 
     @Override
-    public void toString(Appendable buf, IdFactory idFactory, List<Transform> txs) throws IOException {
+    public void toString(@NonNull Appendable buf, IdFactory idFactory, @NonNull List<Transform> txs) throws IOException {
         boolean first = true;
         for (Transform tx : txs) {
             if (!tx.isIdentity()) {
@@ -113,8 +114,9 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
         }
     }
 
+    @NonNull
     @Override
-    public List<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public List<Transform> fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
 
@@ -232,6 +234,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
         return txs;
     }
 
+    @NonNull
     @Override
     public List<Transform> getDefaultValue() {
         return Collections.emptyList();

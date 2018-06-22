@@ -21,6 +21,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
@@ -40,25 +42,33 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class RotateHandle extends AbstractHandle {
 
+    @Nullable
     private static final Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    @Nullable
     private static final Border HANDLE_REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
 
     private static final Circle PICK_NODE_SHAPE = new Circle(3);
     private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
 
+    @Nullable
     private static final Background PIVOT_REGION_BACKGROUND = new Background(new BackgroundFill(Color.PURPLE, null, null));
+    @Nullable
     private static final Border PIVOT_REGION_BORDER = null;
 
     static {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
     }
+    @NonNull
     private final Group group;
 
     private Set<Figure> groupReshapeableFigures;
+    @NonNull
     private final Line line;
     private double lineLength = 10.0;
     private Point2D pickLocation;
+    @NonNull
     private final Region pickNode;
+    @NonNull
     private final Region pivotNode;
 
     public RotateHandle(TransformableFigure figure) {
@@ -112,16 +122,19 @@ public class RotateHandle extends AbstractHandle {
         return pickLocation;
     }
 
+    @NonNull
     @Override
     public Group getNode() {
         return group;
     }
 
+    @NonNull
     @Override
     public TransformableFigure getOwner() {
         return (TransformableFigure) super.getOwner();
     }
 
+    @Nullable
     private Transform getRotateToWorld() {
         TransformableFigure o = getOwner();
         Transform t = o.getParentToWorld();
@@ -137,6 +150,7 @@ public class RotateHandle extends AbstractHandle {
         return t;
     }
 
+    @Nullable
     private Transform getWorldToRotate() {
         TransformableFigure o = getOwner();
         Transform t = o.getWorldToParent();
@@ -153,7 +167,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(MouseEvent event, DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         TransformableFigure o = getOwner();
         Point2D center = Geom.center(o.getBoundsInLocal());
         Transform t = Transforms.concat(getWorldToRotate(), view.getViewToWorld());
@@ -187,7 +201,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    public void handleMousePressed(MouseEvent event, @NonNull DrawingView view) {
         pivotNode.setVisible(true);
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -212,7 +226,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         TransformableFigure o = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), getRotateToWorld());
         Bounds b = o.getBoundsInLocal();

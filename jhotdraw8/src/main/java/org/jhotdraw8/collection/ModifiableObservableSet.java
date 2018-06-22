@@ -33,7 +33,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     @Nullable
     private List<InvalidationListener> invalidationListeners;
 
-    public ModifiableObservableSet(Collection<E> copyMe) {
+    public ModifiableObservableSet(@NonNull Collection<E> copyMe) {
         backingSet = new LinkedHashSet<>(copyMe);
     }
 
@@ -201,6 +201,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         fireInvalidated();
     }
 
+    @NonNull
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {

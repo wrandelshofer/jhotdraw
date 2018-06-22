@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.CssLinearGradient;
 import java.io.IOException;
@@ -40,10 +42,12 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssLinearGradientConverter implements Converter<CssLinearGradient> {
 
+    @NonNull
     private CssColorConverter colorConverter = new CssColorConverter(false);
+    @NonNull
     private CssDoubleConverter doubleConverter = new CssDoubleConverter();
 
-    public void toString(Appendable out, IdFactory idFactory, CssLinearGradient value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable CssLinearGradient value) throws IOException {
         if (value == null) {
             out.append("none");
         } else {
@@ -182,8 +186,9 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
         }
     }
 
+    @Nullable
     @Override
-    public CssLinearGradient fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public CssLinearGradient fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
@@ -245,6 +250,7 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
         return new CssLinearGradient(fromTo.startX, fromTo.startY, fromTo.endX, fromTo.endY, fromTo.isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
     }
 
+    @Nullable
     @Override
     public CssLinearGradient getDefaultValue() {
         return null;
@@ -446,7 +452,7 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
         return new PointToPoint(startX, startY, endX, endY, isProportional);
     }
 
-    private CssStop parseColorStop(CssTokenizerInterface tt) throws IOException, ParseException {
+    private CssStop parseColorStop(@NonNull CssTokenizerInterface tt) throws IOException, ParseException {
         CssColor color = colorConverter.parseColor(tt);
         Double offset = null;
         switch (tt.nextToken()) {
@@ -462,6 +468,7 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
         return new CssStop(offset, color);
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨LinearGradient⟩: linear-gradient(［⟨LinearGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"

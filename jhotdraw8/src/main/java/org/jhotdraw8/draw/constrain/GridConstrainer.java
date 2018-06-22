@@ -29,6 +29,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -80,6 +81,7 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
+    @NonNull
     private Property<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
         @Override
         public void invalidated() {
@@ -197,10 +199,12 @@ public class GridConstrainer extends AbstractConstrainer {
         node.getChildren().addAll(minorNode, majorNode);
     }
 
+    @NonNull
     public DoubleProperty angleProperty() {
         return angle;
     }
 
+    @NonNull
     public BooleanProperty drawGridProperty() {
         return drawGrid;
     }
@@ -225,6 +229,7 @@ public class GridConstrainer extends AbstractConstrainer {
         return majorY.get();
     }
 
+    @NonNull
     @Override
     public Node getNode() {
         return node;
@@ -242,23 +247,28 @@ public class GridConstrainer extends AbstractConstrainer {
         return y.get();
     }
 
+    @NonNull
     public DoubleProperty heightProperty() {
         return height;
     }
 
+    @NonNull
     public Property<CssColor> gridColorProperty() {
         return gridColorProperty;
     }
 
+    @NonNull
     public IntegerProperty majorXProperty() {
         return majorX;
     }
 
+    @NonNull
     public IntegerProperty majorYProperty() {
         return majorY;
     }
 
 
+    @NonNull
     public BooleanProperty snapToGridProperty() {
         return snapToGrid;
     }
@@ -289,8 +299,9 @@ public class GridConstrainer extends AbstractConstrainer {
         return result < 0 ? 360 + result : result;
     }
 
+    @NonNull
     @Override
-    public Point2D translatePoint(Figure f, Point2D p, Point2D dir) {
+    public Point2D translatePoint(Figure f, @NonNull Point2D p, @NonNull Point2D dir) {
         if (!snapToGrid.get()) {
             return p;
         }
@@ -320,8 +331,9 @@ public class GridConstrainer extends AbstractConstrainer {
         return new Point2D(tx * cwidth + cx, ty * cheight + cy);
     }
 
+    @NonNull
     @Override
-    public Rectangle2D translateRectangle(Figure f, Rectangle2D r, Point2D dir) {
+    public Rectangle2D translateRectangle(Figure f, @NonNull Rectangle2D r, @NonNull Point2D dir) {
         if (!snapToGrid.get()) {
             return r;
         }
@@ -355,7 +367,7 @@ public class GridConstrainer extends AbstractConstrainer {
     }
 
     @Override
-    public void updateNode(DrawingView drawingView) {
+    public void updateNode(@NonNull DrawingView drawingView) {
         ObservableList<PathElement> minor = minorNode.getElements();
         ObservableList<PathElement> major = majorNode.getElements();
         minor.clear();
@@ -471,14 +483,17 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     }
 
+    @NonNull
     public DoubleProperty widthProperty() {
         return width;
     }
 
+    @NonNull
     public DoubleProperty xProperty() {
         return x;
     }
 
+    @NonNull
     public DoubleProperty yProperty() {
         return y;
     }

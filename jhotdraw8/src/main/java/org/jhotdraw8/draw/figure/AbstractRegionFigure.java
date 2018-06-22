@@ -16,6 +16,9 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -35,6 +38,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
     public final static Rectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
     public final static DoubleStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    @Nullable
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     public final static DoubleStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
     public final static DoubleStyleableFigureKey X = SimpleRectangleFigure.X;
@@ -54,16 +58,19 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public AbstractRegionFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Path();
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         if (pathElements==null) pathElements=new Path2D.Float();
@@ -85,7 +92,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
 
-    protected void updatePathNode(Path path) {
+    protected void updatePathNode(@NonNull Path path) {
         path.getElements().setAll(Shapes.fxPathElementsFromAWT(pathElements.getPathIterator(null)));
     }
 

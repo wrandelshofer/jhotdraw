@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.io;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +17,11 @@ import java.util.Map;
  */
 public class SimpleIdFactory implements IdFactory {
 
+    @NonNull
     private Map<String, Long> prefixToNextId = new HashMap<>();
+    @NonNull
     private Map<String, Object> idToObject = new HashMap<>();
+    @NonNull
     private Map<Object, String> objectToId = new HashMap<>();
 
     @Override
@@ -51,7 +57,7 @@ public class SimpleIdFactory implements IdFactory {
         }
     }
 
-    public String createId(Object object, String prefix) {
+    public String createId(Object object, @Nullable String prefix) {
         String id = objectToId.get(object);
         if (id == null) {
             long pNextId = prefixToNextId.getOrDefault(prefix, 1L);
@@ -66,7 +72,8 @@ public class SimpleIdFactory implements IdFactory {
         return id;
     }
 
-    public String createId(Object object, String prefix, String idx) {
+    @Nullable
+    public String createId(Object object, @Nullable String prefix, @Nullable String idx) {
         String existingId = objectToId.get(object);
         if (existingId == null) {
             if (idx != null && !idToObject.containsKey(idx)) {

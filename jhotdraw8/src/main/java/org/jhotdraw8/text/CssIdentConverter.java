@@ -8,6 +8,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -42,7 +45,7 @@ import org.jhotdraw8.io.CharBufferReader;
 public class CssIdentConverter implements Converter<String> {
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
         Reader r = new StringReader(value);
         int ch = r.read();
 
@@ -98,8 +101,9 @@ public class CssIdentConverter implements Converter<String> {
 
     }
 
+    @Nullable
     @Override
-    public String fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(in));
         if (tt.nextToken() != CssTokenizer.TT_IDENT) {
             throw new ParseException("Css Identifier expected", in.position());
@@ -107,6 +111,7 @@ public class CssIdentConverter implements Converter<String> {
         return tt.currentStringValue();
     }
 
+    @NonNull
     @Override
     public String getDefaultValue() {
         return "";

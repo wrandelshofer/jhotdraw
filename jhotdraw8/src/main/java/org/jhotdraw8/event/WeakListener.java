@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.event;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.ref.WeakReference;
 import java.util.EventObject;
 import java.util.function.Consumer;
@@ -15,10 +18,11 @@ import java.util.function.Consumer;
  */
 public final class WeakListener<E extends EventObject> implements Listener<E>, javafx.beans.WeakListener {
 
+    @NonNull
     private final WeakReference<Listener<E>> ref;
     private Consumer<Listener<E>> removeListener;
 
-    public WeakListener(Listener<E> listener, Consumer<Listener<E>> removeListener) {
+    public WeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {
         if (listener == null) {
             throw new NullPointerException("Listener must be specified.");
         }

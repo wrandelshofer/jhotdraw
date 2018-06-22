@@ -13,6 +13,8 @@ import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import static org.jhotdraw8.collection.ImmutableList.emptyList;
 
 /**
@@ -39,7 +41,7 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
         }
     }
 
-    private ImmutableSet(Object[] array) {
+    private ImmutableSet(@NonNull Object[] array) {
         this(array, 0, array.length);
     }
 
@@ -161,25 +163,30 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
         }
     }
 
+    @NonNull
     @SuppressWarnings("unchecked")
     public static <T> ImmutableSet<T> emptySet() {
         return (ImmutableSet<T>) EMPTY;
     }
 
+    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <T> ImmutableSet<T> of(T... items) {
         return items.length == 0 ? emptySet() : new ImmutableSet<T>(items);
     }
 
+    @NonNull
     public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
         return collection.isEmpty() ? emptySet() : new ImmutableSet<T>(collection);
     }
 
+    @NonNull
     public static <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
         return length == 0 ? emptySet() : new ImmutableSet<>(a, offset, length);
     }
 
+    @NonNull
     @SuppressWarnings({"unchecked","rawtypes"})
     public static <T> ImmutableSet<T> remove(Collection<T> collection, T item) {
         switch (collection.size()) {

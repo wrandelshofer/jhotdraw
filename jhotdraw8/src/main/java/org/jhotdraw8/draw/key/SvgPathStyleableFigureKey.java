@@ -9,6 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.shape.SVGPath;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -26,6 +27,7 @@ public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String
 
     private final static long serialVersionUID = 1L;
 
+    @NonNull
     private final CssMetaData<?, String> cssMetaData;
 
     private Converter<String> converter;
@@ -83,6 +85,7 @@ public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String
         cssMetaData = md;
     }
 
+    @NonNull
     @Override
     public CssMetaData<?, String> getCssMetaData() {
         return cssMetaData;

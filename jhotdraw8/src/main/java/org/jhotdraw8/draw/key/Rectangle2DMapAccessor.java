@@ -11,6 +11,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Rectangle2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -29,9 +30,13 @@ public class Rectangle2DMapAccessor extends AbstractFigureMapAccessor<Rectangle2
 
     private final static long serialVersionUID = 1L;
 
+    @NonNull
     private final MapAccessor<Double> xKey;
+    @NonNull
     private final MapAccessor<Double> yKey;
+    @NonNull
     private final MapAccessor<Double> widthKey;
+    @NonNull
     private final MapAccessor<Double> heightKey;
 
     /**
@@ -53,13 +58,15 @@ public class Rectangle2DMapAccessor extends AbstractFigureMapAccessor<Rectangle2
     }
 
 
+    @NonNull
     @Override
     public Rectangle2D get(Map<? super Key<?>, Object> a) {
         return new Rectangle2D(xKey.get(a), yKey.get(a), max(0.0,widthKey.get(a)), max(0.0,heightKey.get(a)));
     }
 
+    @NonNull
     @Override
-    public Rectangle2D put(Map<? super Key<?>, Object> a, Rectangle2D value) {
+    public Rectangle2D put(Map<? super Key<?>, Object> a, @NonNull Rectangle2D value) {
         Rectangle2D oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
@@ -68,6 +75,7 @@ public class Rectangle2DMapAccessor extends AbstractFigureMapAccessor<Rectangle2
         return oldValue;
     }
 
+    @NonNull
     @Override
     public Rectangle2D remove(Map<? super Key<?>, Object> a) {
         Rectangle2D oldValue = get(a);

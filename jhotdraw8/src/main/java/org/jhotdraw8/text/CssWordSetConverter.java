@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import javafx.collections.FXCollections;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.io.IdFactory;
 
@@ -46,7 +47,7 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
                     Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableSet<String> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @NonNull ImmutableSet<String> value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];

@@ -13,6 +13,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.tool.ToolEvent;
 import org.jhotdraw8.event.Listener;
@@ -52,6 +54,7 @@ public class SimpleDrawingEditor implements DrawingEditor {
         });
     }
 
+    @Nullable
     private final Listener<ToolEvent> defaultToolActivator = (event) -> {
         switch (event.getEventType()) {
             case TOOL_DONE:
@@ -98,21 +101,25 @@ public class SimpleDrawingEditor implements DrawingEditor {
 
     };
 
+    @NonNull
     @Override
     public SetProperty<DrawingView> drawingViewsProperty() {
         return drawingViews;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<DrawingView> activeDrawingViewProperty() {
         return activeDrawingView;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<Tool> activeToolProperty() {
         return activeTool;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<Tool> defaultToolProperty() {
         return defaultTool;

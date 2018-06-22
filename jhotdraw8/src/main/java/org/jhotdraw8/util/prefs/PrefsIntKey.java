@@ -4,6 +4,8 @@
 package org.jhotdraw8.util.prefs;
 
 import java.util.prefs.Preferences;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.geom.Geom;
 
 /**
@@ -26,11 +28,11 @@ public class PrefsIntKey {
         this.clampMax = clampMax;
     }
 
-    public int get(Preferences prefs) {
+    public int get(@NonNull Preferences prefs) {
         return Geom.clamp(prefs.getInt(key, defaultValue), clampMin, clampMax);
     }
 
-    public void put(Preferences prefs, int newValue) {
+    public void put(@NonNull Preferences prefs, int newValue) {
         prefs.putInt(key, newValue);
     }
 }

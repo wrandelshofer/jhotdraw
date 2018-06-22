@@ -24,6 +24,9 @@ import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.scene.input.DataFormat;
 import static org.jhotdraw8.app.Disableable.DISABLED_PROPERTY;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -47,6 +50,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     /**
      * Holds the model.
      */
+    @Nullable
     private final ObjectProperty<ApplicationModel> model = new SimpleObjectProperty<>(this, MODEL_PROPERTY, null);
 
     /**
@@ -81,6 +85,7 @@ public abstract class AbstractApplication extends javafx.application.Application
         return disabled;
     }
 
+    @NonNull
     @Override
     public ObservableSet<Object> disablers() {
         return disablers;
@@ -139,11 +144,13 @@ public abstract class AbstractApplication extends javafx.application.Application
         });
     }
 
+    @NonNull
     @Override
     public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
     }
 
+    @Nullable
     @Override
     public ObjectProperty<ApplicationModel> modelProperty() {
         return model;

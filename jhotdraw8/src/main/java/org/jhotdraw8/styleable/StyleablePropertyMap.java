@@ -13,6 +13,8 @@ import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.KeyMapEntryProperty;
 
@@ -93,6 +95,7 @@ public class StyleablePropertyMap {
      */
     private final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
 
+    @NonNull
     private MapChangeListener<Key<?>, Object> inputHandler = new MapChangeListener<Key<?>, Object>() {
 
         @Override
@@ -224,6 +227,7 @@ public class StyleablePropertyMap {
      * @param key The key identifying the value.
      * @return The style origin or null if the key is not contained in the map.
      */
+    @Nullable
     public StyleOrigin getStyleOrigin(Key<?> key) {
         if (inline != null && inline.containsKey(key)) {
             return StyleOrigin.INLINE;
@@ -242,6 +246,7 @@ public class StyleablePropertyMap {
         return bean;
     }
 
+    @Nullable
     public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
         @SuppressWarnings("unchecked")
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
@@ -260,7 +265,8 @@ public class StyleablePropertyMap {
         return sp;
     }
 
-    public <T> T remove(StyleOrigin origin, Key<T> key) {
+    @Nullable
+    public <T> T remove(@NonNull StyleOrigin origin, Key<T> key) {
         T value = null;
         switch (origin) {
             case INLINE:
@@ -297,7 +303,7 @@ public class StyleablePropertyMap {
         return value;
     }
 
-    public void removeAll(StyleOrigin origin) {
+    public void removeAll(@NonNull StyleOrigin origin) {
         switch (origin) {
             case INLINE:
                 if (inline != null) {
@@ -329,10 +335,11 @@ public class StyleablePropertyMap {
     // ---
     public class MapStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
+        @NonNull
         private final Key<T> key;
         private final CssMetaData<?, T> metaData;
 
-        public MapStyleableProperty(Key<T> key, CssMetaData<?, T> metaData) {
+        public MapStyleableProperty(@NonNull Key<T> key, CssMetaData<?, T> metaData) {
             this.key = key;
             this.metaData = metaData;
 
@@ -360,7 +367,7 @@ public class StyleablePropertyMap {
          * @param value the value null removes the key from the style origin
          */
         @Override
-        public void applyStyle(StyleOrigin origin, T value) {
+        public void applyStyle(@Nullable StyleOrigin origin, @Nullable T value) {
             if (!key.isAssignable(value)) {
                 throw new ClassCastException("value is not assignable. key:" + key + " value:" + value);
             }
@@ -402,6 +409,7 @@ public class StyleablePropertyMap {
             }
         }
 
+        @Nullable
         @Override
         public StyleOrigin getStyleOrigin() {
             return StyleablePropertyMap.this.getStyleOrigin(key);

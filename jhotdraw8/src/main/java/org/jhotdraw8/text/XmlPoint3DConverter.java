@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point3D;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -21,7 +22,7 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new XmlConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Point3D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @NonNull Point3D value) throws IOException {
         if (value.getZ() == 0.0) {
             formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
         } else {
@@ -29,8 +30,9 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
         }
     }
 
+    @NonNull
     @Override
-    public Point3D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Point3D fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 2:
@@ -42,6 +44,7 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
         }
     }
 
+    @NonNull
     @Override
     public Point3D getDefaultValue() {
         return new Point3D(0, 0, 0);

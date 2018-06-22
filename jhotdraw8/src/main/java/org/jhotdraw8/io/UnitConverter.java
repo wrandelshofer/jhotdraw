@@ -5,6 +5,7 @@ package org.jhotdraw8.io;
 
 import java.util.Objects;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.text.CssSize;
 
 /**
@@ -120,7 +121,7 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert( CssSize value, @Nullable String outputUnit) {
+    default double convert(@NonNull CssSize value, @Nullable String outputUnit) {
         return convert(value.getValue(), value.getUnits(), outputUnit);
     }
 }

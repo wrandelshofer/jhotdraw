@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * IntDirectedGraphBuilder.
  *
@@ -18,6 +20,7 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
+    @NonNull
     public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
         int arrowCount = graph.getArrowCount();
 
@@ -37,6 +40,7 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * @param graph a graph
      * @return a new graph
      */
+    @NonNull
     public static IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
         int arrowCount = graph.getArrowCount();
 
@@ -98,6 +102,7 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * 
      * @return the created graph
      */
+    @NonNull
     public IntImmutableDirectedGraph build() {
         return new IntImmutableDirectedGraph(this);
     }

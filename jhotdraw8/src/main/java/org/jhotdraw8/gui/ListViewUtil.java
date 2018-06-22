@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * ListViewUtil.
@@ -41,6 +42,7 @@ public class ListViewUtil {
             this.reorderingOnly = reorderingOnly;
         }
 
+        @NonNull
         private EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -53,7 +55,7 @@ public class ListViewUtil {
                 }
             }
 
-            private void onDragDone(DragEvent event) {
+            private void onDragDone(@NonNull DragEvent event) {
                 if (reorderingOnly) {
                     // XXX assumes that the ListView autodetects reordering!
                     draggedCellIndex = -1;
@@ -70,6 +72,7 @@ public class ListViewUtil {
 
         };
 
+        @NonNull
         private EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
@@ -97,6 +100,7 @@ public class ListViewUtil {
 
         };
 
+        @org.checkerframework.checker.nullness.qual.Nullable
         EventHandler<? super DragEvent> listDragHandler = new EventHandler<DragEvent>() {
 
             @Override
@@ -183,7 +187,7 @@ public class ListViewUtil {
      * @param listView the list view
      * @param clipboardIO a reader/writer for the clipboard.
      */
-    public static <T> void addDragAndDropSupport(ListView<T> listView, ClipboardIO<T> clipboardIO) {
+    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO) {
         addDragAndDropSupport(listView, listView.getCellFactory(), clipboardIO);
     }
 
@@ -197,12 +201,12 @@ public class ListViewUtil {
      * @param cellFactory the cell factory of the list view
      * @param clipboardIO a reader/writer for the clipboard.
      */
-    public static <T> void addDragAndDropSupport(ListView<T> listView, Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO) {
+    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO) {
         addDragAndDropSupport(listView, cellFactory, clipboardIO, false);
     }
 
-    private static <T> void addDragAndDropSupport(ListView<T> listView, Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO,
-            boolean reorderingOnly) {
+    private static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO,
+                                                  boolean reorderingOnly) {
         DnDSupport<T> dndSupport = new DnDSupport<T>(listView, clipboardIO, reorderingOnly);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
             ListCell<T> cell = cellFactory.call(lv);
@@ -220,7 +224,7 @@ public class ListViewUtil {
      * @param <T> the data type of the list view
      * @param listView the list view
      */
-    public static <T> void addReorderingSupport(ListView<T> listView) {
+    public static <T> void addReorderingSupport(@NonNull ListView<T> listView) {
         addReorderingSupport(listView, listView.getCellFactory(), null);
     }
     /**
@@ -230,7 +234,7 @@ public class ListViewUtil {
      * @param listView the list view
      * @param clipboardIO the clipboard i/o
      */
-    public static <T> void addReorderingSupport(ListView<T> listView, ClipboardIO<T> clipboardIO) {
+    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO) {
         addReorderingSupport(listView, listView.getCellFactory(), clipboardIO);
     }
 
@@ -246,11 +250,11 @@ public class ListViewUtil {
      * @param cellFactory the cell factory of the list view
      * @param clipboardIO a reader/writer for the clipboard. You can provide null if you don't want cut/copy/paste functionality.
      */
-    public static <T> void addReorderingSupport(ListView<T> listView, Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO) {
+    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO) {
         if (clipboardIO==null) {
                 clipboardIO = new ClipboardIO<T>() {
                 @Override
-                public void write(Clipboard clipboard, List<T> items) {
+                public void write(@NonNull Clipboard clipboard, @NonNull List<T> items) {
         // We just write the index of the selected item in the clipboard.
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
@@ -260,6 +264,7 @@ public class ListViewUtil {
                     clipboard.setContent(content);
                 }
 
+                @NonNull
                 @Override
                 public List<T> read(Clipboard clipboard) {
                     // We are not actually interested in the clipboard content.
@@ -267,7 +272,7 @@ public class ListViewUtil {
                 }
 
                 @Override
-                public boolean canRead(Clipboard clipboard) {
+                public boolean canRead(@NonNull Clipboard clipboard) {
                     return clipboard.hasString();
                 }
             };

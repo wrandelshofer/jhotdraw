@@ -5,6 +5,8 @@ package org.jhotdraw8.collection;
 
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.ObservableMap;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * KeyMapEntryProperty.
@@ -16,13 +18,15 @@ import javafx.collections.ObservableMap;
  * @version $Id$
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V>{
+    @NonNull
     private final MapAccessor<V> accessor;
 
-    public KeyMapEntryProperty(ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
+    public KeyMapEntryProperty(@NonNull ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
        super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getValueType());
         this.accessor = key;
     }
 
+    @Nullable
     @Override
     public V get() {
         @SuppressWarnings("unchecked")
@@ -39,6 +43,7 @@ public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V>{
         super.set(value);
     }
 
+    @Nullable
     @Override
     public Object getBean() {
         return map;

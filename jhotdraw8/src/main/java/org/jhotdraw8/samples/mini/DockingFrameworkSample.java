@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.gui.dock.Dock;
 import org.jhotdraw8.gui.dock.DockItem;
 import org.jhotdraw8.gui.dock.DockRoot;
@@ -31,7 +32,8 @@ public class DockingFrameworkSample extends Application {
 
     private int counter;
 
-    public DockRoot initStage(String title, Stage primaryStage, int numTabs, Supplier<Dock> dockSupp, Supplier<Track> hbSupp, Supplier<Track> vbSupp) {
+    @NonNull
+    public DockRoot initStage(String title, @NonNull Stage primaryStage, int numTabs, Supplier<Dock> dockSupp, Supplier<Track> hbSupp, Supplier<Track> vbSupp) {
         DockRoot root = new DockRoot();
         root.setDockFactory(dockSupp);
         root.setVerticalInnerTrackFactory(vbSupp);
@@ -58,7 +60,7 @@ public class DockingFrameworkSample extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(@NonNull Stage primaryStage) {
 // Thread.currentThread().setUncaughtExceptionHandler((t,e)->e.printStackTrace());
         
         initStage("SplitPaneTrack",primaryStage, 0, TabPaneDock::new, () -> new SplitPaneTrack(Orientation.HORIZONTAL), () -> new SplitPaneTrack(Orientation.VERTICAL));

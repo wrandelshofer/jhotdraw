@@ -8,6 +8,7 @@ import java.text.ParseException;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.scene.text.Font;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Allows to use a {@code Converter} with the {@code javafx.css.StyleConverter}
@@ -29,7 +30,7 @@ public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
     public T convert(ParsedValue<String, T> value, Font font) {
         try {
             return converter.fromString(value.getValue());
-        } catch (ParseException | IOException ex) {
+        } catch (@NonNull ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

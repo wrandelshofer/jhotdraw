@@ -6,6 +6,9 @@ package org.jhotdraw8.css;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.CharBufferReader;
 
 /**
@@ -117,7 +120,9 @@ public class CssTokenizer implements CssTokenizerInterface {
 
     private int currentToken;
 
+    @Nullable
     private String stringValue;
+    @Nullable
     private Number numericValue;
     private int lineNumber;
     private int startPosition;
@@ -143,12 +148,14 @@ public class CssTokenizer implements CssTokenizerInterface {
         return currentToken;
     }
 
+    @Nullable
     @Override
     public String currentStringValue() {
         return stringValue;
     }
 
 
+    @Nullable
     @Override
     public Number currentNumericValue() {
         return numericValue;
@@ -498,7 +505,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean identMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean identMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         boolean consumed = false;
         if (ch == '-') {
             buf.append('-');
@@ -526,7 +533,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean nameMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean nameMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (nmcharMacro(ch, buf)) {
             while (nmcharMacro(ch = in.nextChar(), buf)) {
             }
@@ -544,7 +551,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean numMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean numMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         boolean hasSign = false;
         if (ch == '-') {
             hasSign = true;
@@ -637,7 +644,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean nmstartMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean nmstartMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z') {
             buf.append((char) ch);
             return true;
@@ -658,7 +665,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean escapeMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean escapeMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (ch == '\\') {
             ch = in.nextChar();
             if ('0' <= ch && ch <= '9' || 'a' <= ch && ch <= 'f' || 'A' <= ch && ch <= 'F') {
@@ -700,7 +707,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean unicodeAfterBackslashMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean unicodeAfterBackslashMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         int unicodeScalar = hexToInt(ch);
         if (unicodeScalar == -1) {
             return false;
@@ -758,7 +765,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean nmcharMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean nmcharMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z'//
                 || '0' <= ch && ch <= '9' || ch == '-') {
             buf.append((char) ch);
@@ -778,7 +785,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean commentAfterSlashStarMacro(StringBuilder buf) throws IOException {
+    private boolean commentAfterSlashStarMacro(@NonNull StringBuilder buf) throws IOException {
         int ch = in.nextChar();
         while (ch != -1) {
             if (ch == '*') {
@@ -802,7 +809,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean uriMacro(StringBuilder buf) throws IOException {
+    private boolean uriMacro(@NonNull StringBuilder buf) throws IOException {
         int ch = in.nextChar();
         // skip whitespace
         while (ch == ' ' || ch == '\n' || ch == '\t') {
@@ -849,7 +856,7 @@ public class CssTokenizer implements CssTokenizerInterface {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean stringMacro(int ch, StringBuilder buf) throws IOException {
+    private boolean stringMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         int quote = ch;
         if (quote != '\'' && quote != '"') {
             throw new IllegalArgumentException("illegal quote character:" + (char) ch);

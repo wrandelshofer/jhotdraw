@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
@@ -49,6 +51,7 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
         return false;
     }
 
+    @Nullable
     @Override
     public Cursor getCursor() {
         return null;
@@ -59,7 +62,7 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
         return node;
     }
 
-    protected void initNode(Polygon r) {
+    protected void initNode(@NonNull Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
@@ -71,7 +74,7 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getParentToWorld());
         if (f instanceof TransformableFigure) {

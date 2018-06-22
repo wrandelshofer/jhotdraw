@@ -9,6 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingView;
@@ -54,7 +55,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     // Behaviors
     // ---
     @Override
-    public void setDraggedFigure(Figure anchor, DrawingView view) {
+    public void setDraggedFigure(Figure anchor, @NonNull DrawingView view) {
         this.anchorFigure = anchor;
 
         // determine which figures can be reshaped together as a group
@@ -68,7 +69,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     }
 
     @Override
-    public void trackMousePressed(MouseEvent event, DrawingView view) {
+    public void trackMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure, view.viewToWorld(new Point2D(event.getX(), event.getY())));
     }
 
@@ -82,7 +83,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     }
 
     @Override
-    public void trackMouseDragged(MouseEvent event, DrawingView view) {
+    public void trackMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {

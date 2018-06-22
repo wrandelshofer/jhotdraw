@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 import java.util.Objects;
 import javafx.scene.paint.Color;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.text.CssConverterFactory;
 import org.jhotdraw8.text.PatternConverter;
 
@@ -21,16 +22,17 @@ public class CssColor implements Paintable {
     private final static PatternConverter formatter = new PatternConverter("rgba'('{0,number},{1,number},{2,number},{3,number}')'", new CssConverterFactory());
 
     private final String name;
+    @NonNull
     private final Color color;
 
     public final static CssColor BLACK = CssColor.valueOf("black");
     public final static CssColor WHITE = CssColor.valueOf("white");
 
-    public CssColor(Color color) {
+    public CssColor(@NonNull Color color) {
         this(null, color);
     }
 
-    public CssColor(String name, Color color) {
+    public CssColor(@org.checkerframework.checker.nullness.qual.Nullable String name, @NonNull Color color) {
         this.name = name == null ? toName(color) : name;
         this.color = color;
     }
@@ -39,10 +41,12 @@ public class CssColor implements Paintable {
         return name;
     }
 
+    @NonNull
     public Color getColor() {
         return color;
     }
 
+    @NonNull
     @Override
     public Color getPaint() {
         return color;
@@ -74,7 +78,7 @@ public class CssColor implements Paintable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@org.checkerframework.checker.nullness.qual.Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -91,13 +95,14 @@ public class CssColor implements Paintable {
         return true;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CColor{" + getName() + '}';
     }
 
     @Nullable
-    public static CssColor valueOf(String value) {
+    public static CssColor valueOf(@NonNull String value) {
         return new CssColor(value, Color.valueOf(value));
     }
 

@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.gui.dock;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.gui.dock.Track;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
@@ -26,6 +27,7 @@ import org.jhotdraw8.gui.CustomSkin;
 public class ScrollableSplitPaneTrack extends Control implements Track {
 
     private final SplitPane splitPane = new SplitPane();
+    @NonNull
     private ScrollPane scrollPane = new ScrollPane(splitPane);
 
     public ScrollableSplitPaneTrack() {
@@ -84,6 +86,7 @@ public class ScrollableSplitPaneTrack extends Control implements Track {
         return splitPane.getItems();
     }
 
+    @NonNull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

@@ -9,6 +9,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import javafx.scene.text.Font;
@@ -40,7 +42,7 @@ public class XmlFontConverter implements Converter<Font> {
     private final XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull Font font) throws IOException {
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
         FontPosture posture = FontPosture.REGULAR;
@@ -80,7 +82,7 @@ public class XmlFontConverter implements Converter<Font> {
     }
 
     @Override
-    public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Font fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
         tt.setSkipWhitespaces(true);
@@ -209,6 +211,7 @@ public class XmlFontConverter implements Converter<Font> {
         return font;
     }
 
+    @Nullable
     @Override
     public Font getDefaultValue() {
         return null;

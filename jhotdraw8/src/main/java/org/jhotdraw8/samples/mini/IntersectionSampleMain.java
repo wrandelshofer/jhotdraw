@@ -34,6 +34,8 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.geom.Beziers;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
@@ -48,12 +50,14 @@ public class IntersectionSampleMain extends Application {
     StackPane canvas;
     ChoiceBox<String> choice1;
     ChoiceBox<String> choice2;
+    @NonNull
     List<Map.Entry<Shape, List<Handle>>> shapes = new ArrayList<>();
 
     {
         shapes.add(null);
         shapes.add(null);
     }
+    @NonNull
     Path isectPath = new Path();
 
     private static class Point extends Circle {
@@ -63,7 +67,7 @@ public class IntersectionSampleMain extends Application {
         }
     }
 
-    private Map.Entry<Shape, List<Handle>> createShapeAndHandles(final String shapeName, Color shapeColor, Color handleColor) {
+    private Map.Entry<Shape, List<Handle>> createShapeAndHandles(@Nullable final String shapeName, Color shapeColor, Color handleColor) {
         Shape shape = null;
         List<Handle> handles = new ArrayList<>();
         if (shapeName != null) {
@@ -243,6 +247,7 @@ public class IntersectionSampleMain extends Application {
 
     private class Handle {
 
+        @NonNull
         Rectangle node = new Rectangle(5, 5);
         Runnable updateHandle;
         Consumer<Point2D> updateShape;
@@ -275,7 +280,7 @@ public class IntersectionSampleMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(@NonNull Stage primaryStage) {
         choice1 = new ChoiceBox<String>();
         choice1.getItems().setAll("Circle", "CubicCurve", "Ellipse", "Line", "Rectangle", "QuadCurve");
         choice2 = new ChoiceBox<String>();

@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -29,6 +31,7 @@ public class GroupAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.group";
     public static final String COMBINE_PATHS_ID = "edit.combinePaths";
+    @Nullable
     public final Supplier<Figure> groupFactory;
 
     /**
@@ -42,7 +45,7 @@ public class GroupAction extends AbstractSelectedAction {
         this(ID, app, editor, groupFactory);
     }
 
-    public GroupAction(String id, Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
+    public GroupAction(String id, Application app, DrawingEditor editor, @Nullable Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");
@@ -64,7 +67,7 @@ public class GroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void group(DrawingView view, Collection<Figure> figures, Supplier<Figure> groupFactory) {
+    public static void group(@NonNull DrawingView view, Collection<Figure> figures, @NonNull Supplier<Figure> groupFactory) {
         // We don't addChild an empty group
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be grouped");

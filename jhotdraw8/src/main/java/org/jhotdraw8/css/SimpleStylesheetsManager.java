@@ -18,6 +18,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 import javafx.css.StyleOrigin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
@@ -55,10 +57,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     protected class ParsedStylesheetEntry {
 
         private StyleOrigin origin;
+        @Nullable
         private FutureTask<Stylesheet> future;
+        @Nullable
         private Stylesheet stylesheet;
 
-        public ParsedStylesheetEntry(StyleOrigin origin, URI uri) {
+        public ParsedStylesheetEntry(StyleOrigin origin, @NonNull URI uri) {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
@@ -67,7 +71,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
-        public ParsedStylesheetEntry(StyleOrigin origin, String str) {
+        public ParsedStylesheetEntry(StyleOrigin origin, @NonNull String str) {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
@@ -80,6 +84,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             return origin;
         }
 
+        @Nullable
         public Stylesheet getStylesheet() {
             if (future != null) {
                 try {
@@ -114,21 +119,22 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      */
     private LinkedHashMap<Object, ParsedStylesheetEntry> inlineList = new LinkedHashMap<>();
 
+    @NonNull
     private Executor executor = Executors.newCachedThreadPool();
 
     @Override
-    public void addStylesheet(StyleOrigin origin, URI documentHome, URI uri) {
+    public void addStylesheet(@NonNull StyleOrigin origin, @Nullable URI documentHome, @NonNull URI uri) {
         URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
         getMap(origin).put(resolvedUri, new ParsedStylesheetEntry(origin, resolvedUri));
     }
 
     @Override
-    public void addStylesheet(StyleOrigin origin, String str) {
+    public void addStylesheet(@NonNull StyleOrigin origin, @NonNull String str) {
         getMap(origin).put(str, new ParsedStylesheetEntry(origin, str));
     }
 
     @Override
-    public void clearStylesheets(StyleOrigin origin) {
+    public void clearStylesheets(@Nullable StyleOrigin origin) {
         if (origin == null) {
             authorList.clear();
             userAgentList.clear();
@@ -168,7 +174,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Override
-    public <T> void setStylesheets(StyleOrigin origin, URI documentHome, List<T> stylesheets) {
+    public <T> void setStylesheets(@NonNull StyleOrigin origin, @Nullable URI documentHome, @Nullable List<T> stylesheets) {
         LinkedHashMap<Object, ParsedStylesheetEntry> oldMap = getMap(origin);
         if (stylesheets == null) {
             oldMap.clear();
@@ -199,14 +205,17 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         setMap(origin, newMap);
     }
 
+    @NonNull
     protected Collection<ParsedStylesheetEntry> getAuthorStylesheets() {
         return authorList.values();
     }
 
+    @NonNull
     protected Collection<ParsedStylesheetEntry> getUserAgentStylesheets() {
         return userAgentList.values();
     }
 
+    @NonNull
     protected Collection<ParsedStylesheetEntry> getInlineStylesheets() {
         return inlineList.values();
     }
@@ -277,7 +286,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return applicableDeclarations.stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
-    private List<Map.Entry<Integer, Declaration>> collectApplicableDeclarations(E elem, Stylesheet s, List<Map.Entry<Integer, Declaration>> applicableDeclarations) {
+    @NonNull
+    private List<Map.Entry<Integer, Declaration>> collectApplicableDeclarations(E elem, Stylesheet s, @NonNull List<Map.Entry<Integer, Declaration>> applicableDeclarations) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
             Selector selector;
@@ -296,7 +306,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Override
-    public boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E elem) {
+    public boolean applyStylesheetTo(StyleOrigin styleOrigin, @NonNull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
         final List<Map.Entry<Integer, Declaration>> applicableDeclarations = collectApplicableDeclarations(elem, s,
                 new ArrayList<Map.Entry<Integer, Declaration>>());

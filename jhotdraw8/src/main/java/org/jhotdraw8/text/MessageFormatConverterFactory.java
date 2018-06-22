@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -52,8 +55,9 @@ public class MessageFormatConverterFactory implements ConverterFactory {
         this.locale = locale;
     }
 
+    @NonNull
     @Override
-    public Converter<?> apply(String type, String style) {
+    public Converter<?> apply(@Nullable String type, @Nullable String style) {
         if (type == null || type.isEmpty()) {
             return new DefaultConverter();
         }

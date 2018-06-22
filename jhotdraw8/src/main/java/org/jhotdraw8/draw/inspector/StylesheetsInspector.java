@@ -26,6 +26,8 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
@@ -65,11 +67,11 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         this(StylesheetsInspector.class.getResource("StylesheetsInspector.fxml"));
     }
 
-    public StylesheetsInspector(URL fxmlUrl) {
+    public StylesheetsInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -103,7 +105,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             ClipboardIO<URI> io = new ClipboardIO<URI>() {
 
                 @Override
-                public void write(Clipboard clipboard, List<URI> items) {
+                public void write(@NonNull Clipboard clipboard, List<URI> items) {
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }
@@ -116,6 +118,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                     clipboard.setContent(content);
                 }
 
+                @Nullable
                 @Override
                 public List<URI> read(Clipboard clipboard) {
                     List<URI> list;
@@ -153,7 +156,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private int isReplacingDrawing;
 
     @Override
-    protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
+    protected void onDrawingChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
         isReplacingDrawing++;
         if (oldValue != null) {
             listView.getItems().clear();

@@ -10,6 +10,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -219,7 +222,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public void toString(Appendable buf, IdFactory idFactory, Number value) throws IOException {
+    public void toString(@NonNull Appendable buf, IdFactory idFactory, @Nullable Number value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }
@@ -296,8 +299,9 @@ public class NumberConverter implements Converter<Number> {
         return;
     }
 
+    @Nullable
     @Override
-    public Number fromString(CharBuffer str, IdFactory idFactory) throws ParseException {
+    public Number fromString(@Nullable CharBuffer str, IdFactory idFactory) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }
@@ -635,6 +639,7 @@ public class NumberConverter implements Converter<Number> {
         this.valueClass = valueClass;
     }
 
+    @NonNull
     @Override
     public Number getDefaultValue() {
         return 0.0;

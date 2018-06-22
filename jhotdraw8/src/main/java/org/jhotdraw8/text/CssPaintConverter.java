@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.CssLinearGradient;
@@ -38,18 +39,20 @@ public class CssPaintConverter implements Converter<Paint> {
 
   protected static final CssPaintableConverter paintableConverter = new CssPaintableConverter();
 
+  @Nullable
   @Override
   public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     Paintable p = paintableConverter.fromString(buf, idFactory);
     return p == null ? null : p.getPaint();
   }
 
+  @Nullable
   @Override
   public Paint getDefaultValue() {
     return null;
   }
 
-  public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
+  public void toString(Appendable out, IdFactory idFactory, @Nullable Paint value) throws IOException {
     Paintable p;
     if (value == null) {
       p = null;

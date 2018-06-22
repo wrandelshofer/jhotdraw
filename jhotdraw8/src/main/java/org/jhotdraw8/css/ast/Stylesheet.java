@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -14,9 +16,10 @@ import java.util.List;
  */
 public class Stylesheet extends AST {
 
+    @NonNull
     private final List<StyleRule> rules;
 
-    public Stylesheet(List<StyleRule> rules) {
+    public Stylesheet(@NonNull List<StyleRule> rules) {
         this.rules = Collections.unmodifiableList(rules);
     }
 
@@ -25,10 +28,12 @@ public class Stylesheet extends AST {
      *
      * @return the rules
      */
+    @NonNull
     public List<StyleRule> getStyleRules() {
         return rules;
     }
 
+    @NonNull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

@@ -17,6 +17,8 @@ import static java.lang.Double.isNaN;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Affine;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Transforms.
@@ -26,14 +28,17 @@ import javafx.scene.transform.Affine;
  */
 public class Transforms {
 
-    public static Transform concat(Transform a, Transform b) {
+    @Nullable
+    public static Transform concat(@Nullable Transform a, @Nullable Transform b) {
         return (a == null||a.isIdentity()) ? b : (b == null||b.isIdentity() ? a : a.createConcatenation(b));
     }
 
+    @Nullable
     public static Transform concat(Transform a, Transform b, Transform c) {
         return concat(concat(a, b), c);
     }
 
+    @Nullable
     public static Transform createReshapeTransform(Bounds src, Bounds dest) {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
@@ -41,6 +46,7 @@ public class Transforms {
         );
     }
 
+    @Nullable
     public static Transform createReshapeTransform(Bounds src, double destX, double destY, double destW, double destH) {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
@@ -48,6 +54,7 @@ public class Transforms {
         );
     }
 
+    @Nullable
     public static Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
         double scaleX = dw / sw;
         double scaleY = dh / sh;
@@ -69,6 +76,7 @@ public class Transforms {
      * @param transform a transformation
      * @return decomposed transformation
      */
+    @NonNull
     public static List<Transform> decompose(Transform transform) {
         List<Transform> list = new ArrayList<>();
         if (transform.isIdentity()) {
@@ -121,7 +129,7 @@ public class Transforms {
         return list;
     }
 
-    public static Point2D deltaTransform(Transform t, double x, double y) {
+    public static Point2D deltaTransform(@Nullable Transform t, double x, double y) {
         if (t == null) {
             return new Point2D(x, y);
         } else {
@@ -129,7 +137,7 @@ public class Transforms {
         }
     }
 
-    public static Point2D deltaTransform(Transform t, Point2D p) {
+    public static Point2D deltaTransform(@Nullable Transform t, @NonNull Point2D p) {
         if (t == null) {
             return p;
         } else {
@@ -137,22 +145,26 @@ public class Transforms {
         }
     }
 
-    public static AffineTransform toAWT(Transform t) {
+    @Nullable
+    public static AffineTransform toAWT(@Nullable Transform t) {
         if (t == null) {
             return null;
         }
         return new AffineTransform(t.getMxx(), t.getMyx(), t.getMxy(), t.getMyy(), t.getTx(), t.getTy());
     }
 
-    public static Bounds transform(Transform tx, Bounds b) {
+    @NonNull
+    public static Bounds transform(@Nullable Transform tx, @NonNull Bounds b) {
         return tx == null ? b : tx.transform(b);
     }
 
-    public static Point2D transform(Transform tx, Point2D b) {
+    @NonNull
+    public static Point2D transform(@Nullable Transform tx, @NonNull Point2D b) {
         return tx == null ? b : tx.transform(b);
     }
 
-    public static Point2D transform(Transform tx, double x, double y) {
+    @NonNull
+    public static Point2D transform(@Nullable Transform tx, double x, double y) {
         return tx == null ? new Point2D(x, y) : tx.transform(x, y);
     }
 

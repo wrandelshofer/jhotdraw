@@ -6,6 +6,9 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -29,18 +32,20 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class DefaultConverter implements Converter<Object> {
 
+    @Nullable
     @Override
-    public Object fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Object fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
         buf.position(buf.limit());
         return "null".equals(str) ? null : str;
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Object value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Object value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
 
+    @NonNull
     @Override
     public String getDefaultValue() {
         return "null";

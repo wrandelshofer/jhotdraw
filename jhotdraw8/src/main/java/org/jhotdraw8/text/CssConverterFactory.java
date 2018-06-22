@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.text;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * CssConverterFactory.
  *
@@ -11,8 +14,9 @@ package org.jhotdraw8.text;
  */
 public class CssConverterFactory implements ConverterFactory {
 
+    @NonNull
     @Override
-    public Converter<?> apply(String type, String style) {
+    public Converter<?> apply(@Nullable String type, String style) {
         if (type == null) {
             return new DefaultConverter();
         }

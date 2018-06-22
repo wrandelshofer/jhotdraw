@@ -23,6 +23,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.action.Action;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -85,6 +86,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * List of decoders. The first decoder which can decode a resource value is
      * will be used to convert the resource value to an object.
      */
+    @NonNull
     private static List<ResourceDecoder> decoders = new ArrayList<>();
     /**
      * The global verbose property.
@@ -96,6 +98,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * name of the property name modifier, the value of this map is a fallback
      * chain.
      */
+    @NonNull
     private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
     private static final long serialVersionUID = 1L;
 
@@ -128,7 +131,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static Resources getResources(String baseName)
+    public static Resources getResources(@NonNull String baseName)
             throws MissingResourceException {
         return getResources(baseName, LocaleUtil.getDefault());
     }
@@ -141,7 +144,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static Resources getResources(String baseName, Locale locale)
+    public static Resources getResources(@NonNull String baseName, @NonNull Locale locale)
             throws MissingResourceException {
         Resources r;
         r = new Resources(baseName, locale);
@@ -190,10 +193,12 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
     /**
      * The base name of the resource bundle.
      */
+    @NonNull
     private final String baseName;
     /**
      * The locale.
      */
+    @NonNull
     private final Locale locale;
 
     /**
@@ -212,7 +217,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param baseName the base name
      * @param locale the locale
      */
-    public Resources(String baseName, Locale locale) {
+    public Resources(@NonNull String baseName, @NonNull Locale locale) {
         this.locale = locale;
         this.baseName = baseName;
         this.resource = ResourceBundle.getBundle(baseName, locale);
@@ -236,11 +241,11 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         this.parent = potentialParent;
     }
 
-    public void configureAction(Action action, String argument) {
+    public void configureAction(@NonNull Action action, String argument) {
         configureAction(action, argument, getBaseClass());
     }
 
-    public void configureAction(Action action, String argument, Class<?> baseClass) {
+    public void configureAction(@NonNull Action action, String argument, @NonNull Class<?> baseClass) {
         action.set(Action.LABEL, getTextProperty(argument));
         String shortDescription = getToolTipTextProperty(argument);
         if (shortDescription != null && shortDescription.length() > 0) {
@@ -252,11 +257,11 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         action.set(Action.LARGE_ICON_KEY, getLargeIconProperty(argument, baseClass));
     }
 
-    public void configureButton(ButtonBase button, String argument) {
+    public void configureButton(@NonNull ButtonBase button, String argument) {
         configureButton(button, argument, getBaseClass());
     }
 
-    public void configureButton(ButtonBase button, String argument, Class<?> baseClass) {
+    public void configureButton(@NonNull ButtonBase button, String argument, @NonNull Class<?> baseClass) {
         button.setText(getTextProperty(argument));
         //button.setACCELERATOR_KEY, getAcceleratorProperty(argument));
         //action.putValue(Action.MNEMONIC_KEY, new Integer(getMnemonicProperty(argument)));
@@ -271,18 +276,18 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param menu the menu
      * @param argument the argument
      */
-    public void configureMenu(Menu menu, String argument) {
+    public void configureMenu(@NonNull Menu menu, String argument) {
         menu.setText(getTextProperty(argument));
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
         menu.setGraphic(getSmallIconProperty(argument, baseClass));
     }
 
-    public void configureToolBarButton(ButtonBase button, String argument) {
+    public void configureToolBarButton(@NonNull ButtonBase button, String argument) {
         configureToolBarButton(button, argument, getBaseClass());
     }
 
-    public void configureToolBarButton(ButtonBase button, String argument, Class<?> baseClass) {
+    public void configureToolBarButton(@NonNull ButtonBase button, String argument, @NonNull Class<?> baseClass) {
         Node icon = getLargeIconProperty(argument, baseClass);
         if (icon != null) {
             button.setGraphic(getLargeIconProperty(argument, baseClass));
@@ -317,7 +322,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param arguments the arguments
      * @return formatted String
      */
-    public String format(String key, Object... arguments) {
+    @NonNull
+    public String format(@NonNull String key, Object... arguments) {
         //return String.format(resource.getLocale(), getString(key), arguments);
         return new Formatter(resource.getLocale()).format(getString(key), arguments).toString();
     }
@@ -326,7 +332,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * Generates fallback keys by processing all property name modifiers in the
      * key.
      */
-    private void generateFallbackKeys(String key, ArrayList<String> fallbackKeys) {
+    private void generateFallbackKeys(String key, @NonNull ArrayList<String> fallbackKeys) {
         int p1 = key.indexOf("[$");
         if (p1 == -1) {
             fallbackKeys.add(key);
@@ -356,6 +362,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     public KeyCombination getAcceleratorProperty(String key) {
         return getKeyCombination(key + ".accelerator");
     }
@@ -375,11 +382,12 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param arguments the arguments
      * @return formatted String
      */
-    public String getFormatted(String key, Object... arguments) {
+    @NonNull
+    public String getFormatted(@NonNull String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
 
-    private Node getIconProperty(String key, String suffix, Class<?> baseClass) {
+    private Node getIconProperty(String key, String suffix, @NonNull Class<?> baseClass) {
         try {
             String rsrcName = getString(key + suffix);
             if ("".equals(rsrcName) || rsrcName == null) {
@@ -413,7 +421,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param key The key of the property.
      * @return The value of the property. Returns -1 if the property is missing.
      */
-    public Integer getInteger(String key) {
+    @NonNull
+    public Integer getInteger(@NonNull String key) {
         try {
             return Integer.valueOf(getString(key));
         } catch (MissingResourceException e) {
@@ -433,17 +442,19 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
-    public KeyCombination getKeyCombination(String key) {
+    @org.checkerframework.checker.nullness.qual.Nullable
+    public KeyCombination getKeyCombination(@NonNull String key) {
         KeyCombination ks = null;
         String s = getString(key);
         try {
             ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
-        } catch (NoSuchElementException | StringIndexOutOfBoundsException e) {
+        } catch (@NonNull NoSuchElementException | StringIndexOutOfBoundsException e) {
             throw new InternalError(key + "=" + s, e);
         }
         return ks;
     }
 
+    @NonNull
     @Override
     public Enumeration<String> getKeys() {
         return resource.getKeys();
@@ -460,7 +471,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    public Node getLargeIconProperty(String key, Class<?> baseClass) {
+    @org.checkerframework.checker.nullness.qual.Nullable
+    public Node getLargeIconProperty(String key, @NonNull Class<?> baseClass) {
         return getIconProperty(key, ".largeIcon", baseClass);
     }
 
@@ -472,7 +484,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The first char of the value of the property. Returns '\0' if the
      * property is missing.
      */
-    public char getMnemonic(String key) {
+    public char getMnemonic(@NonNull String key) {
         String s = getString(key);
         return (s == null || s.length() == 0) ? '\0' : s.charAt(0);
     }
@@ -486,6 +498,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The first char of the value of the property. Returns '\0' if the
      * property is missing.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     public KeyCombination getMnemonicProperty(String key) {
         String s;
         try {
@@ -511,7 +524,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    public Node getSmallIconProperty(String key, Class<?> baseClass) {
+    @org.checkerframework.checker.nullness.qual.Nullable
+    public Node getSmallIconProperty(String key, @NonNull Class<?> baseClass) {
         return getIconProperty(key, ".smallIcon", baseClass);
     }
 
@@ -523,6 +537,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     public String getTextProperty(String key) {
         try {
             String value = getString(key + ".text");
@@ -545,6 +560,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * the key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
+    @org.checkerframework.checker.nullness.qual.Nullable
     public String getToolTipTextProperty(String key) {
         try {
             String value = getString(key + ".toolTipText");
@@ -567,6 +583,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return resource;
     }
 
+    @org.checkerframework.checker.nullness.qual.Nullable
     @Override
     protected Object handleGetObject(String key) {
         Object obj = handleGetObjectRecursively(key);
@@ -581,7 +598,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return obj;
     }
 
-    protected Object handleGetObjectRecursively(String key) {
+    @org.checkerframework.checker.nullness.qual.Nullable
+    protected Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -593,6 +611,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return obj;
     }
 
+    @NonNull
     private String substitutePlaceholders(String key, String value) throws MissingResourceException {
 
         // Substitute placeholders in the value
@@ -648,6 +667,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
 
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Resources" + "[" + baseName + "]";
@@ -660,7 +680,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param s The KeyStroke String
      * @return The KeyCombination String
      */
-    protected String translateKeyStrokeToKeyCombination(String s) {
+    @org.checkerframework.checker.nullness.qual.Nullable
+    protected String translateKeyStrokeToKeyCombination(@org.checkerframework.checker.nullness.qual.Nullable String s) {
         if (s != null) {
             s = s.replace("ctrl ", "Ctrl+");
             s = s.replace("meta ", "Meta+");

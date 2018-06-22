@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.figure;
 import java.io.File;
 import java.net.URI;
 import java.util.Collections;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
@@ -124,7 +126,8 @@ public interface Drawing extends Figure {
      */
     public final static String TYPE_SELECTOR = "Drawing";
 
-    @Override  
+    @NonNull
+    @Override
     default String getTypeSelector() {
         return TYPE_SELECTOR;
     }

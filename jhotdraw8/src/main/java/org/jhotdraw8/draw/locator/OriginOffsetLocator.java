@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
 
@@ -59,8 +61,9 @@ public class OriginOffsetLocator extends AbstractLocator {
         return offsetY;
     }
 
+    @NonNull
     @Override
-    public Point2D locate(Figure owner) {
+    public Point2D locate(@NonNull Figure owner) {
         Bounds bounds = owner.getBoundsInLocal();
 
         Point2D location = new Point2D(
@@ -71,7 +74,7 @@ public class OriginOffsetLocator extends AbstractLocator {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }

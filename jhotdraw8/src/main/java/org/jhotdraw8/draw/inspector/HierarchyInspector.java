@@ -28,6 +28,8 @@ import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
@@ -59,6 +61,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     private final CachingCollator collator = new CachingCollator(new OSXCollator());
 
+    @Nullable
     private DrawingView drawingView;
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
@@ -87,6 +90,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableColumn<Figure, Boolean> visibleColumn;
     private boolean willUpdateSelectionInTree;
 
+    @NonNull
     private CssWordListConverter wordListConverter = new CssWordListConverter();
 
     public HierarchyInspector() {
@@ -94,7 +98,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 Labels.getBundle());
     }
 
-    public HierarchyInspector(URL fxmlUrl, ResourceBundle resources) {
+    public HierarchyInspector(@NonNull URL fxmlUrl, ResourceBundle resources) {
         init(fxmlUrl, resources);
     }
 
@@ -120,6 +124,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         idColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<String>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.ID) {
+            @Nullable
             @Override
             public String getValue() {
                 return figure == null ? null : figure.get(StyleableFigure.ID);
@@ -141,6 +146,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
                 cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
+            @Nullable
             @Override
             @SuppressWarnings("unchecked")
             public ImmutableList<String> getValue() {
@@ -150,6 +156,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
                 cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
+            @Nullable
             @Override
             @SuppressWarnings("unchecked")
             public ImmutableSet<PseudoClass> getValue() {
@@ -163,6 +170,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         idColumn.setCellFactory(
                 new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
 
+            @Nullable
             @Override
             public TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
@@ -206,6 +214,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
         styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
 
+            @Nullable
             @Override
             public TreeTableCell<Figure, ImmutableList<String>> call(TreeTableColumn<Figure, ImmutableList<String>> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, ImmutableList<String>>() {
@@ -213,6 +222,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         setConverter(new StringConverterAdapter<>(wordListConverter));
                     }
 
+                    @NonNull
                     private Set<String> syntheticClasses = new HashSet<>();
 
                     @Override
@@ -223,7 +233,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void commitEdit(ImmutableList<String> newValue) {
+                    public void commitEdit(@NonNull ImmutableList<String> newValue) {
                         LinkedHashSet<String> newValueSet = new LinkedHashSet<>(newValue);
                         newValueSet.removeAll(syntheticClasses);
                         super.commitEdit(ImmutableList.ofCollection(newValueSet));
@@ -268,6 +278,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         });
         CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>();
         pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableSet<PseudoClass>>>() {
+            @NonNull
             @Override
             public TreeTableCell<Figure, ImmutableSet<PseudoClass>> call(TreeTableColumn<Figure, ImmutableSet<PseudoClass>> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, ImmutableSet<PseudoClass>>() {
@@ -304,7 +315,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+    protected void onDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.getSelectedFigures().removeListener(viewSelectionHandler);
             treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, null);

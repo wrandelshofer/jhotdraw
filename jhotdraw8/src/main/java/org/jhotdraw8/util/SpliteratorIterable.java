@@ -4,6 +4,8 @@
 
 package org.jhotdraw8.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -28,6 +30,7 @@ public class SpliteratorIterable<T> implements Iterable<T> {
         factory.get().forEachRemaining(action);
     }
 
+    @NonNull
     @Override
     public Iterator<T> iterator() {
         return Spliterators.iterator(factory.get());

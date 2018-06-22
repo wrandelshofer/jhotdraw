@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.draw.key;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.Paintable;
 import java.util.Arrays;
 import java.util.List;
@@ -96,6 +98,7 @@ public class CssRadialGradient implements Paintable {
         return getRadialGradient();
     }
 
+    @NonNull
     public Iterable<CssStop> getStops() {
         return Arrays.asList(cstops);
     }
@@ -135,7 +138,7 @@ public class CssRadialGradient implements Paintable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -173,6 +176,7 @@ public class CssRadialGradient implements Paintable {
         return true;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssRadialGradient{" + "focusAngle=" + focusAngle + ", focusDistance=" + focusDistance + "centerX=" + centerX + ", centerY=" + centerY + ", radius=" + radius + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';

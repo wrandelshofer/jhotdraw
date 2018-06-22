@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * ResizePane.
@@ -37,6 +38,7 @@ public class ResizePane extends BorderPane {
         userResizable.set(value);
   }
 
+    @NonNull
     public BooleanProperty userResizableProperty() {
         return userResizable;
     }

@@ -10,6 +10,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Creates a square at each move-to and at the end of the specified path.
@@ -74,6 +75,7 @@ public class FXPathPointsBuilder extends AbstractPathBuilder {
         needsSquareAtLastPoint = true;
     }
 
+    @NonNull
     public Path build() {
         if (needsSquareAtLastPoint) {
             addSquare(getLastX(), getLastY());

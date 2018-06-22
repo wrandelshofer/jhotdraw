@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.BlendModeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EffectStyleableFigureKey;
@@ -31,6 +33,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code null}.
      */
+    @Nullable
     public static EffectStyleableFigureKey EFFECT = new EffectStyleableFigureKey("effect", null);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
@@ -55,7 +58,7 @@ public interface CompositableFigure extends Figure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyCompositableFigureProperties( Node node) {
+    default void applyCompositableFigureProperties(@NonNull Node node) {
         // Performance: JavaFX performs compositing on a Group node, when blend mode != null, altough
         //                    this should be equivalent to SRC_OVER.
         final BlendMode blendMode = getStyled(BLEND_MODE);

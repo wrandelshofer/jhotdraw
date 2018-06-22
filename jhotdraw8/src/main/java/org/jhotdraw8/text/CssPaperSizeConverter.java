@@ -9,6 +9,8 @@ import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javafx.print.Paper;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -22,7 +24,9 @@ import org.jhotdraw8.io.IdFactory;
 public class CssPaperSizeConverter implements Converter<CssSize2D> {
 
     private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
+    @NonNull
     private final static Map<String, CssSize2D> paperSizes;
+    @NonNull
     private final static Map<CssSize2D, String> sizePapers;
 
     static {
@@ -61,6 +65,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
     private final static String LANDSCAPE = "landscape";
     private final static String PORTRAIT = "portrait";
 
+    @Nullable
     private CssSize2D parsePageSize(CssTokenizerInterface tt) throws ParseException, IOException {
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizerInterface.TT_IDENT) {
@@ -91,7 +96,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, CssSize2D value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull CssSize2D value) throws IOException {
         String paper = sizePapers.get(value);
         if (paper != null) {
             out.append(paper);
@@ -102,6 +107,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
         }
     }
 
+    @Nullable
     @Override
     public CssSize2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(buf);
@@ -109,11 +115,13 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
 
     }
 
+    @Nullable
     @Override
     public CssSize2D getDefaultValue() {
         return new CssSize2D(new CssSize(0, null), new CssSize(0, null));
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         StringBuilder buf = new StringBuilder();

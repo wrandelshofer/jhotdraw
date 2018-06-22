@@ -32,6 +32,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.AbstractDocumentOrientedViewController;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
@@ -133,6 +134,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
     /**
      * Counter for incrementing layer names.
      */
+    @NonNull
     private Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
@@ -150,6 +152,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
+    @NonNull
     private DockItem addInspector(Inspector inspector, String id, Priority grow) {
         Resources r = Labels.getResources();
         DockItem dockItem = new DockItem();
@@ -182,6 +185,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         }
     }
 
+    @NonNull
     @Override
     public CompletionStage<Void> clear() {
         Drawing d = new SimpleDrawing();
@@ -197,7 +201,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
      * @param supplier the supplier
      * @return the created figure
      */
-    public <T extends Figure> T createFigure(Supplier<T> supplier) {
+    public <T extends Figure> T createFigure(@NonNull Supplier<T> supplier) {
         T created = supplier.get();
         String prefix = created.getTypeSelector().toLowerCase();
         Integer counter = counters.get(prefix);
@@ -232,7 +236,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
     }
 
     @Override
-    protected void initActionMap(HierarchicalMap<String, Action> map) {
+    protected void initActionMap(@NonNull HierarchicalMap<String, Action> map) {
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
         map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));
         map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
@@ -250,6 +254,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
 
     }
 
+    @NonNull
     private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
@@ -387,7 +392,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
     }
 
     @Override
-    public CompletionStage<Void> print(PrinterJob job) {
+    public CompletionStage<Void> print(@NonNull PrinterJob job) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
@@ -401,7 +406,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
     }
 
     @Override
-    public CompletionStage<DataFormat> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
+    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
@@ -424,7 +429,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
     }
 
     @Override
-    public CompletionStage<Void> write(URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
+    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (SvgExporter.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {

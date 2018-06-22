@@ -34,6 +34,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.util.Resources;
 
 public class FontChooserController {
@@ -65,7 +67,7 @@ public class FontChooserController {
     @FXML
     private ListView<FontTypeface> typefaceList;
 
-    private void addDroppedFamiliesToCollection(FontCollection collection, String[] familyNames) {
+    private void addDroppedFamiliesToCollection(@Nullable FontCollection collection, String[] familyNames) {
         final FontChooserModel model = getModel();
         FontCollection allFonts = model.getAllFonts();
         if (collection == null) {
@@ -85,6 +87,7 @@ public class FontChooserController {
         existing.sort(Comparator.comparing(FontFamily::getName));
     }
 
+    @NonNull
     private FontCollection createFontCollection()  {
         final Resources labels = Resources.getResources("org.jhotdraw8.gui.Labels");
         FontCollection collection = new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
@@ -107,6 +110,7 @@ public class FontChooserController {
         onAction.set(value);
     }
 
+    @Nullable
     public String getSelectedFontName() {
         FontTypeface typeface = typefaceList == null ? null : typefaceList.getSelectionModel().getSelectedItem();
         return typeface == null ? null : typeface.getName();
@@ -177,7 +181,7 @@ public class FontChooserController {
         collectionList.setCellFactory(lv -> {
             final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<FontCollection>() {
                 @Override
-                public void updateItem(FontCollection item, boolean empty) {
+                public void updateItem(@Nullable FontCollection item, boolean empty) {
                     super.updateItem(item, empty);
                     setEditable(item != null && !item.isSmartCollection());
                 }
@@ -191,8 +195,9 @@ public class FontChooserController {
                     return item;
                 }
                 
+                @NonNull
                 @Override
-                public String toString(FontCollection item) {
+                public String toString(@NonNull FontCollection item) {
                     return (item.isSmartCollection()) ? item.getName() + "•" : item.getName();
                 }
                 
@@ -298,10 +303,12 @@ public class FontChooserController {
 
     }
 
+    @NonNull
     public ObjectProperty<FontChooserModel> modelProperty() {
         return model;
     }
 
+    @NonNull
     public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
         return onAction;
     }

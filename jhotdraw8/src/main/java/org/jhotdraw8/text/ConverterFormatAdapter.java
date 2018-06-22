@@ -7,6 +7,9 @@ import java.nio.CharBuffer;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -23,12 +26,13 @@ public class ConverterFormatAdapter implements Converter<Object> {
         this.format = format;
     }
 
+    @NonNull
     @Override
     public String toString(Object value) {
         return format.format(value);
     }
 
-    public Object fromString(String string, IdFactory idFactory, ParsePosition pp) {
+    public Object fromString(String string, IdFactory idFactory, @NonNull ParsePosition pp) {
         Object value = format.parseObject(string, pp);
         return value;
     }
@@ -39,7 +43,7 @@ public class ConverterFormatAdapter implements Converter<Object> {
     }
 
     @Override
-    public Object fromString(CharBuffer buf, IdFactory idFactory) throws ParseException {
+    public Object fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException {
         int pos = buf.position();
         String str = buf.toString();
         ParsePosition pp = new ParsePosition(0);
@@ -53,6 +57,7 @@ public class ConverterFormatAdapter implements Converter<Object> {
         return value;
     }
 
+    @Nullable
     @Override
     public Object getDefaultValue() {
         return null;

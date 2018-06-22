@@ -14,6 +14,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Builder;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Builds a bounding box path.
@@ -61,6 +63,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         addToBounds(x2, y2);
     }
 
+    @Nullable
     public Rectangle getRectangle() {
         if (Double.isNaN(minx)) {
             return null;
@@ -68,6 +71,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
 
+    @NonNull
     public BoundingBox build() {
         if (Double.isNaN(minx)) {
             return new BoundingBox(0, 0, 0, 0);
@@ -75,6 +79,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
+    @NonNull
     public Path getPath() {
         Path p = new Path();
         addPathElementsTo(p.getElements());
@@ -86,7 +91,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         // empty
     }
 
-    public void addPathElementsTo(List<PathElement> elements) {
+    public void addPathElementsTo(@NonNull List<PathElement> elements) {
         if (Double.isNaN(minx)) {
             return;
         }

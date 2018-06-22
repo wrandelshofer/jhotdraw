@@ -37,7 +37,8 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return name string.
      */
-        String getName();
+    @org.checkerframework.checker.nullness.qual.Nullable
+    String getName();
 
     /**
      * Gets the value of the attribute denoted by this accessor from a Map.

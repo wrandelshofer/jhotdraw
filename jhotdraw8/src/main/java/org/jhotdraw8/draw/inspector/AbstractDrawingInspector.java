@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -17,6 +18,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
  */
 public abstract class AbstractDrawingInspector implements Inspector {
 
+    @Nullable
     protected DrawingView drawingView;
 
     private final ChangeListener<Drawing> drawingListener = (ObservableValue<? extends Drawing> o, Drawing oldValue, Drawing newValue) -> {
@@ -24,7 +26,7 @@ public abstract class AbstractDrawingInspector implements Inspector {
     };
 
     @Override
-    public void setDrawingView(DrawingView newValue) {
+    public void setDrawingView(@Nullable DrawingView newValue) {
         DrawingView oldValue = drawingView;
         Drawing oldDrawing = null;
         if (oldValue != null) {

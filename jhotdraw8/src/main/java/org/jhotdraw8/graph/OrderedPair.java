@@ -5,6 +5,7 @@
 package org.jhotdraw8.graph;
 
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.graph.Pair;
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ class OrderedPair<V> implements Pair<V> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.tree.PreorderSpliterator;
+import org.jhotdraw8.tree.SimpleTreeNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
@@ -83,7 +85,7 @@ public class BreadthFirstSpliteratorTest {
         }
     }
 
-    public void testIterate(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    static void testIterate(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
@@ -177,4 +179,6 @@ public class BreadthFirstSpliteratorTest {
         result.sort(Comparator.naturalOrder());
         // assertEquals(expResult, result);
     }
+
+
 }

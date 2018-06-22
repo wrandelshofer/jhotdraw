@@ -10,6 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.Key;
 
@@ -39,7 +41,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
 
         @Override
-        protected void onAdded(Figure e) {
+        protected void onAdded(@NonNull Figure e) {
             Figure oldParent = e.getParent();
             if (oldParent != null && oldParent != AbstractCompositeFigure.this) {
                 oldParent.removeChild(e);
@@ -48,12 +50,12 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
 
         @Override
-        protected void onRemoved(Figure e) {
+        protected void onRemoved(@NonNull Figure e) {
             e.parentProperty().set(null);
         }
 
         @Override
-        protected boolean doAdd(int index, Figure element, boolean checkForDuplicates) {
+        protected boolean doAdd(int index, @NonNull Figure element, boolean checkForDuplicates) {
             Figure oldParent = element.getParent();
             if (oldParent != AbstractCompositeFigure.this) {
                 return super.doAdd(index, element, false);
@@ -107,6 +109,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
             }
         });
     }*/
+    @NonNull
     @Override
     public ObservableList<Figure> getChildren() {
         return children;
@@ -134,6 +137,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInParent() {
         double minX = Double.POSITIVE_INFINITY;
@@ -154,7 +158,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
+    public void firePropertyChangeEvent(@NonNull FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();
         if (source != null && source.getParent() == this) {
             if (children.hasChangeListeners()) {
@@ -165,7 +169,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
+    public <T> void firePropertyChangeEvent(@Nullable Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
         if (children.hasChangeListeners()) {
             if (source != null && source.getParent() == this) {
                 children.fireItemUpdated(children.indexOf(source));
@@ -194,6 +198,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
      *
      * @return a new list instance
      */
+    @NonNull
     public ArrayList<Figure> getChildList() {
         return new ArrayList<Figure>(getChildren());
     }

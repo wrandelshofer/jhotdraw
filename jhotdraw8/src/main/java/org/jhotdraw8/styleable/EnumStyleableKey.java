@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.styleable;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.key.*;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -47,7 +48,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> i
      * @param nullable Whether the value is nullable
      * @param defaultValue The default value.
      */
-    public EnumStyleableKey(String name, Class<T> clazz, boolean nullable, T defaultValue) {
+    public EnumStyleableKey(String name, Class<T> clazz, boolean nullable, @Nullable T defaultValue) {
         super(name, clazz,null,null, defaultValue);
 
         this.nullable = nullable;

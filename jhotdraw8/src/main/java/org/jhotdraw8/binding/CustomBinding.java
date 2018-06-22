@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import javafx.util.StringConverter;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Provides bindings with conversion functions.
@@ -35,7 +36,7 @@ public class CustomBinding {
      * @param propertyB property 'b'
      */
     public static <T, M> void bindBidirectional(
-            Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
         
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
@@ -59,7 +60,7 @@ public class CustomBinding {
      * @param propertyB property 'b'
      */
     public static <T, M> void bind(
-            Property<T> propertyA, Property<M> mediator, Function<M, ObservableValue<T>> propertyB) {
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, ObservableValue<T>> propertyB) {
         
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
@@ -83,8 +84,8 @@ public class CustomBinding {
      * @param propertyB property 'b'
      * @param stringConverter the converter
      */
-    public static <T, S> void bindBidirectional(StringProperty propertyA, Property<S> mediator, Function<S, Property<T>> propertyB,
-            StringConverter<T> stringConverter) {
+    public static <T, S> void bindBidirectional(@NonNull StringProperty propertyA, @NonNull Property<S> mediator, @NonNull Function<S, Property<T>> propertyB,
+                                                @NonNull StringConverter<T> stringConverter) {
         final ChangeListener<S> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
                 propertyA.unbindBidirectional(propertyB.apply(oldv));
@@ -112,7 +113,7 @@ public class CustomBinding {
      * @param convertBtoA converts a value from B to A
      */
     public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>> 
-        void bindBidirectionalAndConvert(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> convertAtoB, Function<B, A> convertBtoA) {
+        void bindBidirectionalAndConvert(@NonNull PROPERTY_A propertyA, @NonNull PROPERTY_B propertyB, @NonNull Function<A, B> convertAtoB, @NonNull Function<B, A> convertBtoA) {
         boolean[] alreadyCalled = new boolean[1];
         addFlaggedChangeListener(propertyB, propertyA, convertAtoB, alreadyCalled);
         addFlaggedChangeListener(propertyA, propertyB, convertBtoA, alreadyCalled);
@@ -128,13 +129,13 @@ public class CustomBinding {
      * @param propertyA property B
      * @param updateA converts a value from B to A
      */
-    public static <A, B> void bindAndConvert(WritableValue<A> propertyA, ObservableValue<B> propertyB, Function<B, A> updateA) {
+    public static <A, B> void bindAndConvert(@NonNull WritableValue<A> propertyA, @NonNull ObservableValue<B> propertyB, @NonNull Function<B, A> updateA) {
         boolean[] alreadyCalled = new boolean[1];
         addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
     }
 
-    private static <Y, X> void addFlaggedChangeListener(WritableValue<X> propertyX, ObservableValue<Y> propertyY, Function<Y, X> updateX,
-            boolean[] alreadyCalled) {
+    private static <Y, X> void addFlaggedChangeListener(@NonNull WritableValue<X> propertyX, ObservableValue<Y> propertyY, @NonNull Function<Y, X> updateX,
+                                                        boolean[] alreadyCalled) {
         propertyY.addListener((observable, oldValue, newValue) -> {
             if (!alreadyCalled[0]) {
                 try {

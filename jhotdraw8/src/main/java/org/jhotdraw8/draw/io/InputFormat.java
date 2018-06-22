@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -42,7 +43,7 @@ public interface InputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */ 
-    default Figure read( URI uri,  Drawing drawing) throws IOException {
+    default Figure read(@NonNull URI uri, Drawing drawing) throws IOException {
         return read(new File(uri), drawing);
     }
 
@@ -58,7 +59,7 @@ public interface InputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */ 
-    default Figure read( File file,  Drawing drawing) throws IOException {
+    default Figure read(@NonNull File file, Drawing drawing) throws IOException {
         URI documentHome=file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI();
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
             return read(in, drawing,documentHome);

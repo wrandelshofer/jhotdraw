@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.geom;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * SvgDoublePathBuilder.
  *
@@ -11,6 +13,7 @@ package org.jhotdraw8.geom;
  */
 public class SvgDoublePathBuilder implements PathBuilder {
 
+    @NonNull
     private StringBuilder buf = new StringBuilder();
 
     @Override
@@ -111,6 +114,7 @@ public class SvgDoublePathBuilder implements PathBuilder {
         PathBuilder.super.smoothQuadTo(x, y); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     public String build() {
         return buf.toString();
     }

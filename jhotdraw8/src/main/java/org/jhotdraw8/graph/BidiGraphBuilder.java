@@ -3,12 +3,15 @@
  */
 package org.jhotdraw8.graph;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Provides an API for building a {@code BidiGraph}.
@@ -20,8 +23,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
+    @NonNull
     private final List<ArrowData<V, A>> arrows;
+    @NonNull
     private final List<V> vertexList;
+    @NonNull
     private final Map<V, VertexData<V, A>> vertices;
 
     /**
@@ -48,7 +54,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      *
      * @param that another graph
      */
-    public BidiGraphBuilder(DirectedGraph<V, A> that) {
+    public BidiGraphBuilder(@NonNull DirectedGraph<V, A> that) {
         this(that, Function.identity(), Function.identity());
     }
 
@@ -64,7 +70,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param arrowMapper a mapping function from that arrow type to the this
      * arrow type
      */
-    public <VV, AA> BidiGraphBuilder(DirectedGraph<VV, AA> that, Function<VV, V> vertexMapper, Function<AA, A> arrowMapper) {
+    public <VV, AA> BidiGraphBuilder(DirectedGraph<VV, AA> that, @NonNull Function<VV, V> vertexMapper, @NonNull Function<AA, A> arrowMapper) {
         arrows = new ArrayList<>(that.getArrowCount());
         vertices = new LinkedHashMap<>(that.getVertexCount());
         vertexList = new ArrayList<>(that.getVertexCount());
@@ -87,19 +93,19 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param to the vertex
      * @param arrow the arrow, can be null
      */
-    public void addArrow(V from, V to, @Nullable A arrow) {
+    public void addArrow(@NonNull V from, @NonNull V to, @Nullable A arrow) {
         if (from == null || to == null) {
             throw new IllegalArgumentException("from=" + from + ", to=" + to + ", arrow=" + arrow);
         }
-        final VertexData<V, A> fromVertex = vertices.get(from);
-        final VertexData<V, A> toVertex = vertices.get(to);
-        if (fromVertex == null || toVertex == null) {
+        final VertexData<V, A> fromData = vertices.get(from);
+        final VertexData<V, A> toData = vertices.get(to);
+        if (fromData == null || toData == null) {
             throw new IllegalArgumentException(
-                    "from=" + from + ", to=" + to + ", arrow=" + arrow + ", fromVertex=" + fromVertex + ", toVertex=" + toVertex);
+                    "from=" + from + ", to=" + to + ", arrow=" + arrow + ", fromVertex=" + fromData + ", toVertex=" + toData);
         }
-        ArrowData<V, A> a = new ArrowData<>(from, to, arrow);
-        fromVertex.next.add(a);
-        toVertex.prev.add(a);
+        ArrowData<V, A> a = new ArrowData<>(fromData, toData, arrow);
+        fromData.next.add(a);
+        toData.prev.add(a);
         arrows.add(a);
     }
 
@@ -110,6 +116,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param vb vertex b
      * @param arrow the arrow
      */
+    @SuppressWarnings("unused")
     public void addBidiArrow(V va, V vb, A arrow) {
         addArrow(va, vb, arrow);
         addArrow(vb, va, arrow);
@@ -146,7 +153,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     @Override
     public V getNext(V vertex, int i) {
-        return getVertexDataNotNull(vertex).next.get(i).to;
+        return getVertexDataNotNull(vertex).next.get(i).to.v;
     }
 
     @Override
@@ -161,7 +168,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     @Override
     public V getPrev(V vertex, int i) {
-        return getVertexDataNotNull(vertex).prev.get(i).from;
+        return getVertexDataNotNull(vertex).prev.get(i).from.v;
     }
 
     @Override
@@ -198,7 +205,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param v a vertex
      * @param a an arrow starting at the vertex, must not be null
      */
-    public void removeArrow(V v, A a) {
+    @SuppressWarnings("unused")
+    public void removeArrow(V v, @NonNull A a) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (a.equals(getNextArrow(v, i))) {
                 removeNext(v, i);
@@ -213,12 +221,17 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param from the start vertex of the arrow
      * @param i the index of the i-th next vertex
      */
+    @SuppressWarnings("WeakerAccess")
     public void removeNext(V from, int i) {
-        final VertexData<V, A> fromVertex = vertices.get(from);
-        ArrowData<V, A> a = fromVertex.next.get(i);
-        final VertexData<V, A> toVertex = vertices.get(a.to);
-        fromVertex.next.remove(i);
-        toVertex.prev.remove(a);
+        final VertexData<V, A> fromData = vertices.get(from);
+        removeNext(fromData,i);
+    }
+
+    private void removeNext(VertexData<V,A> fromData, int i) {
+        ArrowData<V, A> a = fromData.next.get(i);
+        final VertexData<V, A> toData = a.to;
+        fromData.next.remove(i);
+        toData.prev.remove(a);
         arrows.remove(a);
     }
 
@@ -228,6 +241,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param from the start vertex of the arrow
      * @param to the end vertex of the arrow
      */
+    @SuppressWarnings("unused")
     public void removeNext(V from, V to) {
         for (int i = 0, n = getNextCount(from); i < n; i++) {
             if (getNext(from, i).equals(to)) {
@@ -243,6 +257,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      *
      * @param v the vertex
      */
+    @SuppressWarnings("unused")
     public void removeVertex(V v) {
         final VertexData<V, A> vertex = vertices.get(v);
         if (vertex == null) {
@@ -252,8 +267,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
             removeNext(v, i);
         }
         for (int i = vertex.prev.size() - 1; i >= 0; i--) {
-            ArrowData<V, A> arrow = vertex.prev.get(i);
-            removeNext(arrow.from, vertices.get(arrow.from).next.indexOf(arrow));
+            ArrowData<V, A> arrowData = vertex.prev.get(i);
+            removeNext(arrowData.from, (arrowData.from).next.indexOf(arrowData));
         }
         vertices.remove(v);
         vertexList.remove(v);
@@ -261,11 +276,11 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     private static class ArrowData<V, A> {
 
-        final V from;
-        final V to;
+        final  VertexData<V, A> from;
+        final  VertexData<V, A> to;
         final A arrow;
 
-        ArrowData(V from, V to, A arrow) {
+        ArrowData( VertexData<V, A> from,  VertexData<V, A> to, A arrow) {
             this.from = from;
             this.to = to;
             this.arrow = arrow;
@@ -273,15 +288,85 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     }
 
-    private static class VertexData<V, A> {
+    private static class VertexData<V, A> extends ArrayList<ArrowData<V,A>>{
 
         final V v;
-        final List<ArrowData<V, A>> next = new ArrayList<>();
+        final List<ArrowData<V, A>> next = this;
         final List<ArrowData<V, A>> prev = new ArrayList<>();
 
         VertexData(V v) {
             this.v = v;
         }
 
+        public List<ArrowData<V, A>> getNext() {
+            return next;
+        }
+
+        public List<ArrowData<V, A>> getPrev() {
+            return prev;
+        }
     }
+
+    @Override
+    public Stream<V> breadthFirstSearchBackwards(V start, Predicate<V> visited) {
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getPrev, getVertexDataNotNull(start), visited), false);
+    }
+
+    @Override
+    public Stream<V> breadthFirstSearch(V start, Predicate<V> visited) {
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getNext, getVertexDataNotNull(start), visited), false);
+    }
+
+    /**
+     * This is a performance-optimized implementation which does not need to call a hash function for
+     * every vertex.
+     */
+    private class BidiBreadthFirstSpliterator extends Spliterators.AbstractSpliterator<V> {
+
+        @Nullable
+        private final Function<VertexData<V, A>, Iterable<ArrowData<V, A>>> nextNodesFunction;
+        @NonNull
+        private final Queue<VertexData<V, A>> queue;
+        @Nullable
+        private final Predicate<V> visited;
+
+        /**
+         * Creates a new instance.
+         *
+         * @param nextNodesFunction the nextNodesFunction
+         * @param root              the root vertex
+         * @param visited           a predicate with side effect. The predicate returns true
+         *                          if the specified vertex has been visited, and marks the specified vertex
+         *                          as visited.
+         */
+        public BidiBreadthFirstSpliterator(@NonNull Function<VertexData<V, A>, Iterable<ArrowData<V, A>>> nextNodesFunction,
+                                           @NonNull VertexData<V, A> root, @NonNull Predicate<V> visited) {
+            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+            Objects.requireNonNull(nextNodesFunction, "nextNodesFunction");
+            Objects.requireNonNull(root, "root");
+            Objects.requireNonNull(visited, "vistied");
+            this.nextNodesFunction = nextNodesFunction;
+            queue = new ArrayDeque<>(16);
+            this.visited = visited;
+            queue.add(root);
+            visited.test(root.v);
+        }
+
+
+        @Override
+        public boolean tryAdvance(@NonNull Consumer<? super V> action) {
+            VertexData<V, A> current = queue.poll();
+            if (current == null) {
+                return false;
+            }
+            for (ArrowData<V, A> next : nextNodesFunction.apply(current)) {
+                if (visited.test(next.to.v)) {
+                    queue.add(next.to);
+                }
+            }
+            action.accept(current.v);
+            return true;
+        }
+    }
+
 }

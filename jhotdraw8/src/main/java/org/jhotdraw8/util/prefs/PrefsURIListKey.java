@@ -4,6 +4,8 @@
 
 package org.jhotdraw8.util.prefs;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,15 +19,17 @@ import java.util.prefs.Preferences;
  */
 public class PrefsURIListKey {
     private final String key;
+    @NonNull
     private final List<String> defaultValue;
 
 
-    public PrefsURIListKey(String key, List<String>  defaultValue) {
+    public PrefsURIListKey(String key, @NonNull List<String>  defaultValue) {
         this.key = key;
         this.defaultValue = Collections.unmodifiableList(new ArrayList<>(defaultValue));
 
     }
 
+    @NonNull
     public List<String> get(Preferences prefs) {
         return defaultValue;
     }

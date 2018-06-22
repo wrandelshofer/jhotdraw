@@ -13,6 +13,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -37,11 +39,15 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class LineConnectorHandle extends AbstractConnectorHandle {
 
+    @Nullable
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
+    @Nullable
     private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
+    @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Circle REGION_SHAPE = new Circle(4);
 
+    @NonNull
     private final Region targetNode;
 
     public LineConnectorHandle(ConnectingFigure figure, MapAccessor<Point2D> pointKey,
@@ -66,6 +72,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
 
    
 
+    @NonNull
     @Override
     public Region getNode() {
         return targetNode;
@@ -73,7 +80,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
 
    
     @Override
-    public void updateNode(DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.get(pointKey);

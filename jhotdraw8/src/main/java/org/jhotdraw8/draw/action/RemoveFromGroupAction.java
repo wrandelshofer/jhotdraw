@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -52,7 +53,7 @@ public class RemoveFromGroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void removeFromGroup(DrawingView view, List<Figure> figures) {
+    public static void removeFromGroup(@NonNull DrawingView view, List<Figure> figures) {
         List<Figure> reparentableFigures = new ArrayList<>();
         for (Figure f : figures) {
             Layer layer = f.getAncestor(Layer.class);

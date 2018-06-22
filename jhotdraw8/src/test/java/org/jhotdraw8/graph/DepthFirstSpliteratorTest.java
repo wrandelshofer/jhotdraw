@@ -38,7 +38,7 @@ public class DepthFirstSpliteratorTest {
      *
      * @return
      */
-    private DirectedGraph<Integer, Double> createGraph() {
+    static DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
@@ -94,7 +94,7 @@ public class DepthFirstSpliteratorTest {
     /**
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
-    public void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    static void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         DepthFirstSpliterator<Integer> instance = new DepthFirstSpliterator<>(graph::getNextVertices, start);

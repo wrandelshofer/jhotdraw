@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.geom;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.awt.geom.*;
 
 /**
@@ -225,7 +227,7 @@ public class BezierPathIterator implements PathIterator {
      * @see PathIterator#SEG_CLOSE
      */
     @Override
-    public int currentSegment(double[] coords) {
+    public int currentSegment(@NonNull double[] coords) {
         int numCoords = 0;
         int type = 0;
         if (index == path.size()) {

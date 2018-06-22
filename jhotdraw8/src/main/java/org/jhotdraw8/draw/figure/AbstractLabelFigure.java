@@ -19,6 +19,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.draw.connector.Connector;
@@ -88,9 +90,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     /**
      * Defines the border image as an SVG path.
      */
+    @Nullable
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
+    @Nullable
     public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY = new ObjectKey<>("boundsInLocal", Bounds.class, null, true, true, null);
 
     public AbstractLabelFigure() {
@@ -107,6 +111,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         set(ORIGIN, new Point2D(x, y));
     }
     
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
@@ -118,10 +123,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         Bounds boundsInLocal = getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
@@ -134,6 +140,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      *
      * @return the layout bounds
      */
+    @NonNull
     public Bounds getLayoutBounds() {
         Text  textNode = new Text();
         updateTextNode(null, textNode);
@@ -158,6 +165,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 
+    @Nullable
     protected abstract String getText(RenderContext ctx);
 
 
@@ -189,7 +197,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         updateTextNode(ctx, t);
     }
 
-    protected void updatePathNode(RenderContext ctx, Path node) {
+    protected void updatePathNode(RenderContext ctx, @NonNull Path node) {
         applyFillableFigureProperties(node);
         applyStrokeableFigureProperties(node);
 
@@ -222,7 +230,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
     }
 
-    protected void updateTextNode(RenderContext ctx, Text tn) {
+    protected void updateTextNode(RenderContext ctx, @NonNull Text tn) {
         final String text = getText(ctx);
         if (!Objects.equals(text, tn.getText())) {
             tn.setText(text);

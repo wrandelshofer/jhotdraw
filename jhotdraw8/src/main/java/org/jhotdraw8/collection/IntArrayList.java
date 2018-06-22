@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.collection;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import static java.lang.Integer.max;
 import java.util.Arrays;
 import java.util.Collection;
@@ -89,7 +92,7 @@ public class IntArrayList {
      *
      * @param that another list
      */
-    public void addAll(IntArrayList that) {
+    public void addAll(@NonNull IntArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -105,7 +108,8 @@ public class IntArrayList {
      * @param out the output collection
      * @return out
      */
-    public <T extends Collection<Integer>> T addAllInto(T out) {
+    @NonNull
+    public <T extends Collection<Integer>> T addAllInto(@NonNull T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -122,12 +126,12 @@ public class IntArrayList {
      * @param a an array
      * @param offset the offset into the array
      */
-    public void copyInto(int[] a, int offset) {
+    public void copyInto(@NonNull int[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -288,6 +292,7 @@ public class IntArrayList {
      *
      * @return a stream
      */
+    @NonNull
     public IntStream stream() {
         return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
     }
@@ -297,12 +302,14 @@ public class IntArrayList {
      *
      * @return array
      */
+    @NonNull
     public int[] toArray() {
         int[] result = new int[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return Arrays.toString(items);
@@ -315,7 +322,7 @@ public class IntArrayList {
      * provided array)
      * @return the new instance
      */
-    public static IntArrayList of(int... items) {
+    public static IntArrayList of(@NonNull int... items) {
         return new IntArrayList(items);
     }
     

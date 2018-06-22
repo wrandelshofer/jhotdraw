@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.BoundingBox;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -21,10 +22,11 @@ public class XmlBoundingBoxConverter implements Converter<BoundingBox> {
     private final PatternConverter formatter = new PatternConverter("{0,number} +{1,number} +{2,number} +{3,number}", new XmlConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, BoundingBox value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @NonNull BoundingBox value) throws IOException {
         formatter.toStr(out, idFactory, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
     }
 
+    @NonNull
     @Override
     public BoundingBox fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
@@ -32,6 +34,7 @@ public class XmlBoundingBoxConverter implements Converter<BoundingBox> {
         return new BoundingBox((double) v[0], (double) v[1], (double) v[2], (double) v[3]);
     }
 
+    @NonNull
     @Override
     public BoundingBox getDefaultValue() {
         return new BoundingBox(0, 0, 1, 1);

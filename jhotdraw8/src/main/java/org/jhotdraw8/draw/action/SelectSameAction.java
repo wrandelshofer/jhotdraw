@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -50,7 +52,7 @@ public class SelectSameAction extends AbstractSelectedAction {
 
     }
 
-    public static void selectSame(DrawingView view, Figure prototype) {
+    public static void selectSame(@NonNull DrawingView view, @Nullable Figure prototype) {
         if (prototype==null) return;
         
         String stype=prototype.getTypeSelector();

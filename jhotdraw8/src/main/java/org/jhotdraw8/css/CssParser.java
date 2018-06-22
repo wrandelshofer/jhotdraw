@@ -13,6 +13,8 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.css.ast.AbstractAttributeSelector;
 import org.jhotdraw8.css.ast.AdjacentSiblingCombinator;
 import org.jhotdraw8.css.ast.AndCombinator;
@@ -151,20 +153,24 @@ public class CssParser {
 
     private List<ParseException> exceptions;
 
-    public Stylesheet parseStylesheet(URL css) throws IOException {
+    @NonNull
+    public Stylesheet parseStylesheet(@NonNull URL css) throws IOException {
         try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream()))) {
             return parseStylesheet(in);
         }
     }
 
-    public Stylesheet parseStylesheet(URI css) throws IOException {
+    @NonNull
+    public Stylesheet parseStylesheet(@NonNull URI css) throws IOException {
         return parseStylesheet(css.toURL());
     }
 
-    public Stylesheet parseStylesheet(String css) throws IOException {
+    @NonNull
+    public Stylesheet parseStylesheet(@NonNull String css) throws IOException {
         return parseStylesheet(new StringReader(css));
     }
 
+    @NonNull
     public Stylesheet parseStylesheet(Reader css) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(css);
@@ -178,7 +184,8 @@ public class CssParser {
      * @return the declaration list
      * @throws IOException if parsing fails
      */
-    public List<Declaration> parseDeclarationList(String css) throws IOException {
+    @NonNull
+    public List<Declaration> parseDeclarationList(@NonNull String css) throws IOException {
         return CssParser.this.parseDeclarationList(new StringReader(css));
     }
 
@@ -189,6 +196,7 @@ public class CssParser {
      * @return the declaration list
      * @throws IOException if parsing fails
      */
+    @NonNull
     public List<Declaration> parseDeclarationList(Reader css) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(css);
@@ -402,7 +410,7 @@ public class CssParser {
         return new StyleRule(selectorGroup, declarations);
     }
 
-    private SelectorGroup parseSelectorGroup(CssTokenizerInterface tt) throws IOException, ParseException {
+    private SelectorGroup parseSelectorGroup(@NonNull CssTokenizerInterface tt) throws IOException, ParseException {
         List<Selector> selectors = new ArrayList<>();
         selectors.add(parseSelector(tt));
         while (tt.nextToken() != CssTokenizerInterface.TT_EOF
@@ -420,7 +428,7 @@ public class CssParser {
         return new SelectorGroup(selectors);
     }
 
-    private Selector parseSelector(CssTokenizerInterface tt) throws IOException, ParseException {
+    private Selector parseSelector(@NonNull CssTokenizerInterface tt) throws IOException, ParseException {
         SimpleSelector simpleSelector = parseSimpleSelector(tt);
         Selector selector = simpleSelector;
         while (tt.nextToken() != CssTokenizerInterface.TT_EOF
@@ -586,6 +594,7 @@ public class CssParser {
         return selector;
     }
 
+    @NonNull
     private List<Declaration> parseDeclarationList(CssTokenizerInterface tt) throws IOException, ParseException {
         List<Declaration> declarations = new ArrayList<>();
 
@@ -640,6 +649,7 @@ public class CssParser {
 
     }
 
+    @NonNull
     private List<PreservedToken> parseTerms(CssTokenizerInterface tt) throws IOException, ParseException {
         List<PreservedToken> terms = new ArrayList<>();
         tt.nextToken();

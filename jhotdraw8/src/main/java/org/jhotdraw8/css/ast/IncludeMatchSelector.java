@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -23,11 +25,13 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
         this.word = word;
     }
 
+    @Nullable
     @Override
-    protected <T> T match(SelectorModel<T> model, T element) {
+    protected <T> T match(@NonNull SelectorModel<T> model, T element) {
         return model.attributeValueContainsWord(element, attributeName, word) ? element : null;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "[" + attributeName + "~=" + word + ']';

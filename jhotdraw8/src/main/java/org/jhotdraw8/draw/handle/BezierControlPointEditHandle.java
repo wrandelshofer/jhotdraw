@@ -22,6 +22,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -40,7 +42,9 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class BezierControlPointEditHandle extends AbstractHandle {
 
+    @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Path REGION_SHAPE_COLINEAR = new Path();
     private static final Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
@@ -69,6 +73,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         elements.add(new ClosePath());
     }
     private int controlPointMask;
+    @NonNull
     private final Region node;
     private Point2D pickLocation;
     private final int pointIndex;
@@ -126,13 +131,14 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         return pickLocation;
     }
 
+    @NonNull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             ImmutableList<BezierNode> list = owner.get(pointKey);
             BezierNode bn = list.get(pointIndex);
@@ -143,7 +149,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(MouseEvent event, DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         final Figure f = getOwner();
 
@@ -211,7 +217,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);

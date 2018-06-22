@@ -6,6 +6,7 @@ package org.jhotdraw8.tree;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.TreeItem;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.event.Listener;
 
@@ -25,8 +26,10 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     /**
      * Holds the underlying model.
      */
+    @Nullable
     private final NonnullProperty<TreeModel<N>> treeModel //
             = new NonnullProperty<TreeModel<N>>(this, MODEL_PROPERTY, new SimpleTreeModel<N>()) {
+        @Nullable
         private TreeModel<N> oldValue = null;
 
         @Override
@@ -38,6 +41,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
         }
     };
 
+    @Nullable
     public NonnullProperty<TreeModel<N>> treeModelProperty() {
         return treeModel;
     }

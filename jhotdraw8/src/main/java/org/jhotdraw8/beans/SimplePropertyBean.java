@@ -8,6 +8,7 @@ import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -24,6 +25,7 @@ public class SimplePropertyBean implements PropertyBean {
      */
     protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
 
+    @NonNull
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;

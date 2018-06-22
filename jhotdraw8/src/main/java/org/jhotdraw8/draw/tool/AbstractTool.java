@@ -20,6 +20,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.Key;
@@ -94,6 +96,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             }
         }
 
+        @Nullable
         @Override
         public ReadOnlyBooleanProperty selectionEmptyProperty() {
             EditableComponent p = getEditableParent();
@@ -230,7 +233,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * @param name the id of the tool
      * @param rsrc iff nonnull, the resource is applied to the tool
      */
-    public AbstractTool(String name, Resources rsrc) {
+    public AbstractTool(String name, @Nullable Resources rsrc) {
         set(NAME, name);
         if (rsrc != null) {
             applyResources(rsrc);
@@ -250,11 +253,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         return properties;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
+    @NonNull
     @Override
     public ObjectProperty<DrawingEditor> drawingEditorProperty() {
         return drawingEditor;
@@ -263,13 +268,14 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Behaviors
     // ---
-    protected void applyResources(Resources rsrc) {
+    protected void applyResources(@NonNull Resources rsrc) {
         String name = get(NAME);
         set(LABEL, rsrc.getTextProperty(name));
         set(LARGE_ICON_KEY, rsrc.getLargeIconProperty(name, getClass()));
         set(SHORT_DESCRIPTION, rsrc.getToolTipTextProperty(name));
     }
 
+    @NonNull
     @Override
     public Node getNode() {
         return node;
@@ -346,7 +352,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     protected void handleMouseClicked(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleKeyPressed(KeyEvent event, DrawingView view) {
+    protected void handleKeyPressed(@NonNull KeyEvent event, DrawingView view) {
         if (event.getCode()==KeyCode.ESCAPE) {
             fireToolDone();
         }else if (event.getCode()==KeyCode.ENTER) {

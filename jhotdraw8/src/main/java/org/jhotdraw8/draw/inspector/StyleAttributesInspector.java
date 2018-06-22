@@ -39,6 +39,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.ast.Stylesheet;
@@ -94,6 +96,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private Node node;
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter();
 
+    @NonNull
     private Map<String, String> helpTexts = new HashMap<>();
 
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
@@ -107,6 +110,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
     };
 
+    @Nullable
     private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
         if (oldValue != null) {
             newValue.removeListener(modelInvalidationHandler);
@@ -121,11 +125,11 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         this(StyleAttributesInspector.class.getResource("StyleAttributesInspector.fxml"));
     }
 
-    public StyleAttributesInspector(URL fxmlUrl) {
+    public StyleAttributesInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -201,7 +205,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     }
 
     @Override
-    protected void handleDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+    protected void handleDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.modelProperty().removeListener(modelChangeHandler);
             modelChangeHandler.changed(oldValue.modelProperty(), oldValue.getModel(), null);
@@ -427,6 +431,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
     }
+    @NonNull
     private List<HelptextLookupEntry> helptextLookupTable = new ArrayList<>();
 
     protected void updateLookupTable(Observable o) {
@@ -444,7 +449,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
     }
 
-    protected void updateHelpText(Observable o, Number oldv, Number newv) {
+    protected void updateHelpText(Observable o, Number oldv, @NonNull Number newv) {
         int insertionPoint = Collections.binarySearch(helptextLookupTable, new HelptextLookupEntry(newv.intValue(), null));
         if (insertionPoint < 0) {
             insertionPoint = (-(insertionPoint) - 1) - 1;
@@ -465,7 +470,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
     }
 
-    protected void collectHelpTexts(Collection<Figure> figures) {
+    protected void collectHelpTexts(@NonNull Collection<Figure> figures) {
         Drawing drawing = drawingView.getDrawing();
         StylesheetsManager<Figure> styleManager = drawing.getStyleManager();
         FigureSelectorModel selectorModel = (FigureSelectorModel) styleManager.getSelectorModel();

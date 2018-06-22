@@ -9,6 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -27,6 +28,7 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
 
     private final static long serialVersionUID = 1L;
 
+    @NonNull
     private final CssMetaData<?, ImmutableList<Point2D>> cssMetaData;
 
     /**
@@ -73,6 +75,7 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
         cssMetaData = md;
     }
 
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<Point2D>> getCssMetaData() {
         return cssMetaData;

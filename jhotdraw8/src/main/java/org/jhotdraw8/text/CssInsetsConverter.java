@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Insets;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -31,7 +32,7 @@ public class CssInsetsConverter implements Converter<Insets> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Insets value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @NonNull Insets value) throws IOException {
         if (value.getRight() == value.getLeft()) {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {
@@ -47,8 +48,9 @@ public class CssInsetsConverter implements Converter<Insets> {
         }
     }
 
+    @NonNull
     @Override
-    public Insets fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Insets fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
@@ -64,11 +66,13 @@ public class CssInsetsConverter implements Converter<Insets> {
         }
     }
 
+    @NonNull
     @Override
     public Insets getDefaultValue() {
         return new Insets(0, 0, 0, 0);
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩ ⟨left-right⟩ ｜ ⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";

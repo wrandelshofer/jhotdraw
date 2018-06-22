@@ -8,6 +8,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * AbstractDisableable.
@@ -47,6 +48,7 @@ public class AbstractDisableable implements Disableable {
         return disabled.getReadOnlyProperty();
     }
 
+    @NonNull
     @Override
     public ObservableSet<Object> disablers() {
         return disablers;

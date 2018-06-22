@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
 
@@ -62,7 +64,7 @@ public class RelativeLocator extends AbstractLocator {
      * @param bounds current local bounds of a figure 
      * @param p a local coordinate on the figure
      */
-    public RelativeLocator(Bounds bounds, Point2D p) {
+    public RelativeLocator(@NonNull Bounds bounds, Point2D p) {
         this(bounds,p.getX(),p.getY());
     }
     /**
@@ -84,8 +86,9 @@ public class RelativeLocator extends AbstractLocator {
         return relativeY;
     }
 
+    @NonNull
     @Override
-    public Point2D locate(Figure owner) {
+    public Point2D locate(@NonNull Figure owner) {
         Bounds bounds = owner.getBoundsInLocal();
 
         Point2D location = new Point2D(
@@ -96,7 +99,7 @@ public class RelativeLocator extends AbstractLocator {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }

@@ -9,6 +9,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import javafx.application.Platform;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * FXWorker.
@@ -25,7 +26,8 @@ public class FXWorker {
      * @param runnable the runnable
      * @return the CompletableFuture
      */
-    public static CompletableFuture<Void> run(CheckedRunnable runnable) {
+    @NonNull
+    public static CompletableFuture<Void> run(@NonNull CheckedRunnable runnable) {
         return run(Executors.newSingleThreadExecutor(), runnable);
     }
 
@@ -37,7 +39,8 @@ public class FXWorker {
      * @param executor the executor, if null then a new thread is created
      * @return the CompletableFuture
      */
-    public static CompletableFuture<Void> run(Executor executor, CheckedRunnable runnable) {
+    @NonNull
+    public static CompletableFuture<Void> run(Executor executor, @NonNull CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
             try {
@@ -59,7 +62,8 @@ public class FXWorker {
      * @param supplier the supplier
      * @return the CompletableFuture
      */
-    public static <T> CompletableFuture<T> supply(CheckedSupplier<T> supplier) {
+    @NonNull
+    public static <T> CompletableFuture<T> supply(@NonNull CheckedSupplier<T> supplier) {
         return supply(Executors.newSingleThreadExecutor(), supplier);
     }
 
@@ -72,7 +76,8 @@ public class FXWorker {
      * @param executor the executor
      * @return the CompletableFuture
      */
-    public static <T> CompletableFuture<T> supply(Executor executor, CheckedSupplier<T> supplier) {
+    @NonNull
+    public static <T> CompletableFuture<T> supply(Executor executor, @NonNull CheckedSupplier<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
         executor.execute(() -> {
             try {

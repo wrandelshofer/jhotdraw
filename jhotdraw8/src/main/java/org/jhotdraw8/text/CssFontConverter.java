@@ -10,6 +10,8 @@ import java.text.ParseException;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -40,7 +42,7 @@ public class CssFontConverter implements Converter<CssFont> {
     private final CssDoubleConverter doubleConverter = new CssDoubleConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, CssFont font) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull CssFont font) throws IOException {
         /// FIXME use CssTokenizer
 
         double fontSize = font.getSize();
@@ -84,7 +86,7 @@ public class CssFontConverter implements Converter<CssFont> {
     }
 
     @Override
-    public CssFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssFont fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
         tt.setSkipWhitespaces(true);
         FontPosture fontPosture = FontPosture.REGULAR;
@@ -214,6 +216,7 @@ public class CssFontConverter implements Converter<CssFont> {
         return font;
     }
 
+    @Nullable
     @Override
     public CssFont getDefaultValue() {
         return null;

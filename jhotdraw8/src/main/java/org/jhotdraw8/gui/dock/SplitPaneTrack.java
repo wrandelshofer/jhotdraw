@@ -8,6 +8,7 @@ import javafx.geometry.Orientation;
 import static javafx.geometry.Orientation.VERTICAL;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * SplitPaneTrack.

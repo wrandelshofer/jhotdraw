@@ -7,6 +7,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ViewController;
 
@@ -28,6 +30,7 @@ public abstract class AbstractViewControllerAction<V extends ViewController> ext
      */
     private boolean mayCreateView;
     private Class<V> pClass;
+    @Nullable
     private final ChangeListener<ViewController> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeViewProperty().isNull());
@@ -39,6 +42,7 @@ public abstract class AbstractViewControllerAction<V extends ViewController> ext
             disabled.set(true);
         }
     };
+    @Nullable
     private final ViewController view;
 
     /**
@@ -51,7 +55,7 @@ public abstract class AbstractViewControllerAction<V extends ViewController> ext
      * specified view.
      * @param viewClass the type of the view. This is used for type checks.
      */
-    public AbstractViewControllerAction(Application app, V view, Class<V> viewClass) {
+    public AbstractViewControllerAction(@NonNull Application app, @Nullable V view, Class<V> viewClass) {
         super(app);
         this.pClass = viewClass;
         this.view = view;
@@ -62,6 +66,7 @@ public abstract class AbstractViewControllerAction<V extends ViewController> ext
         }
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
     public V getActiveView() {
         ViewController p = (view != null) ? view : app.getActiveView();
