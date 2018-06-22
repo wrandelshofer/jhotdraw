@@ -72,7 +72,7 @@ public class BreadthFirstSpliteratorTest {
                 + "5 -> 6.\n"
                 + "6 -> 1, 5.";
 
-        final String actual = DirectedGraphs.dumpAsAdjacencyList(graph);
+        final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
         System.out.println(actual);
 
         assertEquals(expected, actual);

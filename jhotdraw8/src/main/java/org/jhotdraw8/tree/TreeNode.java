@@ -12,7 +12,7 @@ import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.graph.BreadthFirstSpliterator;
-import org.jhotdraw8.util.SpliteratorIterable;
+import org.jhotdraw8.collection.SpliteratorIterable;
 
 /**
  * Represents a node of a tree structure.

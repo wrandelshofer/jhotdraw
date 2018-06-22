@@ -3,10 +3,11 @@
  */
 package org.jhotdraw8.graph;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import static java.lang.Math.min;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -19,7 +20,9 @@ import java.util.function.Function;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.IteratorEnumerator;
 
 /**
  * Provides algorithms for directed graphs.
@@ -27,7 +30,7 @@ import org.jhotdraw8.collection.IntArrayList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DirectedGraphs {
+public class GraphSearch {
 
     @NonNull
     private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> g) {
@@ -52,198 +55,6 @@ public class DirectedGraphs {
             forest.put(v, initialSet);
         }
         return forest;
-    }
-
-    /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param graph the graph to be dumped
-     * @return the dump
-     */
-    public static <V, A> String dumpAsAdjacencyList(@NonNull DirectedGraph<V, A> graph) {
-        StringWriter w = new StringWriter();
-        try {
-            dumpAsAdjacencyList(w, graph, Object::toString);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return w.toString();
-    }
-
-    /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param w the writer
-     * @param graph the graph to be dumped
-     * @throws java.io.IOException if writing fails
-     */
-    public static <V, A> void dumpAsAdjacencyList(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
-        dumpAsAdjacencyList(w, graph, Object::toString);
-    }
-
-    /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param w the writer
-     * @param graph the graph to be dumped
-     * @param toStringFunction a function which converts a vertex to a string
-     * @throws java.io.IOException if writing fails
-     */
-    public static <V, A> void dumpAsAdjacencyList(@NonNull Appendable w, DirectedGraph<V, A> graph, @NonNull Function<V, String> toStringFunction) throws IOException {
-        for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
-            V v = graph.getVertex(i);
-            if (i != 0) {
-                w.append("\n");
-            }
-            w.append(toStringFunction.apply(v)).append(" -> ");
-            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
-                if (j != 0) {
-                    w.append(", ");
-                }
-                w.append(toStringFunction.apply(graph.getNext(v, j)));
-            }
-            w.append('.');
-        }
-    }
-
-    /**
-     * Dumps the graph graph into a String which can be rendered with the "dot"
-     * tool.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param graph the graph to be dumped
-     * @return the dump
-     */
-    public static <V, A> String dumpAsDot(@NonNull DirectedGraph<V, A> graph) {
-        StringWriter w = new StringWriter();
-        try {
-            dumpAsDot(w, graph, Object::toString);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return w.toString();
-    }
-
-    /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param w the writer
-     * @param graph the graph
-     * @throws java.io.IOException if writing fails
-     */
-    public static <V, A> void dumpAsDot(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
-        dumpAsDot(w, graph, v -> "\"" + v + '"', null, null);
-    }
-
-    /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param w the writer
-     * @param graph the graph
-     * @param vertexToString a function that converts a vertex to a String for
-     * use as vertex name
-     * @throws java.io.IOException if writing fails
-     */
-    public static <V, A> void dumpAsDot(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph,
-                                        @NonNull Function<V, String> vertexToString) throws IOException {
-        dumpAsDot(w, graph, vertexToString, null, null);
-    }
-
-    /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param graph the graph
-     * @param vertexToString a function that converts a vertex to a String for
-     * use as vertex name
-     * @param vertexAttributes a function that converts a vertex to a String for
-     * use as vertex attributes
-     * @param arrowAttributes a function that converts an arrow to a String for
-     * use as arrow attributes
-     * @return the "dot" string
-     */
-    public static <V, A> String dumpAsDot(@NonNull DirectedGraph<V, A> graph,
-                                          @NonNull Function<V, String> vertexToString,
-                                          Function<V, String> vertexAttributes,
-                                          Function<A, String> arrowAttributes) {
-        StringWriter w = new StringWriter();
-        try {
-            dumpAsDot(w, graph, vertexToString, vertexAttributes, arrowAttributes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return w.toString();
-    }
-
-    /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
-     *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param w the writer
-     * @param graph the graph
-     * @param vertexToString a function that converts a vertex to a String for
-     * use as vertex name
-     * @param vertexAttributes a function that converts a vertex to a String for
-     * use as vertex attributes
-     * @param arrowAttributes a function that converts an arrow to a String for
-     * use as arrow attributes
-     * @throws java.io.IOException if writing fails
-     */
-    public static <V, A> void dumpAsDot(Appendable w, DirectedGraph<V, A> graph,
-                                        @NonNull Function<V, String> vertexToString,
-                                        @Nullable Function<V, String> vertexAttributes,
-                                        @Nullable Function<A, String> arrowAttributes) throws IOException {
-        w.append("digraph G {\n");
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            V v = graph.getVertex(i);
-            final String vertexName = vertexToString.apply(v);
-            if (vertexName == null) {
-                continue;
-            }
-            String vattr = vertexAttributes == null ? "" : vertexAttributes.apply(v);
-            if (graph.getNextCount(v) == 0 || !vattr.isEmpty()) {
-                w.append(vertexName);
-                if (vertexAttributes != null) {
-                    w.append(" [").append(vattr).append("];");
-                }
-                w.append('\n');
-            }
-            if (graph.getNextCount(v) != 0) {
-                for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                    final String nextVertexName = vertexToString.apply(graph.getNext(v, j));
-                    if (nextVertexName == null) {
-                        continue;
-                    }
-                    w.append(vertexName);
-                    w.append(" -> ")
-                            .append(nextVertexName);
-                    if (arrowAttributes != null) {
-                        w.append(" [");
-                        w.append(arrowAttributes.apply(graph.getNextArrow(v, j)));
-                        w.append("];");
-                    }
-                    w.append('\n');
-                }
-            }
-        }
-        w.append("}");
     }
 
     /**
@@ -337,8 +148,8 @@ public class DirectedGraphs {
     }
 
     /**
-     * Given a set of nextArrows and a list of arrows ordered by cost, returns the
-     * minimum spanning tree.
+     * Given a set of nextArrows and a list of arrows ordered by cost, returns
+     * the minimum spanning tree.
      * <p>
      * Uses Kruskal's algorithm.
      *
@@ -518,11 +329,112 @@ public class DirectedGraphs {
             }
         }
     }
+    /**
+     * Holds bookkeeping data for a node v from the graph.
+     */
+    private static class NodeData {
 
+        /**
+         * Low represents the smallest index of any node known to be reachable from v through v's DFS subtree,
+         * including v itself.
+         * <p>
+         * Therefore v must be left on the stack if v.low < v.index, whereas v must be removed as the root of a
+         * strongly connected component if v.low == v.index.
+         * <p>
+         * The value v.low is computed during the depth-first search from v, as this finds the nodes that are reachable from v.
+         */
+        private int low;
+
+    }
+
+
+    /**
+     * Returns all stronlgy connected components in the specified graph.
+     *
+     * @param <V>
+     * @param maxIterations
+     * @param vertices
+     * @param nextNodeFunction
+     * @return set of strongly connected components (sets of vertices).
+     */
+    public static <V> List<List<V>> searchStronglyConnectedComponents(
+            final int maxIterations,
+            final Collection<? extends V> vertices,
+            final Function<V, Iterable<? extends V>> nextNodeFunction
+    ) {
+        // The following non-recursive implementation "Tarjan's strongly connected components"
+        // algorithm has been taken from
+        // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm
+
+        final List<List<V>> sccs = new ArrayList<>();
+        final Map<V, NodeData> nodeMap = new HashMap<>();
+
+        int pre = 0;
+        Deque<V> stack = new ArrayDeque<>();
+
+        Deque<Integer> minStack = new ArrayDeque<>();
+        Deque<Enumerator<V>> enumeratorStack = new ArrayDeque<>();
+        Enumerator<V> enumerator = new IteratorEnumerator<>(vertices.iterator());
+
+        int count = 0;
+        STRONGCONNECT:
+        while (true) {
+            if (count++ > maxIterations) {
+                throw new IllegalArgumentException("too many iterations");
+            }
+
+            if (enumerator.moveNext()) {
+                V v = enumerator.current();
+                NodeData vdata = nodeMap.get(v);
+                if (vdata == null) {
+                    vdata = new NodeData();
+                    nodeMap.put(v, vdata);
+                    vdata.low = pre++;
+                    stack.push(v);
+                    // Level down:
+                    minStack.push(vdata.low);
+                    enumeratorStack.push(enumerator);
+                    enumerator = new IteratorEnumerator<>(nextNodeFunction.apply(v).iterator());
+                } else {
+                    if (!minStack.isEmpty()) {
+                        minStack.push(min(vdata.low, minStack.pop()));
+                    }
+                }
+            } else {
+                // Level up:
+                if (enumeratorStack.isEmpty()) {
+                    break STRONGCONNECT;
+                }
+
+                enumerator = enumeratorStack.pop();
+                V v = enumerator.current();
+                int min = minStack.pop();
+                NodeData vdata = nodeMap.get(v);
+                if (min < vdata.low) {
+                    vdata.low = min;
+                } else {
+                    List<V> component = new ArrayList<>();
+                    V w;
+                    do {
+                        w = stack.pop();
+                        component.add(w);
+                        NodeData wdata = nodeMap.get(w);
+                        wdata.low = vertices.size();
+                    } while (!w.equals(v));
+                    sccs.add(component);
+                }
+
+                if (!minStack.isEmpty()) {
+                    minStack.push(min(vdata.low, minStack.pop()));
+                }
+            }
+        }
+        return sccs;
+    }
     /**
      * Prevents instance creation.
      */
-    private DirectedGraphs() {
+    private GraphSearch() {
     }
 
 }

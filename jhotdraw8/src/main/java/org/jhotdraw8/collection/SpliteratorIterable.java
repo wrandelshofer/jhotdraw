@@ -2,7 +2,7 @@
  *  Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.util;
+package org.jhotdraw8.collection;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
