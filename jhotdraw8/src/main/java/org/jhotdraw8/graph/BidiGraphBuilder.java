@@ -12,6 +12,7 @@ import java.util.stream.StreamSupport;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides an API for building a {@code BidiGraph}.
@@ -26,7 +27,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     @NonNull
     private final List<ArrowData<V, A>> arrows;
     @NonNull
-    private final List<V> vertexList;
+    private final List<VertexData<V, A>> vertexList;
     @NonNull
     private final Map<V, VertexData<V, A>> vertices;
 
@@ -89,23 +90,23 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     /**
      * Adds the specified arrow from vertex 'from' to vertex 'to'.
      *
-     * @param from the vertex
-     * @param to the vertex
+     * @param start the vertex
+     * @param end the vertex
      * @param arrow the arrow, can be null
      */
-    public void addArrow(@NonNull V from, @NonNull V to, @Nullable A arrow) {
-        if (from == null || to == null) {
-            throw new IllegalArgumentException("from=" + from + ", to=" + to + ", arrow=" + arrow);
+    public void addArrow(@NonNull V start, @NonNull V end, @Nullable A arrow) {
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("start=" + start + ", end=" + end + ", arrow=" + arrow);
         }
-        final VertexData<V, A> fromData = vertices.get(from);
-        final VertexData<V, A> toData = vertices.get(to);
-        if (fromData == null || toData == null) {
+        final VertexData<V, A> startData = vertices.get(start);
+        final VertexData<V, A> endData = vertices.get(end);
+        if (startData == null || endData == null) {
             throw new IllegalArgumentException(
-                    "from=" + from + ", to=" + to + ", arrow=" + arrow + ", fromVertex=" + fromData + ", toVertex=" + toData);
+                    "start=" + start + ", end=" + end + ", arrow=" + arrow + ", fromVertex=" + startData + ", toVertex=" + endData);
         }
-        ArrowData<V, A> a = new ArrowData<>(fromData, toData, arrow);
-        fromData.next.add(a);
-        toData.prev.add(a);
+        ArrowData<V, A> a = new ArrowData<>(startData, endData, arrow);
+        startData.next.add(a);
+        endData.prev.add(a);
         arrows.add(a);
     }
 
@@ -131,8 +132,9 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         if (vertices.containsKey(v)) {
             return;
         }
-        vertices.put(v, new VertexData<>(v));
-        vertexList.add(v);
+        final VertexData<V, A> data = new VertexData<>(v);
+        vertices.put(v, data);
+        vertexList.add(data);
     }
 
     public void clear() {
@@ -153,7 +155,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     @Override
     public V getNext(V vertex, int i) {
-        return getVertexDataNotNull(vertex).next.get(i).to.v;
+        return getVertexDataNotNull(vertex).next.get(i).end.v;
     }
 
     @Override
@@ -168,7 +170,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     @Override
     public V getPrev(V vertex, int i) {
-        return getVertexDataNotNull(vertex).prev.get(i).from.v;
+        return getVertexDataNotNull(vertex).prev.get(i).start.v;
     }
 
     @Override
@@ -183,7 +185,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     @Override
     public V getVertex(int indexOfVertex) {
-        return vertexList.get(indexOfVertex);
+        return vertexList.get(indexOfVertex).v;
     }
 
     @Override
@@ -218,34 +220,49 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     /**
      * Removes the specified arrow from the graph.
      *
-     * @param from the start vertex of the arrow
+     * @param start the start vertex of the arrow
      * @param i the index of the i-th next vertex
      */
     @SuppressWarnings("WeakerAccess")
-    public void removeNext(V from, int i) {
-        final VertexData<V, A> fromData = vertices.get(from);
-        removeNext(fromData,i);
+    public void removeNext(V start, int i) {
+        final VertexData<V, A> startData = vertices.get(start);
+        removeNext(startData,i);
     }
 
-    private void removeNext(VertexData<V,A> fromData, int i) {
-        ArrowData<V, A> a = fromData.next.get(i);
-        final VertexData<V, A> toData = a.to;
-        fromData.next.remove(i);
-        toData.prev.remove(a);
+    /**
+     * Removes the specified arrow from the graph.
+     *
+     * @param end the end vertex of the arrow
+     * @param i the index of the i-th next vertex
+     */
+    public void removePrev(int end, int i) {
+        final VertexData<V, A> endVertex = vertexList.get(end);
+        final ArrowData<V, A> a = endVertex.prev.get(i);
+        final VertexData<V, A> startVertex = vertices.get(a.start.v);
+        startVertex.next.remove(i);
+        endVertex.prev.remove(a);
+        arrows.remove(a);
+    }
+    
+    private void removeNext(VertexData<V,A> startData, int i) {
+        ArrowData<V, A> a = startData.next.get(i);
+        final VertexData<V, A> endData = a.end;
+        startData.next.remove(i);
+        endData.prev.remove(a);
         arrows.remove(a);
     }
 
     /**
      * Removes the specified arrow from the graph.
      *
-     * @param from the start vertex of the arrow
-     * @param to the end vertex of the arrow
+     * @param start the start vertex of the arrow
+     * @param end the end vertex of the arrow
      */
     @SuppressWarnings("unused")
-    public void removeNext(V from, V to) {
-        for (int i = 0, n = getNextCount(from); i < n; i++) {
-            if (getNext(from, i).equals(to)) {
-                removeNext(from, i);
+    public void removeNext(V start, V end) {
+        for (int i = 0, n = getNextCount(start); i < n; i++) {
+            if (getNext(start, i).equals(end)) {
+                removeNext(start, i);
                 return;
             }
         }
@@ -259,42 +276,52 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      */
     @SuppressWarnings("unused")
     public void removeVertex(V v) {
-        final VertexData<V, A> vertex = vertices.get(v);
-        if (vertex == null) {
+        final VertexData<V, A> data = vertices.get(v);
+        if (data == null) {
             return;
         }
-        for (int i = vertex.next.size() - 1; i >= 0; i--) {
+        for (int i = data.next.size() - 1; i >= 0; i--) {
             removeNext(v, i);
         }
-        for (int i = vertex.prev.size() - 1; i >= 0; i--) {
-            ArrowData<V, A> arrowData = vertex.prev.get(i);
-            removeNext(arrowData.from, (arrowData.from).next.indexOf(arrowData));
+        for (int i = data.prev.size() - 1; i >= 0; i--) {
+            ArrowData<V, A> arrowData = data.prev.get(i);
+            removeNext(arrowData.start, (arrowData.start).next.indexOf(arrowData));
         }
         vertices.remove(v);
-        vertexList.remove(v);
+        vertexList.remove(data);
     }
 
     private static class ArrowData<V, A> {
 
-        final  VertexData<V, A> from;
-        final  VertexData<V, A> to;
-        final A arrow;
+        @NonNull final  VertexData<V, A> start;
+        @NonNull final  VertexData<V, A> end;
+        @Nullable final A arrow;
 
-        ArrowData( VertexData<V, A> from,  VertexData<V, A> to, A arrow) {
-            this.from = from;
-            this.to = to;
+        ArrowData(@NonNull final VertexData<V, A> start, @NonNull final VertexData<V, A> end, @Nullable final A arrow) {
+            this.start = start;
+            this.end = end;
             this.arrow = arrow;
         }
 
+        @NotNull
+        public VertexData<V, A> getStart() {
+            return start;
+        }
+
+        @NotNull
+        public VertexData<V, A> getEnd() {
+            return end;
+        }
     }
 
-    private static class VertexData<V, A> extends ArrayList<ArrowData<V,A>>{
+
+    private static class VertexData<V, A> {
 
         final V v;
-        final List<ArrowData<V, A>> next = this;
+        final List<ArrowData<V, A>> next = new ArrayList<>();
         final List<ArrowData<V, A>> prev = new ArrayList<>();
 
-        VertexData(V v) {
+        VertexData(final V v) {
             this.v = v;
         }
 
@@ -307,14 +334,16 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         }
     }
 
+    @NonNull
     @Override
-    public Stream<V> breadthFirstSearchBackwards(V start, Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getPrev, getVertexDataNotNull(start), visited), false);
+    public Stream<V> breadthFirstSearchBackwards(final V start, final Predicate<V> visited) {
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getPrev, ArrowData::getStart, getVertexDataNotNull(start), visited), false);
     }
 
+    @NonNull
     @Override
-    public Stream<V> breadthFirstSearch(V start, Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getNext, getVertexDataNotNull(start), visited), false);
+    public Stream<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getNext, ArrowData::getEnd, getVertexDataNotNull(start), visited), false);
     }
 
     /**
@@ -323,11 +352,13 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      */
     private class BidiBreadthFirstSpliterator extends Spliterators.AbstractSpliterator<V> {
 
-        @Nullable
+        @NonNull
         private final Function<VertexData<V, A>, Iterable<ArrowData<V, A>>> nextNodesFunction;
         @NonNull
+        private final Function<ArrowData<V, A>, VertexData<V, A>> arrowEndFunction;
+        @NonNull
         private final Queue<VertexData<V, A>> queue;
-        @Nullable
+        @NonNull
         private final Predicate<V> visited;
 
         /**
@@ -339,13 +370,15 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
          *                          if the specified vertex has been visited, and marks the specified vertex
          *                          as visited.
          */
-        public BidiBreadthFirstSpliterator(@NonNull Function<VertexData<V, A>, Iterable<ArrowData<V, A>>> nextNodesFunction,
-                                           @NonNull VertexData<V, A> root, @NonNull Predicate<V> visited) {
+        public BidiBreadthFirstSpliterator(@NonNull final Function<VertexData<V, A>, Iterable<ArrowData<V, A>>> nextNodesFunction,
+                                           @NonNull final Function<ArrowData<V, A>, VertexData<V, A>> arrowEndFunction,
+                                           @NonNull final VertexData<V, A> root, @NonNull final Predicate<V> visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             Objects.requireNonNull(nextNodesFunction, "nextNodesFunction");
             Objects.requireNonNull(root, "root");
             Objects.requireNonNull(visited, "vistied");
             this.nextNodesFunction = nextNodesFunction;
+            this.arrowEndFunction = arrowEndFunction;
             queue = new ArrayDeque<>(16);
             this.visited = visited;
             queue.add(root);
@@ -354,19 +387,19 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
 
         @Override
-        public boolean tryAdvance(@NonNull Consumer<? super V> action) {
-            VertexData<V, A> current = queue.poll();
+        public boolean tryAdvance(@NonNull final Consumer<? super V> action) {
+            final VertexData<V, A> current = queue.poll();
             if (current == null) {
                 return false;
             }
-            for (ArrowData<V, A> next : nextNodesFunction.apply(current)) {
-                if (visited.test(next.to.v)) {
-                    queue.add(next.to);
+            for (final ArrowData<V, A> next : nextNodesFunction.apply(current)) {
+                final VertexData<V, A> endData = arrowEndFunction.apply(next);
+                if (visited.test(endData.v)) {
+                    queue.add(endData);
                 }
             }
             action.accept(current.v);
             return true;
         }
     }
-
 }

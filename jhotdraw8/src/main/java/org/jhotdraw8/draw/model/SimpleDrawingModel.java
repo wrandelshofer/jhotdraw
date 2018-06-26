@@ -31,7 +31,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
-import org.jhotdraw8.graph.DumpGraphs;
+import org.jhotdraw8.graph.GraphSearch;
 import static org.jhotdraw8.tree.TreeModel.ROOT_PROPERTY;
 import org.jhotdraw8.tree.TreeModelEvent;
 
@@ -481,7 +481,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
             visited.clear();
             if (graphBuilder.getVertexCount() > 0) {
-                for (Figure f : DumpGraphs.sortTopologically(graphBuilder)) {
+                for (Figure f : GraphSearch.sortTopologically(graphBuilder)) {
                     if (visited.add(f)) {
                         f.layoutNotify();
                         markDirty(f, DirtyBits.NODE);

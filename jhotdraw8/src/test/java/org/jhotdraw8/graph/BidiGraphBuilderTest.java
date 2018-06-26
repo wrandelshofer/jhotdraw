@@ -6,6 +6,8 @@ package org.jhotdraw8.graph;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -163,9 +165,9 @@ public class BidiGraphBuilderTest {
         Integer b = 1;
         Integer c = 2;
         BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
-        instance.addVertex(0);
-        instance.addVertex(1);
-        instance.addVertex(2);
+        instance.addVertex(a);
+        instance.addVertex(b);
+        instance.addVertex(c);
 
         assertEquals( 3, instance.getVertexCount(),"vertex count");
         assertEquals( 0, instance.getArrowCount(),"arrow count");
@@ -201,9 +203,9 @@ public class BidiGraphBuilderTest {
         Integer b = 1;
         Integer c = 1;
         BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
-        instance.addVertex(0);
-        instance.addVertex(1);
-        instance.addVertex(2);
+        instance.addVertex(a);
+        instance.addVertex(b);
+        instance.addVertex(c);
 
         assertEquals( 3, instance.getVertexCount(),"vertex count");
         assertEquals( 0, instance.getArrowCount(),"arrow count");
@@ -214,5 +216,78 @@ public class BidiGraphBuilderTest {
         assertEquals( 1, instance.getNextCount(a),"next count of " + a);
         assertEquals( b, instance.getNext(a, 0),"next edge of " + a);
     }
+    
+    @Test
+    public void testRemoveVertex() {
+        System.out.println("removeVertex");
+        String a = "a";
+        String b = "b";
+        String c = "c";
+        String d = "d";
+        String e = "e";
+        BidiGraphBuilder<String, Double> instance = new BidiGraphBuilder<>();
+        instance.addVertex(a);
+        instance.addVertex(b);
+        instance.addVertex(c);
+        instance.addVertex(d);
+        instance.addVertex(e);
+        instance.addArrow(a,c, 1.0);
+        instance.addArrow(a,e, 1.0);
+        instance.addArrow(b,c, 1.0);
+        instance.addArrow(c,d, 1.0);
+        instance.addArrow(c,e, 1.0);
 
+        assertEquals( 5, instance.getVertexCount(),"vertex count");
+        assertEquals( 5, instance.getArrowCount(),"arrow count");
+
+        instance.removeVertex(c);
+        assertEquals( 4, instance.getVertexCount(),"vertex count");
+        assertEquals( 1, instance.getArrowCount(),"arrow count");
+    }
+
+    @Test
+    public void testBreadthFirstSearch() {
+        System.out.println("BreadthFirstSearch");
+        String a = "a";
+        String b = "b";
+        String c = "c";
+        String d = "d";
+        String e = "e";
+        BidiGraphBuilder<String, Double> instance = new BidiGraphBuilder<>();
+        instance.addVertex(a);
+        instance.addVertex(b);
+        instance.addVertex(c);
+        instance.addVertex(d);
+        instance.addVertex(e);
+        instance.addArrow(a,c, 1.0);
+        instance.addArrow(a,e, 1.0);
+        instance.addArrow(b,c, 1.0);
+        instance.addArrow(c,d, 1.0);
+        instance.addArrow(c,e, 1.0);
+
+        assertEquals("aced", instance.breadthFirstSearch(a).collect(Collectors.joining("")));
+    }
+
+    @Test
+    public void testBreadthFirstBackwardSearch() {
+        System.out.println("BreadthFirstBackwardSearch");
+        String a = "a";
+        String b = "b";
+        String c = "c";
+        String d = "d";
+        String e = "e";
+        BidiGraphBuilder<String, Double> instance = new BidiGraphBuilder<>();
+        instance.addVertex(a);
+        instance.addVertex(b);
+        instance.addVertex(c);
+        instance.addVertex(d);
+        instance.addVertex(e);
+        instance.addArrow(a,c, 1.0);
+        instance.addArrow(a,e, 1.0);
+        instance.addArrow(b,c, 1.0);
+        instance.addArrow(c,d, 1.0);
+        instance.addArrow(c,e, 1.0);
+
+        assertEquals("eacb", instance.breadthFirstSearchBackwards(e).collect(Collectors.joining("")));
+    }
 }
