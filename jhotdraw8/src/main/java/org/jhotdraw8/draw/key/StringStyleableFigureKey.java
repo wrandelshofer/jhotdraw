@@ -58,6 +58,12 @@ public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String>
     public StringStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
+    public StringStyleableFigureKey(String name, DirtyMask mask, boolean nullable, String defaultValue) {
+        this(name, DirtyMask.of(DirtyBits.NODE), nullable, defaultValue, null);
+    }
+    public StringStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
+        this(name, DirtyMask.of(DirtyBits.NODE), false, defaultValue, helpText);
+    }
 
     /**
      * Creates a new instance with the specified name, mask and default value.
@@ -67,8 +73,8 @@ public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String>
      * @param defaultValue The default value.
      * @param helpText the help text
      */
-    public StringStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
-        super(name, String.class, false, mask, defaultValue);
+    public StringStyleableFigureKey(String name, DirtyMask mask,boolean nullable, String defaultValue, String helpText) {
+        super(name, String.class, nullable, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
          cssMetaData = factory.createSizeCssMetaData(

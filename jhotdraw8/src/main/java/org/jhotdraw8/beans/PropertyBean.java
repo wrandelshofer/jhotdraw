@@ -5,11 +5,13 @@ package org.jhotdraw8.beans;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jhotdraw8.collection.MapEntryProperty;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -41,8 +43,7 @@ import org.jhotdraw8.collection.MapAccessor;
  *        return getProperties;
  *    }
  * }
- *</code></pre>
- *
+ * </code></pre>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -52,21 +53,27 @@ public interface PropertyBean {
     // ---
     // Properties
     // ---
+
     /**
      * Returns an observable map of property keys and their values.
      *
      * @return the map
      */
-        ObservableMap<Key<?>, Object> getProperties();
+    ObservableMap<Key<?>, Object> getProperties();
+
+    default <T> ObjectProperty<T> getProperty(Key<T> key) {
+       return new MapEntryProperty<>(getProperties(),key,key.getValueType());
+    }
 
     // ---
     // convenience methods
     // ---
+
     /**
      * Sets a property value.
      *
-     * @param <T> the value type
-     * @param key the key
+     * @param <T>      the value type
+     * @param key      the key
      * @param newValue the value
      * @return the old value
      */
@@ -96,7 +103,7 @@ public interface PropertyBean {
      */
     @NonNull
     @Nullable
-    default <T> T remove( Key<T> key) {
+    default <T> T remove(Key<T> key) {
         @SuppressWarnings("unchecked")
         T removedValue = (T) getProperties().remove(key);
         return removedValue;
@@ -108,8 +115,8 @@ public interface PropertyBean {
      * @param keys the desired keys
      * @return the map
      */
-        @NonNull
-        default Map<Key<?>, Object> getAll(Key<?>... keys) {
+    @NonNull
+    default Map<Key<?>, Object> getAll(Key<?>... keys) {
         return getAll(Arrays.asList(keys));
     }
 
@@ -119,8 +126,8 @@ public interface PropertyBean {
      * @param keys the desired keys
      * @return the map
      */
-        @NonNull
-        default Map<Key<?>, Object> getAll(@NonNull List<Key<?>> keys) {
+    @NonNull
+    default Map<Key<?>, Object> getAll(@NonNull List<Key<?>> keys) {
         Map<Key<?>, Object> map = getProperties();
         Map<Key<?>, Object> result = new LinkedHashMap<>();
         for (Key<?> k : keys) {
@@ -129,14 +136,14 @@ public interface PropertyBean {
         return result;
     }
 
-        @NonNull
-        default <T> ObjectProperty<T> propertyAt(@NonNull Key<T> key) {
+    @NonNull
+    default <T> ObjectProperty<T> propertyAt(@NonNull Key<T> key) {
         return new MapEntryProperty<Key<?>, Object, T>(getProperties(), key, key.getValueType());
     }
 
     @NonNull
     @SuppressWarnings("unchecked")
-        default <T> ObservableValue<T> valueAt( Key<T> key) {
+    default <T> ObservableValue<T> valueAt(Key<T> key) {
         return (ObservableValue<T>) (ObservableValue<Object>) Bindings.valueAt(getProperties(), key);
     }
 }

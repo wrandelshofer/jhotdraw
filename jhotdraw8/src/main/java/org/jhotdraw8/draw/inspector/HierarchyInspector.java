@@ -111,7 +111,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setResources(resources);
-        try (InputStream in = fxmlUrl.openStream()) {
+        try ( InputStream in = fxmlUrl.openStream()) {
             node = loader.load(in);
         } catch (IOException ex) {
             throw new InternalError(ex);
@@ -121,9 +121,17 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
                 cell.getValue().getValue() == null ? null : cell.getValue().getValue().getTypeSelector())
         );
+        /*
         idColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<String>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), StyleableFigure.ID) {
+                cell -> cell.getValue().getValue().getProperty(StyleableFigure.ID));
+*/
+            idColumn.setCellValueFactory(
+                    cell -> new DrawingModelFigureProperty<String>((DrawingModel) model.getTreeModel(),
+                            cell.getValue().getValue(), StyleableFigure.ID));
+        /*
+            idColumn.setCellValueFactory(
+                    cell -> new DrawingModelFigureProperty<String>((DrawingModel) model.getTreeModel(),
+                            cell.getValue().getValue(), StyleableFigure.ID) {
             @Nullable
             @Override
             public String getValue() {
@@ -135,7 +143,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 setValue(figure.getId());
             }
         }
-        );
+        );*/
         visibleColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), HideableFigure.VISIBLE)

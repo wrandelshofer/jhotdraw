@@ -25,6 +25,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -159,21 +160,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (!Objects.equals(oldValue, newValue)) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                     (Key<Object>) key, oldValue, newValue));
-
-            // This is sent if a layout subject has been added or removed.
-            // - The event is sent on the observing figure (the layout observer).
-            // - The observed figure (the layout subject) may change its appearance, hence we 
-            //   invoke a notify method on it, and we repaint it.
-            if (key instanceof FigureKey
-                    && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)
-                    && Figure.class.isAssignableFrom(key.getValueType())) {
-                if (oldValue != null) {
-                    markDirty((Figure) oldValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
-                }
-                if (newValue != null) {
-                    markDirty((Figure) newValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
-                }
-            }
 
         }
     }
@@ -453,13 +439,16 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmLayout) && visited.add(f)) {
-                    for (Figure a : f.preorderIterable()) {
-                        todo.add(a);
-                    }
-                } else if (dm.intersects(dmLayoutObservers) && visited.add(f)) {
-                    for (Figure obs : f.getLayoutObservers()) {
-                        todo.add(obs);
+
+                if (visited.add(f)) {
+                    if (dm.intersects(dmLayout)) {
+                        for (Figure a : f.preorderIterable()) {
+                            todo.add(a);
+                        }
+                    } else if (dm.intersects(dmLayoutObservers)) {
+                        for (Figure obs : f.getLayoutObservers()) {
+                            todo.add(obs);
+                        }
                     }
                 }
             }
@@ -552,6 +541,23 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                         markDirty(figure, dm);
                         invalidate();
                     }
+
+                    // This is sent if a layout subject has been added or removed.
+                    // - The event is sent on the observing figure (the layout observer).
+                    // - The observed figure (the layout subject) may change its appearance, hence we 
+                    //   invoke a notify method on it, and we repaint it.
+                    if (key instanceof FigureKey
+                            && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)
+                            && Figure.class.isAssignableFrom(key.getValueType())) {
+                        Object oldValue = event.getOldValue();
+                        Object newValue = event.getNewValue();
+                        if (oldValue != null) {
+                            markDirty((Figure) oldValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
+                        }
+                        if (newValue != null) {
+                            markDirty((Figure) newValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
+                        }
+                    }
                 }
                 break;
             }
@@ -564,6 +570,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 markDirty(figure, DirtyBits.STYLE);
                 invalidate();
                 break;
+
             default:
                 throw new UnsupportedOperationException(event.getEventType()
                         + "not supported");

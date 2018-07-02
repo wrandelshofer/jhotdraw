@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Ferro" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="ch.systransis.arl.ferro.FerroMain" />
+    <module name="ext" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <method />
+  </configuration>
+</component>

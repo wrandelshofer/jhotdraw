@@ -16,11 +16,11 @@
             <name>jhotdraw8</name>
             <explicit-platform explicit-source-supported="true"/>
             <source-roots>
-                <root id="src.editorold.dir"/>
-                <root id="src.ferro.dir"/>
-                <root id="src.gen.dir"/>
-                <root id="src.graphlayout.dir"/>
                 <root id="src.java.dir"/>
+                <root id="src.editorold.dir"/>
+                <root id="src.gen.dir"/>
+                <root id="src.ferro.dir"/>
+                <root id="src.graphlayout.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.java.dir"/>

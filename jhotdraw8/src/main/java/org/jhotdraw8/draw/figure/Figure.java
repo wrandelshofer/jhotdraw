@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.css.Styleable;
@@ -106,6 +108,8 @@ import org.jhotdraw8.tree.TreeNode;
  * org.jhotdraw8.draw.key.DirtyBits} in the {@code FigureMapAccessor} to
  * determine which dependent figures need to be updated.
  *
+ * @author Werner Randelshofer
+ * @version $Id$
  * @design.pattern Drawing Framework, KeyAbstraction.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel Facade, Subsystem.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel Strategy, Context.
@@ -115,17 +119,12 @@ import org.jhotdraw8.tree.TreeNode;
  * AbstractProduct.
  * @design.pattern org.jhotdraw8.draw.locator.Locator Strategy, Context.
  * @design.pattern org.jhotdraw8.draw.connector.Connector Strategy, Context.
- *
  * @design.pattern Figure Mixin, Mixin. The Mixin pattern is used to extend the
  * functionality of a class that implements the {@link Figure} interface. The
  * functionality is provided by interfaces with default methods (traits).
- *
  * @design.pattern Figure Composite, Component. {@link Figure} uses the
  * composite pattern to provide uniform access to composite nodes and leaf nodes
  * of a tree structure.
- *
- * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
@@ -135,7 +134,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * To avoid name clashes in the stylesheet, all styleable JHotDraw
      * getProperties use the prefix {@code "-jhotdraw-"}.
-     *
+     * <p>
      * XXX mapping of css attribute names to keys should be done elsewhere!
      */
     public final static String JHOTDRAW_CSS_PREFIX = "";
@@ -158,7 +157,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param selection a set of figures
      * @return bounds
      */
-        public static Bounds bounds( Collection<? extends Figure> selection) {
+    public static Bounds bounds(Collection<? extends Figure> selection) {
         double minx = Double.POSITIVE_INFINITY;
         double miny = Double.POSITIVE_INFINITY;
         double maxx = Double.NEGATIVE_INFINITY;
@@ -200,7 +199,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 }
             }
         } catch (@NonNull IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys",ex);
+            throw new InternalError("class can not read its own keys", ex);
         }
     }
 
@@ -224,7 +223,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param clazz A figure class.
      * @return an unmodifiable set of the keys
      */
-        public static Set<MapAccessor<?>> getDeclaredAndInheritedMapAccessors( Class<?> clazz) {
+    public static Set<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
         Set<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
         if (keys == null) {
             keys = new HashSet<>();
@@ -257,8 +256,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param selection a set of figures
      * @return bounds
      */
-        @org.checkerframework.checker.nullness.qual.Nullable
-        public static Bounds visualBounds(Collection<Figure> selection) {
+    @org.checkerframework.checker.nullness.qual.Nullable
+    public static Bounds visualBounds(Collection<Figure> selection) {
         Bounds b = null;
 
         for (Figure f : selection) {
@@ -305,12 +304,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     // ----
     // convenience methods
     // ----
+
     /**
      * Adds a new child to the figure.
      *
      * @param newChild the new child
      */
-    default void addChild( Figure newChild) {
+    default void addChild(Figure newChild) {
         getChildren().add(newChild);
     }
 
@@ -319,7 +319,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param drawing the drawing to which this figure has been added
      */
-    default void addNotify( Drawing drawing) {
+    default void addNotify(Drawing drawing) {
     }
 
     /**
@@ -327,7 +327,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * list.
      *
      * @param handleType The desired handle type
-     * @param list The handles.
+     * @param list       The handles.
      */
     default void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
@@ -394,7 +394,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param ctx the renderer which will use the node
      * @return the newly created node
      */
-        Node createNode( RenderContext ctx);
+    Node createNode(RenderContext ctx);
 
     /**
      * This method is invoked on a figure by
@@ -405,6 +405,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default void layoutSubjectChangedNotify() {
     }
+
     /**
      * This method is invoked on a figure by
      * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that one
@@ -414,6 +415,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default void layoutObserverChangedNotify() {
     }
+
     /**
      * Disconnects all layout subjects and layout observers from this figure.
      * <p>
@@ -430,14 +432,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * Fires a property change event.
      *
-     * @param <T> the value type
-     * @param source the event source
-     * @param type the event type
-     * @param key the property key
+     * @param <T>      the value type
+     * @param source   the event source
+     * @param type     the event type
+     * @param key      the property key
      * @param oldValue the old property value
      * @param newValue the new property value
      */
-    default <T> void firePropertyChangeEvent( Figure source,  FigurePropertyChangeEvent.EventType type,  Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    default <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (hasPropertyChangeListeners()) {
             firePropertyChangeEvent(new FigurePropertyChangeEvent(source, type, key, oldValue, newValue));
         } else {
@@ -453,7 +455,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param event the event
      */
-    default void firePropertyChangeEvent( FigurePropertyChangeEvent event) {
+    default void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
         if (hasPropertyChangeListeners()) {
             for (Listener<FigurePropertyChangeEvent> l : getPropertyChangeListeners()) {
                 l.handle(event);
@@ -468,6 +470,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     // ----
     // behavior methods
     // ----
+
     /**
      * The bounds that should be used for transformations of this figure.
      * <p>
@@ -480,7 +483,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the local bounds
      */
-        public Bounds getBoundsInLocal();
+    public Bounds getBoundsInLocal();
 
     /**
      * The bounds that should be used for layout calculations for this figure.
@@ -493,7 +496,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the local bounds
      */
-        default public Bounds getBoundsInParent() {
+    default public Bounds getBoundsInParent() {
         Bounds b = getBoundsInLocal();
         double[] points = new double[8];
         points[0] = b.getMinX();
@@ -520,13 +523,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
-    
+
     /**
      * Returns the bounds of the figure in world coordinates.
-     * 
+     *
      * @return the bounds in world coordinates
      */
-        default Bounds getBoundsInWorld() {
+    default Bounds getBoundsInWorld() {
         return Transforms.transform(getLocalToWorld(), getBoundsInLocal());
     }
 
@@ -536,8 +539,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return The center of the figure
      */
-        @NonNull
-        default Point2D getCenterInLocal() {
+    @NonNull
+    default Point2D getCenterInLocal() {
         Bounds b = getBoundsInLocal();
         return Geom.center(b);
     }
@@ -547,12 +550,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return The center of the figure
      */
-        @NonNull
-        default Point2D getCenterInParent() {
+    @NonNull
+    default Point2D getCenterInParent() {
         Bounds b = getBoundsInParent();
         return Geom.center(b);
     }
-    
+
     /**
      * The child figures.
      * <p>
@@ -568,7 +571,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the children
      */
     @Override
-        ObservableList<Figure> getChildren();
+    ObservableList<Figure> getChildren();
 
     /**
      * Returns all figures which observe the layout of this figure.
@@ -585,7 +588,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of dependent figures
      */
-        Collection<Figure> getLayoutObservers();
+    Collection<Figure> getLayoutObservers();
 
     /**
      * Returns the ancestor Drawing.
@@ -679,7 +682,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of property change listeners
      */
-        CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners();
+    CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners();
 
     /**
      * Returns all figures which are subject to the layout of this figure.
@@ -693,7 +696,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of layout subjects
      */
-        default Collection<Figure> getLayoutSubjects() {
+    default Collection<Figure> getLayoutSubjects() {
         return Collections.emptySet();
     }
 
@@ -702,7 +705,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the root
      */
-        default Figure getRoot() {
+    default Figure getRoot() {
         Figure parent = this;
         while (parent.getParent() != null) {
             parent = parent.getParent();
@@ -711,13 +714,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     @Override
-        default Styleable getStyleableParent() {
+    default Styleable getStyleableParent() {
         return getParent();
     }
 
     // ---
     // static methods
     // ---
+
     /**
      * Returns all supported map accessors of the figure.
      * <p>
@@ -726,7 +730,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return an unmodifiable set of keys
      */
-        default Set<MapAccessor<?>> getSupportedKeys() {
+    default Set<MapAccessor<?>> getSupportedKeys() {
         return Figure.getDeclaredAndInheritedMapAccessors(this.getClass());
     }
 
@@ -818,13 +822,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return true if the user may reshapeInLocal this figure together with
      * those in the set.
      */
-    default boolean isGroupReshapeableWith( Set<Figure> others) {
+    default boolean isGroupReshapeableWith(Set<Figure> others) {
         return true;
     }
 
     /**
      * Whether the {@code layout} method of this figure does anything.
-     *
+     * <p>
      * The default implementation returns false.
      *
      * @return true if the {@code layout} method is not empty.
@@ -847,7 +851,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param newParent The new parent figure.
      * @return true if {@code newParent} is an acceptable parent
      */
-    public boolean isSuitableParent( Figure newParent);
+    public boolean isSuitableParent(Figure newParent);
 
     /**
      * Returns true if the specified key is supported by this figure.
@@ -858,7 +862,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param key a key
      * @return whether the key is supported
      */
-    default boolean isSupportedKey( MapAccessor<?> key) {
+    default boolean isSupportedKey(MapAccessor<?> key) {
         return getSupportedKeys().contains(key);
     }
 
@@ -894,7 +898,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * This figure does not keep track of changes that require layout updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
-     *
+     * <p>
      * The default implementation is empty.
      */
     default void layout() {
@@ -922,8 +926,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param p point in local coordinates
      * @return point in world coordinates
      */
-        @NonNull
-        default Point2D localToWorld(@NonNull Point2D p) {
+    @NonNull
+    default Point2D localToWorld(@NonNull Point2D p) {
         final Transform ltw = getLocalToWorld();
         return ltw == null ? p : ltw.transform(p);
     }
@@ -938,8 +942,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param p bounds in local coordinates
      * @return bounds in world coordinates
      */
-        @NonNull
-        default Bounds localToWorld(@NonNull Bounds p) {
+    @NonNull
+    default Bounds localToWorld(@NonNull Bounds p) {
         final Transform ltw = getLocalToWorld();
         return ltw == null ? p : ltw.transform(p);
     }
@@ -960,14 +964,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the parent property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code PARENT_PROPERTY}.
      */
-        ObjectProperty<Figure> parentProperty();
+    ObjectProperty<Figure> parentProperty();
 
     /**
      * Removes a child from the figure.
      *
      * @param child a child of the figure
      */
-    default void removeChild( Figure child) {
+    default void removeChild(Figure child) {
         getChildren().remove(child);
     }
 
@@ -979,12 +983,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     // ----
     // property fields
     // ----
+
     /**
      * Removes the specified connection target.
      *
      * @param targetFigure a Figure which is a connection target.
      */
-    void removeLayoutSubject( Figure targetFigure);
+    void removeLayoutSubject(Figure targetFigure);
 
     /**
      * Invoked by {@code DrawingModel} when the figure is removed from a
@@ -992,7 +997,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param drawing the drawing from which this figure has been removed
      */
-    default void removeNotify( Drawing drawing) {
+    default void removeNotify(Drawing drawing) {
     }
 
     /**
@@ -1007,10 +1012,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
      * {@code reshapeInLocal} on child figures.
      *
-     *
      * @param transform the desired transformation in local coordinates
      */
-    void reshapeInLocal( Transform transform);
+    void reshapeInLocal(Transform transform);
 
     /**
      * Attempts to change the local bounds of the figure.
@@ -1028,9 +1032,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * See {#link #reshapeInLocal(Transform)} for a description of this method.
      *
-     * @param x desired x-position in parent coordinates
-     * @param y desired y-position in parent coordinates
-     * @param width desired width in parent coordinates, may be negative
+     * @param x      desired x-position in parent coordinates
+     * @param y      desired y-position in parent coordinates
+     * @param width  desired width in parent coordinates, may be negative
      * @param height desired height in parent coordinates, may be negative
      */
     default void reshapeInLocal(double x, double y, double width, double height) {
@@ -1050,10 +1054,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
      * {@code reshapeInLocal} on child figures.
      *
-     *
      * @param transform the desired transformation in parent coordinates
      */
-    void reshapeInParent( Transform transform);
+    void reshapeInParent(Transform transform);
 
     /**
      * This method is invoked on a figure by
@@ -1075,7 +1078,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param transform the desired transformation in local coordinates
      */
-    void transformInLocal( Transform transform);
+    void transformInLocal(Transform transform);
 
     /**
      * Attempts to transform the figure.
@@ -1084,7 +1087,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param transform the desired transformation in parent coordinates
      */
-    void transformInParent( Transform transform);
+    void transformInParent(Transform transform);
 
     /**
      * This method is invoked on a figure and all its descendants by
@@ -1141,10 +1144,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * This figure does not keep track of changes that require node updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage node updates.
      *
-     * @param ctx the drawing view
+     * @param ctx  the drawing view
      * @param node the node which was created with {@link #createNode}
      */
-    void updateNode( RenderContext ctx,  Node node);
+    void updateNode(RenderContext ctx, Node node);
 
     /**
      * Transforms the specified point from world coordinates into local
@@ -1156,8 +1159,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-        @NonNull
-        default Point2D worldToLocal(@NonNull Point2D pointInWorld) {
+    @NonNull
+    default Point2D worldToLocal(@NonNull Point2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
         return wtl == null ? pointInWorld : wtl.transform(pointInWorld);
     }
@@ -1172,8 +1175,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-        @NonNull
-        default Point2D worldToParent(@NonNull Point2D pointInWorld) {
+    @NonNull
+    default Point2D worldToParent(@NonNull Point2D pointInWorld) {
         final Transform wtp = getWorldToParent();
         return wtp == null ? pointInWorld : wtp.transform(pointInWorld);
     }

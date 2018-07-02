@@ -56,7 +56,7 @@ public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey
      * @param defaultValue The default value.
      */
     public StringReadOnlyStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
+        this(name, mask, defaultValue, null);
     }
 
     /**

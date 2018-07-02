@@ -37,12 +37,12 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
         return key;
     }
 
-    public Object getOldValue() {
-        return oldValue;
+    public <T> T getOldValue() {
+        return (T) oldValue;
     }
 
-    public Object getNewValue() {
-        return newValue;
+    public <T> T getNewValue() {
+        return (T)newValue;
     }
 
     public EventType getType() {
