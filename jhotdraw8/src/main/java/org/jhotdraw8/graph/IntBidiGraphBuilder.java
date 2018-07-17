@@ -83,11 +83,11 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
      * Before you may call this method, you must have called
      * {@link #setVertexCount(int)}.
      *
-     * @param a vertex a
-     * @param b vertex b
+     * @param vidxa vertex a
+     * @param vidxb vertex b
      */
-    public void addArrow(int a, int b) {
-        buildAddArrow(a, b);
+    public void addArrow(int vidxa, int vidxb) {
+        buildAddArrow(vidxa, vidxb);
     }
 
     /**
@@ -117,13 +117,13 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
     }
 
     /**
-     * Removes the i-th arrow from vertex 'a'.
+     * Removes the i-th arrow from the given vertex.
      *
-     * @param a vertex 'a'
-     * @param i the index of an arrow from vertex 'a'.
+     * @param vidx vertex
+     * @param i the index of an arrow from the vertex.
      */
-    public void removeArrow(int a, int i) {
-        buildRemoveArrow(a, i);
+    public void removeArrow(int vidx, int i) {
+        buildRemoveArrow(vidx, i);
     }
 
 }

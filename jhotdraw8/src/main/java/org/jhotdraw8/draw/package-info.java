@@ -5,7 +5,7 @@
  * @version $Id$
  */
 /** <p>
- * Defines a framework for structured drawing editors and provides default
+ * Defines a programming model for structured drawing editors and provides default
  * implementations.
  * </p>
  * <h3>Package Contents</h3>

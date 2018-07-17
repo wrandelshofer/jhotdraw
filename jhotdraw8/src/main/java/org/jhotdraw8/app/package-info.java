@@ -5,7 +5,7 @@
  * @version $Id$
  */
 /**
- * Defines a framework for document oriented applications and provides default
+ * Defines a programming model for document oriented applications and provides default
  * implementations.
  * <h3>Package Contents</h3>
  * <p>
