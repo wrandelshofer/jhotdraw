@@ -21,8 +21,8 @@ public class DirectedGraphValidator<V,A> {
     }
     public boolean validate(@NonNull DirectedGraph<V,A> graph) {
         Set<V> vertices=new LinkedHashSet<>();
-        for (int i=0,n=graph.getVertexCount();i<n;i++) {
-            if (!vertices.add(graph.getVertex(i))) {
+        for (V v:graph.getVertices()) {
+            if (!vertices.add(v)) {
                 return false;// duplicate vertex
             }
         }

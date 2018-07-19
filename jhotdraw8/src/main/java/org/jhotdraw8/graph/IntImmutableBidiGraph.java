@@ -89,27 +89,32 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
         this.prevArrowOffsets = new int[vertexCapacity ];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = graph.getVertex(vIndex);
-            vertexToIndexMap.put(vObject, vIndex);
+        {
+            int i = 0;
+            for (V v : graph.getVertices()) {
+                vertexToIndexMap.put(v, i);
+                i++;
+            }
         }
 
         int prevArrowCount = 0;
         int nextArrowCount = 0;
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = graph.getVertex(vIndex);
+        {
+            int i = 0;
+            for (V v : graph.getVertices()) {
 
-            nextArrowOffsets[vIndex] = nextArrowCount;
-            for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                nextArrowHeads[nextArrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+            nextArrowOffsets[i] = nextArrowCount;
+            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
+                nextArrowHeads[nextArrowCount] = vertexToIndexMap.get(graph.getNext(v, j));
                 nextArrowCount++;
             }
-            prevArrowOffsets[vIndex] = prevArrowCount;
-            for (int i = 0, n = graph.getPrevCount(vObject); i < n; i++) {
-                prevArrowHeads[prevArrowCount] = vertexToIndexMap.get(graph.getPrev(vObject, i));
+            prevArrowOffsets[i] = prevArrowCount;
+            for (int j = 0, n = graph.getPrevCount(v); j < n; j++) {
+                prevArrowHeads[prevArrowCount] = vertexToIndexMap.get(graph.getPrev(v, j));
                 prevArrowCount++;
             }
-        }
+            i++;
+        }}
     }
 
     @Override

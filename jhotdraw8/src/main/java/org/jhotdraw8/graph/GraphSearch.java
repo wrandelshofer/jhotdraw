@@ -33,11 +33,10 @@ import org.jhotdraw8.collection.IteratorEnumerator;
 public class GraphSearch {
 
     @NonNull
-    private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> g) {
+    private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> graph) {
         // Create initial forest.
-        Map<V, List<V>> forest = new LinkedHashMap<>(g.getVertexCount());
-        for (int i = 0, n = g.getVertexCount(); i < n; i++) {
-            final V v = g.getVertex(i);
+        Map<V, List<V>> forest = new LinkedHashMap<>(graph.getVertexCount());
+        for (V v:graph.getVertices()) {
             List<V> initialSet = new ArrayList<>(1);
             initialSet.add(v);
             forest.put(v, initialSet);
@@ -64,18 +63,17 @@ public class GraphSearch {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param g a directed graph
+     * @param graph a directed graph
      * @return the disjoint sets.
      */
     @NonNull
-    public static <V, A> List<Set<V>> findDisjointSets(@NonNull DirectedGraph<V, A> g) {
+    public static <V, A> List<Set<V>> findDisjointSets(@NonNull DirectedGraph<V, A> graph) {
         // Create initial forest
-        Map<V, List<V>> forest = createForest(g);
+        Map<V, List<V>> forest = createForest(graph);
         // Merge sets.
-        for (int i = 0, n = g.getVertexCount(); i < n; i++) {
-            V u = g.getVertex(i);
-            for (int j = 0, m = g.getNextCount(u); j < m; j++) {
-                V v = g.getNext(u, j);
+        for (V u:graph.getVertices()) {
+            for (int j = 0, m = graph.getNextCount(u); j < m; j++) {
+                V v = graph.getNext(u, j);
                 List<V> uset = forest.get(u);
                 List<V> vset = forest.get(v);
                 if (uset != vset) {
@@ -241,7 +239,7 @@ public class GraphSearch {
         int[] a = sortTopologicallyInt(im);
         List<V> result = new ArrayList<>(a.length);
         for (int i = 0; i < a.length; i++) {
-            result.add(m.getVertex(a[i]));
+            result.add(im.getVertex(a[i]));
         }
         return result;
     }

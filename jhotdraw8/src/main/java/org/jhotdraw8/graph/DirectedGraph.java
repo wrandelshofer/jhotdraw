@@ -77,15 +77,6 @@ public interface DirectedGraph<V, A> {
     }
 
     /**
-     * Returns the specified arrow.
-     *
-     * @param index index of arrow
-     * @return arrow
-     */
-    @Nullable
-    A getArrow(int index);
-
-    /**
      * Returns the specified successor (next) arrow of the specified vertex.
      *
      * @param vertex a vertex
@@ -208,14 +199,6 @@ public interface DirectedGraph<V, A> {
     }
 
     /**
-     * Returns the specified Vertex.
-     *
-     * @param indexOfVertex index of vertex
-     * @return vertex
-     */
-    V getVertex(int indexOfVertex);
-
-    /**
      * Returns the number of nextArrows {@code V}.
      *
      * @return vertex count
@@ -227,41 +210,7 @@ public interface DirectedGraph<V, A> {
      *
      * @return a collection view on all nextArrows
      */
-    default Collection<V> getVertices() {
-        class VertexIterator implements Iterator<V> {
-
-            private int index;
-            private final int vertexCount;
-
-            public VertexIterator() {
-                vertexCount = getVertexCount();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < vertexCount;
-            }
-
-            @Override
-            public V next() {
-                return getVertex(index++);
-            }
-
-        }
-        return new AbstractCollection<V>() {
-            @NonNull
-            @Override
-            public Iterator<V> iterator() {
-                return new VertexIterator();
-            }
-
-            @Override
-            public int size() {
-                return getVertexCount();
-            }
-
-        };
-    }
+    Collection<V> getVertices();
 
     /**
      * Returns all arrows.
@@ -269,42 +218,7 @@ public interface DirectedGraph<V, A> {
      * @return a collection view on all arrows
      */
     @NonNull
-    default Collection<A> getArrows() {
-        class ArrowIterator implements Iterator<A> {
-
-            private int index;
-            private final int arrowCount;
-
-            public ArrowIterator() {
-                arrowCount = getArrowCount();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < arrowCount;
-            }
-
-            @Override
-            @Nullable
-            public A next() {
-                return getArrow(index++);
-            }
-
-        }
-        return new AbstractCollection<A>() {
-            @NonNull
-            @Override
-            public Iterator<A> iterator() {
-                return new ArrowIterator();
-            }
-
-            @Override
-            public int size() {
-                return getArrowCount();
-            }
-
-        };
-    }
+    Collection<A> getArrows();
 
     /**
      * Returns all arrows between two nextArrows.

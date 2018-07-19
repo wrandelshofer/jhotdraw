@@ -6,6 +6,8 @@ package org.jhotdraw8.graph;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,24 +48,28 @@ public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirected
         indexToVertexMap = new ArrayList<>(vertexCapacity);
         vertexToIndexMap = new HashMap<>(vertexCapacity);
 
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = graph.getVertex(vIndex);
-            vertexToIndexMap.put(vObject, vIndex);
-            indexToVertexMap.add(vObject);
+        {
+            int i = 0;
+            for (V v : graph.getVertices()) {
+                vertexToIndexMap.put(v, i);
+                indexToVertexMap.add(v);
+                i++;
+            }
         }
 
         arrowData = new Object[graph.getArrowCount()];
         int arrowCount = 0;
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = indexToVertexMap.get(vIndex);
-
-            vertices[vIndex] = arrowCount;
-            for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
-                arrowData[arrowCount] = graph.getNextArrow(vObject, i);
+        {
+            int i = 0;
+            for (V v : graph.getVertices()) {
+            vertices[i] = arrowCount;
+            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
+                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(v, j));
+                arrowData[arrowCount] = graph.getNextArrow(v, j);
                 ++arrowCount;
             }
-        }
+            i++;
+        }}
     }
 
     @NonNull
@@ -81,6 +87,17 @@ public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirected
     @Override
     public int getNextCount(V vertex) {
         return getNextCount(vertexToIndexMap.get(vertex));
+    }
+
+    @Override
+    public Collection<V> getVertices() {
+        return Collections.unmodifiableCollection(indexToVertexMap);
+
+    }
+
+    @Override
+    public @NonNull Collection<A> getArrows() {
+        return null;
     }
 
     @NonNull

@@ -24,10 +24,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
-    @NonNull
-    private final List<ArrowData<V, A>> arrows;
-    @NonNull
-    private final List<VertexData<V, A>> vertexList;
+    private int arrowCount;
     @NonNull
     private final Map<V, VertexData<V, A>> vertices;
 
@@ -45,9 +42,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param arrowCapacity the arrow capaicty
      */
     public BidiGraphBuilder(int vertexCapacity, int arrowCapacity) {
-        arrows = new ArrayList<>(arrowCapacity);
+        arrowCount = 0;
         vertices = new LinkedHashMap<>(vertexCapacity);
-        vertexList = new ArrayList<>(vertexCapacity);
     }
 
     /**
@@ -72,9 +68,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * arrow type
      */
     public <VV, AA> BidiGraphBuilder(DirectedGraph<VV, AA> that, @NonNull Function<VV, V> vertexMapper, @NonNull Function<AA, A> arrowMapper) {
-        arrows = new ArrayList<>(that.getArrowCount());
+        arrowCount = that.getArrowCount();
         vertices = new LinkedHashMap<>(that.getVertexCount());
-        vertexList = new ArrayList<>(that.getVertexCount());
 
         for (VV vv : that.getVertices()) {
             addVertex(vertexMapper.apply(vv));
@@ -107,7 +102,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         ArrowData<V, A> a = new ArrowData<>(startData, endData, arrow);
         startData.next.add(a);
         endData.prev.add(a);
-        arrows.add(a);
+        arrowCount++;
     }
 
     /**
@@ -134,23 +129,15 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         }
         final VertexData<V, A> data = new VertexData<>(v);
         vertices.put(v, data);
-        vertexList.add(data);
     }
 
     public void clear() {
         vertices.clear();
-        vertexList.clear();
-        arrows.clear();
-    }
-
-    @Override
-    public A getArrow(int index) {
-        return arrows.get(index).arrow;
     }
 
     @Override
     public int getArrowCount() {
-        return arrows.size();
+        return arrowCount;
     }
 
     @Override
@@ -184,13 +171,56 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     }
 
     @Override
-    public V getVertex(int indexOfVertex) {
-        return vertexList.get(indexOfVertex).v;
+    public int getVertexCount() {
+        return vertices.size();
     }
 
     @Override
-    public int getVertexCount() {
-        return vertexList.size();
+    public Collection<V> getVertices() {
+        return Collections.unmodifiableCollection(vertices.keySet());
+    }
+
+    @Override
+    public Collection<A> getArrows() {
+        class ArrowIterator implements Iterator<A> {
+            private final Iterator<V> vertexIterator;
+            private Iterator<A> nextArrowIterator;
+
+            public ArrowIterator() {
+                arrowCount = getArrowCount();
+                vertexIterator=getVertices().iterator();
+                nextArrowIterator=Collections.emptyIterator();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return nextArrowIterator.hasNext() || vertexIterator.hasNext();
+            }
+
+            @Override
+            @Nullable
+            public A next() {
+                while (!nextArrowIterator.hasNext()) {
+                  V  v = vertexIterator.next();
+                    nextArrowIterator = getNextArrows(v).iterator();
+                }
+                return nextArrowIterator.next();
+            }
+
+        }
+        return new AbstractCollection<A>() {
+            @NonNull
+            @Override
+            public Iterator<A> iterator() {
+                return new ArrowIterator();
+            }
+
+            @Override
+            public int size() {
+                return getArrowCount();
+            }
+
+        };
     }
 
     private VertexData<V, A> getVertexDataNotNull(V vertex) {
@@ -229,27 +259,12 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         removeNext(startData,i);
     }
 
-    /**
-     * Removes the specified arrow from the graph.
-     *
-     * @param end the end vertex of the arrow
-     * @param i the index of the i-th next vertex
-     */
-    public void removePrev(int end, int i) {
-        final VertexData<V, A> endVertex = vertexList.get(end);
-        final ArrowData<V, A> a = endVertex.prev.get(i);
-        final VertexData<V, A> startVertex = vertices.get(a.start.v);
-        startVertex.next.remove(i);
-        endVertex.prev.remove(a);
-        arrows.remove(a);
-    }
-    
     private void removeNext(VertexData<V,A> startData, int i) {
         ArrowData<V, A> a = startData.next.get(i);
         final VertexData<V, A> endData = a.end;
         startData.next.remove(i);
         endData.prev.remove(a);
-        arrows.remove(a);
+        arrowCount--;
     }
 
     /**
@@ -288,7 +303,6 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
             removeNext(arrowData.start, (arrowData.start).next.indexOf(arrowData));
         }
         vertices.remove(v);
-        vertexList.remove(data);
     }
 
     private static class ArrowData<V, A> {

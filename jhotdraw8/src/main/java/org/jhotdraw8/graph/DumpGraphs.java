@@ -3,23 +3,12 @@
  */
 package org.jhotdraw8.graph;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
-
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.collection.IntArrayList;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.function.Function;
 
 /**
  * Provides algorithms for directed graphs.
@@ -71,8 +60,8 @@ public class DumpGraphs {
      * @throws java.io.IOException if writing fails
      */
     public static <V, A> void dumpAsAdjacencyList(@NonNull Appendable w, DirectedGraph<V, A> graph, @NonNull Function<V, String> toStringFunction) throws IOException {
-        for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
-            V v = graph.getVertex(i);
+        {int i=0;
+        for (V v:graph.getVertices()) {
             if (i != 0) {
                 w.append("\n");
             }
@@ -84,7 +73,8 @@ public class DumpGraphs {
                 w.append(toStringFunction.apply(graph.getNext(v, j)));
             }
             w.append('.');
-        }
+            i++;
+        }}
     }
 
     /**
@@ -189,8 +179,7 @@ public class DumpGraphs {
         w.append("digraph G {\n");
 
         // dump vertices
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            final V v = graph.getVertex(i);
+        for (V v:graph.getVertices()) {
             final String vertexName = vertexToString.apply(v);
             if (vertexName == null) {
                 continue;
@@ -207,8 +196,7 @@ public class DumpGraphs {
         }
 
         // dump arrows
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            final V start = graph.getVertex(i);
+        for (V start:graph.getVertices()) {
             for (int j = 0, m = graph.getNextCount(start); j < m; j++) {
                 final V end = graph.getNext(start, j);
                 final A arrow = graph.getNextArrow(start, j);

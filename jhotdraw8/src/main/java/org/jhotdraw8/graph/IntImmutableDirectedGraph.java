@@ -67,21 +67,25 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
         this.arrowOffsets = new int[vertexCapacity];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = graph.getVertex(vIndex);
-            vertexToIndexMap.put(vObject, vIndex);
-        }
+        {
+            int i = 0;
+            for (V v : graph.getVertices()) {
+            vertexToIndexMap.put(v, i);
+            i++;
+        }}
 
         int arrowCount = 0;
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = graph.getVertex(vIndex);
+        {
+            int i = 0;
+            for (V v : graph.getVertices()) {
 
-            arrowOffsets[vIndex] = arrowCount;
-            for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
+            arrowOffsets[i] = arrowCount;
+            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
+                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(v, j));
                 arrowCount++;
             }
-        }
+            i++;
+        }}
     }
 
 

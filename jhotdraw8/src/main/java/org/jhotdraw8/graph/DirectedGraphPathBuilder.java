@@ -200,8 +200,8 @@ public class DirectedGraphPathBuilder<V, A> {
         @SuppressWarnings("unchecked")
         AttributedIntDirectedGraph<V,A> intGraph = (AttributedIntDirectedGraph<V,A>) graph;
         int startIndex = -1, goalIndex = -1;
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            V v = graph.getVertex(i);
+        {int i=0;
+        for (V v:graph.getVertices()) {
             if (v == start) {
                 startIndex = i;
                 if (goalIndex != -1) {
@@ -214,14 +214,15 @@ public class DirectedGraphPathBuilder<V, A> {
                     break;
                 }
             }
-        }
+            i++;
+        }}
         VertexPath<Integer> intPath = findIntShortestVertexPath(intGraph, startIndex, goalIndex, costf);
         if (intPath == null) {
             return null;
         }
         ArrayList<V> elements = new ArrayList<>(intPath.getVertices().size());
         for (Integer vi : intPath.getVertices()) {
-            elements.add(graph.getVertex(vi));
+            elements.add(intGraph.getVertex(vi));
         }
         return new VertexPath<>(elements);
     }
@@ -484,8 +485,8 @@ public class DirectedGraphPathBuilder<V, A> {
             @SuppressWarnings("unchecked")
             AttributedIntDirectedGraph<V,A> intGraph = (AttributedIntDirectedGraph<V,A>) graph;
             int startIndex = -1, goalIndex = -1;
-            for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-                V v = graph.getVertex(i);
+            {int i=0;
+            for (V v:graph.getVertices()) {
                 if (v == start) {
                     startIndex = i;
                     if (goalIndex != -1) {
@@ -498,7 +499,8 @@ public class DirectedGraphPathBuilder<V, A> {
                         break;
                     }
                 }
-            }
+                i++;
+            }}
             return findIntShortestEdgePath(intGraph, startIndex, goalIndex, costf);
         } else {
             return doFindShortestEdgePath(graph, start, goal, costf);

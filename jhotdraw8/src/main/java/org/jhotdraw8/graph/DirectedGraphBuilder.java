@@ -6,8 +6,11 @@ package org.jhotdraw8.graph;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -37,12 +40,10 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         final int arrowCount = graph.getArrowCount();
 
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>(graph.getVertexCount(), arrowCount);
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            V v = graph.getVertex(i);
+        for (V v:graph.getVertices()) {
             b.addVertex(v);
         }
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            V v = graph.getVertex(i);
+        for (V v:graph.getVertices()) {
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
                 b.addArrow(graph.getNext(v, j), v, graph.getNextArrow(v, j));
             }
@@ -61,8 +62,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     @NonNull
     public static <V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(DirectedGraph<V, A> graph) {
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            V v = graph.getVertex(i);
+        for (V v:graph.getVertices()) {
             b.addVertex(v);
             for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
                 b.addArrow(v, graph.getNext(v, j), graph.getNextArrow(v, j));
@@ -145,11 +145,10 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         this.arrows = new ArrayList<>(graph.getArrowCount());
         final int ecount = graph.getArrowCount();
 
-        for (int i = 0; i < vcount; i++) {
-            addVertex(graph.getVertex(i));
+        for (V v:graph.getVertices()) {
+            addVertex(v);
         }
-        for (int i = 0; i < vcount; i++) {
-            V v = graph.getVertex(i);
+        for (V v:graph.getVertices()) {
             for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
                 addArrow(v, graph.getNext(v, j), graph.getNextArrow(v, j));
             }
@@ -263,5 +262,80 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         int arrowId = getNextArrowIndex(vi, i);
         return arrows.get(arrowId);
     }
+
+    @Override
+    public Collection<A> getArrows() {
+        class ArrowIterator implements Iterator<A> {
+
+            private int index;
+            private final int arrowCount;
+
+            public ArrowIterator() {
+                arrowCount = getArrowCount();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index < arrowCount;
+            }
+
+            @Override
+            @Nullable
+            public A next() {
+                return getArrow(index++);
+            }
+
+        }
+        return new AbstractCollection<A>() {
+            @NonNull
+            @Override
+            public Iterator<A> iterator() {
+                return new ArrowIterator();
+            }
+
+            @Override
+            public int size() {
+                return getArrowCount();
+            }
+
+        };
+    }
+    @Override
+     public Collection<V> getVertices() {
+        class VertexIterator implements Iterator<V> {
+
+            private int index;
+            private final int vertexCount;
+
+            public VertexIterator() {
+                vertexCount = getVertexCount();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index < vertexCount;
+            }
+
+            @Override
+            public V next() {
+                return getVertex(index++);
+            }
+
+        }
+        return new AbstractCollection<V>() {
+            @NonNull
+            @Override
+            public Iterator<V> iterator() {
+                return new VertexIterator();
+            }
+
+            @Override
+            public int size() {
+                return getVertexCount();
+            }
+
+        };
+    }
+
 
 }

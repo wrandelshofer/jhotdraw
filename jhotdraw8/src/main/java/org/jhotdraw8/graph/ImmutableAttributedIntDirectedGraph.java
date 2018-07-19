@@ -81,23 +81,26 @@ public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDi
         this.vertexObjects = new Object[vertexCapacity];
 
         Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = graph.getVertex(vIndex);
-            vertexToIndexMap.put(vObject, vIndex);
+        {int i=0;
+        for (V v: graph.getVertices()) {
+            vertexToIndexMap.put(v, i);
+            i++;
+        }
         }
 
         int arrowCount = 0;
-        for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
-            V vObject = graph.getVertex(vIndex);
+        {int i=0;
+            for (V v: graph.getVertices()) {
 
-            vertices[vIndex] = arrowCount;
-            vertexObjects[vIndex] = graph.getVertex(vIndex);
-            for (int i = 0, n = graph.getNextCount(vObject); i < n; i++) {
-                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(vObject, i));
-                arrows[arrowCount] = graph.getNextArrow(vObject, i);
+            vertices[i] = arrowCount;
+            vertexObjects[i] = v;
+            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
+                arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(v, j));
+                arrows[arrowCount] = graph.getNextArrow(v, j);
                 arrowCount++;
             }
-        }
+            i++;
+        }}
     }
 
     protected ImmutableAttributedIntDirectedGraph(int vertexCount, int arrowCount) {
