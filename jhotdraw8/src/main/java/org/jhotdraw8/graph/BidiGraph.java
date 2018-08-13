@@ -45,7 +45,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @return breadth first search
      */
     @NonNull
-    default Stream<V> breadthFirstSearchBackwards(V start, Predicate<V> visited) {
+    default Stream<V> breadthFirstSearchBackward(V start, Predicate<V> visited) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start, visited), false);
     }
 
@@ -59,7 +59,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @return breadth first search
      */
     @NonNull
-    default Stream<V> breadthFirstSearchBackwards(V start) {
+    default Stream<V> breadthFirstSearchBackward(V start) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start), false);
     }
 

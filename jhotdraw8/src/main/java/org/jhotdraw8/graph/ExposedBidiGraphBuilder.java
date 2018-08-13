@@ -26,6 +26,8 @@ import java.util.stream.StreamSupport;
 /**
  * Provides an API for building a {@code BidiGraph}.
  * <p>
+ * Performance:
+ * <p>
  * This builder exposes its vertex and arrow data objects.
  * This can improve performance, because this allows to save one memory access per vertex and per arrow.
  * Also, there is no need for looking up data objects in a hash map.
@@ -250,7 +252,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
             removeNext(v, i);
         }
         for (int i = v.prev.size() - 1; i >= 0; i--) {
-            Arrow<V, A> arrow = v.prev.get(i);
+            A arrow = v.prev.get(i);
             removeNext(arrow.start, (arrow.start).next.indexOf(arrow));
         }
         vertices.remove(v);
@@ -308,7 +310,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
 
     @NotNull
     @Override
-    public Stream<V> breadthFirstSearchBackwards(final V start, final Predicate<V> visited) {
+    public Stream<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
         return StreamSupport.stream(new BidiBreadthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNotNull(start), visited), false);
     }
 
@@ -322,7 +324,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * This is a performance-optimized implementation which does not need to call a hash function for
      * every vertex.
      */
-    private class BidiBreadthFirstSpliterator extends Spliterators.AbstractSpliterator<V> {
+    private  class BidiBreadthFirstSpliterator extends Spliterators.AbstractSpliterator<V> {
 
         @NotNull
         private final Function<V, Iterable<A>> nextNodesFunction;

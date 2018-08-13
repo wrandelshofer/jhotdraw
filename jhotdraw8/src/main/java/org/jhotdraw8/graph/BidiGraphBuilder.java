@@ -350,21 +350,21 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     @NonNull
     @Override
-    public Stream<V> breadthFirstSearchBackwards(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getPrev, ArrowData::getStart, getVertexDataNotNull(start), visited), false);
+    public Stream<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator<>(VertexData::getPrev, ArrowData::getStart, getVertexDataNotNull(start), visited), false);
     }
 
     @NonNull
     @Override
     public Stream<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(VertexData::getNext, ArrowData::getEnd, getVertexDataNotNull(start), visited), false);
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator<>(VertexData::getNext, ArrowData::getEnd, getVertexDataNotNull(start), visited), false);
     }
 
     /**
      * This is a performance-optimized implementation which does not need to call a hash function for
      * every vertex.
      */
-    private class BidiBreadthFirstSpliterator extends Spliterators.AbstractSpliterator<V> {
+    private static class BidiBreadthFirstSpliterator<V,A> extends Spliterators.AbstractSpliterator<V> {
 
         @NonNull
         private final Function<VertexData<V, A>, Iterable<ArrowData<V, A>>> nextNodesFunction;

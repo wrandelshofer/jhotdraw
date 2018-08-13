@@ -288,6 +288,6 @@ public class BidiGraphBuilderTest {
         instance.addArrow(c,d, 1.0);
         instance.addArrow(c,e, 1.0);
 
-        assertEquals("eacb", instance.breadthFirstSearchBackwards(e).collect(Collectors.joining("")));
+        assertEquals("eacb", instance.breadthFirstSearchBackward(e).collect(Collectors.joining("")));
     }
 }
