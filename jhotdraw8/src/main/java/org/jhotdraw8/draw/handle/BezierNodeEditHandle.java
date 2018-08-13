@@ -139,6 +139,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
                             node = node.setMask(BezierNode.C0C1C2_MASK);
                             break;
                         case BezierNode.C0C1C2_MASK:
+                        default:
                             node = node.setMask(BezierNode.C0_MASK);
                             break;
                         case BezierNode.MOVE_MASK:
