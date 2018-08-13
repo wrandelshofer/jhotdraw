@@ -28,8 +28,10 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Geom;
@@ -59,6 +61,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         elements.add(new LineTo(4, 4));
         elements.add(new ClosePath());
     }
+
     @NonNull
     private final Region node;
     private Point2D pickLocation;
@@ -120,71 +123,99 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     @Override
     public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (pointKey != null && event.getClickCount() == 2) {
-            if (owner.get(pointKey).size() > 2) {
-                BezierNodePath path = new BezierNodePath(owner.get(pointKey));
-                path.join(pointIndex, 1.0);
-                dv.getModel().set(owner, pointKey, ImmutableList.ofCollection(path.getNodes()));
-                dv.recreateHandles();
+        if (pointKey != null) {
+            if (event.getClickCount() == 1) {
+                if (event.isControlDown() || event.isAltDown()) {
+                    BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+                    BezierNode node = path.getNodes().get(pointIndex);
+                    switch (node.getMask()) {
+                        case BezierNode.C0_MASK:
+                            node = node.setMask(BezierNode.C0C1_MASK);
+                            break;
+                        case BezierNode.C0C1_MASK:
+                            node = node.setMask(BezierNode.C0C2_MASK);
+                            break;
+                        case BezierNode.C0C2_MASK:
+                            node = node.setMask(BezierNode.C0C1C2_MASK);
+                            break;
+                        case BezierNode.C0C1C2_MASK:
+                            node = node.setMask(BezierNode.C0_MASK);
+                            break;
+                        case BezierNode.MOVE_MASK:
+                            break;
+                    }
+                    path.getNodes().set(pointIndex, node);
+                    dv.getModel().set(owner, pointKey, ImmutableList.ofCollection(path.getNodes()));
+                    dv.recreateHandles();
+                }
+            } else if (event.getClickCount() == 2) {
+                if (!event.isControlDown() && !event.isMetaDown() && !event.isAltDown()) {
+                    if (owner.get(pointKey).size() > 2) {
+                        BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+                        path.join(pointIndex, 1.0);
+                        dv.getModel().set(owner, pointKey, ImmutableList.ofCollection(path.getNodes()));
+                        dv.recreateHandles();
+                    }
+                }
             }
         }
     }
 
-    @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+        @Override
+        public void handleMouseDragged (@NonNull MouseEvent event, @NonNull DrawingView view){
+            Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
-        if (!event.isAltDown() && !event.isControlDown()) {
-            // alt or control switches the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            if (!event.isAltDown() && !event.isControlDown()) {
+                // alt or control switches the constrainer off
+                newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            }
+
+            ImmutableList<BezierNode> list = owner.get(pointKey);
+            if (pointIndex >= list.size()) {
+                return;
+            }
+            BezierNode p = list.get(pointIndex);
+            view.getModel().set(getOwner(), pointKey,
+                    ImmutableList.set(list, pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
         }
 
-        ImmutableList<BezierNode> list = owner.get(pointKey);
-        if (pointIndex >= list.size()) {
-            return;
+        @Override
+        public void handleMousePressed (MouseEvent event, DrawingView view){
         }
-        BezierNode p = list.get(pointIndex);
-        view.getModel().set(getOwner(), pointKey,
-                ImmutableList.set(list, pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
-    }
 
-    @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
-    }
-
-    @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
-    }
-
-    @Override
-    public void updateNode(@NonNull DrawingView view) {
-        Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableList<BezierNode> list = f.get(pointKey);
-        if (pointIndex >= list.size()) {
-            return;
+        @Override
+        public void handleMouseReleased (MouseEvent event, DrawingView dv){
         }
-        BezierNode p = getBezierNode();
-        Point2D c0 = getLocation();
-        pickLocation = c0 = t == null ? c0 : t.transform(c0);
-        node.relocate(c0.getX() - 5, c0.getY() - 5);
-        // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
-        BezierNode bn = getBezierNode();
-        if (bn.isC1() && bn.isC2()) {
-            node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
-        } else if (bn.isC1()) {
-            node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
-        } else {
-            node.setShape(REGION_SHAPE_LINEAR);
+        @Override
+        public boolean isSelectable () {
+            return true;
         }
-    }
 
-}
+        @Override
+        public void updateNode (@NonNull DrawingView view){
+            Figure f = getOwner();
+            Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+            ImmutableList<BezierNode> list = f.get(pointKey);
+            if (pointIndex >= list.size()) {
+                return;
+            }
+            BezierNode p = getBezierNode();
+            Point2D c0 = getLocation();
+            pickLocation = c0 = t == null ? c0 : t.transform(c0);
+            node.relocate(c0.getX() - 5, c0.getY() - 5);
+            // rotates the node:
+            node.setRotate(f.getStyled(ROTATE));
+            node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+
+            BezierNode bn = getBezierNode();
+            if (bn.isC1() && bn.isC2()) {
+                node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
+            } else if (bn.isC1()) {
+                node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
+            } else {
+                node.setShape(REGION_SHAPE_LINEAR);
+            }
+        }
+
+    }
