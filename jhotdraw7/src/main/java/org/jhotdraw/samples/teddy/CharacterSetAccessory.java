@@ -25,7 +25,7 @@ public class CharacterSetAccessory extends javax.swing.JPanel {
 
     /** Creates a new instance. */
     public CharacterSetAccessory() {
-        if ("aqua".equals(UIManager.getLookAndFeel().getID().toLowerCase())) {
+        if (false&&"aqua".equals(UIManager.getLookAndFeel().getID().toLowerCase())) {
             initComponents();
         } else {
             initComponentsWin();

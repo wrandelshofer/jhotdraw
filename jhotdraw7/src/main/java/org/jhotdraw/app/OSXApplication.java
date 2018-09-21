@@ -18,12 +18,10 @@ import org.jhotdraw.app.action.file.OpenFileAction;
 import org.jhotdraw.app.action.file.CloseFileAction;
 import org.jhotdraw.app.action.file.OpenDirectoryAction;
 import org.jhotdraw.app.action.file.ExportFileAction;
-import org.jhotdraw.app.action.app.OpenApplicationAction;
 import org.jhotdraw.app.action.app.OpenApplicationFileAction;
 import org.jhotdraw.app.action.app.AboutAction;
 import org.jhotdraw.app.action.app.ExitAction;
 import org.jhotdraw.app.action.app.PrintApplicationFileAction;
-import org.jhotdraw.app.action.app.ReOpenApplicationAction;
 import org.jhotdraw.app.osx.OSXPaletteHandler;
 import org.jhotdraw.gui.Worker;
 import org.jhotdraw.util.*;
@@ -199,12 +197,12 @@ public class OSXApplication extends AbstractApplication {
     }
 
     protected void initLookAndFeel() {
-        try {
+        /*try {
             String lafName=(String)Methods.invokeStatic("ch.randelshofer.quaqua.QuaquaManager","getLookAndFeelClassName");
             UIManager.setLookAndFeel(lafName);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         if (UIManager.getString("OptionPane.css") == null) {
             UIManager.put("OptionPane.css", "<head>"
                     + "<style type=\"text/css\">"
@@ -532,12 +530,6 @@ public class OSXApplication extends AbstractApplication {
         paletteHandler.add((JFrame) getComponent(), null);
 
         Action a;
-        if (null != (a = getAction(null, OpenApplicationAction.ID))) {
-            OSXAdapter.setOpenApplicationHandler(a);
-        }
-        if (null != (a = getAction(null, ReOpenApplicationAction.ID))) {
-            OSXAdapter.setReOpenApplicationHandler(a);
-        }
         if (null != (a = getAction(null, OpenApplicationFileAction.ID))) {
             OSXAdapter.setOpenFileHandler(a);
         }
@@ -658,9 +650,7 @@ public class OSXApplication extends AbstractApplication {
         ActionMap rootMap = new ActionMap();
         rootMap.put(AboutAction.ID, new AboutAction(this));
         rootMap.put(ExitAction.ID, new ExitAction(this));
-        rootMap.put(OpenApplicationAction.ID, new OpenApplicationAction(this));
         rootMap.put(OpenApplicationFileAction.ID, new OpenApplicationFileAction(this));
-        rootMap.put(ReOpenApplicationAction.ID, new ReOpenApplicationAction(this));
         rootMap.put(ClearRecentFilesMenuAction.ID, new ClearRecentFilesMenuAction(this));
         rootMap.put(MaximizeWindowAction.ID, new MaximizeWindowAction(this, null));
         rootMap.put(MinimizeWindowAction.ID, new MinimizeWindowAction(this, null));
