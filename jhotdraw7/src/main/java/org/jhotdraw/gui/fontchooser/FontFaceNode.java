@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.gui.fontchooser;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.Nullable;
 import java.awt.Font;
 import java.util.Collections;
 import java.util.Enumeration;

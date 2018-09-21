@@ -5,7 +5,7 @@
 
 package org.jhotdraw.samples.odg;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw.draw.tool.BezierTool;
 import org.jhotdraw.samples.svg.figures.*;
 import org.jhotdraw.draw.*;

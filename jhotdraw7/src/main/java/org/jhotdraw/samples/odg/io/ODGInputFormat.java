@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.samples.odg.io;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.draw.io.InputFormat;
 import java.awt.datatransfer.*;

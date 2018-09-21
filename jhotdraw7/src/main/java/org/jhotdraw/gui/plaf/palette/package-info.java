@@ -9,8 +9,5 @@
 /**
 PaletteLookAndFeel for components used in the palette windows of a drawing editor.
 */
-@DefaultAnnotation(NonNull.class)
 package org.jhotdraw.gui.plaf.palette;
 
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;

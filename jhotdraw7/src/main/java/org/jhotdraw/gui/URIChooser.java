@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.gui;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.Nullable;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;

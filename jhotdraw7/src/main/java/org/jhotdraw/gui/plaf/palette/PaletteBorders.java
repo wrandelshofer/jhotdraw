@@ -5,7 +5,7 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import javax.annotation.Nonnull;
 /**
  * PaletteBorders.
  *

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.draw.action;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;

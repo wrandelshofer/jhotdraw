@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.beans.*;
 import java.util.LinkedList;

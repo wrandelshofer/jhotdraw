@@ -5,8 +5,9 @@
 
 package org.jhotdraw.draw.event;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.draw.*;
+
+import javax.annotation.Nullable;
 import java.awt.geom.*;
 import java.util.*;
 
@@ -33,7 +34,8 @@ public class FigureEvent extends EventObject {
     private static final long serialVersionUID=1L;
     private Rectangle2D.Double invalidatedArea;
     private AttributeKey<?> attribute;
-    @Nullable private Object oldValue;
+    @Nullable
+    private Object oldValue;
     @Nullable private Object newValue;
     
     /**

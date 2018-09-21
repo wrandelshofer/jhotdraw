@@ -5,7 +5,7 @@
 
 package org.jhotdraw.color;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * AbstractHarmonicRule.

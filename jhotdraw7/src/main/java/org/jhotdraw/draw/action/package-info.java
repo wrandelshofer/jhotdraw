@@ -9,9 +9,5 @@
 /**
 Provides default actions for structured drawing editors.
 */
-@DefaultAnnotation(NonNull.class)
 package org.jhotdraw.draw.action;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;
 

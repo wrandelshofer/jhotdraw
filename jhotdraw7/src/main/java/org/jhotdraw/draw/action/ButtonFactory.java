@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.draw.action;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.app.action.edit.PasteAction;
 import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.CopyAction;
@@ -24,6 +23,7 @@ import java.awt.event.*;
 import java.beans.*;
 import java.text.*;
 import java.util.*;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.plaf.ColorChooserUI;
 import javax.swing.text.*;

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.Nullable;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

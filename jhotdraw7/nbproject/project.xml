@@ -5,8 +5,10 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>JHotDraw7</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
+            <explicit-platform explicit-source-supported="true"/>
             <source-roots>
                 <root id="src.java.dir"/>
+                <root id="src.java2.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>

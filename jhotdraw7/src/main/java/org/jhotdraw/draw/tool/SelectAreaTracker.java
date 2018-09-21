@@ -5,7 +5,7 @@
 
 package org.jhotdraw.draw.tool;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * A <em>select area tracker</em> provides the behavior for selecting figures

@@ -11,8 +11,4 @@
     Provides the Graphical user interface classes for the SVG sample application.
 </p>
 */
-@DefaultAnnotation(NonNull.class)
 package org.jhotdraw.samples.svg.gui;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;
