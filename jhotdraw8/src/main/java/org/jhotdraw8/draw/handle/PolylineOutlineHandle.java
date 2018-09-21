@@ -13,8 +13,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -71,7 +71,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
 
         if (editable && key != null && event.getClickCount() == 2) {
             List<Point2D> points = owner.get(key);
@@ -103,7 +103,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
         }
     }
 
-    protected void initNode(@NonNull Polyline r) {
+    protected void initNode(@Nonnull Polyline r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
@@ -115,7 +115,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();

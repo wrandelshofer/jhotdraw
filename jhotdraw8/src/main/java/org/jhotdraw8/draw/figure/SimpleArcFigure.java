@@ -11,7 +11,7 @@ import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -54,7 +54,7 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         double rx = get(RADIUS_X);
@@ -63,7 +63,7 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(@Nonnull Transform transform) {
         Bounds r = getBoundsInLocal();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
@@ -80,7 +80,7 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
         set(RADIUS_Y, ry);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Arc();
@@ -105,7 +105,7 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
         n.applyCss();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

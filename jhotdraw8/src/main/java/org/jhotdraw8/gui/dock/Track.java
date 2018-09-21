@@ -6,7 +6,7 @@ package org.jhotdraw8.gui.dock;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * A Track provides horizontal or vertical space for {@link Dock}s and other
@@ -36,7 +36,7 @@ public interface Track {
      *
      * @return this
      */
-        @NonNull
+        @Nonnull
         default Node getNode() {
         return (Node) this;
     }

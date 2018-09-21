@@ -10,8 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
@@ -72,7 +72,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
         return node;
     }
 
-    protected void initNode(@NonNull Polygon r) {
+    protected void initNode(@Nonnull Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
@@ -84,7 +84,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Bounds b = getBounds(view);
         if (b == null) {
             return;

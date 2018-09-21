@@ -9,8 +9,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
@@ -28,17 +28,17 @@ import org.jhotdraw8.io.UnitConverter;
  */
 public class CssPoint2DListConverter implements Converter<ImmutableList<Point2D>> {
 
-    @NonNull
+    @Nonnull
     private CssDoubleConverter doubleConverter = new CssDoubleConverter();
-    @NonNull
+    @Nonnull
     private UnitConverter unitConverter = DefaultUnitConverter.getInstance();
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, ImmutableList<Point2D> value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, ImmutableList<Point2D> value) throws IOException {
         toStringFromCollection(out, idFactory, value);
     }
 
-    public void toStringFromCollection(@NonNull Appendable out, IdFactory idFactory, @Nullable Collection<Point2D> value) throws IOException {
+    public void toStringFromCollection(@Nonnull Appendable out, IdFactory idFactory, @Nullable Collection<Point2D> value) throws IOException {
         if (value == null || value.isEmpty()) {
             out.append("none");
             return;
@@ -132,7 +132,7 @@ public class CssPoint2DListConverter implements Converter<ImmutableList<Point2D>
         return ImmutableList.emptyList();
     }
 
-    @NonNull
+    @Nonnull
     public String toStringFromCollection(Collection<Point2D> value) {
         StringBuilder out = new StringBuilder();
         try {
@@ -143,7 +143,7 @@ public class CssPoint2DListConverter implements Converter<ImmutableList<Point2D>
         return out.toString();
     }
 
-    public void toStringFromCollection(@NonNull Appendable out, Collection<Point2D> value) throws IOException {
+    public void toStringFromCollection(@Nonnull Appendable out, Collection<Point2D> value) throws IOException {
         toStringFromCollection(out, null, value);
     }
 }

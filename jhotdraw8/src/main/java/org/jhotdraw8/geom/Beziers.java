@@ -4,7 +4,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
 import org.jhotdraw8.util.function.Double6Consumer;
@@ -195,8 +195,8 @@ public class Beziers {
      */
     public static void splitCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                        double t,
-                                       @org.checkerframework.checker.nullness.qual.Nullable Double6Consumer leftCurveTo,
-                                       @org.checkerframework.checker.nullness.qual.Nullable Double6Consumer rightCurveTo) {
+                                       @javax.annotation.Nullable Double6Consumer leftCurveTo,
+                                       @javax.annotation.Nullable Double6Consumer rightCurveTo) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
         x01 = (x1 - x0) * t + x0;
         y01 = (y1 - y0) * t + y0;
@@ -297,8 +297,8 @@ public class Beziers {
      * @param rightCurveTo if not null, accepts the curve from t to x3,y3
      */
     public static void splitQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t,
-                                      @org.checkerframework.checker.nullness.qual.Nullable Double4Consumer leftCurveTo,
-                                      @org.checkerframework.checker.nullness.qual.Nullable Double4Consumer rightCurveTo) {
+                                      @javax.annotation.Nullable Double4Consumer leftCurveTo,
+                                      @javax.annotation.Nullable Double4Consumer rightCurveTo) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = (x1 - x0) * t + x0;
         y01 = (y1 - y0) * t + y0;

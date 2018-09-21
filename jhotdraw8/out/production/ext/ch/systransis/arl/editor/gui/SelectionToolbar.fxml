@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import ch.systransis.arl.editor.gui.FilterComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<!--
+  ~ systransis AdmiRail Editor
+  ~ Originator: systransis Ltd.
+  ~
+  ~ Copyright (c) by systransis Ltd.
+  ~ All rights reserved.
+  -->
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<FilterComboBox fx:id="vertexCombo" onAction="#vertexChange" prefWidth="150.0" promptText="Vertex">
+			<HBox.margin>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+			</HBox.margin>
+		</FilterComboBox>
+		<FilterComboBox fx:id="mileageCombo" onAction="#mileageChange" prefWidth="150.0" promptText="Mileage">
+			<HBox.margin>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+			</HBox.margin>
+		</FilterComboBox>
+		<FilterComboBox fx:id="pioCombo" onAction="#pioChange" prefWidth="150.0" promptText="PIO">
+			<HBox.margin>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+			</HBox.margin>
+		</FilterComboBox>
+	</children>
+</HBox>

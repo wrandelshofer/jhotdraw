@@ -19,8 +19,8 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * {@code PreferencesUtil} provides utility methods for {@code
@@ -33,7 +33,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class PreferencesUtil
         extends Preferences {
 
-    @NonNull
+    @Nonnull
     private HashMap<String, Object> map = new HashMap<String, Object>();
     private boolean isUserNode;
     private static HashMap<Package, Preferences> systemNodes;
@@ -48,7 +48,7 @@ public class PreferencesUtil
         map.put(key, value);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String get(String key, String def) {
         return (String) (map.containsKey(key) ? map.get(key) : def);
@@ -119,19 +119,19 @@ public class PreferencesUtil
         map.put(key, value);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public byte[] getByteArray(String key, byte[] def) {
         return (byte[]) (map.containsKey(key) ? map.get(key) : def);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String[] keys() throws BackingStoreException {
         return map.keySet().toArray(new String[map.keySet().size()]);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String[] childrenNames() throws BackingStoreException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -159,13 +159,13 @@ public class PreferencesUtil
         // empty
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String name() {
         return "Dummy";
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String absolutePath() {
         return "Dummy";
@@ -176,7 +176,7 @@ public class PreferencesUtil
         return isUserNode;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "Dummy";
@@ -291,7 +291,7 @@ public class PreferencesUtil
      * @param name Base name of the preference.
      * @param stage The window for which to track preferences.
      */
-    public static void installStagePrefsHandler(@NonNull final Preferences prefs, final String name, @NonNull Stage stage) {
+    public static void installStagePrefsHandler(@Nonnull final Preferences prefs, final String name, @Nonnull Stage stage) {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
     }
 
@@ -342,7 +342,7 @@ public class PreferencesUtil
      * @param splitPane splitPane to which the node is added or removed
      * @param side on which side of the split pane the element should be added
      */
-    public static void installVisibilityPrefsHandlers(Preferences prefs, @NonNull Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
+    public static void installVisibilityPrefsHandlers(Preferences prefs, @Nonnull Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
         ChangeListener<? super Number> positionListener = (o, oldValue, newValue) -> {
             prefs.putDouble(visibilityProperty.getName() + ".dividerPosition", newValue.doubleValue());
         };

@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.BooleanKey;
@@ -15,7 +15,6 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.collection.StringKey;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.event.Listener;
 
 /**

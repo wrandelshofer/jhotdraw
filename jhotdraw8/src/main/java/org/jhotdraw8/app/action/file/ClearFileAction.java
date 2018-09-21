@@ -5,7 +5,7 @@ package org.jhotdraw8.app.action.file;
 
 import java.util.concurrent.CompletionStage;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.util.Resources;
@@ -36,7 +36,7 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
     }
 
     @Override
-    public CompletionStage<Void> doIt(@NonNull final DocumentOrientedViewModel view) {
+    public CompletionStage<Void> doIt(@Nonnull final DocumentOrientedViewModel view) {
         return view.clear();
     }
 }

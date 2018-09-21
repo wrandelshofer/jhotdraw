@@ -12,8 +12,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
@@ -38,7 +38,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         super(startX, startY, endX, endY);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
@@ -117,8 +117,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     }
 
     protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
-                                    @NonNull Path markerNode,
-                                    @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
+                                    @Nonnull Path markerNode,
+                                    @Nonnull Point2D start, @Nonnull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
             double angle = Math.atan2(start.getY() - end.getY(), start.getX() - end.getX());

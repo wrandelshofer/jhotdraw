@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 
@@ -90,12 +90,12 @@ public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements Figur
         this.dirtyMask = dirtyMask;
 this.cssName=ReadOnlyStyleableMapAccessor.toCssName(name);
     }
-@NonNull
+@Nonnull
 private final String cssName;
     public DirtyMask getDirtyMask() {
         return dirtyMask;
     }
-@NonNull
+@Nonnull
 public String getCssName() {
     return cssName;
 }

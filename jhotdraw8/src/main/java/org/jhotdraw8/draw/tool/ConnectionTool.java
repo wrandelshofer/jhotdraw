@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.tool;
 import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.List;
@@ -81,7 +81,7 @@ public class ConnectionTool extends AbstractTool {
      * @return a suitable layer for the figure
      */
     @Nullable
-    protected Layer getOrCreateLayer(@NonNull DrawingView dv, Figure newFigure) {
+    protected Layer getOrCreateLayer(@Nonnull DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Layer activeLayer = dv.getActiveLayer();
         if (activeLayer != null && activeLayer.isEditable() && activeLayer.isAllowsChildren()) {
@@ -108,7 +108,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         if (figure != null) {
             Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
             Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
@@ -152,7 +152,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         requestFocus();
         figure = figureFactory.get();
         if (handleType != null) {
@@ -198,7 +198,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void handleMouseReleased(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         if (figure != null) {
             handleMouseDragged(event, view);
             view.getSelectedFigures().clear();

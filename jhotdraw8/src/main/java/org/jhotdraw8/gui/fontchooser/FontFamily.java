@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * FontFamily.
@@ -20,7 +20,7 @@ public class FontFamily {
 
     private final ObservableList<FontTypeface> typefaces=FXCollections.observableArrayList();
 
-    @NonNull
+    @Nonnull
     public ObservableList<FontTypeface> getTypefaces() {
         return typefaces;
     }
@@ -33,7 +33,7 @@ public class FontFamily {
         name.set(value);
     }
 
-    @NonNull
+    @Nonnull
     public StringProperty nameProperty() {
         return name;
     }

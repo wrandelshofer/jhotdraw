@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -67,7 +67,7 @@ public class GroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void group(@NonNull DrawingView view, Collection<Figure> figures, @NonNull Supplier<Figure> groupFactory) {
+    public static void group(@Nonnull DrawingView view, Collection<Figure> figures, @Nonnull Supplier<Figure> groupFactory) {
         // We don't addChild an empty group
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be grouped");

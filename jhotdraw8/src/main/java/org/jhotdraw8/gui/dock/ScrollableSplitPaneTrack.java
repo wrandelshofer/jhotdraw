@@ -3,9 +3,8 @@
  */
 package org.jhotdraw8.gui.dock;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jhotdraw8.gui.dock.Track;
-import javafx.application.Platform;
+import javax.annotation.Nonnull;
+
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -14,8 +13,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Border;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import org.jhotdraw8.gui.CustomSkin;
 
 /**
@@ -27,7 +24,7 @@ import org.jhotdraw8.gui.CustomSkin;
 public class ScrollableSplitPaneTrack extends Control implements Track {
 
     private final SplitPane splitPane = new SplitPane();
-    @NonNull
+    @Nonnull
     private ScrollPane scrollPane = new ScrollPane(splitPane);
 
     public ScrollableSplitPaneTrack() {
@@ -86,7 +83,7 @@ public class ScrollableSplitPaneTrack extends Control implements Track {
         return splitPane.getItems();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

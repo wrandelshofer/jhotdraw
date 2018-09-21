@@ -3,16 +3,14 @@
  */
 package org.jhotdraw8.styleable;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.draw.key.*;
+import javax.annotation.Nullable;
+
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssEnumConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * EnumStyleableFigureKey.

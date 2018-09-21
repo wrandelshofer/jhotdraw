@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.tool;
 import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.ArrayList;
@@ -19,10 +19,8 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
-import org.jhotdraw8.util.ReversedList;
 
 /**
  * CreationTool for polyline figures.
@@ -62,7 +60,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         if (event.getClickCount() != 1) {
             return;
         }
@@ -94,14 +92,14 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void handleMouseMoved(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (createdFigure != null) {
             handleMouseDragged(event, dv);
         }
     }
 
     @Override
-    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (createdFigure != null) {
             double x2 = event.getX();
             double y2 = event.getY();
@@ -114,7 +112,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (event.getClickCount() > 1) {
             if (createdFigure != null) {
                 for (int i = points.size() - 1; i > 0; i--) {

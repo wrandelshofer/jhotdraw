@@ -8,8 +8,8 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ViewController;
 
@@ -47,7 +47,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
      *
      * @param app the application
      */
-    public AbstractFocusOwnerAction(@NonNull Application app) {
+    public AbstractFocusOwnerAction(@Nonnull Application app) {
         this(app, null);
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
      * @param app the application
      * @param target the target node
      */
-    public AbstractFocusOwnerAction(@NonNull Application app, Node target) {
+    public AbstractFocusOwnerAction(@Nonnull Application app, Node target) {
         super(app);
         this.target = target;
 

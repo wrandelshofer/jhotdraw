@@ -25,8 +25,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -63,7 +63,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         elements.add(new ClosePath());
     }
     private Set<Figure> groupReshapeableFigures;
-    @NonNull
+    @Nonnull
     private final Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
@@ -118,14 +118,14 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -159,7 +159,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         // determine which figures can be reshaped together as a group
@@ -184,7 +184,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
@@ -221,7 +221,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
      * @param newPoint newPoint in world coordinates
      * @param model the drawing model
      */
-    public static void translateFigure(Figure f, @NonNull Point2D oldPoint, @NonNull Point2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(Figure f, @Nonnull Point2D oldPoint, @Nonnull Point2D newPoint, @Nullable DrawingModel model) {
         Point2D npl = f.worldToParent(newPoint);
         Point2D opl = f.worldToParent(oldPoint);
         Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());

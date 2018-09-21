@@ -8,7 +8,7 @@ import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
@@ -39,20 +39,20 @@ public class SimpleLineConnectionFigure extends AbstractLineConnectionFigure
         super(startX, startY, endX, endY);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Line();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
 
         Line lineNode = (Line) node;
         Point2D start = get(START);

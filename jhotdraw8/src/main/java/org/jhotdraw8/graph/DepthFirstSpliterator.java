@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -24,7 +24,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
     @Nullable
     private final Function<V, Iterable<V>> nextNodesFunction;
-    @NonNull
+    @Nonnull
     private final Deque<V> stack;
     @Nullable
     private final Predicate<V> visited;
@@ -68,7 +68,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
+    public boolean tryAdvance(@Nonnull Consumer<? super V> action) {
         V current = stack.pollFirst();
         if (current == null) {
             return false;

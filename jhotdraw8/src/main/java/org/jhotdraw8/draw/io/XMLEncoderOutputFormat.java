@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 
@@ -25,7 +25,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     /**
      * Holds the current options.
      */
-    @NonNull
+    @Nonnull
     private Map<? super Key<?>, Object> options = Collections.emptyMap();
 
     @Override
@@ -44,7 +44,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     }
 
     @Override
-    public void write(@NonNull OutputStream out, Drawing drawing) throws IOException {
+    public void write(@Nonnull OutputStream out, Drawing drawing) throws IOException {
         try (XMLEncoder o = new XMLEncoder(out)) {
            /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
             o.setPersistenceDelegate(Figure.class, delegate);

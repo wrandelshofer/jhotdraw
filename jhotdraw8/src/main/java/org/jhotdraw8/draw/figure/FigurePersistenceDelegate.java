@@ -6,14 +6,12 @@ package org.jhotdraw8.draw.figure;
 
 import java.beans.DefaultPersistenceDelegate;
 import java.beans.Encoder;
-import java.beans.Expression;
 import java.beans.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -25,7 +23,7 @@ import org.jhotdraw8.collection.Key;
 public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
 
-    protected void initialixze(Class<?> type, Object oldInstance, Object newInstance, @NonNull Encoder out) {
+    protected void initialixze(Class<?> type, Object oldInstance, Object newInstance, @Nonnull Encoder out) {
         if (true) return;
         Figure f =(Figure)oldInstance;
       HashMap<String,Object> result=new HashMap<>();

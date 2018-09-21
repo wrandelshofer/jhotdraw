@@ -3,10 +3,9 @@
  */
 package org.jhotdraw8.collection;
 
-import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.ObservableMap;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * KeyMapEntryProperty.
@@ -18,10 +17,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @version $Id$
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V>{
-    @NonNull
+    @Nonnull
     private final MapAccessor<V> accessor;
 
-    public KeyMapEntryProperty(@NonNull ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
+    public KeyMapEntryProperty(@Nonnull ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
        super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getValueType());
         this.accessor = key;
     }

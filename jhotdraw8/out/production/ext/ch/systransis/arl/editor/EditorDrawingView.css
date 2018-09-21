@@ -1,0 +1,61 @@
+/*
+ * systransis AdmiRail Editor
+ * Originator: systransis Ltd.
+ *
+ * Copyright (c) by systransis Ltd.
+ * All rights reserved.
+ */
+
+/**
+ * This CSS is used by {@code EditorView} to style handles and tools
+ * shown in {@code EditorDrawingView}.
+ */
+
+/* Styles the rubberbands drawn by tools. See {@code Tool}. */
+.tool-rubberband {
+    -fx-stroke: black;
+}
+
+/* Styles the outline drawn by handles. See {@code Handle}. */
+.handle-select-outline,
+.handle-move-outline,
+.handle-resize-outline,
+.handle-transform-outline {
+    -fx-stroke: blue;
+}
+
+/* Styles the wireframe drawn by handles. See {@code Handle}. */
+.handle-wireframe {
+    -fx-stroke: blue;
+}
+
+/* Styles move and point handles. See {@code Handle}. */
+.handle-move,
+.handle-point {
+    -fx-stroke: blue;
+    -fx-fill: white;
+}
+
+/* Styles disconnected connection point handles. See {@code Handle}. */
+.handle-connection-point-disconnected {
+    -fx-stroke: blue;
+    -fx-fill: white;
+}
+
+/* Styles connected connection point handles. See {@code Handle}. */
+.handle-connection-point-connected {
+    -fx-stroke: blue;
+    -fx-fill: blue;
+}
+
+/* Style for inspector handles. */
+.inspector-handle {
+    -fx-effect: dropshadow(gaussian, deepskyblue, 5, 0.85, 0, 0);
+    -fx-stroke: deepskyblue;
+}
+
+
+.constrainer-grid {
+    -fx-stroke: yellowgreen;
+    -fx-opacity: 0.5;
+}

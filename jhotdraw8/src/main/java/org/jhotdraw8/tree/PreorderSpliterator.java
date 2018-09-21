@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.tree;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -30,7 +30,7 @@ public class PreorderSpliterator<T> extends AbstractSpliterator<T> {
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super T> consumer) {
+    public boolean tryAdvance(@Nonnull Consumer<? super T> consumer) {
         Iterator<T> iter = stack.peek();
         if (iter == null) {
             return false;

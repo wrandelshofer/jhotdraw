@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+<!-- @(#)STI-AST_Topology.xsd
+Copyright (c) systransis Ltd.
+All rights reserved.
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    <!-- attribute type declarations -->
+    <xs:simpleType name="DescTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Mileage"/>
+            <xs:enumeration value="Location"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="MileageOrientationEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Downwards"/>
+            <xs:enumeration value="Upwards"/>
+            <xs:enumeration value="D"/>
+            <xs:enumeration value="U"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOPackageNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ch.systransis.arl.pi"/>
+            <xs:enumeration value="ch.systransis.ast.pi"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOClassNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Block"/>
+            <xs:enumeration value="ch.systransis.ast.pi.Block"/>
+            <xs:enumeration value="Contact"/>
+            <xs:enumeration value="ch.systransis.ast.pi.Contact"/>
+            <xs:enumeration value="ASTRailRoadSwitch"/>
+            <xs:enumeration value="ch.systransis.ast.pi.ASTRailRoadSwitch"/>
+            <xs:enumeration value="ManagedRegion"/>
+            <xs:enumeration value="ch.systransis.ast.pi.ManagedRegion"/>
+            <xs:enumeration value="ASTARCRoute"/>
+            <xs:enumeration value="ch.systransis.ast.pi.ASTARCRoute"/>
+            <xs:enumeration value="ASTRoute"/>
+            <xs:enumeration value="ch.systransis.ast.pi.ASTRoute"/>
+            <xs:enumeration value="Section"/>
+            <xs:enumeration value="ch.systransis.ast.pi.Section"/>
+            <xs:enumeration value="StoppingPoint"/>
+            <xs:enumeration value="ch.systransis.ast.pi.StoppingPoint"/>
+            <xs:enumeration value="ASTZNField"/>
+            <xs:enumeration value="ch.systransis.ast.pi.ASTZNField"/>
+            <xs:enumeration value="NamedRegion"/>
+            <xs:enumeration value="ch.systransis.arl.pi.NamedRegion"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOAttrNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="allowedTrainClasses"/>
+            <xs:enumeration value="createHeartCodePoint"/>
+            <xs:enumeration value="directed"/>
+            <xs:enumeration value="filteredZNTypesForTEL"/>
+            <xs:enumeration value="hasInterdiction"/>
+            <xs:enumeration value="iseDeletion"/>
+            <xs:enumeration value="ignoredInGT"/>
+            <xs:enumeration value="MainSignal"/>
+            <xs:enumeration value="mappedSection"/>
+            <xs:enumeration value="noFlagman"/>
+            <xs:enumeration value="noReservation"/>
+            <xs:enumeration value="stationId"/>
+            <xs:enumeration value="stoppingAllowed"/>
+            <xs:enumeration value="trainDirection"/>
+            <xs:enumeration value="triggerStoppingPoints"/>
+            <xs:enumeration value="virtual"/>
+            <xs:enumeration value="znHandOver"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PathAttrNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Orientation"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SpeedLimitAreaClassEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ch.systransis.ast.pi.ASTSpeedLimitArea"/>
+            <xs:enumeration value="ASTSpeedLimitArea"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TrainClassEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PASSENGER_TRAIN"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- root element -->
+    <xs:element name="ProcessImageConfig">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="EvacuationPaths"/>
+                <xs:element ref="Mileages"/>
+                <xs:element ref="PIOs"/>
+                <xs:element ref="StaticSpeedProfile"/>
+                <xs:element ref="Topology"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="version" use="required"/>
+        </xs:complexType>
+
+        <!-- uniqueness requirements -->
+        <xs:unique name="unique-EvacuationPath-id">
+            <xs:selector xpath=".//EvacuationPath"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+        <xs:unique name="unique-Mileage-name">
+            <xs:selector xpath=".//Mileage"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:unique name="unique-State-id">
+            <xs:selector xpath=".//State"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+        <xs:unique name="unique-SpeedLimitArea-name">
+            <xs:selector xpath=".//SpeedLimitArea"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:unique name="unique-PIO-classNameAndId">
+            <xs:selector xpath=".//PIO"/>
+            <xs:field xpath="@className"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <!-- Children of root -->
+    <xs:element name="EvacuationPaths">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="EvacuationPath"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Mileages">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="Mileage"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOs">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="PIO"/>
+            </xs:choice>
+            <xs:attribute type="PIOPackageNameEnum" name="packageName" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="StaticSpeedProfile">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="SpeedLimitArea"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Topology">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="Twins"/>
+                <xs:element ref="Segment"/>
+                <xs:element ref="Border"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Twins, Segment and V(ertex) -->
+    <xs:element name="Twins">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="V"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Segment">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="V"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="V">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="Alias"/>
+                <xs:element ref="PIOAttr"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Border">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="V"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- EvacuationPath and its child elements -->
+    <xs:element name="EvacuationPath">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="id" use="required"/>
+            <xs:attribute type="xs:string" name="via" use="required"/>
+            <xs:attribute type="xs:string" name="disKriDPoints" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!-- Mileage and its child elements -->
+    <xs:element name="Mileage">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="Anchor"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+            <xs:attribute type="xs:integer" name="max" use="optional"/>
+            <xs:attribute type="xs:integer" name="min" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Anchor">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="mileageName" use="optional"/>
+            <xs:attribute type="xs:integer" name="pos" use="required"/>
+            <xs:attribute type="xs:string" name="vertexName" use="required"/>
+            <xs:attribute type="MileageOrientationEnum" name="orientation" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- SpeedLimitArea and its child elements -->
+    <xs:element name="SpeedLimitArea">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="PIOAttr"/>
+                <xs:element ref="PIOPath"/>
+                <xs:element ref="TrainCategory"/>
+                <xs:element ref="AxleLoad"/>
+            </xs:choice>
+            <xs:attribute type="SpeedLimitAreaClassEnum" name="className" use="required"/>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+            <xs:attribute type="xs:integer" name="speed" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="TrainCategory">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="kind" use="required"/>
+            <xs:attribute type="xs:integer" name="speed" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AxleLoad">
+        <xs:complexType>
+            <xs:attribute type="xs:integer" name="weight" use="required"/>
+            <xs:attribute type="xs:integer" name="speed" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- PIO and its child elements -->
+    <xs:element name="PIO">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="PIOLocation"/>
+                <xs:element ref="Alias"/>
+                <xs:element ref="PIOAttr"/>
+                <xs:element ref="PIOPath"/>
+                <xs:element ref="NoPath"/>
+                <xs:element ref="TriggerLocation"/>
+                <xs:element ref="SectionStateMapping"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="id" use="required"/>
+            <xs:attribute type="PIOClassNameEnum" name="className" use="required"/>
+        </xs:complexType>
+        <!-- uniqueness requirements -->
+        <xs:unique name="unique-PIOAttr-name">
+            <xs:selector xpath="PIOAttr"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+    <xs:element name="PIOLocation">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+                <xs:element ref="Waypoint"/>
+            </xs:choice>
+            <xs:attribute type="DescTypeEnum" name="descType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Alias">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="otherName" use="required"/>
+            <xs:attribute type="xs:string" name="nameSpace" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOAttr">
+        <xs:complexType>
+            <xs:attribute type="PIOAttrNameEnum" name="name" use="required"/>
+            <xs:attribute type="xs:string" name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOPath">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+                <xs:element ref="Waypoint"/>
+                <xs:element ref="PathAttr"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="descType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PathAttr">
+        <xs:complexType>
+            <xs:attribute type="PathAttrNameEnum" name="name" use="required"/>
+            <xs:attribute type="xs:string" name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="NoPath">
+        <xs:complexType>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Waypoint">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="desc" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- TriggerLocation and child elements -->
+    <xs:element name="TriggerLocation">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="ApplicableForDefault"/>
+                <xs:element ref="ApplicableFor"/>
+                <xs:element ref="PIOLocation"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ApplicableFor">
+        <xs:complexType>
+            <xs:attribute type="xs:boolean" name="isStopping" use="required"/>
+            <xs:attribute type="TrainClassEnum" name="trainClass" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ApplicableForDefault">
+        <xs:complexType>
+            <xs:attribute type="xs:boolean" name="isStopping" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="SectionStateMapping">
+    </xs:element>
+</xs:schema>

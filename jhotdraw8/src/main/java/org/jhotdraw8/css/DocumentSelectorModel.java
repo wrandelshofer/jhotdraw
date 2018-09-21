@@ -10,8 +10,8 @@ import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jhotdraw8.draw.figure.Figure;
+import javax.annotation.Nonnull;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -28,13 +28,13 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
 
     private final MapProperty<String, Set<Element>> additionalPseudoClassStates = new SimpleMapProperty<>();
 
-    @NonNull
+    @Nonnull
     public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
         return additionalPseudoClassStates;
     }
 
     @Override
-    public String getAttribute(@NonNull Element elem, StyleOrigin origin, String name) {
+    public String getAttribute(@Nonnull Element elem, StyleOrigin origin, String name) {
         if (origin == StyleOrigin.USER) {
             return getAttribute(elem, name);
         } else {
@@ -43,29 +43,29 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasId(@NonNull Element elem, String id) {
+    public boolean hasId(@Nonnull Element elem, String id) {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
     }
 
     @Override
-    public String getId(@NonNull Element elem) {
+    public String getId(@Nonnull Element elem) {
         return elem.getAttribute("id");
     }
 
     @Override
-    public boolean hasType(@NonNull Element elem, String type) {
+    public boolean hasType(@Nonnull Element elem, String type) {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
     }
 
     @Override
-    public String getType(@NonNull Element elem) {
+    public String getType(@Nonnull Element elem) {
         return elem.getNodeName();
     }
 
     @Override
-    public boolean hasStyleClass(@NonNull Element elem, String clazz) {
+    public boolean hasStyleClass(@Nonnull Element elem, String clazz) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return false;
@@ -79,9 +79,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return false;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Set<String> getStyleClasses(@NonNull Element elem) {
+    public Set<String> getStyleClasses(@Nonnull Element elem) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return Collections.emptySet();
@@ -124,7 +124,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
      * @return true if the element has the pseudo class
      */
     @Override
-    public boolean hasPseudoClass(@NonNull Element element, @NonNull String pseudoClass) {
+    public boolean hasPseudoClass(@Nonnull Element element, @Nonnull String pseudoClass) {
         switch (pseudoClass) {
             case "root":
                 return element.getOwnerDocument() != null
@@ -196,9 +196,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return false;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Element getParent(@NonNull Element elem) {
+    public Element getParent(@Nonnull Element elem) {
         Node n = elem.getParentNode();
         while (n != null && !(n instanceof Element)) {
             n = n.getParentNode();
@@ -206,9 +206,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return (Element) n;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Element getPreviousSibling(@NonNull Element element) {
+    public Element getPreviousSibling(@Nonnull Element element) {
         Node n = element.getPreviousSibling();
         while (n != null && !(n instanceof Element)) {
             n = n.getPreviousSibling();
@@ -217,42 +217,42 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasAttribute(@NonNull Element element, String attributeName) {
+    public boolean hasAttribute(@Nonnull Element element, String attributeName) {
         // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 
     @Override
-    public boolean attributeValueEquals(@NonNull Element element, String attributeName, String attributeValue) {
+    public boolean attributeValueEquals(@Nonnull Element element, String attributeName, String attributeValue) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && actualValue.equals(attributeValue);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@NonNull Element element, String attributeName, @NonNull String substring) {
+    public boolean attributeValueStartsWith(@Nonnull Element element, String attributeName, @Nonnull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
-    public boolean attributeValueEndsWith(@NonNull Element element, String attributeName, @NonNull String substring) {
+    public boolean attributeValueEndsWith(@Nonnull Element element, String attributeName, @Nonnull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.endsWith(substring));
     }
 
     @Override
-    public boolean attributeValueContains(@NonNull Element element, String attributeName, @NonNull String substring) {
+    public boolean attributeValueContains(@Nonnull Element element, String attributeName, @Nonnull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.contains(substring));
     }
 
     @Override
-    public String getAttribute(@NonNull Element element, String attributeName) {
+    public String getAttribute(@Nonnull Element element, String attributeName) {
         return element.getAttribute(attributeName);
     }
 
     @Override
-    public boolean attributeValueContainsWord(@NonNull Element element, String attributeName, @NonNull String word) {
+    public boolean attributeValueContainsWord(@Nonnull Element element, String attributeName, @Nonnull String word) {
         String value = element.getAttribute(attributeName);
         if (value != null) {
             String[] words = value.split("\\s+");
@@ -265,9 +265,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return false;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Set<String> getAttributeNames(@NonNull Element element) {
+    public Set<String> getAttributeNames(@Nonnull Element element) {
         // FIXME we need the XML schema to return the correct result
         Set<String> attr = new HashSet<String>();
         NamedNodeMap nnm = element.getAttributes();
@@ -278,20 +278,20 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return attr;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Set<String> getComposedAttributeNames(@NonNull Element element) {
+    public Set<String> getComposedAttributeNames(@Nonnull Element element) {
         return getAttributeNames(element);
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Set<String> getDecomposedAttributeNames(@NonNull Element element) {
+    public Set<String> getDecomposedAttributeNames(@Nonnull Element element) {
         return getAttributeNames(element);
     }
 
     @Override
-    public void setAttribute(@NonNull Element element, @NonNull StyleOrigin origin, String name, String value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, String name, String value) {
         switch (origin) {
             case USER:
                 element.setAttribute(name, value);

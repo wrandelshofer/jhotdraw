@@ -8,9 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import javafx.print.Paper;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -24,9 +23,9 @@ import org.jhotdraw8.io.IdFactory;
 public class CssPaperSizeConverter implements Converter<CssSize2D> {
 
     private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
-    @NonNull
+    @Nonnull
     private final static Map<String, CssSize2D> paperSizes;
-    @NonNull
+    @Nonnull
     private final static Map<CssSize2D, String> sizePapers;
 
     static {
@@ -96,7 +95,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull CssSize2D value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull CssSize2D value) throws IOException {
         String paper = sizePapers.get(value);
         if (paper != null) {
             out.append(paper);
@@ -121,7 +120,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
         return new CssSize2D(new CssSize(0, null), new CssSize(0, null));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         StringBuilder buf = new StringBuilder();

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.StreamPosTokenizer;
@@ -124,7 +124,7 @@ public class PatternConverter implements Converter<Object[]> {
      */
     private int numIndices;
 
-    public PatternConverter(@NonNull String pattern, ConverterFactory factory) {
+    public PatternConverter(@Nonnull String pattern, ConverterFactory factory) {
         try {
             ast = parseTextFormatPattern(pattern);
             numIndices = 1 + ast.getMaxArgumentIndex();
@@ -139,7 +139,7 @@ public class PatternConverter implements Converter<Object[]> {
         toString(out, idFactory, value);
     }
 
-    @NonNull
+    @Nonnull
     public String format(Object... value) {
         StringBuilder buf = new StringBuilder();
         try {
@@ -159,7 +159,7 @@ public class PatternConverter implements Converter<Object[]> {
         ast.toString(value, out, factory, indices);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Object[] fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         int[] indices = new int[numIndices];
@@ -190,10 +190,10 @@ public class PatternConverter implements Converter<Object[]> {
      */
     static class AST {
 
-        @NonNull
+        @Nonnull
         protected List<AST> children = new ArrayList<>();
 
-        @NonNull
+        @Nonnull
         @Override
         public String toString() {
             return "AST{" + children + '}';
@@ -255,7 +255,7 @@ public class PatternConverter implements Converter<Object[]> {
         protected String style;
         protected Converter<Object> converter;
 
-        @NonNull
+        @Nonnull
         @Override
         public String toString() {
             if (type.isEmpty() && style.isEmpty()) {
@@ -267,7 +267,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, Appendable out, @NonNull ConverterFactory factory, int[] indices) throws IOException {
+        public void toString(Object[] value, Appendable out, @Nonnull ConverterFactory factory, int[] indices) throws IOException {
             if (converter == null) {
                 @SuppressWarnings("unchecked")
                 Converter<Object> temp = (Converter<Object>) factory.apply(type, style);
@@ -277,7 +277,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void fromString(CharBuffer buf, @NonNull ConverterFactory factory, @NonNull ArrayList<Object> value, int[] indices) throws IOException, ParseException {
+        public void fromString(CharBuffer buf, @Nonnull ConverterFactory factory, @Nonnull ArrayList<Object> value, int[] indices) throws IOException, ParseException {
             if (converter == null) {
                 @SuppressWarnings("unchecked")
                 Converter<Object> temp = (Converter<Object>) factory.apply(type, style);
@@ -300,7 +300,7 @@ public class PatternConverter implements Converter<Object[]> {
 
         protected double[] limits;
 
-        @NonNull
+        @Nonnull
         @Override
         public String toString() {
             return "ArgChoice{" + index + " limits=" + limits
@@ -323,7 +323,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void fromString(@NonNull CharBuffer buf, ConverterFactory factory, @NonNull ArrayList<Object> value, int[] indices) throws IOException, ParseException {
+        public void fromString(@Nonnull CharBuffer buf, ConverterFactory factory, @Nonnull ArrayList<Object> value, int[] indices) throws IOException, ParseException {
             int pos = buf.position();
             int choice = -1;
             int greediest = -1;
@@ -361,7 +361,7 @@ public class PatternConverter implements Converter<Object[]> {
 
         protected int maxIndex;
 
-        @NonNull
+        @Nonnull
         @Override
         public String toString() {
             return "ArgList{" + index + " children=" + children
@@ -369,7 +369,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, @NonNull int[] indices) throws IOException {
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, @Nonnull int[] indices) throws IOException {
             int i = indices[index];
 
             AST separator = children.size() < 2 ? null : children.get(1);
@@ -399,7 +399,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void fromString(CharBuffer buf, ConverterFactory factory, @NonNull ArrayList<Object> value, @NonNull int[] indices) throws IOException, ParseException {
+        public void fromString(CharBuffer buf, ConverterFactory factory, @Nonnull ArrayList<Object> value, @Nonnull int[] indices) throws IOException, ParseException {
             int i = indices[index];
 
             AST separator = children.size() < 2 ? null : children.get(1);
@@ -451,7 +451,7 @@ public class PatternConverter implements Converter<Object[]> {
         @Nullable
         protected String chars;
 
-        @NonNull
+        @Nonnull
         @Override
         public String toString() {
             if (minRepeat == 1 && maxRepeat == 1) {
@@ -462,14 +462,14 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, @NonNull Appendable out, ConverterFactory factory, int[] indices) throws IOException {
+        public void toString(Object[] value, @Nonnull Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             for (int i = 0; i < minRepeat; i++) {
                 out.append(chars);
             }
         }
 
         @Override
-        public void fromString(@NonNull CharBuffer buf, ConverterFactory factory, ArrayList<Object> value, int[] indices) throws IOException, ParseException {
+        public void fromString(@Nonnull CharBuffer buf, ConverterFactory factory, ArrayList<Object> value, int[] indices) throws IOException, ParseException {
             for (int i = 0; i < maxRepeat; i++) {
                 int reset = buf.position();
                 for (int j = 0; j < chars.length(); j++) {
@@ -495,7 +495,7 @@ public class PatternConverter implements Converter<Object[]> {
         @Nullable
         protected String chars;
 
-        @NonNull
+        @Nonnull
         @Override
         public String toString() {
             return "RegCharclass[" + chars + "] repeat=" + minRepeat
@@ -503,14 +503,14 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, @NonNull Appendable out, ConverterFactory factory, int[] indices) throws IOException {
+        public void toString(Object[] value, @Nonnull Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             for (int i = 0; i < minRepeat; i++) {
                 out.append(chars.charAt(0));
             }
         }
 
         @Override
-        public void fromString(@NonNull CharBuffer buf, ConverterFactory factory, ArrayList<Object> value, int[] indices) throws IOException, ParseException {
+        public void fromString(@Nonnull CharBuffer buf, ConverterFactory factory, ArrayList<Object> value, int[] indices) throws IOException, ParseException {
             for (int i = 0; i < maxRepeat; i++) {
                 int reset = buf.position();
                 int ch = buf.remaining() > 0 ? buf.get() : -1;
@@ -537,7 +537,7 @@ public class PatternConverter implements Converter<Object[]> {
 
     static class RegexChoice extends Regex {
 
-        @NonNull
+        @Nonnull
         @Override
         public String toString() {
             return "RegChoice{children='" + children + " repeat=" + minRepeat
@@ -552,7 +552,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void fromString(@NonNull CharBuffer buf, ConverterFactory factory, ArrayList<Object> value, int[] indices) throws IOException, ParseException {
+        public void fromString(@Nonnull CharBuffer buf, ConverterFactory factory, ArrayList<Object> value, int[] indices) throws IOException, ParseException {
             for (int i = 0; i < maxRepeat; i++) {
                 int reset = buf.position();
                 for (int j = 0, n = children.size(); j < n; j++) {
@@ -579,13 +579,13 @@ public class PatternConverter implements Converter<Object[]> {
 
     }
 
-    @NonNull
-    public static AST parseTextFormatPattern(@NonNull String pattern) throws IOException {
+    @Nonnull
+    public static AST parseTextFormatPattern(@Nonnull String pattern) throws IOException {
         return parseTextFormatPattern(pattern, new AST(), 0);
     }
 
-    @NonNull
-    private static AST parseTextFormatPattern(@NonNull String pattern, @NonNull AST parent, int offset) throws IOException {
+    @Nonnull
+    private static AST parseTextFormatPattern(@Nonnull String pattern, @Nonnull AST parent, int offset) throws IOException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(pattern));
         tt.resetSyntax();
         tt.quoteChar('\'');
@@ -594,14 +594,14 @@ public class PatternConverter implements Converter<Object[]> {
         return parent;
     }
 
-    private static void parseTextFormatPattern(StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
+    private static void parseTextFormatPattern(StreamPosTokenizer tt, @Nonnull AST parent, int offset) throws IOException {
         while (tt.nextToken() != StreamPosTokenizer.TT_EOF) {
             tt.pushBack();
             parsePatternElement(tt, parent, offset);
         }
     }
 
-    private static void parsePatternElement(StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
+    private static void parsePatternElement(StreamPosTokenizer tt, @Nonnull AST parent, int offset) throws IOException {
         switch (tt.nextToken()) {
             case StreamPosTokenizer.TT_EOF:
                 return;
@@ -616,7 +616,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    private static void parseRegex(StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
+    private static void parseRegex(StreamPosTokenizer tt, @Nonnull AST parent, int offset) throws IOException {
         switch (tt.nextToken()) {
             case StreamPosTokenizer.TT_EOF:
                 throw new IOException("RegexExpression expected @"
@@ -645,7 +645,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    private static void parseRegexRepeat(StreamPosTokenizer tt, @NonNull Regex regex, int offset) throws IOException {
+    private static void parseRegexRepeat(StreamPosTokenizer tt, @Nonnull Regex regex, int offset) throws IOException {
         switch (tt.nextToken()) {
             case '+':
                 regex.minRepeat = 1;
@@ -663,7 +663,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    private static void parseRegexChars(StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
+    private static void parseRegexChars(StreamPosTokenizer tt, @Nonnull AST parent, int offset) throws IOException {
         RegexChars regex = new RegexChars();
         regex.chars = "";
         switch (tt.nextToken()) {
@@ -692,7 +692,7 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(regex);
     }
 
-    private static void parseRegexChoice(StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
+    private static void parseRegexChoice(StreamPosTokenizer tt, @Nonnull AST parent, int offset) throws IOException {
         RegexChoice regex = new RegexChoice();
         if (tt.nextToken() != '(') {
             throw new IOException("RegexChoice '(' expected @"
@@ -709,7 +709,7 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(regex);
     }
 
-    private static void parseRegexCharclass(StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
+    private static void parseRegexCharclass(StreamPosTokenizer tt, @Nonnull AST parent, int offset) throws IOException {
         RegexCharclass regex = new RegexCharclass();
         if (tt.nextToken() != '[') {
             throw new IOException("RegexCharclass '[' expected @"
@@ -739,7 +739,7 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(regex);
     }
 
-    private static void parseArgument(StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
+    private static void parseArgument(StreamPosTokenizer tt, @Nonnull AST parent, int offset) throws IOException {
         RegexChoice regex = new RegexChoice();
         if (tt.nextToken() != '{') {
             throw new IOException("Argument '{' expected @"
@@ -805,7 +805,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    private static void parseSimpleArgumentStyle(StreamPosTokenizer tt, @NonNull AST parent, int index, String type, int offset) throws IOException {
+    private static void parseSimpleArgumentStyle(StreamPosTokenizer tt, @Nonnull AST parent, int index, String type, int offset) throws IOException {
         // parse argument style
         StringBuilder style = new StringBuilder();
 
@@ -839,7 +839,7 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(argument);
     }
 
-    private static void parseChoiceArgumentStyle(StreamPosTokenizer tt, @NonNull AST parent, int index, int offset) throws IOException {
+    private static void parseChoiceArgumentStyle(StreamPosTokenizer tt, @Nonnull AST parent, int index, int offset) throws IOException {
         ChoiceArgument argument = new ChoiceArgument();
         argument.index = index;
         ArrayList<Double> limits = new ArrayList<>();
@@ -915,7 +915,7 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(argument);
     }
 
-    private static void parseListArgumentStyle(StreamPosTokenizer tt, @NonNull AST parent, int index, int offset) throws IOException {
+    private static void parseListArgumentStyle(StreamPosTokenizer tt, @Nonnull AST parent, int index, int offset) throws IOException {
         ListArgument argument = new ListArgument();
         argument.index = index;
         // parse argument style
@@ -961,7 +961,7 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(argument);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Object[] getDefaultValue() {
         return new Object[0];

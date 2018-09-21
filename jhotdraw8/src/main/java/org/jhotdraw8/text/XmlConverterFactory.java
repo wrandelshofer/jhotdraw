@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * XmlConverterFactory.
@@ -20,7 +20,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class XmlConverterFactory implements ConverterFactory {
 
-    @NonNull
+    @Nonnull
     @Override
     public Converter<?> apply(@Nullable String type, String style) {
         if (type == null) {

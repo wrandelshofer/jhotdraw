@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * CssFont same as {@code javafx.scene.text.Font} but allows to get all
@@ -29,7 +29,7 @@ public class CssFont {
     @Nullable
     private final FontPosture posture;
     private final double size;
-    @NonNull
+    @Nonnull
     private final Font font;
 
     public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, double size) {
@@ -61,7 +61,7 @@ public class CssFont {
         return size;
     }
 
-    @NonNull
+    @Nonnull
     public Font getFont() {
         return font;
     }

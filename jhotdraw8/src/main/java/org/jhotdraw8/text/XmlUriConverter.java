@@ -8,8 +8,8 @@ import java.net.URI;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -21,13 +21,13 @@ import org.jhotdraw8.io.IdFactory;
 public class XmlUriConverter implements Converter<URI> {
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull URI value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull URI value) throws IOException {
         out.append(value.toString());
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public URI fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public URI fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         URI value = URI.create(in.toString());
         in.position(in.limit());
         return value;

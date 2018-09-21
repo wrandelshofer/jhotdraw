@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -15,7 +15,7 @@ import org.jhotdraw8.css.SelectorModel;
  */
 public class SelectNothingSelector extends SimpleSelector {
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "SelectNothing";

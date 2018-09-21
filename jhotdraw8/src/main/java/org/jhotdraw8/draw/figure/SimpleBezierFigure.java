@@ -15,7 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -61,7 +61,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
@@ -82,19 +82,19 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext ctx) {
         return new Path();
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
         return new PathConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         // XXX should be cached
@@ -120,17 +120,17 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         return new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
-    @NonNull
+    @Nonnull
     public Point2D getPoint(int index, int coord) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @NonNull
+    @Nonnull
     public Point2D getPointOnPath(float f, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -151,7 +151,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Path pathNode = (Path) node;
 
         applyHideableFigureProperties(node);

@@ -5,8 +5,7 @@
 package org.jhotdraw8.graph;
 
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.graph.Pair;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**

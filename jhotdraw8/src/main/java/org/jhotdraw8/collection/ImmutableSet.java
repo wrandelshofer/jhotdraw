@@ -6,16 +6,13 @@ package org.jhotdraw8.collection;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import static org.jhotdraw8.collection.ImmutableList.emptyList;
+import javax.annotation.Nonnull;
 
 /**
  * ImmutableSet preserves insertion order of items.
@@ -41,7 +38,7 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
         }
     }
 
-    private ImmutableSet(@NonNull Object[] array) {
+    private ImmutableSet(@Nonnull Object[] array) {
         this(array, 0, array.length);
     }
 
@@ -163,30 +160,30 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
         }
     }
 
-    @NonNull
+    @Nonnull
     @SuppressWarnings("unchecked")
     public static <T> ImmutableSet<T> emptySet() {
         return (ImmutableSet<T>) EMPTY;
     }
 
-    @NonNull
+    @Nonnull
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <T> ImmutableSet<T> of(T... items) {
         return items.length == 0 ? emptySet() : new ImmutableSet<T>(items);
     }
 
-    @NonNull
+    @Nonnull
     public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
         return collection.isEmpty() ? emptySet() : new ImmutableSet<T>(collection);
     }
 
-    @NonNull
+    @Nonnull
     public static <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
         return length == 0 ? emptySet() : new ImmutableSet<>(a, offset, length);
     }
 
-    @NonNull
+    @Nonnull
     @SuppressWarnings({"unchecked","rawtypes"})
     public static <T> ImmutableSet<T> remove(Collection<T> collection, T item) {
         switch (collection.size()) {

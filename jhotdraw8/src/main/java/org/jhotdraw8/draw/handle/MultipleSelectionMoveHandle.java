@@ -16,8 +16,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
@@ -39,7 +39,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     @Nullable
     private Point2D locationInDrawing;
-    @NonNull
+    @Nonnull
     private final Region node;
     private Point2D oldPoint;
     @Nullable
@@ -80,7 +80,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         return Cursor.OPEN_HAND;
     }
 
-    private Point2D getLocation(@NonNull DrawingView dv) {
+    private Point2D getLocation(@Nonnull DrawingView dv) {
         return locationInDrawing == null ? null : dv.worldToView(locationInDrawing);
     }
 
@@ -89,14 +89,14 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -136,7 +136,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
     }
@@ -166,7 +166,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         updateLocation(view);
         Point2D p = getLocation(view);
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);

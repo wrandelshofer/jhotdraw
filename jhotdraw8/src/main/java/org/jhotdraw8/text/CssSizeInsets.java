@@ -5,8 +5,8 @@ package org.jhotdraw8.text;
 
 import java.util.Objects;
 import javafx.geometry.Insets;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
 
@@ -81,7 +81,7 @@ public class CssSizeInsets {
      * insets
      * @return the converted value
      */
-    @NonNull
+    @Nonnull
     public Insets getConvertedValue(double width, double height) {
         final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
         final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);
@@ -89,7 +89,7 @@ public class CssSizeInsets {
                 heightConverter.convert(bottom, null), widthConverter.convert(left, null));
     }
 
-    @NonNull
+    @Nonnull
     public Insets getDefaultConvertedValue() {
         return new Insets(top.getConvertedValue(), right.getConvertedValue(),
                 bottom.getConvertedValue(), left.getConvertedValue());

@@ -9,10 +9,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.net.UriUtil;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
@@ -44,7 +43,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
-    @NonNull
+    @Nonnull
     protected String createErrorMessage(@Nullable Throwable t) {
         StringBuilder buf = new StringBuilder();
         for (; t != null; t = t.getCause()) {
@@ -83,7 +82,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      */
     protected abstract void handleActionPerformed(ActionEvent event, Application app);
 
-    @NonNull
+    @Nonnull
     protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {
         TextArea textArea = new TextArea(message);
         textArea.setEditable(false);

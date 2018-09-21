@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
@@ -29,7 +29,7 @@ public class BezierNodeListStyleableFigureKey extends AbstractStyleableFigureKey
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, ImmutableList<BezierNode>> cssMetaData;
 
     /**
@@ -76,7 +76,7 @@ public class BezierNodeListStyleableFigureKey extends AbstractStyleableFigureKey
         cssMetaData = md;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, ImmutableList<BezierNode>> getCssMetaData() {
         return cssMetaData;

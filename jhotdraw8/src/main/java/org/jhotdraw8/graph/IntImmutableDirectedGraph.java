@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +19,13 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
     /**
      * Holds the arrow heads.
      */
-    @NonNull
+    @Nonnull
     protected final int[] arrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    @NonNull
+    @Nonnull
     protected final int[] arrowOffsets;
 
     /**

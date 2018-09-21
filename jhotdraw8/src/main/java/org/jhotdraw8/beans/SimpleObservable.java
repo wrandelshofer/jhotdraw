@@ -5,8 +5,8 @@ package org.jhotdraw8.beans;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+
+import javax.annotation.Nonnull;
 
 /**
  * SimpleObservable.
@@ -22,7 +22,7 @@ public class SimpleObservable implements ObservableMixin {
 
     private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
-    @NonNull
+    @Nonnull
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         return invalidationListeners;
     }

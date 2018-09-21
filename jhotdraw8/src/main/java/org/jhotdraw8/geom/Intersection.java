@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Describes the result of an intersection test.
@@ -41,18 +41,18 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public class Intersection {
 
-    @NonNull
+    @Nonnull
     private final List<Map.Entry<Double, Point2D>> intersections;
     private final Status status;
 
-    public Intersection(@NonNull List<Map.Entry<Double, Point2D>> intersections) {
+    public Intersection(@Nonnull List<Map.Entry<Double, Point2D>> intersections) {
         this(intersections.isEmpty() ? Status.NO_INTERSECTION : Status.INTERSECTION, intersections);
     }
     public Intersection(Status status) {
         this(status, Collections.emptyList());
     }
 
-    public Intersection(Status status, @NonNull List<Map.Entry<Double, Point2D>> intersections) {
+    public Intersection(Status status, @Nonnull List<Map.Entry<Double, Point2D>> intersections) {
         if (status == Status.INTERSECTION && intersections.isEmpty()
                 || status != Status.INTERSECTION && !intersections.isEmpty()) {
             throw new IllegalArgumentException("status=" + status + " intersections=" + intersections);
@@ -62,7 +62,7 @@ public class Intersection {
         this.status = status;
     }
 
-    @NonNull
+    @Nonnull
     public List<Map.Entry<Double, Point2D>> getIntersections() {
         return intersections;
     }
@@ -98,7 +98,7 @@ public class Intersection {
         return intersections.size();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();

@@ -9,8 +9,8 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -32,11 +32,11 @@ public class SymmetricSize2DStyleableMapAccessor extends AbstractStyleableFigure
     private final static long serialVersionUID = 1L;
     private Converter<CssSize2D> converter;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, CssSize2D> cssMetaData;
-    @NonNull
+    @Nonnull
     private final MapAccessor<CssSize> xKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<CssSize> yKey;
 
     /**
@@ -65,7 +65,7 @@ public class SymmetricSize2DStyleableMapAccessor extends AbstractStyleableFigure
         this.xKey = xKey;
         this.yKey = yKey;
     }
-    @NonNull
+    @Nonnull
     @Override
     public CssSize2D get(Map<? super Key<?>, Object> a) {
       return new CssSize2D(xKey.get(a), yKey.get(a));
@@ -90,16 +90,16 @@ public class SymmetricSize2DStyleableMapAccessor extends AbstractStyleableFigure
       return false;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public CssSize2D put(Map<? super Key<?>, Object> a, @NonNull CssSize2D value) {
+    public CssSize2D put(Map<? super Key<?>, Object> a, @Nonnull CssSize2D value) {
         CssSize2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
         return oldValue;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssSize2D remove(Map<? super Key<?>, Object> a) {
         CssSize2D oldValue = get(a);

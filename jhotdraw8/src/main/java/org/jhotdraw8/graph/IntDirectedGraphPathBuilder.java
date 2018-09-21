@@ -10,8 +10,8 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -36,8 +36,8 @@ public class IntDirectedGraphPathBuilder {
      * @throws org.jhotdraw8.graph.PathBuilderException if traversal is not
      * possible
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
-    public VertexPath<Integer> buildAnyVertexPath(@NonNull IntDirectedGraph graph,
+    @javax.annotation.Nullable
+    public VertexPath<Integer> buildAnyVertexPath(@Nonnull IntDirectedGraph graph,
                                                   int start, int goal) throws PathBuilderException {
         VertexPath<Integer> pathElements = IntDirectedGraphPathBuilder.this.findAnyVertexPath(graph, start, goal);
         if (pathElements == null) {
@@ -61,7 +61,7 @@ public class IntDirectedGraphPathBuilder {
      * possible
      */
     @Nullable
-    public VertexPath<Integer> findAnyVertexPath(@NonNull IntDirectedGraph graph,
+    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph graph,
                                                  int start, int goal) throws PathBuilderException {
         IntArrayList pathElements = new IntArrayList(graph.getVertexCount());
         pathElements.add(start);
@@ -92,7 +92,7 @@ public class IntDirectedGraphPathBuilder {
      * possible
      */
     @Nullable
-    public VertexPath<Integer> findAnyVertexPath(@NonNull IntDirectedGraph graph, @NonNull Collection<Integer> waypoints) throws PathBuilderException {
+    public VertexPath<Integer> findAnyVertexPath(@Nonnull IntDirectedGraph graph, @Nonnull Collection<Integer> waypoints) throws PathBuilderException {
         Iterator<Integer> i = waypoints.iterator();
         IntArrayList pathElements = new IntArrayList();
         if (!i.hasNext()) {
@@ -121,7 +121,7 @@ public class IntDirectedGraphPathBuilder {
      * elements. Does not add the root element.
      * @return true on success
      */
-    private static <A> boolean breadthFirstSearchInt(IntDirectedGraph graph, int start, int goal, @NonNull IntArrayList pathElements) {
+    private static <A> boolean breadthFirstSearchInt(IntDirectedGraph graph, int start, int goal, @Nonnull IntArrayList pathElements) {
         BitSet visited = new BitSet(graph.getVertexCount());
         QueueWithBackLinks queue = new QueueWithBackLinks(max(1, min(graph.getVertexCount(), graph.getArrowCount())));
         queue.add(start, SENTINEL);
@@ -178,7 +178,7 @@ public class IntDirectedGraphPathBuilder {
          */
         private int last = 0;
 
-        @NonNull
+        @Nonnull
         private final int[] queue;
 
         public QueueWithBackLinks(int capacity) {

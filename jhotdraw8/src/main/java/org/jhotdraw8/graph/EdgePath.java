@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,10 +23,10 @@ import java.util.Objects;
  */
 public class EdgePath<E> {
 
-    @NonNull
+    @Nonnull
     private final List<E> edges;
 
-    public EdgePath(@NonNull Collection<E> elements) {
+    public EdgePath(@Nonnull Collection<E> elements) {
         this.edges = Collections.unmodifiableList(new ArrayList<>(elements));
     }
 
@@ -60,12 +60,12 @@ public class EdgePath<E> {
         return new EdgePath<>(Arrays.asList(vertices));
     }
 
-    @NonNull
+    @Nonnull
     public List<E> getEdges() {
         return edges;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "EdgePath{" + edges + '}';

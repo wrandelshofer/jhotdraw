@@ -5,7 +5,7 @@ package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
@@ -73,7 +73,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSucceded(@NonNull DocumentOrientedViewModel v, @NonNull URI uri, DataFormat format) {
+    protected void handleSucceded(@Nonnull DocumentOrientedViewModel v, @Nonnull URI uri, DataFormat format) {
         v.setURI(uri);
        v.clearModified();
         v.setTitle(UriUtil.getName(uri));

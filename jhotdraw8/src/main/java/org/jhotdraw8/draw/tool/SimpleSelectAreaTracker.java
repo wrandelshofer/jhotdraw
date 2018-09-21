@@ -7,7 +7,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.util.Resources;
 import static java.lang.Math.*;
@@ -54,7 +54,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     /**
      * The rubberband.
      */
-    @NonNull
+    @Nonnull
     private Rectangle rubberband = new Rectangle();
 
     double x;
@@ -73,14 +73,14 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
         initNode(rubberband);
     }
 
-    protected void initNode(@NonNull Rectangle r) {
+    protected void initNode(@Nonnull Rectangle r) {
         r.setFill(null);
         r.setStroke(Color.BLACK);
         rubberband.getStyleClass().add(STYLECLASS_TOOL_RUBBERBAND);
     }
 
     @Override
-    public void trackMousePressed(@NonNull MouseEvent event, DrawingView dv) {
+    public void trackMousePressed(@Nonnull MouseEvent event, DrawingView dv) {
         Bounds b = getNode().getBoundsInParent();
         x = event.getX();
         y = event.getY();
@@ -92,7 +92,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     }
 
     @Override
-    public void trackMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void trackMouseReleased(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         rubberband.setVisible(false);
 
         double w = x - event.getX();
@@ -106,7 +106,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     }
 
     @Override
-    public void trackMouseDragged(@NonNull MouseEvent event, DrawingView dv) {
+    public void trackMouseDragged(@Nonnull MouseEvent event, DrawingView dv) {
         double w = x - event.getX();
         double h = y - event.getY();
         rubberband.setX(round(min(x, event.getX())) - 0.5);

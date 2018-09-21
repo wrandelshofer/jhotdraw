@@ -3,11 +3,10 @@
  */
 package org.jhotdraw8.collection;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * CompositeMapAccessor.
@@ -30,7 +29,7 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
         return true;
     }
 
-    @NonNull
+    @Nonnull
     public Collection<MapAccessor<?>> getSubAccessors();
 
 }

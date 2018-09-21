@@ -4,9 +4,8 @@
 
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
-import java.util.function.Function;
 import java.util.function.IntFunction;
 
 /**
@@ -21,7 +20,7 @@ public class IntDirectedGraphs {
      * @param graph the graph to be dumped
      * @return a String representation of the graph
      */
-    public static String dumpAsAdjacencyMap(@NonNull IntDirectedGraph graph) {
+    public static String dumpAsAdjacencyMap(@Nonnull IntDirectedGraph graph) {
         return dumpAsAdjacencyMap(graph, Integer::toString);
     }
 
@@ -32,7 +31,7 @@ public class IntDirectedGraphs {
      * @param toStringFunction a function which converts a vertex to a string
      * @return a String representation of the graph
      */
-    public static String dumpAsAdjacencyMap(IntDirectedGraph graph, @NonNull IntFunction<String> toStringFunction) {
+    public static String dumpAsAdjacencyMap(IntDirectedGraph graph, @Nonnull IntFunction<String> toStringFunction) {
         StringBuilder buf = new StringBuilder();
         for (int i = 0, nn = graph.getVertexCount(); i < nn; i++) {
             int v = i;
@@ -59,7 +58,7 @@ public class IntDirectedGraphs {
      * @param g the graph to be dumped
      * @return a String representation of the graph
      */
-    public static String dumpAsDot(@NonNull IntDirectedGraph g) {
+    public static String dumpAsDot(@Nonnull IntDirectedGraph g) {
         return dumpAsDot(g, Integer::toString);
     }
 
@@ -71,7 +70,7 @@ public class IntDirectedGraphs {
      * @param toStringFunction a function which converts a vertex to a string
      * @return a String representation of the graph
      */
-    public static String dumpAsDot(IntDirectedGraph g, @NonNull IntFunction<String> toStringFunction) {
+    public static String dumpAsDot(IntDirectedGraph g, @Nonnull IntFunction<String> toStringFunction) {
         StringBuilder b = new StringBuilder();
 
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {

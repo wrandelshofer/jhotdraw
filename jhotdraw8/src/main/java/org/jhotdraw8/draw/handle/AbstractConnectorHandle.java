@@ -7,30 +7,17 @@ import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Handle for the start or end point of a connection figure.
@@ -62,13 +49,13 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     protected final MapAccessor<Figure> targetKey;
     private boolean editable=true;
 
-    public AbstractConnectorHandle(@NonNull ConnectingFigure figure, MapAccessor<Point2D> pointKey,
+    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, MapAccessor<Point2D> pointKey,
                                    MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
                 connectorKey, targetKey);
     }
 
-    public AbstractConnectorHandle(@NonNull ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<Point2D> pointKey,
+    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<Point2D> pointKey,
                                    MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure);
         this.pointKey = pointKey;
@@ -102,14 +89,14 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
 
-    @NonNull
+    @Nonnull
     @Override
     public ConnectingFigure getOwner() {
         return (ConnectingFigure) super.getOwner();
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         if (!editable)return;
         isDragging = true;
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());

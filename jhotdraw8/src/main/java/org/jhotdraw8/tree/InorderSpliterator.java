@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.tree;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 import java.util.Spliterators.AbstractSpliterator;
@@ -18,7 +18,7 @@ import java.util.function.Function;
  * @version $$Id$$
  */
 public class InorderSpliterator<T> extends AbstractSpliterator<T> {
-    @NonNull
+    @Nonnull
     private final Function<T, Iterable<T>> getChildrenFunction;
     @Nullable
     private T root;
@@ -38,7 +38,7 @@ public class InorderSpliterator<T> extends AbstractSpliterator<T> {
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super T> action) {
+    public boolean tryAdvance(@Nonnull Consumer<? super T> action) {
         if (root == null) {
             return false;
         }

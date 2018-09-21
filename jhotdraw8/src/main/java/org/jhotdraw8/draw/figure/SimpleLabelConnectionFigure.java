@@ -4,10 +4,8 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
-import static org.jhotdraw8.draw.figure.AbstractLabelFigure.ORIGIN;
-import static org.jhotdraw8.draw.figure.TextableFigure.TEXT;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -43,7 +41,7 @@ public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
         return get(TEXT);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

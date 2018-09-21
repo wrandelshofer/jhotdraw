@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -26,7 +26,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractStyleableFigureMapAccessor<T> implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
 
-    @NonNull
+    @Nonnull
     private final String cssName;
     private static final long serialVersionUID = 1L;
 
@@ -50,13 +50,13 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
-    @NonNull
+    @Nonnull
     private final List<Class<?>> typeParameters;
 
-    @NonNull
+    @Nonnull
     private final Set<MapAccessor<?>> subAccessors;
 
-    @NonNull
+    @Nonnull
     private final DirtyMask dirtyMask;
 
     /**
@@ -68,7 +68,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractStyleableFigureMapAccessor(String name, Class<T> clazz, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractStyleableFigureMapAccessor(String name, Class<T> clazz, @Nonnull MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, clazz, null, subAccessors, defaultValue);
     }
 
@@ -83,7 +83,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractStyleableFigureMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
+    public AbstractStyleableFigureMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nonnull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -126,7 +126,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
         return name;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
@@ -134,13 +134,13 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
         return ret;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
-    @NonNull
+    @Nonnull
     public String getFullValueType() {
         StringBuilder buf = new StringBuilder();
         buf.append(clazz.getName());
@@ -174,20 +174,20 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
     /**
      * Returns the name string.
      */
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getFullValueType() + "}";
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Set<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public DirtyMask getDirtyMask() {
         return dirtyMask;
@@ -198,7 +198,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
         return false;
     }
 
-    @NonNull
+    @Nonnull
     public String getCssName() {
         return cssName;
     }

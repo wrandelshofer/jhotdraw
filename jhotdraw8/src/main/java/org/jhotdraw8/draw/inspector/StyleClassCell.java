@@ -14,9 +14,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.util.Resources;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * FXML Controller class.
@@ -41,7 +40,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
         this(LayersInspector.class.getResource("StyleClassCell.fxml"), inspector);
     }
 
-    public StyleClassCell(@NonNull URL fxmlUrl, StyleClassesInspector inspector) {
+    public StyleClassCell(@Nonnull URL fxmlUrl, StyleClassesInspector inspector) {
         init(fxmlUrl);
         this.inspector = inspector;
     }

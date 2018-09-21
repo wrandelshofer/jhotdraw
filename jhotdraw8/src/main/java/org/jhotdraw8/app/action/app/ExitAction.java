@@ -14,8 +14,8 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
@@ -53,7 +53,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @NonNull Application app) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull Application app) {
         app.addDisabler(this);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
@@ -120,7 +120,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected URIChooser getChooser(@NonNull DocumentOrientedViewModel view) {
+    protected URIChooser getChooser(@Nonnull DocumentOrientedViewModel view) {
         URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -261,7 +261,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void saveToFile(@NonNull final URI uri, final DataFormat format) {
+    protected void saveToFile(@Nonnull final URI uri, final DataFormat format) {
         final DocumentOrientedViewModel v = unsavedView;
         v.write(uri, format,null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
@@ -291,7 +291,7 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void saveToFileAndReviewNext(@NonNull final URI uri, final DataFormat format) {
+    protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format) {
         final DocumentOrientedViewModel v = unsavedView;
         v.write(uri, format,null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {

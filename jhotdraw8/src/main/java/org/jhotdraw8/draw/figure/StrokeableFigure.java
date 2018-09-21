@@ -13,7 +13,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -128,7 +128,7 @@ public interface StrokeableFigure extends Figure {
      */
     public static DoubleListStyleableFigureKey STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableList.emptyList());
 
-    default void applyStrokeCapAndJoinProperties(@NonNull Shape shape) {
+    default void applyStrokeCapAndJoinProperties(@Nonnull Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -144,7 +144,7 @@ public interface StrokeableFigure extends Figure {
         }
     }
 
-    default void applyStrokeDashProperties(@NonNull Shape shape) {
+    default void applyStrokeDashProperties(@Nonnull Shape shape) {
         double d = getStyled(STROKE_DASH_OFFSET);
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -155,7 +155,7 @@ public interface StrokeableFigure extends Figure {
         }
     }
 
-    default void applyStrokeTypeProperties(@NonNull Shape shape) {
+    default void applyStrokeTypeProperties(@Nonnull Shape shape) {
         StrokeType st = getStyled(STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -167,7 +167,7 @@ public interface StrokeableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyStrokeableFigureProperties(@NonNull Shape shape) {
+    default void applyStrokeableFigureProperties(@Nonnull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(STROKE));
         applyStrokeColorProperties(shape);
         if (p == null) {
@@ -180,14 +180,14 @@ public interface StrokeableFigure extends Figure {
         applyStrokeDashProperties(shape);
     }
 
-    default void applyStrokeColorProperties(@NonNull Shape shape) {
+    default void applyStrokeColorProperties(@Nonnull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
 
-    default void applyStrokeWidthProperties(@NonNull Shape shape) {
+    default void applyStrokeWidthProperties(@Nonnull Shape shape) {
         double d = getStyled(STROKE_WIDTH);
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);
@@ -195,7 +195,7 @@ public interface StrokeableFigure extends Figure {
 
     }
 
-        @NonNull
+        @Nonnull
         default BasicStroke getStyledStroke() {
         final double width = getStyled(STROKE_WIDTH);
         final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);

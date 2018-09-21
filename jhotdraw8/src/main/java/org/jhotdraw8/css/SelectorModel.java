@@ -5,8 +5,7 @@ package org.jhotdraw8.css;
 
 import java.util.Set;
 import javafx.css.StyleOrigin;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.draw.figure.Figure;
+import javax.annotation.Nullable;
 
 /**
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match

@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.inspector;
 
 import javafx.scene.Node;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 
 /**

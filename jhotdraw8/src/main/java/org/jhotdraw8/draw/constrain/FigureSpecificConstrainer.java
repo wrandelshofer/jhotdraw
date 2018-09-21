@@ -8,7 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.Map;
@@ -60,12 +60,12 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     // ----
     // property methods
     // ----
-    @NonNull
+    @Nonnull
     public ObservableMap<Class<?>, Constrainer> constrainerMapProperty() {
         return constrainerMap;
     }
 
-    @NonNull
+    @Nonnull
     public NonnullProperty<Constrainer> defaultConstrainerProperty() {
         return defaultConstrainer;
     }
@@ -94,36 +94,36 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     }
 
     @Override
-    public Point2D translatePoint(@NonNull Figure f, Point2D p, Point2D dir) {
+    public Point2D translatePoint(@Nonnull Figure f, Point2D p, Point2D dir) {
         return getConstrainer(f).translatePoint(f, p, dir);
     }
 
     @Override
-    public Rectangle2D translateRectangle(@NonNull Figure f, Rectangle2D r, Point2D dir) {
+    public Rectangle2D translateRectangle(@Nonnull Figure f, Rectangle2D r, Point2D dir) {
         return getConstrainer(f).translateRectangle(f, r, dir);
     }
 
     @Override
-    public double translateAngle(@NonNull Figure f, double angle, double dir) {
+    public double translateAngle(@Nonnull Figure f, double angle, double dir) {
         return getConstrainer(f).translateAngle(f, angle, dir);
     }
 
     @Override
-    public Point2D constrainPoint(@NonNull Figure f, Point2D p) {
+    public Point2D constrainPoint(@Nonnull Figure f, Point2D p) {
         return getConstrainer(f).constrainPoint(f, p);
     }
 
     @Override
-    public Rectangle2D constrainRectangle(@NonNull Figure f, Rectangle2D r) {
+    public Rectangle2D constrainRectangle(@Nonnull Figure f, Rectangle2D r) {
         return getConstrainer(f).constrainRectangle(f, r);
     }
 
     @Override
-    public double constrainAngle(@NonNull Figure f, double angle) {
+    public double constrainAngle(@Nonnull Figure f, double angle) {
         return getConstrainer(f).constrainAngle(f, angle);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node getNode() {
         return node;

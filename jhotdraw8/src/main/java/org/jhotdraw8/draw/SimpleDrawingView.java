@@ -49,8 +49,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
@@ -63,11 +63,6 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
-import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.LAYOUT_CHANGED;
-import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.LAYOUT_SUBJECT_CHANGED;
-import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED;
-import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.STYLE_CHANGED;
-import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.TRANSFORM_CHANGED;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.tool.Tool;
@@ -76,13 +71,6 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.tree.TreeModelEvent;
-import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_ADDED_TO_PARENT;
-import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_ADDED_TO_TREE;
-import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_CHANGED;
-import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_REMOVED_FROM_PARENT;
-import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_REMOVED_FROM_TREE;
-import static org.jhotdraw8.tree.TreeModelEvent.EventType.ROOT_CHANGED;
-import static org.jhotdraw8.tree.TreeModelEvent.EventType.SUBTREE_NODES_CHANGED;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -301,7 +289,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         init();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<Layer> activeLayerProperty() {
         return activeLayer;
@@ -318,7 +306,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         getSelectedFigures().clear();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public NonnullProperty<Constrainer> constrainerProperty() {
         return constrainer;
@@ -334,7 +322,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * from the node
      * @return true if the node contains the point
      */
-    private boolean contains(Node node, @NonNull Point2D point, double tolerance) {
+    private boolean contains(Node node, @Nonnull Point2D point, double tolerance) {
         double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(1, 1).magnitude();
 
         if (node instanceof Shape) {
@@ -378,7 +366,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    @NonNull
+    @Nonnull
     private Image createCheckerboardImage(Color c1, Color c2, int size) {
         WritableImage img = new WritableImage(size * 2, size * 2);
         PixelWriter w = img.getPixelWriter();
@@ -398,7 +386,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      *
      * @param handles The provided list
      */
-    protected void createHandles(@NonNull Map<Figure, List<Handle>> handles) {
+    protected void createHandles(@Nonnull Map<Figure, List<Handle>> handles) {
         ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size() > 1) {
             if (getAnchorHandleType() != null) {
@@ -439,7 +427,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return drawing.getReadOnlyProperty();
     }
 
-    public void dump(@NonNull StringBuilder buf, @NonNull Node n, int depth) {
+    public void dump(@Nonnull StringBuilder buf, @Nonnull Node n, int depth) {
         for (int i = 0; i < depth; i++) {
             buf.append(".");
         }
@@ -486,7 +474,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      */
     @Nullable
     @Override
-    public Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures) {
+    public Figure findFigure(double vx, double vy, @Nonnull Set<Figure> figures) {
         return findFigure(vx, vy, figures, getTolerance());
     }
 
@@ -502,7 +490,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @return a figure in the specified set which contains the point, or null.
      */
     @Nullable
-    public Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
+    public Figure findFigure(double vx, double vy, @Nonnull Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
         Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
         for (Figure f : figures) {
@@ -518,7 +506,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return null;
     }
 
-    private Figure findFigureRecursive(Parent p, @NonNull Point2D pp, double tolerance) {
+    private Figure findFigureRecursive(Parent p, @Nonnull Point2D pp, double tolerance) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -541,7 +529,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return null;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<Figure> findFigures(double vx, double vy, boolean decompose) {
         Transform vt = getViewToWorld();
@@ -551,7 +539,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return list;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         Transform vt = getViewToWorld();
@@ -563,7 +551,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return list;
     }
 
-    private void findFiguresInsideRecursive(Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose) {
+    private void findFiguresInsideRecursive(Parent p, @Nonnull Bounds pp, @Nonnull List<Figure> found, boolean decompose) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -595,7 +583,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         Transform vt = getViewToWorld();
@@ -607,7 +595,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return list;
     }
 
-    private void findFiguresIntersectingRecursive(Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose) {
+    private void findFiguresIntersectingRecursive(Parent p, @Nonnull Bounds pp, @Nonnull List<Figure> found, boolean decompose) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -626,7 +614,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    private void findFiguresRecursive(Parent p, @NonNull Point2D pp, @NonNull List<Figure> found, boolean decompose) {
+    private void findFiguresRecursive(Parent p, @Nonnull Point2D pp, @Nonnull List<Figure> found, boolean decompose) {
         double tolerance = getTolerance();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
@@ -689,9 +677,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     // Handles
-    @NonNull
+    @Nonnull
     @Override
-    public Set<Figure> getFiguresWithCompatibleHandle(@NonNull Collection<Figure> figures, Handle master) {
+    public Set<Figure> getFiguresWithCompatibleHandle(@Nonnull Collection<Figure> figures, Handle master) {
         validateHandles();
         Map<Figure, Figure> result = new HashMap<>();
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
@@ -1050,7 +1038,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @return The margin. The default value is:
      * {@code new Insets(20, 20, 20, 20)}.
      */
-    @NonNull
+    @Nonnull
     public ObjectProperty<Insets> marginProperty() {
         return margin;
     }
@@ -1102,7 +1090,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Override
-    public void scrollRectToVisible(@NonNull Bounds boundsInView) {
+    public void scrollRectToVisible(@Nonnull Bounds boundsInView) {
         ScrollPane sp = getScrollPane();
         if (sp == null) {
             return;
@@ -1336,7 +1324,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    private void updateTreeStructure(@NonNull Figure parent) {
+    private void updateTreeStructure(@Nonnull Figure parent) {
         // Since we don't know which figures have been removed from
         // the drawing, we have to get rid of them on ourselves.
         // XXX This is a really slow operation. If each figure would store a
@@ -1365,7 +1353,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public DoubleProperty zoomFactorProperty() {
         return zoomFactor;

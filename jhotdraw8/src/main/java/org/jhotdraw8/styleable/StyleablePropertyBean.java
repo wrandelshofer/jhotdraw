@@ -6,7 +6,7 @@ package org.jhotdraw8.styleable;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.MapAccessor;
 

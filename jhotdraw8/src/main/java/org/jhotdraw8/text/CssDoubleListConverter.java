@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
@@ -30,7 +30,7 @@ import org.jhotdraw8.io.UnitConverter;
 public class CssDoubleListConverter implements Converter<ImmutableList<Double>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,number}|[ ]+}}", new CssConverterFactory());
-    @NonNull
+    @Nonnull
     private UnitConverter unitConverter = DefaultUnitConverter.getInstance();
 
 
@@ -95,10 +95,10 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
         return ImmutableList.emptyList();
     }
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, ImmutableList<Double> value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, ImmutableList<Double> value) throws IOException {
       toStringFromCollection(out, idFactory, value);
     }
-    public void toStringFromCollection(@NonNull Appendable out, IdFactory idFactory, @Nullable Collection<Double> value) throws IOException {
+    public void toStringFromCollection(@Nonnull Appendable out, IdFactory idFactory, @Nullable Collection<Double> value) throws IOException {
       if (value == null) {
         out.append("none");
         return;
@@ -113,7 +113,7 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
       formatter.toString(out, v);
     }
 
-    @NonNull
+    @Nonnull
     public String toStringFromCollection(Collection<Double> value) {
         StringBuilder out = new StringBuilder();
         try {
@@ -124,7 +124,7 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
         return out.toString();
     }
 
-    public void toStringFromCollection(@NonNull Appendable out, Collection<Double> value) throws IOException {
+    public void toStringFromCollection(@Nonnull Appendable out, Collection<Double> value) throws IOException {
         toStringFromCollection(out, null, value);
     }
 }

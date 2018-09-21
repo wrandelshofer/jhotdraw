@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -23,7 +23,7 @@ public class CssScale2DConverter implements Converter<Point2D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @NonNull Point2D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull Point2D value) throws IOException {
         if (value.getX() == value.getY()) {
             formatter.toStr(out, idFactory, 1, value.getX());
         } else {
@@ -31,9 +31,9 @@ public class CssScale2DConverter implements Converter<Point2D> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Point2D fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Point2D fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
@@ -45,13 +45,13 @@ public class CssScale2DConverter implements Converter<Point2D> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D getDefaultValue() {
         return new Point2D(1, 1);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩";

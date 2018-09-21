@@ -3,14 +3,13 @@
  */
 package org.jhotdraw8.styleable;
 
-import javafx.beans.binding.MapExpression;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.KeyMapEntryProperty;
 
@@ -22,20 +21,20 @@ import org.jhotdraw8.collection.KeyMapEntryProperty;
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-    @NonNull
+    @Nonnull
     private final WriteableStyleableMapAccessor<T> key;
     private final CssMetaData<?, T> metaData;
     private final ObservableMap<Key<?>, Object> mapp;
     private final String name;
-    @NonNull
+    @Nonnull
     private final StyleableMap<Key<?>, Object> map;
     private final Object bean;
 
-    public KeyMapEntryStyleableProperty(@NonNull ReadOnlyMapProperty<Key<?>, Object> mapp, @NonNull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(@Nonnull ReadOnlyMapProperty<Key<?>, Object> mapp, @Nonnull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         this(mapp.getBean(), mapp, key, name, metaData);
     }
 
-    public KeyMapEntryStyleableProperty(Object bean, ObservableMap<Key<?>, Object> mapp, @NonNull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(Object bean, ObservableMap<Key<?>, Object> mapp, @Nonnull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp;
         this.map = m;

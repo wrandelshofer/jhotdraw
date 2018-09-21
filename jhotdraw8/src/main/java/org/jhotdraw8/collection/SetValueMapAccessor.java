@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.collection;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,19 +61,19 @@ private final static long serialVersionUID=1L;
         return name;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Set<MapAccessor<?>> getSubAccessors() {
         return Collections.singleton(setAccessor);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Class<Boolean> getValueType() {
         return Boolean.class;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return Collections.emptyList();

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="16" styleClass="flushTopRightLeft" wrapText="true" VBox.vgrow="ALWAYS" />
+    <TextArea fx:id="helpTextArea" editable="false" prefRowCount="4" wrapText="true" VBox.vgrow="NEVER" />
+    <HBox alignment="BASELINE_LEFT">
+      <children>
+            <MenuButton mnemonicParsing="false" text="%options.text">
+              <items>
+                <MenuItem mnemonicParsing="false">
+                     <graphic>
+                    <CheckBox fx:id="composeAttributesCheckBox" mnemonicParsing="false" selected="true" text="%composeAttributes.checkBox.text" />
+                     </graphic>
+                  </MenuItem>
+                <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <CheckBox fx:id="showHelpTextCheckBox" mnemonicParsing="false" text="%showHelpText.checkBox.text" />
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                    <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true" text="%updateContents.checkBox.text" />
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <RadioButton fx:id="showAttributeValues" mnemonicParsing="false" selected="true" text="%shownValues.attributeValues">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="shownValues" />
+                           </toggleGroup>
+                        </RadioButton>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <RadioButton fx:id="showStylesheetValues" mnemonicParsing="false" text="%shownValues.stylesheetValues" toggleGroup="$shownValues" />
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <RadioButton fx:id="showSpecifiedValues" mnemonicParsing="false" text="%shownValues.specifiedValues" toggleGroup="$shownValues" />
+                     </graphic>
+                  </MenuItem>
+              </items>
+            </MenuButton>
+        <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <Button fx:id="selectButton" mnemonicParsing="false" text="%selectButton.text" />
+        <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text">
+          <HBox.margin>
+            <Insets left="4.0" />
+          </HBox.margin>
+        </Button>
+      </children>
+      <VBox.margin>
+        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+      </VBox.margin>
+    </HBox>
+  </children>
+  <styleClass>
+    <String fx:value="inspector" />
+    <String fx:value="flush" />
+  </styleClass>
+</VBox>

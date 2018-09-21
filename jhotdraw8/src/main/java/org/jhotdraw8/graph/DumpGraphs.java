@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -26,7 +26,7 @@ public class DumpGraphs {
      * @param graph the graph to be dumped
      * @return the dump
      */
-    public static <V, A> String dumpAsAdjacencyList(@NonNull DirectedGraph<V, A> graph) {
+    public static <V, A> String dumpAsAdjacencyList(@Nonnull DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {
             dumpAsAdjacencyList(w, graph, Object::toString);
@@ -45,7 +45,7 @@ public class DumpGraphs {
      * @param graph the graph to be dumped
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsAdjacencyList(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
+    public static <V, A> void dumpAsAdjacencyList(@Nonnull Appendable w, @Nonnull DirectedGraph<V, A> graph) throws IOException {
         dumpAsAdjacencyList(w, graph, Object::toString);
     }
 
@@ -59,7 +59,7 @@ public class DumpGraphs {
      * @param toStringFunction a function which converts a vertex to a string
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsAdjacencyList(@NonNull Appendable w, DirectedGraph<V, A> graph, @NonNull Function<V, String> toStringFunction) throws IOException {
+    public static <V, A> void dumpAsAdjacencyList(@Nonnull Appendable w, DirectedGraph<V, A> graph, @Nonnull Function<V, String> toStringFunction) throws IOException {
         {int i=0;
         for (V v:graph.getVertices()) {
             if (i != 0) {
@@ -86,7 +86,7 @@ public class DumpGraphs {
      * @param graph the graph to be dumped
      * @return the dump
      */
-    public static <V, A> String dumpAsDot(@NonNull DirectedGraph<V, A> graph) {
+    public static <V, A> String dumpAsDot(@Nonnull DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {
             dumpAsDot(w, graph, Object::toString);
@@ -106,7 +106,7 @@ public class DumpGraphs {
      * @param graph the graph
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsDot(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
+    public static <V, A> void dumpAsDot(@Nonnull Appendable w, @Nonnull DirectedGraph<V, A> graph) throws IOException {
         dumpAsDot(w, graph, v -> "\"" + v + '"', null, null);
     }
 
@@ -122,8 +122,8 @@ public class DumpGraphs {
      * use as vertex name
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsDot(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph,
-            @NonNull Function<V, String> vertexToString) throws IOException {
+    public static <V, A> void dumpAsDot(@Nonnull Appendable w, @Nonnull DirectedGraph<V, A> graph,
+            @Nonnull Function<V, String> vertexToString) throws IOException {
         dumpAsDot(w, graph, vertexToString, null, null);
     }
 
@@ -142,8 +142,8 @@ public class DumpGraphs {
      * use as arrow attributes
      * @return the "dot" string
      */
-    public static <V, A> String dumpAsDot(@NonNull DirectedGraph<V, A> graph,
-            @NonNull Function<V, String> vertexToString,
+    public static <V, A> String dumpAsDot(@Nonnull DirectedGraph<V, A> graph,
+            @Nonnull Function<V, String> vertexToString,
             Function<V, String> vertexAttributes,
             Function<A, String> arrowAttributes) {
         StringWriter w = new StringWriter();
@@ -171,9 +171,9 @@ public class DumpGraphs {
      * use as arrow attributes
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsDot(@NonNull final Appendable w,
-            @NonNull final DirectedGraph<V, A> graph,
-            @NonNull final Function<V, String> vertexToString,
+    public static <V, A> void dumpAsDot(@Nonnull final Appendable w,
+            @Nonnull final DirectedGraph<V, A> graph,
+            @Nonnull final Function<V, String> vertexToString,
             @Nullable final Function<V, String> vertexAttributes,
             @Nullable final Function<A, String> arrowAttributes) throws IOException {
         w.append("digraph G {\n");

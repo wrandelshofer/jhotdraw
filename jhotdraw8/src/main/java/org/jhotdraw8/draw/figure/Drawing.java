@@ -7,7 +7,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Collections;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
@@ -18,7 +18,6 @@ import org.jhotdraw8.draw.key.CssColorStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.css.StylesheetsManager;
-import org.jhotdraw8.draw.DrawingEditor;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -126,7 +125,7 @@ public interface Drawing extends Figure {
      */
     public final static String TYPE_SELECTOR = "Drawing";
 
-    @NonNull
+    @Nonnull
     @Override
     default String getTypeSelector() {
         return TYPE_SELECTOR;

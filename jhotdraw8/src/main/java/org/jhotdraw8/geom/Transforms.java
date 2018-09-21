@@ -17,8 +17,8 @@ import static java.lang.Double.isNaN;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Affine;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Transforms.
@@ -76,7 +76,7 @@ public class Transforms {
      * @param transform a transformation
      * @return decomposed transformation
      */
-    @NonNull
+    @Nonnull
     public static List<Transform> decompose(Transform transform) {
         List<Transform> list = new ArrayList<>();
         if (transform.isIdentity()) {
@@ -137,7 +137,7 @@ public class Transforms {
         }
     }
 
-    public static Point2D deltaTransform(@Nullable Transform t, @NonNull Point2D p) {
+    public static Point2D deltaTransform(@Nullable Transform t, @Nonnull Point2D p) {
         if (t == null) {
             return p;
         } else {
@@ -153,17 +153,17 @@ public class Transforms {
         return new AffineTransform(t.getMxx(), t.getMyx(), t.getMxy(), t.getMyy(), t.getTx(), t.getTy());
     }
 
-    @NonNull
-    public static Bounds transform(@Nullable Transform tx, @NonNull Bounds b) {
+    @Nonnull
+    public static Bounds transform(@Nullable Transform tx, @Nonnull Bounds b) {
         return tx == null ? b : tx.transform(b);
     }
 
-    @NonNull
-    public static Point2D transform(@Nullable Transform tx, @NonNull Point2D b) {
+    @Nonnull
+    public static Point2D transform(@Nullable Transform tx, @Nonnull Point2D b) {
         return tx == null ? b : tx.transform(b);
     }
 
-    @NonNull
+    @Nonnull
     public static Point2D transform(@Nullable Transform tx, double x, double y) {
         return tx == null ? new Point2D(x, y) : tx.transform(x, y);
     }

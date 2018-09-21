@@ -4,18 +4,13 @@
 package org.jhotdraw8.graph;
 
 import java.util.BitSet;
-import java.util.Iterator;
 import java.util.Spliterator;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
-import static java.util.Spliterator.ORDERED;
 import java.util.Spliterators.AbstractIntSpliterator;
-import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.IntArrayDeque;
 
 /**
@@ -27,9 +22,9 @@ import org.jhotdraw8.collection.IntArrayDeque;
 public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
 
     private final IntFunction< Spliterator.OfInt> graph;
-    @NonNull
+    @Nonnull
     private final IntArrayDeque queue;
-    @NonNull
+    @Nonnull
     private final IntPredicate visited;
 
     /**
@@ -56,7 +51,7 @@ public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
     }
 
     @Override
-    public boolean tryAdvance(@NonNull IntConsumer action) {
+    public boolean tryAdvance(@Nonnull IntConsumer action) {
         if (queue.isEmpty()) {
             return false;
         }

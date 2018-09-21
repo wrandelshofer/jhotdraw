@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.CssLinearGradient;
@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.io.IdFactory;
@@ -37,16 +36,16 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssPaintableConverter implements Converter<Paintable> {
 
-    @NonNull
+    @Nonnull
     private CssColorConverter colorConverter = new CssColorConverter(false);
-    @NonNull
+    @Nonnull
     private CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
-    @NonNull
+    @Nonnull
     private CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter();
-    @NonNull
+    @Nonnull
     private XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Paintable value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable Paintable value) throws IOException {
         if (value == null) {
             out.append("none");
         } else if (Color.TRANSPARENT.equals(value)) {
@@ -67,7 +66,7 @@ public class CssPaintableConverter implements Converter<Paintable> {
 
     @Nullable
     @Override
-    public Paintable fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Paintable fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
 
         if ("none".equals(str)) {
@@ -107,7 +106,7 @@ public class CssPaintableConverter implements Converter<Paintable> {
         return null;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"

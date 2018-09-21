@@ -7,13 +7,11 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UnitConverter;
 
 /**
@@ -35,7 +33,7 @@ import org.jhotdraw8.io.UnitConverter;
  */
 public class CssDoubleConverter implements Converter<Double> {
 
-    @NonNull
+    @Nonnull
     private final CssSizeConverter sizeConverter;
     private final UnitConverter unitConverter;
 
@@ -50,24 +48,24 @@ public class CssDoubleConverter implements Converter<Double> {
 
     @Nullable
     @Override
-    public Double fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Double fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssSize size = sizeConverter.fromString(buf, idFactory);
         return size == null ? null : unitConverter.convert(size.getValue(), size.getUnits(), "px");
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Double getDefaultValue() {
         return 0.0;
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Double value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable Double value) throws IOException {
         CssSize size = value == null ? null : new CssSize(value, null);
         sizeConverter.toString(out, idFactory, size);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨Double⟩: ⟨double⟩";

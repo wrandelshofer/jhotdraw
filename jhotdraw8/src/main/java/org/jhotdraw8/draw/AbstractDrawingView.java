@@ -18,15 +18,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.beans.SimplePropertyBean;
-import static org.jhotdraw8.draw.DrawingView.ACTIVE_HANDLE_PROPERTY;
-import static org.jhotdraw8.draw.DrawingView.HANDLE_TYPE_PROPERTY;
-import static org.jhotdraw8.draw.DrawingView.MULTI_HANDLE_TYPE_PROPERTY;
-import static org.jhotdraw8.draw.DrawingView.SELECTED_FIGURES_PROPERTY;
-import static org.jhotdraw8.draw.DrawingView.TOOL_PROPERTY;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
@@ -45,9 +40,9 @@ import org.jhotdraw8.draw.tool.Tool;
  */
 public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
 
-    @NonNull
+    @Nonnull
     private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
-    @NonNull
+    @Nonnull
     private ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
     /**
      * The selectedFiguresProperty holds the list of selected figures in the
@@ -86,13 +81,13 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         });
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
         return clipboardInputFormat;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
         return clipboardOutputFormat;
@@ -166,37 +161,37 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<Tool> toolProperty() {
         return tool;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public NonnullProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<HandleType> leadHandleTypeProperty() {
         return leadHandleType;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<HandleType> anchorHandleTypeProperty() {
         return anchorHandleType;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public NonnullProperty<HandleType> multiHandleTypeProperty() {
         return multiHandleType;

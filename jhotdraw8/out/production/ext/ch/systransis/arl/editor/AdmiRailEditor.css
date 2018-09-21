@@ -1,0 +1,113 @@
+/*
+ * systransis AdmiRail Editor
+ * Originator: systransis Ltd.
+ *
+ * Copyright (c) by systransis Ltd.
+ * All rights reserved.
+ */
+
+/* This is the top-level stylesheet for AdmiRailEditorView. */
+
+/* The layout of the AdmiRailEditorView is as follows:
+
+Structure:
+.StackPane
+..BorderPane
+...top:ToolBar class:.top
+...center:(vertical)SplitPane id:vsplitPane
+....(horizontal)SplitPane class:.main id:mainSplitPane
+.....ScrollPane class:.master id:masterScrollPane
+.....ScrollPane class:.view id:viewScrollPane
+.....ScrollPane class:.details id:detailsScrollPane
+......VBox id:detailsVBox
+....ScrollPane
+...bottom:HBox (not yet in the FXML!!)
+
+Style Classes:
+   .tools
+      this is a ToolBar
+
+   .main
+      main is a divider pane with .master, .view and .details panes.
+      each pane is a BorderPane
+
+   .status
+      this is a HBox to which we add labels and progress bars as needed
+*/
+
+.tools  {
+}
+
+.main {
+
+}
+
+.master {
+    -fx-background-color: #fff;
+}
+
+.view > * {
+    -fx-background-color: #555;
+}
+
+.details {
+}
+
+.status  {
+}
+
+
+.main > .split-pane-divider {
+    -fx-padding: 0 1px 0 1px;
+}
+
+/* A control which is placed flush to all sides
+ * does not need a border.
+ */
+.flush {
+    -fx-background-insets: 0, 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+.flush:focused {
+    -fx-background-insets: 0, 0;
+}
+.flush .corner {
+    -fx-background-insets: 0, 0;
+}
+
+.flush > .scroll-bar {
+    -fx-background-insets: 0;
+}
+
+
+/**
+ * Defines the general style of controls.
+ */
+.button {
+    -fx-font-size: 12px;
+}
+.check-box {
+    -fx-font-size: 12px;
+}
+.combo-box {
+    -fx-font-size: 12px;
+}
+.label {
+    -fx-font-size: 12px;
+}
+.list-cell {
+    -fx-font-size: 12px;
+}
+.radio-button {
+    -fx-font-size: 12px;
+}
+.slider {
+    -fx-font-size: 11px;
+}
+.title-label {
+    -fx-font: bold 23px System;
+}
+.text-field {
+    -fx-font-size: 12px;
+}

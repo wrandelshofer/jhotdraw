@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -27,7 +27,7 @@ public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets>
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, Insets> cssMetaData;
 
     /**
@@ -83,7 +83,7 @@ public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets>
         cssMetaData = md;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, Insets> getCssMetaData() {
         return cssMetaData;

@@ -13,8 +13,8 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import javafx.collections.ObservableListBase;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A {@code Set} that provides precise control where each element is inserted.
@@ -65,7 +65,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     @Override
-    public boolean setAll(@NonNull Collection<? extends E> col) {
+    public boolean setAll(@Nonnull Collection<? extends E> col) {
         beginChange();
         try {
             clear();
@@ -233,7 +233,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         return old;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
         return new SubObservableList(super.subList(fromIndex, toIndex));
@@ -254,27 +254,27 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         return doAdd(size(), e, true);
     }
 
-    @NonNull
+    @Nonnull
     public Iterator<E> descendingIterator(int index) {
         return new ObservableDescendingIterator(index);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Iterator<E> descendingIterator() {
         return descendingIterator(size());
     }
 
-    @NonNull
+    @Nonnull
     public Iterable<E> descending() {
         return descending(size());
     }
 
-    @NonNull
+    @Nonnull
     public Iterable<E> descending(int index) {
         return new Iterable<E>() {
 
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<E> iterator() {
                 return descendingIterator(index);
@@ -283,16 +283,16 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         };
     }
 
-    @NonNull
+    @Nonnull
     public Iterable<E> ascending() {
         return ascending(size());
     }
 
-    @NonNull
+    @Nonnull
     public Iterable<E> ascending(int index) {
         return new Iterable<E>() {
 
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<E> iterator() {
                 return listIterator(index);
@@ -301,7 +301,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         };
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ListIterator<E> listIterator(int index) {
         return new ObservableListIterator(index);
@@ -597,19 +597,19 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             return sublist.contains(o);
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public Iterator<E> iterator() {
             return sublist.iterator();
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public Object[] toArray() {
             return sublist.toArray();
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public <T> T[] toArray(T[] a) {
             return sublist.toArray(a);
@@ -714,19 +714,19 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             return sublist.lastIndexOf(o);
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public ListIterator<E> listIterator() {
             return sublist.listIterator();
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public ListIterator<E> listIterator(int index) {
             return sublist.listIterator(index);
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public List<E> subList(int fromIndex, int toIndex) {
             return new SubObservableList(sublist.subList(fromIndex, toIndex));
@@ -748,7 +748,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.ORDERED);

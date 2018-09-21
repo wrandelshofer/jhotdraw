@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -19,7 +19,7 @@ import org.jhotdraw8.io.IdFactory;
 public class XmlWordConverter implements Converter<String> {
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull String value) throws IOException {
         for (char ch : value.toCharArray()) {
             if (Character.isWhitespace(ch)) {
                 break;
@@ -28,9 +28,9 @@ public class XmlWordConverter implements Converter<String> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public String fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
@@ -43,7 +43,7 @@ public class XmlWordConverter implements Converter<String> {
         return out.toString();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getDefaultValue() {
         return "";

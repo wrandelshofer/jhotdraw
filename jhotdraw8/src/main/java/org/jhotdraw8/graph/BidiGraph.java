@@ -6,12 +6,11 @@ package org.jhotdraw8.graph;
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * This interface provides read access to a directed graph {@code G = (V, A) }.
@@ -44,7 +43,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * as visited.
      * @return breadth first search
      */
-    @NonNull
+    @Nonnull
     default Stream<V> breadthFirstSearchBackward(V start, Predicate<V> visited) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start, visited), false);
     }
@@ -58,7 +57,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @param start the start vertex
      * @return breadth first search
      */
-    @NonNull
+    @Nonnull
     default Stream<V> breadthFirstSearchBackward(V start) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start), false);
     }
@@ -88,7 +87,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct predecessor arrows of vertex
      */
-    @NonNull
+    @Nonnull
     default Collection<A> getPrevArrows(V vertex) {
         class PrevArrowIterator implements Iterator<A> {
 
@@ -113,7 +112,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
         }
 
         return new AbstractCollection<A>() {
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<A> iterator() {
                 return new PrevArrowIterator(vertex);
@@ -140,7 +139,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct predecessor nextArrows of vertex
      */
-    @NonNull
+    @Nonnull
     default Collection<V> getPrevVertices(V vertex) {
         class PrevVertexIterator implements Iterator<V> {
 
@@ -165,7 +164,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
 
         }
         return new AbstractCollection<V>() {
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<V> iterator() {
                 return new PrevVertexIterator(vertex);

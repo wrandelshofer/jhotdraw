@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 import java.util.Spliterators.AbstractSpliterator;
@@ -22,7 +22,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
     @Nullable
     private final Function<V, Iterable<V>> nextNodesFunction;
-    @NonNull
+    @Nonnull
     private final Queue<V> queue;
     @Nullable
     private final Predicate<V> visited;
@@ -33,7 +33,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
      * @param nextNodesFunction the nextNodesFunction
      * @param root the root vertex
      */
-    public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextNodesFunction,@NonNull V root) {
+    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextNodesFunction,@Nonnull V root) {
         this(nextNodesFunction,root,new HashSet<>()::add);
     }
 
@@ -46,7 +46,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
      * if the specified vertex has been visited, and marks the specified vertex
      * as visited.
      */
-    public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextNodesFunction, @NonNull V root, @NonNull Predicate<V> visited) {
+    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextNodesFunction, @Nonnull V root, @Nonnull Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextNodesFunction,"nextNodesFunction");
         Objects.requireNonNull(root,"root");
@@ -60,7 +60,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
+    public boolean tryAdvance(@Nonnull Consumer<? super V> action) {
         V current = queue.poll();
         if (current == null) {
             return false;

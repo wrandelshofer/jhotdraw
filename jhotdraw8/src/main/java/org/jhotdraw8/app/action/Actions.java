@@ -10,7 +10,7 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.KeyCombination;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Actions.
@@ -42,7 +42,7 @@ public class Actions {
      * @param control The menu control
      * @param action The action
      */
-    public static void bindMenuItem(@NonNull MenuItem control, @NonNull Action action) {
+    public static void bindMenuItem(@Nonnull MenuItem control, @Nonnull Action action) {
         bindMenuItem(control, action, true);
 
     }
@@ -55,7 +55,7 @@ public class Actions {
      * @param bindLabel whether the the text of the menu item should be bound to
      * the label of the action
      */
-    public static void bindMenuItem(@NonNull MenuItem control, @NonNull Action action, boolean bindLabel) {
+    public static void bindMenuItem(@Nonnull MenuItem control, @Nonnull Action action, boolean bindLabel) {
 
         // create a strong reference to name binding:
         if (bindLabel) {

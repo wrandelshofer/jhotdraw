@@ -12,8 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -68,7 +68,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
         set(BOUNDS, rect);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         Rectangle2D r = get(BOUNDS);
@@ -76,7 +76,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(@Nonnull Transform transform) {
         Rectangle2D r = get(BOUNDS);
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
@@ -88,7 +88,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
         set(BOUNDS, new Rectangle2D(x + Math.min(width, 0), y + Math.min(height, 0), Math.abs(width), Math.abs(height)));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         ImageView imageView = new ImageView();
@@ -97,7 +97,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         ImageView imageView = (ImageView) node;
         validateImage();
         imageView.setImage(cachedImage);
@@ -113,13 +113,13 @@ public class SimpleImageFigure extends AbstractLeafFigure
         imageView.getProperties().put(IMAGE_URI, get(IMAGE_URI));
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
             return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

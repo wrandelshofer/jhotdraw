@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -21,8 +19,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
@@ -57,7 +55,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @FXML
     private TextField majorYField;
 
-    @NonNull
+    @Nonnull
     private Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
     private Node node;
 
@@ -74,7 +72,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         this(LayersInspector.class.getResource("GridInspector.fxml"));
     }
 
-    public GridInspector(@NonNull URL fxmlUrl) {
+    public GridInspector(@Nonnull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -83,7 +81,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         return node;
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(@Nonnull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -152,7 +150,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 CssColorConverter converter=new CssColorConverter(true);
                 try {
                     gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor",gridConstrainer.getGridColor().getName())));
-                } catch (@NonNull ParseException|IOException ex) {
+                } catch (@Nonnull ParseException|IOException ex) {
                     // don't set color if preferences is bogus
                 }
                 newValue.setConstrainer(gridConstrainer);

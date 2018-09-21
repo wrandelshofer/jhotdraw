@@ -14,8 +14,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.gui.CustomSkin;
 
 /**
@@ -26,7 +26,7 @@ import org.jhotdraw8.gui.CustomSkin;
  */
 public class SingleItemDock extends Control implements Dock {
 
-    @NonNull
+    @Nonnull
     private BorderPane borderPane = new BorderPane();
     private final ObservableList<DockItem> items = FXCollections.observableArrayList();
 
@@ -65,7 +65,7 @@ public class SingleItemDock extends Control implements Dock {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObservableList<DockItem> getItems() {
         return items;
@@ -92,9 +92,9 @@ public class SingleItemDock extends Control implements Dock {
         return borderPane.prefWidth(height);
     }
     
-    @NonNull
+    @Nonnull
     private ObjectProperty<Track> track=new SimpleObjectProperty<>();
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<Track> trackProperty() {
         return track;

@@ -7,8 +7,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ViewController;
 
@@ -55,7 +55,7 @@ public abstract class AbstractViewControllerAction<V extends ViewController> ext
      * specified view.
      * @param viewClass the type of the view. This is used for type checks.
      */
-    public AbstractViewControllerAction(@NonNull Application app, @Nullable V view, Class<V> viewClass) {
+    public AbstractViewControllerAction(@Nonnull Application app, @Nullable V view, Class<V> viewClass) {
         super(app);
         this.pClass = viewClass;
         this.view = view;

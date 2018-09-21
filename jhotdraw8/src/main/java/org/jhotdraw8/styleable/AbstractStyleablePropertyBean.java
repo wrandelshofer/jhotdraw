@@ -9,8 +9,8 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -46,7 +46,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     /**
      * Returns the user properties.
      */
-    @NonNull
+    @Nonnull
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
@@ -63,7 +63,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
         }
     }
 
-    @NonNull
+    @Nonnull
     protected StyleableMap<Key<?>, Object> getStyleableMap() {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> map = properties;
@@ -74,7 +74,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * Returns the style value.
      */
     @Override
-    public <T> T getStyled(@NonNull MapAccessor<T> key) {
+    public <T> T getStyled(@Nonnull MapAccessor<T> key) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
         T ret = key.get(map.getStyledMap());// key may invoke get multiple times!
@@ -82,7 +82,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     }
 
     @Override
-    public <T> T getStyled(@Nullable StyleOrigin origin, @NonNull MapAccessor<T> key) {
+    public <T> T getStyled(@Nullable StyleOrigin origin, @Nonnull MapAccessor<T> key) {
         if (origin == null) {
             return getStyled(key);
         }
@@ -91,7 +91,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     }
 
     @Override
-    public <T> boolean containsKey(StyleOrigin origin, @NonNull MapAccessor<T> key) {
+    public <T> boolean containsKey(StyleOrigin origin, @Nonnull MapAccessor<T> key) {
         return key.containsKey(getStyleableMap().getMap(origin));
     }
 
@@ -99,7 +99,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * Sets the style value.
      */
     @Override
-    public <T> T setStyled(StyleOrigin origin, @NonNull MapAccessor<T> key, T newValue) {
+    public <T> T setStyled(StyleOrigin origin, @Nonnull MapAccessor<T> key, T newValue) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
         T ret = key.put(map.getMap(origin), newValue);
@@ -107,7 +107,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     }
 
     @Override
-    public <T> T remove(StyleOrigin origin, @NonNull MapAccessor<T> key) {
+    public <T> T remove(StyleOrigin origin, @Nonnull MapAccessor<T> key) {
         @SuppressWarnings("unchecked")
         T ret = key.remove(getStyleableMap().getMap(origin));
         return ret;

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.event.Event;
 
 /**
@@ -35,7 +35,7 @@ public class ToolEvent extends Event<Tool> {
         return eventType;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "ToolEvent{" + "type=" + eventType + " tool=" + getSource()

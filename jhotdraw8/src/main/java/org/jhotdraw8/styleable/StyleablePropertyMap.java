@@ -13,8 +13,8 @@ import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.KeyMapEntryProperty;
 
@@ -95,7 +95,7 @@ public class StyleablePropertyMap {
      */
     private final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
 
-    @NonNull
+    @Nonnull
     private MapChangeListener<Key<?>, Object> inputHandler = new MapChangeListener<Key<?>, Object>() {
 
         @Override
@@ -266,7 +266,7 @@ public class StyleablePropertyMap {
     }
 
     @Nullable
-    public <T> T remove(@NonNull StyleOrigin origin, Key<T> key) {
+    public <T> T remove(@Nonnull StyleOrigin origin, Key<T> key) {
         T value = null;
         switch (origin) {
             case INLINE:
@@ -303,7 +303,7 @@ public class StyleablePropertyMap {
         return value;
     }
 
-    public void removeAll(@NonNull StyleOrigin origin) {
+    public void removeAll(@Nonnull StyleOrigin origin) {
         switch (origin) {
             case INLINE:
                 if (inline != null) {
@@ -335,11 +335,11 @@ public class StyleablePropertyMap {
     // ---
     public class MapStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-        @NonNull
+        @Nonnull
         private final Key<T> key;
         private final CssMetaData<?, T> metaData;
 
-        public MapStyleableProperty(@NonNull Key<T> key, CssMetaData<?, T> metaData) {
+        public MapStyleableProperty(@Nonnull Key<T> key, CssMetaData<?, T> metaData) {
             this.key = key;
             this.metaData = metaData;
 

@@ -5,7 +5,7 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -49,13 +49,13 @@ public class BezierLabelLocator implements Locator {
         this.distance = distance;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D locate(Figure owner) {
         return getRelativePoint((SimpleBezierFigure) owner);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D locate(Figure owner, Figure label) {
         Point2D relativePoint = getRelativeLabelPoint((SimpleBezierFigure) owner, label);
@@ -69,8 +69,8 @@ public class BezierLabelLocator implements Locator {
      * @param owner the owner
      * @return the coordinates
      */
-    @NonNull
-    public Point2D getRelativePoint(@NonNull SimpleBezierFigure owner) {
+    @Nonnull
+    public Point2D getRelativePoint(@Nonnull SimpleBezierFigure owner) {
         Point2D point = owner.getPointOnPath((float) relativePosition, 3);
         Point2D nextPoint = owner.getPointOnPath(
                 (relativePosition < 0.5) ? (float) relativePosition + 0.1f : (float) relativePosition - 0.1f,
@@ -102,8 +102,8 @@ public class BezierLabelLocator implements Locator {
      * @param label the label
      * @return the position
      */
-    @NonNull
-    public Point2D getRelativeLabelPoint(@NonNull SimpleBezierFigure owner, Figure label) {
+    @Nonnull
+    public Point2D getRelativeLabelPoint(@Nonnull SimpleBezierFigure owner, Figure label) {
         // Get a point on the path an the next point on the path
         Point2D point = owner.getPointOnPath((float) relativePosition, 3);
         if (point == null) {

@@ -4,14 +4,11 @@
 package org.jhotdraw8.app.action.edit;
 
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.control.TextInputControl;
-import org.checkerframework.checker.nullness.qual.NonNull;
+
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.app.action.AbstractFocusOwnerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ViewController;
 
 /**
  * Deletes the region at (or after) the caret position.
@@ -39,7 +36,7 @@ public class DeleteAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @NonNull EditableComponent c) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull EditableComponent c) {
         c.deleteSelection();
     }
 

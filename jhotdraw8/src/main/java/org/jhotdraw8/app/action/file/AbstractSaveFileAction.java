@@ -13,8 +13,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.collection.Key;
@@ -66,7 +66,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         resources.configureAction(this, id);
     }
 
-    protected URIChooser getChooser(@NonNull DocumentOrientedViewModel view) {
+    protected URIChooser getChooser(@Nonnull DocumentOrientedViewModel view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -87,7 +87,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         saveFileChooseUri(v);
     }
 
-    protected void saveFileChooseUri(@NonNull final DocumentOrientedViewModel v) {
+    protected void saveFileChooseUri(@Nonnull final DocumentOrientedViewModel v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -126,7 +126,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         }
     }
 
-    protected void saveFileChooseOptions(@NonNull final DocumentOrientedViewModel v, @NonNull URI uri, DataFormat format) {
+    protected void saveFileChooseOptions(@Nonnull final DocumentOrientedViewModel v, @Nonnull URI uri, DataFormat format) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
         if (dialog != null) {
@@ -144,7 +144,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         saveFileToUri(v, uri, format, options);
     }
 
-    protected void saveFileToUri(@NonNull final DocumentOrientedViewModel view, @NonNull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
+    protected void saveFileToUri(@Nonnull final DocumentOrientedViewModel view, @Nonnull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
         view.write(uri, format, options).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(this);

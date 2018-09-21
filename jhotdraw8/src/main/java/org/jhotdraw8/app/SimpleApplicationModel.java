@@ -14,8 +14,8 @@ import java.util.prefs.Preferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.app.AboutAction;
 import org.jhotdraw8.app.action.app.ExitAction;
@@ -102,22 +102,22 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.menuFxml = menuFxml;
     }
 
-    @NonNull
+    @Nonnull
     public List<URIExtensionFilter> getOpenExtensionFilters() {
         return openExtensionFilters;
     }
 
-    @NonNull
+    @Nonnull
     public List<URIExtensionFilter> getSaveExtensionFilters() {
         return saveExtensionFilters;
     }
 
-    @NonNull
+    @Nonnull
     public List<URIExtensionFilter> getImportExtensionFilters() {
         return importExtensionFilters;
     }
 
-    @NonNull
+    @Nonnull
     public List<URIExtensionFilter> getExportExtensionFilters() {
         return exportExtensionFilters;
     }
@@ -127,7 +127,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return viewFactory.get();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public URIChooser createOpenChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -136,7 +136,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public URIChooser createSaveChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -145,7 +145,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public URIChooser createImportChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -154,7 +154,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public URIChooser createExportChooser() {
         FileURIChooser c = new FileURIChooser();

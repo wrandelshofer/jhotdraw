@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.Map;
 

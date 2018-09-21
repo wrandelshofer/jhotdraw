@@ -4,13 +4,11 @@
 package org.jhotdraw8.draw.input;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import javafx.scene.input.Clipboard;
-import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.Nullable;
+
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;

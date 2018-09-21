@@ -4,7 +4,7 @@
 package org.jhotdraw8.text;
 
 import java.util.function.BiFunction;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Creates a {@code Converter} given a type and style.

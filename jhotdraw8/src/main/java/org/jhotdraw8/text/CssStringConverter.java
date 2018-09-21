@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -33,7 +33,7 @@ import org.jhotdraw8.io.CharBufferReader;
 public class CssStringConverter implements Converter<String> {
 private final String helpText;
 private final char quoteChar;
-@NonNull
+@Nonnull
 private final String defaultValue;
 
     public CssStringConverter() {
@@ -49,7 +49,7 @@ private final String defaultValue;
 
     @Nullable
     @Override
-    public String fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
         if (tt.nextToken() != CssTokenizer.TT_STRING) {
             throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
@@ -63,7 +63,7 @@ private final String defaultValue;
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull String value) throws IOException {
         out.append(quoteChar);
         for (char ch : value.toCharArray()) {
             switch (ch) {
@@ -102,7 +102,7 @@ private final String defaultValue;
         out.append(quoteChar);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getDefaultValue() {
         return defaultValue;

@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.draw.figure.Figure;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -36,13 +36,13 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @NonNull IdFactory idFactory, @Nullable T value) throws IOException {
+    public void toString(@Nonnull Appendable out, @Nonnull IdFactory idFactory, @Nullable T value) throws IOException {
         out.append(value == null ? "none" : idFactory.getId(value));
     }
 
     @Nullable
     @Override
-    public T fromString(@NonNull CharBuffer buf, @NonNull IdFactory idFactory) throws ParseException, IOException {
+    public T fromString(@Nonnull CharBuffer buf, @Nonnull IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
         if ("none".equals(str)) {
             return null;

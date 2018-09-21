@@ -19,10 +19,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TextFieldListCell;
@@ -34,8 +32,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.util.Resources;
 
 public class FontChooserController {
@@ -87,7 +85,7 @@ public class FontChooserController {
         existing.sort(Comparator.comparing(FontFamily::getName));
     }
 
-    @NonNull
+    @Nonnull
     private FontCollection createFontCollection()  {
         final Resources labels = Resources.getResources("org.jhotdraw8.gui.Labels");
         FontCollection collection = new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
@@ -195,9 +193,9 @@ public class FontChooserController {
                     return item;
                 }
                 
-                @NonNull
+                @Nonnull
                 @Override
-                public String toString(@NonNull FontCollection item) {
+                public String toString(@Nonnull FontCollection item) {
                     return (item.isSmartCollection()) ? item.getName() + "•" : item.getName();
                 }
                 
@@ -303,12 +301,12 @@ public class FontChooserController {
 
     }
 
-    @NonNull
+    @Nonnull
     public ObjectProperty<FontChooserModel> modelProperty() {
         return model;
     }
 
-    @NonNull
+    @Nonnull
     public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
         return onAction;
     }

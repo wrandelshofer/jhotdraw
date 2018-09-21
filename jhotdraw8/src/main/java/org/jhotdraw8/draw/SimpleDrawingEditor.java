@@ -13,8 +13,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.tool.ToolEvent;
 import org.jhotdraw8.event.Listener;
@@ -101,25 +101,25 @@ public class SimpleDrawingEditor implements DrawingEditor {
 
     };
 
-    @NonNull
+    @Nonnull
     @Override
     public SetProperty<DrawingView> drawingViewsProperty() {
         return drawingViews;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<DrawingView> activeDrawingViewProperty() {
         return activeDrawingView;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<Tool> activeToolProperty() {
         return activeTool;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<Tool> defaultToolProperty() {
         return defaultTool;

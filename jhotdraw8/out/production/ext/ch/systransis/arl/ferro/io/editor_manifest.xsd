@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           targetNamespace="http://systransis.ch/xmlns/topology-editor-manifest"
+           xmlns:t="http://systransis.ch/xmlns/topology-editor-manifest">
+    <xs:element name="Manifest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="t:Property"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Property">
+        <xs:complexType>
+            <xs:attribute name="name" use="required"/>
+            <xs:attribute name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

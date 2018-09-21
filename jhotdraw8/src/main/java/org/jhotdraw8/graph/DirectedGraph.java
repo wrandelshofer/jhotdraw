@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * This interface provides read access to a directed graph {@code G = (V, A) }.
@@ -55,7 +55,7 @@ public interface DirectedGraph<V, A> {
      * @return the arrow or null if b is not next of a
      */
     @Nullable
-    default A findArrow(V a, @NonNull V b) {
+    default A findArrow(V a, @Nonnull V b) {
         int index = findIndexOfNext(a, b);
         return index == -1 ? null : getNextArrow(a, index);
     }
@@ -67,7 +67,7 @@ public interface DirectedGraph<V, A> {
      * @param b another vertex
      * @return index of vertex b. Returns -1 if b is not next index of a.
      */
-    default int findIndexOfNext(V a, @NonNull V b) {
+    default int findIndexOfNext(V a, @Nonnull V b) {
         for (int i = 0, n = getNextCount(a); i < n; i++) {
             if (b.equals(getNext(a, i))) {
                 return i;
@@ -116,7 +116,7 @@ public interface DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct successor nextArrows of vertex
      */
-    @NonNull
+    @Nonnull
     default Collection<V> getNextVertices(V vertex) {
         class NextVertexIterator implements Iterator<V> {
 
@@ -141,7 +141,7 @@ public interface DirectedGraph<V, A> {
 
         }
         return new AbstractCollection<V>() {
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<V> iterator() {
                 return new NextVertexIterator(vertex);
@@ -160,7 +160,7 @@ public interface DirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct successor arrows of vertex
      */
-    @NonNull
+    @Nonnull
     default Collection<A> getNextArrows(V vertex) {
         class NextArrowIterator implements Iterator<A> {
 
@@ -185,7 +185,7 @@ public interface DirectedGraph<V, A> {
         }
 
         return new AbstractCollection<A>() {
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<A> iterator() {
                 return new NextArrowIterator(vertex);
@@ -217,7 +217,7 @@ public interface DirectedGraph<V, A> {
      *
      * @return a collection view on all arrows
      */
-    @NonNull
+    @Nonnull
     Collection<A> getArrows();
 
     /**
@@ -227,7 +227,7 @@ public interface DirectedGraph<V, A> {
      * @param v2 vertex 2
      * @return a collection view on all arrows
      */
-    @NonNull
+    @Nonnull
     default Collection<A> getArrows(V v1, V v2) {
         List<A> arrows = new ArrayList<>();
         for (int i = 0, n = getNextCount(v1); i < n; i++) {
@@ -245,7 +245,7 @@ public interface DirectedGraph<V, A> {
      * @param b another vertex
      * @return true if b is next of a.
      */
-    default boolean isNext(V a, @NonNull V b) {
+    default boolean isNext(V a, @Nonnull V b) {
         return findIndexOfNext(a, b) != -1;
     }
 
@@ -284,7 +284,7 @@ public interface DirectedGraph<V, A> {
      * as visited.
      * @return breadth first search
      */
-    @NonNull
+    @Nonnull
     default Stream<V> breadthFirstSearch(V start, Predicate<V> visited) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getNextVertices, start, visited), false);
     }
@@ -296,7 +296,7 @@ public interface DirectedGraph<V, A> {
      * @param start the start vertex
      * @return breadth first search
      */
-    @NonNull
+    @Nonnull
     default Stream<V> breadthFirstSearch(V start) {
         Set<V> visited=new HashSet<>();
         return breadthFirstSearch(start, visited::add);

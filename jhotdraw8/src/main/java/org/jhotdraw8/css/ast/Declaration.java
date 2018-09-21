@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Declaration extends AST {
 
     private final String property;
-    @NonNull
+    @Nonnull
     private final List<PreservedToken> terms;
     private int startPos = -1;
     private int endPos = -1;
@@ -29,11 +29,11 @@ public class Declaration extends AST {
         this(property, Arrays.asList(new PreservedToken[]{term}));
     }
 
-    public Declaration(String property, @NonNull List<PreservedToken> terms) {
+    public Declaration(String property, @Nonnull List<PreservedToken> terms) {
         this(property, terms, -1, -1);
     }
 
-    public Declaration(String property, @NonNull List<PreservedToken> terms, int startPos, int endPos) {
+    public Declaration(String property, @Nonnull List<PreservedToken> terms, int startPos, int endPos) {
         this.property = property;
         this.terms = Collections.unmodifiableList(new ArrayList<PreservedToken>(terms));
         this.startPos = startPos;
@@ -44,12 +44,12 @@ public class Declaration extends AST {
         return property;
     }
 
-    @NonNull
+    @Nonnull
     public List<PreservedToken> getTerms() {
         return terms;
     }
 
-    @NonNull
+    @Nonnull
     public String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
@@ -59,7 +59,7 @@ public class Declaration extends AST {
         return buf.toString();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
 

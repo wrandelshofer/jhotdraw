@@ -12,8 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -36,7 +36,7 @@ public class SimpleLayer extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, Node node) {
         Group n = (Group) node;
         applyHideableFigureProperties(n);
         if (!isVisible()) {
@@ -83,7 +83,7 @@ public class SimpleLayer extends AbstractCompositeFigure
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext ctx) {
         Group n = new Group();

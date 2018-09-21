@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.io;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,11 +17,11 @@ import java.util.Map;
  */
 public class SimpleIdFactory implements IdFactory {
 
-    @NonNull
+    @Nonnull
     private Map<String, Long> prefixToNextId = new HashMap<>();
-    @NonNull
+    @Nonnull
     private Map<String, Object> idToObject = new HashMap<>();
-    @NonNull
+    @Nonnull
     private Map<Object, String> objectToId = new HashMap<>();
 
     @Override

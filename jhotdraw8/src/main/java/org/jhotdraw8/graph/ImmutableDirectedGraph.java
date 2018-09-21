@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,12 +26,12 @@ public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirected
     /**
      * Maps a vertex index to a vertex object.
      */
-    @NonNull
+    @Nonnull
     private final List<V> indexToVertexMap;
     /**
      * Maps a vertex object to a vertex index.
      */
-    @NonNull
+    @Nonnull
     private final Map<V, Integer> vertexToIndexMap;
 
     private Object[] arrowData;
@@ -72,7 +72,7 @@ public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirected
         }}
     }
 
-    @NonNull
+    @Nonnull
     @Override
     @SuppressWarnings("unchecked")
     public A getArrow(int indexOfArrow) {
@@ -96,18 +96,18 @@ public class ImmutableDirectedGraph<V, A> extends ImmutableAttributedIntDirected
     }
 
     @Override
-    public @NonNull Collection<A> getArrows() {
+    public @Nonnull Collection<A> getArrows() {
         return null;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     @SuppressWarnings("unchecked")
     public A getNextArrow(V vertex, int index) {
         return (A) arrowData[getArrowIndex(vertexToIndexMap.get(vertex), index)];
     }
 
-    @NonNull
+    @Nonnull
     @Override
     @SuppressWarnings("unchecked")
     public A getArrow(int vertex, int index) {

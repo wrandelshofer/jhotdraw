@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 import java.text.*;
@@ -165,7 +165,7 @@ public class OSXCollator extends Collator {
      * @param start start index of digit group
      * @param end end index+ 1 of digit group
      */
-    private void appendDigitGroup(StringBuilder out, @NonNull String s, int start, int end) {
+    private void appendDigitGroup(StringBuilder out, @Nonnull String s, int start, int end) {
         assert start < end : "start:"+start+" end:"+end;
         int num = Math.min(100, end - start) - 1;
         out.append((char) (num /10+ '0' ));

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -60,7 +60,7 @@ public class BezierFit {
      * @param error the maximal allowed error between the bezier path and the
      * digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder builder, Point2D[] digitizedPoints, double error) {
+    public static void fitBezierPath(@Nonnull PathBuilder builder, Point2D[] digitizedPoints, double error) {
         fitBezierPath(builder, Arrays.asList(digitizedPoints), error);
     }
 
@@ -72,7 +72,7 @@ public class BezierFit {
      * @param error the maximal allowed error between the bezier path and the
      * digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder builder, java.util.List<Point2D> digitizedPoints, double error) {
+    public static void fitBezierPath(@Nonnull PathBuilder builder, java.util.List<Point2D> digitizedPoints, double error) {
         // Split into segments at corners
         ArrayList<ArrayList<Point2D>> segments;
         segments = splitAtCorners(digitizedPoints, 77 / 180d * Math.PI, error * error);
@@ -145,7 +145,7 @@ public class BezierFit {
      * @param error the maximal allowed error between the bezier path and the
      * digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder builder, BezierNodePath digitizedPoints, double error) {
+    public static void fitBezierPath(@Nonnull PathBuilder builder, BezierNodePath digitizedPoints, double error) {
         List<Point2D> d = new ArrayList<>();
         for (BezierNode n : digitizedPoints.getNodes()) {
             d.add(new Point2D(n.getX0(), n.getY0()));
@@ -173,7 +173,7 @@ public class BezierFit {
      * 0, this method only removes sequences of coincident points.
      * @return Digitized points with a minimal distance.
      */
-    @NonNull
+    @Nonnull
     public static ArrayList<Point2D> removeClosePoints(java.util.List<Point2D> digitizedPoints, double minDistance) {
         if (minDistance == 0) {
             return removeCoincidentPoints(digitizedPoints);
@@ -211,7 +211,7 @@ public class BezierFit {
      * @param digitizedPoints Digitized points
      * @return Digitized points without subsequent duplicates.
      */
-    @NonNull
+    @Nonnull
     private static ArrayList<Point2D> removeCoincidentPoints(java.util.List<Point2D> digitizedPoints) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<Point2D>();
         if (digitizedPoints.size() > 0) {
@@ -241,7 +241,7 @@ public class BezierFit {
      * @return Segments of digitized points, each segment having less than
      * maximal angle between points.
      */
-    @NonNull
+    @Nonnull
     public static ArrayList<ArrayList<Point2D>> splitAtCorners(java.util.List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
         IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
         ArrayList<ArrayList<Point2D>> segments = new ArrayList<ArrayList<Point2D>>(cornerIndices.size() + 1);
@@ -268,7 +268,7 @@ public class BezierFit {
      * for corner detection
      * @return list of corner indices.
      */
-    @NonNull
+    @Nonnull
     public static IntArrayList findCorners(java.util.List<Point2D> digitizedPoints, double minAngle, double minDistance) {
         IntArrayList cornerIndices = new IntArrayList();
 
@@ -337,7 +337,7 @@ public class BezierFit {
      * @param weight Weight of the current point
      * @return Digitized points with reduced noise.
      */
-    @NonNull
+    @Nonnull
     public static ArrayList<Point2D> reduceNoise(java.util.List<Point2D> digitizedPoints, double weight) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<Point2D>();
         if (digitizedPoints.size() > 0) {
@@ -373,7 +373,7 @@ public class BezierFit {
      * @param errorSquared User-defined errorSquared squared.
      * @param builder Path to which the bezier curve segments are added.
      */
-    private static void fitCubic(@NonNull PathBuilder builder, @NonNull ArrayList<Point2D> d, int first, int last,
+    private static void fitCubic(@Nonnull PathBuilder builder, @Nonnull ArrayList<Point2D> d, int first, int last,
                                  Point2D tHat1, Point2D tHat2,
                                  double errorSquared) {
 
@@ -536,7 +536,7 @@ public class BezierFit {
      * @param first Indice of first point of region in d.
      * @param last Indice of last point of region in d.
      */
-    private static double[] chordLengthParameterize(@NonNull ArrayList<Point2D> d, int first, int last) {
+    private static double[] chordLengthParameterize(@Nonnull ArrayList<Point2D> d, int first, int last) {
         int i;
         double[] u;
         /*  Parameterization		*/
@@ -566,7 +566,7 @@ public class BezierFit {
      * @param u Current parameter values.
      * @param bezCurve Current fitted curve.
      */
-    private static double[] reparameterize(@NonNull ArrayList<Point2D> d, int first, int last, double[] u, Point2D[] bezCurve) {
+    private static double[] reparameterize(@Nonnull ArrayList<Point2D> d, int first, int last, double[] u, Point2D[] bezCurve) {
         int nPts = last - first + 1;
         int i;
         double[] uPrime;
@@ -586,7 +586,7 @@ public class BezierFit {
      * @param P Digitized point.
      * @param u Parameter value for P.
      */
-    private static double newtonRaphsonRootFind(Point2D[] Q, @NonNull Point2D P, double u) {
+    private static double newtonRaphsonRootFind(Point2D[] Q, @Nonnull Point2D P, double u) {
         double numerator, denominator;
         Point2D[] Q1 = new Point2D[3], Q2 = new Point2D[2];
         /*  Q' and Q''			*/
@@ -639,7 +639,7 @@ public class BezierFit {
      * @param splitPoint Point of maximum error (input/output parameter, must be
      * an array of 1)
      */
-    private static double computeMaxError(@NonNull ArrayList<Point2D> d, int first, int last, Point2D[] bezCurve, double[] u, int[] splitPoint) {
+    private static double computeMaxError(@Nonnull ArrayList<Point2D> d, int first, int last, Point2D[] bezCurve, double[] u, int[] splitPoint) {
         int i;
         double maxDist;
         /*  Maximum error */
@@ -675,7 +675,7 @@ public class BezierFit {
      * @param tHat2 Unit tanget vector at end point.
      * @return A cubic bezier curve consisting of 4 control points.
      */
-    private static Point2D[] generateBezier(@NonNull ArrayList<Point2D> d, int first, int last, double[] uPrime, @NonNull Point2D tHat1, @NonNull Point2D tHat2) {
+    private static Point2D[] generateBezier(@Nonnull ArrayList<Point2D> d, int first, int last, double[] uPrime, @Nonnull Point2D tHat1, @Nonnull Point2D tHat2) {
         Point2D[] bezCurve;
 
         bezCurve = new Point2D[4];
@@ -735,7 +735,7 @@ public class BezierFit {
     /**
      * Return the distance between two points
      */
-    private static double v2DistanceBetween2Points(@NonNull Point2D a, @NonNull Point2D b) {
+    private static double v2DistanceBetween2Points(@Nonnull Point2D a, @Nonnull Point2D b) {
         return Math.sqrt(v2SquaredDistanceBetween2Points(a, b));
     }
 
@@ -751,7 +751,7 @@ public class BezierFit {
     /**
      * Scales the input vector to the new length and returns it.
      */
-    private static Point2D v2Scale(@NonNull Point2D v, double newlen) {
+    private static Point2D v2Scale(@Nonnull Point2D v, double newlen) {
         double len = v2Length(v);
         double x = v.getX(), y = v.getY();
         if (len != 0.0) {
@@ -765,7 +765,7 @@ public class BezierFit {
     /**
      * Scales the input vector by the specified factor and returns it.
      */
-    @NonNull
+    @Nonnull
     private static Point2D v2ScaleIII(Point2D v, double s) {
         Point2D result = new Point2D(v.getX() * s, v.getY() * s);
         return result;
@@ -774,7 +774,7 @@ public class BezierFit {
     /**
      * Returns length of input vector.
      */
-    private static double v2Length(@NonNull Point2D a) {
+    private static double v2Length(@Nonnull Point2D a) {
         return Math.sqrt(v2SquaredLength(a));
     }
 
@@ -820,8 +820,8 @@ public class BezierFit {
     /**
      * Normalizes the input vector and returns it.
      */
-    @NonNull
-    private static Point2D v2Normalize(@NonNull Point2D v) {
+    @Nonnull
+    private static Point2D v2Normalize(@Nonnull Point2D v) {
         double len = v2Length(v);
         if (len != 0.0) {
             return new Point2D(v.getX() / len,
@@ -838,7 +838,7 @@ public class BezierFit {
      * @param b Vector b - the value is not changed by this method
      * @return Vector a subtracted by Vector v.
      */
-    @NonNull
+    @Nonnull
     private static Point2D v2SubII(Point2D a, Point2D b) {
         Point2D c = new Point2D(a.getX() - b.getX(),
                 a.getY() - b.getY());

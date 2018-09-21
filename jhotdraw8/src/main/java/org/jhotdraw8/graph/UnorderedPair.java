@@ -3,9 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.graph.Pair;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -65,7 +64,7 @@ public class UnorderedPair<V> implements Pair<V> {
         return a.hashCode() * b.hashCode();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "UnorderedPair{" + "a=" + a + ", b=" + b + '}';

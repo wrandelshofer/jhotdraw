@@ -17,8 +17,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents an item which can be added to a {@code Dock}.
@@ -54,7 +54,7 @@ public class DockItem extends Tab {
         selectedProperty().addListener(this::selectionChanged);
     }
 
-    @NonNull
+    @Nonnull
     public ObjectProperty<Dock> dockProperty() {
         return dock;
     }
@@ -87,7 +87,7 @@ public class DockItem extends Tab {
         draggedTab = null;
     }
 
-    public void handleDragDetected(@NonNull MouseEvent e) {
+    public void handleDragDetected(@Nonnull MouseEvent e) {
         Node graphic = getGraphic();
         draggedTab = this;
         Dragboard db = graphic.startDragAndDrop(TransferMode.MOVE);

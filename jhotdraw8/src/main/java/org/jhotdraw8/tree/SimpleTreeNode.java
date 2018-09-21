@@ -1,7 +1,7 @@
 package org.jhotdraw8.tree;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +20,7 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         this.value = value;
     }
 
-    public void addChild(@NonNull SimpleTreeNode<V> child) {
+    public void addChild(@Nonnull SimpleTreeNode<V> child) {
         if (child.parent != null) {
             child.parent.removeChild(child);
         }
@@ -29,14 +29,14 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         child.parent = this;
     }
 
-    public void removeChild(@NonNull SimpleTreeNode<V> child) {
+    public void removeChild(@Nonnull SimpleTreeNode<V> child) {
         if (children != null) {
             children.remove(child);
             child.parent = null;
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<SimpleTreeNode<V>> getChildren() {
         return children == null ? Collections.emptyList() : Collections.unmodifiableList(children);

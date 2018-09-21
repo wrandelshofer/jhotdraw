@@ -5,8 +5,6 @@ package org.jhotdraw8.draw.inspector;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,14 +31,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.ast.Stylesheet;
@@ -96,7 +93,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private Node node;
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter();
 
-    @NonNull
+    @Nonnull
     private Map<String, String> helpTexts = new HashMap<>();
 
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
@@ -125,11 +122,11 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         this(StyleAttributesInspector.class.getResource("StyleAttributesInspector.fxml"));
     }
 
-    public StyleAttributesInspector(@NonNull URL fxmlUrl) {
+    public StyleAttributesInspector(@Nonnull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(@Nonnull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -431,7 +428,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
     }
-    @NonNull
+    @Nonnull
     private List<HelptextLookupEntry> helptextLookupTable = new ArrayList<>();
 
     protected void updateLookupTable(Observable o) {
@@ -449,7 +446,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
     }
 
-    protected void updateHelpText(Observable o, Number oldv, @NonNull Number newv) {
+    protected void updateHelpText(Observable o, Number oldv, @Nonnull Number newv) {
         int insertionPoint = Collections.binarySearch(helptextLookupTable, new HelptextLookupEntry(newv.intValue(), null));
         if (insertionPoint < 0) {
             insertionPoint = (-(insertionPoint) - 1) - 1;
@@ -470,7 +467,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
     }
 
-    protected void collectHelpTexts(@NonNull Collection<Figure> figures) {
+    protected void collectHelpTexts(@Nonnull Collection<Figure> figures) {
         Drawing drawing = drawingView.getDrawing();
         StylesheetsManager<Figure> styleManager = drawing.getStyleManager();
         FigureSelectorModel selectorModel = (FigureSelectorModel) styleManager.getSelectorModel();

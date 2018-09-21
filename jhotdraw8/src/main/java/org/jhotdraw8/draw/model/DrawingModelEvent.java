@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.model;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -99,7 +99,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the key
      */
-    @NonNull
+    @Nonnull
     public <T> Key<T> getKey() {
         @SuppressWarnings("unchecked")
         Key<T> tmp = (Key<T>) key;
@@ -112,7 +112,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the old value
      */
-    @NonNull
+    @Nonnull
     public <T> T getOldValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) oldValue;
@@ -125,7 +125,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the new value
      */
-    @NonNull
+    @Nonnull
     public <T> T getNewValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) newValue;
@@ -177,7 +177,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return eventType;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "DrawingModelEvent{"

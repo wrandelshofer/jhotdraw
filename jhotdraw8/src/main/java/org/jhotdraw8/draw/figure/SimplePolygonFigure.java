@@ -13,7 +13,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -58,7 +58,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         set(POINTS, ImmutableList.of(points));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         double minX = Double.POSITIVE_INFINITY;
@@ -74,14 +74,14 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         return Shapes.pathIteratorFromPoints(get(POINTS),true,PathIterator.WIND_EVEN_ODD,tx);
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(@Nonnull Transform transform) {
         ArrayList<Point2D> newP = new ArrayList<>(get(POINTS));
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
@@ -89,7 +89,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         set(POINTS, ImmutableList.ofCollection(newP));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Polygon();
@@ -101,7 +101,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Polygon lineNode = (Polygon) node;
         applyHideableFigureProperties(node);
         applyFillableFigureProperties(lineNode);
@@ -121,14 +121,14 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
         return new PathConnector(new RelativeLocator(getBoundsInLocal(),p));
     }
 
     @Override
-    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PolygonOutlineHandle(this, POINTS, false,Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
@@ -146,7 +146,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

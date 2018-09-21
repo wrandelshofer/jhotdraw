@@ -14,7 +14,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
@@ -64,7 +64,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
         set(END, end);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         Point2D start = get(START);
@@ -82,7 +82,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(@Nonnull Transform transform) {
         set(START, transform.transform(get(START)));
         set(END, transform.transform(get(END)));
     }
@@ -93,14 +93,14 @@ public class SimpleLineFigure extends AbstractLeafFigure
         set(END, new Point2D(x + width, y + height));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Line();
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Line lineNode = (Line) node;
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
@@ -117,7 +117,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
@@ -137,7 +137,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

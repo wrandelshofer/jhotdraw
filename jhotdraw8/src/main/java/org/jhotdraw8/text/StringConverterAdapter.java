@@ -6,7 +6,7 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.text.ParseException;
 import javafx.util.StringConverter;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Allows to use a {@code Converter} with the
@@ -31,10 +31,10 @@ public class StringConverterAdapter<T> extends StringConverter<T> {
     }
 
     @Override
-    public T fromString(@NonNull String string) {
+    public T fromString(@Nonnull String string) {
         try {
             return converter.fromString(string);
-        } catch (@NonNull ParseException | IOException ex) {
+        } catch (@Nonnull ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

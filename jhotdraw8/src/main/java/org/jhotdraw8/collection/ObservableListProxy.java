@@ -8,8 +8,8 @@ import java.util.List;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * ObservableListProxy.
@@ -19,7 +19,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class ObservableListProxy<E> extends TransformationList<E, E> {
 
-    public ObservableListProxy(@NonNull ObservableList<? extends E> source) {
+    public ObservableListProxy(@Nonnull ObservableList<? extends E> source) {
         super(source);
 
     }
@@ -197,7 +197,7 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
             return change.getTo();
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public List<E> getRemoved() {
             @SuppressWarnings("unchecked")

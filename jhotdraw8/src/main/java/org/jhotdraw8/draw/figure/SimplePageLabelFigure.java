@@ -5,10 +5,9 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
-import static org.jhotdraw8.draw.figure.AbstractLabelFigure.ORIGIN;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.StringStyleableFigureKey;
@@ -64,8 +63,8 @@ public class SimplePageLabelFigure extends AbstractLabelFigure implements Hideab
         return text;
     }
 
-    @NonNull
-    private String replaceAll(String text, @NonNull String placeholder, String replace) {
+    @Nonnull
+    private String replaceAll(String text, @Nonnull String placeholder, String replace) {
         for (int p = text.indexOf(placeholder); p != -1; p = text.indexOf(placeholder)) {
             text = text.substring(0, p) + replace + text.substring(p + placeholder.length());
         }
@@ -73,14 +72,14 @@ public class SimplePageLabelFigure extends AbstractLabelFigure implements Hideab
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         super.updateNode(ctx, node);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
         applyHideableFigureProperties(node);                
     }
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

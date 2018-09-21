@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -23,7 +23,7 @@ public class FormatConverterAdapter extends Format {
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final Converter<Object> converter;
 
     public FormatConverterAdapter(Converter<?> converter) {
@@ -32,7 +32,7 @@ public class FormatConverterAdapter extends Format {
         this.converter = temp;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
         toAppendTo.append(converter.toString(obj));
@@ -41,7 +41,7 @@ public class FormatConverterAdapter extends Format {
 
     @Nullable
     @Override
-    public Object parseObject(@NonNull String source, ParsePosition pos) {
+    public Object parseObject(@Nonnull String source, ParsePosition pos) {
         try {
             CharBuffer buf = CharBuffer.wrap(source);
             Object value = converter.fromString(buf, null);

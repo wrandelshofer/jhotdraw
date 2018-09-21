@@ -20,7 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.gui.InputDialog;
@@ -90,7 +90,7 @@ private  DataFormat format;
      * Returns a new map.
      * @return the export options
      */
-    @NonNull
+    @Nonnull
     public Map<? super Key<?>, Object> getExportOptions() {
         Map<? super Key<?>, Object> map = new HashMap<>();
         EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());

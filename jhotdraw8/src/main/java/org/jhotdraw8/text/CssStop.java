@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.CssColor;
 import java.util.Objects;
 
@@ -59,7 +59,7 @@ public class CssStop {
         return true;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "CssStop{" + "offset=" + offset + ", " + color + '}';

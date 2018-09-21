@@ -5,7 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Defines a slice of a drawing.

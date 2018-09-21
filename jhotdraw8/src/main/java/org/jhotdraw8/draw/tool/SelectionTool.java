@@ -10,13 +10,12 @@ import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.util.Resources;
@@ -120,7 +119,7 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Properties
     // ---
-    @NonNull
+    @Nonnull
     public BooleanProperty selectBehindEnabledProperty() {
         return selectBehindEnabled;
     }
@@ -134,7 +133,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         requestFocus();
         mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
@@ -269,7 +268,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void handleMouseMoved(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         double vx = event.getX();
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
@@ -392,7 +391,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(@Nonnull DrawingEditor editor) {
         for (DrawingView view : editor.getDrawingViews()) {
             view.setHandleType(handleType);
             view.setAnchorHandleType(anchorHandleType);
@@ -410,11 +409,11 @@ public class SelectionTool extends AbstractTool {
 
     double zoomFactor = 1.0;
 
-    protected void handleZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
+    protected void handleZoom(@Nonnull ZoomEvent event, @Nonnull DrawingView dv) {
         dv.setZoomFactor(zoomFactor * event.getTotalZoomFactor());
     }
 
-    protected void handleZoomStarted(ZoomEvent event, @NonNull DrawingView dv) {
+    protected void handleZoomStarted(ZoomEvent event, @Nonnull DrawingView dv) {
         zoomFactor = dv.getZoomFactor();
     }
 

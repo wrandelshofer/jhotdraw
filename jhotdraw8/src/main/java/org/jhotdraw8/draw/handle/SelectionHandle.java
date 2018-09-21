@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.HashSet;
-import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -18,15 +16,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -38,7 +34,7 @@ import org.jhotdraw8.geom.Transforms;
 public class SelectionHandle extends LocatorHandle {
 
     private Point2D pickLocation;
-    @NonNull
+    @Nonnull
     private final Region node;
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
@@ -73,14 +69,14 @@ public class SelectionHandle extends LocatorHandle {
         return Cursor.DEFAULT;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();

@@ -10,15 +10,13 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssInsetsConverter;
-import org.jhotdraw8.text.CssSize;
-import org.jhotdraw8.text.CssSizeInsets;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -31,15 +29,15 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, Insets> cssMetaData;
-    @NonNull
+    @Nonnull
     private final MapAccessor<Double> topKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<Double> rightKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<Double> bottomKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<Double> leftKey;
 
     /**
@@ -73,7 +71,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
         this.leftKey = leftKey;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, Insets> getCssMetaData() {
         return cssMetaData;
@@ -90,7 +88,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
         return converter;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Insets get(Map<? super Key<?>, Object> a) {
         final Double top = topKey.get(a);
@@ -105,9 +103,9 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
         );
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Insets put(Map<? super Key<?>, Object> a, @NonNull Insets value) {
+    public Insets put(Map<? super Key<?>, Object> a, @Nonnull Insets value) {
         Insets oldValue = get(a);
         topKey.put(a, value.getTop());
         rightKey.put(a, value.getRight());
@@ -116,7 +114,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
         return oldValue;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Insets remove(Map<? super Key<?>, Object> a) {
         Insets oldValue = get(a);

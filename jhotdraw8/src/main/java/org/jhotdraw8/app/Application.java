@@ -17,7 +17,7 @@ import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.HierarchicalMap;

@@ -23,11 +23,11 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.action.Action;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a
@@ -86,7 +86,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * List of decoders. The first decoder which can decode a resource value is
      * will be used to convert the resource value to an object.
      */
-    @NonNull
+    @Nonnull
     private static List<ResourceDecoder> decoders = new ArrayList<>();
     /**
      * The global verbose property.
@@ -98,7 +98,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * name of the property name modifier, the value of this map is a fallback
      * chain.
      */
-    @NonNull
+    @Nonnull
     private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
     private static final long serialVersionUID = 1L;
 
@@ -131,7 +131,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static Resources getResources(@NonNull String baseName)
+    public static Resources getResources(@Nonnull String baseName)
             throws MissingResourceException {
         return getResources(baseName, LocaleUtil.getDefault());
     }
@@ -144,7 +144,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static Resources getResources(@NonNull String baseName, @NonNull Locale locale)
+    public static Resources getResources(@Nonnull String baseName, @Nonnull Locale locale)
             throws MissingResourceException {
         Resources r;
         r = new Resources(baseName, locale);
@@ -193,12 +193,12 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
     /**
      * The base name of the resource bundle.
      */
-    @NonNull
+    @Nonnull
     private final String baseName;
     /**
      * The locale.
      */
-    @NonNull
+    @Nonnull
     private final Locale locale;
 
     /**
@@ -217,7 +217,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param baseName the base name
      * @param locale the locale
      */
-    public Resources(@NonNull String baseName, @NonNull Locale locale) {
+    public Resources(@Nonnull String baseName, @Nonnull Locale locale) {
         this.locale = locale;
         this.baseName = baseName;
         this.resource = ResourceBundle.getBundle(baseName, locale);
@@ -241,11 +241,11 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         this.parent = potentialParent;
     }
 
-    public void configureAction(@NonNull Action action, String argument) {
+    public void configureAction(@Nonnull Action action, String argument) {
         configureAction(action, argument, getBaseClass());
     }
 
-    public void configureAction(@NonNull Action action, String argument, @NonNull Class<?> baseClass) {
+    public void configureAction(@Nonnull Action action, String argument, @Nonnull Class<?> baseClass) {
         action.set(Action.LABEL, getTextProperty(argument));
         String shortDescription = getToolTipTextProperty(argument);
         if (shortDescription != null && shortDescription.length() > 0) {
@@ -257,11 +257,11 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         action.set(Action.LARGE_ICON_KEY, getLargeIconProperty(argument, baseClass));
     }
 
-    public void configureButton(@NonNull ButtonBase button, String argument) {
+    public void configureButton(@Nonnull ButtonBase button, String argument) {
         configureButton(button, argument, getBaseClass());
     }
 
-    public void configureButton(@NonNull ButtonBase button, String argument, @NonNull Class<?> baseClass) {
+    public void configureButton(@Nonnull ButtonBase button, String argument, @Nonnull Class<?> baseClass) {
         button.setText(getTextProperty(argument));
         //button.setACCELERATOR_KEY, getAcceleratorProperty(argument));
         //action.putValue(Action.MNEMONIC_KEY, new Integer(getMnemonicProperty(argument)));
@@ -276,18 +276,18 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param menu the menu
      * @param argument the argument
      */
-    public void configureMenu(@NonNull Menu menu, String argument) {
+    public void configureMenu(@Nonnull Menu menu, String argument) {
         menu.setText(getTextProperty(argument));
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
         menu.setGraphic(getSmallIconProperty(argument, baseClass));
     }
 
-    public void configureToolBarButton(@NonNull ButtonBase button, String argument) {
+    public void configureToolBarButton(@Nonnull ButtonBase button, String argument) {
         configureToolBarButton(button, argument, getBaseClass());
     }
 
-    public void configureToolBarButton(@NonNull ButtonBase button, String argument, @NonNull Class<?> baseClass) {
+    public void configureToolBarButton(@Nonnull ButtonBase button, String argument, @Nonnull Class<?> baseClass) {
         Node icon = getLargeIconProperty(argument, baseClass);
         if (icon != null) {
             button.setGraphic(getLargeIconProperty(argument, baseClass));
@@ -322,8 +322,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param arguments the arguments
      * @return formatted String
      */
-    @NonNull
-    public String format(@NonNull String key, Object... arguments) {
+    @Nonnull
+    public String format(@Nonnull String key, Object... arguments) {
         //return String.format(resource.getLocale(), getString(key), arguments);
         return new Formatter(resource.getLocale()).format(getString(key), arguments).toString();
     }
@@ -332,7 +332,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * Generates fallback keys by processing all property name modifiers in the
      * key.
      */
-    private void generateFallbackKeys(String key, @NonNull ArrayList<String> fallbackKeys) {
+    private void generateFallbackKeys(String key, @Nonnull ArrayList<String> fallbackKeys) {
         int p1 = key.indexOf("[$");
         if (p1 == -1) {
             fallbackKeys.add(key);
@@ -362,7 +362,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     public KeyCombination getAcceleratorProperty(String key) {
         return getKeyCombination(key + ".accelerator");
     }
@@ -382,12 +382,12 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param arguments the arguments
      * @return formatted String
      */
-    @NonNull
-    public String getFormatted(@NonNull String key, Object... arguments) {
+    @Nonnull
+    public String getFormatted(@Nonnull String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
 
-    private Node getIconProperty(String key, String suffix, @NonNull Class<?> baseClass) {
+    private Node getIconProperty(String key, String suffix, @Nonnull Class<?> baseClass) {
         try {
             String rsrcName = getString(key + suffix);
             if ("".equals(rsrcName) || rsrcName == null) {
@@ -421,8 +421,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param key The key of the property.
      * @return The value of the property. Returns -1 if the property is missing.
      */
-    @NonNull
-    public Integer getInteger(@NonNull String key) {
+    @Nonnull
+    public Integer getInteger(@Nonnull String key) {
         try {
             return Integer.valueOf(getString(key));
         } catch (MissingResourceException e) {
@@ -442,19 +442,19 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
-    public KeyCombination getKeyCombination(@NonNull String key) {
+    @javax.annotation.Nullable
+    public KeyCombination getKeyCombination(@Nonnull String key) {
         KeyCombination ks = null;
         String s = getString(key);
         try {
             ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
-        } catch (@NonNull NoSuchElementException | StringIndexOutOfBoundsException e) {
+        } catch (@Nonnull NoSuchElementException | StringIndexOutOfBoundsException e) {
             throw new InternalError(key + "=" + s, e);
         }
         return ks;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Enumeration<String> getKeys() {
         return resource.getKeys();
@@ -471,8 +471,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
-    public Node getLargeIconProperty(String key, @NonNull Class<?> baseClass) {
+    @javax.annotation.Nullable
+    public Node getLargeIconProperty(String key, @Nonnull Class<?> baseClass) {
         return getIconProperty(key, ".largeIcon", baseClass);
     }
 
@@ -484,7 +484,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The first char of the value of the property. Returns '\0' if the
      * property is missing.
      */
-    public char getMnemonic(@NonNull String key) {
+    public char getMnemonic(@Nonnull String key) {
         String s = getString(key);
         return (s == null || s.length() == 0) ? '\0' : s.charAt(0);
     }
@@ -498,7 +498,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The first char of the value of the property. Returns '\0' if the
      * property is missing.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     public KeyCombination getMnemonicProperty(String key) {
         String s;
         try {
@@ -524,8 +524,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
-    public Node getSmallIconProperty(String key, @NonNull Class<?> baseClass) {
+    @javax.annotation.Nullable
+    public Node getSmallIconProperty(String key, @Nonnull Class<?> baseClass) {
         return getIconProperty(key, ".smallIcon", baseClass);
     }
 
@@ -537,7 +537,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     public String getTextProperty(String key) {
         try {
             String value = getString(key + ".text");
@@ -560,7 +560,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * the key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     public String getToolTipTextProperty(String key) {
         try {
             String value = getString(key + ".toolTipText");
@@ -583,7 +583,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return resource;
     }
 
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     @Override
     protected Object handleGetObject(String key) {
         Object obj = handleGetObjectRecursively(key);
@@ -598,8 +598,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return obj;
     }
 
-    @org.checkerframework.checker.nullness.qual.Nullable
-    protected Object handleGetObjectRecursively(@NonNull String key) {
+    @javax.annotation.Nullable
+    protected Object handleGetObjectRecursively(@Nonnull String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -611,7 +611,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return obj;
     }
 
-    @NonNull
+    @Nonnull
     private String substitutePlaceholders(String key, String value) throws MissingResourceException {
 
         // Substitute placeholders in the value
@@ -667,7 +667,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
 
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "Resources" + "[" + baseName + "]";
@@ -680,8 +680,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param s The KeyStroke String
      * @return The KeyCombination String
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
-    protected String translateKeyStrokeToKeyCombination(@org.checkerframework.checker.nullness.qual.Nullable String s) {
+    @javax.annotation.Nullable
+    protected String translateKeyStrokeToKeyCombination(@javax.annotation.Nullable String s) {
         if (s != null) {
             s = s.replace("ctrl ", "Ctrl+");
             s = s.replace("meta ", "Meta+");

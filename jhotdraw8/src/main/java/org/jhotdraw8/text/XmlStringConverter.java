@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -32,9 +32,9 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class XmlStringConverter implements Converter<String> {
 
-    @NonNull
+    @Nonnull
     @Override
-    public String fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);
@@ -43,11 +43,11 @@ public class XmlStringConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getDefaultValue() {
         return "null";

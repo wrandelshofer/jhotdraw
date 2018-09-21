@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Provides utility methods for computing the convex hull from a set of points.
@@ -44,7 +44,7 @@ public class FXConvexHull {
         Arrays.sort(sorted, new Comparator<Point2D>() {
 
             @Override
-            public int compare(@NonNull Point2D o1, @NonNull Point2D o2) {
+            public int compare(@Nonnull Point2D o1, @Nonnull Point2D o2) {
                 double v = o1.getX() - o2.getX();
                 if (v == 0) {
                     v = o1.getY() - o2.getY();
@@ -93,7 +93,7 @@ public class FXConvexHull {
      * @param p3 third point
      * @return true if right turn.
      */
-    public static boolean isRightTurn(Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3) {
+    public static boolean isRightTurn(Point2D p1, @Nonnull Point2D p2, @Nonnull Point2D p3) {
         if (p1.equals(p2) || p2.equals(p3)) {
             // no right turn if points are at same location
             return false;

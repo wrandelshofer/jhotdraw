@@ -5,7 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -39,7 +39,7 @@ public class SimpleLabelFigure extends AbstractLabelFigure implements HideableFi
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         super.updateNode(ctx, node);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(node);
@@ -53,7 +53,7 @@ public class SimpleLabelFigure extends AbstractLabelFigure implements HideableFi
     }
     
     
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

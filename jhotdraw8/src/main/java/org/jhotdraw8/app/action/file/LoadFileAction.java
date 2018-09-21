@@ -5,7 +5,7 @@ package org.jhotdraw8.app.action.file;
 
 import java.util.concurrent.CompletionStage;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.util.Resources;
@@ -125,7 +125,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }*/
 
-    @NonNull
+    @Nonnull
     @Override
     public CompletionStage<Void> doIt(final DocumentOrientedViewModel view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

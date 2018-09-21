@@ -6,10 +6,9 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.geom.Geom;
 
 /**
  * A locator that specifies a point as an offset to the top left corner (origin) of the figure..
@@ -61,9 +60,9 @@ public class OriginOffsetLocator extends AbstractLocator {
         return offsetY;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Point2D locate(@NonNull Figure owner) {
+    public Point2D locate(@Nonnull Figure owner) {
         Bounds bounds = owner.getBoundsInLocal();
 
         Point2D location = new Point2D(

@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * PathIterableFigure.

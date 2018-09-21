@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -31,7 +31,7 @@ public class BezierPointLocator extends AbstractLocator {
         this.coord = index;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D locate(Figure owner) {
         SimpleBezierFigure plf = (SimpleBezierFigure) owner;

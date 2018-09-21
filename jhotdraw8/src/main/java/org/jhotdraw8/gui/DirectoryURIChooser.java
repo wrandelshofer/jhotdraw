@@ -7,8 +7,8 @@ import java.io.File;
 import java.net.URI;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * FileURIChooser.
@@ -23,7 +23,7 @@ public class DirectoryURIChooser implements URIChooser {
      */
     private final DirectoryChooser chooser = new DirectoryChooser();
 
-    @NonNull
+    @Nonnull
     public DirectoryChooser getDirectoryChooser() {
         return chooser;
     }

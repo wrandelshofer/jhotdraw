@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -25,14 +25,14 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
     /** Whether the user may enter a null value. */
     private boolean nullable = false;
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨Insets⟩: ⟨all-insets⟩｜⟨top&bottom⟩ ⟨left&right⟩｜⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable CssSizeInsets value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable CssSizeInsets value) throws IOException {
         if (value == null || value.getLeft() == null || value.getRight() == null | value.getTop() == null || value.getBottom() == null) {
             out.append("none");
             return;
@@ -54,7 +54,7 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
 
     @Nullable
     @Override
-    public CssSizeInsets fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssSizeInsets fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
         if (nullable && "none".equals(str.trim())) {
             return null;
@@ -75,7 +75,7 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssSizeInsets getDefaultValue() {
         return  CssSizeInsets.ZERO;

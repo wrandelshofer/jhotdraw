@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.gui.fontchooser.FontDialog;
 
 /**
@@ -22,7 +22,7 @@ import org.jhotdraw8.gui.fontchooser.FontDialog;
 public class FontChooserMain extends Application {
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(@Nonnull Stage primaryStage) {
                 FontDialog fd = new FontDialog();
         Button btn = new Button();
         btn.setText("Open FontChooser");

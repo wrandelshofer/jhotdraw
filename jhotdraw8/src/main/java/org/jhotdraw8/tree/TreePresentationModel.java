@@ -4,7 +4,7 @@
 package org.jhotdraw8.tree;
 
 import javafx.scene.control.TreeItem;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 
 /**

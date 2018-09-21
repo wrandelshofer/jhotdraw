@@ -27,7 +27,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
-import javafx.geometry.NodeOrientation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -36,17 +35,14 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.DataFormat;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.Actions;
 import org.jhotdraw8.app.action.ScreenMenuBarProxyAction;
@@ -94,7 +90,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
     private final SetProperty<ViewController> views = new SimpleSetProperty<>(FXCollections.observableSet());
-    @NonNull
+    @Nonnull
     private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
@@ -135,7 +131,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @param actions the action map
      * @return the menu bar
      */
-    protected MenuBar createMenuBar(@Nullable Stage stage, @NonNull HierarchicalMap<String, Action> actions) {
+    protected MenuBar createMenuBar(@Nullable Stage stage, @Nonnull HierarchicalMap<String, Action> actions) {
         MenuBar mb = model.createMenuBar();
         Deque<Menu> todo = new LinkedList<>(mb.getMenus());
         final List<KeyCombination> accelerators = new ArrayList<>();
@@ -221,7 +217,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public void execute(@NonNull Runnable r) {
+    public void execute(@Nonnull Runnable r) {
         executor.execute(r);
     }
 
@@ -259,7 +255,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(@NonNull DocumentOrientedViewModel view) {
+    protected void handleViewActivated(@Nonnull DocumentOrientedViewModel view) {
         view.activate();
     }
 
@@ -269,7 +265,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(@NonNull DocumentOrientedViewModel view) {
+    protected void handleViewAdded(@Nonnull DocumentOrientedViewModel view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -371,7 +367,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(@NonNull DocumentOrientedViewModel view) {
+    protected void handleViewDeactivated(@Nonnull DocumentOrientedViewModel view) {
         view.deactivate();
     }
 
@@ -381,7 +377,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(@NonNull DocumentOrientedViewModel view) {
+    protected void handleViewRemoved(@Nonnull DocumentOrientedViewModel view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -413,7 +409,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
         disambiguateViews();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public SetProperty<ViewController> viewsProperty() {
         return views;

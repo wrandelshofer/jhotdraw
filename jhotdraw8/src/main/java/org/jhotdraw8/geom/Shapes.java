@@ -44,15 +44,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
-import static javafx.scene.shape.StrokeLineJoin.BEVEL;
-import static javafx.scene.shape.StrokeLineJoin.MITER;
-import static javafx.scene.shape.StrokeLineJoin.ROUND;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.text.Text;
 import javafx.scene.transform.MatrixType;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
 import org.jhotdraw8.text.XmlNumberConverter;
@@ -137,7 +134,7 @@ public class Shapes {
         }
     }
 
-    @NonNull
+    @Nonnull
     private static Shape awtShapeFromFXArc(Arc node) {
         double centerX = node.getCenterX();
         double centerY = node.getCenterY();
@@ -180,7 +177,7 @@ public class Shapes {
         return new Ellipse2D.Double(x - r, y - r, r * 2, r * 2);
     }
 
-    @NonNull
+    @Nonnull
     private static Shape awtShapeFromFXCubicCurve(CubicCurve e) {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(e.getStartX(), e.getStartY());
@@ -196,18 +193,18 @@ public class Shapes {
         return new Ellipse2D.Double(x - rx, y - ry, rx * 2, ry * 2);
     }
 
-    @NonNull
+    @Nonnull
     private static Shape awtShapeFromFXLine(Line node) {
         Line2D.Double p = new Line2D.Double(node.getStartX(), node.getStartY(), node.getEndX(), node.getEndY());
         return p;
     }
 
-    @NonNull
+    @Nonnull
     private static Shape awtShapeFromFXPath(Path node) {
         return awtShapeFromFXPathElements(node.getElements());
     }
 
-    @NonNull
+    @Nonnull
     public static Shape awtShapeFromFXPathElements(List<PathElement> pathElements) {
         SvgPath2D p = new SvgPath2D();
         double x = 0;
@@ -253,7 +250,7 @@ public class Shapes {
         return p;
     }
 
-    @NonNull
+    @Nonnull
     private static Shape awtShapeFromFXPolygon(Polygon node) {
         Path2D.Double p = new Path2D.Double();
         List<Double> ps = node.getPoints();
@@ -268,7 +265,7 @@ public class Shapes {
         return p;
     }
 
-    @NonNull
+    @Nonnull
     private static Shape awtShapeFromFXPolyline(Polyline node) {
         Path2D.Double p = new Path2D.Double();
         List<Double> ps = node.getPoints();
@@ -282,7 +279,7 @@ public class Shapes {
         return p;
     }
 
-    @NonNull
+    @Nonnull
     private static Shape awtShapeFromFXQuadCurve(QuadCurve node) {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(node.getStartX(), node.getStartY());
@@ -321,8 +318,8 @@ public class Shapes {
         return b.build();
     }
 
-    @NonNull
-    private static Shape awtShapeFromFXText(@NonNull Text node) {
+    @Nonnull
+    private static Shape awtShapeFromFXText(@Nonnull Text node) {
         Path path = (Path) javafx.scene.shape.Shape.subtract(node, new Rectangle());
         return awtShapeFromFXPath(path);
     }
@@ -337,7 +334,7 @@ public class Shapes {
      * @return the SvgPath2D
      * @throws java.io.IOException if the String is not a valid path
      */
-    public static Path2D.Double awtShapeFromSvgString(@NonNull String str) throws IOException {
+    public static Path2D.Double awtShapeFromSvgString(@Nonnull String str) throws IOException {
         AWTPathBuilder b = new AWTPathBuilder();
         buildFromSvgString(b, str);
         return (Path2D.Double) b.build();
@@ -359,8 +356,8 @@ public class Shapes {
         return fxT == null ? null : new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
     }
 
-    @NonNull
-    public static <T extends PathBuilder> T buildFromFXPathElements(@NonNull T builder, List<PathElement> pathElements) {
+    @Nonnull
+    public static <T extends PathBuilder> T buildFromFXPathElements(@Nonnull T builder, List<PathElement> pathElements) {
         double x = 0;
         double y = 0;
         for (PathElement pe : pathElements) {
@@ -405,8 +402,8 @@ public class Shapes {
         return builder;
     }
 
-    @NonNull
-    public static <T extends PathBuilder> T buildFromPathIterator(@NonNull T builder, PathIterator iter) {
+    @Nonnull
+    public static <T extends PathBuilder> T buildFromPathIterator(@Nonnull T builder, PathIterator iter) {
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
@@ -445,8 +442,8 @@ public class Shapes {
      * @return the path builder
      * @throws java.io.IOException if the String is not a valid path
      */
-    @NonNull
-    public static PathBuilder buildFromSvgString(@NonNull PathBuilder builder, @NonNull String str) throws IOException {
+    @Nonnull
+    public static PathBuilder buildFromSvgString(@Nonnull PathBuilder builder, @Nonnull String str) throws IOException {
         try {
             Point2D.Double p = new Point2D.Double();
             Point2D.Double c1 = new Point2D.Double();
@@ -934,7 +931,7 @@ public class Shapes {
         return buf.toString();
     }
 
-    public static String doubleSvgStringFromElements(@NonNull List<PathElement> elements) {
+    public static String doubleSvgStringFromElements(@Nonnull List<PathElement> elements) {
         return doubleSvgStringFromAWT(awtShapeFromFXPathElements(elements));
     }
 
@@ -1006,7 +1003,7 @@ public class Shapes {
      * @param iter AWT Path Iterator
      * @return JavaFX Shape
      */
-    @NonNull
+    @Nonnull
     public static List<PathElement> fxPathElementsFromAWT(PathIterator iter) {
         List<PathElement> fxelem = new ArrayList<>();
         double[] coords = new double[6];
@@ -1036,7 +1033,7 @@ public class Shapes {
         return fxPathElementsFromSvgString(path.getContent());
     }
 
-    public static List<PathElement> fxPathElementsFromSvgString(@NonNull String content) {
+    public static List<PathElement> fxPathElementsFromSvgString(@Nonnull String content) {
         FXPathBuilder b = new FXPathBuilder();
         try {
             buildFromSvgString(b, content);
@@ -1148,12 +1145,12 @@ public class Shapes {
         return false;
     }
 
-    public static PathIterator pathIteratorFromPoints(@NonNull List<javafx.geometry.Point2D> points, boolean closed, int windingRule, @Nullable AffineTransform tx) {
+    public static PathIterator pathIteratorFromPoints(@Nonnull List<javafx.geometry.Point2D> points, boolean closed, int windingRule, @Nullable AffineTransform tx) {
         return new PathIterator() {
             int index = 0;
-            @NonNull
+            @Nonnull
             float[] srcf = new float[2];
-            @NonNull
+            @Nonnull
             double[] srcd = new double[2];
 
             @Override
@@ -1225,7 +1222,7 @@ public class Shapes {
      * @param b the desired bounds
      * @param builder the builder into which the path is output
      */
-    public static void reshape(@Nullable String pathstr, @NonNull Bounds b, @NonNull PathBuilder builder) {
+    public static void reshape(@Nullable String pathstr, @Nonnull Bounds b, @Nonnull PathBuilder builder) {
         if (pathstr != null) {
             try {
                 Shape shape = Shapes.awtShapeFromSvgString(pathstr);
@@ -1256,14 +1253,14 @@ public class Shapes {
      * @param b the desired bounds
      * @param elems on output contains the reshaped path elements
      */
-    public static void reshapePathElements(String pathstr, @NonNull Bounds b, List<PathElement> elems) {
+    public static void reshapePathElements(String pathstr, @Nonnull Bounds b, List<PathElement> elems) {
         FXPathBuilder builder = new FXPathBuilder(elems);
         reshape(pathstr, b, builder);
         builder.pathDone();
     }
 
-    @NonNull
-    public static List<PathElement> transformFXPathElements(@NonNull List<PathElement> elements, javafx.scene.transform.Transform fxT) {
+    @Nonnull
+    public static List<PathElement> transformFXPathElements(@Nonnull List<PathElement> elements, javafx.scene.transform.Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
         awtShapeFromFXPathElements(elements);
         return result;

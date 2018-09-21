@@ -25,7 +25,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -127,7 +127,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         return contentAreaFactor;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext ctx) {
         javafx.scene.Group groupNode = new javafx.scene.Group();
@@ -155,13 +155,13 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         return groupNode;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createPageNode(int internalPageNumber) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
@@ -174,7 +174,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         return numPagesX * numPagesY;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getPageBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
@@ -219,7 +219,7 @@ private Bounds getContentBounds(int internalPageNumber) {
         double y = pageY + (pageH - pageOverY) * py;
         return new BoundingBox(x, y, pageW-marginH*contentAreaFactor, pageH-marginV*contentAreaFactor);
     }
-    @NonNull
+    @Nonnull
     @Override
     public Shape getPageClip(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
@@ -306,7 +306,7 @@ private Bounds getContentBounds(int internalPageNumber) {
         return new Translate(x, y);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -335,7 +335,7 @@ private Bounds getContentBounds(int internalPageNumber) {
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(@Nonnull Transform transform) {
         Bounds newBounds = transform.transform(getBoundsInLocal());
         set(X, newBounds.getMinX());
         set(Y, newBounds.getMinY());
@@ -344,7 +344,7 @@ private Bounds getContentBounds(int internalPageNumber) {
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         javafx.scene.Group groupNode = (javafx.scene.Group) node;
         // We can't use #applyTransformableFigureProperties(node) because
         // this will rotate around an unpredictable center!

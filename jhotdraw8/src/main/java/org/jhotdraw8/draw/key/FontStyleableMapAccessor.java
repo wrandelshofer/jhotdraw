@@ -11,7 +11,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -31,15 +31,15 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, CssFont> cssMetaData;
-    @NonNull
+    @Nonnull
     private final MapAccessor<String> familyKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<FontWeight> weightKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<FontPosture> postureKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<Double> sizeKey;
 
     /**
@@ -73,7 +73,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
         this.postureKey = postureKey;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, CssFont> getCssMetaData() {
         return cssMetaData;
@@ -97,7 +97,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     }
 
     @Override
-    public CssFont put(Map<? super Key<?>, Object> a, @NonNull CssFont value) {
+    public CssFont put(Map<? super Key<?>, Object> a, @Nonnull CssFont value) {
         CssFont oldValue = get(a);
         familyKey.put(a, value.getFamily());
         weightKey.put(a, value.getWeight());

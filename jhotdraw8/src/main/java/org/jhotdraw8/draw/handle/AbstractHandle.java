@@ -3,10 +3,8 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.geom.Geom;
 
 /**
  * AbstractHandle.
@@ -44,7 +42,7 @@ public abstract class AbstractHandle implements Handle {
      * Returns true if both handles have the same class.
      */
     @Override
-    public boolean isCompatible(@NonNull Handle that) {
+    public boolean isCompatible(@Nonnull Handle that) {
         return that.getClass() == this.getClass();
     }
 

@@ -11,7 +11,7 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
@@ -28,7 +28,7 @@ import org.jhotdraw8.geom.Transforms;
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
-    @NonNull
+    @Nonnull
     private final Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
@@ -59,14 +59,14 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         return pickLocation;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -87,7 +87,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
         startBounds = owner.getBoundsInLocal();
         startWorldToLocal = owner.getWorldToLocal();
@@ -117,7 +117,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();

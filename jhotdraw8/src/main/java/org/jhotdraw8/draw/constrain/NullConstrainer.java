@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -22,13 +22,13 @@ public class NullConstrainer extends AbstractConstrainer {
     private final Path node = new Path();
 
     @Override
-    public Point2D translatePoint(Figure f, @NonNull Point2D p, @NonNull Point2D dir) {
+    public Point2D translatePoint(Figure f, @Nonnull Point2D p, @Nonnull Point2D dir) {
         return p.add(dir);
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Rectangle2D translateRectangle(Figure f, @NonNull Rectangle2D r, @NonNull Point2D dir) {
+    public Rectangle2D translateRectangle(Figure f, @Nonnull Rectangle2D r, @Nonnull Point2D dir) {
         return new Rectangle2D(r.getMinX() + dir.getX(), r.getMinY() + dir.getY(), r.getWidth(), r.getHeight());
     }
 
@@ -37,7 +37,7 @@ public class NullConstrainer extends AbstractConstrainer {
         return angle + dir;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node getNode() {
         return node;

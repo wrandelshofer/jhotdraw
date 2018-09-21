@@ -3,9 +3,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.geometry.HPos;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import javafx.geometry.VPos;
@@ -74,7 +73,7 @@ public interface FontableFigure extends Figure {
      * @param ctx RenderContext, can be null
      * @param text a text node
      */
-    default void applyFontableFigureProperties(@Nullable RenderContext ctx, @NonNull Text text) {
+    default void applyFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
         Font font = getStyled(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
@@ -118,7 +117,7 @@ public interface FontableFigure extends Figure {
      * @param ctx context
      * @param text a text node
      */
-    default void applyFontableFigureProperties(RenderContext ctx, @NonNull Labeled text) {
+    default void applyFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
         Font font = getStyled(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);

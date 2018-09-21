@@ -8,14 +8,13 @@ import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import javafx.geometry.Point3D;
@@ -70,7 +69,7 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
     private final CssDoubleConverter nb = new CssDoubleConverter();
 
     @Override
-    public void toString(@NonNull Appendable buf, IdFactory idFactory, @NonNull ImmutableList<Transform> txs) throws IOException {
+    public void toString(@Nonnull Appendable buf, IdFactory idFactory, @Nonnull ImmutableList<Transform> txs) throws IOException {
         if (txs.isEmpty()) {
             buf.append("none");
             return;
@@ -208,7 +207,7 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
     }
 
     @Override
-    public ImmutableList<Transform> fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Transform> fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
@@ -440,7 +439,7 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
         return ImmutableList.emptyList();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨Transform⟩: none｜（⟨Translate⟩｜ ⟨Scale⟩｜ ⟨Rotate⟩｜ ⟨Shear⟩｜ ⟨Matrix⟩）｛, ⟨Transform⟩｝"

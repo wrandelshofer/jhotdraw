@@ -3,8 +3,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.draw.figure.Figure;
+import javax.annotation.Nullable;
 
 /**
  * Defines a <i>layer</i> of a {@link Drawing}.

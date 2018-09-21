@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -20,18 +20,18 @@ import org.jhotdraw8.css.SelectorModel;
  */
 public class SelectorGroup extends AST {
 
-    @NonNull
+    @Nonnull
     private final List<Selector> selectors;
 
     public SelectorGroup(Selector selector) {
         this.selectors = Arrays.asList(new Selector[]{selector});
     }
 
-    public SelectorGroup(@NonNull List<Selector> selectors) {
+    public SelectorGroup(@Nonnull List<Selector> selectors) {
         this.selectors = Collections.unmodifiableList(selectors);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("( ");

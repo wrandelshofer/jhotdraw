@@ -4,7 +4,7 @@
 package org.jhotdraw8.util;
 
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Decodes a resource value.
@@ -36,6 +36,6 @@ public interface ResourceDecoder {
      * @param <T> The type of the decoded object
      * @return the decoded object
      */
-    @NonNull
+    @Nonnull
     <T> T decode(String key, String propertyValue, Class<T> type, Class<?> baseClass);
 }

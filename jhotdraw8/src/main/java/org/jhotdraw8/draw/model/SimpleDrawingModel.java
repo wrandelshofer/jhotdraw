@@ -11,21 +11,19 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
-import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -33,7 +31,6 @@ import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
-import static org.jhotdraw8.tree.TreeModel.ROOT_PROPERTY;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
@@ -65,7 +62,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         @Nullable
         private Figure figure = null;
 
-        @NonNull
+        @Nonnull
         @Override
         public Set<Entry<Key<?>, Object>> entrySet() {
             // FIXME should listen on changes of the entry set!
@@ -99,12 +96,12 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
 
     }
-    @NonNull
+    @Nonnull
     private MapProxy mapProxy = new MapProxy();
 
     private boolean isValidating = false;
     private boolean valid = true;
-    @NonNull
+    @Nonnull
     private Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
     @Nullable
@@ -119,7 +116,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             onRootChanged(oldValue, newValue);
         }
     };
-    @NonNull
+    @Nonnull
     private BiFunction<? super DirtyMask, ? super DirtyMask, ? extends DirtyMask> mergeDirtyMask
             = (a, b) -> a.add(b);
 
@@ -142,7 +139,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
         fireTreeModelEvent(TreeModelEvent.rootChanged(this, newValue));
     }
-    @NonNull
+    @Nonnull
     private Set<Figure> layoutSubjectChange = new HashSet<>();
 
     @SuppressWarnings("unchecked")
@@ -168,7 +165,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         dirties.merge(figure, DirtyMask.of(bits), mergeDirtyMask);
     }
 
-    private void markDirty(Figure figure, @NonNull DirtyMask mask) {
+    private void markDirty(Figure figure, @Nonnull DirtyMask mask) {
         dirties.merge(figure, mask, mergeDirtyMask);
     }
 
@@ -190,7 +187,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void removeFromParent(@NonNull Figure child) {
+    public void removeFromParent(@Nonnull Figure child) {
         Figure oldRoot = child.getRoot();
         Figure parent = child.getParent();
         if (parent != null) {
@@ -217,7 +214,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void insertChildAt(@NonNull Figure child, @NonNull Figure parent, int index) {
+    public void insertChildAt(@Nonnull Figure child, @Nonnull Figure parent, int index) {
         Figure oldRoot = child.getRoot();
         Figure oldParent = child.getParent();
         if (oldParent != null) {
@@ -246,7 +243,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T set(@NonNull Figure figure, MapAccessor<T> key, T newValue) {
+    public <T> T set(@Nonnull Figure figure, MapAccessor<T> key, T newValue) {
         if (key instanceof Key<?>) {
             T oldValue = figure.set(key, newValue);
             // event will be fired by method onPropertyChanged if newValue differs from oldValue
@@ -265,7 +262,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> T remove(@NonNull Figure figure, @NonNull Key<T> key) {
+    public <T> T remove(@Nonnull Figure figure, @Nonnull Key<T> key) {
         T oldValue = figure.remove(key);
         // event will be fired by method onPropertyChanged
         onPropertyChanged(figure, key, oldValue, key.getDefaultValue());
@@ -273,52 +270,52 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Figure f, Transform transform) {
+    public void reshapeInLocal(@Nonnull Figure f, Transform transform) {
         f.reshapeInLocal(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
-    public void reshapeInParent(@NonNull Figure f, Transform transform) {
+    public void reshapeInParent(@Nonnull Figure f, Transform transform) {
         f.reshapeInParent(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
-    public void transformInParent(@NonNull Figure f, Transform transform) {
+    public void transformInParent(@Nonnull Figure f, Transform transform) {
         f.transformInParent(transform);
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
     }
 
     @Override
-    public void transformInLocal(@NonNull Figure f, Transform transform) {
+    public void transformInLocal(@Nonnull Figure f, Transform transform) {
         f.transformInLocal(transform);
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Figure f, double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull Figure f, double x, double y, double width, double height) {
         f.reshapeInLocal(x, y, width, height);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
-    public void layout(@NonNull Figure f) {
+    public void layout(@Nonnull Figure f) {
         f.layoutNotify();
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
-    public void disconnect(@NonNull Figure f) {
+    public void disconnect(@Nonnull Figure f) {
         f.disconnect();
     }
 
     @Override
-    public void updateCss(@NonNull Figure figure) {
+    public void updateCss(@Nonnull Figure figure) {
         figure.stylesheetNotify();
     }
 
-    private void transitivelyCollectDependentFigures(Collection<Figure> todo, @NonNull Set<Figure> done) {
+    private void transitivelyCollectDependentFigures(Collection<Figure> todo, @Nonnull Set<Figure> done) {
         while (true) {
             List<Figure> todoNext = new ArrayList<>();
             for (Figure figure : todo) {
@@ -336,7 +333,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
     }
 
-    private void collectLayoutableAncestors(Collection<Figure> todo, @NonNull Set<Figure> done) {
+    private void collectLayoutableAncestors(Collection<Figure> todo, @Nonnull Set<Figure> done) {
         for (Figure figure : todo) {
             for (Figure ancestor = figure; ancestor != null && ancestor.isLayoutable(); ancestor = ancestor.getParent()) {
                 if (!done.add(ancestor)) {
@@ -504,18 +501,18 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void fireDrawingModelEvent(@NonNull DrawingModelEvent event) {
+    public void fireDrawingModelEvent(@Nonnull DrawingModelEvent event) {
         super.fireDrawingModelEvent(event);
         handleDrawingModelEvent(event);
     }
 
     @Override
-    public void fireTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
+    public void fireTreeModelEvent(@Nonnull TreeModelEvent<Figure> event) {
         super.fireTreeModelEvent(event);
         handleTreeModelEvent(event);
     }
 
-    protected void handleDrawingModelEvent(@NonNull DrawingModelEvent event) {
+    protected void handleDrawingModelEvent(@Nonnull DrawingModelEvent event) {
         if (isValidating) {
             return;
         }
@@ -577,7 +574,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
     }
 
-    protected void handleTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
+    protected void handleTreeModelEvent(@Nonnull TreeModelEvent<Figure> event) {
         if (isValidating) {
             return;
         }

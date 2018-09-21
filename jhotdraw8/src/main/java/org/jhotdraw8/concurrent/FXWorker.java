@@ -4,12 +4,11 @@
 package org.jhotdraw8.concurrent;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
+
 import javafx.application.Platform;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * FXWorker.
@@ -26,8 +25,8 @@ public class FXWorker {
      * @param runnable the runnable
      * @return the CompletableFuture
      */
-    @NonNull
-    public static CompletableFuture<Void> run(@NonNull CheckedRunnable runnable) {
+    @Nonnull
+    public static CompletableFuture<Void> run(@Nonnull CheckedRunnable runnable) {
         return run(Executors.newSingleThreadExecutor(), runnable);
     }
 
@@ -39,8 +38,8 @@ public class FXWorker {
      * @param executor the executor, if null then a new thread is created
      * @return the CompletableFuture
      */
-    @NonNull
-    public static CompletableFuture<Void> run(Executor executor, @NonNull CheckedRunnable runnable) {
+    @Nonnull
+    public static CompletableFuture<Void> run(Executor executor, @Nonnull CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
             try {
@@ -62,8 +61,8 @@ public class FXWorker {
      * @param supplier the supplier
      * @return the CompletableFuture
      */
-    @NonNull
-    public static <T> CompletableFuture<T> supply(@NonNull CheckedSupplier<T> supplier) {
+    @Nonnull
+    public static <T> CompletableFuture<T> supply(@Nonnull CheckedSupplier<T> supplier) {
         return supply(Executors.newSingleThreadExecutor(), supplier);
     }
 
@@ -76,8 +75,8 @@ public class FXWorker {
      * @param executor the executor
      * @return the CompletableFuture
      */
-    @NonNull
-    public static <T> CompletableFuture<T> supply(Executor executor, @NonNull CheckedSupplier<T> supplier) {
+    @Nonnull
+    public static <T> CompletableFuture<T> supply(Executor executor, @Nonnull CheckedSupplier<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
         executor.execute(() -> {
             try {

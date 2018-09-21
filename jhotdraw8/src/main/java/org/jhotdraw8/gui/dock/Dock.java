@@ -4,8 +4,8 @@
 package org.jhotdraw8.gui.dock;
 
 import javafx.beans.property.ObjectProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jhotdraw8.gui.dock.DockItem;
+import javax.annotation.Nonnull;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
@@ -19,7 +19,7 @@ public interface Dock {
 
     ObservableList<DockItem> getItems();
 
-    @NonNull
+    @Nonnull
     default Node getNode() {
         return (Node) this;
     }

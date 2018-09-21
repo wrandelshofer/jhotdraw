@@ -8,7 +8,7 @@ import java.util.List;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Reversed list provides a view on an underlying list with items ordered in
@@ -21,7 +21,7 @@ public class ReversedList<E> extends TransformationList<E, E> {
 
     private int size;
 
-    public ReversedList(@NonNull ObservableList<E> source) {
+    public ReversedList(@Nonnull ObservableList<E> source) {
         super(source);
         size = source.size();
     }

@@ -4,10 +4,8 @@
 
 package org.jhotdraw8.tree;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
+import javax.annotation.Nonnull;
+
 import org.jhotdraw8.event.Event;
 
 /**
@@ -159,7 +157,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         return eventType;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         return "TreeModelEvent{"

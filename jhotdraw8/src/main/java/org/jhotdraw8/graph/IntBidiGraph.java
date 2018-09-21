@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -81,11 +81,11 @@ public interface IntBidiGraph extends IntDirectedGraph {
      * @param vertex a vertex
      * @return a collection view on the direct predecessor nextArrows of vertex
      */
-    @NonNull
+    @Nonnull
     default Collection<Integer> getPrevVertices(int vertex) {
 
        return new AbstractCollection<Integer>() {
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<Integer> iterator() {
                 return getPrevVertexIndicesIterator(vertex);

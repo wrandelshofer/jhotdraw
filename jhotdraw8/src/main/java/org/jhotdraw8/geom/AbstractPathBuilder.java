@@ -4,7 +4,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * AbstractPathBuilder.
@@ -69,7 +69,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         doPathDone();
     }
 
-    @NonNull
+    @Nonnull
     public Point2D getLastPoint() {
         return new Point2D(lastX, lastY);
     }

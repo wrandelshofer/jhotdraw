@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point3D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -23,7 +23,7 @@ public class CssScale3DConverter implements Converter<Point3D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @NonNull Point3D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull Point3D value) throws IOException {
         if (value.getZ() == 1.0) {
             if (value.getX() == value.getY()) {
                 formatter.toStr(out, idFactory, 1, value.getX());
@@ -35,9 +35,9 @@ public class CssScale3DConverter implements Converter<Point3D> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Point3D fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Point3D fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
@@ -51,13 +51,13 @@ public class CssScale3DConverter implements Converter<Point3D> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point3D getDefaultValue() {
         return new Point3D(1, 1, 1);
     }
     
-        @NonNull
+        @Nonnull
         @Override
     public String getHelpText() {
         return "Format of ⟨Scale3D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩ ｜ ⟨xs⟩ ⟨ys⟩ ⟨zs⟩";

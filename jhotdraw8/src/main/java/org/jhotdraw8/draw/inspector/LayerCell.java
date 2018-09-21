@@ -18,8 +18,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -65,7 +65,7 @@ public class LayerCell extends ListCell<Figure> {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);
     }
 
-    public LayerCell(@NonNull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
+    public LayerCell(@Nonnull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
         this.drawingModel = drawingModel;
         this.inspector = inspector;
         init(fxmlUrl);
@@ -184,12 +184,12 @@ public class LayerCell extends ListCell<Figure> {
         updateItem(getItem(), false);
     }
 
-    @NonNull
+    @Nonnull
     private String getItemText() {
         return getItem() == null ? "" : getItem().get(StyleableFigure.ID);
     }
 
-    @NonNull
+    @Nonnull
     private TextField createTextField() {
         final TextField textField = new TextField();
 

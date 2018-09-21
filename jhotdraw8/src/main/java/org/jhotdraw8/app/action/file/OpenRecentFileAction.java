@@ -4,13 +4,12 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
@@ -62,7 +61,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
      * @param uri the uri
      * @param format the data format that should be used to access the URI
      */
-    public OpenRecentFileAction(Application app, @NonNull URI uri, DataFormat format) {
+    public OpenRecentFileAction(Application app, @Nonnull URI uri, DataFormat format) {
         super(app);
         this.uri = uri;
         this.format=format;
@@ -70,7 +69,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
+    protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
         {
             // Search for an empty view
             DocumentOrientedViewModel emptyView;
@@ -96,7 +95,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(@NonNull DocumentOrientedViewModel view, boolean disposeView) {
+    public void doIt(@Nonnull DocumentOrientedViewModel view, boolean disposeView) {
         openViewFromURI(view, uri, format);
     }
 
@@ -114,7 +113,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         v.removeDisabler(this);
     }
 
-    protected void openViewFromURI(@NonNull final DocumentOrientedViewModel v, @NonNull final URI uri, DataFormat format) {
+    protected void openViewFromURI(@Nonnull final DocumentOrientedViewModel v, @Nonnull final URI uri, DataFormat format) {
         final Application app = getApplication();
         v.addDisabler(this);
 

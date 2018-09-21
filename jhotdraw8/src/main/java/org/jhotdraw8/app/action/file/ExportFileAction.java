@@ -6,10 +6,10 @@ package org.jhotdraw8.app.action.file;
 import java.net.URI;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
+
 import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.collection.Key;

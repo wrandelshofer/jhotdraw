@@ -15,8 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -51,14 +51,14 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
      */
     public final static String TYPE_SELECTOR = "CombinedPath";
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
 
         return new Path();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
@@ -110,7 +110,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
@@ -128,8 +128,8 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
 
     }
 
-    @NonNull
-    private PathIterator getPathIteratorCAG(AffineTransform tx, @NonNull CagOperation op) {
+    @Nonnull
+    private PathIterator getPathIteratorCAG(AffineTransform tx, @Nonnull CagOperation op) {
         Area area = null;
         boolean first = true;
         for (Figure child : getChildren()) {
@@ -162,7 +162,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -197,7 +197,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, Node node) {
         Path n = (Path) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);

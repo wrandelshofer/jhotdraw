@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -26,7 +26,7 @@ public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssCo
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, CssColor> cssMetaData;
 
     /**
@@ -82,7 +82,7 @@ public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssCo
         cssMetaData = md;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, CssColor> getCssMetaData() {
         return cssMetaData;

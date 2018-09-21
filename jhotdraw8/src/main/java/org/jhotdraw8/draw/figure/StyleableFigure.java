@@ -7,8 +7,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -35,7 +35,7 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     public static StringReadOnlyStyleableFigureKey ID = new StringReadOnlyStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE),null );
     /**
      * Defines the style class of the figure. The style class is used for
@@ -57,7 +57,7 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
 
     /**
@@ -71,7 +71,7 @@ public interface StyleableFigure extends Figure {
      * @param ctx the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyStyleableFigureProperties(@NonNull RenderContext ctx, @NonNull Node node) {
+    default void applyStyleableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Node node) {
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EXPORT) {
             String styleId = getId();
             node.setId(styleId == null ? "" : styleId);

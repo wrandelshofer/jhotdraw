@@ -22,8 +22,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -73,7 +73,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         elements.add(new ClosePath());
     }
     private int controlPointMask;
-    @NonNull
+    @Nonnull
     private final Region node;
     private Point2D pickLocation;
     private final int pointIndex;
@@ -131,14 +131,14 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             ImmutableList<BezierNode> list = owner.get(pointKey);
             BezierNode bn = list.get(pointIndex);
@@ -149,7 +149,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         final Figure f = getOwner();
 
@@ -217,7 +217,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);

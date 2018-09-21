@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 import java.text.CollationKey;
 import java.text.Collator;

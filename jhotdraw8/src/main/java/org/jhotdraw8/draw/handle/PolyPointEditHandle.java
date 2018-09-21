@@ -15,8 +15,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -39,7 +39,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    @NonNull
+    @Nonnull
     private final Region node;
 
     private Point2D pickLocation;
@@ -83,14 +83,14 @@ public class PolyPointEditHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Region getNode() {
         return node;
     }
 
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
                 dv.getModel().set(owner, pointKey, ImmutableList.remove(owner.get(pointKey), pointIndex));
@@ -100,7 +100,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -126,7 +126,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<Point2D> list = f.get(pointKey);

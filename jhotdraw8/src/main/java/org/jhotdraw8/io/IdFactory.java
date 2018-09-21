@@ -3,8 +3,7 @@
  */
 package org.jhotdraw8.io;
 
-import java.util.Objects;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * IdFactory.

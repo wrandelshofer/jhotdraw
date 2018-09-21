@@ -3,14 +3,12 @@
  */
 package org.jhotdraw8.collection;
 
-import javafx.beans.binding.MapExpression;
 import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.WeakMapChangeListener;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This property is weakly bound to an entry in a map.
@@ -71,7 +69,7 @@ implements MapChangeListener< K, V> {
     }
 
     @Override
-    public void onChanged(@NonNull Change<? extends K, ? extends V> change) {
+    public void onChanged(@Nonnull Change<? extends K, ? extends V> change) {
  if (this.key.equals(change.getKey())) {
                 if (change.wasAdded()) {// was added, or removed and then added
                     @SuppressWarnings("unchecked")

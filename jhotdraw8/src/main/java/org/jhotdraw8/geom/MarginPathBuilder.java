@@ -4,7 +4,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * MarginPathBuilder.

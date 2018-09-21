@@ -73,8 +73,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
@@ -112,7 +112,7 @@ public class SvgExporter {
         SVG_FORMAT = fmt;
     }
     private final String SVG_NS = "http://www.w3.org/2000/svg";
-    @NonNull
+    @Nonnull
     private IdFactory idFactory = new SimpleIdFactory();
     private final Object imageUriKey;
     @Nullable
@@ -175,7 +175,7 @@ public class SvgExporter {
         this.skipInvisibleNodes = skipInvisibleNodes;
     }
 
-    private boolean isSkipNode(@NonNull Node node) {
+    private boolean isSkipNode(@Nonnull Node node) {
         if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
             return true;
         }
@@ -296,7 +296,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeCircle(Document doc, @NonNull Element parent, Circle node) {
+    private Element writeCircle(Document doc, @Nonnull Element parent, Circle node) {
         Element elem = doc.createElement("circle");
         if (node.getCenterX() != 0.0) {
             elem.setAttribute("cx", nb.toString(node.getCenterX()));
@@ -311,7 +311,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeClipAttributes(@NonNull Element elem, Node node) {
+    private void writeClipAttributes(@Nonnull Element elem, Node node) {
         Node clip = node.getClip();
         if (clip == null) {
             return;
@@ -325,7 +325,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeClipPathDefs(@NonNull Document doc, @NonNull Element defsNode, Node node) throws IOException {
+    private void writeClipPathDefs(@Nonnull Document doc, @Nonnull Element defsNode, Node node) throws IOException {
         // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
         Node clip = node.getClip();
         if (clip == null) {
@@ -340,7 +340,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeCompositingAttributes(@NonNull Element elem, Node node) {
+    private void writeCompositingAttributes(@Nonnull Element elem, Node node) {
         if (node.getOpacity() != 1.0) {
             elem.setAttribute("opacity", nb.toString(node.getOpacity()));
         }
@@ -411,7 +411,7 @@ public class SvgExporter {
 
     }
 
-    private Element writeEllipse(Document doc, @NonNull Element parent, Ellipse node) {
+    private Element writeEllipse(Document doc, @Nonnull Element parent, Ellipse node) {
         Element elem = doc.createElement("ellipse");
         if (node.getCenterX() != 0.0) {
             elem.setAttribute("cx", nb.toString(node.getCenterX()));
@@ -429,7 +429,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeFillAttributes(@NonNull Element elem, Shape node) {
+    private void writeFillAttributes(@Nonnull Element elem, Shape node) {
         Paint fill = node.getFill();
         String id = idFactory.getId(fill);
         if (id != null) {
@@ -465,7 +465,7 @@ public class SvgExporter {
         }
     }
 
-    private Element writeGroup(Document doc, Element parent, @NonNull Group node) {
+    private Element writeGroup(Document doc, Element parent, @Nonnull Group node) {
         Element elem = doc.createElement("g");
         writeClipAttributes(elem, node);
         parent.appendChild(elem);
@@ -502,7 +502,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeLine(Document doc, @NonNull Element parent, Line node) {
+    private Element writeLine(Document doc, @Nonnull Element parent, Line node) {
         Element elem = doc.createElement("line");
         if (node.getStartX() != 0.0) {
             elem.setAttribute("x1", nb.toString(node.getStartX()));
@@ -571,7 +571,7 @@ public class SvgExporter {
 
     }
 
-    private void writePaintDefs(@NonNull Document doc, @NonNull Element defsNode, Paint paint) throws IOException {
+    private void writePaintDefs(@Nonnull Document doc, @Nonnull Element defsNode, Paint paint) throws IOException {
         if (idFactory.getId(paint) == null) {
             if (paint instanceof LinearGradient) {
                 LinearGradient g = (LinearGradient) paint;
@@ -667,7 +667,7 @@ public class SvgExporter {
         }
     }
 
-    private Element writePath(@NonNull Document doc, @NonNull Element parent, Path node) {
+    private Element writePath(@Nonnull Document doc, @Nonnull Element parent, Path node) {
         if (node.getElements().isEmpty()) return null;
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
@@ -762,7 +762,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writePolygon(Document doc, @NonNull Element parent, Polygon node) {
+    private Element writePolygon(Document doc, @Nonnull Element parent, Polygon node) {
         Element elem = doc.createElement("polygon");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
@@ -779,7 +779,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writePolyline(Document doc, @NonNull Element parent, Polyline node) {
+    private Element writePolyline(Document doc, @Nonnull Element parent, Polyline node) {
         Element elem = doc.createElement("polyline");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
@@ -821,7 +821,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeRectangle(Document doc, @NonNull Element parent, Rectangle node) {
+    private Element writeRectangle(Document doc, @Nonnull Element parent, Rectangle node) {
         Element elem = doc.createElement("rect");
         if (node.getX() != 0.0) {
             elem.setAttribute("x", nb.toString(node.getX()));
@@ -935,7 +935,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeSVGPath(Document doc, @NonNull Element parent, SVGPath node) {
+    private Element writeSVGPath(Document doc, @Nonnull Element parent, SVGPath node) {
         Element elem = doc.createElement("path");
         elem.setAttribute("d", node.getContent());
         switch (node.getFillRule()) {
@@ -960,7 +960,7 @@ public class SvgExporter {
      * @throws IOException 
      */
     @Nullable
-    private Element writeShape(@NonNull Document doc, @NonNull Element parent, Shape node) throws IOException {
+    private Element writeShape(@Nonnull Document doc, @Nonnull Element parent, Shape node) throws IOException {
         Element elem = null;
         if (node instanceof Arc) {
             elem = writeArc(doc, parent, (Arc) node);
@@ -992,7 +992,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeStrokeAttributes(@NonNull Element elem, Shape shape) {
+    private void writeStrokeAttributes(@Nonnull Element elem, Shape shape) {
         Paint stroke = shape.getStroke();
         if (stroke != null) {
             String id = idFactory.getId(stroke);
@@ -1045,7 +1045,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeStrokeAttributes(@NonNull Element elem, BorderStroke shape) {
+    private void writeStrokeAttributes(@Nonnull Element elem, BorderStroke shape) {
         if (shape.getTopStroke() != null) {
             elem.setAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
         }
@@ -1088,7 +1088,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeStyleAttributes(@NonNull Element elem, Node node) {
+    private void writeStyleAttributes(@Nonnull Element elem, Node node) {
         String id = node.getId();
         if (id != null && !id.isEmpty()) {
             elem.setAttribute("id", id);
@@ -1148,7 +1148,7 @@ public class SvgExporter {
         elem.setAttribute("font-weight", ft.getStyle().contains("bold") || ft.getName().toLowerCase().contains("bold") ? "bold" : "normal");
     }
 
-    private void writeTransformAttributes(@NonNull Element elem, Node node) {
+    private void writeTransformAttributes(@Nonnull Element elem, Node node) {
 
         // The transforms are applied before translateX, translateY, scaleX, 
         // scaleY and rotate transforms.
@@ -1161,7 +1161,7 @@ public class SvgExporter {
         writeTransformAttributes(elem, txs);
     }
 
-    private void writeTransformAttributes(@NonNull Element elem, List< Transform> txs) {
+    private void writeTransformAttributes(@Nonnull Element elem, List< Transform> txs) {
 
         if (txs.size() > 0) {
             String value = tx.toString(txs);

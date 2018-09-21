@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -55,7 +55,7 @@ public class UngroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void ungroup(@NonNull DrawingView view, Collection<Figure> figures) {
+    public static void ungroup(@Nonnull DrawingView view, Collection<Figure> figures) {
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be ungrouped");
             alert.getDialogPane().setMaxWidth(640.0);
@@ -99,7 +99,7 @@ public class UngroupAction extends AbstractSelectedAction {
         view.getSelectedFigures().addAll(newSelection);
     }
 
-    private static void ungroup(@NonNull DrawingView view, Figure group, @NonNull LinkedHashSet<Figure> newSelection) {
+    private static void ungroup(@Nonnull DrawingView view, Figure group, @Nonnull LinkedHashSet<Figure> newSelection) {
         Figure parent = group.getParent();
         if (parent != null && (!parent.isEditable() || !parent.isDecomposable())) {
             // FIXME internationalize me

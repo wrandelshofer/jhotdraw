@@ -9,7 +9,7 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.Comparator;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.io.IdFactory;
 

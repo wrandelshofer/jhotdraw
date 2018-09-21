@@ -6,12 +6,9 @@ package org.jhotdraw8.gui.dock;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.paint.Color;
-import org.checkerframework.checker.nullness.qual.NonNull;
+
+import javax.annotation.Nonnull;
 
 /**
  * ResizePane.
@@ -38,7 +35,7 @@ public class ResizePane extends BorderPane {
         userResizable.set(value);
   }
 
-    @NonNull
+    @Nonnull
     public BooleanProperty userResizableProperty() {
         return userResizable;
     }

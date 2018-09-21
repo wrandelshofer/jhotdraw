@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.scene.paint.Paint;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Paintable.

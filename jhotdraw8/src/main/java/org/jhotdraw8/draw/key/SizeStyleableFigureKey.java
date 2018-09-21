@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -28,7 +28,7 @@ public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> 
     final static long serialVersionUID = 1L;
 
     private final CssSizeConverter converter = new CssSizeConverter();
-    @NonNull
+    @Nonnull
     private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
 
     /**
@@ -76,12 +76,12 @@ public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> 
     }
 
 
-    @NonNull
+    @Nonnull
     @Override
     public Converter<CssSize> getConverter() {
         return converter;
     }
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<? extends Styleable, CssSize> getCssMetaData() {
       return cssMetaData;

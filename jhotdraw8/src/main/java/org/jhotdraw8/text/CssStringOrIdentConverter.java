@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -34,7 +34,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
 
     @Nullable
     @Override
-    public String fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
         if (tt.nextToken() != CssTokenizer.TT_STRING && tt.currentToken() != CssTokenizer.TT_IDENT) {
             throw new ParseException("Css String or Ident expected. " + tt.currentToken(), buf.position());
@@ -43,7 +43,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull String value) throws IOException {
         StringBuffer buf = new StringBuffer();
         boolean isIdent = true;
         buf.append('"');
@@ -85,7 +85,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getDefaultValue() {
         return "";

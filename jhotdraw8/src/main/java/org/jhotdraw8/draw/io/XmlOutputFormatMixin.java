@@ -7,19 +7,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.net.URI;
 import java.util.Collection;
-import java.util.function.Function;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;
 
@@ -35,20 +32,20 @@ public interface XmlOutputFormatMixin extends OutputFormat {
 
    
  
-    default Document toDocument(@NonNull Drawing drawing) throws IOException {
+    default Document toDocument(@Nonnull Drawing drawing) throws IOException {
         return toDocument(drawing, drawing.getChildren());
     }
  
     Document toDocument( Drawing drawing,  Collection<Figure> selection) throws IOException;
 
     @Override
-    default void write(@NonNull File file, @NonNull Drawing drawing) throws IOException {
+    default void write(@Nonnull File file, @Nonnull Drawing drawing) throws IOException {
         Document doc = toDocument(drawing);
         XmlUtil.write(file, doc);
     }
 
     @Override
-    default void write(OutputStream out, @NonNull Drawing drawing) throws IOException {
+    default void write(OutputStream out, @Nonnull Drawing drawing) throws IOException {
         write(out, drawing, drawing.getChildren());
     }
 

@@ -8,16 +8,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.util.StringConverter;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jhotdraw8.draw.DrawingView;
+import javax.annotation.Nonnull;
 
 /**
  * FXML Controller class
@@ -55,7 +52,7 @@ public class ZoomToolbar extends BorderPane {
         this(ZoomToolbar.class.getResource("ZoomToolbar.fxml"));
     }
 
-    public ZoomToolbar(@NonNull URL fxmlUrl) {
+    public ZoomToolbar(@Nonnull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -74,14 +71,14 @@ public class ZoomToolbar extends BorderPane {
         zoomSlider.setLabelFormatter(new StringConverter<Double>() {
             private final String[] labels = {"⅛", "¼", "½", "1", "2", "4", "8"};
 
-            @NonNull
+            @Nonnull
             @Override
-            public String toString(@NonNull Double object) {
+            public String toString(@Nonnull Double object) {
                 int index = object.intValue() + labels.length / 2;
                 return (index >= 0 && index < labels.length) ? labels[index] : "";
             }
 
-            @NonNull
+            @Nonnull
             @Override
             public Double fromString(String string) {
                 return 0.0;
@@ -95,7 +92,7 @@ public class ZoomToolbar extends BorderPane {
      *
      * @return zoom factor
      */
-    @NonNull
+    @Nonnull
     public DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }

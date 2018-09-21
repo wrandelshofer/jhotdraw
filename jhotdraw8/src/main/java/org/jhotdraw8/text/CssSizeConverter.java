@@ -7,13 +7,12 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.SimpleIdFactory;
 
 /**
  * CssDoubleConverter.
@@ -45,7 +44,7 @@ public class CssSizeConverter implements Converter<CssSize> {
 
     @Nullable
     @Override
-    public CssSize fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssSize fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         int start = buf.position();
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
         CssSize sz = parseSize(tt);
@@ -60,7 +59,7 @@ public class CssSizeConverter implements Converter<CssSize> {
     }
 
     @Nullable
-    public CssSize parseSize(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
+    public CssSize parseSize(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
         tt.skipWhitespace();
         if (nullable && tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
             //tt.skipWhitespace();
@@ -107,7 +106,7 @@ public class CssSizeConverter implements Converter<CssSize> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable CssSize value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable CssSize value) throws IOException {
         if (value == null) {
             if (nullable) {
                 out.append("none");
@@ -122,7 +121,7 @@ public class CssSizeConverter implements Converter<CssSize> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨Size⟩: ⟨size⟩ | ⟨percentage⟩% | ⟨size⟩⟨Units⟩"

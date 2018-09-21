@@ -7,9 +7,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * VBoxTrack.
@@ -49,7 +48,7 @@ getItems().addListener(new ListChangeListener<Node>() {
         return getChildren();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

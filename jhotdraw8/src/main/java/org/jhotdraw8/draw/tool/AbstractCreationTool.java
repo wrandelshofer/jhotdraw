@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.tool;
 
 import java.util.function.Supplier;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -59,7 +59,7 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
      * @return a suitable layer for the figure
      */
     @Nullable
-    protected Layer getOrCreateLayer(@NonNull DrawingView dv, Figure newFigure) {
+    protected Layer getOrCreateLayer(@Nonnull DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Layer activeLayer = dv.getActiveLayer();
         if (activeLayer != null && activeLayer.isEditable() && activeLayer.isAllowsChildren()) {

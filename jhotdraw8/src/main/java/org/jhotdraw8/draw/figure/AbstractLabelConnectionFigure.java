@@ -7,18 +7,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import javafx.beans.property.Property;
+
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
@@ -127,7 +126,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             if (get(LABEL_CONNECTOR) == null) {
@@ -153,7 +152,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      *
      * @return a list of connected figures
      */
-    @NonNull
+    @Nonnull
     @Override
     public Set<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
@@ -165,7 +164,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public boolean isGroupReshapeableWith(@NonNull Set<Figure> others) {
+    public boolean isGroupReshapeableWith(@Nonnull Set<Figure> others) {
         for (Figure f : getLayoutSubjects()) {
             if (others.contains(f)) {
                 return false;
@@ -274,7 +273,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void updateGroupNode(RenderContext ctx, @NonNull Group node) {
+    public void updateGroupNode(RenderContext ctx, @Nonnull Group node) {
         super.updateGroupNode(ctx, node);
         applyTransformableFigureProperties(node);
     }

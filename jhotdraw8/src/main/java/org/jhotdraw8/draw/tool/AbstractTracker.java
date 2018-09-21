@@ -5,7 +5,7 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.AbstractDisableable;
 
 /**
@@ -37,7 +37,7 @@ public abstract class AbstractTracker extends AbstractDisableable implements Tra
     // ---
     // Behaviors
     // ---
-    @NonNull
+    @Nonnull
     @Override
     public Node getNode() {
         return node;

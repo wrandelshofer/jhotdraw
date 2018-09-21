@@ -14,8 +14,8 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * This ObservableSet implementation provides overridable fire methods, saving one
@@ -33,7 +33,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     @Nullable
     private List<InvalidationListener> invalidationListeners;
 
-    public ModifiableObservableSet(@NonNull Collection<E> copyMe) {
+    public ModifiableObservableSet(@Nonnull Collection<E> copyMe) {
         backingSet = new LinkedHashSet<>(copyMe);
     }
 
@@ -201,7 +201,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         fireInvalidated();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {

@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -40,26 +40,26 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
         set(MARKER_FILL, new CssColor("black", Color.BLACK));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    protected void updateEndMarkerNode(RenderContext ctx, @NonNull Path node) {
+    protected void updateEndMarkerNode(RenderContext ctx, @Nonnull Path node) {
         super.updateEndMarkerNode(ctx, node); 
         applyMarkerFillableFigureProperties(node);
     }
 
     @Override
-    protected void updateLineNode(RenderContext ctx, @NonNull Line node) {
+    protected void updateLineNode(RenderContext ctx, @Nonnull Line node) {
         super.updateLineNode(ctx, node); 
         applyStrokeableFigureProperties(node);
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         super.updateNode(ctx,node);
 
         applyHideableFigureProperties(node);
@@ -68,7 +68,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     }
 
     @Override
-    protected void updateStartMarkerNode(RenderContext ctx, @NonNull Path node) {
+    protected void updateStartMarkerNode(RenderContext ctx, @Nonnull Path node) {
         super.updateStartMarkerNode(ctx, node); 
         applyMarkerFillableFigureProperties(node);
     }    

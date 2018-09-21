@@ -5,8 +5,8 @@ package org.jhotdraw8.io;
 
 import java.io.*;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -34,10 +34,10 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Start and end position of the current token. rlw
      */
     private int startpos = -1, endpos = -1;
-    @NonNull
+    @Nonnull
     private IntArrayList unread = new IntArrayList();
 
-    @NonNull
+    @Nonnull
     private char buf[] = new char[20];
 
     /**
@@ -64,14 +64,14 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private boolean slashStarCommentsP = false;
 
     // rlw
-    @NonNull
+    @Nonnull
     private char[] slashSlash = new char[]{'/', '/'};
-    @NonNull
+    @Nonnull
     private char[] slashStar = new char[]{'/', '*'};
-    @NonNull
+    @Nonnull
     private char[] starSlash = new char[]{'*', '/'};
 
-    @NonNull
+    @Nonnull
     private byte ctype[] = new byte[256];
     private static final byte CT_WHITESPACE = 1;
     private static final byte CT_DIGIT = 2;
@@ -1013,7 +1013,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @param slashStar token
      * @param starSlash token
      */
-    public void setSlashStarTokens(@NonNull String slashStar, @NonNull String starSlash) {
+    public void setSlashStarTokens(@Nonnull String slashStar, @Nonnull String starSlash) {
         if (slashStar.length() != starSlash.length()) {
             throw new IllegalArgumentException("SlashStar and StarSlash tokens must be of same length: '" + slashStar + "' '" + starSlash + "'");
         }
@@ -1031,7 +1031,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param slashSlash token
      */
-    public void setSlashSlashToken(@NonNull String slashSlash) {
+    public void setSlashSlashToken(@Nonnull String slashSlash) {
         if (slashSlash.length() < 1 || slashSlash.length() > 2) {
             throw new IllegalArgumentException("SlashSlash token must be of length 1 or 2: '" + slashSlash + "'");
         }
@@ -1099,7 +1099,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param greedyToken the token to be consumed
      */
-    public void consumeGreedy(@NonNull String greedyToken) {
+    public void consumeGreedy(@Nonnull String greedyToken) {
         if (greedyToken.length() < sval.length()) {
             pushBack();
             setStartPosition(getStartPosition() + greedyToken.length());
@@ -1116,7 +1116,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @see java.io.StreamTokenizer#sval
      * @see java.io.StreamTokenizer#ttype
      */
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         String ret;

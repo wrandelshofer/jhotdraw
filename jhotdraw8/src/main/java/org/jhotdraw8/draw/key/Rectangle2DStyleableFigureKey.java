@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Rectangle2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -27,7 +27,7 @@ public class Rectangle2DStyleableFigureKey extends AbstractStyleableFigureKey<Re
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, Rectangle2D> cssMetaData;
 
     /**
@@ -76,7 +76,7 @@ public class Rectangle2DStyleableFigureKey extends AbstractStyleableFigureKey<Re
         cssMetaData = md;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, Rectangle2D> getCssMetaData() {
         return cssMetaData;

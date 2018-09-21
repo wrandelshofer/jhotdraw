@@ -3,12 +3,8 @@
  */
 package org.jhotdraw8.tree;
 
-import java.util.HashMap;
-import java.util.Map;
-import javafx.scene.control.TreeItem;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
-import org.jhotdraw8.event.Listener;
 
 /**
  * The {@code TreePresentationModel} can be used to present a {@code TreeModel}

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Rectangle2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -22,11 +22,11 @@ public class CssRectangle2DConverter implements Converter<Rectangle2D> {
     private final PatternConverter formatter = new PatternConverter("{0,number} +{1,number} +{2,number} +{3,number}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @NonNull Rectangle2D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull Rectangle2D value) throws IOException {
         formatter.toStr(out, idFactory, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Rectangle2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
@@ -38,7 +38,7 @@ public class CssRectangle2DConverter implements Converter<Rectangle2D> {
         );
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Rectangle2D getDefaultValue() {
         return new Rectangle2D(0, 0, 1, 1);

@@ -6,7 +6,7 @@ package org.jhotdraw8.collection;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * A type safe accessor for maps.
@@ -37,7 +37,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return name string.
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     String getName();
 
     /**

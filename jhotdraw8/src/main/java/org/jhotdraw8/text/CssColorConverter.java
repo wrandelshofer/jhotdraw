@@ -3,13 +3,13 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.util.Arrays;
+
 import javafx.scene.paint.Color;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
@@ -47,7 +47,7 @@ public class CssColorConverter implements Converter<CssColor> {
 
   @Nullable
   @Override
-  public CssColor fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+  public CssColor fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     CssColor c;
     CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
     tt.setSkipWhitespaces(true);
@@ -65,7 +65,7 @@ public class CssColorConverter implements Converter<CssColor> {
     return null;
   }
 
-  @NonNull
+  @Nonnull
   @Override
   public String getHelpText() {
     return "Format of ⟨Color⟩: " + (optional ? "none｜" : "") + "⟨name⟩｜#⟨hex⟩｜rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)";
@@ -80,7 +80,7 @@ public class CssColorConverter implements Converter<CssColor> {
    * @throws IOException if IO fails
    */
   @Nullable
-  public CssColor parseColor(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
+  public CssColor parseColor(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
     CssColor color = null;
     tt.setSkipWhitespaces(true);
 
@@ -249,7 +249,7 @@ public class CssColorConverter implements Converter<CssColor> {
     return color;
   }
 
-  private CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
+  private CssColor parseColorHexDigits(@Nonnull String hexdigits, int startpos) throws ParseException {
     try {
       int v = (int) Long.parseLong(hexdigits, 16);
       int r, g, b, a;
@@ -291,7 +291,7 @@ public class CssColorConverter implements Converter<CssColor> {
   }
 
   @Override
-  public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable CssColor value) throws IOException {
+  public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable CssColor value) throws IOException {
     if (value == null) {
       out.append("none");
     } else {

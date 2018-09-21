@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jhotdraw8.collection.Enumerator;
@@ -544,7 +544,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
             }
 
             @Override
-            @org.checkerframework.checker.nullness.qual.Nullable
+            @javax.annotation.Nullable
             public A next() {
                 while (!nextArrowIterator.hasNext()) {
                     V v = vertexIterator.next();
@@ -555,7 +555,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
 
         }
         return new AbstractCollection<A>() {
-            @NonNull
+            @Nonnull
             @Override
             public Iterator<A> iterator() {
                 return new ArrowIterator();

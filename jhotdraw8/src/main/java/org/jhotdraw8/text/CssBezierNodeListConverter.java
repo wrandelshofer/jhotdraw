@@ -6,9 +6,8 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javafx.scene.shape.SVGPath;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
@@ -36,7 +35,7 @@ public class CssBezierNodeListConverter implements Converter<ImmutableList<Bezie
 
     @Nullable
     @Override
-    public ImmutableList<BezierNode> fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<BezierNode> fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
         ImmutableList<BezierNode> p = null;
@@ -62,7 +61,7 @@ public class CssBezierNodeListConverter implements Converter<ImmutableList<Bezie
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable ImmutableList<BezierNode> value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable ImmutableList<BezierNode> value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is null");

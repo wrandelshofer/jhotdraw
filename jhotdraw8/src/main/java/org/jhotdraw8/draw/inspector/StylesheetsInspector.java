@@ -26,8 +26,8 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
@@ -67,11 +67,11 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         this(StylesheetsInspector.class.getResource("StylesheetsInspector.fxml"));
     }
 
-    public StylesheetsInspector(@NonNull URL fxmlUrl) {
+    public StylesheetsInspector(@Nonnull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(@Nonnull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -105,7 +105,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             ClipboardIO<URI> io = new ClipboardIO<URI>() {
 
                 @Override
-                public void write(@NonNull Clipboard clipboard, List<URI> items) {
+                public void write(@Nonnull Clipboard clipboard, List<URI> items) {
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }

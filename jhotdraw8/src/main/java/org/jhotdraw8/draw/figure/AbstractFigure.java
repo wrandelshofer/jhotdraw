@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
@@ -17,8 +16,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.SharedKeysMap;
@@ -35,7 +34,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
-    @NonNull
+    @Nonnull
     private static Map<Key<?>, Integer> cachedValuesKeyMap = new HashMap<>();
 
     private transient Map<Key<?>, Object> cachedValues;
@@ -53,13 +52,13 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
             super.fireValueChangedEvent();
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public Object getBean() {
             return AbstractFigure.this;
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public String getName() {
             return PARENT_PROPERTY;
@@ -98,11 +97,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public <T> T getCachedValue(@NonNull Key<T> key) {
+    public <T> T getCachedValue(@Nonnull Key<T> key) {
         return (cachedValues == null) ? key.getDefaultValue() : key.get(cachedValues);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
@@ -117,7 +116,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         return list;
     }
 
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     @Override
     final public Drawing getDrawing() {
         return drawing;
@@ -147,7 +146,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      *
      * @return a new list instance
      */
-    @NonNull
+    @Nonnull
     public Map<String, Object> getPropertyMap() {
         HashMap<String, Object> result = new HashMap<>();
         for (Map.Entry<Key<?>, Object> e : getProperties().entrySet()) {
@@ -168,7 +167,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      *
      * @param newMap the new properties
      */
-    public void setPropertyMap(@NonNull HashMap<String, Object> newMap) {
+    public void setPropertyMap(@Nonnull HashMap<String, Object> newMap) {
         HashMap<String, Key<?>> keyst = new HashMap<>();
         Map<Key<?>, Object> m = getProperties();
         for (MapAccessor<?> ma : Figure.getDeclaredAndInheritedMapAccessors(getClass())) {
@@ -202,11 +201,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      * @return true if {@code newParent} is an acceptable parent
      */
     @Override
-    public boolean isSuitableParent(@org.checkerframework.checker.nullness.qual.Nullable Figure newParent) {
+    public boolean isSuitableParent(@javax.annotation.Nullable Figure newParent) {
         return newParent != null && !(newParent instanceof Drawing);
     }
 
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     @Override
     public ObjectProperty<Figure> parentProperty() {
         return parent;
@@ -240,7 +239,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public <T> T setCachedValue(@NonNull Key<T> key, @org.checkerframework.checker.nullness.qual.Nullable T value) {
+    public <T> T setCachedValue(@Nonnull Key<T> key, @javax.annotation.Nullable T value) {
         if (cachedValues == null) {
             cachedValues = new SharedKeysMap<>(cachedValuesKeyMap);
         }

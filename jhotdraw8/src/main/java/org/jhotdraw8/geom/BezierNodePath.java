@@ -13,8 +13,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.shape.FillRule;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * BezierNodePath.
@@ -32,16 +32,16 @@ public class BezierNodePath implements Shape {
         this(new ArrayList<>(), false, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@NonNull List<BezierNode> nodes) {
+    public BezierNodePath(@Nonnull List<BezierNode> nodes) {
         this(nodes, false, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@NonNull List<BezierNode> nodes, boolean closed, FillRule windingRule) {
+    public BezierNodePath(@Nonnull List<BezierNode> nodes, boolean closed, FillRule windingRule) {
         this(nodes, closed, windingRule == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
 
     }
 
-    public BezierNodePath(@NonNull List<BezierNode> nodes, boolean closed, int windingRule) {
+    public BezierNodePath(@Nonnull List<BezierNode> nodes, boolean closed, int windingRule) {
         this.nodes = new ArrayList<>(nodes);
         this.closed = closed;
         this.windingRule = windingRule;
@@ -53,7 +53,7 @@ public class BezierNodePath implements Shape {
     }
 
     @Override
-    public boolean contains(@NonNull Point2D p) {
+    public boolean contains(@Nonnull Point2D p) {
         return contains(p.getX(), p.getY());
     }
 
@@ -63,7 +63,7 @@ public class BezierNodePath implements Shape {
     }
 
     @Override
-    public boolean contains(@NonNull Rectangle2D r) {
+    public boolean contains(@Nonnull Rectangle2D r) {
         return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
@@ -72,7 +72,7 @@ public class BezierNodePath implements Shape {
         return getBounds2D().getBounds();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Rectangle2D getBounds2D() {
         double x1 = Double.POSITIVE_INFINITY, y1 = Double.POSITIVE_INFINITY,
@@ -136,13 +136,13 @@ public class BezierNodePath implements Shape {
         this.nodes = nodes;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform at) {
         return new BezierNodePathIterator(nodes, closed, windingRule, at);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform at, double flatness) {
         return new FlatteningPathIterator(getPathIterator(at), flatness);
@@ -154,7 +154,7 @@ public class BezierNodePath implements Shape {
     }
 
     @Override
-    public boolean intersects(@NonNull Rectangle2D r) {
+    public boolean intersects(@Nonnull Rectangle2D r) {
         return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 

@@ -12,7 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.gui.CustomSkin;
 
 /**
@@ -24,7 +24,7 @@ import org.jhotdraw8.gui.CustomSkin;
 public class ScrollableVBoxTrack extends Control implements Track {
 
     private final VBox vbox = new VBox();
-    @NonNull
+    @Nonnull
     private ScrollPane scrollPane = new ScrollPane(vbox);
 
     public ScrollableVBoxTrack() {
@@ -82,7 +82,7 @@ public class ScrollableVBoxTrack extends Control implements Track {
         return vbox.getChildren();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

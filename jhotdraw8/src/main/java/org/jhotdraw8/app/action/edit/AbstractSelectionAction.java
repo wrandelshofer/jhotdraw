@@ -10,8 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextInputControl;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
@@ -49,7 +49,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
      *
      * @param app the application
      */
-    public AbstractSelectionAction(@NonNull Application app) {
+    public AbstractSelectionAction(@Nonnull Application app) {
         this(app, null);
     }
 
@@ -59,7 +59,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
      * @param app the application
      * @param target the target node
      */
-    public AbstractSelectionAction(@NonNull Application app, Node target) {
+    public AbstractSelectionAction(@Nonnull Application app, Node target) {
         super(app);
         this.target = target;
 
@@ -143,7 +143,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
             control.selectAll();
         }
 
-        @NonNull
+        @Nonnull
         @Override
         public ReadOnlyBooleanProperty selectionEmptyProperty() {
             throw new UnsupportedOperationException("unsupported");

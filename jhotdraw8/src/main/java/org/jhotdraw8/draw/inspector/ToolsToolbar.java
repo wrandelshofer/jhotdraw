@@ -13,9 +13,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.tool.Tool;
 
@@ -27,9 +27,9 @@ import org.jhotdraw8.draw.tool.Tool;
  */
 public class ToolsToolbar extends GridPane {
 
-    @NonNull
+    @Nonnull
     private ToggleGroup group = new ToggleGroup();
-    @NonNull
+    @Nonnull
     private ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, "editor");
 
     {
@@ -43,7 +43,7 @@ public class ToolsToolbar extends GridPane {
             }
         });
     }
-    @NonNull
+    @Nonnull
     private ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {
@@ -76,12 +76,12 @@ public class ToolsToolbar extends GridPane {
         setDrawingEditor(editor);
     }
 
-    @NonNull
-    public ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy) {
+    @Nonnull
+    public ToggleButton addTool(@Nonnull Tool tool, int gridx, int gridy) {
      return   addTool(tool,gridx,gridy,0);
     }
-    @NonNull
-    public ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy, double marginLeft) {
+    @Nonnull
+    public ToggleButton addTool(@Nonnull Tool tool, int gridx, int gridy, double marginLeft) {
         ToggleButton button = new ToggleButton();
         if (tool.get(Tool.LARGE_ICON_KEY) != null) {
             button.setGraphic(tool.get(Tool.LARGE_ICON_KEY));
@@ -102,7 +102,7 @@ public class ToolsToolbar extends GridPane {
         return button;
     }
 
-    @NonNull
+    @Nonnull
     public ObjectProperty<DrawingEditor> drawingEditor() {
         return editor;
     }

@@ -3,10 +3,9 @@
  */
 package org.jhotdraw8.app.action;
 
-import java.util.Objects;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 
 /**
@@ -17,7 +16,7 @@ import org.jhotdraw8.app.Application;
  */
 public class ScreenMenuBarProxyAction extends AbstractAction {
 
-    @NonNull
+    @Nonnull
     private final Application app;
     private Action currentAction;
 

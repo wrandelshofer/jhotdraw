@@ -15,8 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.PlatformUtil;
@@ -40,12 +40,12 @@ public class DrawingInspector extends AbstractDrawingInspector {
     @FXML
     private ColorPicker backgroundColorPicker;
 
-    @NonNull
+    @Nonnull
     private Property<CssColor> myBackgroundProperty=new SimpleObjectProperty<>();
     @Nullable
     private Property<CssColor> boundBackgroundProperty;
 
-    @NonNull
+    @Nonnull
     private InvalidationListener commitHandler = o -> commitEdits();
     @FXML
     private TextField heightField;
@@ -62,7 +62,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));
     }
 
-    public DrawingInspector(@NonNull URL fxmlUrl) {
+    public DrawingInspector(@Nonnull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -75,7 +75,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         return node;
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(@Nonnull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {

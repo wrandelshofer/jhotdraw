@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.tool;
 import java.net.URI;
 import java.util.function.Supplier;
 import javafx.stage.FileChooser;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -49,7 +49,7 @@ public class ImageCreationTool extends CreationTool {
         return f;
     }
 
-    @NonNull
+    @Nonnull
     protected URIChooser createURIChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);

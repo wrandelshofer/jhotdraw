@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * IntBidiGraphBuilder.
@@ -20,7 +20,7 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
-    @NonNull
+    @Nonnull
     public static IntBidiGraphBuilder inverseOfIntBidiGraph(IntBidiGraph graph) {
         int arrowCount = graph.getArrowCount();
 
@@ -40,7 +40,7 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
      * @param graph a graph
      * @return a new graph
      */
-    @NonNull
+    @Nonnull
     public static IntBidiGraphBuilder ofIntBidiGraph(IntBidiGraph graph) {
         int arrowCount = graph.getArrowCount();
 
@@ -102,7 +102,7 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
      * 
      * @return the created graph
      */
-    @NonNull
+    @Nonnull
     public IntImmutableBidiGraph build() {
         return new IntImmutableBidiGraph(this);
     }

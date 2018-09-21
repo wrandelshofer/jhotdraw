@@ -10,8 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -28,7 +28,7 @@ public class SimpleClipping extends AbstractCompositeFigure
     public SimpleClipping() {
     }
 
-    public SimpleClipping(@NonNull Collection<Figure> children) {
+    public SimpleClipping(@Nonnull Collection<Figure> children) {
         getChildren().addAll(children);
     }
 
@@ -40,7 +40,7 @@ public class SimpleClipping extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
         applyStyleableFigureProperties(ctx, n);
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
@@ -53,7 +53,7 @@ public class SimpleClipping extends AbstractCompositeFigure
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext ctx) {
         Group n = new Group();

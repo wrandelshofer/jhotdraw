@@ -17,8 +17,8 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -381,7 +381,7 @@ public interface DrawingView extends RenderContext {
      * @param pointInView point in view coordinates
      * @return A figure or empty
      */
-    default     Figure findFigure(@NonNull Point2D pointInView) {
+    default     Figure findFigure(@Nonnull Point2D pointInView) {
         return findFigure(pointInView.getX(), pointInView.getY());
     }
 
@@ -394,7 +394,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFigures(@NonNull Point2D pointInView, boolean decompose) {
+    default List<Figure> findFigures(@Nonnull Point2D pointInView, boolean decompose) {
         return findFigures(pointInView.getX(), pointInView.getY(), decompose);
     }
 
@@ -407,7 +407,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFiguresInside(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default List<Figure> findFiguresInside(@Nonnull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresInside(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
@@ -420,7 +420,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default List<Figure> findFiguresIntersecting(@Nonnull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
@@ -527,7 +527,7 @@ public interface DrawingView extends RenderContext {
      * @param view a point in view coordinates
      * @return the corresponding point in world coordinates
      */
-        default Point2D viewToWorld(@NonNull Point2D view) {
+        default Point2D viewToWorld(@Nonnull Point2D view) {
         return getViewToWorld().transform(view);
     }
 
@@ -537,7 +537,7 @@ public interface DrawingView extends RenderContext {
      * @param view a rectangle in view coordinates
      * @return the corresponding point in world coordinates
      */
-        default Bounds viewToWorld(@NonNull Bounds view) {
+        default Bounds viewToWorld(@Nonnull Bounds view) {
         return getViewToWorld().transform(view);
     }
 
@@ -547,7 +547,7 @@ public interface DrawingView extends RenderContext {
      * @param world a point in world coordinates
      * @return the corresponding point in view coordinates
      */
-        default Point2D worldToView(@NonNull Point2D world) {
+        default Point2D worldToView(@Nonnull Point2D world) {
         return getWorldToView().transform(world);
     }
 
@@ -557,7 +557,7 @@ public interface DrawingView extends RenderContext {
      * @param world a box in world coordinates
      * @return the corresponding box in view coordinates
      */
-        default Bounds worldToView(@NonNull Bounds world) {
+        default Bounds worldToView(@Nonnull Bounds world) {
         return getWorldToView().transform(world);
     }
 
@@ -626,7 +626,7 @@ public interface DrawingView extends RenderContext {
      *
      * @param f A figure in the drawing of this DrawingView.
      */
-    default void scrollFigureToVisible(@NonNull Figure f) {
+    default void scrollFigureToVisible(@Nonnull Figure f) {
         Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
         scrollRectToVisible(boundsInView);
     }

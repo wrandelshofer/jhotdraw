@@ -7,14 +7,13 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * ResizeButton.
@@ -43,7 +42,7 @@ public class ResizeButton extends Region {
         target.set(value);
     }
 
-    private void mouseDragged(@NonNull MouseEvent evt) {
+    private void mouseDragged(@Nonnull MouseEvent evt) {
         final Region t = getTarget();
         if (t != null && pressed != null) {
             Point2D current = new Point2D(evt.getSceneX(), evt.getSceneY());
@@ -53,7 +52,7 @@ public class ResizeButton extends Region {
         }
     }
 
-    private void mousePressed(@NonNull MouseEvent evt) {
+    private void mousePressed(@Nonnull MouseEvent evt) {
         final Region t = getTarget();
         if (t != null) {
             pressed = new Point2D(evt.getSceneX(), evt.getSceneY());
@@ -61,7 +60,7 @@ public class ResizeButton extends Region {
         }
     }
 
-    @NonNull
+    @Nonnull
     public ObjectProperty<Region> targetProperty() {
         return target;
     }

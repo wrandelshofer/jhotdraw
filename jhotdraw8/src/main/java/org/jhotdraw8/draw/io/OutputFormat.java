@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Map;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 
@@ -38,7 +38,7 @@ public interface OutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@NonNull URI uri, Drawing drawing) throws IOException {
+    default void write(@Nonnull URI uri, Drawing drawing) throws IOException {
         write(new File(uri), drawing);
     }
 
@@ -51,7 +51,7 @@ public interface OutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@NonNull File file, Drawing drawing) throws IOException {
+    default void write(@Nonnull File file, Drawing drawing) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
             write(out, drawing);
         }

@@ -1,7 +1,7 @@
 package org.jhotdraw8.draw.action;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -35,7 +35,7 @@ public abstract class AbstractSelectedAction extends AbstractViewControllerActio
      * @param app the application
      * @param editor the drawing editor
      */
-    public AbstractSelectedAction(@NonNull Application app, DrawingEditor editor) {
+    public AbstractSelectedAction(@Nonnull Application app, DrawingEditor editor) {
         super(app, null,null);
         setEditor(editor);
     }

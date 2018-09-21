@@ -13,7 +13,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * FXPathBuilder.
@@ -69,7 +69,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
 // empty
     }
 
-    @NonNull
+    @Nonnull
     public Path build() {
         pathDone();
         return new Path(elements);

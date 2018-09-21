@@ -6,11 +6,10 @@ package org.jhotdraw8.tree;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.TreeItem;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jhotdraw8.beans.NonnullProperty;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.event.Listener;
-import static org.jhotdraw8.tree.TreePresentationModel.MODEL_PROPERTY;
 
 /**
  * This model can be used to present a {@code TreeModel}
@@ -69,7 +68,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
 
     protected int updating;
 
-    @NonNull
+    @Nonnull
     @Override
     public TreeItem<N> getRoot() {
         return root;
@@ -80,7 +79,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         return items.get(f);
     }
 
-    public N getValue(@NonNull TreeItem<N> item) {
+    public N getValue(@Nonnull TreeItem<N> item) {
         return item.getValue();
     }
 
@@ -147,7 +146,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     }
 
     @Override
-    protected void handleTreeModelChanged(@Nullable TreeModel<N> oldValue, @NonNull TreeModel<N> newValue) {
+    protected void handleTreeModelChanged(@Nullable TreeModel<N> oldValue, @Nonnull TreeModel<N> newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(modelHandler);
         }

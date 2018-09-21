@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -22,11 +22,11 @@ public class CssPoint2DConverter implements Converter<Point2D> {
     private final PatternConverter formatter = new PatternConverter("{0,number} +{1,number}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @NonNull Point2D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull Point2D value) throws IOException {
         formatter.toStr(out, idFactory, value.getX(), value.getY());
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
@@ -34,13 +34,13 @@ public class CssPoint2DConverter implements Converter<Point2D> {
         return new Point2D(((Number) v[0]).doubleValue(), ((Number) v[1]).doubleValue());
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D getDefaultValue() {
         return new Point2D(0, 0);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨Point2D⟩: ⟨x⟩ ⟨y⟩";

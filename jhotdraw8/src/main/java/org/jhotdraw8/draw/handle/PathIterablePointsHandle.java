@@ -11,11 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
-import static org.jhotdraw8.draw.handle.Handle.STYLECLASS_HANDLE;
 import org.jhotdraw8.geom.FXPathPointsBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
@@ -30,7 +29,7 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class PathIterablePointsHandle extends AbstractHandle {
 
-    @NonNull
+    @Nonnull
     private final Path node;
     private final String styleclass;
     private final boolean selectable;
@@ -58,13 +57,13 @@ public class PathIterablePointsHandle extends AbstractHandle {
         return null;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node getNode() {
         return node;
     }
 
-    protected void initNode(@NonNull Path r) {
+    protected void initNode(@Nonnull Path r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
@@ -75,14 +74,14 @@ public class PathIterablePointsHandle extends AbstractHandle {
         return selectable;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public PathIterableFigure getOwner() {
         return (PathIterableFigure) super.getOwner();
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         PathIterableFigure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();

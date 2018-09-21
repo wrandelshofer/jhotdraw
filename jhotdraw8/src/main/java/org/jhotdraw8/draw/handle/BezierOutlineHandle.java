@@ -14,8 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -56,13 +56,13 @@ public class BezierOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public boolean contains(@NonNull DrawingView dv, double x, double y, double toleranceSquared) {
+    public boolean contains(@Nonnull DrawingView dv, double x, double y, double toleranceSquared) {
         return contains(dv, x, y, sqrt(toleranceSquared), toleranceSquared);
 
     }
 
     @Override
-    public boolean contains(@NonNull DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
+    public boolean contains(@Nonnull DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
         final SimpleBezierFigure o = getOwner();
         Point2D localp = Transforms.concat(dv.getViewToWorld(), o.getWorldToLocal()).transform(x, y);
         Intersection isect = Intersections.intersectPathIteratorCircle(o.getPathIterator(null),
@@ -81,14 +81,14 @@ public class BezierOutlineHandle extends AbstractHandle {
         return node;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public SimpleBezierFigure getOwner() {
         return (SimpleBezierFigure) super.getOwner();
     }
 
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (key != null && event.getClickCount() == 2) {
             double px = event.getX();
             double py = event.getY();
@@ -108,7 +108,7 @@ public class BezierOutlineHandle extends AbstractHandle {
         }
     }
 
-    protected void initNode(@NonNull Path r) {
+    protected void initNode(@Nonnull Path r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
@@ -120,7 +120,7 @@ public class BezierOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();

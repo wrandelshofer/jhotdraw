@@ -3,18 +3,13 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.Spliterator;
-import static java.util.Spliterator.NONNULL;
-import static java.util.Spliterator.ORDERED;
-import static java.util.Spliterator.SIZED;
-import static java.util.Spliterator.SUBSIZED;
 import java.util.Spliterators.AbstractIntSpliterator;
 import java.util.function.IntConsumer;
 
@@ -141,7 +136,7 @@ public interface IntDirectedGraph {
                index=lo;
            }
             @Override
-            public boolean tryAdvance(@NonNull IntConsumer action) {
+            public boolean tryAdvance(@Nonnull IntConsumer action) {
                 if (index<limit) {
                     action.accept(getNext(vidx,index++));
                     return true;

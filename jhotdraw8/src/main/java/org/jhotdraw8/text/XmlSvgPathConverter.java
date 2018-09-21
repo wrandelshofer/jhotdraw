@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.shape.SVGPath;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -29,9 +29,9 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class XmlSvgPathConverter implements Converter<SVGPath> {
 
-    @NonNull
+    @Nonnull
     @Override
-    public SVGPath fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public SVGPath fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);
@@ -43,12 +43,12 @@ public class XmlSvgPathConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull SVGPath value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull SVGPath value) throws IOException {
         final String content = value.getContent();
         out.append(content==null?"none":content);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public SVGPath getDefaultValue() {
         SVGPath p = new SVGPath();

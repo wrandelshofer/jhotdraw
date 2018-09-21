@@ -4,7 +4,7 @@
 package org.jhotdraw8.css;
 
 import java.io.IOException;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * CssTokenizerInterface.
@@ -46,7 +46,7 @@ public interface CssTokenizerInterface {
      * The returned value can be used for String comparisons of the value.
      * @return the current value
      */
-    @org.checkerframework.checker.nullness.qual.Nullable
+    @javax.annotation.Nullable
     default String currentValue() {
         switch (currentToken()) {
             case TT_AT_KEYWORD:

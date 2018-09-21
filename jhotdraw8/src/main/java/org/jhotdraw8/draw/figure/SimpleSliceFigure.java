@@ -13,11 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.PointHandle;
 import org.jhotdraw8.draw.handle.RelativePointHandle;
 import org.jhotdraw8.draw.handle.ResizeHandleKit;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -68,7 +67,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
     }
 
     @Override
-    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
@@ -78,7 +77,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
@@ -99,7 +98,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
         set(HEIGHT, abs(height));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         Rectangle node = new Rectangle();
@@ -110,7 +109,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(node);
         if (ctx.get(RenderContext.RENDERING_INTENT) != RenderingIntent.EDITOR) {
@@ -123,7 +122,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
         rectangleNode.setHeight(get(HEIGHT));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

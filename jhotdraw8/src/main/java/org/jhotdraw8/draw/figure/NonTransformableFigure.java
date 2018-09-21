@@ -5,8 +5,8 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -45,7 +45,7 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void reshapeInLocal(@NonNull Transform transform) {
+    default void reshapeInLocal(@Nonnull Transform transform) {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());

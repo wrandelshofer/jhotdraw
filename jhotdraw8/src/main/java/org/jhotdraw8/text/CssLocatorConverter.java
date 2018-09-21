@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.locator.Locator;
@@ -32,7 +32,7 @@ public class CssLocatorConverter implements Converter<Locator> {
   }
 
   @Override
-  public Locator fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+  public Locator fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     Locator c;
     CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
     tt.setSkipWhitespaces(true);
@@ -50,7 +50,7 @@ public class CssLocatorConverter implements Converter<Locator> {
     return null;
   }
 
-  @NonNull
+  @Nonnull
   @Override
   public String getHelpText() {
     return "Format of ⟨Locator⟩: relative(⟨x⟩%,⟨y⟩%)";
@@ -64,8 +64,8 @@ public class CssLocatorConverter implements Converter<Locator> {
      * @throws ParseException if parsing fails
      * @throws IOException if IO fails
      */
-    @NonNull
-    public Locator parseLocator(@NonNull CssTokenizerInterface tt) throws ParseException, IOException {
+    @Nonnull
+    public Locator parseLocator(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
         Locator color = null;
         tt.setSkipWhitespaces(true);
 
@@ -116,7 +116,7 @@ public class CssLocatorConverter implements Converter<Locator> {
 
 
   @Override
-  public void toString(@NonNull Appendable out, IdFactory idFactory, Locator value) throws IOException {
+  public void toString(@Nonnull Appendable out, IdFactory idFactory, Locator value) throws IOException {
     if (value instanceof RelativeLocator) {
         RelativeLocator rl=(RelativeLocator)value;
       out.append("relative(");

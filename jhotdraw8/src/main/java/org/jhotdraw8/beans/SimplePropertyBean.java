@@ -4,11 +4,10 @@
 package org.jhotdraw8.beans;
 
 import java.util.LinkedHashMap;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -25,7 +24,7 @@ public class SimplePropertyBean implements PropertyBean {
      */
     protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
 
-    @NonNull
+    @Nonnull
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;

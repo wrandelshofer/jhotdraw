@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -51,7 +51,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void addToGroup(@NonNull DrawingView view, List<Figure> figures) {
+    public static void addToGroup(@Nonnull DrawingView view, List<Figure> figures) {
         if (figures.size() < 2) {
             // FIXME internationalize me
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You must select the figures and a group to which the figures should be added");

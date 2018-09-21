@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.render;
 
 import javafx.geometry.Bounds;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import javafx.scene.Node;
 import org.jhotdraw8.beans.PropertyBean;

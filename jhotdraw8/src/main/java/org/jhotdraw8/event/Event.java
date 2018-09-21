@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.event;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.EventObject;
 
@@ -17,11 +17,11 @@ public class Event<E> extends EventObject {
 
     private final static long serialVersionUID = 1L;
 
-    public Event(@NonNull E source) {
+    public Event(@Nonnull E source) {
         super(source);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public E getSource() {
         @SuppressWarnings("unchecked")

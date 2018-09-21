@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -58,18 +58,18 @@ public class XmlIntegerConverter implements Converter<Integer> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, Integer value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, Integer value) throws IOException {
         c.toString(out, idFactory, value);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Integer fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         Number n = c.fromString(in, idFactory);
         return (n == null || n instanceof Integer) ? (Integer) n : n.intValue();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Integer getDefaultValue() {
         Number n = c.getDefaultValue();

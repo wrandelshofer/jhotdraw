@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<!-- @(#)STI-DCR_Topology.xsd
+Copyright (c) systransis Ltd.
+All rights reserved.
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    <!-- attribute type declarations -->
+    <xs:simpleType name="PIOAttrNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="defaultSpeed"/>
+            <xs:enumeration value="isDirected"/>
+            <xs:enumeration value="MainSignal"/>
+            <xs:enumeration value="stoppingAllowed"/>
+            <xs:enumeration value="type"/>
+            <xs:enumeration value="inferOrder"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOKeyValueListEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SpeedLimitCategory"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOKeyValueKeyEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="category"/>
+            <xs:enumeration value="speed"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOClassNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DcrBerth"/>
+            <xs:enumeration value="DcrRoute"/>
+            <xs:enumeration value="DcrSection"/>
+            <xs:enumeration value="DcrTimingPoint"/>
+            <xs:enumeration value="DcrZNField"/>
+            <xs:enumeration value="SafetyElement"/>
+            <xs:enumeration value="DcrSpeedLimitArea"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOsPackageNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ch.systransis.arl.pi"/>
+            <xs:enumeration value="ch.systransis.dcr.ifs.westcad"/>
+            <xs:enumeration value="ch.systransis.dcr.ifs.td"/>
+            <xs:enumeration value="ch.systransis.dcr.pi"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOLocationDescTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Mileage"/>
+            <xs:enumeration value="Location"/>
+            <xs:enumeration value="Vertex"/>
+            <xs:enumeration value="Object"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PIOPathDescTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Mileage"/>
+            <xs:enumeration value="Location"/>
+            <xs:enumeration value="Vertex"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PathAttrNameEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Orientation"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="MileageOrientationEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Downwards"/>
+            <xs:enumeration value="Upwards"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RouteTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="POSA"/>
+            <xs:enumeration value="MAIN"/>
+            <xs:enumeration value="SHUNT"/>
+            <xs:enumeration value="CALLON"/>
+            <xs:enumeration value="AUTO"/>
+            <xs:enumeration value="WARNER"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- root element -->
+    <xs:element name="ProcessImageConfig">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="PIOs"/>
+                <xs:element ref="Mileages"/>
+                <xs:element ref="Topology"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="version" use="optional"/>
+        </xs:complexType>
+
+        <!-- uniqueness requirements -->
+        <xs:unique name="unique-Alias-namespace-name">
+            <xs:selector xpath=".//Alias"/>
+            <xs:field xpath="@nameSpace"/>
+            <xs:field xpath="@otherName"/>
+        </xs:unique>
+        <xs:unique name="unique-Mileage-name">
+            <xs:selector xpath=".//Mileage"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <!-- Children of root -->
+    <xs:element name="PIOs">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="PIO"/>
+            </xs:choice>
+            <xs:attribute type="PIOsPackageNameEnum" name="packageName" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Mileages">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="Mileage"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Topology">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="Twins"/>
+                <xs:element ref="Segment"/>
+                <xs:element ref="Border"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Twin, Segment and Vertex -->
+    <xs:element name="Twins">
+        <xs:complexType>
+            <xs:choice maxOccurs="2" minOccurs="2">
+                <xs:element ref="V"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Segment">
+        <xs:complexType>
+            <xs:choice maxOccurs="2" minOccurs="2">
+                <xs:element ref="V"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="V">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="PIOAttr"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Border">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="V"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!-- Mileage and its child elements -->
+    <xs:element name="Mileage">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+                <xs:element ref="Anchor"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+        </xs:complexType>
+        <xs:unique name="unique-AnchorInMileage">
+            <xs:selector xpath="Mileage/Anchor"/>
+            <xs:field xpath="@vertexName"/>
+        </xs:unique>
+    </xs:element>
+    <xs:element name="Anchor">
+        <xs:complexType>
+            <xs:attribute type="xs:integer" name="pos" use="required"/>
+            <xs:attribute type="xs:string" name="vertexName" use="required"/>
+            <xs:attribute type="MileageOrientationEnum" name="orientation" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- Objects and child elements -->
+    <xs:element name="PIO">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+                <xs:element ref="Alias"/>
+                <xs:element ref="PIOPath"/>
+                <xs:element ref="PIOAttr"/>
+                <xs:element ref="PIOKeyValueList"/>
+                <xs:element ref="PIOLocation"/>
+            </xs:choice>
+            <xs:attribute type="xs:string" name="id" use="required"/>
+            <xs:attribute type="PIOClassNameEnum" name="className" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- Child elements of Objects -->
+    <xs:element name="Alias">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="otherName" use="required"/>
+            <xs:attribute type="xs:string" name="nameSpace" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOLocation">
+        <xs:complexType>
+            <xs:choice maxOccurs="1" minOccurs="1">
+                <xs:element ref="Waypoint"/>
+            </xs:choice>
+            <xs:attribute type="PIOLocationDescTypeEnum" name="descType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOPath">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+                <xs:element ref="Waypoint"/>
+                <xs:element ref="PathAttr"/>
+            </xs:choice>
+            <xs:attribute type="PIOPathDescTypeEnum" name="descType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Waypoint">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="firstVertex" use="optional"/>
+            <xs:attribute type="xs:string" name="secondVertex" use="optional"/>
+            <xs:attribute type="xs:integer" name="distance" use="optional"/>
+            <xs:attribute type="xs:string" name="desc" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PathAttr">
+        <xs:complexType>
+            <xs:attribute type="PathAttrNameEnum" name="name" use="required"/>
+            <xs:attribute type="xs:string" name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOAttr">
+        <xs:complexType>
+            <xs:attribute type="PIOAttrNameEnum" name="name" use="required"/>
+            <xs:attribute type="xs:string" name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOKeyValueList">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="PIOKeyValuePair"/>
+            </xs:choice>
+            <xs:attribute type="PIOKeyValueListEnum" name="name" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PIOKeyValuePair">
+        <xs:complexType>
+            <xs:attribute type="PIOKeyValueKeyEnum" name="key" use="required"/>
+            <xs:attribute type="xs:string" name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

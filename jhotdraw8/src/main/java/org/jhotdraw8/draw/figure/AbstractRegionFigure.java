@@ -17,8 +17,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -58,19 +58,19 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public AbstractRegionFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Path();
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         if (pathElements==null) pathElements=new Path2D.Float();
@@ -92,7 +92,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
 
-    protected void updatePathNode(@NonNull Path path) {
+    protected void updatePathNode(@Nonnull Path path) {
         path.getElements().setAll(Shapes.fxPathElementsFromAWT(pathElements.getPathIterator(null)));
     }
 

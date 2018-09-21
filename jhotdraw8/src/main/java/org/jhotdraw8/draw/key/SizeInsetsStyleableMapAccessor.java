@@ -9,8 +9,8 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -31,15 +31,15 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, CssSizeInsets> cssMetaData;
-    @NonNull
+    @Nonnull
     private final MapAccessor<CssSize> topKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<CssSize> rightKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<CssSize> bottomKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<CssSize> leftKey;
 
     /**
@@ -73,7 +73,7 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
         this.leftKey = leftKey;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, CssSizeInsets> getCssMetaData() {
         return cssMetaData;

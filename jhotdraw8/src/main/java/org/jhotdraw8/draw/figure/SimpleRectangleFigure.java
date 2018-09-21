@@ -14,7 +14,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -64,7 +64,7 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
@@ -90,14 +90,14 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
         set(HEIGHT, abs(height));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Rectangle();
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(rectangleNode);
@@ -113,13 +113,13 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
         rectangleNode.setArcHeight(getStyled(ARC_HEIGHT));
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
             return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

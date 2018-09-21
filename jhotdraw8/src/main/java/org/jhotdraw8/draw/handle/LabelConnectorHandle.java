@@ -15,8 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -49,11 +49,11 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Circle REGION_SHAPE = new Circle(4);
 
-    @NonNull
+    @Nonnull
     private final Group groupNode;
-    @NonNull
+    @Nonnull
     private final Region targetNode;
-    @NonNull
+    @Nonnull
     private final Line lineNode;
     protected final MapAccessor<Point2D> originKey;
     public LabelConnectorHandle(ConnectingFigure figure,  MapAccessor<Point2D> originKey,MapAccessor<Point2D> pointKey,
@@ -85,7 +85,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
 
    
 
-    @NonNull
+    @Nonnull
     @Override
     public Group getNode() {
         return groupNode;
@@ -93,7 +93,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
 
    
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.get(pointKey);

@@ -6,7 +6,7 @@ package org.jhotdraw8.gui.dock;
 import static java.lang.Double.max;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.gui.CustomSkin;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -29,18 +29,18 @@ import javafx.scene.layout.VBox;
  */
 public class TabbedAccordionDock extends Control implements Dock {
 
-    @NonNull
+    @Nonnull
     private ObjectProperty<Track> track = new SimpleObjectProperty<>();
 
-    @NonNull
+    @Nonnull
     private TabPane tabPane = new TabPane();
-    @NonNull
+    @Nonnull
     private Accordion accordion = new Accordion();
-    @NonNull
+    @Nonnull
     private TitledPane titlePane = new TitledPane();
-    @NonNull
+    @Nonnull
     private ResizePane resizePane = new ResizePane();
-    @NonNull
+    @Nonnull
     private ObservableList<DockItem> items = FXCollections.observableArrayList();
 
     public TabbedAccordionDock() {
@@ -88,7 +88,7 @@ public class TabbedAccordionDock extends Control implements Dock {
         return accordion.prefWidth(height);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObservableList<DockItem> getItems() {
         return items;
@@ -99,7 +99,7 @@ public class TabbedAccordionDock extends Control implements Dock {
         return true;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public ObjectProperty<Track> trackProperty() {
         return track;

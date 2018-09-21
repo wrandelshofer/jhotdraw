@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -25,7 +25,7 @@ public class PointLocator extends AbstractLocator {
     }
 
     @Override
-    public Point2D locate(@NonNull Figure owner) {
+    public Point2D locate(@Nonnull Figure owner) {
         return owner.get(key);
     }
 }

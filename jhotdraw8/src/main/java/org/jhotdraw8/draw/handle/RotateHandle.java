@@ -21,8 +21,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
@@ -58,17 +58,17 @@ public class RotateHandle extends AbstractHandle {
     static {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
     }
-    @NonNull
+    @Nonnull
     private final Group group;
 
     private Set<Figure> groupReshapeableFigures;
-    @NonNull
+    @Nonnull
     private final Line line;
     private double lineLength = 10.0;
     private Point2D pickLocation;
-    @NonNull
+    @Nonnull
     private final Region pickNode;
-    @NonNull
+    @Nonnull
     private final Region pivotNode;
 
     public RotateHandle(TransformableFigure figure) {
@@ -122,13 +122,13 @@ public class RotateHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Group getNode() {
         return group;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public TransformableFigure getOwner() {
         return (TransformableFigure) super.getOwner();
@@ -167,7 +167,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         TransformableFigure o = getOwner();
         Point2D center = Geom.center(o.getBoundsInLocal());
         Transform t = Transforms.concat(getWorldToRotate(), view.getViewToWorld());
@@ -201,7 +201,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, @NonNull DrawingView view) {
+    public void handleMousePressed(MouseEvent event, @Nonnull DrawingView view) {
         pivotNode.setVisible(true);
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -226,7 +226,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         TransformableFigure o = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), getRotateToWorld());
         Bounds b = o.getBoundsInLocal();

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,24 +20,24 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
     /**
      * Holds the arrow heads.
      */
-    @NonNull
+    @Nonnull
     protected final int[] nextArrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    @NonNull
+    @Nonnull
     protected final int[] nextArrowOffsets;
     /**
      * Holds the arrow heads.
      */
-    @NonNull
+    @Nonnull
     protected final int[] prevArrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    @NonNull
+    @Nonnull
     protected final int[] prevArrowOffsets;
 
     /**
@@ -145,7 +145,7 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
     public int getPrevCount(int vi) {
         return getNextPrevCount(vi,prevArrowOffsets,prevArrowHeads);
     }
-        private int getNextPrevCount(int vi, int[] arrows, @NonNull int[] arrowHeads) {
+        private int getNextPrevCount(int vi, int[] arrows, @Nonnull int[] arrowHeads) {
         final int vertexCount = getVertexCount();
         if (vi < 0 || vi >= vertexCount) {
             throw new IllegalArgumentException("vi(" + vi + ") < 0 || vi >= " + vertexCount);

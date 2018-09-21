@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javafx.css.PseudoClass;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.io.IdFactory;
 
@@ -47,7 +47,7 @@ public class CssPseudoClassConverter implements Converter<ImmutableSet<PseudoCla
                     Normalizer.normalize(o2.getPseudoClassName(), Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @NonNull ImmutableSet<PseudoClass> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull ImmutableSet<PseudoClass> value) throws IOException {
         Set<PseudoClass> tokens = new LinkedHashSet<>();
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];

@@ -3,15 +3,10 @@
  */
 package org.jhotdraw8.geom;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import static java.awt.geom.PathIterator.SEG_CLOSE;
-import static java.awt.geom.PathIterator.SEG_CUBICTO;
-import static java.awt.geom.PathIterator.SEG_LINETO;
-import static java.awt.geom.PathIterator.SEG_MOVETO;
-import static java.awt.geom.PathIterator.SEG_QUADTO;
 import java.util.List;
 
 /**
@@ -22,7 +17,7 @@ import java.util.List;
  */
 public class BezierNodePathIterator implements PathIterator {
 
-    @NonNull
+    @Nonnull
     private final List<BezierNode> nodes;
     private int index;
     private final boolean closed;

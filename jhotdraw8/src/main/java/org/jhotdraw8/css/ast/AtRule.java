@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +22,7 @@ public class AtRule extends AST {
 
     private final String atKeyword;
     private final SelectorGroup selectorList;
-    @NonNull
+    @Nonnull
     private final List<Declaration> declarations;
 
     public AtRule(String atKeyword,
@@ -32,7 +32,7 @@ public class AtRule extends AST {
         this.declarations = declarations == null ? Collections.emptyList() : Collections.unmodifiableList(declarations);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("AtRule: ");
@@ -49,7 +49,7 @@ public class AtRule extends AST {
         return selectorList;
     }
 
-    @NonNull
+    @Nonnull
     public List<Declaration> getDeclarations() {
         return declarations;
     }

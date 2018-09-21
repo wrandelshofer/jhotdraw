@@ -10,7 +10,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -29,11 +29,11 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nonnull
     private final CssMetaData<?, Point2D> cssMetaData;
-    @NonNull
+    @Nonnull
     private final MapAccessor<Double> xKey;
-    @NonNull
+    @Nonnull
     private final MapAccessor<Double> yKey;
 
     /**
@@ -63,7 +63,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         this.yKey = yKey;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssMetaData<?, Point2D> getCssMetaData() {
         return cssMetaData;
@@ -80,22 +80,22 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         return converter;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D get(Map<? super Key<?>, Object> a) {
         return new Point2D(xKey.get(a), yKey.get(a));
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Point2D put(Map<? super Key<?>, Object> a, @NonNull Point2D value) {
+    public Point2D put(Map<? super Key<?>, Object> a, @Nonnull Point2D value) {
         Point2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
         return oldValue;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Point2D remove(Map<? super Key<?>, Object> a) {
         Point2D oldValue = get(a);

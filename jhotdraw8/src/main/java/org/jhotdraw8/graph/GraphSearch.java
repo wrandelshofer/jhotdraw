@@ -18,8 +18,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.IteratorEnumerator;
@@ -32,7 +32,7 @@ import org.jhotdraw8.collection.IteratorEnumerator;
  */
 public class GraphSearch {
 
-    @NonNull
+    @Nonnull
     private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> graph) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(graph.getVertexCount());
@@ -44,7 +44,7 @@ public class GraphSearch {
         return forest;
     }
 
-    @NonNull
+    @Nonnull
     private static <V> Map<V, List<V>> createForest(Collection<V> vertices) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(vertices.size());
@@ -66,8 +66,8 @@ public class GraphSearch {
      * @param graph a directed graph
      * @return the disjoint sets.
      */
-    @NonNull
-    public static <V, A> List<Set<V>> findDisjointSets(@NonNull DirectedGraph<V, A> graph) {
+    @Nonnull
+    public static <V, A> List<Set<V>> findDisjointSets(@Nonnull DirectedGraph<V, A> graph) {
         // Create initial forest
         Map<V, List<V>> forest = createForest(graph);
         // Merge sets.
@@ -102,7 +102,7 @@ public class GraphSearch {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    @NonNull
+    @Nonnull
     public static <A> List<Set<Integer>> findDisjointSets(AttributedIntDirectedGraph<?, A> g) {
         // Create initial forest.
         final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
@@ -160,8 +160,8 @@ public class GraphSearch {
      * list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
-    @NonNull
-    public static <V, A extends Pair<V>> List<A> findMinimumSpanningTree(@NonNull Collection<V> vertices, List<A> orderedArrows, @Nullable List<A> rejectedArrows) {
+    @Nonnull
+    public static <V, A extends Pair<V>> List<A> findMinimumSpanningTree(@Nonnull Collection<V> vertices, List<A> orderedArrows, @Nullable List<A> rejectedArrows) {
         List<A> minimumSpanningTree = new ArrayList<>(orderedArrows.size());
         if (rejectedArrows == null) {
             rejectedArrows = new ArrayList<>(orderedArrows.size());
@@ -202,8 +202,8 @@ public class GraphSearch {
      * list, if it is provided.
      * @return the graph builder
      */
-    @NonNull
-    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@NonNull Collection<V> vertices, @NonNull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
+    @Nonnull
+    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull Collection<V> vertices, @Nonnull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
         List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);
@@ -227,7 +227,7 @@ public class GraphSearch {
      * @param m the graph
      * @return the sorted list of nextArrows
      */
-    @NonNull
+    @Nonnull
     @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
         final AttributedIntDirectedGraph<V, A> im;
@@ -251,7 +251,7 @@ public class GraphSearch {
      * @param model the graph
      * @return the sorted list of nextArrows
      */
-    @NonNull
+    @Nonnull
     public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?, A> model) {
         final int n = model.getVertexCount();
 
@@ -312,7 +312,7 @@ public class GraphSearch {
         return result;
     }
 
-    private static <V> void union(@NonNull List<V> uset, @NonNull List<V> vset, @NonNull Map<V, List<V>> forest) {
+    private static <V> void union(@Nonnull List<V> uset, @Nonnull List<V> vset, @Nonnull Map<V, List<V>> forest) {
         if (uset != vset) {
             if (uset.size() < vset.size()) {
                 for (V uu : uset) {

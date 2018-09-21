@@ -6,7 +6,7 @@ package org.jhotdraw8.app.action.file;
 import java.net.URI;
 import java.util.concurrent.CompletionStage;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.app.action.Action;
@@ -58,7 +58,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view
      * @param uri the uri of the recent file
      */
-    public LoadRecentFileAction(Application app, DocumentOrientedViewModel view, @NonNull URI uri) {
+    public LoadRecentFileAction(Application app, DocumentOrientedViewModel view, @Nonnull URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);
@@ -171,7 +171,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }*/
 
-    @NonNull
+    @Nonnull
     @Override
     public CompletionStage<Void> doIt(final DocumentOrientedViewModel view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

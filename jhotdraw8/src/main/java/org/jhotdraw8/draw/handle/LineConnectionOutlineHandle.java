@@ -11,8 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.LineConnectingFigure;
 import org.jhotdraw8.geom.Transforms;
@@ -59,13 +59,13 @@ public class LineConnectionOutlineHandle extends AbstractHandle {
         return node;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public LineConnectingFigure getOwner() {
         return (LineConnectingFigure)super.getOwner();
     }
 
-    protected void initNode(@NonNull Polyline r) {
+    protected void initNode(@Nonnull Polyline r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
@@ -77,7 +77,7 @@ public class LineConnectionOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(@Nonnull DrawingView view) {
         LineConnectingFigure f =getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();

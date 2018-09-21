@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -23,7 +23,7 @@ public class CssSymmetricSize2DConverter implements Converter<CssSize2D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @NonNull CssSize2D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull CssSize2D value) throws IOException {
         CssSize x = value.getX();
         CssSize y = value.getY();
         if (x == y) {
@@ -33,7 +33,7 @@ public class CssSymmetricSize2DConverter implements Converter<CssSize2D> {
         }
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public CssSize2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
@@ -54,7 +54,7 @@ public class CssSymmetricSize2DConverter implements Converter<CssSize2D> {
         return new CssSize2D(CssSize.ZERO,CssSize.ZERO);
     }
     
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨SymmetricSize2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";

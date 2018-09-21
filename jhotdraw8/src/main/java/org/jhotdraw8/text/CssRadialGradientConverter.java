@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.text;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
@@ -44,12 +44,12 @@ import org.jhotdraw8.io.CharBufferReader;
  */
 public class CssRadialGradientConverter implements Converter<CssRadialGradient> {
 
-    @NonNull
+    @Nonnull
     private CssColorConverter colorConverter = new CssColorConverter(false);
-    @NonNull
+    @Nonnull
     private CssDoubleConverter doubleConverter = new CssDoubleConverter();
 
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable CssRadialGradient value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable CssRadialGradient value) throws IOException {
         if (value == null) {
             out.append("none");
         } else {
@@ -146,7 +146,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
 
     @Nullable
     @Override
-    public CssRadialGradient fromString(@NonNull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public CssRadialGradient fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(in));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
@@ -322,7 +322,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         return null;
     }
 
-    private CssStop parseColorStop(@NonNull CssTokenizerInterface tt) throws IOException, ParseException {
+    private CssStop parseColorStop(@Nonnull CssTokenizerInterface tt) throws IOException, ParseException {
         CssColor color = colorConverter.parseColor(tt);
         Double offset = null;
         switch (tt.nextToken()) {
@@ -338,7 +338,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         return new CssStop(offset, color);
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨RadialGradient⟩: radial-gradient(［⟨RadialGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
