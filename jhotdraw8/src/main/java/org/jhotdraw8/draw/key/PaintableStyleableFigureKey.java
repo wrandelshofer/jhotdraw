@@ -75,10 +75,10 @@ public class PaintableStyleableFigureKey extends AbstractStyleableFigureKey<Pain
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Paintable> converter
-                = new StyleConverterAdapter<Paintable>(new CssPaintableConverter());
+                = new StyleConverterAdapter<>(new CssPaintableConverter());
         CssMetaData<Styleable, Paintable> md
-                = new SimpleCssMetaData<Styleable, Paintable>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

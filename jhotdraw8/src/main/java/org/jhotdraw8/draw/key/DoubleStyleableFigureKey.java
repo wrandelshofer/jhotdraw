@@ -73,10 +73,10 @@ public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double>
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Double> converter
-                = new StyleConverterAdapter<Double>(new CssDoubleConverter());
+                = new StyleConverterAdapter<>(new CssDoubleConverter());
         CssMetaData<Styleable, Double> md
-                = new SimpleCssMetaData<Styleable, Double>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

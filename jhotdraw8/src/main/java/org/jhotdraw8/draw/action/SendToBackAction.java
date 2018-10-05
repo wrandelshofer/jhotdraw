@@ -43,7 +43,7 @@ public class SendToBackAction extends AbstractSelectedAction {
         if (dview == null) {
             return;
         }
-        final LinkedList<Figure> figures = new LinkedList<Figure>(dview.getSelectedFigures());
+        final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         sendToBack(dview, figures);
 
     }

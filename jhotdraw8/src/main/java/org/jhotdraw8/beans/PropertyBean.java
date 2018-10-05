@@ -136,7 +136,7 @@ public interface PropertyBean {
 
     @Nonnull
     default <T> ObjectProperty<T> propertyAt(@Nonnull Key<T> key) {
-        return new MapEntryProperty<Key<?>, Object, T>(getProperties(), key, key.getValueType());
+        return new MapEntryProperty<>(getProperties(), key, key.getValueType());
     }
 
     @Nonnull

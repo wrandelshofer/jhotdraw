@@ -43,7 +43,7 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
         this.mapp = mapp;
         this.name = name;
         this.bean = bean;
-        bindBidirectional(new KeyMapEntryProperty<T>(mapp, key));
+        bindBidirectional(new KeyMapEntryProperty<>(mapp, key));
     }
 
     @Override

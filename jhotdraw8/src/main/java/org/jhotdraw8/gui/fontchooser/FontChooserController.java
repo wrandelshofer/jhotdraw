@@ -162,7 +162,7 @@ public class FontChooserController {
 
     private void initListCellsWithDragAndDropBehavior() {
         familyList.setCellFactory(lv -> {
-            final TextFieldListCell<FontFamily> listCell = new TextFieldListCell<FontFamily>();
+            final TextFieldListCell<FontFamily> listCell = new TextFieldListCell<>();
             listCell.setOnDragDetected(evt -> {
                 Dragboard dragBoard = familyList.startDragAndDrop(TransferMode.COPY);
                 ClipboardContent content = new ClipboardContent();

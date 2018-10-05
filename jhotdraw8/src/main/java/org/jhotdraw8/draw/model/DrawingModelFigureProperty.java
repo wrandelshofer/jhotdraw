@@ -59,7 +59,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
                 }
             };
 
-            model.addDrawingModelListener(weakListener = new WeakListener<DrawingModelEvent>(modelListener, model::removeDrawingModelListener));
+            model.addDrawingModelListener(weakListener = new WeakListener<>(modelListener, model::removeDrawingModelListener));
         } else {
             modelListener = null;
             weakListener = null;

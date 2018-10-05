@@ -73,7 +73,7 @@ public interface Key<T> extends MapAccessor<T> {
     @Nonnull
     default ObjectProperty<T> getValueProperty(@Nonnull Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
-            a.put(this, new SimpleObjectProperty<T>(getDefaultValue()));
+            a.put(this, new SimpleObjectProperty<>(getDefaultValue()));
         }
         @SuppressWarnings("unchecked")
         SimpleObjectProperty<T> value = (SimpleObjectProperty<T>) a.get(this);
@@ -89,7 +89,7 @@ public interface Key<T> extends MapAccessor<T> {
     @Nullable
     default T getValue(@Nonnull Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
-            a.put(this, new SimpleObjectProperty<T>(getDefaultValue()));
+            a.put(this, new SimpleObjectProperty<>(getDefaultValue()));
         }
         @SuppressWarnings("unchecked")
         SimpleObjectProperty<T> value = (SimpleObjectProperty<T>) a.get(this);

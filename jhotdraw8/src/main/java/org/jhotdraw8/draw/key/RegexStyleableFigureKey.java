@@ -82,10 +82,10 @@ public class RegexStyleableFigureKey extends AbstractStyleableFigureKey<RegexRep
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, RegexReplace> cnvrtr
-                = new StyleConverterAdapter<RegexReplace>(getConverter());
+                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, RegexReplace> md
-                = new SimpleCssMetaData<Styleable, RegexReplace>(property, function,
-                        cnvrtr, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                cnvrtr, defaultValue, inherits);
         cssMetaData = md;
         converter = new CssRegexConverter(isNullable());
     }

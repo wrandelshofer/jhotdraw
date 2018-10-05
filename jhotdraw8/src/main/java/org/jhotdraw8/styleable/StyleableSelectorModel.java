@@ -75,7 +75,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     @Nonnull
     @Override
     public Set<String> getStyleClasses(@Nonnull Styleable element) {
-        return new HashSet<String>(element.getStyleClass());
+        return new HashSet<>(element.getStyleClass());
     }
 
     @Override
@@ -136,7 +136,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
                 if (value instanceof Collection) {
                     @SuppressWarnings("unchecked")
                     Collection<Object> olist = (Collection<Object>) value;
-                    Set<String> slist = new HashSet<String>();
+                    Set<String> slist = new HashSet<>();
                     for (Object o : olist) {
                         slist.add(o.toString());
                     }

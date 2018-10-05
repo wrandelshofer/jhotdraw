@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  */
 public final class ImmutableList<E> extends AbstractList<E> implements ObservableList<E> {
 
-    private final static ImmutableList<Object> EMPTY = new ImmutableList<Object>(true, new Object[0]);
+    private final static ImmutableList<Object> EMPTY = new ImmutableList<>(true, new Object[0]);
 
     private final Object[] array;
 
@@ -191,7 +191,7 @@ public final class ImmutableList<E> extends AbstractList<E> implements Observabl
             List<T> list = (List) collection;
             return remove(list, list.indexOf(item));
         } else {
-            List<T> a = new ArrayList<T>(collection);// linear
+            List<T> a = new ArrayList<>(collection);// linear
             a.remove(item);// linear
             return new ImmutableList<>(a);// linear
         }

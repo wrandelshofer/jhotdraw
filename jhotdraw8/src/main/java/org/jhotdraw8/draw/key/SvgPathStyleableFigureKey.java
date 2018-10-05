@@ -78,10 +78,10 @@ public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, String> converter
-                = new StyleConverterAdapter<String>(getConverter());
+                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, String> md
-                = new SimpleCssMetaData<Styleable, String>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

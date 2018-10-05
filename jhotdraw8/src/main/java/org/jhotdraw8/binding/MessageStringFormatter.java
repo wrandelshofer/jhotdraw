@@ -48,7 +48,7 @@ public abstract class MessageStringFormatter extends StringBinding {
     }
 
     private static ObservableValue<?>[] extractDependencies(Object... args) {
-        final List<ObservableValue<?>> dependencies = new ArrayList<ObservableValue<?>>();
+        final List<ObservableValue<?>> dependencies = new ArrayList<>();
         for (final Object obj : args) {
             if (obj instanceof ObservableValue) {
                 dependencies.add((ObservableValue<?>) obj);

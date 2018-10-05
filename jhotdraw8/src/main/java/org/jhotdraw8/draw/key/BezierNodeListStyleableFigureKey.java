@@ -69,10 +69,10 @@ public class BezierNodeListStyleableFigureKey extends AbstractStyleableFigureKey
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableList<BezierNode>> converter
-                = new StyleConverterAdapter<ImmutableList<BezierNode>>(getConverter());
+                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, ImmutableList<BezierNode>> md
-                = new SimpleCssMetaData<Styleable, ImmutableList<BezierNode>>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

@@ -12,7 +12,6 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides an API for building a {@code BidiGraph}.
@@ -142,32 +141,32 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     @Override
     public V getNext(V vertex, int i) {
-        return getVertexDataNotNull(vertex).next.get(i).end.v;
+        return getVertexDataNonnull(vertex).next.get(i).end.v;
     }
 
     @Override
     public A getNextArrow(V vertex, int index) {
-        return getVertexDataNotNull(vertex).next.get(index).arrow;
+        return getVertexDataNonnull(vertex).next.get(index).arrow;
     }
 
     @Override
     public int getNextCount(V vertex) {
-        return getVertexDataNotNull(vertex).next.size();
+        return getVertexDataNonnull(vertex).next.size();
     }
 
     @Override
     public V getPrev(V vertex, int i) {
-        return getVertexDataNotNull(vertex).prev.get(i).start.v;
+        return getVertexDataNonnull(vertex).prev.get(i).start.v;
     }
 
     @Override
     public A getPrevArrow(V vertex, int index) {
-        return getVertexDataNotNull(vertex).prev.get(index).arrow;
+        return getVertexDataNonnull(vertex).prev.get(index).arrow;
     }
 
     @Override
     public int getPrevCount(V vertex) {
-        return getVertexDataNotNull(vertex).prev.size();
+        return getVertexDataNonnull(vertex).prev.size();
     }
 
     @Override
@@ -223,7 +222,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         };
     }
 
-    private VertexData<V, A> getVertexDataNotNull(V vertex) {
+    private VertexData<V, A> getVertexDataNonnull(V vertex) {
         VertexData<V, A> vertexData = vertices.get(vertex);
         if (vertexData == null) {
             throw new NullPointerException("vertex is not in graph. vertex=" + vertex);
@@ -317,12 +316,12 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
             this.arrow = arrow;
         }
 
-        @NotNull
+        @Nonnull
         public VertexData<V, A> getStart() {
             return start;
         }
 
-        @NotNull
+        @Nonnull
         public VertexData<V, A> getEnd() {
             return end;
         }
@@ -351,13 +350,13 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     @Nonnull
     @Override
     public Stream<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator<>(VertexData::getPrev, ArrowData::getStart, getVertexDataNotNull(start), visited), false);
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator<>(VertexData::getPrev, ArrowData::getStart, getVertexDataNonnull(start), visited), false);
     }
 
     @Nonnull
     @Override
     public Stream<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator<>(VertexData::getNext, ArrowData::getEnd, getVertexDataNotNull(start), visited), false);
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator<>(VertexData::getNext, ArrowData::getEnd, getVertexDataNonnull(start), visited), false);
     }
 
     /**

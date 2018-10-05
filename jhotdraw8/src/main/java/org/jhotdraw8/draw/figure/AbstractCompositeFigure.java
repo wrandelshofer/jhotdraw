@@ -200,6 +200,6 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
      */
     @Nonnull
     public ArrayList<Figure> getChildList() {
-        return new ArrayList<Figure>(getChildren());
+        return new ArrayList<>(getChildren());
     }
 }

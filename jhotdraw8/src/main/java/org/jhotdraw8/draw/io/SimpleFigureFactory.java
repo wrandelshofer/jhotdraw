@@ -119,7 +119,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
     }
 
     public <T> void addDefaultValue(Class<? extends Figure> figure, MapAccessor<T> acc, T value) {
-        defaultValueMap.put(new FigureAccessorKey<T>(figure, acc), value);
+        defaultValueMap.put(new FigureAccessorKey<>(figure, acc), value);
     }
 
     /**
@@ -282,7 +282,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
     public void addSkipAttribute(Class<? extends Figure> figure, String attributeName) {
         HashSet<Class<? extends Figure>> set = skipAttributes.get(attributeName);
         if (set == null) {
-            set = new HashSet<Class<? extends Figure>>();
+            set = new HashSet<>();
             skipAttributes.put(attributeName, set);
         }
         set.add(figure);
@@ -377,7 +377,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
 
     @Override
     public <T> T getDefaultValue(@Nonnull Figure f, @Nonnull MapAccessor<T> key) {
-        FigureAccessorKey<T> k = new FigureAccessorKey<T>(f.getClass(), key);
+        FigureAccessorKey<T> k = new FigureAccessorKey<>(f.getClass(), key);
         if (defaultValueMap.containsKey(k)) {
             @SuppressWarnings("unchecked")
             T defaultValue = (T) defaultValueMap.get(k);
@@ -421,7 +421,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
 
     @Override
     public <T> boolean isDefaultValue(@Nonnull Figure f, @Nonnull MapAccessor<T> key, @Nullable T value) {
-        FigureAccessorKey<T> k = new FigureAccessorKey<T>(f.getClass(), key);
+        FigureAccessorKey<T> k = new FigureAccessorKey<>(f.getClass(), key);
         T defaultValue;
         if (defaultValueMap.containsKey(k)) {
             @SuppressWarnings("unchecked")

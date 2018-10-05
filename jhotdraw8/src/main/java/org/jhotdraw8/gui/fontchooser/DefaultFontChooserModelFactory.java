@@ -540,8 +540,8 @@ public class DefaultFontChooserModelFactory {
 
     @Nonnull
     public static ArrayList<FontFamily> collectFamiliesNamed(List<FontFamily> allFamilies, String... names) {
-        ArrayList<FontFamily> coll = new ArrayList<FontFamily>();
-        HashSet<String> nameMap = new HashSet<String>();
+        ArrayList<FontFamily> coll = new ArrayList<>();
+        HashSet<String> nameMap = new HashSet<>();
         nameMap.addAll(Arrays.asList(names));
         for (FontFamily family : allFamilies) {
             if (nameMap.contains(family.getName())) {

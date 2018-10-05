@@ -70,10 +70,10 @@ public class Size2DStyleableFigureKey extends AbstractStyleableFigureKey<CssSize
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssSize2D> converter
-                = new StyleConverterAdapter<CssSize2D>(new CssSize2DConverter());
+                = new StyleConverterAdapter<>(new CssSize2DConverter());
         CssMetaData<Styleable, CssSize2D> md
-                = new SimpleCssMetaData<Styleable, CssSize2D>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

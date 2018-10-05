@@ -88,7 +88,7 @@ public class StyleablePropertyMap {
     /**
      * Read-only wrapper for the outputReadonly getProperties.
      */
-    private final ReadOnlyMapProperty<Key<?>, Object> outputReadonly = new ReadOnlyMapWrapper<Key<?>, Object>(this, OUTPUT_PROPERTY, FXCollections.unmodifiableObservableMap(output)).getReadOnlyProperty();
+    private final ReadOnlyMapProperty<Key<?>, Object> outputReadonly = new ReadOnlyMapWrapper<>(this, OUTPUT_PROPERTY, FXCollections.unmodifiableObservableMap(output)).getReadOnlyProperty();
 
     /**
      * Holds the styleable getProperties.
@@ -343,7 +343,7 @@ public class StyleablePropertyMap {
             this.key = key;
             this.metaData = metaData;
 
-            bindBidirectional(new KeyMapEntryProperty<T>(user, key));
+            bindBidirectional(new KeyMapEntryProperty<>(user, key));
         }
 
         @Override

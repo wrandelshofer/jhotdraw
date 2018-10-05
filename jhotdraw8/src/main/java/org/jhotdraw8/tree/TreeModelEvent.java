@@ -76,31 +76,31 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     }
 
     public static <E> TreeModelEvent<E> subtreeNodesInvalidated(TreeModel<E> source, E subtreeRot) {
-        return new TreeModelEvent<E>(source, EventType.SUBTREE_NODES_CHANGED, subtreeRot, null, null, -1);
+        return new TreeModelEvent<>(source, EventType.SUBTREE_NODES_CHANGED, subtreeRot, null, null, -1);
     }
 
     public static<E>  TreeModelEvent<E> nodeAddedToParent(TreeModel<E> source, E child, E parent, int index) {
-        return new TreeModelEvent<E>(source, EventType.NODE_ADDED_TO_PARENT, child, parent, null, index);
+        return new TreeModelEvent<>(source, EventType.NODE_ADDED_TO_PARENT, child, parent, null, index);
     }
 
     public static <E> TreeModelEvent<E> nodeRemovedFromParent(TreeModel<E> source, E child, E parent, int index) {
-        return new TreeModelEvent<E>(source, EventType.NODE_REMOVED_FROM_PARENT, child, parent, null, index);
+        return new TreeModelEvent<>(source, EventType.NODE_REMOVED_FROM_PARENT, child, parent, null, index);
     }
 
     public static <E> TreeModelEvent<E> nodeAddedToTree(TreeModel<E> source, E root, E node) {
-        return new TreeModelEvent<E>(source, EventType.NODE_ADDED_TO_TREE, node, null, root, -1);
+        return new TreeModelEvent<>(source, EventType.NODE_ADDED_TO_TREE, node, null, root, -1);
     }
 
     public static <E> TreeModelEvent<E> nodeRemovedFromTree(TreeModel<E> source, E root, E node) {
-        return new TreeModelEvent<E>(source, EventType.NODE_REMOVED_FROM_TREE, node, null, root, -1);
+        return new TreeModelEvent<>(source, EventType.NODE_REMOVED_FROM_TREE, node, null, root, -1);
     }
 
     public static <E> TreeModelEvent<E> nodeInvalidated(TreeModel<E> source, E node) {
-        return new TreeModelEvent<E>(source, EventType.NODE_CHANGED, node, null, null, -1);
+        return new TreeModelEvent<>(source, EventType.NODE_CHANGED, node, null, null, -1);
     }
 
     public static <E> TreeModelEvent<E> rootChanged(TreeModel<E> source, E root) {
-        return new TreeModelEvent<E>(source, EventType.ROOT_CHANGED, root, null, null, -1);
+        return new TreeModelEvent<>(source, EventType.ROOT_CHANGED, root, null, null, -1);
     }
 
     /**

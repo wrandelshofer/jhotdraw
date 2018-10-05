@@ -26,7 +26,7 @@ public final class WeakListener<E extends EventObject> implements Listener<E>, j
         if (listener == null) {
             throw new NullPointerException("Listener must be specified.");
         }
-        this.ref = new WeakReference<Listener<E>>(listener);
+        this.ref = new WeakReference<>(listener);
         this.removeListener = removeListener;
     }
 

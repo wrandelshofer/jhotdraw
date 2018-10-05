@@ -67,10 +67,10 @@ public class DoubleListStyleableFigureKey extends AbstractStyleableFigureKey<Imm
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableList<Double>> converter
-                = new StyleConverterAdapter<ImmutableList<Double>>(new CssDoubleListConverter());
+                = new StyleConverterAdapter<>(new CssDoubleListConverter());
         CssMetaData<Styleable, ImmutableList<Double>> md
-                = new SimpleCssMetaData<Styleable, ImmutableList<Double>>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

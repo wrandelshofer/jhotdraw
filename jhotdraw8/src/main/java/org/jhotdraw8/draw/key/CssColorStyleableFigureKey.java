@@ -75,10 +75,10 @@ public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssCo
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssColor> converter
-                = new StyleConverterAdapter<CssColor>(new CssColorConverter(true));
+                = new StyleConverterAdapter<>(new CssColorConverter(true));
         CssMetaData<Styleable, CssColor> md
-                = new SimpleCssMetaData<Styleable, CssColor>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

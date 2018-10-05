@@ -55,7 +55,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> i
             throw new IllegalArgumentException("defaultValue may only be null if nullable=true");
         }
 
-        StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<Styleable>(null);
+        StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;

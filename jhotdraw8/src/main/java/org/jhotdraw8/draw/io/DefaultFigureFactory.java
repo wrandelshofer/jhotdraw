@@ -162,7 +162,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(CssColor.class, new XmlCColorConverter(true));
         addConverterForType(Boolean.class, new XmlBooleanConverter());
         addConverterForType(TextAlignment.class, new XmlEnumConverter<>(TextAlignment.class));
-        addConverterForType(SimpleCombinedPathFigure.CagOperation.class, new XmlEnumConverter<SimpleCombinedPathFigure.CagOperation>(SimpleCombinedPathFigure.CagOperation.class));
+        addConverterForType(SimpleCombinedPathFigure.CagOperation.class, new XmlEnumConverter<>(SimpleCombinedPathFigure.CagOperation.class));
         addConverterForType(VPos.class, new XmlEnumConverter<>(VPos.class));
         addConverterForType(HPos.class, new XmlEnumConverter<>(HPos.class));
         addConverterForType(CssFont.class, new XmlFFontConverter());

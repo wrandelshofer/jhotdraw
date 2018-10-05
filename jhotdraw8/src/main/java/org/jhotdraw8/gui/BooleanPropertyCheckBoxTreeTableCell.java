@@ -39,7 +39,7 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
     }
 
     public static <S> Callback<TreeTableColumn<S, Boolean>, TreeTableCell<S, Boolean>> forTreeTableColumn() {
-        return list -> new BooleanPropertyCheckBoxTreeTableCell<S>();
+        return list -> new BooleanPropertyCheckBoxTreeTableCell<>();
     }
 
     private void commitSelectionChange(Observable o) {

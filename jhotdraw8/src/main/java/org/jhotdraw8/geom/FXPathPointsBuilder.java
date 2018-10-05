@@ -24,7 +24,7 @@ public class FXPathPointsBuilder extends AbstractPathBuilder {
     private double squareSize = 5;
 
     public FXPathPointsBuilder() {
-        this(5, new ArrayList<PathElement>());
+        this(5, new ArrayList<>());
     }
 
     public FXPathPointsBuilder(List<PathElement> elements) {

@@ -68,10 +68,10 @@ public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableList<Transform>> converter
-                = new StyleConverterAdapter<ImmutableList<Transform>>(new CssTransformListConverter());
+                = new StyleConverterAdapter<>(new CssTransformListConverter());
         CssMetaData<Styleable, ImmutableList<Transform>> md
-                = new SimpleCssMetaData<Styleable, ImmutableList<Transform>>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

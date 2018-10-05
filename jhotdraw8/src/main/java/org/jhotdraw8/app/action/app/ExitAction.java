@@ -322,7 +322,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void doExit() {
-        for (ViewController pr : new ArrayList<ViewController>(app.views())) {
+        for (ViewController pr : new ArrayList<>(app.views())) {
             DocumentOrientedViewModel p=(DocumentOrientedViewModel)pr;
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);

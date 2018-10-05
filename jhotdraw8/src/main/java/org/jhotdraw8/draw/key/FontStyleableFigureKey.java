@@ -65,10 +65,10 @@ public class FontStyleableFigureKey extends AbstractStyleableFigureKey<CssFont> 
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssFont> converter
-                = new StyleConverterAdapter<CssFont>(new CssFontConverter());
+                = new StyleConverterAdapter<>(new CssFontConverter());
         CssMetaData<Styleable, CssFont> md
-                = new SimpleCssMetaData<Styleable, CssFont>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

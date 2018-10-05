@@ -83,10 +83,10 @@ public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, String> converter  = new StyleConverterAdapter<String>(this.converter);
+        final StyleConverter<String, String> converter  = new StyleConverterAdapter<>(this.converter);
         CssMetaData<Styleable, String> md
-                = new SimpleCssMetaData<Styleable, String>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

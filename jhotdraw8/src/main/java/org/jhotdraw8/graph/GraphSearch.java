@@ -83,7 +83,7 @@ public class GraphSearch {
         }
 
         // Create final forest.
-        Set<List<V>> visited = new HashSet<List<V>>(forest.size());
+        Set<List<V>> visited = new HashSet<>(forest.size());
         List<Set<V>> disjointSets = new ArrayList<>(forest.size());
         for (List<V> set : forest.values()) {
             if (visited.add(set)) {
@@ -134,12 +134,12 @@ public class GraphSearch {
             }
         }
         // Create final forest.
-        final Map<IntArrayList, Object> setMap = new HashMap<IntArrayList, Object>();
+        final Map<IntArrayList, Object> setMap = new HashMap<>();
         final List<Set<Integer>> disjointSets = new ArrayList<>();
         for (IntArrayList set : sets) {
             if (!setMap.containsKey(set)) {
                 setMap.put(set, set);
-                disjointSets.add(set.addAllInto(new LinkedHashSet<Integer>()));
+                disjointSets.add(set.addAllInto(new LinkedHashSet<>()));
             }
         }
         return disjointSets;

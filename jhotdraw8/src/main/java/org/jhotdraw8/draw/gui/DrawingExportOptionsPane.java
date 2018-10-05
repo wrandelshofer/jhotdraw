@@ -40,7 +40,7 @@ public class DrawingExportOptionsPane extends GridPane {
     @FXML // fx:id="drawingDpiField"
     private TextField drawingDpiField; // Value injected by FXMLLoader
 
-    private final TextFormatter<Number> drawingDpiFormatter = new TextFormatter<Number>(new StringConverterAdapter<>(new CssNumberConverter()));
+    private final TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter()));
     @FXML // fx:id="drawingDpiLabel"
     private Label drawingDpiLabel; // Value injected by FXMLLoader
 
@@ -56,7 +56,7 @@ public class DrawingExportOptionsPane extends GridPane {
     private URL location;
     @FXML // fx:id="pagesDpiField"
     private TextField pagesDpiField; // Value injected by FXMLLoader
-    private final TextFormatter<Number> pagesDpiFormatter = new TextFormatter<Number>(new StringConverterAdapter<>(new CssNumberConverter()));
+    private final TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter()));
     @FXML // fx:id="pagesDpiLabel"
     private Label pagesDpiLabel; // Value injected by FXMLLoader
     @FXML // ResourceBundle that was given to the FXMLLoader
@@ -64,7 +64,7 @@ public class DrawingExportOptionsPane extends GridPane {
 
     @FXML // fx:id="slicesDpiField"
     private TextField slicesDpiField; // Value injected by FXMLLoader
-    private final TextFormatter<Number> slicesDpiFormatter = new TextFormatter<Number>(new StringConverterAdapter<>(new CssNumberConverter()));
+    private final TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter()));
     @FXML // fx:id="slicesDpiLabel"
     private Label slicesDpiLabel; // Value injected by FXMLLoader
 

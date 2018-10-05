@@ -49,7 +49,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
      *
      */
     @Nullable
-    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<URIChooser>(
+    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>(
             "saveChooser", URIChooser.class, null);
 
     private static final long serialVersionUID = 1L;

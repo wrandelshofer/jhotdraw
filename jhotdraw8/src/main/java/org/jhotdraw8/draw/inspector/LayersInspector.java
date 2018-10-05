@@ -125,7 +125,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     private void onSelectionChanged() {
         if (!isUpdateSelection) {
             isUpdateSelection = true;
-            Platform.runLater(this::updateSelection);
+            Platform.runLater((Runnable)this::updateSelection);
         }
     }
 

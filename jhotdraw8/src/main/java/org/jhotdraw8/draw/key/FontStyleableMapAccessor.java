@@ -61,10 +61,10 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssFont> converter
-                = new StyleConverterAdapter<CssFont>(new CssFontConverter());
+                = new StyleConverterAdapter<>(new CssFontConverter());
         CssMetaData<Styleable, CssFont> md
-                = new SimpleCssMetaData<Styleable, CssFont>(property, function,
-                        converter, getDefaultValue(), inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.familyKey = familyKey;

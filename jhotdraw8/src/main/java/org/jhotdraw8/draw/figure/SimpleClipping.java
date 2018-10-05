@@ -43,7 +43,7 @@ public class SimpleClipping extends AbstractCompositeFigure
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
         applyStyleableFigureProperties(ctx, n);
 
-        List<Node> nodes = new ArrayList<Node>(getChildren().size());
+        List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }

@@ -207,7 +207,7 @@ public class ListViewUtil {
 
     private static <T> void addDragAndDropSupport(@Nonnull ListView<T> listView, @Nonnull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO,
                                                   boolean reorderingOnly) {
-        DnDSupport<T> dndSupport = new DnDSupport<T>(listView, clipboardIO, reorderingOnly);
+        DnDSupport<T> dndSupport = new DnDSupport<>(listView, clipboardIO, reorderingOnly);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
             ListCell<T> cell = cellFactory.call(lv);
             cell.addEventHandler(DragEvent.DRAG_DONE, dndSupport.cellDragHandler);

@@ -35,7 +35,7 @@ public class BezierFit {
     }
 
     public static void main(String[] args) {
-        ArrayList<Point2D> d = new ArrayList<Point2D>();
+        ArrayList<Point2D> d = new ArrayList<>();
         d.add(new Point2D(0, 0));
         d.add(new Point2D(5, 1));
         d.add(new Point2D(10, 0));
@@ -180,7 +180,7 @@ public class BezierFit {
         } else {
 
             double squaredDistance = minDistance * minDistance;
-            java.util.ArrayList<Point2D> cleaned = new ArrayList<Point2D>();
+            java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
             if (digitizedPoints.size() > 0) {
                 Point2D prev = digitizedPoints.get(0);
                 cleaned.add(prev);
@@ -213,7 +213,7 @@ public class BezierFit {
      */
     @Nonnull
     private static ArrayList<Point2D> removeCoincidentPoints(java.util.List<Point2D> digitizedPoints) {
-        java.util.ArrayList<Point2D> cleaned = new ArrayList<Point2D>();
+        java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
             Point2D prev = digitizedPoints.get(0);
             cleaned.add(prev);
@@ -244,16 +244,16 @@ public class BezierFit {
     @Nonnull
     public static ArrayList<ArrayList<Point2D>> splitAtCorners(java.util.List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
         IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
-        ArrayList<ArrayList<Point2D>> segments = new ArrayList<ArrayList<Point2D>>(cornerIndices.size() + 1);
+        ArrayList<ArrayList<Point2D>> segments = new ArrayList<>(cornerIndices.size() + 1);
 
         if (cornerIndices.size() == 0) {
-            segments.add(new ArrayList<Point2D>(digitizedPoints));
+            segments.add(new ArrayList<>(digitizedPoints));
         } else {
-            segments.add(new ArrayList<Point2D>(digitizedPoints.subList(0, cornerIndices.get(0) + 1)));
+            segments.add(new ArrayList<>(digitizedPoints.subList(0, cornerIndices.get(0) + 1)));
             for (int i = 1; i < cornerIndices.size(); i++) {
-                segments.add(new ArrayList<Point2D>(digitizedPoints.subList(cornerIndices.get(i - 1), cornerIndices.get(i) + 1)));
+                segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.get(i - 1), cornerIndices.get(i) + 1)));
             }
-            segments.add(new ArrayList<Point2D>(digitizedPoints.subList(cornerIndices.get(cornerIndices.size() - 1), digitizedPoints.size())));
+            segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.get(cornerIndices.size() - 1), digitizedPoints.size())));
         }
 
         return segments;
@@ -339,7 +339,7 @@ public class BezierFit {
      */
     @Nonnull
     public static ArrayList<Point2D> reduceNoise(java.util.List<Point2D> digitizedPoints, double weight) {
-        java.util.ArrayList<Point2D> cleaned = new ArrayList<Point2D>();
+        java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
             Point2D prev = digitizedPoints.get(0);
             cleaned.add(prev);

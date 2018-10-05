@@ -68,10 +68,10 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableList<Point2D>> converter
-                = new StyleConverterAdapter<ImmutableList<Point2D>>(new CssPoint2DListConverter());
+                = new StyleConverterAdapter<>(new CssPoint2DListConverter());
         CssMetaData<Styleable, ImmutableList<Point2D>> md
-                = new SimpleCssMetaData<Styleable, ImmutableList<Point2D>>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

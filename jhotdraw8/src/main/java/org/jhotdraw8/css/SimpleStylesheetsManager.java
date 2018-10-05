@@ -309,7 +309,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     public boolean applyStylesheetTo(StyleOrigin styleOrigin, @Nonnull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
         final List<Map.Entry<Integer, Declaration>> applicableDeclarations = collectApplicableDeclarations(elem, s,
-                new ArrayList<Map.Entry<Integer, Declaration>>());
+                new ArrayList<>());
         if (applicableDeclarations.isEmpty()) {
             return false;
         }

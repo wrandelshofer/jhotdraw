@@ -236,7 +236,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         // handling of emptyness must be consistent with code in apply() method
         Set<Figure> newValue = drawingView.getSelectedFigures();
         if (newValue.isEmpty()) {
-            newValue = new LinkedHashSet<Figure>();
+            newValue = new LinkedHashSet<>();
             newValue.add(drawing);
         }
         collectHelpTexts(newValue);
@@ -408,7 +408,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private void invalidateTextArea() {
         if (textAreaValid) {
             textAreaValid = false;
-            Platform.runLater(this::updateTextArea);
+            Platform.runLater((Runnable)this::updateTextArea);
         }
     }
 

@@ -269,7 +269,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     @Override
     public Set<String> getAttributeNames(@Nonnull Element element) {
         // FIXME we need the XML schema to return the correct result
-        Set<String> attr = new HashSet<String>();
+        Set<String> attr = new HashSet<>();
         NamedNodeMap nnm = element.getAttributes();
         for (int i = 0, n = nnm.getLength(); i < n; i++) {
             Node node = nnm.item(i);

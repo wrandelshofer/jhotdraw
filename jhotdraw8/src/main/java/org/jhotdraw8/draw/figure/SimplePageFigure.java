@@ -393,7 +393,7 @@ private Bounds getContentBounds(int internalPageNumber) {
         int currentPage = ctx.get(RenderContext.RENDER_PAGE_INTERNAL_NUMBER);
         currentPageNode.getTransforms().setAll(getPageTranslate(currentPage));
 
-        List<Node> currentPageChildren = new ArrayList<Node>(getChildren().size() + 2);
+        List<Node> currentPageChildren = new ArrayList<>(getChildren().size() + 2);
         for (Figure child : getChildren()) {
             currentPageChildren.add(ctx.getNode(child));
         }

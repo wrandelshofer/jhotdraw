@@ -76,10 +76,10 @@ public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets>
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Insets> converter
-                = new StyleConverterAdapter<Insets>(new CssInsetsConverter());
+                = new StyleConverterAdapter<>(new CssInsetsConverter());
         CssMetaData<Styleable, Insets> md
-                = new SimpleCssMetaData<Styleable, Insets>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

@@ -82,10 +82,10 @@ public class ObservableWordListStyleableFigureKey extends AbstractStyleableFigur
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableList<String>> converter
-                = new StyleConverterAdapter<ImmutableList<String>>(new CssWordListConverter());
+                = new StyleConverterAdapter<>(new CssWordListConverter());
         CssMetaData<Styleable, ImmutableList<String>> md
-                = new SimpleCssMetaData<Styleable, ImmutableList<String>>(property, function,
-                        converter, defaultValue, inherits);
+                = new SimpleCssMetaData<>(property, function,
+                converter, defaultValue, inherits);
         cssMetaData = md;
     }
 

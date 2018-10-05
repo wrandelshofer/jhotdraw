@@ -24,7 +24,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
      */
     @Nullable
     private final NonnullProperty<TreeModel<N>> treeModel //
-            = new NonnullProperty<TreeModel<N>>(this, MODEL_PROPERTY, new SimpleTreeModel<N>()) {
+            = new NonnullProperty<TreeModel<N>>(this, MODEL_PROPERTY, new SimpleTreeModel<>()) {
         @Nullable
         private TreeModel<N> oldValue = null;
 

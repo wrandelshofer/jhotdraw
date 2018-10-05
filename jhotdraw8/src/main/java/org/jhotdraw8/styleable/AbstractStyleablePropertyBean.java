@@ -57,7 +57,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     public <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
         if (key instanceof WriteableStyleableMapAccessor) {
             WriteableStyleableMapAccessor<T> skey = (WriteableStyleableMapAccessor<T>) key;
-            return new KeyMapEntryStyleableProperty<T>(this, properties, skey, skey.getCssName(), skey.getCssMetaData());
+            return new KeyMapEntryStyleableProperty<>(this, properties, skey, skey.getCssName(), skey.getCssMetaData());
         } else {
             return null;
         }

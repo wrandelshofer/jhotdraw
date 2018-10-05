@@ -25,7 +25,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
     public final static ClosePath CLOSE_PATH=new ClosePath();
 
     public FXPathBuilder() {
-        this(new ArrayList<PathElement>());
+        this(new ArrayList<>());
     }
 
     public FXPathBuilder(List<PathElement> elements) {

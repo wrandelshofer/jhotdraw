@@ -18,7 +18,7 @@ import org.jhotdraw8.collection.ImmutableList;
 public class BezierNodePathBuilder extends AbstractPathBuilder implements Builder<List<BezierNode>> {
 
     @Nonnull
-    private List<BezierNode> nodes = new ArrayList<BezierNode>();
+    private List<BezierNode> nodes = new ArrayList<>();
 
     private void add(BezierNode newValue) {
         nodes.add(newValue);

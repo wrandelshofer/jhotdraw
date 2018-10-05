@@ -131,7 +131,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
             g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
         }
 
-        List<Node> nodes = new ArrayList<Node>(getChildren().size());
+        List<Node> nodes = new ArrayList<>(getChildren().size());
         nodes.add(page);
         for (Figure child : getChildren()) {
             nodes.add(v.getNode(child));

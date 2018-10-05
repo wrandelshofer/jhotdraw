@@ -7,8 +7,6 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.javafx.geom.transform.Affine3D;
-import com.sun.javafx.geom.transform.BaseTransform;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
@@ -33,28 +31,10 @@ import javax.annotation.Nullable;
  * @version $Id$
  */
 public class Transforms {
-    private static class IdentityTransform extends Transform {
-
-        private IdentityTransform() {
-
-        }
-
-        @Override
-        public void impl_apply(Affine3D t) {
-            // nothing to do
-        }
-
-        @Override
-        public BaseTransform impl_derive(BaseTransform t) {
-            return t;
-        }
-    }
-
-
     /**
      * Immutable identity transform.
      */
-    public static final Transform IDENTITY = new IdentityTransform();
+    public static final Transform IDENTITY = new Translate();
 
     @Nonnull
     public static Transform concat(@Nullable Transform a, @Nullable Transform b) {

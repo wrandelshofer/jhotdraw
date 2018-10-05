@@ -78,10 +78,10 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
 
     final static public String PARENT_RESOURCE_KEY = "$parent";
 
-    private static final HashSet<String> acceleratorKeys = new HashSet<String>(
+    private static final HashSet<String> acceleratorKeys = new HashSet<>(
             Arrays.asList(new String[]{
-        "shift", "control", "ctrl", "meta", "alt", "altGraph"
-    }));
+                    "shift", "control", "ctrl", "meta", "alt", "altGraph"
+            }));
     /**
      * List of decoders. The first decoder which can decode a resource value is
      * will be used to convert the resource value to an object.
@@ -99,7 +99,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * chain.
      */
     @Nonnull
-    private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
+    private static HashMap<String, String[]> propertyNameModifiers = new HashMap<>();
     private static final long serialVersionUID = 1L;
 
     static {
@@ -630,7 +630,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
             } else {
                 placeholderFormat = "string";
             }
-            ArrayList<String> fallbackKeys = new ArrayList<String>();
+            ArrayList<String> fallbackKeys = new ArrayList<>();
             generateFallbackKeys(placeholderKey, fallbackKeys);
 
             String placeholderValue = null;

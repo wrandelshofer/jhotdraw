@@ -70,7 +70,7 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
         applyStyleableFigureProperties(ctx, n);
         applyCompositableFigureProperties(n);
         
-        List<Node> nodes = new ArrayList<Node>(getChildren().size());
+        List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }

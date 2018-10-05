@@ -281,9 +281,9 @@ public class IntersectionSampleMain extends Application {
 
     @Override
     public void start(@Nonnull Stage primaryStage) {
-        choice1 = new ChoiceBox<String>();
+        choice1 = new ChoiceBox<>();
         choice1.getItems().setAll("Circle", "CubicCurve", "Ellipse", "Line", "Rectangle", "QuadCurve");
-        choice2 = new ChoiceBox<String>();
+        choice2 = new ChoiceBox<>();
         choice2.getItems().setAll("Circle", "CubicCurve", "Ellipse", "Line", "Point", "Rectangle", "QuadCurve");
         HBox hbox = new HBox(4);
         hbox.getChildren().addAll(choice1, choice2);

@@ -58,7 +58,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends AbstractStyleable
             throw new IllegalArgumentException("defaultValue may only be null if nullable=true");
         }
 
-        StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<Styleable>(null);
+        StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -77,7 +77,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends AbstractStyleable
     @Override
     public Converter<T> getConverter() {
         if (converter == null) {
-            converter = new CssEnumConverter<T>(getValueType(), nullable);
+            converter = new CssEnumConverter<>(getValueType(), nullable);
         }
         return converter;
     }

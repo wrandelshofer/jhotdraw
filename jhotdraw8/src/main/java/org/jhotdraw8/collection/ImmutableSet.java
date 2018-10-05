@@ -152,11 +152,11 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     public static <T> ImmutableSet<T> add(Collection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
-                return new ImmutableSet<T>(Collections.singleton(item));
+                return new ImmutableSet<>(Collections.singleton(item));
             default:
-                Set<T> a = new LinkedHashSet<T>(collection);
+                Set<T> a = new LinkedHashSet<>(collection);
                 a.add(item);
-                return new ImmutableSet<T>(true, a);
+                return new ImmutableSet<>(true, a);
         }
     }
 
@@ -170,12 +170,12 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <T> ImmutableSet<T> of(T... items) {
-        return items.length == 0 ? emptySet() : new ImmutableSet<T>(items);
+        return items.length == 0 ? emptySet() : new ImmutableSet<>(items);
     }
 
     @Nonnull
     public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
-        return collection.isEmpty() ? emptySet() : new ImmutableSet<T>(collection);
+        return collection.isEmpty() ? emptySet() : new ImmutableSet<>(collection);
     }
 
     @Nonnull
@@ -212,9 +212,9 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
                 }
             default:
                 if (collection.contains(item)) {
-                    Set<T> a = new LinkedHashSet<T>(collection);
+                    Set<T> a = new LinkedHashSet<>(collection);
                     a.remove(item);
-                    return new ImmutableSet<T>(true, a);
+                    return new ImmutableSet<>(true, a);
                 } else {
                     if (collection instanceof ImmutableSet) {
                         return (ImmutableSet<T>) collection;

@@ -35,7 +35,7 @@ public class Declaration extends AST {
 
     public Declaration(String property, @Nonnull List<PreservedToken> terms, int startPos, int endPos) {
         this.property = property;
-        this.terms = Collections.unmodifiableList(new ArrayList<PreservedToken>(terms));
+        this.terms = Collections.unmodifiableList(new ArrayList<>(terms));
         this.startPos = startPos;
         this.endPos = endPos;
     }

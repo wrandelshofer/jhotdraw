@@ -34,7 +34,7 @@ public class PreferencesUtil
         extends Preferences {
 
     @Nonnull
-    private HashMap<String, Object> map = new HashMap<String, Object>();
+    private HashMap<String, Object> map = new HashMap<>();
     private boolean isUserNode;
     private static HashMap<Package, Preferences> systemNodes;
     private static HashMap<Package, Preferences> userNodes;

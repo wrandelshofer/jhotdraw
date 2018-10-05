@@ -4,8 +4,7 @@
 package org.jhotdraw8.graph;
 
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -43,9 +42,9 @@ import java.util.stream.StreamSupport;
  */
 public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,A>, A extends ExposedBidiGraphBuilder.Arrow<V,A>> implements BidiGraph<V, A> {
 
-    @NotNull
+    @Nonnull
     private final Set<A> arrows;
-    @NotNull
+    @Nonnull
     private final Set<V> vertices;
 
     /**
@@ -71,7 +70,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      *
      * @param that another graph
      */
-    public ExposedBidiGraphBuilder(@NotNull DirectedGraph<V, A> that) {
+    public ExposedBidiGraphBuilder(@Nonnull DirectedGraph<V, A> that) {
         this(that, Function.identity(), Function.identity());
     }
 
@@ -87,7 +86,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param arrowMapper a mapping function from that arrow type to the this
      * arrow type
      */
-    public <VV, AA> ExposedBidiGraphBuilder(DirectedGraph<VV, AA> that, @NotNull Function<VV, V> vertexMapper, @NotNull Function<AA, A> arrowMapper) {
+    public <VV, AA> ExposedBidiGraphBuilder(DirectedGraph<VV, AA> that, @Nonnull Function<VV, V> vertexMapper, @Nonnull Function<AA, A> arrowMapper) {
         arrows = new LinkedHashSet<>(that.getArrowCount());
         vertices = new LinkedHashSet<>(that.getVertexCount());
 
@@ -109,7 +108,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param end the vertex
      * @param arrow the arrow, can be null
      */
-    public void addArrow(@NotNull V start, @NotNull V end, @Nullable A arrow) {
+    public void addArrow(@Nonnull V start, @Nonnull V end, @Nullable A arrow) {
         if (start == null || end == null) {
             throw new IllegalArgumentException("start=" + start + ", end=" + end + ", arrow=" + arrow);
         }
@@ -143,32 +142,32 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
 
     @Override
     public V getNext(V vertex, int i) {
-        return (V) getVertexDataNotNull(vertex).next.get(i).end;
+        return (V) getVertexDataNonnull(vertex).next.get(i).end;
     }
 
     @Override
     public A getNextArrow(V vertex, int index) {
-        return (A) getVertexDataNotNull(vertex).next.get(index);
+        return (A) getVertexDataNonnull(vertex).next.get(index);
     }
 
     @Override
     public int getNextCount(V vertex) {
-        return getVertexDataNotNull(vertex).next.size();
+        return getVertexDataNonnull(vertex).next.size();
     }
 
     @Override
     public V getPrev(V vertex, int i) {
-        return getVertexDataNotNull(vertex).prev.get(i).start;
+        return getVertexDataNonnull(vertex).prev.get(i).start;
     }
 
     @Override
     public A getPrevArrow(V vertex, int index) {
-        return getVertexDataNotNull(vertex).prev.get(index);
+        return getVertexDataNonnull(vertex).prev.get(index);
     }
 
     @Override
     public int getPrevCount(V vertex) {
-        return getVertexDataNotNull(vertex).prev.size();
+        return getVertexDataNonnull(vertex).prev.size();
     }
 
     @Override
@@ -186,7 +185,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
         return Collections.unmodifiableCollection(arrows);
     }
 
-    private V getVertexDataNotNull(V vertex) {
+    private V getVertexDataNonnull(V vertex) {
         return vertex;
     }
 
@@ -197,7 +196,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param a an arrow starting at the vertex, must not be null
      */
     @SuppressWarnings("unused")
-    public void removeArrow(V v, @NotNull A a) {
+    public void removeArrow(V v, @Nonnull A a) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (a.equals(getNextArrow(v, i))) {
                 removeNext(v, i);
@@ -266,20 +265,20 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      */
     public static class Arrow<V extends Vertex<V,A>, A extends Arrow<V,A>> {
 
-        @NotNull final V start;
-        @NotNull final V end;
+        @Nonnull final V start;
+        @Nonnull final V end;
 
-        public Arrow(@NotNull final V start, @NotNull final V end) {
+        public Arrow(@Nonnull final V start, @Nonnull final V end) {
             this.start = start;
             this.end = end;
         }
 
-        @NotNull
+        @Nonnull
         public V getStart() {
             return start;
         }
 
-        @NotNull
+        @Nonnull
         public V getEnd() {
             return end;
         }
@@ -293,8 +292,8 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      */
     public static class Vertex<V extends Vertex<V,A>, A extends Arrow<V,A>> {
 
-        @NotNull final List<A> next = new ArrayList<>();
-        @NotNull final List<A> prev = new ArrayList<>();
+        @Nonnull final List<A> next = new ArrayList<>();
+        @Nonnull final List<A> prev = new ArrayList<>();
 
         public Vertex() {
         }
@@ -308,16 +307,16 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
         }
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public Stream<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNotNull(start), visited), false);
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNonnull(start), visited), false);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public Stream<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(Vertex::getNext, Arrow::getEnd, getVertexDataNotNull(start), visited), false);
+        return StreamSupport.stream(new BidiBreadthFirstSpliterator(Vertex::getNext, Arrow::getEnd, getVertexDataNonnull(start), visited), false);
     }
 
     /**
@@ -326,13 +325,13 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      */
     private  class BidiBreadthFirstSpliterator extends Spliterators.AbstractSpliterator<V> {
 
-        @NotNull
+        @Nonnull
         private final Function<V, Iterable<A>> nextNodesFunction;
-        @NotNull
+        @Nonnull
         private final Function<A, V> arrowEndFunction;
-        @NotNull
+        @Nonnull
         private final Queue<V> queue;
-        @NotNull
+        @Nonnull
         private final Predicate<V> visited;
 
         /**
@@ -344,9 +343,9 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
          *                          if the specified vertex has been visited, and marks the specified vertex
          *                          as visited.
          */
-        public BidiBreadthFirstSpliterator(@NotNull final Function<V, Iterable<A>> nextNodesFunction,
-                                           @NotNull final Function<A, V> arrowEndFunction,
-                                           @NotNull final V root, @NotNull final Predicate<V> visited) {
+        public BidiBreadthFirstSpliterator(@Nonnull final Function<V, Iterable<A>> nextNodesFunction,
+                                           @Nonnull final Function<A, V> arrowEndFunction,
+                                           @Nonnull final V root, @Nonnull final Predicate<V> visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             Objects.requireNonNull(nextNodesFunction, "nextNodesFunction");
             Objects.requireNonNull(root, "root");
@@ -361,7 +360,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
 
 
         @Override
-        public boolean tryAdvance(@NotNull final Consumer<? super V> action) {
+        public boolean tryAdvance(@Nonnull final Consumer<? super V> action) {
             final V current = queue.poll();
             if (current == null) {
                 return false;

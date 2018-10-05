@@ -151,7 +151,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
 
     protected void fireAdded(@Nullable E e) {
         if (changeListeners != null) {
-            SetChangeListener.Change<E> change = new Change<E>(this, e, true);
+            SetChangeListener.Change<E> change = new Change<>(this, e, true);
             for (SetChangeListener<? super E> listener : changeListeners) {
                 listener.onChanged(change);
             }
@@ -188,7 +188,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
 
     protected void fireRemoved(@Nullable E e) {
         if (changeListeners != null && !changeListeners.isEmpty()) {
-            SetChangeListener.Change<E> change = new Change<E>(this, e, false);
+            SetChangeListener.Change<E> change = new Change<>(this, e, false);
             for (SetChangeListener<? super E> listener : changeListeners) {
                 listener.onChanged(change);
             }

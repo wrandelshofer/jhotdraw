@@ -118,7 +118,7 @@ public class UngroupAction extends AbstractSelectedAction {
 
         int index = parent.getChildren().indexOf(group);
         newSelection.addAll(group.getChildren());
-        for (Figure child : new ArrayList<Figure>(group.getChildren())) {
+        for (Figure child : new ArrayList<>(group.getChildren())) {
             model.insertChildAt(child, parent, index++);
 
             if (groupTransform != null) {

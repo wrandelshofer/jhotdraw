@@ -34,10 +34,10 @@ public class IntegerStyleableKey extends SimpleStyleableKey<Integer> {
             return spb.getStyleableProperty(this);
         };
         final StyleConverter<String, Integer> converter
-                = new StyleConverterAdapter< Integer>(new XmlIntegerConverter());
+                = new StyleConverterAdapter<>(new XmlIntegerConverter());
         CssMetaData<Styleable, Integer> md
-                = new SimpleCssMetaData<Styleable, Integer>(cssName, function,
-                        converter, 0, false);
+                = new SimpleCssMetaData<>(cssName, function,
+                converter, 0, false);
         
        setCssMetaData(md);
     }

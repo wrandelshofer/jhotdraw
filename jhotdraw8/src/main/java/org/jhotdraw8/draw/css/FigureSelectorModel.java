@@ -87,7 +87,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public Set<String> getStyleClasses(@Nonnull Figure element) {
         Collection<String> styleClasses = element.getStyleClass();
-        return (styleClasses == null) ? Collections.emptySet() : new HashSet<String>(element.getStyleClass());
+        return (styleClasses == null) ? Collections.emptySet() : new HashSet<>(element.getStyleClass());
     }
 
     private void mapFigureClass(Figure element) {

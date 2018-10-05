@@ -126,7 +126,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 cell -> cell.getValue().getValue().getProperty(StyleableFigure.ID));
 */
             idColumn.setCellValueFactory(
-                    cell -> new DrawingModelFigureProperty<String>((DrawingModel) model.getTreeModel(),
+                    cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                             cell.getValue().getValue(), StyleableFigure.ID));
         /*
             idColumn.setCellValueFactory(
@@ -145,11 +145,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
         );*/
         visibleColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel) model.getTreeModel(),
+                cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), HideableFigure.VISIBLE)
         );
         lockedColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel) model.getTreeModel(),
+                cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
@@ -399,7 +399,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private void updateSelectionInTreeLater(SetChangeListener.Change<? extends Figure> change) {
         if (!willUpdateSelectionInTree && !isUpdatingSelectionInView) {
             willUpdateSelectionInTree = true;
-            Platform.runLater(this::updateSelectionInTree);
+            Platform.runLater((Runnable)this::updateSelectionInTree);
         }
     }
 

@@ -92,17 +92,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Comments which appear inside an XML element, that can not be associated
      * to as a head comment.
      */
-    public final static SimpleFigureKey<List<String>> XML_BODY_COMMENT_KEY = new SimpleFigureKey<List<String>>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static SimpleFigureKey<List<String>> XML_BODY_COMMENT_KEY = new SimpleFigureKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     /**
      * Comments which can not be associated to a figure, or which appear in the
      * epilog of an XML file, are associated to the drawing.
      */
-    public final static SimpleFigureKey<List<String>> XML_EPILOG_COMMENT_KEY = new SimpleFigureKey<List<String>>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static SimpleFigureKey<List<String>> XML_EPILOG_COMMENT_KEY = new SimpleFigureKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     /**
      * Comments which appear before an XML element of a figure are associated to
      * the figure as a comment.
      */
-    public final static SimpleFigureKey<List<String>> XML_HEAD_COMMENT_KEY = new SimpleFigureKey<List<String>>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static SimpleFigureKey<List<String>> XML_HEAD_COMMENT_KEY = new SimpleFigureKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     @javax.annotation.Nullable
     protected List<String> comments;

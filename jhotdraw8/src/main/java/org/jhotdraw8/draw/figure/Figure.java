@@ -423,7 +423,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * drawing.
      */
     default void disconnect() {
-        for (Figure connectedFigure : new ArrayList<Figure>(getLayoutObservers())) {
+        for (Figure connectedFigure : new ArrayList<>(getLayoutObservers())) {
             connectedFigure.removeLayoutSubject(this);
         }
         removeAllLayoutSubjects();
