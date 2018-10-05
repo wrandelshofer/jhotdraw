@@ -9,7 +9,7 @@ This repository contains three generations of the JHotDraw framework.
   JHotDraw 6 and older.
 
 * JHotDraw 7
-  This version is based on Java SE 6 language features and the Swing user interface library.
+  This version is based on Java SE 11 language features and the Swing user interface library.
   It uses similar design principles as the previous versions, but it is not compatible with JHotDraw 6 and older.
 
 * JHotDraw 6 and older
