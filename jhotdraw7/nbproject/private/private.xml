@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/javax.annotation/classes/module-info.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/jhotdraw.app/classes/org/jhotdraw/app/AbstractApplication.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/nanoxml/classes/module-info.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/javax.annotation/classes/javax/annotation/CheckForNull.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/jhotdraw.samples.teddy/classes/module-info.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/jhotdraw.app/classes/module-info.java</file>
+        </group>
     </open-files>
 </project-private>

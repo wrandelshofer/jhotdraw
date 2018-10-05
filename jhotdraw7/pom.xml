@@ -7,7 +7,7 @@
 
   <groupId>org.jhotdraw</groupId>
   <artifactId>jhotdraw</artifactId>
-  <version>7.6.0-SNAPSHOT</version>
+  <version>7.7.0</version>
 
   <name>JHotDraw 7</name>
   <description>JHotDraw 7 is a two-dimensional graphics framework for structured drawing editors. It can be used to create many different editors from a simple doodle program up to full fledged diagram editors and vector animation tools.</description>
@@ -54,18 +54,6 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>findbugs</artifactId>
-      <version>1.3.9</version>
-    </dependency>
-    <dependency>
-      <groupId>netscape</groupId>
-      <artifactId>LiveConnect</artifactId>
-      <version>3.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/java_30.zip</systemPath>
-    </dependency>
   </dependencies>
 
   <properties>

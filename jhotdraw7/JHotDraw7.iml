@@ -15,9 +15,11 @@
     <output url="file://$MODULE_DIR$/build/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/annotation/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/nanoxml/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/svg/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/teddy/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/minisamples/java" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
@@ -31,50 +33,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="java_30.zip">
+      <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/java_30.zip!/" />
+          <root url="jar://$MODULE_DIR$/lib/jsr305.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/jsr305.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="MRJAdapter.jar">
-        <CLASSES>
-          <root url="file://lib/MRJAdapter.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="quaqua.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/quaqua.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="swing-layout.jar">
-        <CLASSES>
-          <root url="file://lib/swing-layout.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="swing-worker.jar">
-        <CLASSES>
-          <root url="file://lib/swing-worker.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="annotations" level="project" />
   </component>
 </module>

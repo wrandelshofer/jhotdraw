@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Teddy" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.jhotdraw.samples.teddy.Main" />
-    <module name="JHotDraw7" />
+    <module name="jhotdraw.samples.teddy" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <extension name="coverage">
       <pattern>

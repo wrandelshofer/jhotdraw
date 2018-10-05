@@ -14,5 +14,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="junit-5.2" level="project" />
     <orderEntry type="library" name="ext" level="project" />
+    <orderEntry type="library" name="org.openjfx:javafx-controls:11" level="project" />
   </component>
 </module>

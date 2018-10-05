@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -182,7 +182,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
     }
 
     @Override
-    public @NonNull Collection<A> getArrows() {
+    public @Nonnull Collection<A> getArrows() {
         return Collections.unmodifiableCollection(arrows);
     }
 
