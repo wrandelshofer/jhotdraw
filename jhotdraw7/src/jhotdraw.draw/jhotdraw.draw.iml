@@ -11,6 +11,5 @@
     <orderEntry type="module" module-name="jhotdraw.app" />
     <orderEntry type="module" module-name="jhotdraw.app.nanoxml" />
     <orderEntry type="module" module-name="javax.annotation" />
-    <orderEntry type="library" name="org.openjfx:javafx-controls:11" level="project" />
   </component>
 </module>

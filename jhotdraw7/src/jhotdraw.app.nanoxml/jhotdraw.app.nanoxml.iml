@@ -9,6 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="nanoxml" />
     <orderEntry type="module" module-name="jhotdraw.app" />
-    <orderEntry type="library" name="org.openjfx:javafx-controls:11" level="project" />
+    <orderEntry type="module" module-name="javax.annotation" />
   </component>
 </module>

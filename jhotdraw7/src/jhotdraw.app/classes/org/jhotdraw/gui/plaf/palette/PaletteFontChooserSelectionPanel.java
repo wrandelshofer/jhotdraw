@@ -6,7 +6,6 @@
 package org.jhotdraw.gui.plaf.palette;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import org.jhotdraw.util.ResourceBundleUtil;

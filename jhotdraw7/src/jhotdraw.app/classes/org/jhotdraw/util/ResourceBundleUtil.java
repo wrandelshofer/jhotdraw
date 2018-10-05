@@ -5,13 +5,27 @@
 package org.jhotdraw.util;
 
 import javax.annotation.Nullable;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.*;
-import javax.swing.*;
-import java.text.*;
-import java.net.*;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.NoSuchElementException;
+import java.util.ResourceBundle;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a
@@ -156,7 +170,7 @@ public class ResourceBundleUtil implements Serializable {
      * Recursive part of the getString method.
      *
      * @param key
-     * @throws java.util.MissingResourceException
+     * @throws MissingResourceException
      */
     private String getStringRecursive(String key) throws MissingResourceException {
         String value = resource.getString(key);

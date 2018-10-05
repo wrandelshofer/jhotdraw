@@ -5,12 +5,17 @@
 
 package org.jhotdraw.util.prefs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.prefs.*;
-import javax.swing.*;
-import javax.swing.plaf.basic.*;
-import javax.swing.event.*;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.plaf.basic.BasicToolBarUI;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.util.prefs.Preferences;
 
 /**
  * ToolBarPrefsHandler.

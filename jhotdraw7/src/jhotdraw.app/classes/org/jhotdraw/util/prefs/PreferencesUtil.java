@@ -4,15 +4,30 @@
  */
 package org.jhotdraw.util.prefs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.prefs.*;
-import javax.swing.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GraphicsConfiguration;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.Window;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.NodeChangeListener;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 
 /**
  * {@code PreferencesUtil} provides utility methods for {@code

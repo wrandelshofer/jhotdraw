@@ -40,7 +40,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.TransferHandler;
 
 import org.jhotdraw.app.Disposable;
 import org.jhotdraw.gui.ToolBarLayout;
@@ -53,8 +52,6 @@ import org.jhotdraw.samples.svg.io.SVGOutputFormat;
 import org.jhotdraw.samples.svg.io.SVGZInputFormat;
 import org.jhotdraw.samples.svg.io.SVGZOutputFormat;
 import org.jhotdraw.util.prefs.PreferencesUtil;
-
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
 
 /**
  * JSVGDrawingAppletPanel.

@@ -10,6 +10,7 @@ import java.util.*;
 import javax.swing.*;
 import java.util.concurrent.*;
 import java.util.prefs.*;
+
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**

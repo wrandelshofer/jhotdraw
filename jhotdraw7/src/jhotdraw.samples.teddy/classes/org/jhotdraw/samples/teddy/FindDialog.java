@@ -8,8 +8,7 @@ package org.jhotdraw.samples.teddy;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+
 import org.jhotdraw.app.*;
 import org.jhotdraw.util.*;
 import org.jhotdraw.samples.teddy.regex.*;

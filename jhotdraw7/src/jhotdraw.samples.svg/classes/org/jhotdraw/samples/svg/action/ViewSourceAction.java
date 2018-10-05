@@ -5,7 +5,6 @@
 package org.jhotdraw.samples.svg.action;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

@@ -5,7 +5,8 @@
 
 package org.jhotdraw.util;
 
-import java.util.*;
+import java.util.Locale;
+
 /**
  * LocaleUtil provides a setDefault()/getDefault() wrapper to java.util.Locale
  * in order to overcome the security restriction preventing Applets from using

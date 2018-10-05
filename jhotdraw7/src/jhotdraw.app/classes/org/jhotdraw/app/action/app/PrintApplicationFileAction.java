@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.app.action.app;
 
-import org.jhotdraw.gui.Worker;
 import org.jhotdraw.util.*;
 import java.awt.event.*;
 import javax.swing.*;

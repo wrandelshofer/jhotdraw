@@ -12,7 +12,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URISyntaxException;
 import org.jhotdraw.beans.*;
-import org.jhotdraw.gui.Worker;
 import org.jhotdraw.util.*;
 
 import java.util.ResourceBundle;
