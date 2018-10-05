@@ -373,7 +373,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         values.set(index * numOrigins + ordinal, newValue == null ? NULL_VALUE : newValue);
 
         V returnValue = oldValue == NULL_VALUE ? null : oldValue;
-        if (!Objects.equals(oldValue, newValue)) {
+        if (!Objects.equals(returnValue, newValue)) {
             if (origin == StyleOrigin.USER) {
                 ChangeEvent change = new ChangeEvent(key, returnValue, newValue, true, oldValue != null);
                 callObservers(this.origin, change);
