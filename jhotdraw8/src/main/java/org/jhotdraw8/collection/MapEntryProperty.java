@@ -7,19 +7,21 @@ import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.WeakMapChangeListener;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
  * This property is weakly bound to an entry in a map.
  *
- * @author Werner Randelshofer
  * @param <K> key type
  * @param <V> map value type
  * @param <T> entry value type
+ * @author Werner Randelshofer
  */
-public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T> 
-implements MapChangeListener< K, V> {
+public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
+        implements MapChangeListener<K, V> {
 
     @Nullable
     protected K key;
@@ -70,19 +72,20 @@ implements MapChangeListener< K, V> {
 
     @Override
     public void onChanged(@Nonnull Change<? extends K, ? extends V> change) {
- if (this.key.equals(change.getKey())) {
-                if (change.wasAdded()) {// was added, or removed and then added
-                    @SuppressWarnings("unchecked")
-                    T valueAdded = (T) change.getValueAdded();
-                    if (super.get() != valueAdded) {
-                        set(valueAdded);
-                    }
-                } else if (change.wasRemoved()) {// was removed but not added
-                    if (super.get() != null) {
-                        set(null);
-                    }
+        if (this.key.equals(change.getKey())) {
+            if (change.wasAdded()) {// was added, or removed and then added
+                @SuppressWarnings("unchecked")
+                T valueAdded = (T) change.getValueAdded();
+                if (!Objects.equals(super.get(), valueAdded)) {
+                    set(valueAdded);
                 }
-            }    }
+            } else if (change.wasRemoved()) {// was removed but not added
+                if (super.get() != null) {
+                    set(null);
+                }
+            }
+        }
+    }
 
     @Override
     public void unbind() {

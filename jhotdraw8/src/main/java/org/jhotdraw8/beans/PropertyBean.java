@@ -92,6 +92,19 @@ public interface PropertyBean {
     default <T> T get(@Nonnull MapAccessor<T> key) {
         return key.get(getProperties());
     }
+    /**
+     * Gets a nonnull property value.
+     *
+     * @param <T> the value type
+     * @param key the key
+     * @return the value
+     */
+    @Nonnull
+    default <T> T getNonnull(@Nonnull MapAccessor<T> key) {
+        T value = key.get(getProperties());
+        if (value == null)throw new NullPointerException();
+        return value;
+    }
 
     /**
      * Removes a property value.

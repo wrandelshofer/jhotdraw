@@ -5,12 +5,15 @@ package org.jhotdraw8.styleable;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -22,7 +25,7 @@ import org.jhotdraw8.collection.MapAccessor;
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
     // FIXME should be one instance per class. The instance should be unmodifiable.
-    private final static Map<Class<?>,Map<Key<?>,Integer>> keyMaps=new HashMap<>();
+    private final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new HashMap<>();
 
     /**
      * Holds the properties.
@@ -30,15 +33,15 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     // protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
     //protected final StyleableMap<Key<?>, Object> properties = new OldStyleableMap<Key<?>, Object>() {
     protected final StyleableMap<Key<?>, Object> properties = new SimpleStyleableMap<Key<?>, Object>(
-    keyMaps.computeIfAbsent(getClass(), k->new HashMap<>())
+            keyMaps.computeIfAbsent(getClass(), k -> new HashMap<>())
     ) {
 
         @Override
         @SuppressWarnings("unchecked")
-        protected void callObservers(StyleOrigin origin,  MapChangeListener.Change<Key<?>, Object> change) {
+        protected void callObservers(StyleOrigin origin, MapChangeListener.Change<Key<?>, Object> change) {
             changed((Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
             AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
-            super.callObservers(origin,  change);
+            super.callObservers(origin, change);
         }
 
     };
@@ -122,8 +125,8 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * This method is invoked just before listeners are notified. This
      * implementation is empty.
      *
-     * @param <T> the type
-     * @param key the changed key
+     * @param <T>      the type
+     * @param key      the changed key
      * @param oldValue the old value
      * @param newValue the new value
      */
@@ -134,10 +137,10 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * This method is invoked just before listeners are notified. This
      * implementation is empty.
      *
-     * @param origin the style origin
+     * @param origin     the style origin
      * @param willChange true if the change is about to be performed, false if
-     * the change happened
-     * @param change the change
+     *                   the change happened
+     * @param change     the change
      */
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
 
