@@ -285,7 +285,7 @@
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/runConfigurations/SVG.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/runConfigurations/Teddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/.idea/runConfigurations/Teddy.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/JHotDraw7.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/JHotDraw7.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/applet.policy" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/build.xml" afterDir="false" />
@@ -349,6 +349,8 @@
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/documentation/tutorial/purpose.html" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/documentation/tutorial/purpose.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/documentation/tutorial/stylesheet.css" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/documentation/tutorial/stylesheet.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/documentation/tutorial/toc.html" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/documentation/tutorial/toc.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.odg/classes/org/jhotdraw/samples/odg/Labels.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.odg/classes/org/jhotdraw/samples/odg/Labels.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.svg/classes/org/jhotdraw/samples/svg/Labels.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.svg/classes/org/jhotdraw/samples/svg/Labels.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/net/n3/nanoxml/CDATAReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/nanoxml/classes/net/n3/nanoxml/CDATAReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/net/n3/nanoxml/ContentReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/nanoxml/classes/net/n3/nanoxml/ContentReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/net/n3/nanoxml/IXMLBuilder.java" beforeDir="false" />
@@ -1020,7 +1022,6 @@
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/net/images/createNode.png" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.net/classes/org/jhotdraw/samples/net/images/createNode.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/net/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.net/classes/org/jhotdraw/samples/net/package-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/odg/Gradient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.odg/classes/org/jhotdraw/samples/odg/Gradient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/odg/Labels.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.odg/classes/org/jhotdraw/samples/odg/Labels.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/odg/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.odg/classes/org/jhotdraw/samples/odg/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/odg/ODGApplicationModel.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/odg/ODGAttributeKeys.java" beforeDir="false" />
@@ -1079,7 +1080,6 @@
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/pert/images/createTask.png" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.pert/classes/org/jhotdraw/samples/pert/images/createTask.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/pert/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.pert/classes/org/jhotdraw/samples/pert/package-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/svg/Gradient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.svg/classes/org/jhotdraw/samples/svg/Gradient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/svg/Labels.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.svg/classes/org/jhotdraw/samples/svg/Labels.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/svg/Labels_de.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.svg/classes/org/jhotdraw/samples/svg/Labels_de.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/svg/LinearGradient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.samples.svg/classes/org/jhotdraw/samples/svg/LinearGradient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/src/main/java/org/jhotdraw/samples/svg/Main.java" beforeDir="false" />
