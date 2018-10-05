@@ -4,11 +4,11 @@
 
 package org.jhotdraw8.tree;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.jhotdraw8.graph.BreadthFirstSpliterator;
 import org.jhotdraw8.graph.DepthFirstSpliterator;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * TreeTraversalTest.

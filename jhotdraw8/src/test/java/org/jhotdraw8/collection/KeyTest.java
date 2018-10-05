@@ -19,7 +19,7 @@ import org.jhotdraw8.text.CssPaintConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *

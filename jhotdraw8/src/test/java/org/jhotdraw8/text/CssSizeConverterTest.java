@@ -4,17 +4,16 @@
  */
 package org.jhotdraw8.text;
 
-import java.nio.CharBuffer;
-import java.util.Arrays;
-import java.util.List;
-
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.params.provider.MethodSource;
+
+import java.nio.CharBuffer;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;

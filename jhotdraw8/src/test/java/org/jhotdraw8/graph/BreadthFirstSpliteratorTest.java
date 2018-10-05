@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.tree.PreorderSpliterator;
-import org.jhotdraw8.tree.SimpleTreeNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;

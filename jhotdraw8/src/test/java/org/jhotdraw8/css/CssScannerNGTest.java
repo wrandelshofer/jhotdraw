@@ -5,12 +5,14 @@
 package org.jhotdraw8.css;
 
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 import java.io.StringReader;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * CssScannerNGTest.
@@ -26,9 +28,7 @@ public class CssScannerNGTest {
     /**
      * Test of nextChar method, of class CssScanner.
      */
-    @ParameterizedTest
-    @MethodSource( "scannerData")
-    public void testScanner(String inputData, String expectedValue) throws Exception {
+    public void doTestScanner(String inputData, String expectedValue) throws Exception {
         CssScanner s = new CssScanner(new StringReader(inputData));
         //
         StringBuilder buf=new StringBuilder();
@@ -52,20 +52,21 @@ public class CssScannerNGTest {
 
 
 
-    public static Object[][] scannerData() {
-        return new Object[][]{
-            {"abcd", "abcd"},
+    @TestFactory
+    public List<DynamicTest> testScanner() {
+        return Arrays.asList(
+                dynamicTest("abcd abcd",()->doTestScanner("abcd", "abcd")),
             //
-            {"ab\ncd", "ab\ncd"},
-            {"ab\r\ncd", "ab\ncd"},
-            {"ab\fcd", "ab\ncd"},
-            {"ab\rcd", "ab\ncd"},
+            dynamicTest("ab\ncd ab\ncd",()->doTestScanner("ab\ncd", "ab\ncd")),
+            dynamicTest("ab\r\ncd ab\ncd",()->doTestScanner("ab\r\ncd", "ab\ncd")),
+            dynamicTest("ab\fcd ab\ncd",()->doTestScanner("ab\fcd", "ab\ncd")),
+            dynamicTest("ab\rcd ab\ncd",()->doTestScanner("ab\rcd", "ab\ncd")),
             //
-            {"abcd\n", "abcd\n"},
-            {"abcd\r\n", "abcd\n"},
-            {"abcd\f", "abcd\n"},
-            {"abcd\r", "abcd\n"},
-        };
+            dynamicTest("abcd\n abcd\n",()->doTestScanner("abcd\n", "abcd\n")),
+            dynamicTest("abcd\r\n abcd\n",()->doTestScanner("abcd\r\n", "abcd\n")),
+            dynamicTest("abcd\f abcd\n",()->doTestScanner("abcd\f", "abcd\n")),
+            dynamicTest("abcd\r abcd\n",()->doTestScanner("abcd\r", "abcd\n"))
+        );
     }
     
 }

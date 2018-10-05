@@ -5,17 +5,9 @@
  */
 package org.jhotdraw8.text;
 
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.draw.key.CssLinearGradient;
-import org.jhotdraw8.text.DefaultConverter;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
 

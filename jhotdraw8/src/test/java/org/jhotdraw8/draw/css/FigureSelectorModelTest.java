@@ -7,12 +7,14 @@ package org.jhotdraw8.draw.css;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.SimpleLabelFigure;
+import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.draw.key.Paintable;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * FigureSelectorModelTest.

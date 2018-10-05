@@ -4,14 +4,15 @@
  */
 package org.jhotdraw8.collection;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import javafx.collections.ListChangeListener;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**

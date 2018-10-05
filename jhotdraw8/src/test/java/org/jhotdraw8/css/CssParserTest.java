@@ -4,30 +4,28 @@
  */
 package org.jhotdraw8.css;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.List;
+import org.jhotdraw8.css.ast.Declaration;
+import org.jhotdraw8.css.ast.SelectorGroup;
+import org.jhotdraw8.css.ast.StyleRule;
+import org.jhotdraw8.css.ast.Stylesheet;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.jhotdraw8.css.ast.Declaration;
-import org.jhotdraw8.css.ast.StyleRule;
-import org.jhotdraw8.css.ast.SelectorGroup;
-import org.jhotdraw8.css.ast.Stylesheet;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;

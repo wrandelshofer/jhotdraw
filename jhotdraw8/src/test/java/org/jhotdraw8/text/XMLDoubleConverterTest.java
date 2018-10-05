@@ -5,11 +5,8 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.text.XmlNumberConverter;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.text.ParseException;

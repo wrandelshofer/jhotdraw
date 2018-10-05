@@ -5,7 +5,7 @@ package org.jhotdraw8.graph;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * IntImmutableDirectedGraphTest.

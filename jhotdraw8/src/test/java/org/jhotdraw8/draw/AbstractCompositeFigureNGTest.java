@@ -5,9 +5,6 @@
  */
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
@@ -15,10 +12,16 @@ import javafx.css.Styleable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
+import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
