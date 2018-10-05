@@ -22,15 +22,20 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+
 import org.jhotdraw8.geom.BezierNode;
+import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
@@ -72,6 +77,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         elements.add(new LineTo(3, 3));
         elements.add(new ClosePath());
     }
+
     private int controlPointMask;
     @Nonnull
     private final Region node;
@@ -139,12 +145,16 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
     @Override
     public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
-        if (pointKey != null && event.getClickCount() == 2) {
-            ImmutableList<BezierNode> list = owner.get(pointKey);
-            BezierNode bn = list.get(pointIndex);
+        if (pointKey != null) {
+            if (event.getClickCount() == 1) {
+                if (event.isControlDown() || event.isAltDown()) {
+                    ImmutableList<BezierNode> list = owner.get(pointKey);
+                    BezierNode bn = list.get(pointIndex);
 
-            dv.getModel().set(owner, pointKey,
-                    ImmutableList.set(list, pointIndex, bn.setColinear(!bn.isColinear())));
+                    dv.getModel().set(owner, pointKey,
+                            ImmutableList.set(list, pointIndex, bn.setColinear(!bn.isColinear())));
+                }
+            }
         }
     }
 

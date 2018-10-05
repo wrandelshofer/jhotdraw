@@ -100,7 +100,6 @@ public interface PropertyBean {
      * @param key the key
      * @return the removed value
      */
-    @Nonnull
     @Nullable
     default <T> T remove(Key<T> key) {
         @SuppressWarnings("unchecked")

@@ -131,32 +131,27 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             oldValue = newValue;
         }
     };
-    private final Listener<DrawingModelEvent> drawingModelHandler = new Listener<DrawingModelEvent>() {
-
-        @Override
-        public void handle(DrawingModelEvent event) {
-            Figure f = event.getNode();
-            switch (event.getEventType()) {
-                case LAYOUT_CHANGED:
-                    if (f == getDrawing()) {
-                        invalidateConstrainerNode();
-                        invalidateWorldViewTransforms();
-                        repaint();
-                    }
-                    break;
-                case STYLE_CHANGED:
+    private final Listener<DrawingModelEvent> drawingModelHandler = event -> {
+        Figure f = event.getNode();
+        switch (event.getEventType()) {
+            case LAYOUT_CHANGED:
+                if (f == getDrawing()) {
+                    invalidateConstrainerNode();
+                    invalidateWorldViewTransforms();
                     repaint();
-                    break;
-                case PROPERTY_VALUE_CHANGED:
-                case LAYOUT_SUBJECT_CHANGED:
-                case TRANSFORM_CHANGED:
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + " not supported");
-            }
+                }
+                break;
+            case STYLE_CHANGED:
+                repaint();
+                break;
+            case PROPERTY_VALUE_CHANGED:
+            case LAYOUT_SUBJECT_CHANGED:
+            case TRANSFORM_CHANGED:
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
-
     };
     private Group drawingPane;
 
@@ -183,7 +178,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * Margin around the drawing.
      */
-    private final ObjectProperty<Insets> margin = new NonnullProperty<Insets>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
+    private final ObjectProperty<Insets> margin = new NonnullProperty<>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
     /**
      * The number of nodes that are maximally updated per frame.
      */
@@ -350,8 +345,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             } else {
                 return false;
             }
-        } else if (node instanceof Rectangle) {
-            return Geom.contains(node.getBoundsInLocal(), point, toleranceInLocal);
         } else if (node instanceof Group) {
             if (Geom.contains(node.getBoundsInLocal(), point, toleranceInLocal)) {
                 for (Node child : ((Group) node).getChildren()) {
@@ -431,10 +424,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         for (int i = 0; i < depth; i++) {
             buf.append(".");
         }
-        buf.append(n + " lb: " + Geom.toString(n.getLayoutBounds())).append('\n');
+        buf.append(n).append(" lb: ").append(Geom.toString(n.getLayoutBounds())).append('\n');
         Figure f = nodeToFigureMap.get(n);
         if (f != null) {
-            buf.append(" flb: " + Geom.toString(f.getBoundsInParent())).append('\n');
+            buf.append(" flb: ").append(Geom.toString(f.getBoundsInParent())).append('\n');
         } else {
             buf.append('\n');
         }
@@ -506,7 +499,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return null;
     }
 
-    private Figure findFigureRecursive(Parent p, @Nonnull Point2D pp, double tolerance) {
+    @Nullable
+    private Figure findFigureRecursive(@Nullable Parent p, @Nonnull Point2D pp, double tolerance) {
+        if (p == null) return null;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -738,7 +733,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return rootPane.getStylesheets();
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public Transform getViewToWorld() {
         if (viewToWorldTransform == null) {

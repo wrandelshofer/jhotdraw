@@ -10,7 +10,6 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationModel;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ViewController;
 
 /**
  * Displays a dialog showing information about the application.
@@ -37,8 +36,10 @@ public class AboutAction extends AbstractApplicationAction {
 
     @Override
     protected void handleActionPerformed(ActionEvent event, Application app) {
+        if (app==null) return;
+
         addDisabler(this);
-        ApplicationModel model = getApplication().getModel();
+        ApplicationModel model = app.getModel();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 model.getCopyright()
@@ -54,7 +55,7 @@ public class AboutAction extends AbstractApplicationAction {
         alert.setGraphic(null);
         alert.initModality(Modality.NONE);
         alert.showingProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == false) {
+            if (!newValue) {
                 removeDisabler(this);
             }
         }

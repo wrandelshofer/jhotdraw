@@ -361,6 +361,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return the transformation
      */
+    @Nonnull
     Transform getWorldToView();
 
     /**
@@ -368,6 +369,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return the transformation;
      */
+    @Nonnull
     Transform getViewToWorld();
 
     // ---

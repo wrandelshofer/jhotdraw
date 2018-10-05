@@ -6,17 +6,23 @@ package org.jhotdraw8.geom;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sun.javafx.geom.transform.Affine3D;
+import com.sun.javafx.geom.transform.BaseTransform;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+
 import static java.lang.Math.sqrt;
 import static java.lang.Math.atan;
 import static java.lang.Math.abs;
 import static java.lang.Double.isNaN;
+
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Affine;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -27,18 +33,37 @@ import javax.annotation.Nullable;
  * @version $Id$
  */
 public class Transforms {
+    private static class IdentityTransform extends Transform {
 
-    @Nullable
+        private IdentityTransform() {
+
+        }
+
+        @Override
+        public void impl_apply(Affine3D t) {
+            // nothing to do
+        }
+
+        @Override
+        public BaseTransform impl_derive(BaseTransform t) {
+            return t;
+        }
+    }
+
+
+    /**
+     * Immutable identity transform.
+     */
+    public static final Transform IDENTITY = new IdentityTransform();
+
+    @Nonnull
     public static Transform concat(@Nullable Transform a, @Nullable Transform b) {
-        return (a == null||a.isIdentity()) ? b : (b == null||b.isIdentity() ? a : a.createConcatenation(b));
+        Transform t = (a == null || a.isIdentity()) ? b : (b == null || b.isIdentity() ? a : a.createConcatenation(b));
+        return t == null ? IDENTITY : t;
     }
 
-    @Nullable
-    public static Transform concat(Transform a, Transform b, Transform c) {
-        return concat(concat(a, b), c);
-    }
 
-    @Nullable
+    @Nonnull
     public static Transform createReshapeTransform(Bounds src, Bounds dest) {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
@@ -46,7 +71,7 @@ public class Transforms {
         );
     }
 
-    @Nullable
+    @Nonnull
     public static Transform createReshapeTransform(Bounds src, double destX, double destY, double destW, double destH) {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
@@ -54,8 +79,8 @@ public class Transforms {
         );
     }
 
-    @Nullable
-    public static Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
+    @Nonnull
+    static Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
         double scaleX = dw / sw;
         double scaleY = dh / sh;
 
@@ -173,8 +198,9 @@ public class Transforms {
      * <p>
      * A tangent vector pointing to (1,0) results in an identity matrix.
      * <p>
+     *
      * @param tangent a tangent vector
-     * @param pivot the pivot of the rotation
+     * @param pivot   the pivot of the rotation
      * @return a rotation transform
      */
     public static Transform rotate(Point2D tangent, Point2D pivot) {
@@ -187,17 +213,18 @@ public class Transforms {
      * <p>
      * A tangent vector pointing to (1,0) results in an identity matrix.
      * <p>
+     *
      * @param tangentX a tangent vector
      * @param tangentY a tangent vector
-     * @param pivotX the pivot of the rotation
-     * @param pivotY the pivot of the rotation
+     * @param pivotX   the pivot of the rotation
+     * @param pivotY   the pivot of the rotation
      * @return a rotation transform
      */
     public static Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
         double theta = Math.atan2(tangentY, tangentX);
         return Transform.rotate(theta * 180.0 / Math.PI, pivotX, pivotY);
     }
-    
+
     /**
      * Creates a transformation matrix, which projects a point onto the given line.
      * The projection is orthogonal to the line.
@@ -209,46 +236,49 @@ public class Transforms {
      *  b = vvT / vTv * (a - p1) + p1;
      *  b = [ vvT / vTv | vvT / vTv * p1 ] * a; // 2 by 3 matrix
      * </pre>
-     * 
+     *
      * @param x1 x-coordinate of p1 of the line
      * @param y1 y-coordinate of p1 of the line
      * @param x2 x-coordinate of p2 of the line
      * @param y2 y-coordinate of p2 of the line
      * @return the transformation matrix
      */
-    public static Transform createProjectPointOnLineTransform(double x1,double y1, double x2, double y2) {
-        double vx =x2-x1;
-        double vy =y2-y1;
-        double vxx=vx*vx;
-        double vyy=vy*vy;
-        double vTv=vxx+vyy;
-        
-        double xx = vxx/vTv;
-        double xy = vx*vy/vTv;
-        double yy = vyy/vTv;
+    @Nonnull
+    public static Transform createProjectPointOnLineTransform(double x1, double y1, double x2, double y2) {
+        double vx = x2 - x1;
+        double vy = y2 - y1;
+        double vxx = vx * vx;
+        double vyy = vy * vy;
+        double vTv = vxx + vyy;
+
+        double xx = vxx / vTv;
+        double xy = vx * vy / vTv;
+        double yy = vyy / vTv;
         double yx = xy;
-        double tx = xx*x1+xy*y1;
-        double ty = yx*x1+yy*y1;
-        
-        return new Affine(xx,xy,tx,yx,yy,ty);
+        double tx = xx * x1 + xy * y1;
+        double ty = yx * x1 + yy * y1;
+
+        return new Affine(xx, xy, tx, yx, yy, ty);
     }
-    public static Point2D projectPointOnLine(double ax, double ay, double x1,double y1, double x2, double y2) {
-        double vx =x2-x1;
-        double vy =y2-y1;
-        double vxx=vx*vx;
-        double vyy=vy*vy;
-        double vTv=vxx+vyy;
-        
-        double xx = vxx/vTv;
-        double xy = vx*vy/vTv;
-        double yy = vyy/vTv;
+
+    @Nonnull
+    public static Point2D projectPointOnLine(double ax, double ay, double x1, double y1, double x2, double y2) {
+        double vx = x2 - x1;
+        double vy = y2 - y1;
+        double vxx = vx * vx;
+        double vyy = vy * vy;
+        double vTv = vxx + vyy;
+
+        double xx = vxx / vTv;
+        double xy = vx * vy / vTv;
+        double yy = vyy / vTv;
         double yx = xy;
-        double tx = xx*x1+xy*y1;
-        double ty = yx*x1+yy*y1;
-        
-        
-        double bx = xx*ax+xy*ay+tx;
-        double by = yx*ax+yy*ay+ty;
-        return new Point2D(bx,by);
+        double tx = xx * x1 + xy * y1;
+        double ty = yx * x1 + yy * y1;
+
+
+        double bx = xx * ax + xy * ay + tx;
+        double by = yx * ax + yy * ay + ty;
+        return new Point2D(bx, by);
     }
 }
