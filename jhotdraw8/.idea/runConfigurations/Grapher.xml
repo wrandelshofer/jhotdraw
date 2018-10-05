@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Grapher" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.grapher.GrapherMain" />
-    <module name="jhotdraw8" />
-    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-    <method />
-  </configuration>
-</component>

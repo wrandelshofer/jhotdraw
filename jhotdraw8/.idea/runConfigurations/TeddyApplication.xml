@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TeddyApplication" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.teddy.TeddyApplication" />
+    <module name="jhotdraw8" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.jhotdraw8.samples.teddy.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

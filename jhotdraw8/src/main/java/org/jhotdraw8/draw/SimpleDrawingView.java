@@ -879,6 +879,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void handleVisibleRectChanged(Observable o) {
         invalidateConstrainerNode();
         invalidateLayerNodes();
+        invalidateHandles();
         repaint();
     }
 
@@ -951,7 +952,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         handleNewDrawingModel(null, drawingModel.get());
 
         // Set stylesheet
-        rootPane.getStylesheets().add("org/jhotdraw8/draw/SimpleDrawingView.css");
+        rootPane.getStylesheets().add(SimpleDrawingView.class.getResource("SimpleDrawingView.css").toString());
 
         // set root
         node = new SimpleDrawingViewNode();
