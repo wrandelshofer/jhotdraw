@@ -360,6 +360,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             drawingView.getSelectedFigures().clear();
             drawingView.getSelectedFigures().addAll(matchedFigures);
             drawingView.scrollSelectedFiguresToVisible();
+            drawingView.jiggleHandles();
         } catch (IOException ex) {
             ex.printStackTrace();
             return;

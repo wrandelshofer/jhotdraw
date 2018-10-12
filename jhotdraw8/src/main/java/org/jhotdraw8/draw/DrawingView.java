@@ -622,6 +622,11 @@ public interface DrawingView extends RenderContext {
     }
 
     public void recreateHandles();
+    
+    /**
+     * Plays a short animation on the handles to make them easier discoverable.
+     */
+    public void jiggleHandles();
 
     /**
      * Scrolls the specified figure to visible.

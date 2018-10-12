@@ -4,7 +4,9 @@
 package org.jhotdraw8.draw;
 
 import java.io.IOException;
+
 import static java.lang.Math.max;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import javafx.animation.StrokeTransition;
+import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -49,8 +55,11 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import javafx.util.Duration;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
@@ -311,10 +320,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Returns true if the node contains the specified point within a a
      * tolerance.
      *
-     * @param node The node
-     * @param point The point in local coordinates
+     * @param node      The node
+     * @param point     The point in local coordinates
      * @param tolerance The maximal distance the point is allowed to be away
-     * from the node
+     *                  from the node
      * @return true if the node contains the point
      */
     private boolean contains(Node node, @Nonnull Point2D point, double tolerance) {
@@ -448,8 +457,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), 
-                getViewToWorld().deltaTransform(getTolerance(),getTolerance()).getX());
+        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy),
+                getViewToWorld().deltaTransform(getTolerance(), getTolerance()).getX());
         return f;
     }
 
@@ -460,8 +469,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Uses a default tolerance value. See {@link #findFigure(double, double, java.util.Set, double)
      * }.
      *
-     * @param vx point in view coordinates
-     * @param vy point in view coordinates
+     * @param vx      point in view coordinates
+     * @param vy      point in view coordinates
      * @param figures figures of interest
      * @return a figure in the specified set which contains the point, or null.
      */
@@ -475,11 +484,11 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Finds a figure at the specified coordinate, but looks only at figures in
      * the specified set.
      *
-     * @param vx point in view coordinates
-     * @param vy point in view coordinates
-     * @param figures figures of interest
+     * @param vx        point in view coordinates
+     * @param vy        point in view coordinates
+     * @param figures   figures of interest
      * @param tolerance the number of pixels around the figure in view
-     * coordinates, in which the the point is considered to be inside the figure
+     *                  coordinates, in which the the point is considered to be inside the figure
      * @return a figure in the specified set which contains the point, or null.
      */
     @Nullable
@@ -651,7 +660,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             if (!handle.isSelectable()) {
                 continue;
             }
-            if (handle.contains(this, vx, vy, getTolerance(), getTolerance()*getTolerance())) {
+            if (handle.contains(this, vx, vy, getTolerance(), getTolerance() * getTolerance())) {
                 return handle;
             } else {
                 if (contains(node, new Point2D(vx, vy), getTolerance())) {
@@ -1014,8 +1023,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Returns true if the point is inside the radius from the center of the
      * node.
      *
-     * @param node The node
-     * @param point The point in local coordinates
+     * @param node          The node
+     * @param point         The point in local coordinates
      * @param squaredRadius The square of the radius in which the node must be
      * @return true if the node contains the point
      */
@@ -1059,6 +1068,31 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         handlesAreValid = false;
         recreateHandles = true;
         repaint();
+    }
+
+    @Override
+    public void jiggleHandles() {
+        validateHandles();
+        List<Handle> copiedList = handles.values().stream().flatMap(List::stream).collect(Collectors.toList());
+
+        // We scale the handles back and forth.
+        double amount = 0.1;
+        Transition flash = new Transition() {
+            {
+                setCycleDuration(Duration.millis(100));
+                setCycleCount(2);
+                setAutoReverse(true);
+            }
+
+            @Override
+            protected void interpolate(double frac) {
+                for (Handle h : copiedList) {
+                    h.getNode().setScaleX(1 + frac * amount);
+                    h.getNode().setScaleY(1 + frac * amount);
+                }
+            }
+        };
+        flash.play();
     }
 
     private void removeNode(Figure f) {
@@ -1341,8 +1375,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // Validate handles only, if they are invalid/*, and if
         // the DrawingView has a DrawingEditor.*/
         if (!handlesAreValid /*
-                * && getEditor() != null
-                 */) {
+         * && getEditor() != null
+         */) {
             handlesAreValid = true;
             updateHandles();
             updateLayout();
