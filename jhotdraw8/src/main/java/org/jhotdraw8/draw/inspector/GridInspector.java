@@ -69,7 +69,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     private TextField yField;
 
     public GridInspector() {
-        this(LayersInspector.class.getResource("GridInspector.fxml"));
+        this(GridInspector.class.getResource("GridInspector.fxml"));
     }
 
     public GridInspector(@Nonnull URL fxmlUrl) {
