@@ -201,7 +201,7 @@ public class BidiGraphBuilderTest {
         System.out.println("getVertexCount");
         Integer a = 0;
         Integer b = 1;
-        Integer c = 1;
+        Integer c = 2;
         BidiGraphBuilder<Integer, Double> instance = new BidiGraphBuilder<>();
         instance.addVertex(a);
         instance.addVertex(b);
