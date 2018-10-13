@@ -303,19 +303,6 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
         buf.append("\n}");
 
-        // XXX for some reason, textArea is never updated
-        //     here we force the scene to update it.
-        /*
-        try {
-            Method m = Node.class.getDeclaredMethod("impl_markDirty", DirtyBits.class);
-            m.setAccessible(true);
-            for (Parent p = textArea; p != null; p = p.getParent()) {
-                m.invoke(p, DirtyBits.NODE_CONTENTS);
-            }
-        } catch (NoSuchMethodException | IllegalAccessException | IllegalAccessError | InvocationTargetException e) {
-            System.out.println("StylesAttributesInspector e:" + e);
-        }
-        */
         textArea.setText(buf.toString());
         int rows = 1;
         for (int i = 0; i < buf.length(); i++) {
