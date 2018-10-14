@@ -110,7 +110,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
 
     @Nullable
     @Override
-    public CssSize2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssSize2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(buf);
         return parsePageSize(tt);
 

@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point3D;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -37,7 +39,7 @@ public class CssScale3DConverter implements Converter<Point3D> {
 
     @Nonnull
     @Override
-    public Point3D fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Point3D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:

@@ -45,7 +45,7 @@ public interface Converter<T> {
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
     @Nullable
-    T fromString( CharBuffer in,@Nullable IdFactory idFactory) throws ParseException, IOException;
+    T fromString(@Nullable CharBuffer in,@Nullable IdFactory idFactory) throws ParseException, IOException;
 
 
     /**

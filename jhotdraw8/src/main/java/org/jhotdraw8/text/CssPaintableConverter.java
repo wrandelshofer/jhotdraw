@@ -66,7 +66,7 @@ public class CssPaintableConverter implements Converter<Paintable> {
 
     @Nullable
     @Override
-    public Paintable fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Paintable fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
 
         if ("none".equals(str)) {

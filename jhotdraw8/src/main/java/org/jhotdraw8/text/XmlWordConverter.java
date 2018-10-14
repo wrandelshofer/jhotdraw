@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -30,7 +32,7 @@ public class XmlWordConverter implements Converter<String> {
 
     @Nonnull
     @Override
-    public String fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

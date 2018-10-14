@@ -54,7 +54,7 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
 
     @Nullable
     @Override
-    public CssSizeInsets fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssSizeInsets fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
         if (nullable && "none".equals(str.trim())) {
             return null;

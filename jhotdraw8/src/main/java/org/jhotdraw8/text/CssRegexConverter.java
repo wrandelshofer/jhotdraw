@@ -80,7 +80,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
 
     @Nullable
     @Override
-    public RegexReplace fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public RegexReplace fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         String find = null;

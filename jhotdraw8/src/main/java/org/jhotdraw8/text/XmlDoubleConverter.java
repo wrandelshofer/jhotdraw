@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -67,7 +69,7 @@ public class XmlDoubleConverter implements Converter<Double> {
 
     @Nonnull
     @Override
-    public Double fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public Double fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         Number n = c.fromString(in, idFactory);
         return (n == null || n instanceof Double) ? (Double) n : n.doubleValue();
     }

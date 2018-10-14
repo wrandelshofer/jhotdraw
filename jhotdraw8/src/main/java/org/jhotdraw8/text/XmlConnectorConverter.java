@@ -73,7 +73,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
 
     @Nullable
     @Override
-    public Connector fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Connector fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Connector c;
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
         tt.setSkipWhitespaces(true);

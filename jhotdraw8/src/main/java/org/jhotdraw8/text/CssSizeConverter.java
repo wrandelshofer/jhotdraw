@@ -46,7 +46,7 @@ public class CssSizeConverter implements Converter<CssSize> {
 
     @Nullable
     @Override
-    public CssSize fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssSize fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         int start = buf.position();
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
         CssSize sz = parseSize(tt);

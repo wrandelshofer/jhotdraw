@@ -34,7 +34,7 @@ public class XmlStringConverter implements Converter<String> {
 
     @Nonnull
     @Override
-    public String fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);

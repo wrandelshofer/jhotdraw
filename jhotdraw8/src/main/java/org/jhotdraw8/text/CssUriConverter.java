@@ -32,7 +32,7 @@ public class CssUriConverter implements Converter<URI> {
 
     @Nullable
     @Override
-    public URI fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public URI fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
         if (tt.nextToken() == CssToken.TT_IDENT //
                 && "none".equals(tt.currentStringValue())) {

@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Insets;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -50,7 +52,7 @@ public class CssInsetsConverter implements Converter<Insets> {
 
     @Nonnull
     @Override
-    public Insets fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Insets fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:

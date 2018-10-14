@@ -42,7 +42,7 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
 
     @Nullable
     @Override
-    public T fromString(@Nonnull CharBuffer buf, @Nonnull IdFactory idFactory) throws ParseException, IOException {
+    public T fromString(@Nullable CharBuffer buf, @Nonnull IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
         if ("none".equals(str)) {
             return null;

@@ -4,6 +4,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -20,7 +21,7 @@ public class CssConverterConverterAdapter<T> implements Converter<T> {
 
     @Nullable
     @Override
-    public T fromString(CharBuffer in, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public T fromString(@Nullable CharBuffer in, @Nullable IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(in);
         return conv.parse(tt);
     }

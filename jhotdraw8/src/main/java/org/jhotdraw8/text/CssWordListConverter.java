@@ -9,6 +9,7 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.Comparator;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.io.IdFactory;
@@ -56,7 +57,7 @@ public class CssWordListConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public ImmutableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<String> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         ImmutableList<String> l =  ImmutableList.ofArray(v, 1, (int) v[0]);
         return l;

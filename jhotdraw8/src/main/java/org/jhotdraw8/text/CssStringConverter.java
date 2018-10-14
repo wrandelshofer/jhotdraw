@@ -51,7 +51,7 @@ public class CssStringConverter implements Converter<String> {
 
     @Nullable
     @Override
-    public String fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
         if (tt.nextToken() != CssToken.TT_STRING) {
             throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());

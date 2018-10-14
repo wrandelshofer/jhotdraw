@@ -11,6 +11,8 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.io.IdFactory;
 
@@ -56,7 +58,7 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<String> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         ImmutableSet<String> l =  ImmutableSet.ofArray(v,1,(int)v[0]);
         return l;

@@ -12,6 +12,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import javafx.css.PseudoClass;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.io.IdFactory;
 
@@ -57,7 +59,7 @@ public class CssPseudoClassConverter implements Converter<ImmutableSet<PseudoCla
     }
 
     @Override
-    public ImmutableSet<PseudoClass> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<PseudoClass> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         ImmutableSet<PseudoClass> l =  ImmutableSet.ofArray(v,1,(int)v[0]);
         return l;

@@ -49,7 +49,7 @@ public class CssColorConverter implements Converter<CssColor> {
 
   @Nullable
   @Override
-  public CssColor fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+  public CssColor fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     CssColor c;
     CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
     tt.setSkipWhitespaces(true);

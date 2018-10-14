@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -36,7 +38,7 @@ public class CssBooleanConverter implements Converter<Boolean> {
 
     @Nonnull
     @Override
-    public Boolean fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException {
+    public Boolean fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

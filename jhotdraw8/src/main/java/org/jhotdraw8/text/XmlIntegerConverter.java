@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -64,7 +66,7 @@ public class XmlIntegerConverter implements Converter<Integer> {
 
     @Nonnull
     @Override
-    public Integer fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public Integer fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         Number n = c.fromString(in, idFactory);
         return (n == null || n instanceof Integer) ? (Integer) n : n.intValue();
     }

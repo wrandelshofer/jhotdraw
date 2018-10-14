@@ -148,7 +148,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
 
     @Nullable
     @Override
-    public CssRadialGradient fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public CssRadialGradient fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(in));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssToken.TT_IDENT) {

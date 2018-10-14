@@ -63,6 +63,7 @@ public class NumberConverter implements Converter<Number> {
      * <code>NumberFormat</code> instance obtained from
      * <code>NumberFormat.getNumberInstance()</code>.
      */
+    @SuppressWarnings("WeakerAccess")
     public NumberConverter() {
         super();
         initFormats();
@@ -75,6 +76,7 @@ public class NumberConverter implements Converter<Number> {
      * @param max the max
      * @param multiplier the multiplier
      */
+    @SuppressWarnings("WeakerAccess")
     public NumberConverter(double min, double max, double multiplier) {
         this(min, max, multiplier, false, null);
     }
@@ -87,6 +89,7 @@ public class NumberConverter implements Converter<Number> {
      * @param multiplier the multiplier
      * @param allowsNullValue whether null values are allowed
      */
+    @SuppressWarnings("WeakerAccess")
     public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue) {
         this(min, max, multiplier, allowsNullValue, null);
     }
@@ -100,6 +103,7 @@ public class NumberConverter implements Converter<Number> {
      * @param allowsNullValue whether null values are allowed
      * @param unit the unit string
      */
+    @SuppressWarnings("WeakerAccess")
     public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
         super();
         initFormats();
@@ -126,7 +130,7 @@ public class NumberConverter implements Converter<Number> {
      * @param minimum Minimum legal value that can be input
      * @see #setValueClass
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unused"})
     public void setMinimum(Comparable minimum) {
         min = minimum;
     }
@@ -136,7 +140,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return Minimum legal value that can be input
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unused"})
     public Comparable getMinimum() {
         return min;
     }
@@ -150,7 +154,7 @@ public class NumberConverter implements Converter<Number> {
      * @param max Maximum legal value that can be input
      * @see #setValueClass
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unused"})
     public void setMaximum(Comparable max) {
         this.max = max;
     }
@@ -160,7 +164,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return Maximum legal value that can be input
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unused"})
     public Comparable getMaximum() {
         return max;
     }
@@ -188,6 +192,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @param newValue true if null values are allowed
      */
+    @SuppressWarnings("unused")
     public void setAllowsNullValue(boolean newValue) {
         allowsNullValue = newValue;
     }
@@ -197,6 +202,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return true if null values are allowed
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean getAllowsNullValue() {
         return allowsNullValue;
     }
@@ -207,6 +213,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @param newValue the value
      */
+    @SuppressWarnings("unused")
     public void setMinimumFractionDigits(int newValue) {
         minFractionDigits = newValue;
         doubleDecimalFormat.setMinimumFractionDigits(newValue);
@@ -217,6 +224,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return the minimum fraction digits
      */
+    @SuppressWarnings("unused")
     public int getMinimumFractionDigits() {
         return minFractionDigits;
     }
@@ -296,7 +304,6 @@ public class NumberConverter implements Converter<Number> {
                 buf.append(unit);
             }
         }
-        return;
     }
 
     @Nullable
@@ -304,6 +311,9 @@ public class NumberConverter implements Converter<Number> {
     public Number fromString(@Nullable CharBuffer str, IdFactory idFactory) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
+        }
+        if (str == null) {
+            throw new ParseException("str is null",0);
         }
 
         // Parse the remaining characters from the CharBuffer
@@ -386,7 +396,7 @@ public class NumberConverter implements Converter<Number> {
         }
 
         Class<?> valueClass = getValueClass();
-        Object value;
+        Number value;
         if (valueClass != null) {
             try {
                 if (valueClass == Integer.class) {
@@ -406,13 +416,13 @@ public class NumberConverter implements Converter<Number> {
                     if (factor != 1.0) {
                         v = (float) (v / factor);
                     }
-                    value = Float.valueOf(v);
+                    value = v;
                 } else if (valueClass == Double.class) {
                     double v = Double.parseDouble(text);
                     if (factor != 1.0) {
                         v = (v / factor);
                     }
-                    value = Double.valueOf(v);
+                    value = v;
                 } else if (valueClass == Byte.class) {
                     byte v = Byte.parseByte(text);
                     if (factor != 1.0) {
@@ -448,7 +458,7 @@ public class NumberConverter implements Converter<Number> {
         }
         // consume the text that we just parsed
         str.position(str.position() + end);
-        return (Number) value;
+        return value;
     }
 
     /**
@@ -457,8 +467,8 @@ public class NumberConverter implements Converter<Number> {
      * @param wantsCCE If false, and a ClassCastException is thrown in comparing
      * the values, the exception is consumed and false is returned.
      */
-    @SuppressWarnings("unchecked")
-    boolean isValidValue(Object value, boolean wantsCCE) {
+    @SuppressWarnings({"unchecked", "WeakerAccess"})
+    boolean isValidValue(Number value, boolean wantsCCE) {
         try {
             if (min != null && min.compareTo((Number) value) > 0) {
                 return false;
@@ -471,7 +481,7 @@ public class NumberConverter implements Converter<Number> {
         }
 
         try {
-            if (max != null && max.compareTo((Number) value) < 0) {
+            if (max != null && max.compareTo(value) < 0) {
                 return false;
             }
         } catch (ClassCastException cce) {
@@ -529,6 +539,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return the maximum integer digits
      */
+    @SuppressWarnings("unused")
     public int getMaximumIntegerDigits() {
         return maxIntDigits;
     }
@@ -539,6 +550,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @param newValue the new value
      */
+    @SuppressWarnings("unused")
     public void setMaximumIntegerDigits(int newValue) {
         doubleDecimalFormat.setMaximumIntegerDigits(newValue);
         scientificFormat.setMaximumIntegerDigits(newValue);
@@ -551,6 +563,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return the maximum fraction digits
      */
+    @SuppressWarnings("unused")
     public int getMaximumFractionDigits() {
         return maxFractionDigits;
     }
@@ -561,6 +574,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @param newValue the maximum fraction digits
      */
+    @SuppressWarnings("unused")
     public void setMaximumFractionDigits(int newValue) {
         doubleDecimalFormat.setMaximumFractionDigits(newValue);
         scientificFormat.setMaximumFractionDigits(newValue);
@@ -572,6 +586,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return the minimum negative exponent
      */
+    @SuppressWarnings("unused")
     public int getMinimumNegativeExponent() {
         return minNegativeExponent;
     }
@@ -581,6 +596,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @param newValue the minimum negative exponent
      */
+    @SuppressWarnings("unused")
     public void setMinimumNegativeExponent(int newValue) {
         this.minNegativeExponent = newValue;
     }
@@ -590,6 +606,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return the minimum positive exponent
      */
+    @SuppressWarnings("unused")
     public int getMinimumPositiveExponent() {
         return minPositiveExponent;
     }
@@ -599,6 +616,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @param newValue the maximum positive exponent
      */
+    @SuppressWarnings("unused")
     public void setMinimumPositiveExponent(int newValue) {
         this.minPositiveExponent = newValue;
     }
@@ -608,6 +626,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return true if scientific notation is used
      */
+    @SuppressWarnings("unused")
     public boolean isUsesScientificNotation() {
         return usesScientificNotation;
     }
@@ -617,6 +636,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @param newValue true if scientific notation is used
      */
+    @SuppressWarnings("unused")
     public void setUsesScientificNotation(boolean newValue) {
         this.usesScientificNotation = newValue;
     }

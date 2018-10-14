@@ -36,7 +36,7 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
 
 
     @Override
-    public ImmutableList<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Double> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         ArrayList<Double> l = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);

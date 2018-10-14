@@ -82,7 +82,7 @@ public class XmlFFontConverter implements Converter<CssFont> {
     }
 
     @Override
-    public CssFont fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssFont fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
         tt.setSkipWhitespaces(true);

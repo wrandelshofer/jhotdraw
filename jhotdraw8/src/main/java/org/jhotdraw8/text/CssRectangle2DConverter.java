@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Rectangle2D;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -28,7 +30,7 @@ public class CssRectangle2DConverter implements Converter<Rectangle2D> {
 
     @Nonnull
     @Override
-    public Rectangle2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Rectangle2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new Rectangle2D(((Number) v[0]).doubleValue(),

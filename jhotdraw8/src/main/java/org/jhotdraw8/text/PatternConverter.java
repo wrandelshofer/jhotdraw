@@ -161,7 +161,7 @@ public class PatternConverter implements Converter<Object[]> {
 
     @Nonnull
     @Override
-    public Object[] fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Object[] fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         int[] indices = new int[numIndices];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i;

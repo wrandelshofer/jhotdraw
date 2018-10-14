@@ -58,7 +58,7 @@ public class CssPoint2DListConverter implements Converter<ImmutableList<Point2D>
     }
 
     @Override
-    public ImmutableList<Point2D> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Point2D> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         ArrayList<Point2D> l = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);

@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.BoundingBox;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -28,7 +30,7 @@ public class XmlBoundingBoxConverter implements Converter<BoundingBox> {
 
     @Nonnull
     @Override
-    public BoundingBox fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public BoundingBox fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new BoundingBox((double) v[0], (double) v[1], (double) v[2], (double) v[3]);

@@ -29,59 +29,82 @@
     <list default="true" id="2ff40a52-acbb-47ed-83d2-e973858521bd" name="New changelist" comment="Minor changes.">
       <change afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.util/classes/module-info.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../jhotdraw7/src/jhotdraw.util/jhotdraw.util.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/styleable/ListStyleableKey.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssConverterConverterAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssListConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ext/src/ferro/ch/systransis/arl/ferro/model/css/AliasConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/ferro/ch/systransis/arl/ferro/model/css/AliasConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/BooleanConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/BooleanConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/BoundsConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/BoundsConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/ConnectorConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/ConnectorConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/Ellipse2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/Ellipse2DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/PIONodeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/PIONodeConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/PrintJobConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/PrintJobConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/VertexConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/VertexConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ext/src/ferro/ch/systransis/arl/ferro/io/RailwayDrawingConnectorXmlConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ext/src/ferro/ch/systransis/arl/ferro/io/RailwayDrawingConnectorXmlConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/beans/PropertyBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/beans/PropertyBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ObjectKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ObjectKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssTokenizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssTokenizerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssTokenizerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/DocumentSelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/DocumentSelectorModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/SelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/SelectorModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/ast/PreservedToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/ast/PreservedToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/css/FigureSelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/css/FigureSelectorModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/AbstractStyleableFigureKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/AbstractStyleableFigureKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/SimpleCssMetaData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/SimpleCssMetaData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/StringOrIdentStyleableFigureKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/StringOrIdentStyleableFigureKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/StringStyleableFigureKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/StringStyleableFigureKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/styleable/ReadOnlyStyleableMapAccessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/styleable/ReadOnlyStyleableMapAccessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/styleable/StyleablePropertyBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/styleable/StyleablePropertyBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/styleable/StyleableSelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/styleable/StyleableSelectorModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/Converter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/Converter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/ConverterFormatAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/ConverterFormatAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBezierNodeListConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBezierNodeListConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBooleanConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBooleanConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBoundingBoxConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBoundingBoxConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssColorConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssColorConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssConverterConverterAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssConverterConverterAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssDoubleConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssDoubleConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssDoubleListConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssDoubleListConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssEffectConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssEffectConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssEnumConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssEnumConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssFontConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssFontConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssIdentConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssIdentConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssInsetsConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssInsetsConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssLinearGradientConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssLinearGradientConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssLocatorConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssLocatorConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssNumberConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssNumberConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPaintConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPaintConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPaintableConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPaintableConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPaperSizeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPaperSizeConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPoint2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPoint2DConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPoint2DListConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPoint2DListConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPoint3DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPoint3DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPseudoClassConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssPseudoClassConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssRadialGradientConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssRadialGradientConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssRectangle2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssRectangle2DConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssRegexConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssRegexConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssScale2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssScale2DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssScale3DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssScale3DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSetConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSetConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSize2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSize2DConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSizeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSizeConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSizeInsetsConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSizeInsetsConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssStringConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssStringConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssStringOrIdentConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssStringOrIdentConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSvgPathConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSvgPathConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSymmetricPoint2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSymmetricPoint2DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSymmetricSize2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSymmetricSize2DConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssTransformListConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssTransformListConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssUriConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssUriConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssWordListConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssWordListConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssWordSetConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssWordSetConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/DefaultConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/DefaultConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/NumberConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/NumberConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/PatternConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/PatternConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/Rectangle2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/Rectangle2DConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/SvgTransformListConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/SvgTransformListConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlBezierNodeListConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlBezierNodeListConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlBooleanConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlBooleanConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlBoundingBoxConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlBoundingBoxConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlConnectorConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlConnectorConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlDoubleConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlDoubleConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlEnumConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlEnumConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlFFontConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlFFontConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlFontConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlFontConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssTokenizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssTokenizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlInsetsConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlInsetsConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlIntegerConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlIntegerConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlObjectReferenceConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlObjectReferenceConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlPoint2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlPoint2DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlPoint3DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlPoint3DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlRectangle2DConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlRectangle2DConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlStringConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlStringConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlSvgPathConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlSvgPathConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlUriConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlUriConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlUrlConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlUrlConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlWordConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlWordConverter.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes.">
       <change beforePath="$PROJECT_DIR$/../jhotdraw6/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw6/.classpath" afterDir="false" />
@@ -322,7 +345,7 @@
           <entry key="css" value="2" />
           <entry key="fxml" value="4" />
           <entry key="gitignore" value="1" />
-          <entry key="java" value="293" />
+          <entry key="java" value="295" />
           <entry key="png" value="5" />
           <entry key="properties" value="9" />
           <entry key="xml" value="1" />
@@ -333,7 +356,7 @@
           <entry key="CLASS" value="3" />
           <entry key="CSS" value="2" />
           <entry key="Image" value="5" />
-          <entry key="JAVA" value="293" />
+          <entry key="JAVA" value="295" />
           <entry key="Manifest" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="Properties" value="9" />
@@ -343,14 +366,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="28" />
-          <entry key="java" value="11289" />
+          <entry key="java" value="11373" />
           <entry key="properties" value="4" />
           <entry key="txt" value="351" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="11289" />
+          <entry key="JAVA" value="11373" />
           <entry key="PLAIN_TEXT" value="379" />
           <entry key="Properties" value="4" />
         </counts>
@@ -456,28 +479,10 @@
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssStringConverter.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="353">
-                  <caret line="73" column="5" selection-start-line="73" selection-start-column="5" selection-end-line="73" selection-end-column="5" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBezierNodeListConverter.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="241">
-                  <caret line="42" column="36" lean-forward="true" selection-start-line="42" selection-start-column="36" selection-end-line="42" selection-end-column="36" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBooleanConverter.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="516">
-                  <caret line="45" column="9" lean-forward="true" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
+                  <caret line="47" column="9" lean-forward="true" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
                 </state>
               </provider>
             </entry>
@@ -512,8 +517,46 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/NumberConverter.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="220">
-                  <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+                <state relative-caret-position="-520">
+                  <caret line="470" column="17" lean-forward="true" selection-start-line="470" selection-start-column="17" selection-end-line="470" selection-end-column="17" />
+                  <folding>
+                    <element signature="e#1969#2002#0" expanded="true" />
+                    <element signature="e#2269#2302#0" expanded="true" />
+                    <element signature="e#2681#2714#0" expanded="true" />
+                    <element signature="e#3163#3196#0" expanded="true" />
+                    <element signature="e#5794#5821#0" expanded="true" />
+                    <element signature="e#6042#6075#0" expanded="true" />
+                    <element signature="e#6317#6344#0" expanded="true" />
+                    <element signature="e#6625#6652#0" expanded="true" />
+                    <element signature="e#16802#16829#0" expanded="true" />
+                    <element signature="e#17065#17092#0" expanded="true" />
+                    <element signature="e#17480#17507#0" expanded="true" />
+                    <element signature="e#17764#17791#0" expanded="true" />
+                    <element signature="e#18169#18196#0" expanded="true" />
+                    <element signature="e#18439#18466#0" expanded="true" />
+                    <element signature="e#18723#18750#0" expanded="true" />
+                    <element signature="e#18993#19020#0" expanded="true" />
+                    <element signature="e#19262#19289#0" expanded="true" />
+                    <element signature="e#19519#19546#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/Converter.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="151">
+                  <caret line="47" column="24" lean-forward="true" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/BooleanConverter.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="236">
+                  <caret line="34" column="19" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
                 </state>
               </provider>
             </entry>
@@ -522,7 +565,7 @@
             <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlDoubleConverter.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="212">
-                  <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+                  <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
                 </state>
               </provider>
             </entry>
@@ -634,7 +677,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/ast/PreservedToken.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssColorConverter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssEffectConverter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssEnumConverter.java" />
@@ -684,6 +726,7 @@
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssStringConverter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBooleanConverter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/Converter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/NumberConverter.java" />
       </list>
     </option>
@@ -1495,20 +1538,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssRegexConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="91" column="22" lean-forward="true" selection-start-line="91" selection-start-column="22" selection-end-line="91" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssSvgPathConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="38" column="36" lean-forward="true" selection-start-line="38" selection-start-column="36" selection-end-line="38" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlBezierNodeListConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
@@ -1785,7 +1814,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/CssBooleanConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="516">
-          <caret line="45" column="9" lean-forward="true" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
+          <caret line="47" column="9" lean-forward="true" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -1834,7 +1863,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/XmlDoubleConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1845,10 +1874,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/converter/BooleanConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="34" column="19" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/Converter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="47" column="24" lean-forward="true" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/text/NumberConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+        <state relative-caret-position="-520">
+          <caret line="470" column="17" lean-forward="true" selection-start-line="470" selection-start-column="17" selection-end-line="470" selection-end-column="17" />
+          <folding>
+            <element signature="e#1969#2002#0" expanded="true" />
+            <element signature="e#2269#2302#0" expanded="true" />
+            <element signature="e#2681#2714#0" expanded="true" />
+            <element signature="e#3163#3196#0" expanded="true" />
+            <element signature="e#5794#5821#0" expanded="true" />
+            <element signature="e#6042#6075#0" expanded="true" />
+            <element signature="e#6317#6344#0" expanded="true" />
+            <element signature="e#6625#6652#0" expanded="true" />
+            <element signature="e#16802#16829#0" expanded="true" />
+            <element signature="e#17065#17092#0" expanded="true" />
+            <element signature="e#17480#17507#0" expanded="true" />
+            <element signature="e#17764#17791#0" expanded="true" />
+            <element signature="e#18169#18196#0" expanded="true" />
+            <element signature="e#18439#18466#0" expanded="true" />
+            <element signature="e#18723#18750#0" expanded="true" />
+            <element signature="e#18993#19020#0" expanded="true" />
+            <element signature="e#19262#19289#0" expanded="true" />
+            <element signature="e#19519#19546#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

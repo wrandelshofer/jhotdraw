@@ -48,7 +48,7 @@ public class CssDoubleConverter implements Converter<Double> {
 
     @Nullable
     @Override
-    public Double fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Double fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssSize size = sizeConverter.fromString(buf, idFactory);
         return size == null ? null : unitConverter.convert(size.getValue(), size.getUnits(), "px");
     }

@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -28,7 +30,7 @@ public class CssPoint2DConverter implements Converter<Point2D> {
 
     @Nonnull
     @Override
-    public Point2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Point2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new Point2D(((Number) v[0]).doubleValue(), ((Number) v[1]).doubleValue());

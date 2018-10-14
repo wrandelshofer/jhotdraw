@@ -43,7 +43,7 @@ public class ConverterFormatAdapter implements Converter<Object> {
     }
 
     @Override
-    public Object fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException {
+    public Object fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException {
         int pos = buf.position();
         String str = buf.toString();
         ParsePosition pp = new ParsePosition(0);

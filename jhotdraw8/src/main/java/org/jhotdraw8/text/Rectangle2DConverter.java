@@ -28,7 +28,7 @@ public class Rectangle2DConverter implements Converter<Rectangle2D> {
 
     @Nullable
     @Override
-    public Rectangle2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Rectangle2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         if (v == null) {
             return null;

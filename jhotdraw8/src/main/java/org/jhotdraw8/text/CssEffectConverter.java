@@ -272,7 +272,7 @@ public class CssEffectConverter implements Converter<Effect> {
 
     @Nullable
     @Override
-    public Effect fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public Effect fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssToken.TT_IDENT) {

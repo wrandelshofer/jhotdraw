@@ -15,6 +15,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
@@ -118,7 +119,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
 
     @Nonnull
     @Override
-    public List<Transform> fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public List<Transform> fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
 

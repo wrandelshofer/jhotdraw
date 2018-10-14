@@ -58,7 +58,7 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
 
     @Nullable
     @Override
-    public E fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public E fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

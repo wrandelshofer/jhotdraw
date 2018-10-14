@@ -36,7 +36,7 @@ public class CssSetConverter<E> implements Converter<ImmutableSet<E>> {
     }
 
     @Override
-    public ImmutableSet<E> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<E> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         return ImmutableSet.emptySet();
     }
 

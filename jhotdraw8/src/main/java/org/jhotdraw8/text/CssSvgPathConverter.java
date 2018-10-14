@@ -32,7 +32,7 @@ public class CssSvgPathConverter implements Converter<String> {
 
     @Nullable
     @Override
-    public String fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
         String p = null;

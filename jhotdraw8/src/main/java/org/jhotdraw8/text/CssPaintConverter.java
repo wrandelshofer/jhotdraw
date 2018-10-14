@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.text;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
@@ -41,7 +42,7 @@ public class CssPaintConverter implements Converter<Paint> {
 
   @Nullable
   @Override
-  public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+  public Paint fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     Paintable p = paintableConverter.fromString(buf, idFactory);
     return p == null ? null : p.getPaint();
   }

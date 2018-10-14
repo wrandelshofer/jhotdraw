@@ -27,7 +27,7 @@ public class CssSize2DConverter implements Converter<CssSize2D> {
 
     @Nonnull
     @Override
-    public CssSize2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssSize2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new CssSize2D((CssSize) v[0], (CssSize) v[1]);

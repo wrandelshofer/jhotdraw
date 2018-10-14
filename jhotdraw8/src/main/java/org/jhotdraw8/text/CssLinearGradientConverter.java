@@ -190,7 +190,7 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
 
     @Nullable
     @Override
-    public CssLinearGradient fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public CssLinearGradient fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssToken.TT_IDENT) {

@@ -15,6 +15,7 @@ import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
@@ -209,7 +210,7 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
     }
 
     @Override
-    public ImmutableList<Transform> fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<Transform> fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);

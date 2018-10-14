@@ -27,7 +27,7 @@ public class XmlUriConverter implements Converter<URI> {
 
     @Nonnull
     @Override
-    public URI fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public URI fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         URI value = URI.create(in.toString());
         in.position(in.limit());
         return value;

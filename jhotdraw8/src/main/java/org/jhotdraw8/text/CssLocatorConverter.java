@@ -34,7 +34,7 @@ public class CssLocatorConverter implements Converter<Locator> {
   }
 
   @Override
-  public Locator fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+  public Locator fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     Locator c;
     CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
     tt.setSkipWhitespaces(true);

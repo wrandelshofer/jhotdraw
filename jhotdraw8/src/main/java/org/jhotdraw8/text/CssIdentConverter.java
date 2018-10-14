@@ -53,7 +53,7 @@ public class CssIdentConverter implements Converter<String> {
 
     @Nullable
     @Override
-    public String fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(in));
         if (tt.nextToken() != CssToken.TT_IDENT) {
             throw new ParseException("Css Identifier expected", in.position());
