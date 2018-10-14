@@ -17,11 +17,11 @@ import javafx.scene.transform.Translate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import static java.lang.Math.*;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 
 /**
  * SvgTransformListConverter.
@@ -121,17 +121,17 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
     @Override
     public List<Transform> fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
-        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
+        CssTokenizerAPI tt = new CssTokenizer(new StringReader(in.toString()));
 
-        while (tt.nextToken() != CssToken.TT_EOF) {
+        while (tt.nextToken() != CssTokenType.TT_EOF) {
             tt.pushBack();
-            if (tt.nextToken() != CssToken.TT_FUNCTION) {
+            if (tt.nextToken() != CssTokenType.TT_FUNCTION) {
                 throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             String func = tt.currentStringValue();
             switch (func) {
                 case "skewX": {
-                    if (tt.nextToken() != CssToken.TT_NUMBER) {
+                    if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                         throw new ParseException("skew-angle expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double a = tt.currentNumericValue().doubleValue();
@@ -139,7 +139,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                     break;
                 }
                 case "skewY": {
-                    if (tt.nextToken() != CssToken.TT_NUMBER) {
+                    if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                         throw new ParseException("skew-angle expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double a = tt.currentNumericValue().doubleValue();
@@ -147,7 +147,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                     break;
                 }
                 case "translate": {
-                    if (tt.nextToken() != CssToken.TT_NUMBER) {
+                    if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                         throw new ParseException("tx expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double tx = tt.currentNumericValue().doubleValue();
@@ -155,7 +155,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                         tt.pushBack();
                     }
                     double ty;
-                    if (tt.nextToken() == CssToken.TT_NUMBER) {
+                    if (tt.nextToken() == CssTokenType.TT_NUMBER) {
                         ty = tt.currentNumericValue().doubleValue();
 
                     } else {
@@ -166,7 +166,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                     break;
                 }
                 case "scale": {
-                    if (tt.nextToken() != CssToken.TT_NUMBER) {
+                    if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                         throw new ParseException("sx expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double sx = tt.currentNumericValue().doubleValue();
@@ -174,7 +174,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                         tt.pushBack();
                     }
                     double sy;
-                    if (tt.nextToken() == CssToken.TT_NUMBER) {
+                    if (tt.nextToken() == CssTokenType.TT_NUMBER) {
                         sy = tt.currentNumericValue().doubleValue();
 
                     } else {
@@ -185,7 +185,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                     break;
                 }
                 case "rotate": {
-                    if (tt.nextToken() != CssToken.TT_NUMBER) {
+                    if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                         throw new ParseException("rotate-angle expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double angle = tt.currentNumericValue().doubleValue();
@@ -194,12 +194,12 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                     }
                     double cx;
                     double cy;
-                    if (tt.nextToken() == CssToken.TT_NUMBER) {
+                    if (tt.nextToken() == CssTokenType.TT_NUMBER) {
                         cx = tt.currentNumericValue().doubleValue();
                         if (tt.nextToken() != ',') {
                             tt.pushBack();
                         }
-                        if (tt.nextToken() != CssToken.TT_NUMBER) {
+                        if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                             throw new ParseException("cy expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                         }
                         cy = tt.currentNumericValue().doubleValue();
@@ -217,7 +217,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                         if (tt.nextToken() != ',') {
                             tt.pushBack();
                         }
-                        if (tt.nextToken() != CssToken.TT_NUMBER) {
+                        if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                             throw new ParseException(((char) ('a' + i)) + " expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                         }
                         m[i] = tt.currentNumericValue().doubleValue();

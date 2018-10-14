@@ -17,13 +17,13 @@ import javafx.scene.transform.Translate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Affine;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 
 /**
  * CssTransformListConverter.
@@ -212,28 +212,28 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
     @Override
     public ImmutableList<Transform> fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
-        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
+        CssTokenizerAPI tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
-        if (tt.nextToken() == CssToken.TT_IDENT && tt.currentStringValue().equals("none")) {
+        if (tt.nextToken() == CssTokenType.TT_IDENT && tt.currentStringValue().equals("none")) {
             in.position(in.limit());
             return ImmutableList.emptyList();
         } else {
             tt.pushBack();
         }
 
-        while (tt.nextToken() != CssToken.TT_EOF) {
+        while (tt.nextToken() != CssTokenType.TT_EOF) {
             tt.pushBack();
-            if (tt.nextToken() != CssToken.TT_FUNCTION) {
+            if (tt.nextToken() != CssTokenType.TT_FUNCTION) {
                 throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             String func = tt.currentStringValue();
             int funcPos = tt.getStartPosition();
             List<Double> m = new ArrayList<>();
-            while (tt.nextToken() != ')' && tt.currentToken() != CssToken.TT_EOF) {
+            while (tt.nextToken() != ')' && tt.currentToken() != CssTokenType.TT_EOF) {
                 if (tt.currentToken() != ',') {
                     tt.pushBack();
                 }
-                if (tt.nextToken() != CssToken.TT_NUMBER) {
+                if (tt.nextToken() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("coefficient nb " + m.size() + " expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                 }
                 m.add(tt.currentNumericValue().doubleValue());

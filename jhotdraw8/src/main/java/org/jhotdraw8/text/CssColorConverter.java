@@ -6,7 +6,7 @@ package org.jhotdraw8.text;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -14,7 +14,7 @@ import java.text.ParseException;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import static org.jhotdraw8.geom.Geom.clamp;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -51,7 +51,7 @@ public class CssColorConverter implements Converter<CssColor> {
   @Override
   public CssColor fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     CssColor c;
-    CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
+    CssTokenizerAPI tt = new CssTokenizer(new CharBufferReader(buf));
     tt.setSkipWhitespaces(true);
     c = parseColor(tt);
 
@@ -82,12 +82,12 @@ public class CssColorConverter implements Converter<CssColor> {
    * @throws IOException if IO fails
    */
   @Nullable
-  public CssColor parseColor(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
+  public CssColor parseColor(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
     CssColor color = null;
     tt.setSkipWhitespaces(true);
 
     if (optional) {
-      if (tt.nextToken() == CssToken.TT_IDENT && "none".equals(tt.currentStringValue())) {
+      if (tt.nextToken() == CssTokenType.TT_IDENT && "none".equals(tt.currentStringValue())) {
         return null;
       } else {
         tt.pushBack();
@@ -95,7 +95,7 @@ public class CssColorConverter implements Converter<CssColor> {
     }
 
     switch (tt.nextToken()) {
-      case CssToken.TT_DIMENSION:
+      case CssTokenType.TT_DIMENSION:
         if (tt.currentNumericValue().intValue() == 0 && (tt.currentNumericValue() instanceof Long)
                 && tt.currentStringValue().startsWith("x")) {
           color = parseColorHexDigits(tt.currentStringValue().substring(1), tt.getStartPosition());
@@ -103,10 +103,10 @@ public class CssColorConverter implements Converter<CssColor> {
           throw new ParseException("CssColor: hex color expected, found:" + "0" + tt.currentStringValue(), tt.getStartPosition());
         }
         break;
-      case CssToken.TT_HASH:
+      case CssTokenType.TT_HASH:
         color = parseColorHexDigits(tt.currentStringValue(), tt.getStartPosition());
         break;
-      case CssToken.TT_IDENT:
+      case CssTokenType.TT_IDENT:
         String ident = tt.currentStringValue();
         try {
           color = ident.startsWith("0x") ? parseColorHexDigits(ident.substring(2), tt.getStartPosition()) : new CssColor(ident, Color.web(ident));
@@ -114,19 +114,19 @@ public class CssColorConverter implements Converter<CssColor> {
           throw new ParseException(e.getMessage() + " value:" + ident, tt.getStartPosition());
         }
         break;
-      case CssToken.TT_FUNCTION:
+      case CssTokenType.TT_FUNCTION:
         StringBuilder buf = new StringBuilder(tt.currentStringValue());
         buf.append('(');
         double[] values = new double[4];
         int i = 0;
         switch (tt.currentStringValue()) {
           case "rgb":
-            while (i < 3 && (tt.nextToken() == CssToken.TT_NUMBER || tt.currentToken() == CssToken.TT_PERCENTAGE)) {
+            while (i < 3 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
               buf.append(numberConverter.toString(tt.currentNumericValue()));
-              if (tt.currentToken() == CssToken.TT_PERCENTAGE) {
+              if (tt.currentToken() == CssTokenType.TT_PERCENTAGE) {
                 buf.append('%');
               }
-              values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() / 255.0 : tt.currentNumericValue().doubleValue() / 100.0;
+              values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() / 255.0 : tt.currentNumericValue().doubleValue() / 100.0;
               if (i < 3) {
                 if (tt.nextToken() != ',') {
                   throw new ParseException("CssColor: rgb comma expected but found " + tt.currentStringValue(), tt.getStartPosition());
@@ -147,15 +147,15 @@ public class CssColorConverter implements Converter<CssColor> {
             }
             break;
           case "rgba":
-            while (i < 4 && (tt.nextToken() == CssToken.TT_NUMBER || tt.currentToken() == CssToken.TT_PERCENTAGE)) {
+            while (i < 4 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
               buf.append(numberConverter.toString(tt.currentNumericValue()));
-              if (tt.currentToken() == CssToken.TT_PERCENTAGE) {
+              if (tt.currentToken() == CssTokenType.TT_PERCENTAGE) {
                 buf.append('%');
               }
               if (i < 3) {
-                values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() / 255.0 : tt.currentNumericValue().doubleValue() / 100.0;
+                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() / 255.0 : tt.currentNumericValue().doubleValue() / 100.0;
               } else {
-                values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
+                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
               }
               if (i < 4) {
                 if (tt.nextToken() != ',') {
@@ -177,15 +177,15 @@ public class CssColorConverter implements Converter<CssColor> {
             }
             break;
           case "hsb":
-            while (i < 3 && (tt.nextToken() == CssToken.TT_NUMBER || tt.currentToken() == CssToken.TT_PERCENTAGE)) {
+            while (i < 3 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
               buf.append(numberConverter.toString(tt.currentNumericValue()));
-              if (tt.currentToken() == CssToken.TT_PERCENTAGE) {
+              if (tt.currentToken() == CssTokenType.TT_PERCENTAGE) {
                 buf.append('%');
               }
               if (i < 1) {
-                values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() * 3.6;
+                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() * 3.6;
               } else {
-                values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
+                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
               }
               if (i < 3) {
                 if (tt.nextToken() != ',') {
@@ -207,17 +207,17 @@ public class CssColorConverter implements Converter<CssColor> {
             }
             break;
           case "hsba":
-            while (i < 4 && (tt.nextToken() == CssToken.TT_NUMBER || tt.currentToken() == CssToken.TT_PERCENTAGE)) {
+            while (i < 4 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
               buf.append(numberConverter.toString(tt.currentNumericValue()));
-              if (tt.currentToken() == CssToken.TT_PERCENTAGE) {
+              if (tt.currentToken() == CssTokenType.TT_PERCENTAGE) {
                 buf.append('%');
               }
               if (i < 1) {
-                values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() * 3.6;
+                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() * 3.6;
               } else if (i < 3) {
-                values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
+                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
               } else {
-                values[i++] = tt.currentToken() == CssToken.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
+                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumericValue().doubleValue() : tt.currentNumericValue().doubleValue() / 100.0;
               }
               if (i < 4) {
                 if (tt.nextToken() != ',') {

@@ -12,9 +12,9 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.EllipseConnector;
 import org.jhotdraw8.draw.connector.LocatorConnector;
@@ -75,7 +75,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     @Override
     public Connector fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Connector c;
-        CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
+        CssTokenizerAPI tt = new CssTokenizer(new CharBufferReader(buf));
         tt.setSkipWhitespaces(true);
         c = parseConnector(tt);
 
@@ -100,13 +100,13 @@ public class XmlConnectorConverter implements Converter<Connector> {
      * @throws IOException if IO fails
      */
     @Nullable
-    public Connector parseConnector(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
+    public Connector parseConnector(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
         Locator locator = null;
         Function<Locator, Connector> supplier;
         tt.setSkipWhitespaces(true);
 
         switch (tt.nextToken()) {
-            case CssToken.TT_IDENT:
+            case CssTokenType.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
                     return null;
                 }

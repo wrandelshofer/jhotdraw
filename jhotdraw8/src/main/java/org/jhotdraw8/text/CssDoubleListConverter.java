@@ -13,9 +13,9 @@ import java.util.Iterator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.UnitConverter;
@@ -38,9 +38,9 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
     @Override
     public ImmutableList<Double> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         ArrayList<Double> l = new ArrayList<>();
-        CssTokenizerInterface tt = new CssTokenizer(buf);
+        CssTokenizerAPI tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);
-        if (tt.nextToken() == CssToken.TT_IDENT && "none".equals(tt.currentStringValue())) {
+        if (tt.nextToken() == CssTokenType.TT_IDENT && "none".equals(tt.currentStringValue())) {
             tt.skipWhitespace();
             return  ImmutableList.ofCollection(l);
         } else {
@@ -50,22 +50,22 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
         Loop:
         while (true) {
             switch (tt.nextToken()) {
-                case CssToken.TT_DIMENSION: {
+                case CssTokenType.TT_DIMENSION: {
                     double value = tt.currentNumericValue().doubleValue();
                     l.add(unitConverter.convert(value, tt.currentStringValue(), "px"));
                     break;
                 }
-                case CssToken.TT_PERCENTAGE: {
+                case CssTokenType.TT_PERCENTAGE: {
                     double value = tt.currentNumericValue().doubleValue() / 100.0;
                     l.add(unitConverter.convert(value, "%", "px"));
                     break;
                 }
-                case CssToken.TT_NUMBER: {
+                case CssTokenType.TT_NUMBER: {
                     double value = tt.currentNumericValue().doubleValue();
                     l.add(value);
                     break;
                 }
-                case CssToken.TT_IDENT: {
+                case CssTokenType.TT_IDENT: {
                     double value;
                     switch (tt.currentStringValue()) {
                         case "INF":

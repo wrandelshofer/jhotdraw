@@ -10,9 +10,9 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.IdFactory;
 
@@ -48,7 +48,7 @@ public class CssSizeConverter implements Converter<CssSize> {
     @Override
     public CssSize fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         int start = buf.position();
-        CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
+        CssTokenizerAPI tt = new CssTokenizer(new CharBufferReader(buf));
         CssSize sz = parseSize(tt);
         buf.position(start + tt.getEndPosition());
         return sz;
@@ -61,9 +61,9 @@ public class CssSizeConverter implements Converter<CssSize> {
     }
 
     @Nullable
-    public CssSize parseSize(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
+    public CssSize parseSize(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
         tt.skipWhitespace();
-        if (nullable && tt.nextToken() == CssToken.TT_IDENT && "none".equals(tt.currentStringValue())) {
+        if (nullable && tt.nextToken() == CssTokenType.TT_IDENT && "none".equals(tt.currentStringValue())) {
             //tt.skipWhitespace();
             return null;
         } else {
@@ -72,19 +72,19 @@ public class CssSizeConverter implements Converter<CssSize> {
         Number value = null;
         String units;
         switch (tt.nextToken()) {
-            case CssToken.TT_DIMENSION:
+            case CssTokenType.TT_DIMENSION:
                 value = tt.currentNumericValue();
                 units = tt.currentStringValue();
                 break;
-            case CssToken.TT_PERCENTAGE:
+            case CssTokenType.TT_PERCENTAGE:
                 value = tt.currentNumericValue();
                 units = "%";
                 break;
-            case CssToken.TT_NUMBER:
+            case CssTokenType.TT_NUMBER:
                 value = tt.currentNumericValue();
                 units = null;
                 break;
-            case CssToken.TT_IDENT: {
+            case CssTokenType.TT_IDENT: {
                 switch (tt.currentStringValue()) {
                     case "INF":
                         value = Double.POSITIVE_INFINITY;

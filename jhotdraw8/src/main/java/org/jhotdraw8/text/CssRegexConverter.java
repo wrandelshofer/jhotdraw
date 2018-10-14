@@ -11,9 +11,9 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -81,7 +81,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
     @Nullable
     @Override
     public RegexReplace fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
+        CssTokenizerAPI tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         String find = null;
         String replace = null;
@@ -89,13 +89,13 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         String msg = nullable ? "\"replace(\" or \"none\" expected" : "\"replace(\" expected";
 
         switch (tt.nextToken()) {
-            case CssToken.TT_FUNCTION:
+            case CssTokenType.TT_FUNCTION:
                 if ("replace".equals(tt.currentStringValue())) {
                 } else {
                     throw new ParseException(msg, tt.getStartPosition());
                 }
                 break;
-            case CssToken.TT_IDENT:
+            case CssTokenType.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
                     tt.skipWhitespace();
                     in.position(tt.getStartPosition());
@@ -110,7 +110,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
                 throw new ParseException(msg, tt.getStartPosition());
         }
         switch (tt.nextToken()) {
-            case CssToken.TT_STRING:
+            case CssTokenType.TT_STRING:
                 find = tt.currentStringValue();
                 break;
             default:
@@ -126,10 +126,10 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         }
 
         switch (tt.nextToken()) {
-            case CssToken.TT_STRING:
+            case CssTokenType.TT_STRING:
                 replace = tt.currentStringValue();
                 break;
-            case CssToken.TT_EOF:
+            case CssTokenType.TT_EOF:
                 break;
             default:
                 replace = null;

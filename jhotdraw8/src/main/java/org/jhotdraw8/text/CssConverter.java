@@ -3,8 +3,9 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
+import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.io.IdFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,10 +31,10 @@ public interface CssConverter<T> {
      * @return the parsed value
      */
     @Nullable
-    T parse(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException;
+    T parse(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
 
     /**
      * Produces tokens.
      */
-    void produceTokens(@Nullable T value,@Nonnull Consumer<CssToken> consumer);
+    void produceTokens(@Nullable T value, @Nullable IdFactory idFactory,@Nonnull Consumer<Token> consumer);
 }

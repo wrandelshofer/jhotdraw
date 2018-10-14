@@ -31,7 +31,7 @@ public class CssTokenizerTest {
         CssTokenizer tt = new CssTokenizer(new StringReader(inputData), false);
         //
         StringBuilder buf = new StringBuilder();
-        while (tt.nextToken() != CssToken.TT_EOF) {
+        while (tt.nextToken() != CssTokenType.TT_EOF) {
             if (buf.length() > 0) {
                 buf.append(' ');
             }
@@ -53,7 +53,7 @@ public class CssTokenizerTest {
         expectedValue = expectedValue.replaceAll("\\t", "\\\\t");
         System.out.println("testTokenizer:" + actualValue + " :: " + expectedValue);
 
-        assertEquals(actualValue, expectedValue);
+        assertEquals(expectedValue, actualValue);
     }
 
     @TestFactory

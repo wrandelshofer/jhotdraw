@@ -11,9 +11,8 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -79,8 +78,8 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
     }
 
     @Nonnull
-    public E parse(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
-        if (tt.nextToken() != CssToken.TT_IDENT) {
+    public E parse(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
+        if (tt.nextToken() != CssTokenType.TT_IDENT) {
             throw new ParseException("identifier expected", tt.getStartPosition());
         }
 

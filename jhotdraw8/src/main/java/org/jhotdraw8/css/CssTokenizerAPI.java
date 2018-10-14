@@ -1,4 +1,4 @@
-/* @(#)CssTokenizerInterface.java
+/* @(#)CssTokenizerAPI.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css;
@@ -7,38 +7,38 @@ import java.io.IOException;
 import java.text.ParseException;
 import javax.annotation.Nullable;
 
-import static org.jhotdraw8.css.CssToken.TT_AT_KEYWORD;
-import static org.jhotdraw8.css.CssToken.TT_BAD_COMMENT;
-import static org.jhotdraw8.css.CssToken.TT_BAD_STRING;
-import static org.jhotdraw8.css.CssToken.TT_BAD_URI;
-import static org.jhotdraw8.css.CssToken.TT_CDC;
-import static org.jhotdraw8.css.CssToken.TT_CDO;
-import static org.jhotdraw8.css.CssToken.TT_COLUMN;
-import static org.jhotdraw8.css.CssToken.TT_COMMENT;
-import static org.jhotdraw8.css.CssToken.TT_DASH_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_DIMENSION;
-import static org.jhotdraw8.css.CssToken.TT_EOF;
-import static org.jhotdraw8.css.CssToken.TT_FUNCTION;
-import static org.jhotdraw8.css.CssToken.TT_HASH;
-import static org.jhotdraw8.css.CssToken.TT_IDENT;
-import static org.jhotdraw8.css.CssToken.TT_INCLUDE_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_NUMBER;
-import static org.jhotdraw8.css.CssToken.TT_PERCENTAGE;
-import static org.jhotdraw8.css.CssToken.TT_PREFIX_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_S;
-import static org.jhotdraw8.css.CssToken.TT_STRING;
-import static org.jhotdraw8.css.CssToken.TT_SUBSTRING_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_SUFFIX_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_UNICODE_RANGE;
-import static org.jhotdraw8.css.CssToken.TT_URL;
+import static org.jhotdraw8.css.CssTokenType.TT_AT_KEYWORD;
+import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;
+import static org.jhotdraw8.css.CssTokenType.TT_BAD_STRING;
+import static org.jhotdraw8.css.CssTokenType.TT_BAD_URI;
+import static org.jhotdraw8.css.CssTokenType.TT_CDC;
+import static org.jhotdraw8.css.CssTokenType.TT_CDO;
+import static org.jhotdraw8.css.CssTokenType.TT_COLUMN;
+import static org.jhotdraw8.css.CssTokenType.TT_COMMENT;
+import static org.jhotdraw8.css.CssTokenType.TT_DASH_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_DIMENSION;
+import static org.jhotdraw8.css.CssTokenType.TT_EOF;
+import static org.jhotdraw8.css.CssTokenType.TT_FUNCTION;
+import static org.jhotdraw8.css.CssTokenType.TT_HASH;
+import static org.jhotdraw8.css.CssTokenType.TT_IDENT;
+import static org.jhotdraw8.css.CssTokenType.TT_INCLUDE_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_NUMBER;
+import static org.jhotdraw8.css.CssTokenType.TT_PERCENTAGE;
+import static org.jhotdraw8.css.CssTokenType.TT_PREFIX_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_S;
+import static org.jhotdraw8.css.CssTokenType.TT_STRING;
+import static org.jhotdraw8.css.CssTokenType.TT_SUBSTRING_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_SUFFIX_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_UNICODE_RANGE;
+import static org.jhotdraw8.css.CssTokenType.TT_URL;
 
 /**
- * CssTokenizerInterface.
+ * Defines the API of a CSS Tokenizer.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface CssTokenizerInterface {
+public interface CssTokenizerAPI {
 
 
     /** Returns the current value converted to a string.

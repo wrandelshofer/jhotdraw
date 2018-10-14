@@ -11,9 +11,9 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -67,14 +67,14 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
     private final static String PORTRAIT = "portrait";
 
     @Nullable
-    private CssSize2D parsePageSize(CssTokenizerInterface tt) throws ParseException, IOException {
+    private CssSize2D parsePageSize(CssTokenizerAPI tt) throws ParseException, IOException {
         tt.setSkipWhitespaces(true);
-        if (tt.nextToken() == CssToken.TT_IDENT) {
+        if (tt.nextToken() == CssTokenType.TT_IDENT) {
             CssSize2D paperSize = paperSizes.get(tt.currentStringValue());
             if (paperSize == null) {
                 throw new ParseException("Illegal paper format:" + tt.currentStringValue(), tt.getStartPosition());
             }
-            if (tt.nextToken() == CssToken.TT_IDENT) {
+            if (tt.nextToken() == CssTokenType.TT_IDENT) {
                 switch (tt.currentStringValue()) {
                     case LANDSCAPE:
                         paperSize = new CssSize2D(paperSize.getY(), paperSize.getX());
@@ -111,7 +111,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
     @Nullable
     @Override
     public CssSize2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizerInterface tt = new CssTokenizer(buf);
+        CssTokenizerAPI tt = new CssTokenizer(buf);
         return parsePageSize(tt);
 
     }

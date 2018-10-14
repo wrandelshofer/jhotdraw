@@ -1,0 +1,277 @@
+package org.jhotdraw8.css;
+
+import org.jhotdraw8.io.IdFactory;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+
+/**
+ * Defines CSS 3 token types.
+ * <p>
+ * References:
+ * <ul>
+ * <li><a href="https://www.w3.org/TR/css-syntax-3/#tokenization">
+ * CSS Syntax Module Level 3, Tokenization</a></li>
+ * </ul>
+ * </p>
+ */
+public class CssTokenType {
+
+    public final static String IDENT_NONE = "none";
+    public final static String IDENT_INITIAL_VALUE = "initial-value";
+
+    /**
+     * Defines an at-keyword-token.
+     * <pre>
+     *     at-keyword-token = '@', ident-token ;
+     * </pre>
+     */
+    public final static int TT_AT_KEYWORD = -3;
+
+    /**
+     * Defines a bad-comment-token.
+     */
+    public final static int TT_BAD_COMMENT = -7;
+
+    /**
+     * Defines a bad-string-token.
+     */
+    public final static int TT_BAD_STRING = -5;
+
+    /**
+     * Defines a bad-uri-token.
+     */
+    public final static int TT_BAD_URI = -6;
+
+    /**
+     * Defines a CDC-token.
+     * <pre>
+     *  CDC-token = "-->";
+     * </pre>
+     */
+    public final static int TT_CDC = -15;
+
+    /**
+     * Defines a CDO-token.
+     * <pre>
+     *  CDO-token = "<!--";
+     * </pre>
+     */
+    public final static int TT_CDO = -14;
+
+    /**
+     * Defines a column-token.
+     * <pre>
+     *  column-token = "||";
+     * </pre>
+     */
+    public final static int TT_COLUMN = -24;
+
+    /**
+     * Defines a comment-token.
+     * <pre>
+     *     comment-token = "/','*',comment-body,'*','/' ;
+     *     comment-body = (* anything but '*' followed by '/' *);
+     * </pre>
+     */
+    public final static int TT_COMMENT = -17;
+
+    /**
+     * Defines a dash-match-token.
+     * <pre>
+     *  dash-match-token = "|=";
+     * </pre>
+     */
+    public final static int TT_DASH_MATCH = -20;
+
+    /**
+     * Defines a dimension-token.
+     * <pre>
+     *     dimension-token = digit-token , ident-token ;
+     * </pre>
+     */
+    public final static int TT_DIMENSION = -11;
+
+    /**
+     * Defines an EOF-token.
+     */
+    public final static int TT_EOF = -1;
+
+    /**
+     * Defines a function-token.
+     * <pre>
+     *     function-token = ident-token , '(' ;
+     * </pre>
+     */
+    public final static int TT_FUNCTION = -18;
+
+    /**
+     * Defines a hash-token.
+     * <pre>
+     *     hash-token = '#' , ident-char , { ident-char } ;
+     *
+     *     ident-char = ( 'a'-'z' | 'A'-'Z' | '_' | '0'-'9' )
+     *                | non-ASCII
+     *                | escape ;
+     *
+     * </pre>
+     */
+    public final static int TT_HASH = -8;
+
+    /**
+     * Defines an ident-token.
+     * <pre>
+     *     ident-token = [ '-' ] , first-ident-char , { ident-char } ;
+     *
+     *     first-ident-char = ('a'-'z'|'A'-'Z'|'_')
+     *                      | non-ASCII
+     *                      | escape ;
+     *
+     *     ident-char = ( 'a'-'z' | 'A'-'Z' | '_' | '0'-'9' )
+     *                | non-ASCII
+     *                | escape ;
+     *
+     *     escape = '\' , (* not newline or hex-digit *)
+     *            | '\' , 6 * hex-digit
+     *            | '\', hex-digit , 4 * {hex-digit}, whitespace ;
+     *
+     *     hex-digit = '0'-'9'
+     *               | 'a'-'f'
+     *               | 'A'-'F' ;
+     * </pre>
+     */
+    public final static int TT_IDENT = -2;
+
+    /**
+     * Defines an include-match-token.
+     * <pre>
+     *  include-match-token = "~=";
+     * </pre>
+     */
+    public final static int TT_INCLUDE_MATCH = -19;
+
+    /**
+     * Defines a number-token.
+     * <pre>
+     *     number-token = [ '+' | '-' ] , mantissa , [exponent] ;
+     *
+     *     mantissa = digit, {digit} | {digit}, '.' digit, {digit} ;
+     *
+     *     exponent = ( 'e' | 'E' ), [ '+' , '-' ], digit , {digit} ;
+     * </pre>
+     */
+    public final static int TT_NUMBER = -9;
+
+    /**
+     * Defines a percentage-token.
+     * <pre>
+     *     percentage-token = number-token , '%' ;
+     * </pre>
+     */
+    public final static int TT_PERCENTAGE = -10;
+
+    /**
+     * Defines a prefix-match-token.
+     * <pre>
+     *  prefix-match-token = "^=";
+     * </pre>
+     */
+    public final static int TT_PREFIX_MATCH = -21;
+
+    /**
+     * Defines a ws*-token.
+     * <pre>
+     *     ws* = { whitespace-token } ;
+     *
+     *     whitespace-token = { whitespace } ;
+     *
+     *     whitespace = ' ' | '\' | newline ;
+     *
+     *     newline = '\n' | "\r\n" | '\r' | '\f' ;
+     * </pre>
+     */
+    public final static int TT_S = -16;
+
+    /**
+     * Defines a string-token.
+     * <pre>
+     *     string-token = quote-string
+     *                  | apostrophe-string ;
+     *
+     *     quote-string = '"', {quote-string-body}, '"' ;
+     *
+     *     apostrophe-string = "'", {apostrophe-string-body}, "'" ;
+     *
+     *     quote-string-body = (* not " \ or newline | escape | '\' newline *);
+     *
+     *     apostrophe-string-body = (* not ' \ or newline | escape | '\' newline *);
+     *
+     *     escape = '\' , (* not newline or hex-digit *)
+     *            | '\' , 6 * hex-digit
+     *            | '\', hex-digit , 4 * {hex-digit}, whitespace ;
+     *
+     *     newline = '\n' | "\r\n" | '\r' | '\f' ;
+     * </pre>
+     *
+     */
+    public final static int TT_STRING = -4;
+
+    /**
+     * Defines a substring-match-token.
+     * <pre>
+     *  substring-match-token = "*=";
+     * </pre>
+     */
+    public final static int TT_SUBSTRING_MATCH = -23;
+
+    /**
+     * Defines a suffix-match-token.
+     * <pre>
+     *  suffix-match-token = "$=";
+     * </pre>
+     */
+    public final static int TT_SUFFIX_MATCH = -22;
+
+    /**
+     * Defines a unicode-range-token.
+     * <pre>
+     *     unicode-range = ('U'|'u'),'+',( mask-range, from-to-range );
+     *     mask-range = 1 * hex-digit , 5 * { '?' }
+     *                | 2 * hex-digit , 4 * { '?' }
+     *                | 3 * hex-digit , 3 * { '?' }
+     *                | 4 * hex-digit , 2 * { '?' }
+     *                | 5 * hex-digit , 1 * { '?' }
+     *                | 6 * hex-digit
+     *     from-to-range = hex-digit, 5 * { hex-digit } , '-' , hex-digit, 5 * { hex-digit } ;
+     * </pre>
+     */
+    public final static int TT_UNICODE_RANGE = -13;
+
+    /**
+     * Defines a url-token.
+     * <pre>
+     *     url-token = "url(" , ws* , url-unquoted | string-token , ws*, ')' ;
+     *     url-unquoted = ur-unquoted-char , {url-unquoted-char} ;
+     *     url-unquoted-char = not " ' ( ) \ whitespace or non-printable | escape ;
+     * </pre>
+     */
+    public final static int TT_URL = -12;
+
+    /**
+     * Defines the comma delim-token.
+     */
+    public final static int TT_COMMA = ',';
+
+    /**
+     * Defines the semicolon delim-token.
+     */
+    public final static int TT_SEMICOLON = ';';
+
+    /**
+     * Defines the colon delim-token.
+     */
+    public final static int TT_COLON = ':';
+
+}

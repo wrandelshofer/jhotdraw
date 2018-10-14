@@ -10,9 +10,9 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.IdFactory;
 
@@ -52,7 +52,7 @@ public class CssNumberConverter implements Converter<Number> {
             return null;
         }
         int start = buf.position();
-        CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
+        CssTokenizerAPI tt = new CssTokenizer(new CharBufferReader(buf));
         Number sz = parseNumber(tt);
         buf.position(start + tt.getEndPosition());
         return sz;
@@ -65,9 +65,9 @@ public class CssNumberConverter implements Converter<Number> {
     }
 
     @Nullable
-    public Number parseNumber(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
+    public Number parseNumber(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
         tt.skipWhitespace();
-        if (nullable && tt.nextToken() == CssToken.TT_IDENT && "none".equals(tt.currentStringValue())) {
+        if (nullable && tt.nextToken() == CssTokenType.TT_IDENT && "none".equals(tt.currentStringValue())) {
             //tt.skipWhitespace();
             return null;
         } else {
@@ -75,10 +75,10 @@ public class CssNumberConverter implements Converter<Number> {
         }
         Number value = null;
         switch (tt.nextToken()) {
-            case CssToken.TT_NUMBER:
+            case CssTokenType.TT_NUMBER:
                 value = tt.currentNumericValue();
                 break;
-            case CssToken.TT_IDENT: {
+            case CssTokenType.TT_IDENT: {
                 switch (tt.currentStringValue()) {
                     case "INF":
                         value = Double.POSITIVE_INFINITY;

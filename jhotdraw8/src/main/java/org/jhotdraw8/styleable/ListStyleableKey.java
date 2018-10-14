@@ -31,7 +31,7 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
 
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull ImmutableList<T> defaultValue, @Nonnull CssConverter<T> converter) {
         super(key, elemClass, defaultValue);
-        this.converter=new CssConverterConverterAdapter<>(new CssListConverter<T>(converter));
+        this.converter=new CssConverterConverterAdapter<>(new CssListConverter<>(converter));
         StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
         Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

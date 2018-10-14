@@ -9,7 +9,7 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
@@ -40,7 +40,7 @@ public class CssBezierNodeListConverter implements Converter<ImmutableList<Bezie
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
         ImmutableList<BezierNode> p = null;
-        if (tt.nextToken() == CssToken.TT_IDENT) {
+        if (tt.nextToken() == CssTokenType.TT_IDENT) {
             if (!nullable) {
                 throw new ParseException("String expected. " + tt.currentToken(), buf.position());
             }
@@ -49,7 +49,7 @@ public class CssBezierNodeListConverter implements Converter<ImmutableList<Bezie
             }
             p = null;
         } else {
-            if (tt.currentToken() != CssToken.TT_STRING) {
+            if (tt.currentToken() != CssTokenType.TT_STRING) {
                 throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
             }
             BezierNodePathBuilder builder=new BezierNodePathBuilder();

@@ -92,7 +92,7 @@ public class CssParserTest {
         }
         System.out.println(" expected: " + expectedValue);
         //---
-        assertEquals(actualValue, expectedValue);
+        assertEquals(expectedValue, actualValue);
     }
 
     @TestFactory

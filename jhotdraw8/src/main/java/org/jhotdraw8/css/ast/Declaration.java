@@ -21,19 +21,19 @@ public class Declaration extends AST {
 
     private final String property;
     @Nonnull
-    private final List<PreservedToken> terms;
+    private final List<Token> terms;
     private int startPos = -1;
     private int endPos = -1;
 
-    public Declaration(String property, PreservedToken term) {
-        this(property, Arrays.asList(new PreservedToken[]{term}));
+    public Declaration(String property, Token term) {
+        this(property, Arrays.asList(new Token[]{term}));
     }
 
-    public Declaration(String property, @Nonnull List<PreservedToken> terms) {
+    public Declaration(String property, @Nonnull List<Token> terms) {
         this(property, terms, -1, -1);
     }
 
-    public Declaration(String property, @Nonnull List<PreservedToken> terms, int startPos, int endPos) {
+    public Declaration(String property, @Nonnull List<Token> terms, int startPos, int endPos) {
         this.property = property;
         this.terms = Collections.unmodifiableList(new ArrayList<>(terms));
         this.startPos = startPos;
@@ -45,7 +45,7 @@ public class Declaration extends AST {
     }
 
     @Nonnull
-    public List<PreservedToken> getTerms() {
+    public List<Token> getTerms() {
         return terms;
     }
 
@@ -53,7 +53,7 @@ public class Declaration extends AST {
     public String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
-        for (PreservedToken t : terms) {
+        for (Token t : terms) {
             buf.append(t.toString());
         }
         return buf.toString();

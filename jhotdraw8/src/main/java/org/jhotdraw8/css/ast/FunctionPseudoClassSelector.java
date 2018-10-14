@@ -21,9 +21,9 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
     private final String functionIdentifier;
     @Nonnull
-    private final List<PreservedToken> terms;
+    private final List<Token> terms;
 
-    public FunctionPseudoClassSelector(String functionIdentifier, @Nonnull List<PreservedToken> terms) {
+    public FunctionPseudoClassSelector(String functionIdentifier, @Nonnull List<Token> terms) {
         this.functionIdentifier = functionIdentifier;
         this.terms = Collections.unmodifiableList(terms);
     }

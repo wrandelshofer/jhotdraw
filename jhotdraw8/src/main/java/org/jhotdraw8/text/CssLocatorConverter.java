@@ -10,9 +10,9 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.io.CharBufferReader;
@@ -36,7 +36,7 @@ public class CssLocatorConverter implements Converter<Locator> {
   @Override
   public Locator fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     Locator c;
-    CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
+    CssTokenizerAPI tt = new CssTokenizer(new CharBufferReader(buf));
     tt.setSkipWhitespaces(true);
     c = parseLocator(tt);
 
@@ -67,12 +67,12 @@ public class CssLocatorConverter implements Converter<Locator> {
      * @throws IOException if IO fails
      */
     @Nonnull
-    public Locator parseLocator(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
+    public Locator parseLocator(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
         Locator color = null;
         tt.setSkipWhitespaces(true);
 
         switch (tt.nextToken()) {
-            case CssToken.TT_FUNCTION:
+            case CssTokenType.TT_FUNCTION:
                 if (!"relative".equals(tt.currentStringValue())) {
                     throw new ParseException("Locator: function 'relative(' expected, found:" + tt.currentValue(), tt.getStartPosition());
                 }
@@ -83,10 +83,10 @@ public class CssLocatorConverter implements Converter<Locator> {
         double x, y;
 
         switch (tt.nextToken()) {
-            case CssToken.TT_NUMBER:
+            case CssTokenType.TT_NUMBER:
                 x = tt.currentNumericValue().doubleValue();
                 break;
-            case CssToken.TT_PERCENTAGE:
+            case CssTokenType.TT_PERCENTAGE:
                 x = tt.currentNumericValue().doubleValue() / 100.0;
                 break;
             default:
@@ -100,10 +100,10 @@ public class CssLocatorConverter implements Converter<Locator> {
                 break;
         }
         switch (tt.nextToken()) {
-            case CssToken.TT_NUMBER:
+            case CssTokenType.TT_NUMBER:
                 y = tt.currentNumericValue().doubleValue();
                 break;
-            case CssToken.TT_PERCENTAGE:
+            case CssTokenType.TT_PERCENTAGE:
                 y = tt.currentNumericValue().doubleValue() / 100.0;
                 break;
             default:

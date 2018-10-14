@@ -11,29 +11,29 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.io.CharBufferReader;
 
-import static org.jhotdraw8.css.CssToken.TT_AT_KEYWORD;
-import static org.jhotdraw8.css.CssToken.TT_BAD_COMMENT;
-import static org.jhotdraw8.css.CssToken.TT_BAD_STRING;
-import static org.jhotdraw8.css.CssToken.TT_BAD_URI;
-import static org.jhotdraw8.css.CssToken.TT_CDC;
-import static org.jhotdraw8.css.CssToken.TT_CDO;
-import static org.jhotdraw8.css.CssToken.TT_COLUMN;
-import static org.jhotdraw8.css.CssToken.TT_COMMENT;
-import static org.jhotdraw8.css.CssToken.TT_DASH_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_DIMENSION;
-import static org.jhotdraw8.css.CssToken.TT_EOF;
-import static org.jhotdraw8.css.CssToken.TT_FUNCTION;
-import static org.jhotdraw8.css.CssToken.TT_HASH;
-import static org.jhotdraw8.css.CssToken.TT_IDENT;
-import static org.jhotdraw8.css.CssToken.TT_INCLUDE_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_NUMBER;
-import static org.jhotdraw8.css.CssToken.TT_PERCENTAGE;
-import static org.jhotdraw8.css.CssToken.TT_PREFIX_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_S;
-import static org.jhotdraw8.css.CssToken.TT_STRING;
-import static org.jhotdraw8.css.CssToken.TT_SUBSTRING_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_SUFFIX_MATCH;
-import static org.jhotdraw8.css.CssToken.TT_URL;
+import static org.jhotdraw8.css.CssTokenType.TT_AT_KEYWORD;
+import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;
+import static org.jhotdraw8.css.CssTokenType.TT_BAD_STRING;
+import static org.jhotdraw8.css.CssTokenType.TT_BAD_URI;
+import static org.jhotdraw8.css.CssTokenType.TT_CDC;
+import static org.jhotdraw8.css.CssTokenType.TT_CDO;
+import static org.jhotdraw8.css.CssTokenType.TT_COLUMN;
+import static org.jhotdraw8.css.CssTokenType.TT_COMMENT;
+import static org.jhotdraw8.css.CssTokenType.TT_DASH_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_DIMENSION;
+import static org.jhotdraw8.css.CssTokenType.TT_EOF;
+import static org.jhotdraw8.css.CssTokenType.TT_FUNCTION;
+import static org.jhotdraw8.css.CssTokenType.TT_HASH;
+import static org.jhotdraw8.css.CssTokenType.TT_IDENT;
+import static org.jhotdraw8.css.CssTokenType.TT_INCLUDE_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_NUMBER;
+import static org.jhotdraw8.css.CssTokenType.TT_PERCENTAGE;
+import static org.jhotdraw8.css.CssTokenType.TT_PREFIX_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_S;
+import static org.jhotdraw8.css.CssTokenType.TT_STRING;
+import static org.jhotdraw8.css.CssTokenType.TT_SUBSTRING_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_SUFFIX_MATCH;
+import static org.jhotdraw8.css.CssTokenType.TT_URL;
 
 /**
  * {@code CssTokenizer} processes an input stream of characters into tokens for
@@ -136,7 +136,7 @@ import static org.jhotdraw8.css.CssToken.TT_URL;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssTokenizer implements CssTokenizerInterface {
+public class CssTokenizer implements CssTokenizerAPI {
 
     private CssScanner in;
 
@@ -232,7 +232,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                     stringValue = "~=";
                 } else {
                     in.pushBack(next);
-                    currentToken = ch;
+                    currentToken = '~';
                     stringValue = String.valueOf((char) ch);
                 }
                 break;
@@ -247,7 +247,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                     stringValue = "||";
                 } else {
                     in.pushBack(next);
-                    currentToken = ch;
+                    currentToken = '|';
                     stringValue = String.valueOf((char) currentToken);
                 }
                 break;
@@ -259,7 +259,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                     stringValue = "^=";
                 } else {
                     in.pushBack(next);
-                    currentToken = ch;
+                    currentToken = '^';
                     stringValue = String.valueOf((char) currentToken);
                 }
                 break;
@@ -271,7 +271,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                     stringValue = "$=";
                 } else {
                     in.pushBack(next);
-                    currentToken = ch;
+                    currentToken = '$';
                     stringValue = String.valueOf((char) currentToken);
                 }
                 break;
@@ -283,7 +283,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                     stringValue = "*=";
                 } else {
                     in.pushBack(next);
-                    currentToken = ch;
+                    currentToken = '*';
                     stringValue = String.valueOf((char) ch);
                 }
                 break;
@@ -295,7 +295,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                     stringValue = buf.toString();
                 } else {
                     in.pushBack(ch);
-                    currentToken = ch;
+                    currentToken = '@';
                     stringValue = String.valueOf((char) currentToken);
                 }
                 break;
