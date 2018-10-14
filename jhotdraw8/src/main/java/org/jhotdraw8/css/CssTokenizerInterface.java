@@ -4,7 +4,33 @@
 package org.jhotdraw8.css;
 
 import java.io.IOException;
+import java.text.ParseException;
 import javax.annotation.Nullable;
+
+import static org.jhotdraw8.css.CssToken.TT_AT_KEYWORD;
+import static org.jhotdraw8.css.CssToken.TT_BAD_COMMENT;
+import static org.jhotdraw8.css.CssToken.TT_BAD_STRING;
+import static org.jhotdraw8.css.CssToken.TT_BAD_URI;
+import static org.jhotdraw8.css.CssToken.TT_CDC;
+import static org.jhotdraw8.css.CssToken.TT_CDO;
+import static org.jhotdraw8.css.CssToken.TT_COLUMN;
+import static org.jhotdraw8.css.CssToken.TT_COMMENT;
+import static org.jhotdraw8.css.CssToken.TT_DASH_MATCH;
+import static org.jhotdraw8.css.CssToken.TT_DIMENSION;
+import static org.jhotdraw8.css.CssToken.TT_EOF;
+import static org.jhotdraw8.css.CssToken.TT_FUNCTION;
+import static org.jhotdraw8.css.CssToken.TT_HASH;
+import static org.jhotdraw8.css.CssToken.TT_IDENT;
+import static org.jhotdraw8.css.CssToken.TT_INCLUDE_MATCH;
+import static org.jhotdraw8.css.CssToken.TT_NUMBER;
+import static org.jhotdraw8.css.CssToken.TT_PERCENTAGE;
+import static org.jhotdraw8.css.CssToken.TT_PREFIX_MATCH;
+import static org.jhotdraw8.css.CssToken.TT_S;
+import static org.jhotdraw8.css.CssToken.TT_STRING;
+import static org.jhotdraw8.css.CssToken.TT_SUBSTRING_MATCH;
+import static org.jhotdraw8.css.CssToken.TT_SUFFIX_MATCH;
+import static org.jhotdraw8.css.CssToken.TT_UNICODE_RANGE;
+import static org.jhotdraw8.css.CssToken.TT_URL;
 
 /**
  * CssTokenizerInterface.
@@ -14,33 +40,6 @@ import javax.annotation.Nullable;
  */
 public interface CssTokenizerInterface {
 
-    /**
-     * Token types. DELIM token are given as UTF-16 characters.
-     */
-    int TT_AT_KEYWORD = -3;
-    int TT_BAD_COMMENT = -7;
-    int TT_BAD_STRING = -5;
-    int TT_BAD_URI = -6;
-    int TT_CDC = -15;
-    int TT_CDO = -14;
-    int TT_COLUMN = -24;
-    int TT_COMMENT = -17;
-    int TT_DASH_MATCH = -20;
-    int TT_DIMENSION = -11;
-    int TT_EOF = -1;
-    int TT_FUNCTION = -18;
-    int TT_HASH = -8;
-    int TT_IDENT = -2;
-    int TT_INCLUDE_MATCH = -19;
-    int TT_NUMBER = -9;
-    int TT_PERCENTAGE = -10;
-    int TT_PREFIX_MATCH = -21;
-    int TT_S = -16;
-    int TT_STRING = -4;
-    int TT_SUBSTRING_MATCH = -23;
-    int TT_SUFFIX_MATCH = -22;
-    int TT_UNICODE_RANGE = -13;
-    int TT_URI = -12;
 
     /** Returns the current value converted to a string.
      * The returned value can be used for String comparisons of the value.
@@ -95,10 +94,10 @@ public interface CssTokenizerInterface {
                 return "$=";
             case TT_UNICODE_RANGE:
                 return currentStringValue();
-            case TT_URI:
+            case TT_URL:
                 return currentStringValue();
             default:
-                return Character.toString((char) currentToken());
+                throw new AssertionError("unsupported token type "+ currentToken());
         }
     }
 
@@ -110,8 +109,8 @@ public interface CssTokenizerInterface {
     @Nullable
     String currentStringValue();
     
-    /** Returns the current token id.
-     * @return the current token */
+    /** Returns the current token type.
+     * @return the current token type */
     int currentToken();
 
     int getLineNumber();
@@ -121,6 +120,21 @@ public interface CssTokenizerInterface {
     int getEndPosition();
 
     int nextToken() throws IOException;
+
+    /**
+     * Fetches the next token and throws a parse exception if it
+     * is not of the required type.
+     *
+     * @param ttype the required token type
+     * @param message the error message
+     * @throws ParseException if the token is not of the required type
+     * @throws IOException on IO exception
+     */
+    default void requireNextToken(int ttype, String message) throws ParseException,IOException {
+        if (nextToken()!=ttype) {
+            throw new ParseException(message,getStartPosition());
+        }
+    }
 
     /**
      * Pushes the current token back.

@@ -228,7 +228,7 @@ public class NumberConverter implements Converter<Number> {
         }
 
         if (value instanceof Double) {
-            double v = ((Double) value).doubleValue();
+            double v = (Double) value;
             if (factor != 1.0) {
                 v = v * factor;
             }
@@ -252,7 +252,7 @@ public class NumberConverter implements Converter<Number> {
                 buf.append(str);
             }
         } else if (value instanceof Float) {
-            float v = ((Float) value).floatValue();
+            float v = (Float) value;
             if (factor != 1.0) {
                 v = (float) (v * factor);
             }
@@ -267,25 +267,25 @@ public class NumberConverter implements Converter<Number> {
             }
             buf.append(str);
         } else if (value instanceof Long) {
-            long v = ((Long) value).longValue();
+            long v = (Long) value;
             if (factor != 1.0) {
                 v = (long) (v * factor);
             }
             buf.append(Long.toString(v));
         } else if (value instanceof Integer) {
-            int v = ((Integer) value).intValue();
+            int v = (Integer) value;
             if (factor != 1.0) {
                 v = (int) (v * factor);
             }
             buf.append(Integer.toString(v));
         } else if (value instanceof Byte) {
-            byte v = ((Byte) value).byteValue();
+            byte v = (Byte) value;
             if (factor != 1.0) {
                 v = (byte) (v * factor);
             }
             buf.append(Byte.toString(v));
         } else if (value instanceof Short) {
-            short v = ((Short) value).shortValue();
+            short v = (Short) value;
             if (factor != 1.0) {
                 v = (short) (v * factor);
             }

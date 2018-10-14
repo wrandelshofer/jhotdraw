@@ -5,6 +5,8 @@ package org.jhotdraw8.text;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
@@ -149,7 +151,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
     public CssRadialGradient fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(in));
         tt.setSkipWhitespaces(true);
-        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        if (tt.nextToken() == CssToken.TT_IDENT) {
             if ("none".equals(tt.currentStringValue())) {
                 in.position(in.limit());
                 return null;
@@ -157,7 +159,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                 throw new ParseException("CSS RadialGradient: \"<none>\" or \"<radial-gradient>(\"  expected", tt.getStartPosition());
             }
         }
-        if (tt.currentToken() != CssTokenizer.TT_FUNCTION) {
+        if (tt.currentToken() != CssToken.TT_FUNCTION) {
             throw new ParseException("CSS RadialGradient: \"<radial-gradient>(\"  expected", tt.getStartPosition());
         }
 
@@ -174,16 +176,16 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         double centerY = 0.5;
         double radius = 1;
         Boolean isProportional = null;
-        while (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        while (tt.nextToken() == CssToken.TT_IDENT) {
             if ("focus-angle".equals(tt.currentStringValue())) {
                 switch (tt.nextToken()) {
-                    case CssTokenizer.TT_DIMENSION:
+                    case CssToken.TT_DIMENSION:
                         if (!"deg".equals(tt.currentStringValue())) {
                             throw new ParseException("CSS RadialGradient: expected focus-angle given in degrees with unit  \"deg\", found: " + tt.currentStringValue(), tt.getStartPosition());
                         }
                         focusAngle = tt.currentNumericValue().doubleValue();
                         break;
-                    case CssTokenizer.TT_NUMBER:
+                    case CssToken.TT_NUMBER:
                         focusAngle = tt.currentNumericValue().doubleValue();
                         break;
                     default:
@@ -192,10 +194,10 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
 
             } else if ("focus-distance".equals(tt.currentStringValue())) {
                 switch (tt.nextToken()) {
-                    case CssTokenizer.TT_PERCENTAGE:
+                    case CssToken.TT_PERCENTAGE:
                         focusDistance = tt.currentNumericValue().doubleValue() / 100;
                         break;
-                    case CssTokenizer.TT_NUMBER:
+                    case CssToken.TT_NUMBER:
                         focusDistance = tt.currentNumericValue().doubleValue();
                         break;
                     default:
@@ -204,7 +206,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
 
             } else if ("center".equals(tt.currentStringValue())) {
                 switch (tt.nextToken()) {
-                    case CssTokenizer.TT_PERCENTAGE:
+                    case CssToken.TT_PERCENTAGE:
                         if (isProportional == null) {
                             isProportional = true;
                         }
@@ -213,7 +215,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                         }
                         centerX = tt.currentNumericValue().doubleValue() / 100;
                         break;
-                    case CssTokenizer.TT_NUMBER:
+                    case CssToken.TT_NUMBER:
                         if (isProportional == null) {
                             isProportional = false;
                         }
@@ -226,7 +228,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                         throw new ParseException("CSS RadialGradient: center x-value  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
                 }
                 switch (tt.nextToken()) {
-                    case CssTokenizer.TT_PERCENTAGE:
+                    case CssToken.TT_PERCENTAGE:
                         if (isProportional == null) {
                             isProportional = true;
                         }
@@ -235,7 +237,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                         }
                         centerY = tt.currentNumericValue().doubleValue() / 100;
                         break;
-                    case CssTokenizer.TT_NUMBER:
+                    case CssToken.TT_NUMBER:
                         if (isProportional == null) {
                             isProportional = false;
                         }
@@ -249,7 +251,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                 }
             } else if ("radius".equals(tt.currentStringValue())) {
                 switch (tt.nextToken()) {
-                    case CssTokenizer.TT_PERCENTAGE:
+                    case CssToken.TT_PERCENTAGE:
                         if (isProportional == null) {
                             isProportional = true;
                         }
@@ -258,7 +260,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                         }
                         radius = tt.currentNumericValue().doubleValue() / 100;
                         break;
-                    case CssTokenizer.TT_NUMBER:
+                    case CssToken.TT_NUMBER:
                         if (isProportional == null) {
                             isProportional = false;
                         }
@@ -280,7 +282,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             }
         }
         CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
-        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        if (tt.nextToken() == CssToken.TT_IDENT) {
             if ("repeat".equals(tt.currentStringValue())) {
                 cycleMethod = CycleMethod.REPEAT;
 
@@ -297,7 +299,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             tt.pushBack();
         }
         List<CssStop> stops = new ArrayList<>();
-        while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
+        while (tt.nextToken() != ')' && tt.currentToken() != CssToken.TT_EOF) {
             tt.pushBack();
             stops.add(parseColorStop(tt));
             if (tt.nextToken() != ',') {
@@ -326,10 +328,10 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         CssColor color = colorConverter.parseColor(tt);
         Double offset = null;
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 offset = tt.currentNumericValue().doubleValue();
                 break;
-            case CssTokenizerInterface.TT_PERCENTAGE:
+            case CssToken.TT_PERCENTAGE:
                 offset = tt.currentNumericValue().doubleValue() / 100.0;
                 break;
             default:

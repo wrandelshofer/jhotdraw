@@ -9,6 +9,8 @@ import java.text.ParseException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.CharBufferReader;
@@ -61,7 +63,7 @@ public class CssSizeConverter implements Converter<CssSize> {
     @Nullable
     public CssSize parseSize(@Nonnull CssTokenizerInterface tt) throws ParseException, IOException {
         tt.skipWhitespace();
-        if (nullable && tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
+        if (nullable && tt.nextToken() == CssToken.TT_IDENT && "none".equals(tt.currentStringValue())) {
             //tt.skipWhitespace();
             return null;
         } else {
@@ -70,19 +72,19 @@ public class CssSizeConverter implements Converter<CssSize> {
         Number value = null;
         String units;
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_DIMENSION:
+            case CssToken.TT_DIMENSION:
                 value = tt.currentNumericValue();
                 units = tt.currentStringValue();
                 break;
-            case CssTokenizerInterface.TT_PERCENTAGE:
+            case CssToken.TT_PERCENTAGE:
                 value = tt.currentNumericValue();
                 units = "%";
                 break;
-            case CssTokenizerInterface.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 value = tt.currentNumericValue();
                 units = null;
                 break;
-            case CssTokenizerInterface.TT_IDENT: {
+            case CssToken.TT_IDENT: {
                 switch (tt.currentStringValue()) {
                     case "INF":
                         value = Double.POSITIVE_INFINITY;

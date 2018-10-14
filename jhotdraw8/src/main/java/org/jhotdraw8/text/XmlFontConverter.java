@@ -11,6 +11,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import javafx.scene.text.Font;
@@ -93,7 +95,7 @@ public class XmlFontConverter implements Converter<Font> {
         String fontFamily = "System";
 
         // parse FontStyle
-        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        if (tt.nextToken() == CssToken.TT_IDENT) {
             switch (tt.currentStringValue().toLowerCase()) {
                 case "normal":
                     fontPosture = FontPosture.REGULAR;
@@ -112,7 +114,7 @@ public class XmlFontConverter implements Converter<Font> {
 
         // parse FontWeight
         boolean fontWeightConsumed = false;
-        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        if (tt.nextToken() == CssToken.TT_IDENT) {
             switch (tt.currentStringValue().toLowerCase()) {
                 case "normal":
                     fontWeight = FontWeight.NORMAL;
@@ -143,7 +145,7 @@ public class XmlFontConverter implements Converter<Font> {
         double fontWeightOrFontSize = 0.0;
         boolean fontWeightOrFontSizeConsumed = false;
         if (!fontWeightConsumed) {
-            if (tt.nextToken() == CssTokenizer.TT_NUMBER) {
+            if (tt.nextToken() == CssToken.TT_NUMBER) {
                 fontWeightOrFontSize = tt.currentNumericValue().doubleValue();
                 fontWeightOrFontSizeConsumed = true;
             } else {
@@ -152,7 +154,7 @@ public class XmlFontConverter implements Converter<Font> {
         }
 
         // parse FontSize
-        if (tt.nextToken() == CssTokenizer.TT_NUMBER) {
+        if (tt.nextToken() == CssToken.TT_NUMBER) {
             fontSize = tt.currentNumericValue().doubleValue();
 
             if (fontWeightOrFontSizeConsumed) {
@@ -196,7 +198,7 @@ public class XmlFontConverter implements Converter<Font> {
             tt.pushBack();
         }
 
-        if (tt.nextToken() == CssTokenizer.TT_IDENT || tt.currentToken() == CssTokenizer.TT_STRING) {
+        if (tt.nextToken() == CssToken.TT_IDENT || tt.currentToken() == CssToken.TT_STRING) {
             fontFamily = tt.currentStringValue();
             // consume buffer
             buf.position(buf.limit());

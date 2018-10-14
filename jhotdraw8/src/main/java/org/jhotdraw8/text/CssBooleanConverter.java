@@ -43,13 +43,14 @@ public class CssBooleanConverter implements Converter<Boolean> {
             out.append(in.get());
         }
         String str = out.toString();
-        if (str.equals(trueString)) {
-            return true;
-        } else if (str.equals(falseString)) {
-            return false;
-        } else {
-            in.position(pos);
-            throw new ParseException("\"" + trueString + "\" or \"" + falseString + "\" expected instead of \"" + str + "\".", pos);
+        switch (str) {
+            case trueString:
+                return true;
+            case falseString:
+                return false;
+            default:
+                in.position(pos);
+                throw new ParseException("\"" + trueString + "\" or \"" + falseString + "\" expected instead of \"" + str + "\".", pos);
         }
     }
 

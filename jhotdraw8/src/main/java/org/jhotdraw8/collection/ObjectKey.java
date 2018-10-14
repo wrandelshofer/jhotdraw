@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
 /**
- * An <em>name</em> which provides typesafe access to a map entry.
+ * A <em>name</em> which provides typesafe access to a map entry.
  * <p>
  * A Key has a name, a type and a default value.
  * <p>
@@ -38,7 +38,7 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Holds a String representation of the name.
      */
-    @javax.annotation.Nullable
+    @Nonnull
     private final String name;
     /**
      * Holds the default value.
@@ -139,7 +139,7 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return name string.
      */
-    @javax.annotation.Nullable
+    @Nonnull
     @Override
     public String getName() {
         return name;

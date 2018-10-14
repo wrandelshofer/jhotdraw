@@ -11,6 +11,8 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.connector.Connector;
@@ -104,7 +106,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
         tt.setSkipWhitespaces(true);
 
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_IDENT:
+            case CssToken.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
                     return null;
                 }

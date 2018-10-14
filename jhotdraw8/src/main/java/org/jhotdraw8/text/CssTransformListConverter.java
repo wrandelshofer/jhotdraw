@@ -15,6 +15,8 @@ import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import javafx.geometry.Point3D;
@@ -211,26 +213,26 @@ public class CssTransformListConverter implements Converter<ImmutableList<Transf
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
-        if (tt.nextToken() == CssTokenizer.TT_IDENT && tt.currentStringValue().equals("none")) {
+        if (tt.nextToken() == CssToken.TT_IDENT && tt.currentStringValue().equals("none")) {
             in.position(in.limit());
             return ImmutableList.emptyList();
         } else {
             tt.pushBack();
         }
 
-        while (tt.nextToken() != CssTokenizer.TT_EOF) {
+        while (tt.nextToken() != CssToken.TT_EOF) {
             tt.pushBack();
-            if (tt.nextToken() != CssTokenizer.TT_FUNCTION) {
+            if (tt.nextToken() != CssToken.TT_FUNCTION) {
                 throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             String func = tt.currentStringValue();
             int funcPos = tt.getStartPosition();
             List<Double> m = new ArrayList<>();
-            while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
+            while (tt.nextToken() != ')' && tt.currentToken() != CssToken.TT_EOF) {
                 if (tt.currentToken() != ',') {
                     tt.pushBack();
                 }
-                if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
+                if (tt.nextToken() != CssToken.TT_NUMBER) {
                     throw new ParseException("coefficient nb " + m.size() + " expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                 }
                 m.add(tt.currentNumericValue().doubleValue());

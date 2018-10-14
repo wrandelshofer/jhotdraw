@@ -13,6 +13,7 @@ import java.util.Iterator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.DefaultUnitConverter;
@@ -39,7 +40,7 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
         ArrayList<Double> l = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);
-        if (tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
+        if (tt.nextToken() == CssToken.TT_IDENT && "none".equals(tt.currentStringValue())) {
             tt.skipWhitespace();
             return  ImmutableList.ofCollection(l);
         } else {
@@ -49,22 +50,22 @@ public class CssDoubleListConverter implements Converter<ImmutableList<Double>> 
         Loop:
         while (true) {
             switch (tt.nextToken()) {
-                case CssTokenizerInterface.TT_DIMENSION: {
+                case CssToken.TT_DIMENSION: {
                     double value = tt.currentNumericValue().doubleValue();
                     l.add(unitConverter.convert(value, tt.currentStringValue(), "px"));
                     break;
                 }
-                case CssTokenizerInterface.TT_PERCENTAGE: {
+                case CssToken.TT_PERCENTAGE: {
                     double value = tt.currentNumericValue().doubleValue() / 100.0;
                     l.add(unitConverter.convert(value, "%", "px"));
                     break;
                 }
-                case CssTokenizerInterface.TT_NUMBER: {
+                case CssToken.TT_NUMBER: {
                     double value = tt.currentNumericValue().doubleValue();
                     l.add(value);
                     break;
                 }
-                case CssTokenizerInterface.TT_IDENT: {
+                case CssToken.TT_IDENT: {
                     double value;
                     switch (tt.currentStringValue()) {
                         case "INF":

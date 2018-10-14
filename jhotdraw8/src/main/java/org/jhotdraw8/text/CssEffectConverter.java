@@ -5,6 +5,8 @@ package org.jhotdraw8.text;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
 import java.io.StringReader;
@@ -273,7 +275,7 @@ public class CssEffectConverter implements Converter<Effect> {
     public Effect fromString(@Nonnull CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
-        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        if (tt.nextToken() == CssToken.TT_IDENT) {
             if ("none".equals(tt.currentStringValue())) {
                 tt.skipWhitespace();
                 in.position(tt.getStartPosition());
@@ -293,7 +295,7 @@ public class CssEffectConverter implements Converter<Effect> {
     private Effect parseEffect(CssTokenizerInterface tt) throws ParseException, IOException {
         Effect first = null;
         Effect previous = null;
-        while (tt.nextToken() == CssTokenizer.TT_FUNCTION) {
+        while (tt.nextToken() == CssToken.TT_FUNCTION) {
 
             Effect current = null;
             switch (tt.currentStringValue()) {
@@ -349,7 +351,7 @@ public class CssEffectConverter implements Converter<Effect> {
 
     private Effect parseBlend(CssTokenizerInterface tt) throws ParseException, IOException {
         BlendMode mode = BlendMode.SRC_OVER;
-        if (tt.nextToken() == CssTokenizerInterface.TT_IDENT) {
+        if (tt.nextToken() == CssToken.TT_IDENT) {
             tt.pushBack();
             mode = blendModeConverter.parse(tt);
         }
@@ -362,10 +364,10 @@ public class CssEffectConverter implements Converter<Effect> {
     private Effect parseBloom(CssTokenizerInterface tt) throws ParseException, IOException {
         double threshold = 0.3;
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 threshold = tt.currentNumericValue().doubleValue();
                 break;
-            case CssTokenizer.TT_PERCENTAGE:
+            case CssToken.TT_PERCENTAGE:
                 threshold = tt.currentNumericValue().doubleValue() / 100;
                 break;
             default:
@@ -382,7 +384,7 @@ public class CssEffectConverter implements Converter<Effect> {
         double height = 5;
         int iterations = 1;
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 width = Geom.clamp(tt.currentNumericValue().doubleValue(), 0, 255);
                 break;
             default:
@@ -392,7 +394,7 @@ public class CssEffectConverter implements Converter<Effect> {
             tt.pushBack();
         }
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 height = Geom.clamp(tt.currentNumericValue().doubleValue(), 0, 255);
                 break;
             default:
@@ -402,7 +404,7 @@ public class CssEffectConverter implements Converter<Effect> {
             tt.pushBack();
         }
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 iterations = Geom.clamp(tt.currentNumericValue().intValue(), 0, 3);
                 break;
             default:
@@ -419,15 +421,15 @@ public class CssEffectConverter implements Converter<Effect> {
         double saturation = 0.0;
         double brightness = 0.0;
         double contrast = 0.0;
-        while (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        while (tt.nextToken() == CssToken.TT_IDENT) {
             String ident = tt.currentStringValue();
             int identPos = tt.getStartPosition();
             double adjust = 0.0;
             switch (tt.nextToken()) {
-                case CssTokenizer.TT_NUMBER:
+                case CssToken.TT_NUMBER:
                     adjust = tt.currentNumericValue().doubleValue();
                     break;
-                case CssTokenizer.TT_PERCENTAGE:
+                case CssToken.TT_PERCENTAGE:
                     adjust = tt.currentNumericValue().doubleValue() / 100;
                     break;
                 default:
@@ -468,7 +470,7 @@ public class CssEffectConverter implements Converter<Effect> {
     private Effect parseGaussianBlur(CssTokenizerInterface tt) throws ParseException, IOException {
         double radius = 5;
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 radius = Geom.clamp(tt.currentNumericValue().doubleValue(), 0, 63);
                 break;
             default:
@@ -488,10 +490,10 @@ public class CssEffectConverter implements Converter<Effect> {
     private Effect parseGlow(CssTokenizerInterface tt) throws ParseException, IOException {
         double level = 0.3;
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 level = tt.currentNumericValue().doubleValue();
                 break;
-            case CssTokenizer.TT_PERCENTAGE:
+            case CssToken.TT_PERCENTAGE:
                 level = tt.currentNumericValue().doubleValue() / 100;
                 break;
             default:
@@ -515,7 +517,7 @@ public class CssEffectConverter implements Converter<Effect> {
         Effect input=null;
 
         if (tt.nextToken() != ')') {
-            if (tt.currentToken() != CssTokenizer.TT_IDENT) {
+            if (tt.currentToken() != CssToken.TT_IDENT) {
                 throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getStartPosition());
             }
             tt.pushBack();
@@ -524,11 +526,11 @@ public class CssEffectConverter implements Converter<Effect> {
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() == CssTokenizer.TT_HASH) {
+            if (tt.nextToken() == CssToken.TT_HASH) {
                 color = Color.web('#' + tt.currentStringValue());
-            } else if (tt.currentToken() == CssTokenizer.TT_IDENT) {
+            } else if (tt.currentToken() == CssToken.TT_IDENT) {
                 color = Color.web(tt.currentStringValue());
-            } else if (tt.currentToken() == CssTokenizer.TT_FUNCTION) {
+            } else if (tt.currentToken() == CssToken.TT_FUNCTION) {
                 tt.pushBack();
                 CssColor colorOrNull = colorConverter.parseColor(tt);
                 color = colorOrNull.getColor();
@@ -538,7 +540,7 @@ public class CssEffectConverter implements Converter<Effect> {
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
+            if (tt.nextToken() != CssToken.TT_NUMBER) {
                 throw new ParseException("CSS Effect: radius number expected", tt.getStartPosition());
             }
             radius = tt.currentNumericValue().doubleValue();
@@ -547,10 +549,10 @@ public class CssEffectConverter implements Converter<Effect> {
                 tt.pushBack();
             }
             switch (tt.nextToken()) {
-                case CssTokenizer.TT_NUMBER:
+                case CssToken.TT_NUMBER:
                     spreadOrChocke = tt.currentNumericValue().doubleValue();
                     break;
-                case CssTokenizer.TT_PERCENTAGE:
+                case CssToken.TT_PERCENTAGE:
                     spreadOrChocke = tt.currentNumericValue().doubleValue() / 100.0;
                     break;
                 default:
@@ -559,14 +561,14 @@ public class CssEffectConverter implements Converter<Effect> {
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
+            if (tt.nextToken() != CssToken.TT_NUMBER) {
                 throw new ParseException("CSS Shadow-Effect: offset-x number expected", tt.getStartPosition());
             }
             offsetX = tt.currentNumericValue().doubleValue();
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
+            if (tt.nextToken() != CssToken.TT_NUMBER) {
                 throw new ParseException("CSS Shadow-Effect: offset-y number expected", tt.getStartPosition());
             }
             offsetY = tt.currentNumericValue().doubleValue();
@@ -604,7 +606,7 @@ public class CssEffectConverter implements Converter<Effect> {
         double radius = 10.0;
 
         if (tt.nextToken() != ')') {
-            if (tt.currentToken() != CssTokenizer.TT_IDENT) {
+            if (tt.currentToken() != CssToken.TT_IDENT) {
                 throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getStartPosition());
             }
             tt.pushBack();
@@ -613,11 +615,11 @@ public class CssEffectConverter implements Converter<Effect> {
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() == CssTokenizer.TT_HASH) {
+            if (tt.nextToken() == CssToken.TT_HASH) {
                 color = Color.web('#' + tt.currentStringValue());
-            } else if (tt.currentToken() == CssTokenizer.TT_IDENT) {
+            } else if (tt.currentToken() == CssToken.TT_IDENT) {
                 color = Color.web(tt.currentStringValue());
-            } else if (tt.currentToken() == CssTokenizer.TT_FUNCTION) {
+            } else if (tt.currentToken() == CssToken.TT_FUNCTION) {
                 tt.pushBack();
                 CssColor colorOrNull = colorConverter.parseColor(tt);
                 color = colorOrNull.getColor();
@@ -627,7 +629,7 @@ public class CssEffectConverter implements Converter<Effect> {
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
+            if (tt.nextToken() != CssToken.TT_NUMBER) {
                 throw new ParseException("CSS Effect: radius number expected", tt.getStartPosition());
             }
             radius = tt.currentNumericValue().doubleValue();

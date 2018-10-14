@@ -109,7 +109,6 @@ public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String>
     @Nonnull
     @Override
     public Converter<String> getConverter() {
-
         return converter;
     }
 }

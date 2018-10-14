@@ -9,6 +9,8 @@ import java.text.ParseException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -31,27 +33,27 @@ import org.jhotdraw8.io.CharBufferReader;
  * @version $Id$
  */
 public class CssStringConverter implements Converter<String> {
-private final String helpText;
-private final char quoteChar;
-@Nonnull
-private final String defaultValue;
+    private final String helpText;
+    private final char quoteChar;
+    @Nonnull
+    private final String defaultValue;
 
     public CssStringConverter() {
-        this('\'',null);
+        this('\"', null);
     }
 
     public CssStringConverter(char quoteChar, String helpText) {
-        this.quoteChar=quoteChar;
+        this.quoteChar = quoteChar;
         this.helpText = helpText;
-        defaultValue=""+quoteChar+quoteChar;
+        defaultValue = "" + quoteChar + quoteChar;
     }
-    
+
 
     @Nullable
     @Override
     public String fromString(@Nonnull CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
-        if (tt.nextToken() != CssTokenizer.TT_STRING) {
+        if (tt.nextToken() != CssToken.TT_STRING) {
             throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
         }
         return tt.currentStringValue();
@@ -63,43 +65,12 @@ private final String defaultValue;
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull String value) throws IOException {
-        out.append(quoteChar);
-        for (char ch : value.toCharArray()) {
-            switch (ch) {
-                case ' ':
-                    out.append(ch);
-                    break;
-                case '\\':
-                    out.append('\\');
-                    out.append('\\');
-                    break;
-                case '\n':
-                    out.append('\\');
-                    out.append('\n');
-                    break;
-                default:
-                    if (ch == quoteChar) {
-                        out.append('\\');
-                    out.append(quoteChar);
-                    }else{
-                    
-                    if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
-                        out.append('\\');
-                        String hex = Integer.toHexString(ch);
-                        for (int i = 0, n = 6 - hex.length(); i < n; i++) {
-                            out.append('0');
-                        }
-                        out.append(hex);
-                    } else {
-                        out.append(ch);
-                    }
-                    
-                    }
-                    break;
-            }
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
+        if (value == null) {
+            out.append(CssToken.IDENT_NONE);
+        } else {
+            out.append(new CssToken(CssToken.TT_STRING, value).toCss());
         }
-        out.append(quoteChar);
     }
 
     @Nonnull
@@ -107,7 +78,6 @@ private final String defaultValue;
     public String getDefaultValue() {
         return defaultValue;
     }
-    
-    
-    
+
+
 }

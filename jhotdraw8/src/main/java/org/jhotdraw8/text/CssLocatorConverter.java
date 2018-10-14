@@ -9,6 +9,8 @@ import java.text.ParseException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.locator.Locator;
@@ -70,7 +72,7 @@ public class CssLocatorConverter implements Converter<Locator> {
         tt.setSkipWhitespaces(true);
 
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_FUNCTION:
+            case CssToken.TT_FUNCTION:
                 if (!"relative".equals(tt.currentStringValue())) {
                     throw new ParseException("Locator: function 'relative(' expected, found:" + tt.currentValue(), tt.getStartPosition());
                 }
@@ -81,10 +83,10 @@ public class CssLocatorConverter implements Converter<Locator> {
         double x, y;
 
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 x = tt.currentNumericValue().doubleValue();
                 break;
-            case CssTokenizer.TT_PERCENTAGE:
+            case CssToken.TT_PERCENTAGE:
                 x = tt.currentNumericValue().doubleValue() / 100.0;
                 break;
             default:
@@ -98,10 +100,10 @@ public class CssLocatorConverter implements Converter<Locator> {
                 break;
         }
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 y = tt.currentNumericValue().doubleValue();
                 break;
-            case CssTokenizer.TT_PERCENTAGE:
+            case CssToken.TT_PERCENTAGE:
                 y = tt.currentNumericValue().doubleValue() / 100.0;
                 break;
             default:

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.text.CssStringConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
 
@@ -47,45 +47,45 @@ public class PreservedToken extends AST {
             return stringValue;
         }
         switch (ttype) {
-            case CssTokenizer.TT_IDENT:
+            case CssToken.TT_IDENT:
                 return fromIDENT();
-            case CssTokenizer.TT_AT_KEYWORD:
+            case CssToken.TT_AT_KEYWORD:
                 return "@" + fromIDENT();
-            case CssTokenizer.TT_STRING:
+            case CssToken.TT_STRING:
                 return fromSTRING();
-            //case CssTokenizer.TT_BAD_STRING : return fromBAD_STRING(stringValue) ;
-            //case CssTokenizer.TT_BAD_URI : return fromBAD_URI(stringValue) ;
-            //case CssTokenizer.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
-            case CssTokenizer.TT_HASH:
+            //case CssToken.TT_BAD_STRING : return fromBAD_STRING(stringValue) ;
+            //case CssToken.TT_BAD_URI : return fromBAD_URI(stringValue) ;
+            //case CssToken.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
+            case CssToken.TT_HASH:
                 return "#" + fromIDENT();
-            case CssTokenizer.TT_NUMBER:
+            case CssToken.TT_NUMBER:
                 return fromNUMBER();
-            case CssTokenizer.TT_PERCENTAGE:
+            case CssToken.TT_PERCENTAGE:
                 return fromNUMBER() + "%";
-            case CssTokenizer.TT_DIMENSION:
+            case CssToken.TT_DIMENSION:
                 return fromNUMBER() + fromIDENT();
-            case CssTokenizer.TT_URI:
+            case CssToken.TT_URL:
                 return fromURI();
-            case CssTokenizer.TT_UNICODE_RANGE:
+            case CssToken.TT_UNICODE_RANGE:
                 return fromUNICODE_RANGE();
-            //case CssTokenizer.TT_CDO : return fromCDO() ;
-            //case CssTokenizer.TT_CDC : return fromCDC() ;
-            case CssTokenizer.TT_S:
+            //case CssToken.TT_CDO : return fromCDO() ;
+            //case CssToken.TT_CDC : return fromCDC() ;
+            case CssToken.TT_S:
                 return fromS();
-            //case CssTokenizer.TT_COMMENT : return fromCOMMENT() ;
-            case CssTokenizer.TT_FUNCTION:
+            //case CssToken.TT_COMMENT : return fromCOMMENT() ;
+            case CssToken.TT_FUNCTION:
                 return fromIDENT() + "(";
-            case CssTokenizer.TT_INCLUDE_MATCH:
+            case CssToken.TT_INCLUDE_MATCH:
                 return fromINCLUDE_MATCH();
-            case CssTokenizer.TT_DASH_MATCH:
+            case CssToken.TT_DASH_MATCH:
                 return fromDASH_MATCH();
-            case CssTokenizer.TT_PREFIX_MATCH:
+            case CssToken.TT_PREFIX_MATCH:
                 return fromPREFIX_MATCH();
-            case CssTokenizer.TT_SUFFIX_MATCH:
+            case CssToken.TT_SUFFIX_MATCH:
                 return fromSUFFIX_MATCH();
-            case CssTokenizer.TT_SUBSTRING_MATCH:
+            case CssToken.TT_SUBSTRING_MATCH:
                 return fromSUBSTRING_MATCH();
-            case CssTokenizer.TT_COLUMN:
+            case CssToken.TT_COLUMN:
                 return fromCOLUMN();
 
         }

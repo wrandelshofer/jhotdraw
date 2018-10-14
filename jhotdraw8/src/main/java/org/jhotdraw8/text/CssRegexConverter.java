@@ -10,6 +10,8 @@ import java.text.ParseException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -87,13 +89,13 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         String msg = nullable ? "\"replace(\" or \"none\" expected" : "\"replace(\" expected";
 
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_FUNCTION:
+            case CssToken.TT_FUNCTION:
                 if ("replace".equals(tt.currentStringValue())) {
                 } else {
                     throw new ParseException(msg, tt.getStartPosition());
                 }
                 break;
-            case CssTokenizer.TT_IDENT:
+            case CssToken.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
                     tt.skipWhitespace();
                     in.position(tt.getStartPosition());
@@ -108,7 +110,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
                 throw new ParseException(msg, tt.getStartPosition());
         }
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_STRING:
+            case CssToken.TT_STRING:
                 find = tt.currentStringValue();
                 break;
             default:
@@ -124,10 +126,10 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         }
 
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_STRING:
+            case CssToken.TT_STRING:
                 replace = tt.currentStringValue();
                 break;
-            case CssTokenizer.TT_EOF:
+            case CssToken.TT_EOF:
                 break;
             default:
                 replace = null;

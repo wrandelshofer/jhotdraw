@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -34,7 +35,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getAttribute(@Nonnull Element elem, StyleOrigin origin, String name) {
+    public String getAttribute(@Nonnull Element elem, @NotNull StyleOrigin origin, @NotNull String name) {
         if (origin == StyleOrigin.USER) {
             return getAttribute(elem, name);
         } else {
@@ -43,7 +44,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasId(@Nonnull Element elem, String id) {
+    public boolean hasId(@Nonnull Element elem, @NotNull String id) {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
     }
@@ -54,7 +55,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasType(@Nonnull Element elem, String type) {
+    public boolean hasType(@Nonnull Element elem, @NotNull String type) {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
     }
@@ -65,7 +66,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasStyleClass(@Nonnull Element elem, String clazz) {
+    public boolean hasStyleClass(@Nonnull Element elem, @NotNull String clazz) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return false;
@@ -217,52 +218,20 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasAttribute(@Nonnull Element element, String attributeName) {
+    public boolean hasAttribute(@Nonnull Element element, @NotNull String attributeName) {
         // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 
     @Override
-    public boolean attributeValueEquals(@Nonnull Element element, String attributeName, String attributeValue) {
-        String actualValue = element.getAttribute(attributeName);
-        return actualValue != null && actualValue.equals(attributeValue);
-    }
-
-    @Override
-    public boolean attributeValueStartsWith(@Nonnull Element element, String attributeName, @Nonnull String substring) {
+    public boolean attributeValueStartsWith(@Nonnull Element element, @NotNull String attributeName, @Nonnull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
-    public boolean attributeValueEndsWith(@Nonnull Element element, String attributeName, @Nonnull String substring) {
-        String actualValue = element.getAttribute(attributeName);
-        return actualValue != null && (actualValue.endsWith(substring));
-    }
-
-    @Override
-    public boolean attributeValueContains(@Nonnull Element element, String attributeName, @Nonnull String substring) {
-        String actualValue = element.getAttribute(attributeName);
-        return actualValue != null && (actualValue.contains(substring));
-    }
-
-    @Override
-    public String getAttribute(@Nonnull Element element, String attributeName) {
+    public String getAttribute(@Nonnull Element element, @NotNull String attributeName) {
         return element.getAttribute(attributeName);
-    }
-
-    @Override
-    public boolean attributeValueContainsWord(@Nonnull Element element, String attributeName, @Nonnull String word) {
-        String value = element.getAttribute(attributeName);
-        if (value != null) {
-            String[] words = value.split("\\s+");
-            for (int i = 0; i < words.length; i++) {
-                if (word.equals(words[i])) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     @Nonnull
@@ -291,7 +260,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, String name, String value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @NotNull String name, String value) {
         switch (origin) {
             case USER:
                 element.setAttribute(name, value);

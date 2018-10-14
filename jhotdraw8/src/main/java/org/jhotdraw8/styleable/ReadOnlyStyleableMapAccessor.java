@@ -25,7 +25,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return name string.
      */
-    @Nullable
+    @Nonnull
     String getName();
 
     /**

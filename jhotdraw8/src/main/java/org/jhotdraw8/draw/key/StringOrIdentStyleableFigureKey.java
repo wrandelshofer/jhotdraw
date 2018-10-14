@@ -17,7 +17,8 @@ import org.jhotdraw8.text.CssStringOrIdentConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
- * StringStyleableFigureKey.
+ * This key has a string value which can be given as a CSS ident-token or
+ * as a CSS string-token.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -57,13 +58,6 @@ public class StringOrIdentStyleableFigureKey extends AbstractStyleableFigureKey<
      */
     public StringOrIdentStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
         super(name, String.class, false, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createSizeCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
 
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

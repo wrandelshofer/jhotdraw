@@ -210,14 +210,14 @@ public class CssParser {
 
     private Stylesheet parseStylesheet(CssTokenizerInterface tt) throws IOException {
         List<StyleRule> styleRules = new ArrayList<>();
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF) {
+        while (tt.nextToken() != CssToken.TT_EOF) {
             try {
                 switch (tt.currentToken()) {
-                    case CssTokenizerInterface.TT_S:
-                    case CssTokenizerInterface.TT_CDC:
-                    case CssTokenizerInterface.TT_CDO:
+                    case CssToken.TT_S:
+                    case CssToken.TT_CDC:
+                    case CssToken.TT_CDO:
                         break;
-                    case CssTokenizerInterface.TT_AT_KEYWORD: {
+                    case CssToken.TT_AT_KEYWORD: {
                         tt.pushBack();
                         AtRule r = parseAtRule(tt);
                         if (r != null) {
@@ -248,22 +248,22 @@ public class CssParser {
     }
 
     private void skipWhitespace(CssTokenizerInterface tt) throws IOException, ParseException {
-        while (tt.currentToken() == CssTokenizerInterface.TT_S//
-                || tt.currentToken() == CssTokenizerInterface.TT_CDC//
-                || tt.currentToken() == CssTokenizerInterface.TT_CDO) {
+        while (tt.currentToken() == CssToken.TT_S//
+                || tt.currentToken() == CssToken.TT_CDC//
+                || tt.currentToken() == CssToken.TT_CDO) {
             tt.nextToken();
         }
     }
 
     private AtRule parseAtRule(CssTokenizerInterface tt) throws IOException, ParseException {
         // FIXME implement this properly
-        if (tt.nextToken() != CssTokenizerInterface.TT_AT_KEYWORD) {
+        if (tt.nextToken() != CssToken.TT_AT_KEYWORD) {
             throw new ParseException("AtRule: At-Keyword expected.", tt.getLineNumber());
         }
         String atKeyword = tt.currentStringValue();
         tt.nextToken();
         skipWhitespace(tt);
-        while (tt.currentToken() != CssTokenizerInterface.TT_EOF
+        while (tt.currentToken() != CssToken.TT_EOF
                 && tt.currentToken() != '{'//
                 && tt.currentToken() != ';') {
             tt.pushBack();
@@ -293,7 +293,7 @@ public class CssParser {
                 tt.pushBack();
                 parseSquareBlock(tt);
                 break;
-            case CssTokenizerInterface.TT_FUNCTION:
+            case CssToken.TT_FUNCTION:
                 tt.pushBack();
                 parseFunctionBlock(tt);
                 break;
@@ -309,7 +309,7 @@ public class CssParser {
         if (tt.nextToken() != '{') {
             throw new ParseException("CurlyBlock: '{' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+        while (tt.nextToken() != CssToken.TT_EOF
                 && tt.currentToken() != '}') {
             tt.pushBack();
             // FIXME do something with component value
@@ -325,7 +325,7 @@ public class CssParser {
         if (tt.nextToken() != '(') {
             throw new ParseException("RoundBlock: '(' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+        while (tt.nextToken() != CssToken.TT_EOF
                 && tt.currentToken() != ')') {
             tt.pushBack();
             // FIXME do something with component value
@@ -341,7 +341,7 @@ public class CssParser {
         if (tt.nextToken() != '[') {
             throw new ParseException("SquareBlock: '[' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+        while (tt.nextToken() != CssToken.TT_EOF
                 && tt.currentToken() != ']') {
             tt.pushBack();
             // FIXME do something with component value
@@ -354,7 +354,7 @@ public class CssParser {
     }
 
     private Object parseFunctionBlock(CssTokenizerInterface tt) throws IOException, ParseException {
-        if (tt.nextToken() != CssTokenizerInterface.TT_FUNCTION) {
+        if (tt.nextToken() != CssToken.TT_FUNCTION) {
             throw new ParseException("FunctionBlock: function expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
         if (tt.nextToken() != ')') {
@@ -364,7 +364,7 @@ public class CssParser {
     }
 
     private Object parsePreservedToken(CssTokenizerInterface tt) throws IOException, ParseException {
-        if (tt.nextToken() == CssTokenizerInterface.TT_EOF) {
+        if (tt.nextToken() == CssToken.TT_EOF) {
             throw new ParseException("PreservedToken: token expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
         return null;
@@ -374,7 +374,7 @@ public class CssParser {
         // Fixme don't throw away a qualified rule
         tt.nextToken();
         skipWhitespace(tt);
-        while (tt.currentToken() != CssTokenizerInterface.TT_EOF
+        while (tt.currentToken() != CssToken.TT_EOF
                 && tt.currentToken() != '{'//
                 && tt.currentToken() != ';') {
             tt.pushBack();
@@ -413,7 +413,7 @@ public class CssParser {
     private SelectorGroup parseSelectorGroup(@Nonnull CssTokenizerInterface tt) throws IOException, ParseException {
         List<Selector> selectors = new ArrayList<>();
         selectors.add(parseSelector(tt));
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+        while (tt.nextToken() != CssToken.TT_EOF
                 && tt.currentToken() != '{') {
             skipWhitespace(tt);
             if (tt.currentToken() != ',') {
@@ -431,15 +431,15 @@ public class CssParser {
     private Selector parseSelector(@Nonnull CssTokenizerInterface tt) throws IOException, ParseException {
         SimpleSelector simpleSelector = parseSimpleSelector(tt);
         Selector selector = simpleSelector;
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+        while (tt.nextToken() != CssToken.TT_EOF
                 && tt.currentToken() != '{' && tt.currentToken() != ',') {
 
             boolean potentialDescendantCombinator = false;
-            if (tt.currentToken() == CssTokenizerInterface.TT_S) {
+            if (tt.currentToken() == CssToken.TT_S) {
                 potentialDescendantCombinator = true;
                 skipWhitespace(tt);
             }
-            if (tt.currentToken() == CssTokenizerInterface.TT_EOF
+            if (tt.currentToken() == CssToken.TT_EOF
                     || tt.currentToken() == '{' || tt.currentToken() == ',') {
                 break;
             }
@@ -474,12 +474,12 @@ public class CssParser {
             switch (tt.currentToken()) {
                 case '*':
                     return new UniversalSelector();
-                case CssTokenizerInterface.TT_IDENT:
+                case CssToken.TT_IDENT:
                     return new TypeSelector(tt.currentStringValue());
-                case CssTokenizerInterface.TT_HASH:
+                case CssToken.TT_HASH:
                     return new IdSelector(tt.currentStringValue());
                 case '.':
-                    if (tt.nextToken() != CssTokenizerInterface.TT_IDENT) {
+                    if (tt.nextToken() != CssToken.TT_IDENT) {
                         throw new ParseException("SimpleSelector: identifier expected.", tt.getLineNumber());
                     }
                     return new ClassSelector(tt.currentStringValue());
@@ -502,15 +502,15 @@ public class CssParser {
         if (tt.nextToken() != ':') {
             throw new ParseException("Pseudo Class Selector: ':' expected of \"" + tt.currentStringValue() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
-        if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
-                && tt.currentToken() != CssTokenizerInterface.TT_FUNCTION) {
+        if (tt.nextToken() != CssToken.TT_IDENT
+                && tt.currentToken() != CssToken.TT_FUNCTION) {
             throw new ParseException("Pseudo Class Selector: identifier or function expected instead of \"" + tt.currentStringValue() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
 
-        if (tt.currentToken() == CssTokenizerInterface.TT_FUNCTION) {
+        if (tt.currentToken() == CssToken.TT_FUNCTION) {
             String ident = tt.currentStringValue();
             List<PreservedToken> terms = new ArrayList<>();
-            while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+            while (tt.nextToken() != CssToken.TT_EOF
                     && tt.currentToken() != ')') {
                 terms.add(new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(), tt.getStartPosition(), tt.getEndPosition()));
             }
@@ -525,56 +525,56 @@ public class CssParser {
         if (tt.nextToken() != '[') {
             throw new ParseException("AttributeSelector: '[' expected.", tt.getLineNumber());
         }
-        if (tt.nextToken() != CssTokenizerInterface.TT_IDENT) {
+        if (tt.nextToken() != CssToken.TT_IDENT) {
             throw new ParseException("AttributeSelector: Identifier expected. Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
         String attributeName = tt.currentStringValue();
         AbstractAttributeSelector selector;
         switch (tt.nextToken()) {
             case '=':
-                if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
-                        && tt.currentToken() != CssTokenizerInterface.TT_STRING
-                        && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
+                if (tt.nextToken() != CssToken.TT_IDENT
+                        && tt.currentToken() != CssToken.TT_STRING
+                        && tt.currentToken() != CssToken.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
                 selector = new EqualsMatchSelector(attributeName, tt.currentStringValue());
                 break;
-            case CssTokenizerInterface.TT_INCLUDE_MATCH:
-                if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
-                        && tt.currentToken() != CssTokenizerInterface.TT_STRING
-                        && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
+            case CssToken.TT_INCLUDE_MATCH:
+                if (tt.nextToken() != CssToken.TT_IDENT
+                        && tt.currentToken() != CssToken.TT_STRING
+                        && tt.currentToken() != CssToken.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
                 selector = new IncludeMatchSelector(attributeName, tt.currentStringValue());
                 break;
-            case CssTokenizerInterface.TT_DASH_MATCH:
-                if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
-                        && tt.currentToken() != CssTokenizerInterface.TT_STRING
-                        && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
+            case CssToken.TT_DASH_MATCH:
+                if (tt.nextToken() != CssToken.TT_IDENT
+                        && tt.currentToken() != CssToken.TT_STRING
+                        && tt.currentToken() != CssToken.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
                 selector = new DashMatchSelector(attributeName, tt.currentStringValue());
                 break;
-            case CssTokenizerInterface.TT_PREFIX_MATCH:
-                if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
-                        && tt.currentToken() != CssTokenizerInterface.TT_STRING
-                        && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
+            case CssToken.TT_PREFIX_MATCH:
+                if (tt.nextToken() != CssToken.TT_IDENT
+                        && tt.currentToken() != CssToken.TT_STRING
+                        && tt.currentToken() != CssToken.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
                 selector = new PrefixMatchSelector(attributeName, tt.currentStringValue());
                 break;
-            case CssTokenizerInterface.TT_SUFFIX_MATCH:
-                if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
-                        && tt.currentToken() != CssTokenizerInterface.TT_STRING
-                        && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
+            case CssToken.TT_SUFFIX_MATCH:
+                if (tt.nextToken() != CssToken.TT_IDENT
+                        && tt.currentToken() != CssToken.TT_STRING
+                        && tt.currentToken() != CssToken.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
                 selector = new SuffixMatchSelector(attributeName, tt.currentStringValue());
                 break;
-            case CssTokenizerInterface.TT_SUBSTRING_MATCH:
-                if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
-                        && tt.currentToken() != CssTokenizerInterface.TT_STRING
-                        && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
+            case CssToken.TT_SUBSTRING_MATCH:
+                if (tt.nextToken() != CssToken.TT_IDENT
+                        && tt.currentToken() != CssToken.TT_STRING
+                        && tt.currentToken() != CssToken.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
                 selector = new SubstringMatchSelector(attributeName, tt.currentStringValue());
@@ -598,10 +598,10 @@ public class CssParser {
     private List<Declaration> parseDeclarationList(CssTokenizerInterface tt) throws IOException, ParseException {
         List<Declaration> declarations = new ArrayList<>();
 
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+        while (tt.nextToken() != CssToken.TT_EOF
                 && tt.currentToken() != '}') {
             switch (tt.currentToken()) {
-                case CssTokenizerInterface.TT_IDENT:
+                case CssToken.TT_IDENT:
                     tt.pushBack();
                     try {
                         declarations.add(parseDeclaration(tt));
@@ -612,7 +612,7 @@ public class CssParser {
                     }
                     break;
                 case ';':
-                case CssTokenizerInterface.TT_S:
+                case CssToken.TT_S:
                     break;
                 default:
                     throw new ParseException(//
@@ -629,7 +629,7 @@ public class CssParser {
     }
 
     private Declaration parseDeclaration(CssTokenizerInterface tt) throws IOException, ParseException {
-        if (tt.nextToken() != CssTokenizerInterface.TT_IDENT) {
+        if (tt.nextToken() != CssToken.TT_IDENT) {
             throw new ParseException(//
                     "Declaration: property name expected. Line "//
                     + tt.getLineNumber() + ".",//
@@ -655,16 +655,16 @@ public class CssParser {
         tt.nextToken();
         skipWhitespace(tt);
         tt.pushBack();
-        while (tt.nextToken() != CssTokenizerInterface.TT_EOF
+        while (tt.nextToken() != CssToken.TT_EOF
                 && //
                 tt.currentToken() != '}' && tt.currentToken() != ';') {
             switch (tt.currentToken()) {
-                case CssTokenizerInterface.TT_CDC:
-                case CssTokenizerInterface.TT_CDO:
+                case CssToken.TT_CDC:
+                case CssToken.TT_CDO:
                     break;
-                case CssTokenizerInterface.TT_BAD_URI:
+                case CssToken.TT_BAD_URI:
                     throw new ParseException("Terms: Bad URI in line " + tt.getLineNumber() + ".", tt.getStartPosition());
-                case CssTokenizerInterface.TT_BAD_STRING:
+                case CssToken.TT_BAD_STRING:
                     throw new ParseException("Terms: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
                 default:
                     terms.add(new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(), tt.getStartPosition(), tt.getEndPosition()));
@@ -681,11 +681,11 @@ public class CssParser {
 
     private PreservedToken parseTerm(CssTokenizerInterface tt) throws IOException, ParseException {
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_EOF:
+            case CssToken.TT_EOF:
                 throw new ParseException("Term: Term expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
-            case CssTokenizerInterface.TT_BAD_URI:
+            case CssToken.TT_BAD_URI:
                 throw new ParseException("Term: Bad URI in line " + tt.getLineNumber() + ".", tt.getStartPosition());
-            case CssTokenizerInterface.TT_BAD_STRING:
+            case CssToken.TT_BAD_STRING:
                 throw new ParseException("Term: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
             default:
                 return new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(), tt.getStartPosition(), tt.getEndPosition());

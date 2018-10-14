@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -34,7 +36,7 @@ public class CssSvgPathConverter implements Converter<String> {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
         String p = null;
-        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+        if (tt.nextToken() == CssToken.TT_IDENT) {
             if (!nullable) {
                 throw new ParseException("String expected. " + tt.currentToken(), buf.position());
             }
@@ -43,7 +45,7 @@ public class CssSvgPathConverter implements Converter<String> {
             }
             p = null;
         } else {
-            if (tt.currentToken() != CssTokenizer.TT_STRING) {
+            if (tt.currentToken() != CssToken.TT_STRING) {
                 throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
             }
             p = (tt.currentStringValue());

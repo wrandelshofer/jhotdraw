@@ -31,7 +31,7 @@ public class CssTokenizerTest {
         CssTokenizer tt = new CssTokenizer(new StringReader(inputData), false);
         //
         StringBuilder buf = new StringBuilder();
-        while (tt.nextToken() != CssTokenizer.TT_EOF) {
+        while (tt.nextToken() != CssToken.TT_EOF) {
             if (buf.length() > 0) {
                 buf.append(' ');
             }

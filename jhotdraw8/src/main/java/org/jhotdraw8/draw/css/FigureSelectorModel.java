@@ -19,6 +19,8 @@ import javafx.css.PseudoClass;
 import javafx.css.StyleOrigin;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.SelectorModel;
@@ -59,33 +61,33 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasId(@Nonnull Figure element, @Nonnull String id) {
+    public boolean hasId(@NotNull @Nonnull Figure element, @NotNull @Nonnull String id) {
         return id.equals(element.getId());
     }
 
     @Override
-    public String getId(@Nonnull Figure element) {
+    public String getId(@NotNull @Nonnull Figure element) {
         return element.getId();
     }
 
     @Override
-    public boolean hasType(@Nonnull Figure element, @Nonnull String type) {
+    public boolean hasType(@NotNull @Nonnull Figure element, @NotNull @Nonnull String type) {
         return type.equals(element.getTypeSelector());
     }
 
     @Override
-    public String getType(@Nonnull Figure element) {
+    public String getType(@NotNull @Nonnull Figure element) {
         return element.getTypeSelector();
     }
 
     @Override
-    public boolean hasStyleClass(@Nonnull Figure element, String clazz) {
+    public boolean hasStyleClass(@NotNull @Nonnull Figure element, @NotNull String clazz) {
         return element.getStyleClass().contains(clazz);
     }
 
     @Nonnull
     @Override
-    public Set<String> getStyleClasses(@Nonnull Figure element) {
+    public Set<String> getStyleClasses(@NotNull @Nonnull Figure element) {
         Collection<String> styleClasses = element.getStyleClass();
         return (styleClasses == null) ? Collections.emptySet() : new HashSet<>(element.getStyleClass());
     }
@@ -119,7 +121,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasAttribute(@Nonnull Figure element, String attributeName) {
+    public boolean hasAttribute(@NotNull @Nonnull Figure element, @NotNull String attributeName) {
         for (MapAccessor<?> key : element.getSupportedKeys()) {
             if (key.getName().equals(attributeName) && (key instanceof WriteableStyleableMapAccessor)) {
                 return true;
@@ -129,18 +131,18 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean attributeValueEquals(@Nonnull Figure element, String attributeName, String requestedValue) {
+    public boolean attributeValueEquals(@Nonnull Figure element, @NotNull String attributeName, @NotNull String requestedValue) {
         String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
         return Objects.equals(stringValue, requestedValue);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@Nonnull Figure element, String attributeName, @Nonnull String substring) {
+    public boolean attributeValueStartsWith(@Nonnull Figure element, @NotNull String attributeName, @Nonnull String substring) {
         String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
         return stringValue != null && stringValue.startsWith(substring);
     }
 
-    @Nonnull
+    @Nullable
     protected ReadOnlyStyleableMapAccessor<Object> getReadOnlyAttributeAccessor(@Nonnull Figure element, String attributeName) {
         @SuppressWarnings("unchecked")
         ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadOnlyKey(element, attributeName);
@@ -163,19 +165,19 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean attributeValueEndsWith(@Nonnull Figure element, String attributeName, @Nonnull String substring) {
+    public boolean attributeValueEndsWith(@Nonnull Figure element, @NotNull String attributeName, @Nonnull String substring) {
         String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
         return stringValue != null && stringValue.endsWith(substring);
     }
 
     @Override
-    public boolean attributeValueContains(@Nonnull Figure element, String attributeName, @Nonnull String substring) {
+    public boolean attributeValueContains(@Nonnull Figure element, @NotNull String attributeName, @Nonnull String substring) {
         String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
         return stringValue != null && stringValue.contains(substring);
     }
 
     @Override
-    public boolean attributeValueContainsWord(@Nonnull Figure element, String attributeName, @Nonnull String word) {
+    public boolean attributeValueContainsWord(@NotNull @Nonnull Figure element, @NotNull String attributeName, @NotNull @Nonnull String word) {
         ReadOnlyStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, attributeName);
         if (k == null) {
             return false;
@@ -204,7 +206,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasPseudoClass(@Nonnull Figure element, @Nonnull String pseudoClass) {
+    public boolean hasPseudoClass(@NotNull @Nonnull Figure element, @NotNull @Nonnull String pseudoClass) {
         Set<Figure> fs = additionalPseudoClassStates.get(pseudoClass);
         if (fs != null && fs.contains(element)) {
             return true;
@@ -215,13 +217,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public Figure getParent(@Nonnull Figure element) {
+    public Figure getParent(@NotNull @Nonnull Figure element) {
         return element.getParent();
     }
 
     @Nullable
     @Override
-    public Figure getPreviousSibling(@Nonnull Figure element) {
+    public Figure getPreviousSibling(@NotNull @Nonnull Figure element) {
         if (element.getParent() == null) {
             return null;
         }
@@ -231,14 +233,14 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Nonnull
     @Override
-    public Set<String> getAttributeNames(@Nonnull Figure element) {
+    public Set<String> getAttributeNames(@NotNull @Nonnull Figure element) {
         // FIXME use keyToName map
         return getMetaMap(element).keySet();
     }
 
     @Nonnull
     @Override
-    public Set<String> getComposedAttributeNames(@Nonnull Figure element) {
+    public Set<String> getComposedAttributeNames(@NotNull @Nonnull Figure element) {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
         Set<WriteableStyleableMapAccessor<?>> attrk = new HashSet<>();
@@ -261,7 +263,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Nonnull
     @Override
-    public Set<String> getDecomposedAttributeNames(@Nonnull Figure element) {
+    public Set<String> getDecomposedAttributeNames(@NotNull @Nonnull Figure element) {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
         Set<WriteableStyleableMapAccessor<?>> attrk = new HashSet<>();
@@ -280,13 +282,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    public String getAttribute(@Nonnull Figure element, String attributeName) {
+    public String getAttribute(@NotNull @Nonnull Figure element, @NotNull String attributeName) {
         return getAttribute(element, StyleOrigin.USER, attributeName);
     }
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public String getAttribute(@Nonnull Figure element, @Nullable StyleOrigin origin, String attributeName) {
+    public String getAttribute(@Nonnull Figure element, @NotNull @Nullable StyleOrigin origin, @NotNull String attributeName) {
         WriteableStyleableMapAccessor<Object> key = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         if (key == null) {
             return null;
@@ -337,7 +339,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Figure elem, StyleOrigin origin, String name, String value) {
+    public void setAttribute(@NotNull @Nonnull Figure elem, @NotNull StyleOrigin origin, @NotNull String name, String value) {
         Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 
         WriteableStyleableMapAccessor<Object> k = metaMap.get(name);

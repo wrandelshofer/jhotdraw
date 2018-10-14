@@ -19,7 +19,15 @@ import javax.annotation.Nullable;
  * @param <V> the type of the property value
  */
 public class SimpleCssMetaData<S extends Styleable, V> extends CssMetaData<S, V> {
-
+    /**
+     *
+     * Construct a CssMetaData with the given parameters and no sub-properties.
+     * @param property the CSS property
+     * @param converter the StyleConverter used to convert the CSS parsed value to a Java object.
+     * @param initialValue The initial or default value of the corresponding StyleableProperty
+     * @param inherits true if this property uses CSS inheritance
+     * @param function the function that converts a value of type S to a Java object
+     */
     public SimpleCssMetaData(
             final String property,
             final Function<S, StyleableProperty<V>> function,
