@@ -510,7 +510,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     @Nullable
     private Figure findFigureRecursive(@Nullable Parent p, @Nonnull Point2D pp, double tolerance) {
-        if (p == null) return null;
+        if (p == null) {
+            return null;
+        }
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -1125,16 +1127,17 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (sp == null) {
             return;
         }
-        final Bounds contentBounds = sp.getContent().getBoundsInLocal();
 
+        final Bounds contentBounds = sp.getContent().getBoundsInLocal();
         double width = contentBounds.getWidth();
         double height = contentBounds.getHeight();
-
         double x = boundsInView.getMinX() + boundsInView.getWidth() * 0.5;
         double y = boundsInView.getMinY() + boundsInView.getHeight() * 0.5;
+
         // scrolling values range from 0 to 1
-        sp.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
-        sp.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
+        Bounds viewportBounds = sp.getViewportBounds();
+        sp.setVvalue(Geom.clamp((y - viewportBounds.getHeight() * 0.5) / (height - viewportBounds.getHeight()), 0.0, 1.0));
+        sp.setHvalue(Geom.clamp((x - viewportBounds.getWidth() * 0.5) / (width - viewportBounds.getWidth()), 0.0, 1.0));
     }
 
     /**
