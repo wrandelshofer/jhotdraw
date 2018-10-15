@@ -18,17 +18,6 @@ import org.jhotdraw8.io.CharBufferReader;
 
 /**
  * Converts an {@code String} to a quoted CSS {@code String}.
- * <pre>
- * unicode       = '\' , ( 6 * hexd
- *                       | hexd , 5 * [hexd] , w
- *                       );
- * escape        = ( unicode
- *                 | '\' , -( newline | hexd)
- *                 ) ;
- * string        = string1 | string2 ;
- * string1       = '"' , { -( '"' ) | '\\' , newline |  escape } , '"' ;
- * string2       = "'" , { -( "'" ) | '\\' , newline |  escape } , "'" ;
- * </pre>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -54,6 +43,11 @@ public class CssStringConverter implements Converter<String> {
     @Override
     public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
+        if (tt.nextToken()==CssTokenType.TT_IDENT&&CssTokenType.IDENT_NONE.equals(tt.currentStringValue())) {
+            return null;
+        }else{
+            tt.pushBack();
+        }
         if (tt.nextToken() != CssTokenType.TT_STRING) {
             throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
         }
@@ -70,7 +64,7 @@ public class CssStringConverter implements Converter<String> {
         if (value == null) {
             out.append(CssTokenType.IDENT_NONE);
         } else {
-            out.append(new Token(CssTokenType.TT_STRING, value).fromToken());
+            out.append(new Token(CssTokenType.TT_STRING, value, quoteChar).fromToken());
         }
     }
 

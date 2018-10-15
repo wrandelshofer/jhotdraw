@@ -9,11 +9,14 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.draw.key.CssColor;
+
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Bloom;
@@ -96,9 +99,9 @@ public class CssEffectConverter implements Converter<Effect> {
     private static final String SHADOW = "shadow";
 
     @Nonnull
-    private CssEnumConverter<BlurType> blurTypeConverter = new CssEnumConverter<>(BlurType.class,false);
+    private CssEnumConverter<BlurType> blurTypeConverter = new CssEnumConverter<>(BlurType.class, false);
     @Nonnull
-    private CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class,false);
+    private CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class, false);
     @Nonnull
     private CssColorConverter colorConverter = new CssColorConverter(false);
     @Nonnull
@@ -353,7 +356,7 @@ public class CssEffectConverter implements Converter<Effect> {
         BlendMode mode = BlendMode.SRC_OVER;
         if (tt.nextToken() == CssTokenType.TT_IDENT) {
             tt.pushBack();
-            mode = blendModeConverter.parse(tt);
+            mode = blendModeConverter.parse(tt,null);
         }
         if (tt.nextToken() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
@@ -514,14 +517,14 @@ public class CssEffectConverter implements Converter<Effect> {
         double spreadOrChocke = 0.0;
         double offsetX = 0.0;
         double offsetY = 4.0;
-        Effect input=null;
+        Effect input = null;
 
         if (tt.nextToken() != ')') {
             if (tt.currentToken() != CssTokenType.TT_IDENT) {
                 throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getStartPosition());
             }
             tt.pushBack();
-            blurType = blurTypeConverter.parse(tt);
+            blurType = blurTypeConverter.parse(tt,null);
 
             if (tt.nextToken() != ',') {
                 tt.pushBack();
@@ -574,29 +577,29 @@ public class CssEffectConverter implements Converter<Effect> {
             offsetY = tt.currentNumericValue().doubleValue();
             if (tt.nextToken() != ',') {
                 tt.pushBack();
-            }else{
-                input=parseEffect(tt);
+            } else {
+                input = parseEffect(tt);
             }
         }
-            if (tt.currentToken() != ')') {
-                throw new ParseException("CSS Shadow-Effect: ')'  expected", tt.getStartPosition());
-            }
+        if (tt.currentToken() != ')') {
+            throw new ParseException("CSS Shadow-Effect: ')'  expected", tt.getStartPosition());
+        }
 
-         final Effect effect ;
+        final Effect effect;
         if (isDropShadow) {
-            DropShadow dropShadow =new DropShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
-            if (input!=null) {
+            DropShadow dropShadow = new DropShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            if (input != null) {
                 dropShadow.setInput(input);
             }
-            effect=dropShadow;
+            effect = dropShadow;
         } else {
-            InnerShadow innerhShadow =new InnerShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
-            if (input!=null) {
+            InnerShadow innerhShadow = new InnerShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            if (input != null) {
                 innerhShadow.setInput(input);
             }
-            effect=innerhShadow;
+            effect = innerhShadow;
         }
-            return effect;
+        return effect;
     }
 
     private Effect parseShadow(CssTokenizerAPI tt) throws ParseException, IOException {
@@ -610,7 +613,7 @@ public class CssEffectConverter implements Converter<Effect> {
                 throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getStartPosition());
             }
             tt.pushBack();
-            blurType = blurTypeConverter.parse(tt);
+            blurType = blurTypeConverter.parse(tt,null);
 
             if (tt.nextToken() != ',') {
                 tt.pushBack();

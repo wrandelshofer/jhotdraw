@@ -52,4 +52,10 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
             }
         }
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨List⟩: none | ⟨Item⟩, ⟨Item⟩, ...\n"
+        +"With ⟨Item⟩:\n  "+elementConverter.getHelpText();
+    }
 }

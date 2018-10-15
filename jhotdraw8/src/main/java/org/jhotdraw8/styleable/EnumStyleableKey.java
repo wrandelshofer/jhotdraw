@@ -10,6 +10,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.CssConverterConverterAdapter;
 import org.jhotdraw8.text.CssEnumConverter;
 
 /**
@@ -74,7 +75,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> i
     @Override
     public Converter<T> getConverter() {
         if (converter == null) {
-            converter = new CssEnumConverter<>(getValueType(), nullable);
+            converter = new CssConverterConverterAdapter<>(new CssEnumConverter<>(getValueType(), nullable));
         }
         return converter;
     }

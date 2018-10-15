@@ -8,6 +8,7 @@ import org.jhotdraw8.text.CssStringConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -36,24 +37,38 @@ public class Token extends AST {
     private int startPos = -1;
     private int endPos = -1;
 
+    @Nullable
+    private final Character preferredQuoteChar;
+
     private final static XmlNumberConverter DOUBLE_CONVERTER = new XmlNumberConverter();
 
     public Token(int ttype, String stringValue) {
         this(ttype, stringValue, null, 0, stringValue.length());
 
     }
-
-    public Token(char ttype) {
-        this(ttype, Character.toString(ttype), null, 0, 1);
+    public Token(int ttype, String stringValue, @Nullable Character preferredQuoteChar) {
+        this(ttype, stringValue, null, preferredQuoteChar, stringValue.length());
 
     }
 
+    public Token(char ttype) {
+        this(ttype, Character.toString(ttype), null, null, 0, 1);
+
+    }
+
+    public Token(int ttype, String stringValue, Number numericValue) {
+        this(ttype, stringValue, numericValue, null, 0, 1);
+    }
     public Token(int ttype, String stringValue, Number numericValue, int startPos, int endPos) {
+        this(ttype, stringValue, numericValue, null, startPos, endPos);
+    }
+    public Token(int ttype, String stringValue, Number numericValue, @Nullable Character preferredQuoteChar, int startPos, int endPos) {
         this.ttype = ttype;
         this.stringValue = stringValue;
         this.numericValue = numericValue;
         this.startPos = startPos;
         this.endPos = endPos;
+        this.preferredQuoteChar = preferredQuoteChar;
     }
 
     @Override
@@ -204,7 +219,10 @@ public class Token extends AST {
     }
 
     private String fromSTRING(String value) {
-        char quoteChar = value.indexOf('\'') == -1 || value.indexOf('"') == -1 ? '\'' : '"';
+        char quoteChar =
+                preferredQuoteChar!=null
+                        ?preferredQuoteChar
+                        :value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
         return fromSTRING(value, quoteChar, quoteChar);
     }
 
@@ -213,7 +231,10 @@ public class Token extends AST {
     }
 
     private String fromBAD_STRING(String value) {
-        char quoteChar = value.indexOf('\'') == -1 || value.indexOf('"') == -1 ? '\'' : '"';
+        char quoteChar =
+                preferredQuoteChar!=null
+                        ?preferredQuoteChar
+                        :value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
         return fromSTRING(value, quoteChar, '\n');
     }
 

@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.CssConverterConverterAdapter;
 import org.jhotdraw8.text.CssEnumConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -77,7 +78,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends AbstractStyleable
     @Override
     public Converter<T> getConverter() {
         if (converter == null) {
-            converter = new CssEnumConverter<>(getValueType(), nullable);
+            converter = new CssConverterConverterAdapter<>(new CssEnumConverter<>(getValueType(), nullable));
         }
         return converter;
     }

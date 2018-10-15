@@ -37,4 +37,11 @@ public interface CssConverter<T> {
      * Produces tokens.
      */
     void produceTokens(@Nullable T value, @Nullable IdFactory idFactory,@Nonnull Consumer<Token> consumer);
-}
+
+    /**
+     * Gets a help text.
+     * @return a help text.
+     */
+    String getHelpText();
+
+    }
