@@ -51,8 +51,8 @@ public class Token extends AST {
 
     }
 
-    public Token(char ttype) {
-        this(ttype, Character.toString(ttype), null, null, 0, 1);
+    public Token(int ttype) {
+        this(ttype, Character.toString((char)ttype), null, null, 0, 1);
 
     }
 

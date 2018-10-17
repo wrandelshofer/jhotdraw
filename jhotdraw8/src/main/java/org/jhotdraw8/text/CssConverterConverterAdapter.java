@@ -46,4 +46,10 @@ public class CssConverterConverterAdapter<T> implements Converter<T> {
             throw e.getCause();
         }
     }
+
+    @Nullable
+    @Override
+    public String getHelpText() {
+        return conv.getHelpText();
+    }
 }

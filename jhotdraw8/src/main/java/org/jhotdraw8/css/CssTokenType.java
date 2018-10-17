@@ -274,4 +274,14 @@ public class CssTokenType {
      */
     public final static int TT_COLON = ':';
 
+    /**
+     * Defines the right bracket delim-token.
+     */
+    public final static int TT_RIGHT_BRACKET = ')';
+    /**
+     * Defines the slash delim-token.
+     */
+    public final static int TT_SLASH = '/';
+
+
 }

@@ -22,6 +22,8 @@ import org.jhotdraw8.io.IdFactory;
  * CssLocatorConverter.
  * <p>
  * Currently converts relative locators only.
+ * <p>
+ * FIXME should implement CssConverter instead of Converter
  *
  * @author Werner Randelshofer
  * @version $Id$

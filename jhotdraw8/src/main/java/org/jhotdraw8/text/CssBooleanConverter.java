@@ -6,10 +6,14 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizerAPI;
+import org.jhotdraw8.css.ast.Token;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -18,7 +22,7 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssBooleanConverter implements Converter<Boolean> {
+public class CssBooleanConverter implements CssConverter<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,35 +35,30 @@ public class CssBooleanConverter implements Converter<Boolean> {
     public CssBooleanConverter() {
     }
 
+    @Nullable
     @Override
-    public void toString(@Nonnull Appendable buf, IdFactory idFactory, Boolean value) throws IOException {
-        buf.append(value ? trueString : falseString);
-    }
-
-    @Nonnull
-    @Override
-    public Boolean fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException {
-        int pos = in.position();
-        StringBuilder out = new StringBuilder();
-        while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
-            out.append(in.get());
-        }
-        String str = out.toString();
-        switch (str) {
+    public Boolean parse(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        tt.requireNextToken(CssTokenType.TT_IDENT,"⟨Boolean⟩ identifier expected.");
+        String s = tt.currentStringValue();
+        if (s==null)s=CssTokenType.IDENT_NONE;
+        switch (s) {
+            case CssTokenType.IDENT_NONE:
+                return null;
             case trueString:
-                return true;
+                return Boolean.TRUE;
             case falseString:
-                return false;
+                return Boolean.FALSE;
             default:
-                in.position(pos);
-                throw new ParseException("\"" + trueString + "\" or \"" + falseString + "\" expected instead of \"" + str + "\".", pos);
+                throw new ParseException("⟨Boolean⟩ "+trueString+" or "+falseString+" expected.",tt.getStartPosition());
         }
     }
 
-    @Nonnull
     @Override
-    public Boolean getDefaultValue() {
-        return false;
+    public void produceTokens(@Nullable Boolean value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> consumer) {
+        if (value ==null) {
+            consumer.accept(new Token(CssTokenType.TT_IDENT,CssTokenType.IDENT_NONE));
+        }else
+            consumer.accept(new Token(CssTokenType.TT_IDENT,value?trueString:falseString));
     }
 
     @Nonnull

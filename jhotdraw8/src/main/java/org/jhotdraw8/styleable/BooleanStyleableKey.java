@@ -6,6 +6,7 @@ package org.jhotdraw8.styleable;
 import javafx.css.StyleablePropertyFactory;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.text.CssBooleanConverter;
+import org.jhotdraw8.text.CssConverterConverterAdapter;
 
 /**
  * BooleanStyleableKey.
@@ -13,7 +14,7 @@ import org.jhotdraw8.text.CssBooleanConverter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> {
+public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> implements WriteableStyleableMapAccessor<Boolean> {
 
     private final static long serialVersionUID = 1L;
 
@@ -29,7 +30,7 @@ public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> {
     }
 
     public BooleanStyleableKey(String key, @Nonnull String cssName, Boolean defaultValue) {
-        super(key, Boolean.class, null, new CssBooleanConverter(),defaultValue);
+        super(key, Boolean.class, null, new CssConverterConverterAdapter<>(new CssBooleanConverter()),defaultValue);
         setCssMetaData(
                 new StyleablePropertyFactory<>(null).createBooleanCssMetaData(
                         cssName, s -> {

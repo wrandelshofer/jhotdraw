@@ -25,6 +25,7 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
     @Nonnull
     private final Converter<ImmutableList<T>> converter;
     private final CssMetaData<? extends Styleable, ImmutableList<T>> cssMetaData;
+    private final String cssName;
 
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull CssConverter<T> converter) {
         this(key, elemClass, ImmutableList.emptyList(), converter);
@@ -41,6 +42,7 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
         final StyleConverter<String, ImmutableList<T>> styleConverter
                 = new StyleConverterAdapter<>(this.converter);
         cssMetaData = new SimpleCssMetaData<>(key, function, styleConverter, defaultValue, false);
+        this.cssName = ReadOnlyStyleableMapAccessor.toCssName(key);
 
     }
 
@@ -58,6 +60,6 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
     @Nonnull
     @Override
     public String getCssName() {
-        return getName();
+        return cssName;
     }
 }

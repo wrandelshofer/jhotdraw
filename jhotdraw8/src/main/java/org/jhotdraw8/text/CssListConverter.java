@@ -25,9 +25,10 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     public ImmutableList<T> parse(@NotNull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         ArrayList<T> list = new ArrayList<>();
         do {
-            T elem = elementConverter.parse(tt,idFactory);
-            if (elem != null)
+            T elem = elementConverter.parse(tt, idFactory);
+            if (elem != null) {
                 list.add(elem);
+            }
             tt.setSkipWhitespaces(true);
             tt.setSkipComments(true);
         } while (tt.nextToken() == ',');
@@ -42,9 +43,12 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         } else {
             boolean first = true;
             for (T elem : value) {
-                if (elem == null) continue;
-                if (first) first = false;
-                else {
+                if (elem == null) {
+                    continue;
+                }
+                if (first) {
+                    first = false;
+                } else {
                     consumer.accept(new Token(','));
                     consumer.accept(new Token(CssTokenType.TT_S, " "));
                 }
@@ -56,6 +60,6 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     @Override
     public String getHelpText() {
         return "Format of ⟨List⟩: none | ⟨Item⟩, ⟨Item⟩, ...\n"
-        +"With ⟨Item⟩:\n  "+elementConverter.getHelpText();
+                + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
     }
 }
