@@ -5,7 +5,6 @@ package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
@@ -14,8 +13,9 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.text.CssPoint2DListConverter;
+import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -30,6 +30,7 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
 
     @Nonnull
     private final CssMetaData<?, ImmutableList<Point2D>> cssMetaData;
+    private final Converter<ImmutableList<Point2D>> converter ;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -67,11 +68,12 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, ImmutableList<Point2D>> converter
-                = new StyleConverterAdapter<>(new CssPoint2DListConverter());
+        this.converter=new CssListConverter<>(
+                new CssPoint2DConverter(false),false);
         CssMetaData<Styleable, ImmutableList<Point2D>> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<ImmutableList<Point2D>>(this.converter),
+                defaultValue, inherits);
         cssMetaData = md;
     }
 
@@ -81,13 +83,8 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
         return cssMetaData;
     }
 
-    private Converter<ImmutableList<Point2D>> converter;
-
     @Override
     public Converter<ImmutableList<Point2D>> getConverter() {
-        if (converter == null) {
-            converter = new CssPoint2DListConverter();
-        }
         return converter;
     }
 

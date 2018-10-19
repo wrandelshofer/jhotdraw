@@ -25,6 +25,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -42,13 +44,13 @@ import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.svg.TransformFlattener;
-import org.jhotdraw8.text.CssSize;
-import org.jhotdraw8.text.CssSizeConverter;
-import org.jhotdraw8.text.CssTransformListConverter;
-import org.jhotdraw8.text.SvgPaintConverter;
-import org.jhotdraw8.text.SvgTransformListConverter;
-import org.jhotdraw8.text.XmlNumberConverter;
-import org.jhotdraw8.text.XmlSizeListConverter;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.svg.text.SvgPaintConverter;
+import org.jhotdraw8.svg.text.SvgTransformConverter;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -85,12 +87,11 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     @Nullable
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
-    private final XmlSizeListConverter nbList = new XmlSizeListConverter();
-    private final SvgPaintConverter paint = new SvgPaintConverter();
+    private final Converter<ImmutableList<CssSize>> nbList = new CssListConverter<>(new CssSizeConverter(false));
+    private final SvgPaintConverter paint = new SvgPaintConverter(true);
     private boolean skipInvisibleNodes = true;
-    private final CssSizeConverter sznb = new CssSizeConverter();
-    private final SvgTransformListConverter tx = new SvgTransformListConverter();
-    private final CssTransformListConverter txc = new CssTransformListConverter();
+    private final Converter<CssSize> sznb = new CssSizeConverter(false);
+    private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
 
     @Nonnull
     private SvgExporter createExporter() {

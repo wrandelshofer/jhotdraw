@@ -5,7 +5,6 @@ package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 
@@ -16,7 +15,7 @@ import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.text.CssBezierNodeListConverter;
+import org.jhotdraw8.css.text.CssBezierNodeListConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -68,11 +67,9 @@ public class BezierNodeListStyleableFigureKey extends AbstractStyleableFigureKey
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, ImmutableList<BezierNode>> converter
-                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, ImmutableList<BezierNode>> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(converter), defaultValue, inherits);
         cssMetaData = md;
     }
 
@@ -82,13 +79,10 @@ public class BezierNodeListStyleableFigureKey extends AbstractStyleableFigureKey
         return cssMetaData;
     }
 
-    private Converter<ImmutableList<BezierNode>> converter;
+    private final Converter<ImmutableList<BezierNode>> converter=new CssBezierNodeListConverter(false);
 
     @Override
     public Converter<ImmutableList<BezierNode>> getConverter() {
-        if (converter == null) {
-            converter = new CssBezierNodeListConverter(true);
-        }
         return converter;
     }
 

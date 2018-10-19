@@ -46,7 +46,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.CssIdentConverter;
+import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.StyleRule;
@@ -91,7 +91,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private RadioButton showSpecifiedValues;
 
     private Node node;
-    private final CssIdentConverter cssIdentConverter = new CssIdentConverter();
+    private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
 
     @Nonnull
     private Map<String, String> helpTexts = new HashMap<>();

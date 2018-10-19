@@ -9,9 +9,8 @@ import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssBooleanConverter;
+import org.jhotdraw8.css.text.CssBooleanConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
-import org.jhotdraw8.text.CssConverterConverterAdapter;
 
 /**
  * DoubleStyleableFigureKey.
@@ -75,7 +74,7 @@ public class BooleanStyleableFigureKey extends AbstractStyleableFigureKey<Boolea
     @Override
     public Converter<Boolean> getConverter() {
         if (converter == null) {
-            converter = new CssConverterConverterAdapter<>(new CssBooleanConverter());
+            converter = new CssBooleanConverter(false);
         }
         return converter;
     }

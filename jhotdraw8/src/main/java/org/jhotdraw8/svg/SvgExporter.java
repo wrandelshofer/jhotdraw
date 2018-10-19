@@ -13,6 +13,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -68,6 +69,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -75,16 +77,21 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
-import org.jhotdraw8.text.SvgPaintConverter;
-import org.jhotdraw8.text.SvgTransformListConverter;
-import org.jhotdraw8.text.XmlNumberConverter;
-import org.jhotdraw8.text.XmlSizeListConverter;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.text.CssDoubleConverter;
+import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.css.text.CssNumberConverter;
+import org.jhotdraw8.svg.text.SvgPaintConverter;
+import org.jhotdraw8.svg.text.SvgTransformConverter;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -111,6 +118,7 @@ public class SvgExporter {
         }
         SVG_FORMAT = fmt;
     }
+
     private final String SVG_NS = "http://www.w3.org/2000/svg";
     @Nonnull
     private IdFactory idFactory = new SimpleIdFactory();
@@ -118,20 +126,20 @@ public class SvgExporter {
     @Nullable
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
-    private final XmlSizeListConverter nbList = new XmlSizeListConverter();
-    private final SvgPaintConverter paintConverter = new SvgPaintConverter();
+    private final Converter<ImmutableList<Number>> nbList = new CssListConverter<>(new CssNumberConverter(false));
+    private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
+    private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
     private boolean skipInvisibleNodes = true;
     private final Object skipKey;
-    private final SvgTransformListConverter tx = new SvgTransformListConverter();
-        @Nullable
-        private Function<URI, URI> uriResolver = new UriResolver(null, null);
+    private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
+    @Nullable
+    private Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     /**
-     *
      * @param imageUriKey this property is used to retrieve an URL from an
-     * ImageView
-     * @param skipKey this property is used to retrieve a Boolean from a Node.
-     * If the Boolean is true, then the node is skipped.
+     *                    ImageView
+     * @param skipKey     this property is used to retrieve a Boolean from a Node.
+     *                    If the Boolean is true, then the node is skipped.
      */
     public SvgExporter(Object imageUriKey, Object skipKey) {
         this.imageUriKey = imageUriKey;
@@ -142,12 +150,12 @@ public class SvgExporter {
         return null;
     }
 
-        @Nullable
-        public Function<URI, URI> getUriResolver() {
+    @Nullable
+    public Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver( Function<URI, URI> uriResolver) {
+    public void setUriResolver(Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 
@@ -443,21 +451,21 @@ public class SvgExporter {
                 }
             }
         }
-        
-        
-       final FillRule fillRule;
+
+
+        final FillRule fillRule;
         if (node instanceof Path) {
-            Path path=(Path)node;
+            Path path = (Path) node;
             fillRule = path.getFillRule();
         } else if (node instanceof SVGPath) {
-            SVGPath path=(SVGPath)node;
+            SVGPath path = (SVGPath) node;
             fillRule = path.getFillRule();
-        }else{
-            fillRule=FillRule.NON_ZERO;
+        } else {
+            fillRule = FillRule.NON_ZERO;
         }
         switch (fillRule) {
             case EVEN_ODD:
-            elem.setAttribute("fill-rule", "evenodd");
+                elem.setAttribute("fill-rule", "evenodd");
                 break;
             case NON_ZERO:
             default:
@@ -668,7 +676,9 @@ public class SvgExporter {
     }
 
     private Element writePath(@Nonnull Document doc, @Nonnull Element parent, Path node) {
-        if (node.getElements().isEmpty()) return null;
+        if (node.getElements().isEmpty()) {
+            return null;
+        }
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
         StringBuilder buf = new StringBuilder();
@@ -951,13 +961,13 @@ public class SvgExporter {
     }
 
     /**
-     * Writes a shape if it has a visual representation. 
-     * 
-     * @param doc the document
+     * Writes a shape if it has a visual representation.
+     *
+     * @param doc    the document
      * @param parent the parent element
-     * @param node the shape
+     * @param node   the shape
      * @return the created element or null if the shape has no visual representation (e.g. a path without path elements)
-     * @throws IOException 
+     * @throws IOException
      */
     @Nullable
     private Element writeShape(@Nonnull Document doc, @Nonnull Element parent, Shape node) throws IOException {
@@ -1021,7 +1031,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
         }
         if (!shape.getStrokeDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", nbList.toStringFromCollection(shape.getStrokeDashArray()));
+            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableList.ofCollection(shape.getStrokeDashArray())));
         }
         if (shape.getStrokeDashOffset() != 0) {
             elem.setAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
@@ -1064,7 +1074,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
         }
         if (!style.getDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", nbList.toStringFromCollection(style.getDashArray()));
+            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableList.ofCollection(style.getDashArray())));
         }
         if (style.getDashOffset() != 0) {
             elem.setAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
@@ -1152,7 +1162,7 @@ public class SvgExporter {
 
         // The transforms are applied before translateX, translateY, scaleX, 
         // scaleY and rotate transforms.
-        List< Transform> txs = new ArrayList<>();
+        List<Transform> txs = new ArrayList<>();
         Point2D pivot = Geom.center(node.getBoundsInLocal());
         txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
         txs.add(new Rotate(node.getRotate(), pivot.getX(), pivot.getY()));
@@ -1161,10 +1171,10 @@ public class SvgExporter {
         writeTransformAttributes(elem, txs);
     }
 
-    private void writeTransformAttributes(@Nonnull Element elem, List< Transform> txs) {
+    private void writeTransformAttributes(@Nonnull Element elem, List<Transform> txs) {
 
         if (txs.size() > 0) {
-            String value = tx.toString(txs);
+            String value = tx.toString(ImmutableList.ofCollection(txs));
             if (!value.isEmpty()) {
                 elem.setAttribute("transform", value);
             }

@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.key;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
@@ -16,7 +15,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssPoint2DConverter;
+import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -52,11 +51,9 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Point2D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, Point2D> md
                 = new SimpleCssMetaData<>(property, function,
-                        cnvrtr, getDefaultValue(), inherits);
+                new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.xKey = xKey;
@@ -70,13 +67,10 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     }
 
-    private Converter<Point2D> converter;
+    private final Converter<Point2D> converter = new CssPoint2DConverter(false);
 
     @Override
     public Converter<Point2D> getConverter() {
-        if (converter == null) {
-            converter = new CssPoint2DConverter();
-        }
         return converter;
     }
 

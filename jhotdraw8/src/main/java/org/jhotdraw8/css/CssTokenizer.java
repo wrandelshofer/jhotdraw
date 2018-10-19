@@ -10,6 +10,7 @@ import java.nio.CharBuffer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.io.CharBufferReader;
+import org.jhotdraw8.io.CharSequenceReader;
 
 import static org.jhotdraw8.css.CssTokenType.TT_AT_KEYWORD;
 import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;
@@ -158,6 +159,10 @@ public class CssTokenizer implements CssTokenizerAPI {
         this(new CharBufferReader(charBuffer), true);
     }
 
+    public CssTokenizer(CharSequence charSequence) {
+        this(new CharSequenceReader(charSequence), true);
+    }
+
     public CssTokenizer(Reader reader) {
         this(reader, true);
     }
@@ -174,14 +179,14 @@ public class CssTokenizer implements CssTokenizerAPI {
 
     @Nullable
     @Override
-    public String currentStringValue() {
+    public String currentString() {
         return stringValue;
     }
 
 
     @Nullable
     @Override
-    public Number currentNumericValue() {
+    public Number currentNumber() {
         return numericValue;
     }
 

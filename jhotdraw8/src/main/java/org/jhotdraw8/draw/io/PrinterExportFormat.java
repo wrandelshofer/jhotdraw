@@ -27,8 +27,8 @@ import org.jhotdraw8.draw.figure.SimplePageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
-import org.jhotdraw8.text.CssSize;
-import org.jhotdraw8.text.CssSize2D;
+import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssSize2D;
 import org.jhotdraw8.draw.figure.Page;
 
 /**

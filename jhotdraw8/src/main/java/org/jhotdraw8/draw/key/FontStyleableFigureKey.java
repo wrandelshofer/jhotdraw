@@ -4,17 +4,19 @@
 package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
+
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+
 import javax.annotation.Nonnull;
+
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssFontConverter;
+import org.jhotdraw8.css.text.CssFontConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.text.CssFont;
+import org.jhotdraw8.css.text.CssFont;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -29,6 +31,7 @@ public class FontStyleableFigureKey extends AbstractStyleableFigureKey<CssFont> 
 
     @Nonnull
     private final CssMetaData<?, CssFont> cssMetaData;
+    private final Converter<CssFont> converter = new CssFontConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -43,7 +46,7 @@ public class FontStyleableFigureKey extends AbstractStyleableFigureKey<CssFont> 
     /**
      * Creates a new instance with the specified name and default value.
      *
-     * @param name The name of the key.
+     * @param name         The name of the key.
      * @param defaultValue The default value.
      */
     public FontStyleableFigureKey(String name, CssFont defaultValue) {
@@ -64,11 +67,9 @@ public class FontStyleableFigureKey extends AbstractStyleableFigureKey<CssFont> 
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssFont> converter
-                = new StyleConverterAdapter<>(new CssFontConverter());
         CssMetaData<Styleable, CssFont> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(this.converter), defaultValue, inherits);
         cssMetaData = md;
     }
 
@@ -79,13 +80,8 @@ public class FontStyleableFigureKey extends AbstractStyleableFigureKey<CssFont> 
 
     }
 
-    private Converter<CssFont> converter;
-
     @Override
     public Converter<CssFont> getConverter() {
-        if (converter == null) {
-            converter = new CssFontConverter();
-        }
         return converter;
     }
 }

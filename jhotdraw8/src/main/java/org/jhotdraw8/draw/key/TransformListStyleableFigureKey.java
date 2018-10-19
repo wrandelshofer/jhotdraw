@@ -5,17 +5,17 @@ package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.css.text.CssTransformConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.text.CssTransformListConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -30,6 +30,7 @@ public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<
 
     @Nonnull
     private final CssMetaData<?, ImmutableList<Transform>> cssMetaData;
+    private Converter<ImmutableList<Transform>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -67,11 +68,10 @@ public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, ImmutableList<Transform>> converter
-                = new StyleConverterAdapter<>(new CssTransformListConverter());
+        converter = new CssListConverter<>(new CssTransformConverter());
         CssMetaData<Styleable, ImmutableList<Transform>> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(converter), defaultValue, inherits);
         cssMetaData = md;
     }
 
@@ -81,13 +81,8 @@ public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<
         return cssMetaData;
     }
 
-    private Converter<ImmutableList<Transform>> converter;
-
     @Override
     public Converter<ImmutableList<Transform>> getConverter() {
-        if (converter == null) {
-            converter = new CssTransformListConverter();
-        }
         return converter;
     }
 

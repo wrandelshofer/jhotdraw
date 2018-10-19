@@ -34,7 +34,7 @@ import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.StringConverterAdapter;
-import org.jhotdraw8.text.XmlUriConverter;
+import org.jhotdraw8.xml.text.XmlUriConverter;
 
 /**
  * FXML Controller class

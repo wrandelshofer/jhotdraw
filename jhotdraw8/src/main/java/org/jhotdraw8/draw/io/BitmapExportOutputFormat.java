@@ -47,7 +47,7 @@ import org.jhotdraw8.draw.figure.SimplePageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.geom.Transforms;
-import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.css.text.CssSize;
 import org.jhotdraw8.draw.figure.Page;
 
 /**

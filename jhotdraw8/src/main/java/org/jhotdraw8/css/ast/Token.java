@@ -4,8 +4,8 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.text.CssStringConverter;
-import org.jhotdraw8.text.XmlNumberConverter;
+import org.jhotdraw8.css.text.CssStringConverter;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,7 +40,7 @@ public class Token extends AST {
     @Nullable
     private final Character preferredQuoteChar;
 
-    private final static XmlNumberConverter DOUBLE_CONVERTER = new XmlNumberConverter();
+    private final static XmlNumberConverter NUMBER_CONVERTER = new XmlNumberConverter();
 
     public Token(int ttype, String stringValue) {
         this(ttype, stringValue, null, 0, stringValue.length());
@@ -58,6 +58,9 @@ public class Token extends AST {
 
     public Token(int ttype, String stringValue, Number numericValue) {
         this(ttype, stringValue, numericValue, null, 0, 1);
+    }
+    public Token(int ttype,  Number numericValue) {
+        this(ttype, "", numericValue, null, 0, 1);
     }
     public Token(int ttype, String stringValue, Number numericValue, int startPos, int endPos) {
         this(ttype, stringValue, numericValue, null, startPos, endPos);
@@ -84,7 +87,7 @@ public class Token extends AST {
             case CssTokenType.TT_IDENT:
                 return fromIDENT();
             case CssTokenType.TT_AT_KEYWORD:
-                return "@" + fromIDENT();
+                return fromHASHorAT('@' ,stringValue);
             case CssTokenType.TT_STRING:
                 return fromSTRING();
             case CssTokenType.TT_BAD_STRING:
@@ -92,7 +95,7 @@ public class Token extends AST {
             //case CssTokenType.TT_BAD_URI : return fromBAD_URI(stringValue) ;
             //case CssTokenType.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
             case CssTokenType.TT_HASH:
-                return "#" + fromIDENT();
+                return fromHASHorAT('#' ,stringValue);
             case CssTokenType.TT_NUMBER:
                 return fromNUMBER();
             case CssTokenType.TT_PERCENTAGE:
@@ -210,6 +213,30 @@ public class Token extends AST {
             throw new RuntimeException("unexpected IO exception", e);
         }
     }
+    private String fromHASHorAT(char hashOrAt, @Nonnull String value) {
+        StringBuilder out = new StringBuilder();
+        out.append(hashOrAt);
+        Reader r = new StringReader(value);
+        try {
+            for (int ch=r.read();ch!=-1;ch=r.read()) {
+                // escape nmchar if necessary
+                if (ch == '_'
+                        || 'a' <= ch && ch <= 'z'
+                        || 'A' <= ch && ch <= 'Z'
+                        || '0' <= ch && ch <= '9'
+                        || ch == '-'
+                        || 0xA0 <= ch && ch <= 0x10FFFF) {
+                    out.append((char) ch);
+                } else {
+                    out.append('\\');
+                    out.append((char) ch);
+                }
+            }
+            return out.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("unexpected IO exception", e);
+        }
+    }
 
 
     private final static CssStringConverter cssStringConverter = new CssStringConverter();
@@ -280,11 +307,9 @@ public class Token extends AST {
     }
 
     private String fromNUMBER() {
-        if (numericValue instanceof Double) {
-            return DOUBLE_CONVERTER.toString((Double) numericValue);
-        } else {
-            return numericValue.toString();
-        }
+
+            return NUMBER_CONVERTER.toString( numericValue);
+
     }
 
     private String fromPERCENTAGE() {

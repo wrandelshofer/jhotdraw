@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssSymmetricPoint2DConverter;
+import org.jhotdraw8.css.text.CssSymmetricPoint2DConverter;
 
 /**
  * SymmetricPoint2DStyleableMapAccessor.

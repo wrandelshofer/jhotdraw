@@ -5,14 +5,13 @@ package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssDoubleConverter;
+import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -27,7 +26,7 @@ public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double>
     @Nonnull
     private final CssMetaData<? extends Styleable, Double> cssMetaData;
 
-    private final CssDoubleConverter converter = new CssDoubleConverter();
+    private final Converter<Double> converter ;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -58,13 +57,6 @@ public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double>
      */
     public DoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue) {
         super(name, Double.class, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createSizeCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
 
         Function<Styleable, StyleableProperty<Double>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -72,11 +64,10 @@ public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double>
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Double> converter
-                = new StyleConverterAdapter<>(new CssDoubleConverter());
+        this.converter = new CssDoubleConverter(false);
         CssMetaData<Styleable, Double> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(converter), defaultValue, inherits);
         cssMetaData = md;
     }
 

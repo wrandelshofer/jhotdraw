@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.key;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.text.FontPosture;
@@ -17,9 +16,9 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssFontConverter;
+import org.jhotdraw8.css.text.CssFontConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.text.CssFont;
+import org.jhotdraw8.css.text.CssFont;
 
 /**
  * FontStyleableMapAccessor.
@@ -60,11 +59,9 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssFont> converter
-                = new StyleConverterAdapter<>(new CssFontConverter());
         CssMetaData<Styleable, CssFont> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, getDefaultValue(), inherits);
+                new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.familyKey = familyKey;
@@ -80,13 +77,10 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
 
     }
 
-    private Converter<CssFont> converter;
+    private final Converter<CssFont> converter= new CssFontConverter(false);;
 
     @Override
     public Converter<CssFont> getConverter() {
-        if (converter == null) {
-            converter = new CssFontConverter();
-        }
         return converter;
     }
 

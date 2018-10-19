@@ -14,16 +14,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.text.CssColorConverter;
+import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
-import org.jhotdraw8.text.XmlDoubleConverter;
+import org.jhotdraw8.xml.text.XmlDoubleConverter;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
@@ -93,9 +93,10 @@ public class DrawingInspector extends AbstractDrawingInspector {
                     myBackgroundProperty,//
                     backgroundColorPicker.valueProperty(),//
                     (CssColor c) -> c == null ? null : c.getColor(), //
-                    (Color c) -> new CssColor(c)//
+                    CssColor::new//
             );
-            backgroundColorField.textProperty().bindBidirectional(myBackgroundProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
+            backgroundColorField.textProperty().bindBidirectional(myBackgroundProperty,
+                    new StringConverterAdapter<>(new CssColorConverter(false)));
             myBackgroundProperty.addListener(commitHandler);
             
         });

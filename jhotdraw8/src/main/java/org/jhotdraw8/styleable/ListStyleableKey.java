@@ -4,17 +4,12 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.css.StyleablePropertyFactory;
-import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListKey;
-import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
-import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssConverter;
-import org.jhotdraw8.text.CssConverterConverterAdapter;
-import org.jhotdraw8.text.CssListConverter;
+import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 import javax.annotation.Nonnull;
@@ -33,7 +28,7 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
 
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull ImmutableList<T> defaultValue, @Nonnull CssConverter<T> converter) {
         super(key, elemClass, defaultValue);
-        this.converter = new CssConverterConverterAdapter<>(new CssListConverter<>(converter));
+        this.converter =new CssListConverter<>(converter);
 
         Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

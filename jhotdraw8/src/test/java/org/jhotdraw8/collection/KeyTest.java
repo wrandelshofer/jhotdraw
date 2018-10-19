@@ -15,7 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.jhotdraw8.text.CssPaintConverter;
+import org.jhotdraw8.css.text.CssPaintConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.junit.jupiter.api.Test;
 
@@ -151,9 +151,9 @@ public class KeyTest {
         String[] newValueReceived=new String[1];
         ps3.addListener((o,oldValue,newValue)->newValueReceived[0]=newValue);
         ps2.setValue("#660033");
-        assertEquals(ps.getValue(),Color.valueOf("#660033"),"value from ps2 to ps");
-        assertEquals(ps3.getValue(),"#660033","value from ps2 to ps to ps3");
-        assertEquals(newValueReceived[0],"#660033", "value from ps2 to listener on ps3");
+        assertEquals(Color.valueOf("#660033"),ps.getValue(),"value from ps2 to ps");
+        assertEquals("#660033",ps3.getValue(),"value from ps2 to ps to ps3");
+        assertEquals("#660033",newValueReceived[0], "value from ps2 to listener on ps3");
     }
     @Test
     public void testPropertyAt8() {
@@ -168,8 +168,8 @@ public class KeyTest {
         String[] newValueReceived=new String[1];
         ps3.addListener((o,oldValue,newValue)->newValueReceived[0]=newValue);
         ps2.setValue("#660033");
-        assertEquals(ps.getValue(),Color.valueOf("#660033"),"value from ps2 to ps");
-        assertEquals(ps3.getValue(),"#660033","value from ps2 to ps to ps3");
-        assertEquals(newValueReceived[0],"#660033", "value from ps2 to listener on ps3");
+        assertEquals(Color.valueOf("#660033"),ps.getValue(),"value from ps2 to ps");
+        assertEquals("#660033",ps3.getValue(),"value from ps2 to ps to ps3");
+        assertEquals("#660033",newValueReceived[0], "value from ps2 to listener on ps3");
     }
 }

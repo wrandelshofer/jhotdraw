@@ -13,8 +13,8 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.text.CssSize;
-import org.jhotdraw8.text.CssSizeConverter;
+import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -27,7 +27,7 @@ public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> 
 
     final static long serialVersionUID = 1L;
 
-    private final CssSizeConverter converter = new CssSizeConverter();
+    private final Converter<CssSize> converter = new CssSizeConverter(false);
     @Nonnull
     private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
 
@@ -67,11 +67,11 @@ public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> 
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssSize> converter
-                = new StyleConverterAdapter<>(new CssSizeConverter());
+        final StyleConverter<String, CssSize> cvrtr
+                = new StyleConverterAdapter<>(converter);
         CssMetaData<Styleable, CssSize> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                cvrtr, defaultValue, inherits);
         cssMetaData = md;
     }
 

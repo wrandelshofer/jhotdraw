@@ -260,28 +260,36 @@ public class CssTokenType {
     public final static int TT_URL = -12;
 
     /**
-     * Defines the comma delim-token.
+     * Defines the comma "," delim-token.
      */
     public final static int TT_COMMA = ',';
 
     /**
-     * Defines the semicolon delim-token.
+     * Defines the semicolon ";" delim-token.
      */
     public final static int TT_SEMICOLON = ';';
 
     /**
-     * Defines the colon delim-token.
+     * Defines the colon ":" delim-token.
      */
     public final static int TT_COLON = ':';
 
     /**
-     * Defines the right bracket delim-token.
+     * Defines the left bracket ")" delim-token.
+     */
+    public final static int TT_LEFT_BRACKET = '(';
+    /**
+     * Defines the right bracket "(" delim-token.
      */
     public final static int TT_RIGHT_BRACKET = ')';
     /**
-     * Defines the slash delim-token.
+     * Defines the slash "/" delim-token.
      */
     public final static int TT_SLASH = '/';
 
+    /**
+     * Defines the plus "+" delim-token.
+     */
+    public final static int TT_PLUS = '+';
 
 }

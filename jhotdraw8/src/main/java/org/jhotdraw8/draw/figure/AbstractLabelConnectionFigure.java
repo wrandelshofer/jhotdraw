@@ -37,7 +37,7 @@ import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.css.text.CssSize;
 
 /**
  * A Label that can be attached to another Figure by setting LABEL_CONNECTOR and

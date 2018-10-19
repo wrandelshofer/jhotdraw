@@ -6,12 +6,10 @@ package org.jhotdraw8.styleable;
 import javax.annotation.Nullable;
 
 import javafx.css.CssMetaData;
-import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssConverterConverterAdapter;
-import org.jhotdraw8.text.CssEnumConverter;
+import org.jhotdraw8.css.text.CssEnumConverter;
 
 /**
  * EnumStyleableFigureKey.
@@ -56,6 +54,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> i
             throw new IllegalArgumentException("defaultValue may only be null if nullable=true");
         }
 
+        converter = new CssEnumConverter<>(getValueType(), nullable);
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
@@ -70,13 +69,10 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> i
 
     }
 
-    private Converter<T> converter;
+    private final Converter<T> converter;
 
     @Override
     public Converter<T> getConverter() {
-        if (converter == null) {
-            converter = new CssConverterConverterAdapter<>(new CssEnumConverter<>(getValueType(), nullable));
-        }
         return converter;
     }
 }

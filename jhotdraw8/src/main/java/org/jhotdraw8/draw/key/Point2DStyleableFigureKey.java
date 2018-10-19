@@ -5,7 +5,6 @@ package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
@@ -13,7 +12,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssPoint2DConverter;
+import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -61,13 +60,6 @@ public class Point2DStyleableFigureKey extends AbstractStyleableFigureKey<Point2
      */
     public Point2DStyleableFigureKey(String key, DirtyMask mask, Point2D defaultValue) {
         super(key, Point2D.class, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createPoint2DCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
 
         Function<Styleable, StyleableProperty<Point2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -75,11 +67,9 @@ public class Point2DStyleableFigureKey extends AbstractStyleableFigureKey<Point2
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Point2D> converter
-                = new StyleConverterAdapter<>(new CssPoint2DConverter());
         CssMetaData<Styleable, Point2D> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(converter), defaultValue, inherits);
         cssMetaData = md;
     }
 
@@ -90,13 +80,10 @@ public class Point2DStyleableFigureKey extends AbstractStyleableFigureKey<Point2
 
     }
 
-    private Converter<Point2D> converter;
+    private final Converter<Point2D> converter= new CssPoint2DConverter(false);
 
     @Override
     public Converter<Point2D> getConverter() {
-        if (converter == null) {
-            converter = new CssPoint2DConverter();
-        }
         return converter;
     }
 }

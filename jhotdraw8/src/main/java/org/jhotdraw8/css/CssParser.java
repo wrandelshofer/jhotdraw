@@ -260,7 +260,7 @@ public class CssParser {
         if (tt.nextToken() != CssTokenType.TT_AT_KEYWORD) {
             throw new ParseException("AtRule: At-Keyword expected.", tt.getLineNumber());
         }
-        String atKeyword = tt.currentStringValue();
+        String atKeyword = tt.currentString();
         tt.nextToken();
         skipWhitespace(tt);
         while (tt.currentToken() != CssTokenType.TT_EOF
@@ -475,14 +475,14 @@ public class CssParser {
                 case '*':
                     return new UniversalSelector();
                 case CssTokenType.TT_IDENT:
-                    return new TypeSelector(tt.currentStringValue());
+                    return new TypeSelector(tt.currentString());
                 case CssTokenType.TT_HASH:
-                    return new IdSelector(tt.currentStringValue());
+                    return new IdSelector(tt.currentString());
                 case '.':
                     if (tt.nextToken() != CssTokenType.TT_IDENT) {
                         throw new ParseException("SimpleSelector: identifier expected.", tt.getLineNumber());
                     }
-                    return new ClassSelector(tt.currentStringValue());
+                    return new ClassSelector(tt.currentString());
                 case ':':
                     tt.pushBack();
                     return parsePseudoClassSelector(tt);
@@ -490,7 +490,7 @@ public class CssParser {
                     tt.pushBack();
                     return parseAttributeSelector(tt);
                 default:
-                    throw new ParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentStringValue() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw new ParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
             }
         } catch (ParseException e) {
             exceptions.add(e);
@@ -500,24 +500,24 @@ public class CssParser {
 
     private PseudoClassSelector parsePseudoClassSelector(CssTokenizerAPI tt) throws IOException, ParseException {
         if (tt.nextToken() != ':') {
-            throw new ParseException("Pseudo Class Selector: ':' expected of \"" + tt.currentStringValue() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw new ParseException("Pseudo Class Selector: ':' expected of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
         if (tt.nextToken() != CssTokenType.TT_IDENT
                 && tt.currentToken() != CssTokenType.TT_FUNCTION) {
-            throw new ParseException("Pseudo Class Selector: identifier or function expected instead of \"" + tt.currentStringValue() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw new ParseException("Pseudo Class Selector: identifier or function expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
 
         if (tt.currentToken() == CssTokenType.TT_FUNCTION) {
-            String ident = tt.currentStringValue();
+            String ident = tt.currentString();
             List<Token> terms = new ArrayList<>();
             while (tt.nextToken() != CssTokenType.TT_EOF
                     && tt.currentToken() != ')') {
-                terms.add(new Token(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(), tt.getStartPosition(), tt.getEndPosition()));
+                terms.add(new Token(tt.currentToken(), tt.currentString(), tt.currentNumber(), tt.getStartPosition(), tt.getEndPosition()));
             }
             return new FunctionPseudoClassSelector(ident, terms);
         } else {
 
-            return new SimplePseudoClassSelector(tt.currentStringValue());
+            return new SimplePseudoClassSelector(tt.currentString());
         }
     }
 
@@ -528,7 +528,7 @@ public class CssParser {
         if (tt.nextToken() != CssTokenType.TT_IDENT) {
             throw new ParseException("AttributeSelector: Identifier expected. Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
-        String attributeName = tt.currentStringValue();
+        String attributeName = tt.currentString();
         AbstractAttributeSelector selector;
         switch (tt.nextToken()) {
             case '=':
@@ -537,7 +537,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new EqualsMatchSelector(attributeName, tt.currentStringValue());
+                selector = new EqualsMatchSelector(attributeName, tt.currentString());
                 break;
             case CssTokenType.TT_INCLUDE_MATCH:
                 if (tt.nextToken() != CssTokenType.TT_IDENT
@@ -545,7 +545,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new IncludeMatchSelector(attributeName, tt.currentStringValue());
+                selector = new IncludeMatchSelector(attributeName, tt.currentString());
                 break;
             case CssTokenType.TT_DASH_MATCH:
                 if (tt.nextToken() != CssTokenType.TT_IDENT
@@ -553,7 +553,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new DashMatchSelector(attributeName, tt.currentStringValue());
+                selector = new DashMatchSelector(attributeName, tt.currentString());
                 break;
             case CssTokenType.TT_PREFIX_MATCH:
                 if (tt.nextToken() != CssTokenType.TT_IDENT
@@ -561,7 +561,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new PrefixMatchSelector(attributeName, tt.currentStringValue());
+                selector = new PrefixMatchSelector(attributeName, tt.currentString());
                 break;
             case CssTokenType.TT_SUFFIX_MATCH:
                 if (tt.nextToken() != CssTokenType.TT_IDENT
@@ -569,7 +569,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new SuffixMatchSelector(attributeName, tt.currentStringValue());
+                selector = new SuffixMatchSelector(attributeName, tt.currentString());
                 break;
             case CssTokenType.TT_SUBSTRING_MATCH:
                 if (tt.nextToken() != CssTokenType.TT_IDENT
@@ -577,7 +577,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new SubstringMatchSelector(attributeName, tt.currentStringValue());
+                selector = new SubstringMatchSelector(attributeName, tt.currentString());
                 break;
             case ']':
                 selector = new ExistsMatchSelector(attributeName);
@@ -635,12 +635,12 @@ public class CssParser {
                     + tt.getLineNumber() + ".",//
                     tt.getStartPosition());
         }
-        String property = tt.currentStringValue();
+        String property = tt.currentString();
         int startPos = tt.getStartPosition();
         tt.nextToken();
         skipWhitespace(tt);
         if (tt.currentToken() != ':') {
-            throw new ParseException("Declaration: ':' expected instead of \"" + tt.currentStringValue() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw new ParseException("Declaration: ':' expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
         List<Token> terms = parseTerms(tt);
         int endPos = terms.isEmpty() ? tt.getStartPosition() : terms.get(terms.size() - 1).getEndPos();
@@ -667,7 +667,7 @@ public class CssParser {
                 case CssTokenType.TT_BAD_STRING:
                     throw new ParseException("Terms: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
                 default:
-                    terms.add(new Token(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(), tt.getStartPosition(), tt.getEndPosition()));
+                    terms.add(new Token(tt.currentToken(), tt.currentString(), tt.currentNumber(), tt.getStartPosition(), tt.getEndPosition()));
                     break;
             }
         }
@@ -688,7 +688,7 @@ public class CssParser {
             case CssTokenType.TT_BAD_STRING:
                 throw new ParseException("Term: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
             default:
-                return new Token(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(), tt.getStartPosition(), tt.getEndPosition());
+                return new Token(tt.currentToken(), tt.currentString(), tt.currentNumber(), tt.getStartPosition(), tt.getEndPosition());
         }
     }
 }

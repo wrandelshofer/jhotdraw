@@ -12,8 +12,8 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssSize2D;
-import org.jhotdraw8.text.CssSize2DConverter;
+import org.jhotdraw8.css.text.CssSize2D;
+import org.jhotdraw8.css.text.CssSize2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 

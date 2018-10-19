@@ -7,7 +7,7 @@ import java.util.Objects;
 import javafx.scene.paint.Color;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.text.CssConverterFactory;
+import org.jhotdraw8.css.text.CssConverterFactory;
 import org.jhotdraw8.text.PatternConverter;
 
 /**
@@ -21,6 +21,7 @@ public class CssColor implements Paintable {
 
     private final static PatternConverter formatter = new PatternConverter("rgba'('{0,number},{1,number},{2,number},{3,number}')'", new CssConverterFactory());
 
+    @Nonnull
     private final String name;
     @Nonnull
     private final Color color;
@@ -32,11 +33,12 @@ public class CssColor implements Paintable {
         this(null, color);
     }
 
-    public CssColor(@javax.annotation.Nullable String name, @Nonnull Color color) {
+    public CssColor(@Nullable String name, @Nonnull Color color) {
         this.name = name == null ? toName(color) : name;
         this.color = color;
     }
 
+    @Nonnull
     public String getName() {
         return name;
     }
@@ -52,6 +54,7 @@ public class CssColor implements Paintable {
         return color;
     }
 
+    @Nonnull
     public static String toName(Color c) {
         if (c.getOpacity() == 1.0) {
             int r = (int) Math.round(c.getRed() * 255.0);

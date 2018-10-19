@@ -52,7 +52,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
-import org.jhotdraw8.text.XmlNumberConverter;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 /**
  * Shapes.

@@ -5,14 +5,13 @@ package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssPaintableConverter;
+import org.jhotdraw8.css.text.CssPaintableConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -28,6 +27,7 @@ public class PaintableStyleableFigureKey extends AbstractStyleableFigureKey<Pain
 
     @Nonnull
     private final CssMetaData<?, Paintable> cssMetaData;
+    private Converter<Paintable> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -60,13 +60,6 @@ public class PaintableStyleableFigureKey extends AbstractStyleableFigureKey<Pain
      */
     public PaintableStyleableFigureKey(String key, DirtyMask mask, Paintable defaultValue) {
         super(key, Paintable.class, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createPaintCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
 
         Function<Styleable, StyleableProperty<Paintable>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -74,11 +67,10 @@ public class PaintableStyleableFigureKey extends AbstractStyleableFigureKey<Pain
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Paintable> converter
-                = new StyleConverterAdapter<>(new CssPaintableConverter());
+        converter = new CssPaintableConverter(true);
         CssMetaData<Styleable, Paintable> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(converter), defaultValue, inherits);
         cssMetaData = md;
     }
 
@@ -89,13 +81,8 @@ public class PaintableStyleableFigureKey extends AbstractStyleableFigureKey<Pain
 
     }
 
-    private Converter<Paintable> converter;
-
     @Override
     public Converter<Paintable> getConverter() {
-        if (converter == null) {
-            converter = new CssPaintableConverter();
-        }
         return converter;
     }
 }

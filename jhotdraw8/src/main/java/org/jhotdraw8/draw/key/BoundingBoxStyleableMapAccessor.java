@@ -16,7 +16,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssBoundingBoxConverter;
+import org.jhotdraw8.css.text.CssBoundingBoxConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -83,7 +83,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableFigureMapA
     @Override
     public Converter<BoundingBox> getConverter() {
         if (converter == null) {
-            converter = new CssBoundingBoxConverter();
+            converter = new CssBoundingBoxConverter(false);
         }
         return converter;
     }

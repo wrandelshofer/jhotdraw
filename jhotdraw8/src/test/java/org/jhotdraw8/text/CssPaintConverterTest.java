@@ -7,6 +7,7 @@ package org.jhotdraw8.text;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.jhotdraw8.css.text.CssPaintConverter;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.io.IdFactory;

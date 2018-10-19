@@ -10,8 +10,7 @@ import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssConverterConverterAdapter;
-import org.jhotdraw8.text.CssEnumConverter;
+import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -63,7 +62,7 @@ public class BlendModeStyleableFigureKey extends AbstractStyleableFigureKey<Blen
     @Override
     public Converter<BlendMode> getConverter() {
         if (converter == null) {
-            converter = new CssConverterConverterAdapter<>(new CssEnumConverter<>(BlendMode.class, false));
+            converter = new CssEnumConverter<>(BlendMode.class, false);
         }
         return converter;
     }

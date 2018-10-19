@@ -6,11 +6,12 @@ package org.jhotdraw8.text;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
+import org.jhotdraw8.css.text.CssLinearGradientConverter;
+import org.jhotdraw8.css.text.CssStop;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.CssLinearGradient;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.nio.CharBuffer;
@@ -58,17 +59,6 @@ public class CssLinearGradientConverterTest {
         assertEquals(actual, expected);
     }
 
-    /**
-     * Test of getDefaultValue method, of class CssLinearGradientConverter.
-     */
-    @Test
-    public void testGetDefaultValue() {
-        System.out.println("getDefaultValue");
-        CssLinearGradientConverter instance = new CssLinearGradientConverter();
-        CssLinearGradient expResult = null;
-        CssLinearGradient result = instance.getDefaultValue();
-        assertEquals(result, expResult);
-    }
 
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {

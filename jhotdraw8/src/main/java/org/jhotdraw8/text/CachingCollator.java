@@ -28,8 +28,8 @@ public class CachingCollator implements Comparator<String> {
 
     @Override
     public int compare(@Nullable String o1, @Nullable String o2) {
-        CollationKey k1 = keyMap.computeIfAbsent(o1==null?"":o1, collator::getCollationKey);
-        CollationKey k2 = keyMap.computeIfAbsent(o2==null?"":o2, collator::getCollationKey);
+        CollationKey k1 = keyMap.computeIfAbsent(o1 == null ? "" : o1, collator::getCollationKey);
+        CollationKey k2 = keyMap.computeIfAbsent(o2 == null ? "" : o2, collator::getCollationKey);
         return k1.compareTo(k2);
     }
 

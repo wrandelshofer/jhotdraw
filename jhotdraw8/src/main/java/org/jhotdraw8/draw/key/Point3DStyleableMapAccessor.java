@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.key;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point3D;
@@ -16,7 +15,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssPoint3DConverter;
+import org.jhotdraw8.css.text.CssPoint3DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -55,11 +54,9 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Point3D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, Point3D> md
                 = new SimpleCssMetaData<>(property, function,
-                        cnvrtr, getDefaultValue(), inherits);
+                new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.xKey = xKey;
@@ -74,13 +71,10 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     }
 
-    private Converter<Point3D> converter;
+    private Converter<Point3D> converter=converter = new CssPoint3DConverter(false);
 
     @Override
     public Converter<Point3D> getConverter() {
-        if (converter == null) {
-            converter = new CssPoint3DConverter();
-        }
         return converter;
     }
 

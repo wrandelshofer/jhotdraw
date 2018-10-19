@@ -7,7 +7,6 @@ import static java.lang.Double.max;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Rectangle2D;
@@ -17,7 +16,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssRectangle2DConverter;
+import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -59,11 +58,9 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Rectangle2D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, Rectangle2D> md
                 = new SimpleCssMetaData<>(property, function,
-                        cnvrtr, getDefaultValue(), inherits);
+                new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.xKey = xKey;
@@ -79,13 +76,10 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
 
     }
 
-    private Converter<Rectangle2D> converter;
+    private final Converter<Rectangle2D> converter= new CssRectangle2DConverter(false);
 
     @Override
     public Converter<Rectangle2D> getConverter() {
-        if (converter == null) {
-            converter = new CssRectangle2DConverter();
-        }
         return converter;
     }
 

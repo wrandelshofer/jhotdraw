@@ -8,7 +8,7 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.SymmetricSize2DStyleableMapAccessor;
-import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.css.text.CssSize;
 
 /**
  * A figure which supports cutting off the start and end of a stroked path.

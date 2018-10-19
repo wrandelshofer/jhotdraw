@@ -26,9 +26,10 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.CssColorConverter;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
-import org.jhotdraw8.text.XmlNumberConverter;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 /**
  * FXML Controller class
@@ -110,7 +111,8 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 (CssColor c) -> c == null ? null : c.getColor(), //
                 (Color c) -> new CssColor(c)//
         );
-        gridColorField.textProperty().bindBidirectional(gridColorProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
+        gridColorField.textProperty().bindBidirectional(gridColorProperty, new StringConverterAdapter<>(
+                new CssColorConverter(false)));
     }
 
     @Override
@@ -147,7 +149,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
 
                 gridConstrainer = new GridConstrainer(prefs.getDouble("gridX", 0), prefs.getDouble("gridY", 0), prefs.getDouble("gridWidth", 10), prefs.getDouble("gridHeight", 10),
                         prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
-                CssColorConverter converter=new CssColorConverter(true);
+               Converter<CssColor> converter=new CssColorConverter(true);
                 try {
                     gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor",gridConstrainer.getGridColor().getName())));
                 } catch (@Nonnull ParseException|IOException ex) {

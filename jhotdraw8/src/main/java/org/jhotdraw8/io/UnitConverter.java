@@ -6,7 +6,7 @@ package org.jhotdraw8.io;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.css.text.CssSize;
 
 /**
  * UnitConverter.

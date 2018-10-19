@@ -10,7 +10,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.text.XmlIntegerConverter;
+import org.jhotdraw8.xml.text.XmlIntegerConverter;
 
 /**
  * IntegerStyleableKey.

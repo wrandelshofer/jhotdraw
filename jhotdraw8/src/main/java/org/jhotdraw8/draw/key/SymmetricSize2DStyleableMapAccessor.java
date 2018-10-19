@@ -16,9 +16,9 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssSize;
-import org.jhotdraw8.text.CssSize2D;
-import org.jhotdraw8.text.CssSymmetricSize2DConverter;
+import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssSize2D;
+import org.jhotdraw8.css.text.CssSymmetricSize2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**

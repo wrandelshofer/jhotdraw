@@ -41,10 +41,10 @@ public class CssTokenizerTest {
                 buf.append((char) tt.currentToken());
             }
             buf.append(':');
-            if (tt.currentNumericValue() != null)
-                buf.append(tt.currentNumericValue());
-            if (tt.currentStringValue() != null)
-                buf.append(tt.currentStringValue());
+            if (tt.currentNumber() != null)
+                buf.append(tt.currentNumber());
+            if (tt.currentString() != null)
+                buf.append(tt.currentString());
         }
         String actualValue = buf.toString();
         actualValue = actualValue.replaceAll("\\n", "\\\\n");

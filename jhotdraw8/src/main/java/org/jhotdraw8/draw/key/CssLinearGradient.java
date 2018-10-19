@@ -12,7 +12,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.text.CssStop;
+import org.jhotdraw8.css.text.CssStop;
 
 /**
  * CssLinearGradient.

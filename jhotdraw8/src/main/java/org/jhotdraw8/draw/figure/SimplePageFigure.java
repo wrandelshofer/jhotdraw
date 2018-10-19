@@ -41,8 +41,8 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
-import org.jhotdraw8.text.CssSize;
-import org.jhotdraw8.text.CssSize2D;
+import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssSize2D;
 
 /**
  * Defines a page layout for printing.

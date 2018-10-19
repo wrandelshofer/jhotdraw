@@ -5,6 +5,7 @@ package org.jhotdraw8.css;
 
 import java.io.IOException;
 import java.text.ParseException;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static org.jhotdraw8.css.CssTokenType.TT_AT_KEYWORD;
@@ -49,7 +50,7 @@ public interface CssTokenizerAPI {
     default String currentValue() {
         switch (currentToken()) {
             case TT_AT_KEYWORD:
-                return "@" + currentStringValue();
+                return "@" + currentString();
             case TT_BAD_COMMENT:
                 return "bad comment";
             case TT_BAD_STRING:
@@ -63,51 +64,68 @@ public interface CssTokenizerAPI {
             case TT_COLUMN:
                 return "|";
             case TT_COMMENT:
-                return currentStringValue();
+                return currentString();
             case TT_DASH_MATCH:
                 return "|=";
             case TT_DIMENSION:
-                return currentNumericValue() + currentStringValue();
+                return currentNumber() + currentString();
             case TT_EOF:
                 return "eof";
             case TT_FUNCTION:
-                return currentStringValue();
+                return currentString();
             case TT_HASH:
-                return currentStringValue();
+                return currentString();
             case TT_IDENT:
-                return currentStringValue();
+                return currentString();
             case TT_INCLUDE_MATCH:
                 return "~=";
             case TT_NUMBER:
-                return "" + currentNumericValue();
+                return "" + currentNumber();
             case TT_PERCENTAGE:
-                return currentNumericValue() + "%";
+                return currentNumber() + "%";
             case TT_PREFIX_MATCH:
                 return "^=";
             case TT_S:
                 return " ";
             case TT_STRING:
-                return currentStringValue();
+                return currentString();
             case TT_SUBSTRING_MATCH:
                 return "*=";
             case TT_SUFFIX_MATCH:
                 return "$=";
             case TT_UNICODE_RANGE:
-                return currentStringValue();
+                return currentString();
             case TT_URL:
-                return currentStringValue();
+                return currentString();
             default:
                 throw new AssertionError("unsupported token type "+ currentToken());
         }
     }
 
     @Nullable
-    Number currentNumericValue();
+    Number currentNumber();
 
+    @Nonnull
+    default Number currentNumberNonnull() {
+        Number number = currentNumber();
+        if (number == null) {
+            throw new AssertionError("currentNumber is null");
+        }
+        return number;
+    }
     /** Returns the current string value.
      * @return  the current string value */
     @Nullable
-    String currentStringValue();
+    String currentString();
+
+    @Nonnull
+    default String currentStringNonnull() {
+        String str = currentString();
+        if (str == null) {
+            throw new AssertionError("currentString is null");
+        }
+        return str;
+    }
     
     /** Returns the current token type.
      * @return the current token type */
@@ -120,6 +138,22 @@ public interface CssTokenizerAPI {
     int getEndPosition();
 
     int nextToken() throws IOException;
+
+    default void skipIfPresent(int ttype) throws IOException {
+            if (nextToken() != ttype) {
+                pushBack();
+            }
+    }
+
+    /**
+     * Invokes {@link #nextToken()} and checks if it is a "none" identifier.
+     *
+     * @return true if "none"
+     * @throws IOException on io error
+     */
+    default boolean nextTokenIsIdentNone() throws IOException {
+        return nextToken()==CssTokenType.TT_IDENT&& currentStringNonnull().equals(CssTokenType.IDENT_NONE);
+    }
 
     /**
      * Fetches the next token and throws a parse exception if it

@@ -5,7 +5,6 @@ package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
@@ -13,7 +12,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssInsetsConverter;
+import org.jhotdraw8.css.text.CssInsetsConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -61,13 +60,6 @@ public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets>
      */
     public InsetsStyleableFigureKey(String key, DirtyMask mask, Insets defaultValue) {
         super(key, Insets.class, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createInsetsCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
 
         Function<Styleable, StyleableProperty<Insets>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -75,11 +67,9 @@ public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets>
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Insets> converter
-                = new StyleConverterAdapter<>(new CssInsetsConverter());
         CssMetaData<Styleable, Insets> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(this.converter), defaultValue, inherits);
         cssMetaData = md;
     }
 
@@ -90,13 +80,10 @@ public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets>
 
     }
 
-    private Converter<Insets> converter;
+    private final Converter<Insets> converter= new CssInsetsConverter(false);
 
     @Override
     public Converter<Insets> getConverter() {
-        if (converter == null) {
-            converter = new CssInsetsConverter();
-        }
         return converter;
     }
 }

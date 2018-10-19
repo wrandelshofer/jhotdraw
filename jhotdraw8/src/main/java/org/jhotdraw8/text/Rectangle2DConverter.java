@@ -10,6 +10,7 @@ import javafx.geometry.Rectangle2D;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.xml.text.XmlConverterFactory;
 
 /**
  * Rectangle2DConverter.

@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssEffectConverter;
+import org.jhotdraw8.css.text.CssEffectConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**

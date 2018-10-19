@@ -41,7 +41,7 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.css.text.CssSize;
 
 /**
  * A Label that can be placed anywhere on a drawing.

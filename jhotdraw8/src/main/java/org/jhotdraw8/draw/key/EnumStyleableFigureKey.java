@@ -4,14 +4,12 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.css.CssMetaData;
-import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javax.annotation.Nullable;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssConverterConverterAdapter;
-import org.jhotdraw8.text.CssEnumConverter;
+import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -60,6 +58,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends AbstractStyleable
         }
 
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
+        converter = new CssEnumConverter<>(getValueType(), nullable);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -73,13 +72,10 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends AbstractStyleable
 
     }
 
-    private Converter<T> converter;
+    private final Converter<T> converter ;
 
     @Override
     public Converter<T> getConverter() {
-        if (converter == null) {
-            converter = new CssConverterConverterAdapter<>(new CssEnumConverter<>(getValueType(), nullable));
-        }
         return converter;
     }
 }

@@ -6,6 +6,7 @@
 package org.jhotdraw8.text;
 
 import javafx.geometry.Rectangle2D;
+import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.junit.jupiter.api.DynamicTest;
@@ -39,7 +40,7 @@ public class CssRectangle2DConverterTest {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
-        CssRectangle2DConverter instance = new CssRectangle2DConverter();
+        CssRectangle2DConverter instance = new CssRectangle2DConverter(false);
         Rectangle2D actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

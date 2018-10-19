@@ -9,10 +9,10 @@ import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nullable;
+
 import javax.annotation.Nonnull;
 import org.jhotdraw8.io.DefaultUnitConverter;
-import org.jhotdraw8.text.CssSize2D;
+import org.jhotdraw8.css.text.CssSize2D;
 
 /**
  * Defines a page layout for printing.

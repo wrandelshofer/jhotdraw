@@ -16,7 +16,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssScale3DConverter;
+import org.jhotdraw8.css.text.CssScale3DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**

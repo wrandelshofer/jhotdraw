@@ -43,8 +43,9 @@ import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.text.CachingCollator;
-import org.jhotdraw8.text.CssSetConverter;
-import org.jhotdraw8.text.CssWordListConverter;
+import org.jhotdraw8.css.text.CssPseudoClassConverter;
+import org.jhotdraw8.css.text.CssSetConverter;
+import org.jhotdraw8.css.text.CssWordListConverter;
 import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.tree.ExpandedTreeItemIterator;
@@ -284,7 +285,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 };
             }
         });
-        CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>();
+        CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>(new CssPseudoClassConverter(false));
         pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableSet<PseudoClass>>>() {
             @Nonnull
             @Override
