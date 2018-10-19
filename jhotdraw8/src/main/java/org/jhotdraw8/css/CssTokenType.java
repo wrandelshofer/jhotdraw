@@ -89,7 +89,7 @@ public class CssTokenType {
     /**
      * Defines a dimension-token.
      * <pre>
-     *     dimension-token = digit-token , ident-token ;
+     *     dimension-token = number-token , ident-token ;
      * </pre>
      */
     public final static int TT_DIMENSION = -11;
@@ -112,9 +112,19 @@ public class CssTokenType {
      * <pre>
      *     hash-token = '#' , ident-char , { ident-char } ;
      *
-     *     ident-char = ( 'a'-'z' | 'A'-'Z' | '_' | '0'-'9' )
+     *     ident-char = ( letter | '_' | digit )
      *                | non-ASCII
      *                | escape ;
+     *
+     *     letter = (* a letter from 'a' to 'z' and 'A' to 'Z' *) ;
+     *
+     *     digit = "0" | "1"  | "2"  | "3"  | "4"  | "5"  | "6"  | "7"  | "8"  | "9" ;
+     *
+     *     escape = '\' , char - (newline | hex-digit)
+     *            | '\' , 6 * hex-digit
+     *            | '\', hex-digit , 4 * {hex-digit}, whitespace ;
+     *
+     *     non-ASCII = (* a unicode code-point between U+80 and U+10FFFF )
      *
      * </pre>
      */
@@ -137,9 +147,9 @@ public class CssTokenType {
      *            | '\' , 6 * hex-digit
      *            | '\', hex-digit , 4 * {hex-digit}, whitespace ;
      *
-     *     hex-digit = '0'-'9'
-     *               | 'a'-'f'
-     *               | 'A'-'F' ;
+     *     hex-digit = digit
+     *               | 'a' | 'b' | 'c' | 'd' | 'e' | 'f'
+     *               | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
      * </pre>
      */
     public final static int TT_IDENT = -2;
@@ -155,11 +165,11 @@ public class CssTokenType {
     /**
      * Defines a number-token.
      * <pre>
-     *     number-token = [ '+' | '-' ] , mantissa , [exponent] ;
-     *
-     *     mantissa = digit, {digit} | {digit}, '.' digit, {digit} ;
-     *
-     *     exponent = ( 'e' | 'E' ), [ '+' , '-' ], digit , {digit} ;
+     * number-token      ::= decimal-number | scientific-number ;
+     * integer           ::= [ "+" | "-" ] , digit, {digit} ;
+     * decimal-number    ::= integer
+     *                     | [ "+" | "-" ] , {digit} , "." , digit, {digit} ;
+     * scientific-number ::= decimal-number , ( "E" | "e" ) , integer ;
      * </pre>
      */
     public final static int TT_NUMBER = -9;
@@ -208,7 +218,7 @@ public class CssTokenType {
      *
      *     apostrophe-string-body = (* not ' \ or newline | escape | '\' newline *);
      *
-     *     escape = '\' , (* not newline or hex-digit *)
+     *     escape = '\' , char - (newline | hex-digit)
      *            | '\' , 6 * hex-digit
      *            | '\', hex-digit , 4 * {hex-digit}, whitespace ;
      *
