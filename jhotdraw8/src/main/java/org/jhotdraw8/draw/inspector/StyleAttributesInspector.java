@@ -71,13 +71,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private CheckBox updateContentsCheckBox;
     @FXML
     private CheckBox composeAttributesCheckBox;
-    @FXML
-    private CheckBox showHelpTextCheckBox;
 
     @FXML
     private TextArea textArea;
-    @FXML
-    private TextArea helpTextArea;
     @FXML
     private RadioButton showAttributeValues;
 
@@ -147,9 +143,6 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         composeAttributesCheckBox.setSelected(prefs.getBoolean("composeAttributes", true));
         composeAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("composeAttributes", newValue));
-        showHelpTextCheckBox.setSelected(prefs.getBoolean("showHelpText", true));
-        showHelpTextCheckBox.selectedProperty().addListener((o, oldValue, newValue)
-                -> prefs.putBoolean("showHelpText", newValue));
 
         applyButton.setOnAction(this::apply);
         selectButton.setOnAction(this::select);
@@ -159,8 +152,6 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 invalidateTextArea();
             }
         });
-        helpTextArea.visibleProperty().bind(showHelpTextCheckBox.selectedProperty());
-        helpTextArea.managedProperty().bind(showHelpTextCheckBox.selectedProperty());
 
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::updateHelpText);
@@ -450,8 +441,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         if (d != null) {
             helpText = helpTexts.get(d.getProperty());
         }
-        if (!Objects.equals(helpText, helpTextArea.getText())) {
-            helpTextArea.setText(helpText);
+        if (drawingView!=null) {
+            drawingView.setHelpText(helpText);
         }
     }
 

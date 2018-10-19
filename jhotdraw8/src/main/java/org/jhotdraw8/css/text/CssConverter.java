@@ -3,11 +3,9 @@
  */
 package org.jhotdraw8.css.text;
 
-import javafx.scene.paint.Paint;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.draw.key.CssLinearGradient;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 
@@ -102,7 +100,10 @@ public interface CssConverter<T> extends Converter<T> {
 
     default T fromString(CharBuffer buf, IdFactory idFactory) throws ParseException {
         try {
-            return parse(new CssTokenizer(buf), idFactory);
+            CssTokenizer tt = new CssTokenizer(buf);
+            T value = parse(tt, idFactory);
+            buf.position(tt.getNextPosition());
+            return value;
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception", e);
         }

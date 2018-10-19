@@ -136,6 +136,14 @@ public interface CssTokenizerAPI {
     int getStartPosition();
 
     int getEndPosition();
+    /**
+     * Gets the current position.
+     *
+     * @return the start position of the token if a token has been pushed back,
+     * the end position of the token otherwise
+     */
+    int getNextPosition();
+
 
     int nextToken() throws IOException;
 

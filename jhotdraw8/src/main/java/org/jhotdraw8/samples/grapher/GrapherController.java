@@ -81,6 +81,7 @@ import org.jhotdraw8.draw.input.MultiClipboardInputFormat;
 import org.jhotdraw8.draw.input.MultiClipboardOutputFormat;
 import org.jhotdraw8.draw.inspector.DrawingInspector;
 import org.jhotdraw8.draw.inspector.GridInspector;
+import org.jhotdraw8.draw.inspector.HelpTextInspector;
 import org.jhotdraw8.draw.inspector.HierarchyInspector;
 import org.jhotdraw8.draw.inspector.Inspector;
 import org.jhotdraw8.draw.inspector.Labels;
@@ -366,6 +367,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
             dock = new TabbedAccordionDock();
             dock.getItems().add(addInspector(new DrawingInspector(), "drawing", Priority.NEVER));
             dock.getItems().add(addInspector(new GridInspector(), "grid", Priority.NEVER));
+            dock.getItems().add(addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
             d.add(dock);
             return d;
         }).thenAccept(list -> {

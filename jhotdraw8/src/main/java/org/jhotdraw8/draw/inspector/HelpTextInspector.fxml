@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextArea fx:id="textArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="16" styleClass="flushTopRightLeft" wrapText="true" VBox.vgrow="ALWAYS" />
+    </children>
+    <styleClass>
+        <String fx:value="inspector" />
+        <String fx:value="flush" />
+    </styleClass>
+</VBox>

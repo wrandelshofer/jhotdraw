@@ -41,6 +41,8 @@ import org.jhotdraw8.draw.tool.Tool;
 public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
 
     @Nonnull
+    private ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
+    @Nonnull
     private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
     @Nonnull
     private ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
@@ -208,4 +210,8 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
 
     protected abstract void updateTool(Tool oldValue, Tool newValue);
 
+    @Override
+    public ObjectProperty<String> helpTextProperty() {
+        return helpText;
+    }
 }

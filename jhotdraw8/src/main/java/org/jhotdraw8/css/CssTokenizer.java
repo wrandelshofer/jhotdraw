@@ -924,6 +924,16 @@ public class CssTokenizer implements CssTokenizerAPI {
     public int getEndPosition() {
         return endPosition;
     }
+    /**
+     * Gets the current position.
+     *
+     * @return the start position of the token if a token has been pushed back,
+     * the end position of the token otherwise
+     */
+    public int getNextPosition() {
+        return pushBack ? startPosition : endPosition;
+    }
+
 
     @Override
     public void skipWhitespace() throws IOException {

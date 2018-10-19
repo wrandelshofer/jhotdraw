@@ -583,7 +583,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
             }
             return converter.fromString(CharBuffer.wrap(string), idFactory);
         } catch (ParseException ex) {
-            throw new IOException(ex+"\nstring: \""+string+"\"");
+            throw new IOException(ex+"\nstring: \""+string+"\"",ex);
         }
     }
 

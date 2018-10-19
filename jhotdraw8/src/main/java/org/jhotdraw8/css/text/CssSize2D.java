@@ -4,7 +4,9 @@
 package org.jhotdraw8.css.text;
 
 import java.util.Objects;
+
 import javafx.geometry.Point2D;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -68,6 +70,13 @@ public class CssSize2D {
         hash = 11 * hash + Objects.hashCode(this.x);
         hash = 11 * hash + Objects.hashCode(this.y);
         return hash;
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+        return "CssSize2D{" + x.getValue() + (x.getUnits()==null? "" : x.getUnits())
+                + ", " + y.getValue() + "" +  (y.getUnits()==null? "" : y.getUnits()) + '}';
     }
 
 }

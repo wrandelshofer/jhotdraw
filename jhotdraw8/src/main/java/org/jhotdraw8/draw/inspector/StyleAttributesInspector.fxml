@@ -14,10 +14,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="16" styleClass="flushTopRightLeft" wrapText="true" VBox.vgrow="ALWAYS" />
-    <TextArea fx:id="helpTextArea" editable="false" prefRowCount="4" wrapText="true" VBox.vgrow="NEVER" />
     <HBox alignment="BASELINE_LEFT">
       <children>
             <MenuButton mnemonicParsing="false" text="%options.text">
@@ -25,11 +24,6 @@
                 <MenuItem mnemonicParsing="false">
                      <graphic>
                     <CheckBox fx:id="composeAttributesCheckBox" mnemonicParsing="false" selected="true" text="%composeAttributes.checkBox.text" />
-                     </graphic>
-                  </MenuItem>
-                <MenuItem mnemonicParsing="false">
-                     <graphic>
-                        <CheckBox fx:id="showHelpTextCheckBox" mnemonicParsing="false" text="%showHelpText.checkBox.text" />
                      </graphic>
                   </MenuItem>
                   <MenuItem mnemonicParsing="false">

@@ -32,10 +32,10 @@ public class CssListConverterTest {
     }
 
     /**
-     * Test ofCollection toString method, ofCollection class CssDoubleListConverter.
+     * Test of toString method, ofclass CssDoubleListConverter.
      */
     static
-    public void testToString(List<Double> value, String expected) throws Exception {
+    public void doTestToString(List<Double> value, String expected) throws Exception {
         System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
@@ -48,10 +48,10 @@ public class CssListConverterTest {
     }
 
     /**
-     * Test ofCollection fromString method, ofCollection class CssDoubleListConverter.
+     * Test of fromString method, of class CssDoubleListConverter.
      */
     static
-    public void testFromString(List<Double> expected, String string) throws Exception {
+    public void doTestFromString(List<Double> expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -65,25 +65,25 @@ public class CssListConverterTest {
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> testFromString(Collections.emptyList(), "none")),
-                dynamicTest("2", () -> testFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
-                dynamicTest("3", () -> testFromString(Arrays.asList(1.0, 3.0e30, 3.0), "1 3e30 3")),
-                dynamicTest("4", () -> testFromString(Arrays.asList(1.0, 2.0, Double.POSITIVE_INFINITY), "1 2 INF")),
-                dynamicTest("5", () -> testFromString(Arrays.asList(1.0, Double.NEGATIVE_INFINITY, 3.0), "1 -INF 3")),
-                dynamicTest("6", () -> testFromString(Arrays.asList(1.0, Double.NaN, 3.0), "1 NaN 3"))
+                dynamicTest("1", () -> doTestFromString(Collections.emptyList(), "none")),
+                dynamicTest("2", () -> doTestFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
+                dynamicTest("3", () -> doTestFromString(Arrays.asList(1.0, 3.0e30, 3.0), "1 3e30 3")),
+                dynamicTest("4", () -> doTestFromString(Arrays.asList(1.0, 2.0, Double.POSITIVE_INFINITY), "1 2 INF")),
+                dynamicTest("5", () -> doTestFromString(Arrays.asList(1.0, Double.NEGATIVE_INFINITY, 3.0), "1 -INF 3")),
+                dynamicTest("6", () -> doTestFromString(Arrays.asList(1.0, Double.NaN, 3.0), "1 NaN 3"))
         );
     }
 
     @TestFactory
     public List<DynamicTest> testToStringFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> testToString(null, "none")),
-                dynamicTest("2", () -> testToString(Collections.emptyList(), "")),
-                dynamicTest("3", () -> testToString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
-                dynamicTest("4", () -> testToString(Arrays.asList(1.0, 3.0e30, 3.0), "1 3.0E30 3")),
-                dynamicTest("5", () -> testToString(Arrays.asList(1.0, 2.0, Double.POSITIVE_INFINITY), "1 2 INF")),
-                dynamicTest("6", () -> testToString(Arrays.asList(1.0, Double.NEGATIVE_INFINITY, 3.0), "1 -INF 3")),
-                dynamicTest("7", () -> testToString(Arrays.asList(1.0, Double.NaN, 3.0), "1 NaN 3"))
+                dynamicTest("1", () -> doTestToString(null, "none")),
+                dynamicTest("2", () -> doTestToString(Collections.emptyList(), "")),
+                dynamicTest("3", () -> doTestToString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
+                dynamicTest("4", () -> doTestToString(Arrays.asList(1.0, 3.0e30, 3.0), "1 3.0E30 3")),
+                dynamicTest("5", () -> doTestToString(Arrays.asList(1.0, 2.0, Double.POSITIVE_INFINITY), "1 2 INF")),
+                dynamicTest("6", () -> doTestToString(Arrays.asList(1.0, Double.NEGATIVE_INFINITY, 3.0), "1 -INF 3")),
+                dynamicTest("7", () -> doTestToString(Arrays.asList(1.0, Double.NaN, 3.0), "1 NaN 3"))
         );
     }
 }
