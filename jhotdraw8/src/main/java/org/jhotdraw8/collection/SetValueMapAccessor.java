@@ -87,8 +87,9 @@ private final static long serialVersionUID=1L;
     @Override
     public Boolean put(Map<? super Key<?>, Object> a, @Nullable Boolean value) {
         ImmutableSet<E> set = setAccessor.get(a);
+        assert set != null;
         boolean oldValue = set.contains(this.value);
-        if (value != null && value.booleanValue()) {
+        if (value != null && value) {
             set = ImmutableSet.add(set, this.value);
         } else {
             set = ImmutableSet.remove(set, this.value);

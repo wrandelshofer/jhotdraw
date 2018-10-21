@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.SetWrapper;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.PatternConverter;
@@ -52,7 +53,7 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
     @Override
     public <TT extends ImmutableSet<String>> void toString(Appendable out, IdFactory idFactory, @Nonnull TT value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
-        tokens.addAll(value);
+        tokens.addAll(new SetWrapper<>(value));
         Object[] v = new Object[tokens.size() + 1];
         v[0] = value.size();
         value.copyInto(v, 1);

@@ -15,6 +15,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -103,7 +104,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-       return Shapes.pathIteratorFromPoints(get(POINTS), false, PathIterator.WIND_NON_ZERO, tx);
+       return Shapes.pathIteratorFromPoints(new ListWrapper<>(get(POINTS)), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
     @Nonnull
@@ -114,7 +115,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
-        ArrayList<Point2D> newP = new ArrayList<>(get(POINTS));
+        ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
@@ -142,7 +143,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
 
     @Nonnull
     public static double[] toPointArray(Figure f, MapAccessor<ImmutableList<Point2D>> key) {
-        List<Point2D> points = f.get(key);
+        ImmutableList<Point2D> points = f.get(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {
             Point2D p = points.get(i);

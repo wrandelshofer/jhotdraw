@@ -56,7 +56,7 @@ public class CssListConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false));
-        List<Double> actual = instance.fromString(buf, idFactory);
+        ImmutableList<Double> actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         assertEquals(actual, expected);

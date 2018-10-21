@@ -17,6 +17,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
@@ -138,7 +139,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(Transform transform) {
-        ArrayList<BezierNode> newP = new ArrayList<>(get(PATH));
+        ArrayList<BezierNode> newP = new ArrayList<>(new ListWrapper<>(get(PATH)));
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).transform(transform));
         }

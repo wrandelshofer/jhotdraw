@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -75,7 +76,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     @Nonnull
     @SuppressWarnings("unchecked")
-    private Key<Collection<String>> tagsKey = (Key<Collection<String>>) (Key<?>) StyleableFigure.STYLE_CLASS;
+    private Key<ImmutableList<String>> tagsKey = (Key<ImmutableList<String>>) (Key<?>) StyleableFigure.STYLE_CLASS;
     @FXML
     private TextField textField;
     private boolean willUpdateList;
@@ -94,7 +95,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 tagName = tagName.trim();
                 for (Figure f : getSelectedFigures()) {
                     @SuppressWarnings("unchecked")
-                    Collection<String> tags = f.get(tagsKey);
+                    ImmutableList<String> tags = f.get(tagsKey);
                     Collection<String> newTags = listFactory.get();
                     boolean contains = false;
                     for (String t : tags) {
@@ -176,7 +177,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 tagName = tagName.trim();
                 for (Figure f : getSelectedFigures()) {
                     @SuppressWarnings("unchecked")
-                    Collection<String> tags = f.get(tagsKey);
+                    ImmutableList<String> tags = f.get(tagsKey);
                     Collection<String> newTags = listFactory.get();
                     boolean contains = false;
                     for (String t : tags) {
@@ -202,18 +203,17 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
         boolean first = true;
         for (Figure f : newValue) {
-            @SuppressWarnings("unchecked")
-            Collection<String> tags = f.get(tagsKey);
+            ImmutableList<String> tags = f.get(tagsKey);
             if (first) {
-                intersection.addAll(tags);
+                intersection.addAll(new ListWrapper<>(tags));
                 first = false;
             } else {
                 if (!intersection.isEmpty()) {
-                    intersection.retainAll(tags);
+                    intersection.retainAll(new ListWrapper<>(tags));
                 }
             }
             if (!tags.isEmpty()) {
-                union.addAll(tags);
+                union.addAll(new ListWrapper<>(tags));
             }
         }
 

@@ -11,6 +11,8 @@ import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
@@ -170,7 +172,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     @javax.annotation.Nullable
     default Transform getInverseTransform() {
-        List<Transform> list = getStyled(TRANSFORMS);
+        ImmutableList<Transform> list = getStyled(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave null
@@ -199,7 +201,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (l2p == null) {
             Point2D center = getCenterInLocal();
 
-            List<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             double sx = styled ? getStyled(SCALE_X) : get(SCALE_X);
             double sy = styled ? getStyled(SCALE_Y) : get(SCALE_Y);
             double r = styled ? getStyled(ROTATE) : get(ROTATE);
@@ -237,7 +239,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
         Point2D center = getCenterInLocal();
 
-        List<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+        ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
         double sx = styled ? getStyled(SCALE_X) : get(SCALE_X);
         double sy = styled ? getStyled(SCALE_Y) : get(SCALE_Y);
         double r = styled ? getStyled(ROTATE) : get(ROTATE);
@@ -257,7 +259,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
             list.add(ts);
         }
         if (t != null && !t.isEmpty()) {
-            list.addAll(t);
+            list.addAll(new ListWrapper<>(t));
         }
         return list;
     }
@@ -282,7 +284,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
-            List<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             double sx = styled ? getStyled(SCALE_X) : get(SCALE_X);
             double sy = styled ? getStyled(SCALE_Y) : get(SCALE_Y);
             double r = styled ? getStyled(ROTATE) : get(ROTATE);
@@ -317,7 +319,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     @Nullable
     default Transform getTransform() {
-        List<Transform> list = getStyled(TRANSFORMS);
+        ImmutableList<Transform> list = getStyled(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave empty
@@ -371,7 +373,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     @Override
     default void reshapeInLocal( Transform transform) {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
-            List<Transform> ts = get(TRANSFORMS);
+            ImmutableList<Transform> ts = get(TRANSFORMS);
             if (ts.isEmpty()) {
                 set(TRANSFORMS, ImmutableList.of(transform));
             } else {
@@ -430,7 +432,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 }
             } else {
                 flattenTransforms();
-                List<Transform> transforms = get(TRANSFORMS);
+                ImmutableList<Transform> transforms = get(TRANSFORMS);
                 if (transforms.isEmpty()) {
                     set(TRANSFORMS, ImmutableList.of(transform));
                 } else {
@@ -445,7 +447,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     @Override
     default void transformInLocal( Transform t) {
         flattenTransforms();
-        List<Transform> transforms = get(TRANSFORMS);
+        ImmutableList<Transform> transforms = get(TRANSFORMS);
         if (transforms.isEmpty()) {
             set(TRANSFORMS, ImmutableList.of(t));
         } else {
@@ -465,7 +467,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
             return;
         } else {
             flattenTransforms();
-            List<Transform> transforms = new ArrayList<>(get(TRANSFORMS));
+            ImmutableList<Transform> transforms = get(TRANSFORMS);
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, ImmutableList.of(t));
             } else {

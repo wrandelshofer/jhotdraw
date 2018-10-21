@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
@@ -11,6 +12,8 @@ import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.collection.SetWrapper;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -87,12 +90,12 @@ public interface StyleableFigure extends Figure {
 
     @Override  
     default ObservableList<String> getStyleClass() {
-        return get(STYLE_CLASS);
+        return FXCollections.observableList(new ListWrapper<>(get(STYLE_CLASS)));
     }
 
     @Override
     default ObservableSet<PseudoClass> getPseudoClassStates() {
-        return get(PSEUDO_CLASS_STATES);
+        return FXCollections.observableSet(new SetWrapper<>(get(PSEUDO_CLASS_STATES)));
     }
 
     @Override

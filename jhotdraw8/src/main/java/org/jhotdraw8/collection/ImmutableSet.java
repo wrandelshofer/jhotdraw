@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
+public final class ImmutableSet<E> extends AbstractReadOnlySet<E>  {
 
     private final static ImmutableSet<Object> EMPTY = new ImmutableSet<>(Collections.emptySet());
     private final Set<E> backingSet;
@@ -35,6 +35,18 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
                 break;
             default:
                 this.backingSet = new LinkedHashSet<>(copyMe);
+        }
+    }
+    private ImmutableSet(ReadOnlyCollection<E> copyMe) {
+        switch (copyMe.size()) {
+            case 0:
+                backingSet = Collections.emptySet();
+                break;
+            case 1:
+                backingSet = Collections.singleton(copyMe.iterator().next());
+                break;
+            default:
+                this.backingSet = new LinkedHashSet<>(new SetWrapper<>(copyMe));
         }
     }
 
@@ -65,30 +77,7 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     }
 
     @Override
-    public boolean add(E e) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addListener(InvalidationListener listener) {
-    }
-
-    @Override
-    public void addListener(SetChangeListener<? super E> listener) {
-    }
-
-    @Override
-    public void clear() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean contains(Object o) {
+    public boolean contains(E o) {
         return backingSet.contains(o);
     }
 
@@ -115,29 +104,6 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     }
 
     @Override
-    public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void removeListener(InvalidationListener listener) {
-    }
-
-    @Override
-    public void removeListener(SetChangeListener<? super E> listener) {
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public int size() {
         return backingSet.size();
     }
@@ -159,7 +125,16 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
                 return new ImmutableSet<>(true, a);
         }
     }
-
+    public static <T> ImmutableSet<T> add(ReadOnlyCollection<T> collection, T item) {
+        switch (collection.size()) {
+            case 0:
+                return new ImmutableSet<>(Collections.singleton(item));
+            default:
+                Set<T> a = new LinkedHashSet<>(new SetWrapper<>(collection));
+                a.add(item);
+                return new ImmutableSet<>(true, a);
+        }
+    }
     @Nonnull
     @SuppressWarnings("unchecked")
     public static <T> ImmutableSet<T> emptySet() {
@@ -177,6 +152,10 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
     public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
         return collection.isEmpty() ? emptySet() : new ImmutableSet<>(collection);
     }
+    @Nonnull
+    public static <T> ImmutableSet<T> ofCollection(ReadOnlyCollection<T> collection) {
+        return collection.isEmpty() ? emptySet() : new ImmutableSet<>(collection);
+    }
 
     @Nonnull
     public static <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
@@ -192,8 +171,6 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
             case 1:
                 if (collection.contains(item)) {
                     return (ImmutableSet<T>) EMPTY;
-                } else if (collection instanceof ImmutableSet) {
-                    return (ImmutableSet<T>) collection;
                 } else {
                     return new ImmutableSet(true, Collections.singleton(item));
                 }
@@ -205,9 +182,6 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
                     return new ImmutableSet(true, Collections.singleton(one.equals(item) ? two : one));
 
                 } else {
-                    if (collection instanceof ImmutableSet) {
-                        return (ImmutableSet<T>) collection;
-                    }
                     return new ImmutableSet(collection);
                 }
             default:
@@ -216,9 +190,38 @@ public final class ImmutableSet<E> extends AbstractSet<E> implements ObservableS
                     a.remove(item);
                     return new ImmutableSet<>(true, a);
                 } else {
-                    if (collection instanceof ImmutableSet) {
-                        return (ImmutableSet<T>) collection;
-                    }
+                    return new ImmutableSet(collection);
+                }
+        }
+    }
+    @Nonnull
+    @SuppressWarnings({"unchecked","rawtypes"})
+    public static <T> ImmutableSet<T> remove(ReadOnlyCollection<T> collection, T item) {
+        switch (collection.size()) {
+            case 0:
+                return (ImmutableSet<T>) EMPTY;
+            case 1:
+                if (collection.contains(item)) {
+                    return (ImmutableSet<T>) EMPTY;
+                } else {
+                    return new ImmutableSet(true, Collections.singleton(item));
+                }
+            case 2:
+                if (collection.contains(item)) {
+                    Iterator<T> iter = collection.iterator();
+                    T one = iter.next();
+                    T two = iter.next();
+                    return new ImmutableSet(true, Collections.singleton(one.equals(item) ? two : one));
+
+                } else {
+                    return new ImmutableSet(collection);
+                }
+            default:
+                if (collection.contains(item)) {
+                    Set<T> a = new LinkedHashSet<>(new SetWrapper<>(collection));
+                    a.remove(item);
+                    return new ImmutableSet<>(true, a);
+                } else {
                     return new ImmutableSet(collection);
                 }
         }

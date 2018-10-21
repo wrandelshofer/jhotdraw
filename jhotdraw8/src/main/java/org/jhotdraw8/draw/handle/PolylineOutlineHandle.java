@@ -74,7 +74,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
     public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
 
         if (editable && key != null && event.getClickCount() == 2) {
-            List<Point2D> points = owner.get(key);
+            ImmutableList<Point2D> points = owner.get(key);
 
             Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
             Point2D pInLocal = owner.worldToLocal(pInDrawing);

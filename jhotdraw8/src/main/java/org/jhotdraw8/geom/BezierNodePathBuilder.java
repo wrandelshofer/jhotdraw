@@ -15,7 +15,7 @@ import org.jhotdraw8.collection.ImmutableList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BezierNodePathBuilder extends AbstractPathBuilder implements Builder<List<BezierNode>> {
+public class BezierNodePathBuilder extends AbstractPathBuilder implements Builder<ImmutableList<BezierNode>> {
 
     @Nonnull
     private List<BezierNode> nodes = new ArrayList<>();

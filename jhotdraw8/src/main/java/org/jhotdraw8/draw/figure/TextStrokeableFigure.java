@@ -13,6 +13,7 @@ import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
@@ -161,9 +162,9 @@ public interface TextStrokeableFigure extends Figure {
             shape.setStrokeType(st);
         }
 
-        List<Double> dashArray = getStyled(TEXT_STROKE_DASH_ARRAY);
+        ImmutableList<Double> dashArray = getStyled(TEXT_STROKE_DASH_ARRAY);
         if (!dashArray.equals(shape.getStrokeDashArray())) {
-            shape.getStrokeDashArray().setAll(dashArray);
+            shape.getStrokeDashArray().setAll(new ListWrapper<>(dashArray));
         }
     }
 

@@ -16,6 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.draw.locator.RelativeLocator;
@@ -179,7 +181,7 @@ public class TransformHandleKit {
 
     private abstract static class AbstractTransformHandle extends AbstractResizeTransformHandle {
 
-        List<Transform> startTransforms;
+        ImmutableList<Transform> startTransforms;
 
         public AbstractTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Border border) {
             super(owner, styleclass, locator, shape, bg, border);
@@ -197,7 +199,7 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds;
-            List<Transform> oldTransforms = startTransforms;
+            ImmutableList<Transform> oldTransforms = startTransforms;
 
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();

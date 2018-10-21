@@ -32,17 +32,18 @@ public class BezierNodePath implements Shape {
         this(new ArrayList<>(), false, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@Nonnull List<BezierNode> nodes) {
+    public BezierNodePath(@Nonnull Iterable<BezierNode> nodes) {
         this(nodes, false, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@Nonnull List<BezierNode> nodes, boolean closed, FillRule windingRule) {
+    public BezierNodePath(@Nonnull Iterable<BezierNode> nodes, boolean closed, FillRule windingRule) {
         this(nodes, closed, windingRule == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
 
     }
 
-    public BezierNodePath(@Nonnull List<BezierNode> nodes, boolean closed, int windingRule) {
-        this.nodes = new ArrayList<>(nodes);
+    public BezierNodePath(@Nonnull Iterable<BezierNode> nodes, boolean closed, int windingRule) {
+        this.nodes = new ArrayList<>();
+        for (BezierNode n: nodes) this.nodes.add(n);
         this.closed = closed;
         this.windingRule = windingRule;
     }

@@ -149,9 +149,9 @@ public interface StrokeableFigure extends Figure {
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        List<Double> dashArray = getStyled(STROKE_DASH_ARRAY);
+        ImmutableList<Double> dashArray = getStyled(STROKE_DASH_ARRAY);
         if (!dashArray.equals(shape.getStrokeDashArray())) {
-            shape.getStrokeDashArray().setAll(dashArray);
+            shape.getStrokeDashArray().setAll(dashArray.toArray(new Double[dashArray.size()]));
         }
     }
 
