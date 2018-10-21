@@ -13,7 +13,7 @@ public abstract class AbstractReadOnlyList<E> implements ReadOnlyList<E> {
             return false;
 
         Iterator<E> e1 = iterator();
-        Iterator<?> e2 = ((List<?>) o).iterator();
+        Iterator<?> e2 = ((Iterable<?>) o).iterator();
         while (e1.hasNext() && e2.hasNext()) {
             E o1 = e1.next();
             Object o2 = e2.next();
