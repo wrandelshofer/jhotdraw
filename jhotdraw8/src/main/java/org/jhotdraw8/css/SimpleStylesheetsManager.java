@@ -41,7 +41,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         this.selectorModel = selectorModel;
     }
 
-    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, String key, String value) {
+    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, String key, List<CssToken> value) {
         selectorModel1.setAttribute(elem, styleOrigin, key, value);
     }
 
@@ -226,24 +226,24 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
         // The stylesheet is a user-agent stylesheet
         for (Declaration d : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getProperty(), d.getTermsAsString());
+            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getProperty(), d.getTerms());
         }
 
         // The value of a property was set by the user through a call to a set method with StyleOrigin.USER
         // ... nothing to do!
         // The stylesheet is an external file
         for (Declaration d : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getProperty(), d.getTermsAsString());
+            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getProperty(), d.getTerms());
         }
 
         // The stylesheet is an internal file
         for (Declaration d : collectApplicableDeclarations(elem, getInlineStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getProperty(), d.getTermsAsString());
+            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getProperty(), d.getTerms());
         }
 
         // 'inline style attributes' can override all other values
         if (selectorModel.hasAttribute(elem, "style")) {
-            Map<String, String> inlineDeclarations = new HashMap<>();
+            Map<String, List<CssToken>> inlineDeclarations = new HashMap<>();
             String styleValue = selectorModel.getAttribute(elem, "style");
             try {
                 for (Declaration d : parser.parseDeclarationList(styleValue)) {
@@ -252,13 +252,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         continue;
                     }
 
-                    inlineDeclarations.put(d.getProperty(), d.getTermsAsString());
+                    inlineDeclarations.put(d.getProperty(), d.getTerms());
                 }
             } catch (IOException ex) {
                 System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + styleValue);
                 ex.printStackTrace();
             }
-            for (Map.Entry<String, String> entry : inlineDeclarations.entrySet()) {
+            for (Map.Entry<String, List<CssToken>> entry : inlineDeclarations.entrySet()) {
                 doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey(), entry.getValue());
             }
             inlineDeclarations.clear();
@@ -315,7 +315,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
         for (Map.Entry<Integer, Declaration> entry : applicableDeclarations) {
             Declaration d = entry.getValue();
-            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(), d.getTermsAsString());
+            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(), d.getTerms());
         }
         return true;
     }

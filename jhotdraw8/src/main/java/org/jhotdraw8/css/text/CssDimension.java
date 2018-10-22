@@ -1,4 +1,4 @@
-/* @(#)CssSize.java
+/* @(#)CssDimension.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -10,19 +10,19 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.io.DefaultUnitConverter;
 
 /**
- * CssSize.
+ * CssDimension.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSize {
+public class CssDimension {
 
     @Nullable
-    public final static CssSize ZERO = new CssSize(0, null);
+    public final static CssDimension ZERO = new CssDimension(0, null);
     private final String units;
     private final double value;
 
-    public CssSize(double value, String units) {
+    public CssDimension(double value, String units) {
         this.value = value;
         this.units = units;
     }
@@ -38,7 +38,7 @@ public class CssSize {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CssSize other = (CssSize) obj;
+        final CssDimension other = (CssDimension) obj;
         if (Double.doubleToLongBits(this.value) != Double.doubleToLongBits(other.value)) {
             return false;
         }
@@ -71,7 +71,7 @@ public class CssSize {
     @Nonnull
     @Override
     public String toString() {
-        return "CssSize{" + value + units + '}';
+        return "CssDimension{" + value + units + '}';
     }
 
 }

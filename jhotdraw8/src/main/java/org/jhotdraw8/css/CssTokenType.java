@@ -301,5 +301,15 @@ public class CssTokenType {
      * Defines the plus "+" delim-token.
      */
     public final static int TT_PLUS = '+';
+    /**
+     * Defines the percent "%" delim-token.
+     */
+    public final static int TT_PERCENT_DELIM = '%';
+
+    /**
+     * Defines the vertical line "|" delim-token.
+     */
+    public final static int TT_VERTICAL_LINE = '|';
+
 
 }

@@ -14,9 +14,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -48,7 +48,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
     }
 
     @Override
-    public <TT extends CssFont> void produceTokensNonnull(@Nonnull TT font, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    public <TT extends CssFont> void produceTokensNonnull(@Nonnull TT font, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
         final FontPosture posture = font.getPosture();
@@ -58,7 +58,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         if (posture != null) {
             switch (font.getPosture()) {
                 case ITALIC:
-                    out.accept(new Token(CssTokenType.TT_IDENT, "italic"));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "italic"));
                     needsSpace = true;
                     break;
                 case REGULAR:
@@ -74,39 +74,38 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
                     break;
                 case BOLD:
                     if (needsSpace) {
-                        out.accept(new Token(CssTokenType.TT_S, " "));
+                        out.accept(new CssToken(CssTokenType.TT_S, " "));
                     }
-                    out.accept(new Token(CssTokenType.TT_IDENT, "bold"));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "bold"));
                     break;
                 default:
                     if (needsSpace) {
-                        out.accept(new Token(CssTokenType.TT_S, " "));
+                        out.accept(new CssToken(CssTokenType.TT_S, " "));
                     }
-                    out.accept(new Token(CssTokenType.TT_NUMBER, weight.getWeight()));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, weight.getWeight()));
                     break;
             }
         }
-        out.accept(new Token(CssTokenType.TT_S, " "));
-        out.accept(new Token(CssTokenType.TT_NUMBER, fontSize));
-        out.accept(new Token(CssTokenType.TT_S, " "));
+        out.accept(new CssToken(CssTokenType.TT_S, " "));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, fontSize));
+        out.accept(new CssToken(CssTokenType.TT_S, " "));
         if (fontFamily.contains(" ") || fontFamily.contains("\'") || fontFamily.contains("\"")) {
-            out.accept(new Token(CssTokenType.TT_STRING, fontFamily));
+            out.accept(new CssToken(CssTokenType.TT_STRING, fontFamily));
         } else {
-            out.accept(new Token(CssTokenType.TT_IDENT, fontFamily));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, fontFamily));
         }
     }
 
     @NotNull
     @Override
-    public CssFont parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.setSkipWhitespaces(true);
+    public CssFont parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
         double fontSize = 12.0;
         String fontFamily = "System";
 
         // parse FontStyle
-        if (tt.nextToken() == CssTokenType.TT_IDENT) {
+        if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonnull().toLowerCase()) {
                 case "normal":
                     fontPosture = FontPosture.REGULAR;
@@ -125,7 +124,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
         // parse FontWeight
         boolean fontWeightConsumed = false;
-        if (tt.nextToken() == CssTokenType.TT_IDENT) {
+        if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonnull().toLowerCase()) {
                 case "normal":
                     fontWeight = FontWeight.NORMAL;
@@ -156,7 +155,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         double fontWeightOrFontSize = 0.0;
         boolean fontWeightOrFontSizeConsumed = false;
         if (!fontWeightConsumed) {
-            if (tt.nextToken() == CssTokenType.TT_NUMBER) {
+            if (tt.next() == CssTokenType.TT_NUMBER) {
                 fontWeightOrFontSize = tt.currentNumberNonnull().doubleValue();
                 fontWeightOrFontSizeConsumed = true;
             } else {
@@ -165,7 +164,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         }
 
         // parse FontSize
-        if (tt.nextToken() == CssTokenType.TT_NUMBER) {
+        if (tt.next() == CssTokenType.TT_NUMBER) {
             fontSize = tt.currentNumberNonnull().doubleValue();
 
             if (fontWeightOrFontSizeConsumed) {
@@ -209,12 +208,12 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
             tt.pushBack();
         }
 
-        if (tt.nextToken() == CssTokenType.TT_IDENT || tt.currentToken() == CssTokenType.TT_STRING) {
+        if (tt.next() == CssTokenType.TT_IDENT || tt.current() == CssTokenType.TT_STRING) {
             fontFamily = tt.currentString();
-            while (tt.nextToken() == CssTokenType.TT_IDENT) {
+            while (tt.next() == CssTokenType.TT_IDENT) {
                 fontFamily += " " + tt.currentString();
             }
-        } else if (tt.currentToken() == CssTokenType.TT_STRING) {
+        } else if (tt.current() == CssTokenType.TT_STRING) {
             fontFamily = tt.currentString();
         } else {
             throw new ParseException("⟨Font⟩: ⟨FontFamily⟩ expected", tt.getStartPosition());

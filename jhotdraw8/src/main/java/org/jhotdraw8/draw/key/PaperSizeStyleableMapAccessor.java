@@ -16,7 +16,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssPaperSizeConverter;
-import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.css.text.CssSize2D;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
@@ -34,9 +34,9 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAcc
     @Nonnull
     private final CssMetaData<?, CssSize2D> cssMetaData;
     @Nonnull
-    private final MapAccessor<CssSize> xKey;
+    private final MapAccessor<CssDimension> xKey;
     @Nonnull
-    private final MapAccessor<CssSize> yKey;
+    private final MapAccessor<CssDimension> yKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -45,7 +45,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAcc
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public PaperSizeStyleableMapAccessor(String name, MapAccessor<CssSize> xKey, MapAccessor<CssSize> yKey) {
+    public PaperSizeStyleableMapAccessor(String name, MapAccessor<CssDimension> xKey, MapAccessor<CssDimension> yKey) {
         super(name, CssSize2D.class, new MapAccessor<?>[]{xKey, yKey}, new CssSize2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssSize2D>> function = s -> {

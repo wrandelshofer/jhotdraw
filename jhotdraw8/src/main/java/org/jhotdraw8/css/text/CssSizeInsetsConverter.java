@@ -65,13 +65,13 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
-                return new CssSizeInsets((CssSize) v[1], (CssSize) v[1], (CssSize) v[1], (CssSize) v[1]);
+                return new CssSizeInsets((CssDimension) v[1], (CssDimension) v[1], (CssDimension) v[1], (CssDimension) v[1]);
             case 2:
-                return new CssSizeInsets((CssSize) v[1], (CssSize) v[2], (CssSize) v[1], (CssSize) v[2]);
+                return new CssSizeInsets((CssDimension) v[1], (CssDimension) v[2], (CssDimension) v[1], (CssDimension) v[2]);
             case 3:
-                return new CssSizeInsets((CssSize) v[1], (CssSize) v[2], (CssSize) v[3], (CssSize) v[2]);
+                return new CssSizeInsets((CssDimension) v[1], (CssDimension) v[2], (CssDimension) v[3], (CssDimension) v[2]);
             case 4:
-                return new CssSizeInsets((CssSize) v[1], (CssSize) v[2], (CssSize) v[3], (CssSize) v[4]);
+                return new CssSizeInsets((CssDimension) v[1], (CssDimension) v[2], (CssDimension) v[3], (CssDimension) v[4]);
             default:
                 throw new ParseException("CssSizeInsets with 1 to 4 dimension values expected.", buf.position());
         }

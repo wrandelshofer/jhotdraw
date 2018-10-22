@@ -26,8 +26,8 @@ public class CssSymmetricSize2DConverter implements Converter<CssSize2D> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, @Nonnull CssSize2D value) throws IOException {
-        CssSize x = value.getX();
-        CssSize y = value.getY();
+        CssDimension x = value.getX();
+        CssDimension y = value.getY();
         if (x == y) {
             formatter.toStr(out, idFactory, 1, value.getX());
         } else {
@@ -42,9 +42,9 @@ public class CssSymmetricSize2DConverter implements Converter<CssSize2D> {
         int count = (Integer) v[0];
         switch (count) {
             case 1:
-                return new CssSize2D(((CssSize) v[1]), ((CssSize) v[1]));
+                return new CssSize2D(((CssDimension) v[1]), ((CssDimension) v[1]));
             case 2:
-                return new CssSize2D(((CssSize) v[1]), ((CssSize) v[2]));
+                return new CssSize2D(((CssDimension) v[1]), ((CssDimension) v[2]));
             default:
                 throw new ParseException("one or two numbers expected, found " + count + " numbers", 0);
         }
@@ -53,7 +53,7 @@ public class CssSymmetricSize2DConverter implements Converter<CssSize2D> {
     @Nullable
     @Override
     public CssSize2D getDefaultValue() {
-        return new CssSize2D(CssSize.ZERO,CssSize.ZERO);
+        return new CssSize2D(CssDimension.ZERO, CssDimension.ZERO);
     }
     
     @Nonnull

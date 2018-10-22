@@ -1,10 +1,10 @@
-/* @(#)CssSizeConverterTest.java
+/* @(#)CssDimensionConverterTest.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
@@ -19,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * CssSizeConverterTest.
+ * CssDimensionConverterTest.
  *
  * @author Werner Randelshofer
  * @version $$Id: CssSizeConverterNGTest_1.java 1176 2016-12-11 19:48:19Z
  * rawcoder $$
  */
-public class CssSizeConverterTest {
+public class CssDimensionConverterTest {
 
-    public CssSizeConverterTest() {
+    public CssDimensionConverterTest() {
     }
 
     /**
@@ -39,7 +39,7 @@ public class CssSizeConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssSizeConverter instance = new CssSizeConverter(true);
-        instance.toString(out, idFactory, value==null?null:new CssSize(value, null));
+        instance.toString(out, idFactory, value==null?null:new CssDimension(value, null));
         String actual = out.toString();
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -55,7 +55,7 @@ public class CssSizeConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
         CssSizeConverter instance = new CssSizeConverter(true);
-        CssSize actualSize = instance.fromString(buf,idFactory);
+        CssDimension actualSize = instance.fromString(buf,idFactory);
         Double actual =actualSize==null?null: actualSize.getConvertedValue();
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

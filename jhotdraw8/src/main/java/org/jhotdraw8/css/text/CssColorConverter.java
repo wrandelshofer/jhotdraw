@@ -6,9 +6,10 @@ package org.jhotdraw8.css.text;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.key.CssColor;
 
 import java.io.IOException;
@@ -16,8 +17,6 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerAPI;
 
 import static org.jhotdraw8.geom.Geom.clamp;
 
@@ -55,15 +54,15 @@ public class CssColorConverter implements CssConverter<CssColor> {
 
 
     @Override
-    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value == null) {
-            out.accept(new Token(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
         }
-        CssTokenizer tt = new CssTokenizer(value.getName());
+        CssStreamTokenizer tt = new CssStreamTokenizer(value.getName());
         try {
-            while (tt.nextToken() != CssTokenType.TT_EOF) {
-                out.accept(new Token(tt.currentToken(), tt.currentString(), tt.currentNumber()));
+            while (tt.next() != CssTokenType.TT_EOF) {
+                out.accept(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
             }
         } catch (IOException e) {
             throw new AssertionError("unexpected io exception", e);
@@ -85,19 +84,18 @@ public class CssColorConverter implements CssConverter<CssColor> {
 
     @Nullable
     @Override
-    public CssColor parse(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssColor parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         CssColor color = null;
-        tt.setSkipWhitespaces(true);
 
         if (nullable) {
-            if (tt.nextTokenIsIdentNone()) {
+            if (tt.nextIsIdentNone()) {
                 return null;
             } else {
                 tt.pushBack();
             }
         }
 
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_DIMENSION:
                 if (tt.currentNumberNonnull().intValue() == 0 && (tt.currentNumber() instanceof Long)
                         && tt.currentStringNonnull().startsWith("x")) {
@@ -124,11 +122,11 @@ public class CssColorConverter implements CssConverter<CssColor> {
                 int i = 0;
                 switch (tt.currentStringNonnull()) {
                     case "rgb":
-                        while (i < 3 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new Token(tt.currentToken(), tt.currentString(), tt.currentNumber()));
-                            values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() / 255.0 : tt.currentNumberNonnull().doubleValue() / 100.0;
+                        while (i < 3 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
+                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
+                            values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() / 255.0 : tt.currentNumberNonnull().doubleValue() / 100.0;
                             if (i < 3) {
-                                if (tt.nextToken() != ',') {
+                                if (tt.next() != ',') {
                                     throw new ParseException("CssColor: rgb comma expected but found " + tt.currentString(), tt.getStartPosition());
                                 } else {
                                     buf.append(tt.currentString());
@@ -147,15 +145,15 @@ public class CssColorConverter implements CssConverter<CssColor> {
                         }
                         break;
                     case "rgba":
-                        while (i < 4 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new Token(tt.currentToken(), tt.currentString(), tt.currentNumber()));
+                        while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
+                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
                             if (i < 3) {
-                                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() / 255.0 : tt.currentNumberNonnull().doubleValue() / 100.0;
+                                values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() / 255.0 : tt.currentNumberNonnull().doubleValue() / 100.0;
                             } else {
-                                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
+                                values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
                             }
                             if (i < 4) {
-                                if (tt.nextToken() != ',') {
+                                if (tt.next() != ',') {
                                     throw new ParseException("CssColor: rgba comma expected but found " + tt.currentString(), tt.getStartPosition());
                                 } else {
                                     buf.append(tt.currentString());
@@ -174,15 +172,15 @@ public class CssColorConverter implements CssConverter<CssColor> {
                         }
                         break;
                     case "hsb":
-                        while (i < 3 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new Token(tt.currentToken(), tt.currentString(), tt.currentNumber()));
+                        while (i < 3 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
+                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
                             if (i < 1) {
-                                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() * 3.6;
+                                values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() * 3.6;
                             } else {
-                                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
+                                values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
                             }
                             if (i < 3) {
-                                if (tt.nextToken() != ',') {
+                                if (tt.next() != ',') {
                                     throw new ParseException("CssColor: hsb comma expected but found " + tt.currentString(), tt.getStartPosition());
                                 } else {
                                     buf.append(tt.currentString());
@@ -201,17 +199,17 @@ public class CssColorConverter implements CssConverter<CssColor> {
                         }
                         break;
                     case "hsba":
-                        while (i < 4 && (tt.nextToken() == CssTokenType.TT_NUMBER || tt.currentToken() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new Token(tt.currentToken(), tt.currentString(), tt.currentNumber()));
+                        while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
+                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
                             if (i < 1) {
-                                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() * 3.6;
+                                values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() * 3.6;
                             } else if (i < 3) {
-                                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
+                                values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
                             } else {
-                                values[i++] = tt.currentToken() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
+                                values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() / 100.0;
                             }
                             if (i < 4) {
-                                if (tt.nextToken() != ',') {
+                                if (tt.next() != ',') {
                                     throw new ParseException("CssColor: hsba comma expected but found " + tt.currentString(), tt.getStartPosition());
                                 } else {
                                     buf.append(tt.currentString());
@@ -232,7 +230,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                     default:
                         throw new ParseException("CssColor: expected but found " + tt.currentValue(), tt.getStartPosition());
                 }
-                if (tt.nextToken() != ')') {
+                if (tt.next() != ')') {
                     throw new ParseException("CssColor: ')' expected but found " + tt.currentValue(), tt.getStartPosition());
                 }
                 break;

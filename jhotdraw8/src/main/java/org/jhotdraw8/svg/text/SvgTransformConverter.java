@@ -8,9 +8,9 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.text.AbstractCssConverter;
 import org.jhotdraw8.io.IdFactory;
 
@@ -57,53 +57,53 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    protected <TT extends Transform> void produceTokensNonnull(@Nonnull TT tx, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    protected <TT extends Transform> void produceTokensNonnull(@Nonnull TT tx, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
                 if (tx instanceof Translate) {
                     Translate tr = (Translate) tx;
-                    out.accept(new Token(CssTokenType.TT_FUNCTION,"translate"));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tr.getTx()));
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tr.getTy()));
-                    out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+                    out.accept(new CssToken(CssTokenType.TT_FUNCTION,"translate"));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getTx()));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getTy()));
+                    out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
                } else if (tx instanceof Scale) {
                     Scale ts = (Scale) tx;
-                    out.accept(new Token(CssTokenType.TT_FUNCTION,"scale"));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, ts.getX()));
+                    out.accept(new CssToken(CssTokenType.TT_FUNCTION,"scale"));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getX()));
                     if (ts.getY() != ts.getX() || ts.getZ() != 1 || ts.getPivotX() != 0 || ts.getPivotY() != 0) {
-                        out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, ts.getY()));
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getY()));
                     }
                      if (ts.getPivotX() != 0 || ts.getPivotY() != 0) {
                          throw new UnsupportedOperationException("pivot not implemented yet");
                     }
-                    out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+                    out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
 
                 } else if (tx instanceof Rotate) {
                     Rotate tr = (Rotate) tx;
-                    out.accept(new Token(CssTokenType.TT_FUNCTION,"rotate"));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tr.getAngle()));
+                    out.accept(new CssToken(CssTokenType.TT_FUNCTION,"rotate"));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getAngle()));
                     if (tr.getPivotX() != 0.0 || tr.getPivotY() != 0.0) {
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                        out.accept(new Token(CssTokenType.TT_S," "));
-                        out.accept(new Token(CssTokenType.TT_NUMBER, tr.getPivotX()));
-                        out.accept(new Token(CssTokenType.TT_COMMA));
-                        out.accept(new Token(CssTokenType.TT_NUMBER, tr.getPivotY()));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                        out.accept(new CssToken(CssTokenType.TT_S," "));
+                        out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getPivotX()));
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                        out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getPivotY()));
                     }
-                    out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+                    out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
                 } else if (tx.isType2D()) {
-                    out.accept(new Token(CssTokenType.TT_FUNCTION,"matrix"));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tx.getMxx()));
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tx.getMyx()));
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tx.getMxy()));
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tx.getMyy()));
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tx.getTx()));
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_NUMBER, tx.getTy()));
-                    out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+                    out.accept(new CssToken(CssTokenType.TT_FUNCTION,"matrix"));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tx.getMxx()));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tx.getMyx()));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tx.getMxy()));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tx.getMyy()));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tx.getTx()));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, tx.getTy()));
+                    out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
                 } else {
                     throw new UnsupportedOperationException("Unsupported transformation "+tx);
                 }
@@ -124,23 +124,21 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
 
     @Nonnull
     @Override
-    public Transform parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.setSkipWhitespaces(true);
-
+    public Transform parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION,"⟨Transform⟩: function expected");
             String func = tt.currentStringNonnull();
             int funcPos = tt.getStartPosition();
             List<Double> m = new ArrayList<>();
-            while (tt.nextToken() != ')' && tt.currentToken() != CssTokenType.TT_EOF) {
-                if (tt.currentToken() != ',') {
+            while (tt.next() != ')' && tt.current() != CssTokenType.TT_EOF) {
+                if (tt.current() != ',') {
                     tt.pushBack();
                 }
-                if (tt.nextToken() != CssTokenType.TT_NUMBER) {
+                if (tt.next() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("coefficient nb " + m.size() + " expected: \"" + tt.currentString() + "\"", tt.getStartPosition());
                 }
                 m.add(tt.currentNumberNonnull().doubleValue());
             }
-            if (tt.currentToken() != ')') {
+            if (tt.current() != ')') {
                 throw new ParseException("')' expected: \"" + tt.currentString() + "\"", tt.getStartPosition());
             }
             switch (func) {

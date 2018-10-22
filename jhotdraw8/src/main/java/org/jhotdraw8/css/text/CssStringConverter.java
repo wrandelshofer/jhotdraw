@@ -10,9 +10,9 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.ast.Token;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.text.Converter;
@@ -43,14 +43,14 @@ public class CssStringConverter implements Converter<String> {
     @Nullable
     @Override
     public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
-        if (tt.nextToken()==CssTokenType.TT_IDENT&&CssTokenType.IDENT_NONE.equals(tt.currentString())) {
+        CssStreamTokenizer tt = new CssStreamTokenizer(new CharBufferReader(buf));
+        if (tt.next()==CssTokenType.TT_IDENT&&CssTokenType.IDENT_NONE.equals(tt.currentString())) {
             return null;
         }else{
             tt.pushBack();
         }
-        if (tt.nextToken() != CssTokenType.TT_STRING) {
-            throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
+        if (tt.next() != CssTokenType.TT_STRING) {
+            throw new ParseException("Css String expected. " + tt.current(), buf.position());
         }
         return tt.currentString();
     }
@@ -65,7 +65,7 @@ public class CssStringConverter implements Converter<String> {
         if (value == null) {
             out.append(CssTokenType.IDENT_NONE);
         } else {
-            out.append(new Token(CssTokenType.TT_STRING, value, quoteChar).fromToken());
+            out.append(new CssToken(CssTokenType.TT_STRING, value, quoteChar).fromToken());
         }
     }
 

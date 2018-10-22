@@ -6,6 +6,7 @@ package org.jhotdraw8.css;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -260,24 +261,33 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @NotNull String name, String value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @NotNull String name, List<CssToken> value) {
+        final String valueStr = preprocessValue(value);
         switch (origin) {
             case USER:
-                element.setAttribute(name, value);
+                element.setAttribute(name, valueStr);
                 break;
             case USER_AGENT:
                 if (!hasAttribute(element, name)) {
-                    element.setAttribute(name, value);
+                    element.setAttribute(name, valueStr);
                 }
                 break;
             case AUTHOR:
-                element.setAttribute(name, value);
+                element.setAttribute(name, valueStr);
                 break;
             case INLINE:
-                element.setAttribute(name, value);
+                element.setAttribute(name, valueStr);
                 break;
             default:
                 throw new UnsupportedOperationException("unsupported origin:" + origin);
         }
+    }
+
+    private String preprocessValue(List<CssToken> value) {
+        StringBuilder buf=new StringBuilder();
+        for (CssToken t:value){
+            buf.append(t.fromToken());
+        }
+        return buf.toString();
     }
 }

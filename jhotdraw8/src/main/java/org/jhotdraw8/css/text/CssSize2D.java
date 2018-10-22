@@ -18,14 +18,14 @@ import javax.annotation.Nullable;
  */
 public class CssSize2D {
 
-    private final CssSize x;
-    private final CssSize y;
+    private final CssDimension x;
+    private final CssDimension y;
 
     public CssSize2D(double x, double y, String units) {
-        this(new CssSize(x, units), new CssSize(y, units));
+        this(new CssDimension(x, units), new CssDimension(y, units));
     }
 
-    public CssSize2D(CssSize x, CssSize y) {
+    public CssSize2D(CssDimension x, CssDimension y) {
         this.x = x;
         this.y = y;
     }
@@ -56,11 +56,11 @@ public class CssSize2D {
         return new Point2D(x.getConvertedValue(), y.getConvertedValue());
     }
 
-    public CssSize getX() {
+    public CssDimension getX() {
         return x;
     }
 
-    public CssSize getY() {
+    public CssDimension getY() {
         return y;
     }
 

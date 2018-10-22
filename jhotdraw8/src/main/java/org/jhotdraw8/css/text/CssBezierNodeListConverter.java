@@ -12,9 +12,8 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
@@ -38,10 +37,8 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
 
     @NotNull
     @Override
-    public ImmutableList<BezierNode> parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.setSkipWhitespaces(true);
-        tt.setSkipComments(true);
-        if (tt.nextToken() != CssTokenType.TT_STRING) {
+    public ImmutableList<BezierNode> parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
         }
         BezierNodePathBuilder builder = new BezierNodePathBuilder();
@@ -50,11 +47,11 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
     }
 
     @Override
-    protected <TT extends ImmutableList<BezierNode>> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    protected <TT extends ImmutableList<BezierNode>> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value.isEmpty()) {
-            out.accept(new Token(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
-            out.accept(new Token(CssTokenType.TT_STRING, Shapes.doubleSvgStringFromAWT(new BezierNodePath(value).getPathIterator(null))));
+            out.accept(new CssToken(CssTokenType.TT_STRING, Shapes.doubleSvgStringFromAWT(new BezierNodePath(value).getPathIterator(null))));
         }
     }
 

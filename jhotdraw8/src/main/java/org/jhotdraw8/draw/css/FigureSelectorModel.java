@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -23,6 +24,7 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
@@ -288,7 +290,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public String getAttribute(@Nonnull Figure element, @NotNull @Nullable StyleOrigin origin, @NotNull String attributeName) {
+    public String getAttribute(@Nonnull Figure element, @Nullable StyleOrigin origin, @NotNull String attributeName) {
         WriteableStyleableMapAccessor<Object> key = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         if (key == null) {
             return null;
@@ -339,7 +341,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@NotNull @Nonnull Figure elem, @NotNull StyleOrigin origin, @NotNull String name, String value) {
+    public void setAttribute(@NotNull @Nonnull Figure elem, @NotNull StyleOrigin origin, @NotNull String name, List<CssToken> value) {
         Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 
         WriteableStyleableMapAccessor<Object> k = metaMap.get(name);
@@ -351,7 +353,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 Converter<Object> converter = k.getConverter();
                 Object convertedValue;
                 try {
-                    convertedValue = converter.fromString(value);
+                    convertedValue = converter.fromString(preprocessValue(value));
                     elem.setStyled(origin, k, convertedValue);
                 } catch (@Nonnull ParseException | IOException ex) {
                     //FIXME we should mark this as an error somewhere in the GUI
@@ -359,5 +361,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 }
             }
         }
+    }
+
+    private String preprocessValue(List<CssToken> value) {
+        StringBuilder buf=new StringBuilder();
+        for (CssToken t:value){
+            buf.append(t.fromToken());
+        }
+        return buf.toString();
     }
 }

@@ -9,11 +9,12 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.css.text.CssSize;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -23,13 +24,13 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> implements WriteableStyleableMapAccessor<CssSize> {
+public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssDimension> implements WriteableStyleableMapAccessor<CssDimension> {
 
     final static long serialVersionUID = 1L;
 
-    private final Converter<CssSize> converter = new CssSizeConverter(false);
+    private final Converter<CssDimension> converter = new CssSizeConverter(false);
     @Nonnull
-    private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
+    private final CssMetaData<? extends Styleable, CssDimension> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -47,7 +48,7 @@ public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> 
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public SizeStyleableFigureKey(String name, CssSize defaultValue) {
+    public SizeStyleableFigureKey(String name, CssDimension defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -58,18 +59,18 @@ public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> 
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public SizeStyleableFigureKey(String name, DirtyMask mask, CssSize defaultValue) {
-        super(name, CssSize.class, mask, defaultValue);
+    public SizeStyleableFigureKey(String name, DirtyMask mask, CssDimension defaultValue) {
+        super(name, CssDimension.class, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<CssSize>> function = s -> {
+        Function<Styleable, StyleableProperty<CssDimension>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssSize> cvrtr
+        final StyleConverter<String, CssDimension> cvrtr
                 = new StyleConverterAdapter<>(converter);
-        CssMetaData<Styleable, CssSize> md
+        CssMetaData<Styleable, CssDimension> md
                 = new SimpleCssMetaData<>(property, function,
                 cvrtr, defaultValue, inherits);
         cssMetaData = md;
@@ -78,12 +79,12 @@ public class SizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> 
 
     @Nonnull
     @Override
-    public Converter<CssSize> getConverter() {
+    public Converter<CssDimension> getConverter() {
         return converter;
     }
     @Nonnull
     @Override
-    public CssMetaData<? extends Styleable, CssSize> getCssMetaData() {
+    public CssMetaData<? extends Styleable, CssDimension> getCssMetaData() {
       return cssMetaData;
       
     }

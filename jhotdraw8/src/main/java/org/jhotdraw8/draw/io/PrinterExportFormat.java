@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.figure.SimplePageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
-import org.jhotdraw8.css.text.CssSize;
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.css.text.CssSize2D;
 import org.jhotdraw8.draw.figure.Page;
 
@@ -144,7 +144,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     @Override
     protected void writePage(File file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
+        CssDimension pw = page.get(SimplePageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();

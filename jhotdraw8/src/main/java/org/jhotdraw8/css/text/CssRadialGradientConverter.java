@@ -6,8 +6,9 @@ package org.jhotdraw8.css.text;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import javafx.scene.paint.CycleMethod;
-import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -56,8 +56,8 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
     }
 
     @Override
-    protected <TT extends CssRadialGradient> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
-        out.accept(new Token(CssTokenType.TT_FUNCTION, RADIAL_GRADIENT_FUNCTION));
+    protected <TT extends CssRadialGradient> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_FUNCTION, RADIAL_GRADIENT_FUNCTION));
         CssRadialGradient lg = value;
         final boolean proportional = lg.isProportional();
         final double focusAngle = lg.getFocusAngle();
@@ -67,52 +67,52 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         final double radius = lg.getRadius();
         boolean needsComma = false;
         if (focusAngle != 0.0) {
-            out.accept(new Token(CssTokenType.TT_IDENT, "focus-angle"));
-            out.accept(new Token(CssTokenType.TT_S, " "));
-            out.accept(new Token(CssTokenType.TT_DIMENSION, "deg", focusAngle));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, "focus-angle"));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_DIMENSION, "deg", focusAngle));
             needsComma = true;
         }
         if (focusDistance != 0.0) {
             if (needsComma) {
-                out.accept(new Token(CssTokenType.TT_COMMA));
-                out.accept(new Token(CssTokenType.TT_S, " "));
-                out.accept(new Token(CssTokenType.TT_COMMA));
-                out.accept(new Token(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
             }
-            out.accept(new Token(CssTokenType.TT_IDENT, "focus-distance"));
-            out.accept(new Token(CssTokenType.TT_S, " "));
-            out.accept(new Token(CssTokenType.TT_PERCENTAGE, focusDistance * 100));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, "focus-distance"));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, focusDistance * 100));
             needsComma = true;
         }
         if (centerX != 0.5 || centerY != 0.5) {
             if (needsComma) {
-                out.accept(new Token(CssTokenType.TT_COMMA));
-                out.accept(new Token(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
             }
-            out.accept(new Token(CssTokenType.TT_IDENT, "center"));
-            out.accept(new Token(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, "center"));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
             if (proportional) {
-                out.accept(new Token(CssTokenType.TT_PERCENTAGE, centerX * 100));
-                out.accept(new Token(CssTokenType.TT_S, " "));
-                out.accept(new Token(CssTokenType.TT_PERCENTAGE, centerY * 100));
-                out.accept(new Token(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, centerX * 100));
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, centerY * 100));
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
             } else {
-                out.accept(new Token(CssTokenType.TT_NUMBER, centerX));
-                out.accept(new Token(CssTokenType.TT_S, " "));
-                out.accept(new Token(CssTokenType.TT_NUMBER, centerY));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, centerX));
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, centerY));
             }
             needsComma = true;
         }
         if (needsComma) {
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        out.accept(new Token(CssTokenType.TT_IDENT, "radius"));
-        out.accept(new Token(CssTokenType.TT_S, " "));
+        out.accept(new CssToken(CssTokenType.TT_IDENT, "radius"));
+        out.accept(new CssToken(CssTokenType.TT_S, " "));
         if (proportional) {
-            out.accept(new Token(CssTokenType.TT_PERCENTAGE, radius * 100));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, radius * 100));
         } else {
-            out.accept(new Token(CssTokenType.TT_NUMBER, radius));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, radius));
         }
         needsComma = true;
 
@@ -122,18 +122,18 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
                     break;
                 case REPEAT:
                     if (needsComma) {
-                        out.accept(new Token(CssTokenType.TT_COMMA));
-                        out.accept(new Token(CssTokenType.TT_S, " "));
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                        out.accept(new CssToken(CssTokenType.TT_S, " "));
                     }
-                    out.accept(new Token(CssTokenType.TT_IDENT, "repeat"));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "repeat"));
                     needsComma = true;
                     break;
                 case REFLECT:
                     if (needsComma) {
-                        out.accept(new Token(CssTokenType.TT_COMMA));
-                        out.accept(new Token(CssTokenType.TT_S, " "));
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                        out.accept(new CssToken(CssTokenType.TT_S, " "));
                     }
-                    out.accept(new Token(CssTokenType.TT_IDENT, "reflect"));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "reflect"));
                     needsComma = true;
                     break;
                 default:
@@ -141,24 +141,23 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
             }
             for (CssStop stop : lg.getStops()) {
                 if (needsComma) {
-                    out.accept(new Token(CssTokenType.TT_COMMA));
-                    out.accept(new Token(CssTokenType.TT_S, " "));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
                 }
                 colorConverter.produceTokens(stop.getColor(), idFactory, out);
                 if (stop.getOffset() != null) {
-                    out.accept(new Token(CssTokenType.TT_S, " "));
-                    out.accept(new Token(CssTokenType.TT_PERCENTAGE, stop.getOffset() * 100.0));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, stop.getOffset() * 100.0));
                 }
                 needsComma = true;
             }
         }
-        out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+        out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
     }
 
     @Nonnull
     @Override
-    public CssRadialGradient parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.setSkipWhitespaces(true);
+    public CssRadialGradient parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨RadialGradient⟩: \"radial-gradient(\"  expected");
         switch (tt.currentStringNonnull()) {
             case RADIAL_GRADIENT_FUNCTION:
@@ -173,9 +172,9 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         double centerY = 0.5;
         double radius = 1;
         Boolean isProportional = null;
-        while (tt.nextToken() == CssTokenType.TT_IDENT) {
+        while (tt.next() == CssTokenType.TT_IDENT) {
             if ("focus-angle".equals(tt.currentString())) {
-                switch (tt.nextToken()) {
+                switch (tt.next()) {
                     case CssTokenType.TT_DIMENSION:
                         if (!"deg".equals(tt.currentString())) {
                             throw new ParseException("CSS RadialGradient: expected focus-angle given in degrees with unit  \"deg\", found: " + tt.currentString(), tt.getStartPosition());
@@ -190,7 +189,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
                 }
 
             } else if ("focus-distance".equals(tt.currentString())) {
-                switch (tt.nextToken()) {
+                switch (tt.next()) {
                     case CssTokenType.TT_PERCENTAGE:
                         focusDistance = tt.currentNumberNonnull().doubleValue() / 100;
                         break;
@@ -202,7 +201,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
                 }
 
             } else if ("center".equals(tt.currentString())) {
-                switch (tt.nextToken()) {
+                switch (tt.next()) {
                     case CssTokenType.TT_PERCENTAGE:
                         if (isProportional == null) {
                             isProportional = true;
@@ -224,7 +223,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
                     default:
                         throw new ParseException("CSS RadialGradient: center x-value expected, found: " + tt.currentString(), tt.getStartPosition());
                 }
-                switch (tt.nextToken()) {
+                switch (tt.next()) {
                     case CssTokenType.TT_PERCENTAGE:
                         if (isProportional == null) {
                             isProportional = true;
@@ -247,7 +246,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
                         throw new ParseException("CSS RadialGradient: center y-value  expected, found: " + tt.currentString(), tt.getStartPosition());
                 }
             } else if ("radius".equals(tt.currentString())) {
-                switch (tt.nextToken()) {
+                switch (tt.next()) {
                     case CssTokenType.TT_PERCENTAGE:
                         if (isProportional == null) {
                             isProportional = true;
@@ -274,12 +273,12 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
                 break;
             }
 
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
         }
         CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
-        if (tt.nextToken() == CssTokenType.TT_IDENT) {
+        if (tt.next() == CssTokenType.TT_IDENT) {
             if ("repeat".equals(tt.currentString())) {
                 cycleMethod = CycleMethod.REPEAT;
 
@@ -292,22 +291,21 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
             tt.pushBack();
         }
 
-        if (tt.nextToken() != ',') {
+        if (tt.next() != ',') {
             tt.pushBack();
         }
         List<CssStop> stops = new ArrayList<>();
-        while (tt.nextToken() != ')' && tt.currentToken() != CssTokenType.TT_EOF) {
+        while (tt.next() != ')' && tt.current() != CssTokenType.TT_EOF) {
             tt.pushBack();
             stops.add(parseColorStop(tt, idFactory));
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
         }
 
-        if (tt.currentToken() != ')') {
+        if (tt.current() != ')') {
             throw new ParseException("CSS RadialGradient: ')'  expected, found: " + tt.currentString(), tt.getStartPosition());
         }
-        tt.skipWhitespace();
         if (isProportional == null) {
             isProportional = true;
         }
@@ -315,10 +313,10 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         return new CssRadialGradient(focusAngle, focusDistance, centerX, centerY, radius, isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
     }
 
-    private CssStop parseColorStop(@Nonnull CssTokenizerAPI tt, IdFactory idFactory) throws IOException, ParseException {
+    private CssStop parseColorStop(@Nonnull CssTokenizer tt, IdFactory idFactory) throws IOException, ParseException {
         CssColor color = colorConverter.parse(tt, idFactory);
         Double offset = null;
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 offset = tt.currentNumberNonnull().doubleValue();
                 break;

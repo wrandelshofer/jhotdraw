@@ -12,10 +12,9 @@ import javafx.geometry.BoundingBox;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -39,8 +38,7 @@ public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
 
     @Nonnull
     @Override
-    public BoundingBox parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.setSkipWhitespaces(true);
+    public BoundingBox parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         final double x, y, width, height;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨BoundingBox⟩: ⟨min-x⟩ expected.");
         x = tt.currentNumberNonnull().doubleValue();
@@ -58,23 +56,23 @@ public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
     }
 
     @Override
-    protected <TT extends BoundingBox> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
-        out.accept(new Token(CssTokenType.TT_NUMBER, value.getMinX()));
-        out.accept(new Token(CssTokenType.TT_COMMA));
+    protected <TT extends BoundingBox> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinX()));
+        out.accept(new CssToken(CssTokenType.TT_COMMA));
         if (withSpace) {
-            out.accept(new Token(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        out.accept(new Token(CssTokenType.TT_NUMBER, value.getMinY()));
-        out.accept(new Token(CssTokenType.TT_COMMA));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinY()));
+        out.accept(new CssToken(CssTokenType.TT_COMMA));
         if (withSpace) {
-            out.accept(new Token(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        out.accept(new Token(CssTokenType.TT_NUMBER, value.getWidth()));
-        out.accept(new Token(CssTokenType.TT_COMMA));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getWidth()));
+        out.accept(new CssToken(CssTokenType.TT_COMMA));
         if (withSpace) {
-            out.accept(new Token(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        out.accept(new Token(CssTokenType.TT_NUMBER, value.getHeight()));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getHeight()));
     }
 
     @Override

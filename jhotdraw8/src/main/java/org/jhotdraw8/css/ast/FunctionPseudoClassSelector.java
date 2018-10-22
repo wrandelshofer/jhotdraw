@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.css.SelectorModel;
+import org.jhotdraw8.css.CssToken;
 
 /**
  * A "class selector" matches an element based on the value of its "pseudo
@@ -21,9 +22,9 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
     private final String functionIdentifier;
     @Nonnull
-    private final List<Token> terms;
+    private final List<CssToken> terms;
 
-    public FunctionPseudoClassSelector(String functionIdentifier, @Nonnull List<Token> terms) {
+    public FunctionPseudoClassSelector(String functionIdentifier, @Nonnull List<CssToken> terms) {
         this.functionIdentifier = functionIdentifier;
         this.terms = Collections.unmodifiableList(terms);
     }

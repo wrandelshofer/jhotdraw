@@ -13,10 +13,9 @@ import javafx.geometry.Insets;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -42,11 +41,10 @@ public class CssInsetsConverter extends AbstractCssConverter<Insets> {
 
     @Nonnull
     @Override
-    public Insets parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.setSkipWhitespaces(true);
+    public Insets parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         List<Number> list=new ArrayList<>(4);
         for (int i=0;i<4;i++) {
-            switch (tt.nextToken()) {
+            switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
                     list.add(tt.currentNumberNonnull());
                     break;
@@ -83,26 +81,26 @@ public class CssInsetsConverter extends AbstractCssConverter<Insets> {
     }
 
     @Override
-    protected <TT extends Insets> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    protected <TT extends Insets> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value.getRight() == value.getLeft()) {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {
-                    out.accept(new Token(CssTokenType.TT_NUMBER,value.getTop()));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getTop()));
                     return;
                 } else {
-                    out.accept(new Token(CssTokenType.TT_NUMBER,value.getTop()));
-                    out.accept(new Token(CssTokenType.TT_S," "));
-                    out.accept(new Token(CssTokenType.TT_NUMBER,value.getRight()));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getTop()));
+                    out.accept(new CssToken(CssTokenType.TT_S," "));
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getRight()));
                     return;
                 }
             }
         }
-        out.accept(new Token(CssTokenType.TT_NUMBER,value.getTop()));
-        out.accept(new Token(CssTokenType.TT_S," "));
-        out.accept(new Token(CssTokenType.TT_NUMBER,value.getRight()));
-        out.accept(new Token(CssTokenType.TT_S," "));
-        out.accept(new Token(CssTokenType.TT_NUMBER,value.getBottom()));
-        out.accept(new Token(CssTokenType.TT_S," "));
-        out.accept(new Token(CssTokenType.TT_NUMBER,value.getLeft()));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getTop()));
+        out.accept(new CssToken(CssTokenType.TT_S," "));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getRight()));
+        out.accept(new CssToken(CssTokenType.TT_S," "));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getBottom()));
+        out.accept(new CssToken(CssTokenType.TT_S," "));
+        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getLeft()));
     }
 }

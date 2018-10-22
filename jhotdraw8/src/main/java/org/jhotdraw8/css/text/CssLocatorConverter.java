@@ -10,9 +10,9 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssStreamTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.io.CharBufferReader;
@@ -40,8 +40,7 @@ public class CssLocatorConverter implements Converter<Locator> {
   @Override
   public Locator fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     Locator c;
-    CssTokenizerAPI tt = new CssTokenizer(new CharBufferReader(buf));
-    tt.setSkipWhitespaces(true);
+    CssTokenizer tt = new CssStreamTokenizer(new CharBufferReader(buf));
     c = parseLocator(tt);
 
     if (!buf.toString().trim().isEmpty()) {
@@ -71,11 +70,10 @@ public class CssLocatorConverter implements Converter<Locator> {
      * @throws IOException if IO fails
      */
     @Nonnull
-    public Locator parseLocator(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
+    public Locator parseLocator(@Nonnull CssTokenizer tt) throws ParseException, IOException {
         Locator color = null;
-        tt.setSkipWhitespaces(true);
 
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_FUNCTION:
                 if (!"relative".equals(tt.currentString())) {
                     throw new ParseException("Locator: function 'relative(' expected, found:" + tt.currentValue(), tt.getStartPosition());
@@ -86,7 +84,7 @@ public class CssLocatorConverter implements Converter<Locator> {
         }
         double x, y;
 
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 x = tt.currentNumber().doubleValue();
                 break;
@@ -96,14 +94,14 @@ public class CssLocatorConverter implements Converter<Locator> {
             default:
                 throw new ParseException("RelativeLocator: x-value expected but found " + tt.currentValue(), tt.getStartPosition());
         }
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case ',':
                 break;
             default:
                 tt.pushBack();
                 break;
         }
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 y = tt.currentNumber().doubleValue();
                 break;
@@ -113,7 +111,7 @@ public class CssLocatorConverter implements Converter<Locator> {
             default:
                 throw new ParseException("RelativeLocator: y-value expected but found " + tt.currentValue(), tt.getStartPosition());
         }
-        if (tt.nextToken() != ')') {
+        if (tt.next() != ')') {
             throw new ParseException("RelativeLocator: ')' expected but found " + tt.currentValue(), tt.getStartPosition());
         }
 

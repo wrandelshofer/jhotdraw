@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.IntArrayList;
 
 /**
  * The {@code CssScanner} preprocesses an input stream of UTF-16 code points for
- * the {@code CssTokenizer}.
+ * the {@code CssStreamTokenizer}.
  * <p>
  * The scanner filters out the characters '\r', '\f' and '\000' using the
  * following ISO 14977 EBNF productions:

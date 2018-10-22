@@ -41,7 +41,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private char buf[] = new char[20];
 
     /**
-     * The next character to be considered by the nextToken method. May also be
+     * The next character to be considered by the next method. May also be
      * NEED_CHAR to indicate that a new character should be read, or SKIP_LF to
      * indicate that a new character should be read and, if it is a '\n'
      * character, it should be discarded and a second new character should be
@@ -83,7 +83,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private boolean isParseExponents = false;
 
     /**
-     * After a call to the <code>nextToken</code> method, this field contains
+     * After a call to the <code>next</code> method, this field contains
      * the type of the token just read. For a single character token, its value
      * is the single character, converted to an integer. For a quoted string
      * token (see , its value is the quote character. Otherwise, its value is
@@ -312,7 +312,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Specifies that matching pairs of this character delimit string constants
      * in this tokenizer.
      * <p>
-     * When the <code>nextToken</code> method encounters a string constant, the
+     * When the <code>next</code> method encounters a string constant, the
      * <code>ttype</code> field is set to the string delimiter and the
      * <code>sval</code> field is set to the body of the string.
      * <p>
@@ -388,7 +388,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     /**
      * Determines whether or not ends of line are treated as tokens. If the flag
      * argument is true, this tokenizer treats end of lines as tokens; the
-     * <code>nextToken</code> method returns <code>TT_EOL</code> and also sets
+     * <code>next</code> method returns <code>TT_EOL</code> and also sets
      * the <code>ttype</code> field to this value when an end of line is read.
      * <p>
      * A line is a sequence of characters ending with either a carriage-return
@@ -449,7 +449,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * flag argument is <code>true</code>, then the value in the
      * <code>sval</code> field is lowercased whenever a word token is returned
      * (the <code>ttype</code> field has the value <code>TT_WORD</code> by the
-     * <code>nextToken</code> method of this tokenizer.
+     * <code>next</code> method of this tokenizer.
      * <p>
      * If the flag argument is <code>false</code>, then the <code>sval</code>
      * field is not modified.
@@ -496,7 +496,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * <code>sval</code> field of this tokenizer.
      * <p>
      * Typical clients of this class first set up the syntax tables and then sit
-     * in a loop calling nextToken to parse successive tokens until TT_EOF is
+     * in a loop calling next to parse successive tokens until TT_EOF is
      * returned.
      *
      * @return the value of the <code>ttype</code> field.
@@ -540,7 +540,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
         ttype = c;
         /* Just to be safe */
 
- /* Set peekc so that the next invocation of nextToken will read
+ /* Set peekc so that the next invocation of next will read
          * another character unless peekc is reset in this invocation
          */
         peekc = NEED_CHAR;
@@ -858,17 +858,17 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                     }
                     prevc = c;
                 }
-                return nextToken();
+                return next();
             } else if (c == '/' && slashSlashCommentsP) {
                 while ((c = read()) != '\n' && c != '\r' && c >= 0);
                 peekc = c;
-                return nextToken();
+                return next();
             } else {
                 // Now see if it is still a single line comment
                 if ((ct['/'] & CT_COMMENT) != 0) {
                     while ((c = read()) != '\n' && c != '\r' && c >= 0);
                     peekc = c;
-                    return nextToken();
+                    return next();
                 } else {
                     peekc = c;
                     // rlw
@@ -1040,7 +1040,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     }
 
     /**
-     * Causes the next call to the <code>nextToken</code> method of this
+     * Causes the next call to the <code>next</code> method of this
      * tokenizer to return the current value in the <code>ttype</code> field,
      * and not to modify the value in the <code>nval</code> or <code>sval</code>
      * field.
@@ -1051,7 +1051,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @see java.io.StreamTokenizer#ttype
      */
     public void pushBack() {
-        if (ttype != TT_NOTHING) /* No-op if nextToken() not called */ {
+        if (ttype != TT_NOTHING) /* No-op if next() not called */ {
             pushedBack = true;
         }
     }
@@ -1144,6 +1144,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                 break;
             }
         }
-        return "Token[" + ret + "], line " + lineno;
+        return "CssToken[" + ret + "], line " + lineno;
     }
 }

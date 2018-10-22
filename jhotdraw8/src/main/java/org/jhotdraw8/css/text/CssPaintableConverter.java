@@ -7,8 +7,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.CssLinearGradient;
@@ -51,7 +51,7 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
         super(nullable);
     }
     @Override
-    protected <TT extends Paintable> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    protected <TT extends Paintable> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
          if (value instanceof CssColor) {
             CssColor c = (CssColor) value;
             colorConverter.produceTokens(c,idFactory,out);
@@ -68,8 +68,8 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
 
     @Nonnull
     @Override
-    public Paintable parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        if (tt.nextToken()==CssTokenType.TT_FUNCTION) {
+    public Paintable parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next()==CssTokenType.TT_FUNCTION) {
             switch (tt.currentStringNonnull()) {
                 case CssLinearGradientConverter.LINEAR_GRADIENT_FUNCTION:
                     tt.pushBack();

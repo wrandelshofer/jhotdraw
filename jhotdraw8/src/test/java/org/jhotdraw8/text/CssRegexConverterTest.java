@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
  * Test for {@link CssRegexConverter}.
- * 
+ *
  * @author Werner Randelshofer
  */
 public class CssRegexConverterTest {
@@ -38,25 +38,29 @@ public class CssRegexConverterTest {
     public void testRegexFromStringReplace(String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
         CssRegexConverter c = new CssRegexConverter(false);
         RegexReplace rgx = c.fromString(inputCssRegex);
-        assertEquals(rgx.getFind(), expectedFind,"find");
-        assertEquals(rgx.getReplace(), expectedReplace,"replace");
+        assertEquals(rgx.getFind(), expectedFind, "find");
+        assertEquals(rgx.getReplace(), expectedReplace, "replace");
     }
+
     public static void testRegexFromStringReplaceNullable(String inputCssRegex, boolean expectNull) throws Exception {
         CssRegexConverter cNullable = new CssRegexConverter(true);
         RegexReplace rgx = cNullable.fromString(inputCssRegex);
-        if (expectNull)
-            assertNull(rgx,"Nullable converter must return null regex");
-        else
-            assertNotNull(rgx,"Nullable converter most not return null regex");
-        
+        if (expectNull) {
+            assertNull(rgx, "Nullable converter must return null regex");
+        } else {
+            assertNotNull(rgx, "Nullable converter most not return null regex");
+        }
+
         CssRegexConverter cNonnull = new CssRegexConverter(false);
         try {
-        RegexReplace rgxNonnull = cNonnull.fromString(inputCssRegex);
-            if (expectNull)
+            RegexReplace rgxNonnull = cNonnull.fromString(inputCssRegex);
+            if (expectNull) {
                 fail("Nonnull converter must produce ParseException");
+            }
         } catch (ParseException e) {
-            if (!expectNull)
+            if (!expectNull) {
                 fail("Nonnull converter must not produce ParseException");
+            }
         }
     }
 
@@ -65,42 +69,42 @@ public class CssRegexConverterTest {
     public List<DynamicTest> testRegexFromStringReplaceFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRegexFromStringReplace("replace('' '')", "", "")),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)' '$1')", ".*@(.*)", "$1")),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)' '$0')", ".*@(.*)", "$0")),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)' '')", ".*@(.*)", "")),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)' '')", ".*@(.*)", "")),
-        //
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)' '$1')", ".*@(.*)", "$1")),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)' '$0')", ".*@(.*)", "$0")),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)' '')", ".*@(.*)", "")),
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
-            //
-            dynamicTest("1", () -> testRegexFromStringReplace("replace('.*\\'(.*)' '$1')", ".*'(.*)", "$1"))
-            );
+                dynamicTest("2", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
+                dynamicTest("3", () -> testRegexFromStringReplace("replace('.*@(.*)' '$1')", ".*@(.*)", "$1")),
+                dynamicTest("4", () -> testRegexFromStringReplace("replace('.*@(.*)' '$0')", ".*@(.*)", "$0")),
+                dynamicTest("5", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
+                dynamicTest("6", () -> testRegexFromStringReplace("replace('.*@(.*)' '')", ".*@(.*)", "")),
+                dynamicTest("7", () -> testRegexFromStringReplace("replace('.*@(.*)' '')", ".*@(.*)", "")),
+                //
+                dynamicTest("8", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
+                dynamicTest("9", () -> testRegexFromStringReplace("replace('.*@(.*)' '$1')", ".*@(.*)", "$1")),
+                dynamicTest("10", () -> testRegexFromStringReplace("replace('.*@(.*)' '$0')", ".*@(.*)", "$0")),
+                dynamicTest("11", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
+                dynamicTest("12", () -> testRegexFromStringReplace("replace('.*@(.*)' '')", ".*@(.*)", "")),
+                dynamicTest("13", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
+                //
+                dynamicTest("14", () -> testRegexFromStringReplace("replace('.*\\'(.*)' '$1')", ".*'(.*)", "$1"))
+        );
     }
 
     @TestFactory
     public List<DynamicTest> testRegexFromStringApplyFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromStringApply("replace('' '')", "", "")),
-                dynamicTest("1", () -> testFromStringApply("replace('.*@(.*)')", "a@b", "a@b")),
-                dynamicTest("1", () -> testFromStringApply("replace('.*@(.*)' '$1')", "a@b", "b")),
-                dynamicTest("1", () -> testFromStringApply("replace('.*@(.*)' '$0')", "a@b", "a@b")),
-                dynamicTest("1", () -> testFromStringApply("replace('.*@(.*)')", "a@b", "a@b")),
-                dynamicTest("1", () -> testFromStringApply("replace('.*@(.*)' ' ' )", "a@b", " ")),
-                dynamicTest("1", () -> testFromStringApply("replace('.*@(.*)' '')", "a@b", ""))
-            );
+                dynamicTest("2", () -> testFromStringApply("replace('.*@(.*)')", "a@b", "a@b")),
+                dynamicTest("3", () -> testFromStringApply("replace('.*@(.*)' '$1')", "a@b", "b")),
+                dynamicTest("4", () -> testFromStringApply("replace('.*@(.*)' '$0')", "a@b", "a@b")),
+                dynamicTest("5", () -> testFromStringApply("replace('.*@(.*)')", "a@b", "a@b")),
+                dynamicTest("6", () -> testFromStringApply("replace('.*@(.*)' ' ' )", "a@b", " ")),
+                dynamicTest("7", () -> testFromStringApply("replace('.*@(.*)' '')", "a@b", ""))
+        );
     }
 
-@TestFactory
-public List<DynamicTest> testRegexFromStringReplaceNullableFactory() {
+    @TestFactory
+    public List<DynamicTest> testRegexFromStringReplaceNullableFactory() {
         return Arrays.asList(
-        dynamicTest("1", () -> testRegexFromStringReplaceNullable("replace('' '')", false)),
-                dynamicTest("1", () -> testRegexFromStringReplaceNullable("none", true))
+                dynamicTest("1", () -> testRegexFromStringReplaceNullable("replace('' '')", false)),
+                dynamicTest("2", () -> testRegexFromStringReplaceNullable("none", true))
         );
     }
 }

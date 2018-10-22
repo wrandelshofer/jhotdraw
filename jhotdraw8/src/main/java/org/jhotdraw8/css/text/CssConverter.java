@@ -3,9 +3,9 @@
  */
 package org.jhotdraw8.css.text;
 
+import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 
@@ -33,7 +33,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @return the parsed value
      */
     @Nullable
-    T parse(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
+    T parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
 
     /**
      * Parses from the given tokenizer and moves the tokenizer
@@ -43,7 +43,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @return the parsed value
      */
     @Nonnull
-    default T parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    default T parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         T value = parse(tt, idFactory);
         if (value == null) {
             throw new ParseException("Value expected.", tt.getStartPosition());
@@ -54,7 +54,7 @@ public interface CssConverter<T> extends Converter<T> {
     /**
      * Produces tokens.
      */
-    <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out);
+    <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out);
 
     /**
      * Converts the value to String.
@@ -83,7 +83,7 @@ public interface CssConverter<T> extends Converter<T> {
 
     @Override
     default <TT extends T> void toString(Appendable out, IdFactory idFactory, TT value) throws IOException {
-        Consumer<Token> consumer = token -> {
+        Consumer<CssToken> consumer = token -> {
             try {
                 out.append(token.fromToken());
             } catch (IOException e) {
@@ -100,7 +100,7 @@ public interface CssConverter<T> extends Converter<T> {
 
     default T fromString(CharBuffer buf, IdFactory idFactory) throws ParseException {
         try {
-            CssTokenizer tt = new CssTokenizer(buf);
+            CssStreamTokenizer tt = new CssStreamTokenizer(buf);
             T value = parse(tt, idFactory);
             buf.position(tt.getNextPosition());
             return value;

@@ -13,10 +13,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssSize;
 import org.jhotdraw8.css.text.CssSizeInsets;
 import org.jhotdraw8.css.text.CssSizeInsetsConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
@@ -34,13 +34,13 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
     @Nonnull
     private final CssMetaData<?, CssSizeInsets> cssMetaData;
     @Nonnull
-    private final MapAccessor<CssSize> topKey;
+    private final MapAccessor<CssDimension> topKey;
     @Nonnull
-    private final MapAccessor<CssSize> rightKey;
+    private final MapAccessor<CssDimension> rightKey;
     @Nonnull
-    private final MapAccessor<CssSize> bottomKey;
+    private final MapAccessor<CssDimension> bottomKey;
     @Nonnull
-    private final MapAccessor<CssSize> leftKey;
+    private final MapAccessor<CssDimension> leftKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -51,7 +51,7 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
      * @param bottomKey the insets bottom key
      * @param leftKey the insets left key
      */
-    public SizeInsetsStyleableMapAccessor(String name, MapAccessor<CssSize> topKey, MapAccessor<CssSize> rightKey, MapAccessor<CssSize> bottomKey, MapAccessor<CssSize> leftKey) {
+    public SizeInsetsStyleableMapAccessor(String name, MapAccessor<CssDimension> topKey, MapAccessor<CssDimension> rightKey, MapAccessor<CssDimension> bottomKey, MapAccessor<CssDimension> leftKey) {
         super(name, CssSizeInsets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssSizeInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssSizeInsets>> function = s -> {
@@ -93,18 +93,18 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
     @Nullable
     @Override
     public CssSizeInsets get(Map<? super Key<?>, Object> a) {
-        final CssSize top = topKey.get(a);
-        final CssSize right = rightKey.get(a);
-        final CssSize bottom = bottomKey.get(a);
-        final CssSize left = leftKey.get(a);
+        final CssDimension top = topKey.get(a);
+        final CssDimension right = rightKey.get(a);
+        final CssDimension bottom = bottomKey.get(a);
+        final CssDimension left = leftKey.get(a);
         if (top == null || right == null || bottom == null | left == null) {
             return null;
         }
         return new CssSizeInsets(
-                top == null ? CssSize.ZERO : top,
-                right == null ? CssSize.ZERO : right,
-                bottom == null ? CssSize.ZERO : bottom,
-                left == null ? CssSize.ZERO : left
+                top == null ? CssDimension.ZERO : top,
+                right == null ? CssDimension.ZERO : right,
+                bottom == null ? CssDimension.ZERO : bottom,
+                left == null ? CssDimension.ZERO : left
         );
     }
 

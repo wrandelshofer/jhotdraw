@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.SelectorModel;
 import org.w3c.dom.Element;
 
@@ -209,7 +210,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public void setAttribute(@NotNull @Nonnull Styleable elem, @NotNull StyleOrigin origin, @NotNull String name, String value) {
+    public void setAttribute(@NotNull @Nonnull Styleable elem, @NotNull StyleOrigin origin, @NotNull String name, List<CssToken> value) {
         List<CssMetaData<? extends Styleable, ?>> metaList = elem.getCssMetaData();
         HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
         for (CssMetaData<? extends Styleable, ?> m : metaList) {
@@ -219,8 +220,8 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         CssMetaData<Styleable, ?> m = (CssMetaData<Styleable, ?>) metaMap.get(name);
         if (m != null && m.isSettable(elem)) {
             @SuppressWarnings("unchecked")
-            StyleConverter<String, Object> converter = (StyleConverter<String, Object>) m.getConverter();
-            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(value, null);
+            StyleConverter<Object, Object> converter = (StyleConverter<Object, Object>) m.getConverter();
+            ParsedValueImpl<Object, Object> parsedValue = new ParsedValueImpl<>(value, null);
 
             Object convertedValue = converter.convert(parsedValue, null);
             @SuppressWarnings("unchecked")

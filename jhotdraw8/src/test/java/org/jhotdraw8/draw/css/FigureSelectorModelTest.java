@@ -5,6 +5,8 @@
 package org.jhotdraw8.draw.css;
 
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.SimpleLabelFigure;
 import org.jhotdraw8.draw.key.Paintable;
@@ -12,18 +14,20 @@ import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.text.Converter;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * FigureSelectorModelTest.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class FigureSelectorModelTest {
-    
+
     public FigureSelectorModelTest() {
     }
 
@@ -35,22 +39,22 @@ public class FigureSelectorModelTest {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         SimpleLabelFigure figure = new SimpleLabelFigure();
         FigureSelectorModel instance = new FigureSelectorModel();
-        
+
         final PaintableStyleableFigureKey key = FillableFigure.FILL;
-        final String attrName=key.getCssName();
-        final Converter<Paintable> converter=key.getConverter();
-        
-        
-       assertNotNull(key.getDefaultValue(),"need a key with a non-null default value for this test");
-        
-        assertEquals(instance.getAttribute(figure,attrName),"initial","no value has been set, must be 'initial'");
-        
-        instance.setAttribute(figure, StyleOrigin.USER, attrName, converter.toString(null));
-        
-        assertNull(figure.get(key),"figure.get(key) value has been explicitely set to null");
-        
-       assertEquals(instance.getAttribute(figure, attrName), converter.toString(null),"model.get(figure,key) value has been explicitly set to null");
-       
+        final String attrName = key.getCssName();
+        final Converter<Paintable> converter = key.getConverter();
+
+
+        assertNotNull(key.getDefaultValue(), "need a key with a non-null default value for this test");
+
+        assertEquals(instance.getAttribute(figure, attrName), "initial", "no value has been set, must be 'initial'");
+
+        instance.setAttribute(figure, StyleOrigin.USER, attrName, Arrays.asList(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
+
+        assertNull(figure.get(key), "figure.get(key) value has been explicitly set to null");
+
+        assertEquals(instance.getAttribute(figure, attrName), converter.toString(null), "model.get(figure,key) value has been explicitly set to null");
+
     }
-    
+
 }

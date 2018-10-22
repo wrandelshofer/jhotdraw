@@ -4,7 +4,7 @@
 package org.jhotdraw8.css.ast;
 
 /**
- * A ComponentValue is the abstract base class of Token, CurlyBlock,
+ * A ComponentValue is the abstract base class of CssToken, CurlyBlock,
  * RoundBlock, SquareBlock and FunctionBlock.
  *
  * @author Werner Randelshofer

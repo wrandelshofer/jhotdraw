@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.css;
 
+import java.util.List;
 import java.util.Set;
 
 import javafx.css.StyleOrigin;
@@ -253,5 +254,5 @@ public interface SelectorModel<T> {
      * @param value   The attribute value. Null removes the attribute from the
      *                element.
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable String value);
+    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value);
 }

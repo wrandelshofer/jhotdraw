@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.css.CssToken;
+
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -21,19 +23,19 @@ public class Declaration extends AST {
 
     private final String property;
     @Nonnull
-    private final List<Token> terms;
+    private final List<CssToken> terms;
     private int startPos = -1;
     private int endPos = -1;
 
-    public Declaration(String property, Token term) {
-        this(property, Arrays.asList(new Token[]{term}));
+    public Declaration(String property, CssToken term) {
+        this(property, Arrays.asList(new CssToken[]{term}));
     }
 
-    public Declaration(String property, @Nonnull List<Token> terms) {
+    public Declaration(String property, @Nonnull List<CssToken> terms) {
         this(property, terms, -1, -1);
     }
 
-    public Declaration(String property, @Nonnull List<Token> terms, int startPos, int endPos) {
+    public Declaration(String property, @Nonnull List<CssToken> terms, int startPos, int endPos) {
         this.property = property;
         this.terms = Collections.unmodifiableList(new ArrayList<>(terms));
         this.startPos = startPos;
@@ -45,7 +47,7 @@ public class Declaration extends AST {
     }
 
     @Nonnull
-    public List<Token> getTerms() {
+    public List<CssToken> getTerms() {
         return terms;
     }
 
@@ -53,7 +55,7 @@ public class Declaration extends AST {
     public String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
-        for (Token t : terms) {
+        for (CssToken t : terms) {
             buf.append(t.toString());
         }
         return buf.toString();

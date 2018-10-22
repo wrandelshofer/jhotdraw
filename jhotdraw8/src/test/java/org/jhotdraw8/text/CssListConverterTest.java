@@ -59,7 +59,7 @@ public class CssListConverterTest {
         ImmutableList<Double> actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
-        assertEquals(actual, expected);
+        assertEquals( expected, actual.toList());
     }
 
     @TestFactory
@@ -78,7 +78,7 @@ public class CssListConverterTest {
     public List<DynamicTest> testToStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestToString(null, "none")),
-                dynamicTest("2", () -> doTestToString(Collections.emptyList(), "")),
+                dynamicTest("2", () -> doTestToString(Collections.emptyList(), "none")),
                 dynamicTest("3", () -> doTestToString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
                 dynamicTest("4", () -> doTestToString(Arrays.asList(1.0, 3.0e30, 3.0), "1 3.0E30 3")),
                 dynamicTest("5", () -> doTestToString(Arrays.asList(1.0, 2.0, Double.POSITIVE_INFINITY), "1 2 INF")),

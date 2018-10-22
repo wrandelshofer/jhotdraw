@@ -1,4 +1,4 @@
-/* @(#)CssTokenizerTest.java
+/* @(#)CssStreamTokenizerTest.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,30 +15,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * CssTokenizerTest.
+ * CssStreamTokenizerTest.
  *
  * @author Werner Randelshofer
  */
-public class CssTokenizerTest {
+public class CssStreamTokenizerTest {
 
-    public CssTokenizerTest() {
+    public CssStreamTokenizerTest() {
     }
 
     /**
      * Test of nextChar method, of class CssScanner.
      */
     public static void testTokenizer(String inputData, String expectedValue) throws Exception {
-        CssTokenizer tt = new CssTokenizer(new StringReader(inputData), false);
+        CssStreamTokenizer tt = new CssStreamTokenizer(new StringReader(inputData));
         //
         StringBuilder buf = new StringBuilder();
-        while (tt.nextToken() != CssTokenType.TT_EOF) {
+        while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             if (buf.length() > 0) {
                 buf.append(' ');
             }
-            if (tt.currentToken() < 0) {
-                buf.append(tt.currentToken());
+            if (tt.current() < 0) {
+                buf.append(tt.current());
             } else {
-                buf.append((char) tt.currentToken());
+                buf.append((char) tt.current());
             }
             buf.append(':');
             if (tt.currentNumber() != null)

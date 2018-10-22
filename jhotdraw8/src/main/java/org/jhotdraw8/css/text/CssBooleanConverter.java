@@ -4,9 +4,8 @@
 package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.io.IdFactory;
 
 import javax.annotation.Nonnull;
@@ -34,7 +33,7 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
 
     @Nonnull
     @Override
-    public Boolean parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Boolean parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT,"⟨Boolean⟩ identifier expected.");
         String s = tt.currentString();
         if (s==null)s=CssTokenType.IDENT_NONE;
@@ -49,8 +48,8 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
     }
 
     @Override
-    public <TT extends Boolean> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
-            out.accept(new Token(CssTokenType.TT_IDENT,((Boolean)value)?trueString:falseString));
+    public <TT extends Boolean> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+            out.accept(new CssToken(CssTokenType.TT_IDENT,((Boolean)value)?trueString:falseString));
     }
 
     @Nonnull

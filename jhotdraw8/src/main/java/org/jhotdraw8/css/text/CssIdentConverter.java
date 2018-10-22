@@ -3,10 +3,9 @@
  */
 package org.jhotdraw8.css.text;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 import javax.annotation.Nonnull;
@@ -50,7 +49,7 @@ public class CssIdentConverter extends AbstractCssConverter<String> {
 
     @Nonnull
     @Override
-    public String parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public String parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT," ⟨Ident⟩: ⟨identifier⟩ expected");
         return tt.currentStringNonnull();
     }
@@ -58,8 +57,8 @@ public class CssIdentConverter extends AbstractCssConverter<String> {
 
 
     @Override
-    protected <TT extends String> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
-        out.accept(new Token(CssTokenType.TT_IDENT,value));
+    protected <TT extends String> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_IDENT,value));
     }
 
     @Override

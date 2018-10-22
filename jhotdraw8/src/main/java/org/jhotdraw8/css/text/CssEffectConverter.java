@@ -6,9 +6,9 @@ package org.jhotdraw8.css.text;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.key.CssColor;
 
 import java.io.IOException;
@@ -104,41 +104,41 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private CssColorConverter colorConverter = new CssColorConverter(false);
 
     @Override
-    public <TT extends Effect> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    public <TT extends Effect> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value instanceof Blend) {
             Blend fx = (Blend) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION,BLEND));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,BLEND));
             blendModeConverter.produceTokens(fx.getMode(),idFactory,out);
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             //FIXME
             /* if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.,", ");
+                out.accept(new CssToken(CssTokenType.,", ");
                 toString(out, idFactory, fx.getInput());
             }*/
         } else if (value instanceof Bloom) {
-            out.accept(new Token(CssTokenType.TT_FUNCTION,BLOOM));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,BLOOM));
             Bloom fx = (Bloom) value;
-            out.accept(new Token(CssTokenType.TT_PERCENTAGE,fx.getThreshold() * 100));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE,fx.getThreshold() * 100));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else if (value instanceof BoxBlur) {
             BoxBlur fx = (BoxBlur) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION,BOX_BLUR));
-            out.accept(new Token(CssTokenType.TT_NUMBER,fx.getWidth()));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER,fx.getHeight()));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER,fx.getIterations()));
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,BOX_BLUR));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER,fx.getWidth()));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER,fx.getHeight()));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER,fx.getIterations()));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else if (value instanceof ColorAdjust) {
             ColorAdjust fx = (ColorAdjust) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION, COLOR_ADJUST));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION, COLOR_ADJUST));
             boolean needComma = false;
             final double hue = fx.getHue();
             final double saturation = fx.getSaturation();
@@ -146,141 +146,141 @@ public class CssEffectConverter implements CssConverter<Effect> {
             final double contrast = fx.getContrast();
             boolean all = hue == 0 && saturation == 0 && brightness == 0 && contrast == 0;
             if (hue != 0 || all) {
-                out.accept(new Token(CssTokenType.TT_IDENT,"hue"));
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT,"hue"));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 if (hue > 0) {
-                    out.accept(new Token(CssTokenType.TT_PLUS));
+                    out.accept(new CssToken(CssTokenType.TT_PLUS));
                 }
-                out.accept(new Token(CssTokenType.TT_PERCENTAGE,hue*100));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE,hue*100));
                 needComma = true;
             }
             if (saturation != 0 || all) {
                 if (needComma) {
-                    out.accept(new Token(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
                 }
-                out.accept(new Token(CssTokenType.TT_IDENT,"saturation"));
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT,"saturation"));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 if (saturation > 0) {
-                    out.accept(new Token(CssTokenType.TT_PLUS));
+                    out.accept(new CssToken(CssTokenType.TT_PLUS));
                 }
-                out.accept(new Token(CssTokenType.TT_PERCENTAGE,saturation*100));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE,saturation*100));
                 needComma = true;
             }
             if (brightness != 0 || all) {
                 if (needComma) {
-                    out.accept(new Token(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
                 }
-                out.accept(new Token(CssTokenType.TT_IDENT,"brightness"));
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT,"brightness"));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 if (brightness > 0) {
-                    out.accept(new Token(CssTokenType.TT_PLUS));
+                    out.accept(new CssToken(CssTokenType.TT_PLUS));
                 }
-                out.accept(new Token(CssTokenType.TT_PERCENTAGE,brightness*100));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE,brightness*100));
                 needComma = true;
             }
             if (contrast != 0 || all) {
                 if (needComma) {
-                    out.accept(new Token(CssTokenType.TT_COMMA));
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
                 }
-                out.accept(new Token(CssTokenType.TT_IDENT,"contrast"));
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT,"contrast"));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 if (contrast > 0) {
-                    out.accept(new Token(CssTokenType.TT_PLUS));
+                    out.accept(new CssToken(CssTokenType.TT_PLUS));
                 }
-                out.accept(new Token(CssTokenType.TT_PERCENTAGE,contrast*100));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE,contrast*100));
             }
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else if (value instanceof DropShadow) {
             DropShadow fx = (DropShadow) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION,DROP_SHADOW));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,DROP_SHADOW));
             blurTypeConverter.produceTokens(fx.getBlurType(),idFactory,out);
-            out.accept(new Token(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
             colorConverter.produceTokens(new CssColor(fx.getColor()),idFactory,out);
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_PERCENTAGE, fx.getSpread()*100));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getOffsetX()));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getOffsetY()));
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getSpread()*100));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetX()));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetY()));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else if (value instanceof GaussianBlur) {
             GaussianBlur fx = (GaussianBlur) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION,GAUSSIAN_BLUR));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,GAUSSIAN_BLUR));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else if (value instanceof Glow) {
             Glow fx = (Glow) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION,GLOW));
-            out.accept(new Token(CssTokenType.TT_PERCENTAGE, fx.getLevel()*100));
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,GLOW));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getLevel()*100));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else if (value instanceof InnerShadow) {
             InnerShadow fx = (InnerShadow) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION,INNER_SHADOW));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,INNER_SHADOW));
             blurTypeConverter.produceTokens(fx.getBlurType(),idFactory,out);
-            out.accept(new Token(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
             colorConverter.produceTokens(new CssColor(fx.getColor()),idFactory,out);
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_PERCENTAGE, fx.getChoke()*100));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getOffsetX()));
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getOffsetY()));
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getChoke()*100));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetX()));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetY()));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else if (value instanceof Shadow) {
             Shadow fx = (Shadow) value;
-            out.accept(new Token(CssTokenType.TT_FUNCTION,SHADOW));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION,SHADOW));
             blurTypeConverter.produceTokens(fx.getBlurType(),idFactory,out);
-            out.accept(new Token(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
             colorConverter.produceTokens(new CssColor(fx.getColor()),idFactory,out);
-            out.accept(new Token(CssTokenType.TT_COMMA));
-            out.accept(new Token(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new Token(CssTokenType.TT_RIGHT_BRACKET));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
-                out.accept(new Token(CssTokenType.TT_S," "));
+                out.accept(new CssToken(CssTokenType.TT_S," "));
                 produceTokens(fx.getInput(),idFactory,out);
             }
         } else {
-            out.accept(new Token(CssTokenType.TT_IDENT,CssTokenType.IDENT_NONE));
+            out.accept(new CssToken(CssTokenType.TT_IDENT,CssTokenType.IDENT_NONE));
         }
     }
 
 
     @Nullable
     @Override
-    public Effect parse(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        if (tt.nextTokenIsIdentNone()) return null;
+    public Effect parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.nextIsIdentNone()) return null;
         tt.pushBack();
         return parseEffect(tt);
     }
     @Nullable
-    private Effect parseEffect(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseEffect(CssTokenizer tt) throws ParseException, IOException {
         Effect first = null;
         Effect previous = null;
-        while (tt.nextToken() == CssTokenType.TT_FUNCTION) {
+        while (tt.next() == CssTokenType.TT_FUNCTION) {
 
             Effect current = null;
             switch (tt.currentStringNonnull()) {
@@ -327,28 +327,28 @@ public class CssEffectConverter implements CssConverter<Effect> {
                 previous = current;
             }
 
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
         }
         return first;
     }
 
-    private Effect parseBlend(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseBlend(CssTokenizer tt) throws ParseException, IOException {
         BlendMode mode = BlendMode.SRC_OVER;
-        if (tt.nextToken() == CssTokenType.TT_IDENT) {
+        if (tt.next() == CssTokenType.TT_IDENT) {
             tt.pushBack();
             mode = blendModeConverter.parse(tt,null);
         }
-        if (tt.nextToken() != ')') {
+        if (tt.next() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
         return new Blend(mode);
     }
 
-    private Effect parseBloom(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseBloom(CssTokenizer tt) throws ParseException, IOException {
         double threshold = 0.3;
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 threshold = tt.currentNumber().doubleValue();
                 break;
@@ -358,59 +358,59 @@ public class CssEffectConverter implements CssConverter<Effect> {
             default:
                 tt.pushBack();
         }
-        if (tt.nextToken() != ')') {
+        if (tt.next() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
         return new Bloom(Geom.clamp(threshold, 0, 1));
     }
 
-    private Effect parseBoxBlur(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseBoxBlur(CssTokenizer tt) throws ParseException, IOException {
         double width = 5;
         double height = 5;
         int iterations = 1;
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 width = Geom.clamp(tt.currentNumber().doubleValue(), 0, 255);
                 break;
             default:
                 tt.pushBack();
         }
-        if (tt.nextToken() != ',') {
+        if (tt.next() != ',') {
             tt.pushBack();
         }
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 height = Geom.clamp(tt.currentNumber().doubleValue(), 0, 255);
                 break;
             default:
                 tt.pushBack();
         }
-        if (tt.nextToken() != ',') {
+        if (tt.next() != ',') {
             tt.pushBack();
         }
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 iterations = Geom.clamp(tt.currentNumber().intValue(), 0, 3);
                 break;
             default:
                 tt.pushBack();
         }
-        if (tt.nextToken() != ')') {
+        if (tt.next() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
         return new BoxBlur(width, height, iterations);
     }
 
-    private Effect parseColorAdjust(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseColorAdjust(CssTokenizer tt) throws ParseException, IOException {
         double hue = 0.0;
         double saturation = 0.0;
         double brightness = 0.0;
         double contrast = 0.0;
-        while (tt.nextToken() == CssTokenType.TT_IDENT) {
+        while (tt.next() == CssTokenType.TT_IDENT) {
             String ident = tt.currentString();
             int identPos = tt.getStartPosition();
             double adjust = 0.0;
-            switch (tt.nextToken()) {
+            switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
                     adjust = tt.currentNumber().doubleValue();
                     break;
@@ -437,44 +437,44 @@ public class CssEffectConverter implements CssConverter<Effect> {
                 default:
                     throw new ParseException("CSS illegal identifier: " + ident, identPos);
             }
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
         }
-        if (tt.currentToken() != ')') {
+        if (tt.current() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
         return new ColorAdjust(hue, saturation, brightness, contrast);
     }
 
     @Nonnull
-    private Effect parseDropShadow(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseDropShadow(@Nonnull CssTokenizer tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, true);
     }
 
-    private Effect parseGaussianBlur(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseGaussianBlur(CssTokenizer tt) throws ParseException, IOException {
         double radius = 5;
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 radius = Geom.clamp(tt.currentNumber().doubleValue(), 0, 63);
                 break;
             default:
                 tt.pushBack();
         }
-        if (tt.nextToken() != ')') {
+        if (tt.next() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
         return new GaussianBlur(radius);
     }
 
     @Nonnull
-    private Effect parseInnerShadow(@Nonnull CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseInnerShadow(@Nonnull CssTokenizer tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, false);
     }
 
-    private Effect parseGlow(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseGlow(CssTokenizer tt) throws ParseException, IOException {
         double level = 0.3;
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 level = tt.currentNumber().doubleValue();
                 break;
@@ -484,14 +484,14 @@ public class CssEffectConverter implements CssConverter<Effect> {
             default:
                 tt.pushBack();
         }
-        if (tt.nextToken() != ')') {
+        if (tt.next() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
         return new Glow(Geom.clamp(level, 0, 1));
     }
 
     @Nonnull
-    private Effect parseDropShadowOrInnerShadow(CssTokenizerAPI tt, boolean isDropShadow) throws ParseException, IOException {
+    private Effect parseDropShadowOrInnerShadow(CssTokenizer tt, boolean isDropShadow) throws ParseException, IOException {
         String func = isDropShadow ? DROP_SHADOW : INNER_SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
         Color color = new Color(0, 0, 0, 0.75);
@@ -501,39 +501,39 @@ public class CssEffectConverter implements CssConverter<Effect> {
         double offsetY = 4.0;
         Effect input = null;
 
-        if (tt.nextToken() != ')') {
-            if (tt.currentToken() != CssTokenType.TT_IDENT) {
+        if (tt.next() != ')') {
+            if (tt.current() != CssTokenType.TT_IDENT) {
                 throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getStartPosition());
             }
             tt.pushBack();
             blurType = blurTypeConverter.parse(tt,null);
 
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() == CssTokenType.TT_HASH) {
+            if (tt.next() == CssTokenType.TT_HASH) {
                 color = Color.web('#' + tt.currentString());
-            } else if (tt.currentToken() == CssTokenType.TT_IDENT) {
+            } else if (tt.current() == CssTokenType.TT_IDENT) {
                 color = Color.web(tt.currentString());
-            } else if (tt.currentToken() == CssTokenType.TT_FUNCTION) {
+            } else if (tt.current() == CssTokenType.TT_FUNCTION) {
                 tt.pushBack();
                 CssColor colorOrNull = colorConverter.parse(tt,null);
                 color = colorOrNull.getColor();
             } else {
                 throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getStartPosition());
             }
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenType.TT_NUMBER) {
+            if (tt.next() != CssTokenType.TT_NUMBER) {
                 throw new ParseException("CSS Effect: radius number expected", tt.getStartPosition());
             }
             radius = tt.currentNumber().doubleValue();
 
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
-            switch (tt.nextToken()) {
+            switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
                     spreadOrChocke = tt.currentNumber().doubleValue();
                     break;
@@ -543,27 +543,27 @@ public class CssEffectConverter implements CssConverter<Effect> {
                 default:
                     throw new ParseException("CSS Shadow-Effect: spread or chocke number expected", tt.getStartPosition());
             }
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenType.TT_NUMBER) {
+            if (tt.next() != CssTokenType.TT_NUMBER) {
                 throw new ParseException("CSS Shadow-Effect: offset-x number expected", tt.getStartPosition());
             }
             offsetX = tt.currentNumber().doubleValue();
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenType.TT_NUMBER) {
+            if (tt.next() != CssTokenType.TT_NUMBER) {
                 throw new ParseException("CSS Shadow-Effect: offset-y number expected", tt.getStartPosition());
             }
             offsetY = tt.currentNumber().doubleValue();
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             } else {
                 input = parseEffect(tt);
             }
         }
-        if (tt.currentToken() != ')') {
+        if (tt.current() != ')') {
             throw new ParseException("CSS Shadow-Effect: ')'  expected", tt.getStartPosition());
         }
 
@@ -584,42 +584,42 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return effect;
     }
 
-    private Effect parseShadow(CssTokenizerAPI tt) throws ParseException, IOException {
+    private Effect parseShadow(CssTokenizer tt) throws ParseException, IOException {
         String func = SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
         Color color = new Color(0, 0, 0, 0.75);
         double radius = 10.0;
 
-        if (tt.nextToken() != ')') {
-            if (tt.currentToken() != CssTokenType.TT_IDENT) {
+        if (tt.next() != ')') {
+            if (tt.current() != CssTokenType.TT_IDENT) {
                 throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getStartPosition());
             }
             tt.pushBack();
             blurType = blurTypeConverter.parse(tt,null);
 
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() == CssTokenType.TT_HASH) {
+            if (tt.next() == CssTokenType.TT_HASH) {
                 color = Color.web('#' + tt.currentString());
-            } else if (tt.currentToken() == CssTokenType.TT_IDENT) {
+            } else if (tt.current() == CssTokenType.TT_IDENT) {
                 color = Color.web(tt.currentString());
-            } else if (tt.currentToken() == CssTokenType.TT_FUNCTION) {
+            } else if (tt.current() == CssTokenType.TT_FUNCTION) {
                 tt.pushBack();
                 CssColor colorOrNull = colorConverter.parse(tt,null);
                 color = colorOrNull.getColor();
             } else {
                 throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getStartPosition());
             }
-            if (tt.nextToken() != ',') {
+            if (tt.next() != ',') {
                 tt.pushBack();
             }
-            if (tt.nextToken() != CssTokenType.TT_NUMBER) {
+            if (tt.next() != CssTokenType.TT_NUMBER) {
                 throw new ParseException("CSS Effect: radius number expected", tt.getStartPosition());
             }
             radius = tt.currentNumber().doubleValue();
 
-            if (tt.nextToken() != ')') {
+            if (tt.next() != ')') {
                 throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
             }
         }

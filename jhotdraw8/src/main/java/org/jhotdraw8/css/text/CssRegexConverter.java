@@ -11,9 +11,9 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssStreamTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.RegexReplace;
@@ -83,14 +83,13 @@ public class CssRegexConverter implements Converter<RegexReplace> {
     @Nullable
     @Override
     public RegexReplace fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizerAPI tt = new CssTokenizer(new StringReader(in.toString()));
-        tt.setSkipWhitespaces(true);
+        CssTokenizer tt = new CssStreamTokenizer(new StringReader(in.toString()));
         String find = null;
         String replace = null;
 
         String msg = nullable ? "\"replace(\" or \"none\" expected" : "\"replace(\" expected";
 
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_FUNCTION:
                 if ("replace".equals(tt.currentString())) {
                 } else {
@@ -99,8 +98,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
                 break;
             case CssTokenType.TT_IDENT:
                 if ("none".equals(tt.currentString())) {
-                    tt.skipWhitespace();
-                    in.position(tt.getStartPosition());
+                    in.position(tt.getNextPosition());
                     if (nullable) {
                         return null;
                     }
@@ -111,7 +109,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
             default:
                 throw new ParseException(msg, tt.getStartPosition());
         }
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_STRING:
                 find = tt.currentString();
                 break;
@@ -119,7 +117,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
                 throw new ParseException("find string expected", tt.getStartPosition());
         }
 
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case ',':
                 break;
             default:
@@ -127,7 +125,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
                 break;
         }
 
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_STRING:
                 replace = tt.currentString();
                 break;
@@ -137,14 +135,13 @@ public class CssRegexConverter implements Converter<RegexReplace> {
                 replace = null;
                 tt.pushBack();
         }
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case ')':
                 break;
             default:
                 throw new ParseException("closing bracket \")\" expected", tt.getStartPosition());
         }
-        tt.skipWhitespace();
-        in.position(tt.getStartPosition());
+        in.position(tt.getNextPosition());
         return new RegexReplace(find, replace);
     }
 

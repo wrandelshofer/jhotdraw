@@ -12,10 +12,9 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -39,24 +38,22 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
 
 
     @Override
-    public ImmutableSet<T> parse(@NotNull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<T> parse(@NotNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         ArrayList<T> list = new ArrayList<>();
         do {
-            tt.skipWhitespace();
             T elem = elementConverter.parse(tt, idFactory);
             if (elem != null) {
                 list.add(elem);
             }
-            tt.setSkipWhitespaces(false);
-        } while (tt.nextToken() == CssTokenType.TT_COMMA || tt.currentToken() == CssTokenType.TT_S);
+        } while (tt.next() == CssTokenType.TT_COMMA || tt.current() == CssTokenType.TT_S);
         tt.pushBack();
         return ImmutableSet.ofCollection(list);
     }
 
     @Override
-    public <TT extends ImmutableSet<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @NotNull Consumer<Token> out) {
+    public <TT extends ImmutableSet<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @NotNull Consumer<CssToken> out) {
         if (value.isEmpty()) {
-            out.accept(new Token(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
             boolean first = true;
             for (T elem : value) {
@@ -67,9 +64,9 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
                     first = false;
                 } else {
                     if (withComma) {
-                        out.accept(new Token(CssTokenType.TT_COMMA));
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
                     }
-                    out.accept(new Token(CssTokenType.TT_S, " "));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
                 }
                 elementConverter.produceTokens(elem, idFactory, out);
             }

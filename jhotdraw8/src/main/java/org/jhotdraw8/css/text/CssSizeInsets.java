@@ -20,12 +20,12 @@ public class CssSizeInsets {
 
     public final static CssSizeInsets ZERO = new CssSizeInsets();
 
-    private final CssSize bottom;
-    private final CssSize left;
-    private final CssSize right;
-    private final CssSize top;
+    private final CssDimension bottom;
+    private final CssDimension left;
+    private final CssDimension right;
+    private final CssDimension top;
 
-    public CssSizeInsets(CssSize top, CssSize right, CssSize bottom, CssSize left) {
+    public CssSizeInsets(CssDimension top, CssDimension right, CssDimension bottom, CssDimension left) {
         this.top = top;
         this.right = right;
         this.bottom = bottom;
@@ -33,11 +33,11 @@ public class CssSizeInsets {
     }
 
     public CssSizeInsets(double top, double right, double bottom, double left, String units) {
-        this(new CssSize(top, units), new CssSize(right, units), new CssSize(bottom, units), new CssSize(left, units));
+        this(new CssDimension(top, units), new CssDimension(right, units), new CssDimension(bottom, units), new CssDimension(left, units));
     }
 
     public CssSizeInsets() {
-        this(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ZERO);
+        this(CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CssSizeInsets {
         return true;
     }
 
-    public CssSize getBottom() {
+    public CssDimension getBottom() {
         return bottom;
     }
 
@@ -95,15 +95,15 @@ public class CssSizeInsets {
                 bottom.getConvertedValue(), left.getConvertedValue());
     }
 
-    public CssSize getLeft() {
+    public CssDimension getLeft() {
         return left;
     }
 
-    public CssSize getRight() {
+    public CssDimension getRight() {
         return right;
     }
 
-    public CssSize getTop() {
+    public CssDimension getTop() {
         return top;
     }
 

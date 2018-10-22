@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -41,7 +42,6 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.css.text.CssSize;
 
 /**
  * A Label that can be placed anywhere on a drawing.
@@ -62,10 +62,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_BOTTOM = new SizeStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_LEFT = new SizeStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_RIGHT = new SizeStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_TOP = new SizeStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static SizeStyleableFigureKey SHAPE_SLICE_BOTTOM = new SizeStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static SizeStyleableFigureKey SHAPE_SLICE_LEFT = new SizeStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static SizeStyleableFigureKey SHAPE_SLICE_RIGHT = new SizeStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static SizeStyleableFigureKey SHAPE_SLICE_TOP = new SizeStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
     /**
      * This property specifies inward offsets from the top, right, bottom, and
      * left edges of the border image defined by the {@link #SHAPE_BOUNDS}

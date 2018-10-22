@@ -35,7 +35,7 @@ import org.jhotdraw8.text.PatternConverter;
  * HTML 5, Common Microsyntaxes, Space-separated tokens
  * </a></li>
  * <li><a href="https://www.w3.org/TR/xmlschema-2/#token">
- * XML Schema Part 2, Built-in datatypes, Derived datatypes, Token
+ * XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken
  * </a></li>
  * </ul>
  *

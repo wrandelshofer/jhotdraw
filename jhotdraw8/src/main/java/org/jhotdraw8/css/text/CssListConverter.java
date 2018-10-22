@@ -3,9 +3,8 @@ package org.jhotdraw8.css.text;
 import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.io.IdFactory;
 
 import javax.annotation.Nullable;
@@ -29,24 +28,29 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     @Override
-    public ImmutableList<T> parse(@NotNull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<T> parse(@NotNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
+            return ImmutableList.emptyList();
+        } else {
+            tt.pushBack();
+        }
+
+
         ArrayList<T> list = new ArrayList<>();
         do {
-            tt.skipWhitespace();
             T elem = elementConverter.parse(tt, idFactory);
             if (elem != null) {
                 list.add(elem);
             }
-            tt.setSkipWhitespaces(false);
-        } while (tt.nextToken() == CssTokenType.TT_COMMA || tt.currentToken() == CssTokenType.TT_S);
+        } while (tt.nextNoSkip() == CssTokenType.TT_COMMA || tt.current() == CssTokenType.TT_S);
         tt.pushBack();
         return ImmutableList.ofCollection(list);
     }
 
     @Override
-    public <TT extends ImmutableList<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @NotNull Consumer<Token> out) {
-        if (value == null) {
-            out.accept(new Token(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+    public <TT extends ImmutableList<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @NotNull Consumer<CssToken> out) {
+        if (value == null || value.isEmpty()) {
+            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
             boolean first = true;
             for (T elem : value) {
@@ -57,9 +61,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                     first = false;
                 } else {
                     if (withComma) {
-                        out.accept(new Token(CssTokenType.TT_COMMA));
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
                     }
-                    out.accept(new Token(CssTokenType.TT_S, " "));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
                 }
                 elementConverter.produceTokens(elem, idFactory, out);
             }

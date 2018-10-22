@@ -32,13 +32,13 @@ public class CssSize2DConverter implements Converter<CssSize2D> {
     public CssSize2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
-        return new CssSize2D((CssSize) v[0], (CssSize) v[1]);
+        return new CssSize2D((CssDimension) v[0], (CssDimension) v[1]);
     }
 
     @Nullable
     @Override
     public CssSize2D getDefaultValue() {
-        return new CssSize2D(new CssSize(0, null), new CssSize(0, null));
+        return new CssSize2D(new CssDimension(0, null), new CssDimension(0, null));
     }
 
     @Nonnull

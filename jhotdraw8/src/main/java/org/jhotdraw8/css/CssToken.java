@@ -1,9 +1,8 @@
-/* @(#)Token.java
+/* @(#)CssToken.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.css.ast;
+package org.jhotdraw8.css;
 
-import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
@@ -14,12 +13,12 @@ import java.io.Reader;
 import java.io.StringReader;
 
 /**
- * Token.
+ * CssToken.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Token extends AST {
+public class CssToken /*extends AST*/ {
 
     /**
      * The token type.
@@ -34,41 +33,43 @@ public class Token extends AST {
      */
     private final Number numericValue;
 
-    private int startPos = -1;
-    private int endPos = -1;
+    private final int startPos;
+    private final int endPos ;
+    private final int lineNumber ;
 
     @Nullable
     private final Character preferredQuoteChar;
 
     private final static XmlNumberConverter NUMBER_CONVERTER = new XmlNumberConverter();
 
-    public Token(int ttype, String stringValue) {
-        this(ttype, stringValue, null, 0, stringValue.length());
+    public CssToken(int ttype, String stringValue) {
+        this(ttype, stringValue, null, 0,0, stringValue.length());
 
     }
-    public Token(int ttype, String stringValue, @Nullable Character preferredQuoteChar) {
-        this(ttype, stringValue, null, preferredQuoteChar, stringValue.length());
-
-    }
-
-    public Token(int ttype) {
-        this(ttype, Character.toString((char)ttype), null, null, 0, 1);
+    public CssToken(int ttype, String stringValue, @Nullable Character preferredQuoteChar) {
+        this(ttype, stringValue, null, preferredQuoteChar, 0,stringValue.length());
 
     }
 
-    public Token(int ttype, String stringValue, Number numericValue) {
-        this(ttype, stringValue, numericValue, null, 0, 1);
+    public CssToken(int ttype) {
+        this(ttype, Character.toString((char)ttype), null, null,0, 0, 1);
+
     }
-    public Token(int ttype,  Number numericValue) {
-        this(ttype, "", numericValue, null, 0, 1);
+
+    public CssToken(int ttype, String stringValue, Number numericValue) {
+        this(ttype, stringValue, numericValue, null, 0,0, 1);
     }
-    public Token(int ttype, String stringValue, Number numericValue, int startPos, int endPos) {
-        this(ttype, stringValue, numericValue, null, startPos, endPos);
+    public CssToken(int ttype, Number numericValue) {
+        this(ttype, "", numericValue, null, 0,0, 1);
     }
-    public Token(int ttype, String stringValue, Number numericValue, @Nullable Character preferredQuoteChar, int startPos, int endPos) {
+    public CssToken(int ttype, String stringValue, Number numericValue, int lineNumber, int startPos, int endPos) {
+        this(ttype, stringValue, numericValue, null, lineNumber, startPos, endPos);
+    }
+    public CssToken(int ttype, String stringValue, Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
         this.ttype = ttype;
         this.stringValue = stringValue;
         this.numericValue = numericValue;
+        this.lineNumber=lineNumber;
         this.startPos = startPos;
         this.endPos = endPos;
         this.preferredQuoteChar = preferredQuoteChar;
@@ -101,7 +102,7 @@ public class Token extends AST {
             case CssTokenType.TT_PERCENTAGE:
                 return fromNUMBER() + "%";
             case CssTokenType.TT_DIMENSION:
-                return fromNUMBER() + fromIDENT();
+                return stringValue==null?fromNUMBER():fromNUMBER() + fromIDENT();
             case CssTokenType.TT_URL:
                 return fromURL();
             case CssTokenType.TT_UNICODE_RANGE:
@@ -403,4 +404,19 @@ public class Token extends AST {
         return endPos;
     }
 
+    public String getStringValue() {
+        return stringValue;
+    }
+
+    public Number getNumericValue() {
+        return numericValue;
+    }
+
+    public int getType() {
+        return ttype;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
 }

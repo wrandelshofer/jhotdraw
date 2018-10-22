@@ -9,6 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
+import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.xml.text.XmlIntegerConverter;
 
@@ -18,7 +19,7 @@ import org.jhotdraw8.xml.text.XmlIntegerConverter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntegerStyleableKey extends SimpleStyleableKey<Integer> {
+public class IntegerStyleableKey extends SimpleStyleableKey<Integer> implements WriteableStyleableMapAccessor<Integer> {
 
     private final static long serialVersionUID = 1L;
 
@@ -27,17 +28,18 @@ public class IntegerStyleableKey extends SimpleStyleableKey<Integer> {
     }
 
     public IntegerStyleableKey(String key, String cssName) {
-        super(key, Integer.class, null, new XmlIntegerConverter());
+        this(key, cssName, new XmlIntegerConverter());
+    }
+    public IntegerStyleableKey(String key, String cssName, Converter<Integer> converter) {
+        super(key, Integer.class, null,converter);
         
         Function<Styleable, StyleableProperty<Integer>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
-        final StyleConverter<String, Integer> converter
-                = new StyleConverterAdapter<>(new XmlIntegerConverter());
         CssMetaData<Styleable, Integer> md
                 = new SimpleCssMetaData<>(cssName, function,
-                converter, 0, false);
+                new StyleConverterAdapter<>(converter), 0, false);
         
        setCssMetaData(md);
     }

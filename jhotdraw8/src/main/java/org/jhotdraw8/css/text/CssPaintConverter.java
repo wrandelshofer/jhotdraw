@@ -6,8 +6,8 @@ package org.jhotdraw8.css.text;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.key.CssRadialGradient;
 import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.CssLinearGradient;
@@ -53,7 +53,7 @@ public class CssPaintConverter extends AbstractCssConverter<Paint> {
 
     @Nonnull
     @Override
-    public Paint parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Paint parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         Paintable p = paintableConverter.parseNonnull(tt, idFactory);
         if (p.getPaint() == null) {
             throw new ParseException("paint is null", 0);
@@ -67,7 +67,7 @@ public class CssPaintConverter extends AbstractCssConverter<Paint> {
     }
 
     @Override
-    protected <TT extends Paint> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    protected <TT extends Paint> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         Paintable p;
         if (value instanceof Color) {
             p = new CssColor((Color) value);

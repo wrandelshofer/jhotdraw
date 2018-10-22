@@ -12,9 +12,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -45,8 +44,8 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
 
 
     @Nullable
-    public E parse(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        if (tt.nextToken() != CssTokenType.TT_IDENT) {
+    public E parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException("identifier expected", tt.getStartPosition());
         }
 
@@ -86,12 +85,12 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
     }
 
     @Override
-    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> consumer) {
+    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is not nullable. enum type:" + enumClass + " value:" + value);
             }
-            consumer.accept(new Token(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+            consumer.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
             StringBuilder out = new StringBuilder();
             for (char ch : value.toString().toLowerCase().replace('_', '-').toCharArray()) {
@@ -100,7 +99,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
                 }
                 out.append(ch);
             }
-            consumer.accept(new Token(CssTokenType.TT_IDENT, out.toString()));
+            consumer.accept(new CssToken(CssTokenType.TT_IDENT, out.toString()));
         }
     }
 

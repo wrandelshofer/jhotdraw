@@ -13,8 +13,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssStreamTokenizer;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssTokenizerAPI;
 import org.jhotdraw8.io.IdFactory;
 import javafx.scene.text.Font;
 import org.jhotdraw8.text.Converter;
@@ -87,8 +87,7 @@ public class XmlFontConverter implements Converter<Font> {
     @Override
     public Font fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
-        CssTokenizerAPI tt = new CssTokenizer(new StringReader(buf.toString()));
-        tt.setSkipWhitespaces(true);
+        CssTokenizer tt = new CssStreamTokenizer(new StringReader(buf.toString()));
 
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
@@ -96,7 +95,7 @@ public class XmlFontConverter implements Converter<Font> {
         String fontFamily = "System";
 
         // parse FontStyle
-        if (tt.nextToken() == CssTokenType.TT_IDENT) {
+        if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentString().toLowerCase()) {
                 case "normal":
                     fontPosture = FontPosture.REGULAR;
@@ -115,7 +114,7 @@ public class XmlFontConverter implements Converter<Font> {
 
         // parse FontWeight
         boolean fontWeightConsumed = false;
-        if (tt.nextToken() == CssTokenType.TT_IDENT) {
+        if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentString().toLowerCase()) {
                 case "normal":
                     fontWeight = FontWeight.NORMAL;
@@ -146,7 +145,7 @@ public class XmlFontConverter implements Converter<Font> {
         double fontWeightOrFontSize = 0.0;
         boolean fontWeightOrFontSizeConsumed = false;
         if (!fontWeightConsumed) {
-            if (tt.nextToken() == CssTokenType.TT_NUMBER) {
+            if (tt.next() == CssTokenType.TT_NUMBER) {
                 fontWeightOrFontSize = tt.currentNumber().doubleValue();
                 fontWeightOrFontSizeConsumed = true;
             } else {
@@ -155,7 +154,7 @@ public class XmlFontConverter implements Converter<Font> {
         }
 
         // parse FontSize
-        if (tt.nextToken() == CssTokenType.TT_NUMBER) {
+        if (tt.next() == CssTokenType.TT_NUMBER) {
             fontSize = tt.currentNumber().doubleValue();
 
             if (fontWeightOrFontSizeConsumed) {
@@ -199,7 +198,7 @@ public class XmlFontConverter implements Converter<Font> {
             tt.pushBack();
         }
 
-        if (tt.nextToken() == CssTokenType.TT_IDENT || tt.currentToken() == CssTokenType.TT_STRING) {
+        if (tt.next() == CssTokenType.TT_IDENT || tt.current() == CssTokenType.TT_STRING) {
             fontFamily = tt.currentString();
             // consume buffer
             buf.position(buf.limit());

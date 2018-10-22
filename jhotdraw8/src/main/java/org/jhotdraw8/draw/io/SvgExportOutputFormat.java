@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
+
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -46,7 +48,6 @@ import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.svg.TransformFlattener;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.css.text.CssSize;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
@@ -87,10 +88,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     @Nullable
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
-    private final Converter<ImmutableList<CssSize>> nbList = new CssListConverter<>(new CssSizeConverter(false));
+    private final Converter<ImmutableList<CssDimension>> nbList = new CssListConverter<>(new CssSizeConverter(false));
     private final SvgPaintConverter paint = new SvgPaintConverter(true);
     private boolean skipInvisibleNodes = true;
-    private final Converter<CssSize> sznb = new CssSizeConverter(false);
+    private final Converter<CssDimension> sznb = new CssSizeConverter(false);
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
 
     @Nonnull
@@ -181,7 +182,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     @Override
     protected void writePage(@Nonnull File file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
+        CssDimension pw = page.get(SimplePageFigure.PAPER_WIDTH);
         markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
         final SvgExporter exporter = createExporter();

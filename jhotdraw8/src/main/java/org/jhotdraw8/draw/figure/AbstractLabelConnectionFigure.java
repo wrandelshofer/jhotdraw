@@ -19,6 +19,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
@@ -37,7 +38,6 @@ import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.css.text.CssSize;
 
 /**
  * A Label that can be attached to another Figure by setting LABEL_CONNECTOR and
@@ -73,13 +73,13 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
-    public final static SizeStyleableFigureKey LABEL_OFFSET_Y = new SizeStyleableFigureKey("labelOffsetY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static SizeStyleableFigureKey LABEL_OFFSET_Y = new SizeStyleableFigureKey("labelOffsetY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
     /**
      * The tangential offset of the label.
      * <p>
      * The offset is on tangent line of the figure.
      */
-    public final static SizeStyleableFigureKey LABEL_OFFSET_X = new SizeStyleableFigureKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static SizeStyleableFigureKey LABEL_OFFSET_X = new SizeStyleableFigureKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
     public final static Size2DStyleableMapAccessor LABELED_OFFSET = new Size2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.

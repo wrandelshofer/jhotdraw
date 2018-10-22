@@ -10,10 +10,9 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -38,9 +37,8 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
 
     @Nonnull
     @Override
-    public Number parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.skipWhitespace();
-        switch (tt.currentToken()) {
+    public Number parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        switch (tt.current()) {
             case CssTokenType.TT_NUMBER:
                 return tt.currentNumberNonnull().doubleValue();
             case CssTokenType.TT_IDENT: {
@@ -66,8 +64,8 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
     }
 
     @Override
-    public <TT extends Number> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
-            out.accept(new Token(CssTokenType.TT_NUMBER, value));
+    public <TT extends Number> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, value));
     }
 
     @Nonnull

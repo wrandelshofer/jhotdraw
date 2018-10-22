@@ -10,9 +10,9 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -30,7 +30,7 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSizeConverter implements CssConverter<CssSize> {
+public class CssSizeConverter implements CssConverter<CssDimension> {
 
     private final boolean nullable;
 
@@ -41,17 +41,18 @@ public class CssSizeConverter implements CssConverter<CssSize> {
 
     @Nullable
     @Override
-    public CssSize parse(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        tt.skipWhitespace();
-        if (nullable && tt.nextToken() == CssTokenType.TT_IDENT && "none".equals(tt.currentString())) {
-            //tt.skipWhitespace();
-            return null;
-        } else {
-            tt.pushBack();
+    public CssDimension parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (nullable) {
+            if (tt.next() == CssTokenType.TT_IDENT && "none".equals(tt.currentString())) {
+                //tt.skipWhitespace();
+                return null;
+            } else {
+                tt.pushBack();
+            }
         }
         Number value = null;
         String units;
-        switch (tt.nextToken()) {
+        switch (tt.next()) {
             case CssTokenType.TT_DIMENSION:
                 value = tt.currentNumberNonnull();
                 units = tt.currentString();
@@ -84,23 +85,23 @@ public class CssSizeConverter implements CssConverter<CssSize> {
             default:
                 throw new ParseException("number expected", tt.getStartPosition());
         }
-        return new CssSize(value.doubleValue(), units);
+        return new CssDimension(value.doubleValue(), units);
     }
 
 
     @Override
-    public <TT extends CssSize> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
+    public <TT extends CssDimension> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value == null) {
-            out.accept(new Token(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else if (value.getUnits() == null || "".equals(value.getUnits())) {
-            out.accept(new Token(CssTokenType.TT_NUMBER, "", value.getValue()));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, "", value.getValue()));
         } else {
             switch (value.getUnits()) {
                 case "%":
-                    out.accept(new Token(CssTokenType.TT_PERCENTAGE, "%", value.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, "%", value.getValue()));
                     break;
                 default:
-                    out.accept(new Token(CssTokenType.TT_DIMENSION, value.getUnits(), value.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, value.getUnits(), value.getValue()));
                     break;
             }
         }
@@ -108,7 +109,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
 
     @Nullable
     @Override
-    public CssSize getDefaultValue() {
+    public CssDimension getDefaultValue() {
         return null;
     }
 

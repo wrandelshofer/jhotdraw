@@ -12,9 +12,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizerAPI;
-import org.jhotdraw8.css.ast.Token;
-import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.io.IdFactory;
 
 /**
@@ -33,7 +32,7 @@ import org.jhotdraw8.io.IdFactory;
  * HTML 5, Common Microsyntaxes, Space-separated tokens
  * </a></li>
  * <li><a href="https://www.w3.org/TR/xmlschema-2/#token">
- * XML Schema Part 2, Built-in datatypes, Derived datatypes, Token
+ * XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken
  * </a></li>
  * </ul>
  *
@@ -48,7 +47,7 @@ public class CssPseudoClassConverter extends AbstractCssConverter<PseudoClass> {
 
     @Nonnull
     @Override
-    public PseudoClass parseNonnull(@Nonnull CssTokenizerAPI tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public PseudoClass parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT," ⟨PseudoClass⟩: ⟨identifier⟩ expected");
         return PseudoClass.getPseudoClass(tt.currentStringNonnull());
     }
@@ -56,8 +55,8 @@ public class CssPseudoClassConverter extends AbstractCssConverter<PseudoClass> {
 
 
     @Override
-    protected <TT extends PseudoClass> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<Token> out) {
-        out.accept(new Token(CssTokenType.TT_IDENT,value.getPseudoClassName()));
+    protected <TT extends PseudoClass> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_IDENT,value.getPseudoClassName()));
     }
 
     @Override
