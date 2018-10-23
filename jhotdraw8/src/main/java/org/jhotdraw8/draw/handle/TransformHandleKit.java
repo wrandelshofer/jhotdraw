@@ -17,13 +17,12 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import static java.lang.Math.*;
-import java.util.List;
+
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;

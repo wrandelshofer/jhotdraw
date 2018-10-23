@@ -3,16 +3,10 @@
  */
 package org.jhotdraw8.collection;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
-import javafx.beans.InvalidationListener;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
@@ -24,7 +18,7 @@ import javax.annotation.Nonnull;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public final class ImmutableList<E> extends AbstractReadOnlyList<E> {
+public final class ImmutableList<E> extends AbstractReadableList<E> {
 
     private final static ImmutableList<Object> EMPTY = new ImmutableList<>(true, new Object[0]);
 
@@ -72,7 +66,7 @@ public final class ImmutableList<E> extends AbstractReadOnlyList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> add(@Nullable ReadOnlyCollection<T> collection, T item) {
+    public static <T> ImmutableList<T> add(@Nullable ReadableCollection<T> collection, T item) {
         if (collection == null || collection.isEmpty()) {
             return ImmutableList.of(item);
         }
@@ -108,7 +102,7 @@ public final class ImmutableList<E> extends AbstractReadOnlyList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> add(@javax.annotation.Nullable ReadOnlyCollection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> add(@javax.annotation.Nullable ReadableCollection<T> collection, int index, T item) {
         if (collection == null || collection.isEmpty() && index == 0) {
             return ImmutableList.of(item);
         }
@@ -146,7 +140,7 @@ public final class ImmutableList<E> extends AbstractReadOnlyList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> remove(@javax.annotation.Nullable ReadOnlyCollection<T> collection, int index) {
+    public static <T> ImmutableList<T> remove(@javax.annotation.Nullable ReadableCollection<T> collection, int index) {
         if (collection == null || collection.size() == 1 && index == 0) {
             return ImmutableList.emptyList();
         }
@@ -187,7 +181,7 @@ public final class ImmutableList<E> extends AbstractReadOnlyList<E> {
         }
     }
 
-    public static <T> ImmutableList<T> set(ReadOnlyCollection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> set(ReadableCollection<T> collection, int index, T item) {
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         a[index] = item;

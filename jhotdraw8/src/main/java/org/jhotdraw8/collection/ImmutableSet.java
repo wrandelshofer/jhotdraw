@@ -3,15 +3,11 @@
  */
 package org.jhotdraw8.collection;
 
-import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import javafx.beans.InvalidationListener;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
 import javax.annotation.Nonnull;
 
 /**
@@ -20,7 +16,7 @@ import javax.annotation.Nonnull;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public final class ImmutableSet<E> extends AbstractReadOnlySet<E>  {
+public final class ImmutableSet<E> extends AbstractReadableSet<E> {
 
     private final static ImmutableSet<Object> EMPTY = new ImmutableSet<>(Collections.emptySet());
     private final Set<E> backingSet;
@@ -37,7 +33,7 @@ public final class ImmutableSet<E> extends AbstractReadOnlySet<E>  {
                 this.backingSet = new LinkedHashSet<>(copyMe);
         }
     }
-    private ImmutableSet(ReadOnlyCollection<E> copyMe) {
+    private ImmutableSet(ReadableCollection<E> copyMe) {
         switch (copyMe.size()) {
             case 0:
                 backingSet = Collections.emptySet();
@@ -125,7 +121,7 @@ public final class ImmutableSet<E> extends AbstractReadOnlySet<E>  {
                 return new ImmutableSet<>(true, a);
         }
     }
-    public static <T> ImmutableSet<T> add(ReadOnlyCollection<T> collection, T item) {
+    public static <T> ImmutableSet<T> add(ReadableCollection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
                 return new ImmutableSet<>(Collections.singleton(item));
@@ -153,7 +149,7 @@ public final class ImmutableSet<E> extends AbstractReadOnlySet<E>  {
         return collection.isEmpty() ? emptySet() : new ImmutableSet<>(collection);
     }
     @Nonnull
-    public static <T> ImmutableSet<T> ofCollection(ReadOnlyCollection<T> collection) {
+    public static <T> ImmutableSet<T> ofCollection(ReadableCollection<T> collection) {
         return collection.isEmpty() ? emptySet() : new ImmutableSet<>(collection);
     }
 
@@ -196,7 +192,7 @@ public final class ImmutableSet<E> extends AbstractReadOnlySet<E>  {
     }
     @Nonnull
     @SuppressWarnings({"unchecked","rawtypes"})
-    public static <T> ImmutableSet<T> remove(ReadOnlyCollection<T> collection, T item) {
+    public static <T> ImmutableSet<T> remove(ReadableCollection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
                 return (ImmutableSet<T>) EMPTY;

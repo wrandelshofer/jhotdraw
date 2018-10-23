@@ -1,15 +1,16 @@
+/* @(#)AbstractReadableSet.java
+ * Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.collection;
 
 import java.util.Iterator;
-import java.util.List;
 
-public abstract class AbstractReadOnlyList<E> implements ReadOnlyList<E> {
-
+public abstract class AbstractReadableSet<E> implements ReadableSet<E> {
     @Override
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ReadOnlyList))
+        if (!(o instanceof ReadableSet))
             return false;
 
         Iterator<E> e1 = iterator();

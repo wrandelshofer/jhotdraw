@@ -1,15 +1,19 @@
+/* @(#)ReadableList.java
+ * Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.collection;
-
-
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
+/**
+ * Provides an API for reading a list.
+ *
+ * @param <E> the element type
+ */
+public interface ReadableList<E> extends ReadableCollection<E> {
 
     E get(int index);
 
@@ -21,7 +25,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
     @Nonnull
     @Override
     default Iterator<E> iterator() {
-        return new ReadOnlyListIterator<>(this);
+        return new ReadableListIterator<>(this);
     }
 
 

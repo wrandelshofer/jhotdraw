@@ -1,11 +1,14 @@
+/* @(#)ListWrapper.java
+ * Copyright © 2018 by the authors and contributors ofCollection JHotDraw. MIT License.
+ */
 package org.jhotdraw8.collection;
 
 import java.util.AbstractList;
 
 public class ListWrapper<E> extends AbstractList<E> {
-    private final ReadOnlyList<E> backingList;
+    private final ReadableList<E> backingList;
 
-    public ListWrapper(ReadOnlyList<E> backingList) {
+    public ListWrapper(ReadableList<E> backingList) {
         this.backingList = backingList;
     }
 
