@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 /**
  * Takes a list of tokens and evaluates common Css functions.
@@ -144,7 +143,7 @@ public class CssFunctionProcessor<T> {
         }
         int end = tt.getEndPosition();
 
-        String attrValue = model.getAttribute(element, attrName);
+        String attrValue = model.getAttributeAsString(element, attrName);
         if (attrValue != null && !attrValue.isEmpty()) {
             if (typeOrUnit == null) {
                 typeOrUnit = "string";

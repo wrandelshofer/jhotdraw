@@ -91,7 +91,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         @SuppressWarnings("unchecked")
         public Object put(Key<?> key, Object value) {
             Object oldValue = target.put(key, value);
-            onPropertyChanged(figure, (Key<Object>) key, oldValue, oldValue);
+            handlePropertyChanged(figure, (Key<Object>) key, oldValue, oldValue);
             return oldValue;
         }
 
@@ -103,7 +103,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private boolean valid = true;
     @Nonnull
     private Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
-    private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
+    private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::handlePropertyChanged;
     @Nullable
     private final ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
@@ -143,7 +143,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private Set<Figure> layoutSubjectChange = new HashSet<>();
 
     @SuppressWarnings("unchecked")
-    private void onPropertyChanged(FigurePropertyChangeEvent event) {
+    private void handlePropertyChanged(FigurePropertyChangeEvent event) {
         if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED
                 && !Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
@@ -153,7 +153,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void onPropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    private <T> void handlePropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (!Objects.equals(oldValue, newValue)) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                     (Key<Object>) key, oldValue, newValue));
@@ -246,8 +246,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     public <T> T set(@Nonnull Figure figure, MapAccessor<T> key, T newValue) {
         if (key instanceof Key<?>) {
             T oldValue = figure.set(key, newValue);
-            // event will be fired by method onPropertyChanged if newValue differs from oldValue
-            onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+            // event will be fired by method handlePropertyChanged if newValue differs from oldValue
+            handlePropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
             return oldValue;
         } else {
             mapProxy.setFigure(figure);
@@ -264,8 +264,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public <T> T remove(@Nonnull Figure figure, @Nonnull Key<T> key) {
         T oldValue = figure.remove(key);
-        // event will be fired by method onPropertyChanged
-        onPropertyChanged(figure, key, oldValue, key.getDefaultValue());
+        // event will be fired by method handlePropertyChanged
+        handlePropertyChanged(figure, key, oldValue, key.getDefaultValue());
         return oldValue;
     }
 
@@ -533,7 +533,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Key<?> key = event.getKey();
                 if (key instanceof FigureKey) {
                     FigureKey<?> fk = (FigureKey<?>) key;
-                    final DirtyMask dm = fk.getDirtyMask();
+                    final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
                     if (!dm.isEmpty()) {
                         markDirty(figure, dm);
                         invalidate();

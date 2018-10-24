@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.css;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.SimpleLabelFigure;
 import org.jhotdraw8.draw.key.Paintable;
@@ -47,13 +47,13 @@ public class FigureSelectorModelTest {
 
         assertNotNull(key.getDefaultValue(), "need a key with a non-null default value for this test");
 
-        assertEquals(instance.getAttribute(figure, attrName), "initial", "no value has been set, must be 'initial'");
+        assertNull( instance.getAttributeAsString(figure, attrName), "no value has been set, must be null");
 
-        instance.setAttribute(figure, StyleOrigin.USER, attrName, CssTokenType.IDENT_NONE);//Arrays.asList(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
+        instance.setAttribute(figure, StyleOrigin.USER, attrName, Arrays.asList(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
 
         assertNull(figure.get(key), "figure.get(key) value has been explicitly set to null");
 
-        assertEquals(instance.getAttribute(figure, attrName), converter.toString(null), "model.get(figure,key) value has been explicitly set to null");
+        assertEquals(instance.getAttributeAsString(figure, attrName), converter.toString(null), "model.get(figure,key) value has been explicitly set to null");
 
     }
 

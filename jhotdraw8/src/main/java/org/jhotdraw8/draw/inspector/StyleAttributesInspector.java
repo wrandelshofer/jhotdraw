@@ -45,6 +45,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.css.StylesheetsManager;
@@ -257,7 +258,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (String name : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
-                    String attribute = selectorModel.getAttribute(f, origin, name);
+                    String attribute = selectorModel.getAttributeAsString(f, origin, name);
                     attr.put(name, attribute==null?CssTokenType.IDENT_INITIAL :attribute);
                 }
             } else {
@@ -268,7 +269,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 for (String name : attr.keySet()) {
                     String oldAttrValue = attr.get(name);
                     if (oldAttrValue != null) {
-                        String newAttrValue = selectorModel.getAttribute(f, origin, name);
+                        String newAttrValue = selectorModel.getAttributeAsString(f, origin, name);
                         if (newAttrValue==null)newAttrValue=CssTokenType.IDENT_INITIAL;
                         if (!oldAttrValue.equals(newAttrValue)) {
                             attr.put(name, "/* multiple values */");
@@ -374,6 +375,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             for (Figure f : d.breadthFirstIterable()) {
                 if (sm.applyStylesheetTo(StyleOrigin.USER, s, f)) {
+                    m.fireStyleInvalidated(f);
                     m.fireNodeInvalidated(f);
                     m.fireTransformInvalidated(f);
                     m.fireLayoutInvalidated(f);

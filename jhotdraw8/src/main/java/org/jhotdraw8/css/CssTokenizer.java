@@ -5,6 +5,8 @@ package org.jhotdraw8.css;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -187,4 +189,16 @@ public interface CssTokenizer {
     void pushBack();
 
     CssToken getToken();
+
+    /**
+     * Scans the remaining tokens and adds them to a list.
+     * @return a new list
+     * @throws IOException on io exception
+     */
+    default List<CssToken> toTokenList() throws IOException {
+        List<CssToken> list = new ArrayList<>();
+            while (nextNoSkip() != CssTokenType.TT_EOF) list.add(getToken());
+
+        return list;
+    }
 }

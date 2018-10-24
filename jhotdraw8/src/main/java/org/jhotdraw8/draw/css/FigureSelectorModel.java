@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.css;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -25,17 +27,22 @@ import javafx.css.StyleOrigin;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssFunctionProcessor;
+import org.jhotdraw8.css.CssListTokenizer;
+import org.jhotdraw8.css.CssStreamTokenizer;
 import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.SelectorModel;
+import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.w3c.dom.Element;
 
 /**
  * FigureSelectorModel.
@@ -292,13 +299,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    public String getAttribute(@Nonnull Figure element, @Nonnull String attributeName) {
-        return getAttribute(element, StyleOrigin.USER, attributeName);
+    public String getAttributeAsString(@Nonnull Figure element, @Nonnull String attributeName) {
+        return getAttributeAsString(element, StyleOrigin.USER, attributeName);
     }
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public String getAttribute(@Nonnull Figure element, @Nullable StyleOrigin origin, @Nonnull String attributeName) {
+    public String getAttributeAsString(@Nonnull Figure element, @Nullable StyleOrigin origin, @Nonnull String attributeName) {
         WriteableStyleableMapAccessor<Object> key = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         if (key == null) {
             return null;
@@ -318,6 +325,40 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return null;
         }
         return key.getConverter().toString(element.getStyled(origin, key));
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public List<CssToken> getAttribute(@Nonnull Figure element, @Nullable StyleOrigin origin, @Nonnull String attributeName) {
+        WriteableStyleableMapAccessor<Object> key = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
+        if (key == null) {
+            return null;
+        }
+        boolean isInitialValue = origin != null && !element.containsKey(origin, key);
+        if (isInitialValue) {
+            if ((key instanceof CompositeMapAccessor)) {
+                for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
+                    if (element.containsKey(origin, subkey)) {
+                        isInitialValue = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (isInitialValue) {
+            return null;
+        }
+        Converter<Object> converter = key.getConverter();
+        if (converter instanceof CssConverter) {
+           return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin,key),null);
+        }else {
+            try {
+            CssTokenizer tt = new CssStreamTokenizer(converter.toString(element.getStyled(origin, key)));
+                return tt.toTokenList();
+            } catch (IOException e) {
+                throw new RuntimeException("unexpected exception",e);
+            }
+        }
     }
 
     @Nullable
@@ -346,7 +387,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable String value) {
+    public void setAttributeAsString(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable String value) {
         Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 
         WriteableStyleableMapAccessor<Object> k = metaMap.get(name);
@@ -366,4 +407,29 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             }
         }
     }
+    @Override
+    public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value) {
+        Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
+
+        WriteableStyleableMapAccessor<Object> k = metaMap.get(name);
+        if (k != null) {
+            if (value == null) {
+                elem.remove(origin, k);
+            } else {
+                @SuppressWarnings("unchecked")
+                Converter<Object> converter = k.getConverter();
+                Object convertedValue;
+                try {
+                    if (converter instanceof CssConverter)
+                    convertedValue = ((CssConverter<Object>)converter).parse(new CssListTokenizer(value),null);
+                    else
+                        convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
+                    elem.setStyled(origin, k, convertedValue);
+                } catch (@Nonnull ParseException | IOException ex) {
+                    LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
+                }
+            }
+        }
+    }
+
 }

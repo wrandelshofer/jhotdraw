@@ -41,75 +41,6 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private final CssParser parser = new CssParser();
     private SelectorModel<E> selectorModel;
-
-    public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
-        this.selectorModel = selectorModel;
-    }
-
-    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, String key, List<CssToken> value) {
-        CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel1);
-        String processed = preprocessTerms(elem, processor, value);
-        selectorModel1.setAttribute(elem, styleOrigin, key, processed);
-    }
-
-    public void getSelectorModel(SelectorModel<E> newValue) {
-        selectorModel = newValue;
-    }
-
-    @Override
-    public SelectorModel<E> getSelectorModel() {
-        return selectorModel;
-    }
-
-    protected class ParsedStylesheetEntry {
-
-        private StyleOrigin origin;
-        @Nullable
-        private FutureTask<Stylesheet> future;
-        @Nullable
-        private Stylesheet stylesheet;
-
-        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull URI uri) {
-            this.origin = origin;
-            this.future = new FutureTask<>(() -> {
-                CssParser p = new CssParser();
-                return p.parseStylesheet(uri);
-            });
-            executor.execute(future);
-        }
-
-        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull String str) {
-            this.origin = origin;
-            this.future = new FutureTask<>(() -> {
-                CssParser p = new CssParser();
-                return p.parseStylesheet(str);
-            });
-            executor.execute(future);
-        }
-
-        public StyleOrigin getOrigin() {
-            return origin;
-        }
-
-        @Nullable
-        public Stylesheet getStylesheet() {
-            if (future != null) {
-                try {
-                    stylesheet = future.get();
-                    future = null;
-                } catch (InterruptedException ex) {
-                    // retry later
-                } catch (ExecutionException ex) {
-                    ex.printStackTrace();
-                    stylesheet = null;
-                    future = null;
-                }
-            }
-            return stylesheet;
-        }
-
-    }
-
     /**
      * Cache for parsed user agent stylesheets.
      * <p>
@@ -125,9 +56,31 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * @see #userAgentList
      */
     private LinkedHashMap<Object, ParsedStylesheetEntry> inlineList = new LinkedHashMap<>();
-
     @Nonnull
     private Executor executor = Executors.newCachedThreadPool();
+
+    public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
+        this.selectorModel = selectorModel;
+    }
+
+    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, String key, List<CssToken> value) {
+        if (value == null) {
+            selectorModel1.setAttribute(elem, styleOrigin, key, null);
+        } else {
+            CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel1);
+            List<CssToken> processed = preprocessTerms(elem, processor, value);
+            selectorModel1.setAttribute(elem, styleOrigin, key, processed);
+        }
+    }
+
+    public void getSelectorModel(SelectorModel<E> newValue) {
+        selectorModel = newValue;
+    }
+
+    @Override
+    public SelectorModel<E> getSelectorModel() {
+        return selectorModel;
+    }
 
     @Override
     public void addStylesheet(@Nonnull StyleOrigin origin, @Nullable URI documentHome, @Nonnull URI uri) {
@@ -251,7 +204,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         // 'inline style attributes' can override all other values
         if (selectorModel.hasAttribute(elem, "style")) {
             Map<String, List<CssToken>> inlineDeclarations = new HashMap<>();
-            String styleValue = selectorModel.getAttribute(elem, "style");
+            String styleValue = selectorModel.getAttributeAsString(elem, "style");
             try {
                 for (Declaration d : parser.parseDeclarationList(styleValue)) {
                     // Declarations without terms are ignored
@@ -311,10 +264,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
         return applicableDeclarations;
     }
+
     @Override
     public boolean applyStylesheetTo(StyleOrigin styleOrigin, @Nonnull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
-CssFunctionProcessor<E> processor=new CssFunctionProcessor<>(selectorModel);
+        CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel);
         final List<Map.Entry<Integer, Declaration>> applicableDeclarations = collectApplicableDeclarations(elem, s,
                 new ArrayList<>());
         if (applicableDeclarations.isEmpty()) {
@@ -322,29 +276,70 @@ CssFunctionProcessor<E> processor=new CssFunctionProcessor<>(selectorModel);
         }
         for (Map.Entry<Integer, Declaration> entry : applicableDeclarations) {
             Declaration d = entry.getValue();
-            String value = preprocessTerms(elem, processor, d.getTerms());
-            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(), CssTokenType.IDENT_INITIAL.equals(value) ? null : value);
+            List<CssToken> value = preprocessTerms(elem, processor, d.getTerms());
+            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(),
+                    value.size() == 1 && value.get(0).getType() == CssTokenType.TT_IDENT
+                            && CssTokenType.IDENT_INITIAL.equals(value.get(0).getStringValue()) ? null : value);
         }
         return true;
     }
 
     @NotNull
-    private String preprocessTerms(E elem, CssFunctionProcessor<E> processor, List<CssToken> terms) {
+    private List<CssToken> preprocessTerms(E elem, CssFunctionProcessor<E> processor, List<CssToken> terms) {
         String value;
         try {
-          List<CssToken> processed=  processor.process(elem,terms);
-          StringBuilder buf=new StringBuilder();
-          for (CssToken t:processed) {
-              buf.append(t.fromToken());
-          }
-          value=buf.toString();
+            return processor.process(elem, terms);
         } catch (ParseException e) {
-            StringBuilder buf=new StringBuilder();
-            for (CssToken t:terms) {
-                buf.append(t.fromToken());
-            }
-            value = buf.toString();
+            return terms;
         }
-        return value;
+    }
+
+    protected class ParsedStylesheetEntry {
+
+        private StyleOrigin origin;
+        @Nullable
+        private FutureTask<Stylesheet> future;
+        @Nullable
+        private Stylesheet stylesheet;
+
+        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull URI uri) {
+            this.origin = origin;
+            this.future = new FutureTask<>(() -> {
+                CssParser p = new CssParser();
+                return p.parseStylesheet(uri);
+            });
+            executor.execute(future);
+        }
+
+        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull String str) {
+            this.origin = origin;
+            this.future = new FutureTask<>(() -> {
+                CssParser p = new CssParser();
+                return p.parseStylesheet(str);
+            });
+            executor.execute(future);
+        }
+
+        public StyleOrigin getOrigin() {
+            return origin;
+        }
+
+        @Nullable
+        public Stylesheet getStylesheet() {
+            if (future != null) {
+                try {
+                    stylesheet = future.get();
+                    future = null;
+                } catch (InterruptedException ex) {
+                    // retry later
+                } catch (ExecutionException ex) {
+                    ex.printStackTrace();
+                    stylesheet = null;
+                    future = null;
+                }
+            }
+            return stylesheet;
+        }
+
     }
 }

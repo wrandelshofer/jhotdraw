@@ -74,6 +74,10 @@ public class DirtyMask {
     public DirtyMask add(@Nonnull DirtyMask that) {
         return new DirtyMask(this.bitmask | that.bitmask);
     }
+    @Nonnull
+    public DirtyMask add(@Nonnull DirtyBits bits) {
+        return new DirtyMask(this.bitmask | bits.getMask());
+    }
 
     @Nonnull
     @Override

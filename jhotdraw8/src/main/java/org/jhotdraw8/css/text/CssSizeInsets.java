@@ -117,4 +117,13 @@ public class CssSizeInsets {
         return hash;
     }
 
+    @Override
+    public String toString() {
+        return "CssSizeInsets{" +
+                "" + bottom +
+                ", " + left +
+                ", " + right +
+                ", " + top +
+                '}';
+    }
 }

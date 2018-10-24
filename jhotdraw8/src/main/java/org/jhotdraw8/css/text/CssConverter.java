@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -55,6 +57,12 @@ public interface CssConverter<T> extends Converter<T> {
      * Produces tokens.
      */
     <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out);
+
+    default <TT extends T> List<CssToken> toTokens(@Nullable TT value, @Nullable IdFactory idFactory) {
+        List<CssToken> list=new ArrayList<>();
+        produceTokens(value,idFactory,list::add);
+        return list;
+    }
 
     /**
      * Converts the value to String.
@@ -100,9 +108,10 @@ public interface CssConverter<T> extends Converter<T> {
 
     default T fromString(CharBuffer buf, IdFactory idFactory) throws ParseException {
         try {
+            int startPos=buf.position();
             CssStreamTokenizer tt = new CssStreamTokenizer(buf);
             T value = parse(tt, idFactory);
-            buf.position(tt.getNextPosition());
+            buf.position(startPos+tt.getNextPosition());
             return value;
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception", e);

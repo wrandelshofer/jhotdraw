@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.css;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +35,7 @@ public interface SelectorModel<T> {
      * the value contains the specified substring.
      */
     default boolean attributeValueContains(@Nonnull T element, @Nonnull String attributeName, @Nonnull String substring) {
-        String actualValue = getAttribute(element, attributeName);
+        String actualValue = getAttributeAsString(element, attributeName);
         return actualValue != null && (actualValue.contains(substring));
     }
 
@@ -47,7 +50,7 @@ public interface SelectorModel<T> {
      * the value contains the specified word.
      */
     default boolean attributeValueContainsWord(@Nonnull T element, @Nonnull String attributeName, @Nonnull String word) {
-        String value = getAttribute(element, attributeName);
+        String value = getAttributeAsString(element, attributeName);
         if (value != null) {
             String[] words = value.split("\\s+");
             for (int i = 0; i < words.length; i++) {
@@ -70,7 +73,7 @@ public interface SelectorModel<T> {
      * the value ends with the specified substring.
      */
     default boolean attributeValueEndsWith(@Nonnull T element, @Nonnull String attributeName, @Nonnull String substring) {
-        String actualValue = getAttribute(element, attributeName);
+        String actualValue = getAttributeAsString(element, attributeName);
         return actualValue != null && (actualValue.endsWith(substring));
     }
 
@@ -85,7 +88,7 @@ public interface SelectorModel<T> {
      * value
      */
     default boolean attributeValueEquals(@Nonnull T element, @Nonnull String attributeName, @Nonnull String attributeValue) {
-        String actualValue = getAttribute(element, attributeName);
+        String actualValue = getAttributeAsString(element, attributeName);
         return actualValue != null && actualValue.equals(attributeValue);
     }
 
@@ -100,7 +103,7 @@ public interface SelectorModel<T> {
      * the value starts with the specified substring.
      */
     default boolean attributeValueStartsWith(@Nonnull T element, @Nonnull String attributeName, @Nonnull String substring) {
-        String actualValue = getAttribute(element, attributeName);
+        String actualValue = getAttributeAsString(element, attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
@@ -113,12 +116,23 @@ public interface SelectorModel<T> {
      * attribute with this name.
      */
     @Nullable
-    default String getAttribute(@Nonnull T element, @Nonnull String name) {
-        return getAttribute(element, StyleOrigin.USER, name);
+    default String getAttributeAsString(@Nonnull T element, @Nonnull String name) {
+        return getAttributeAsString(element, StyleOrigin.USER, name);
     }
 
     @Nullable
-    String getAttribute(@Nonnull T element, @Nullable StyleOrigin origin, @Nonnull String name);
+    default String getAttributeAsString(@Nonnull T element, @Nullable StyleOrigin origin, @Nonnull String name) {
+        List<CssToken> list = getAttribute(element, origin, name);
+        if (list == null) {
+            return null;
+        }
+        StringBuilder buf = new StringBuilder();
+        for (CssToken t : list) buf.append(t.fromToken());
+        return buf.toString();
+    }
+
+    @Nullable
+    List<CssToken> getAttribute(@Nonnull T element, @Nullable StyleOrigin origin, @Nonnull String name);
 
     /**
      * Returns all styleable attributes of the element.
@@ -248,5 +262,29 @@ public interface SelectorModel<T> {
      * @param value   The attribute value. Null removes the attribute from the
      *                element.
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable String value);
+    default void setAttributeAsString(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable String value) {
+        if (value == null) {
+            setAttribute(element, origin, name, null);
+        } else {
+            List<CssToken> list = new ArrayList<>();
+            CssStreamTokenizer tt = new CssStreamTokenizer(value);
+            try {
+                while (tt.nextNoSkip() != CssTokenType.TT_EOF) list.add(tt.getToken());
+            } catch (IOException e) {
+                throw new RuntimeException("unexpected exception", e);
+            }
+            setAttribute(element, origin, name, list);
+        }
+    }
+
+    /**
+     * Sets an attribute value.
+     *
+     * @param element The element
+     * @param origin  The style origin
+     * @param name    The attribute name
+     * @param value   The attribute value. Null removes the attribute from the
+     *                element.
+     */
+    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value);
 }

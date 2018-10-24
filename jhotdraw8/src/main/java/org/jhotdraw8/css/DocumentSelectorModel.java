@@ -12,9 +12,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -34,8 +39,20 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getAttribute(@Nonnull Element elem, StyleOrigin origin, @Nonnull String name) {
-        return getAttribute(elem, name);
+    public String getAttributeAsString(@Nonnull Element elem, StyleOrigin origin, @Nonnull String name) {
+        return getAttributeAsString(elem, name);
+    }
+
+    @Nullable
+    @Override
+    public List<CssToken> getAttribute(@Nonnull Element element, @Nullable StyleOrigin origin, @Nonnull String name) {
+        String str=getAttributeAsString(element,origin,name);
+        if (str==null)return null;
+        try {
+            return new CssStreamTokenizer(str).toTokenList();
+        } catch (IOException e) {
+            throw new RuntimeException("unexpected exception",e);
+        }
     }
 
     @Override
@@ -225,7 +242,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getAttribute(@Nonnull Element element, @Nonnull String attributeName) {
+    public String getAttributeAsString(@Nonnull Element element, @Nonnull String attributeName) {
         return element.getAttribute(attributeName);
     }
 
@@ -255,7 +272,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull String name, String value) {
+    public void setAttributeAsString(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull String name, String value) {
         switch (origin) {
             case USER:
             case USER_AGENT:
@@ -270,5 +287,12 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
             default:
                 throw new UnsupportedOperationException("unsupported origin:" + origin);
         }
+    }
+
+    @Override
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value) {
+        StringBuilder buf = new StringBuilder();
+        for (CssToken t : value) buf.append(t.fromToken());
+        setAttributeAsString(element,origin,name, buf.toString());
     }
 }
