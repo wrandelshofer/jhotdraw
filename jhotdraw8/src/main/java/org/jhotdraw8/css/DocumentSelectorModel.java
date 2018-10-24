@@ -38,7 +38,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getAttribute(@Nonnull Element elem, @NotNull StyleOrigin origin, @NotNull String name) {
+    public String getAttribute(@Nonnull Element elem, @NotNull StyleOrigin origin, @Nonnull @NotNull String name) {
         return getAttribute(elem, name);
     }
 
@@ -65,7 +65,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasStyleClass(@Nonnull Element elem, @NotNull String clazz) {
+    public boolean hasStyleClass(@Nonnull Element elem, @Nonnull @NotNull String clazz) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return false;
@@ -217,19 +217,19 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasAttribute(@Nonnull Element element, @NotNull String attributeName) {
+    public boolean hasAttribute(@Nonnull Element element, @Nonnull @NotNull String attributeName) {
         // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@Nonnull Element element, @NotNull String attributeName, @Nonnull String substring) {
+    public boolean attributeValueStartsWith(@Nonnull Element element, @Nonnull @NotNull String attributeName, @Nonnull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
-    public String getAttribute(@Nonnull Element element, @NotNull String attributeName) {
+    public String getAttribute(@Nonnull Element element, @Nonnull @NotNull String attributeName) {
         return element.getAttribute(attributeName);
     }
 
@@ -259,7 +259,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @NotNull String name, String value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull @NotNull String name, String value) {
         switch (origin) {
             case USER:
             case USER_AGENT:

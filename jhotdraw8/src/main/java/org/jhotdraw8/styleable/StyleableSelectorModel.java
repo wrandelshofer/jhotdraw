@@ -72,7 +72,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean hasStyleClass( @Nonnull Styleable element,  String clazz) {
+    public boolean hasStyleClass(@Nonnull Styleable element, @Nonnull String clazz) {
         return element.getStyleClass().contains(clazz);
     }
 
@@ -94,7 +94,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
     @Nullable
     @Override
-    public Styleable getPreviousSibling( Styleable element) {
+    public Styleable getPreviousSibling(@Nonnull Styleable element) {
         return null;
     }
 
@@ -162,7 +162,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean attributeValueEquals(@Nonnull Styleable element,  @Nonnull String attributeName,  String attributeValue) {
+    public boolean attributeValueEquals(@Nonnull Styleable element, @Nonnull String attributeName, @Nonnull String attributeValue) {
         String actualValue = getAttribute(element, attributeName);
         return actualValue != null && actualValue.equals(attributeValue);
     }
@@ -174,7 +174,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean attributeValueContainsWord( @Nonnull Styleable element,  @Nonnull String attributeName,  String word) {
+    public boolean attributeValueContainsWord(@Nonnull Styleable element, @Nonnull String attributeName, @Nonnull String word) {
         Set<String> value = getWordListAttribute(element, attributeName);
 
         return value != null && value.contains(word);
@@ -211,7 +211,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public void setAttribute( @Nonnull Styleable elem,  StyleOrigin origin,  String name, String value) {
+    public void setAttribute(@Nonnull Styleable elem, @Nonnull StyleOrigin origin, @Nonnull String name, String value) {
         List<CssMetaData<? extends Styleable, ?>> metaList = elem.getCssMetaData();
         HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
         for (CssMetaData<? extends Styleable, ?> m : metaList) {
