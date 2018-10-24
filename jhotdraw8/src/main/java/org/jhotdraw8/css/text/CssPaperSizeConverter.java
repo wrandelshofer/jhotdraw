@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
@@ -111,7 +111,7 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
     @Nullable
     @Override
     public CssSize2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new CssStreamTokenizer(buf);
+        CssTokenizer tt = new StreamCssTokenizer(buf);
         return parsePageSize(tt, idFactory);
 
     }

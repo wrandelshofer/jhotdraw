@@ -9,7 +9,7 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
@@ -39,7 +39,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
     @Override
     public ImmutableList<BezierNode> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String input = buf.toString();
-        CssStreamTokenizer tt = new CssStreamTokenizer(new CharBufferReader(buf));
+        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
 
         ImmutableList<BezierNode> p = null;
         if (tt.next() == CssTokenType.TT_IDENT) {

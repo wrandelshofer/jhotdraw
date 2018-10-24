@@ -10,7 +10,7 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.locator.Locator;
@@ -40,7 +40,7 @@ public class CssLocatorConverter implements Converter<Locator> {
   @Override
   public Locator fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
     Locator c;
-    CssTokenizer tt = new CssStreamTokenizer(new CharBufferReader(buf));
+    CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
     c = parseLocator(tt);
 
     if (!buf.toString().trim().isEmpty()) {

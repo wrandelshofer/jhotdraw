@@ -1,17 +1,16 @@
 package org.jhotdraw8.css;
 
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,12 +32,17 @@ class CssFunctionProcessorTest {
         elem.setAttribute("rearBrakes","Drum");
         doc.appendChild(elem);
 
-        CssStreamTokenizer tt = new CssStreamTokenizer(expression);
+        StreamCssTokenizer tt = new StreamCssTokenizer(expression);
         StringBuilder buf=new StringBuilder();
         Consumer<CssToken> consumer=t->buf.append(t.fromToken());
 
         DocumentSelectorModel model = new DocumentSelectorModel();
-        CssFunctionProcessor<Element> instance = new CssFunctionProcessor<>(model);
+        Map<String,List<CssToken>> customProperties=new LinkedHashMap<>();
+        customProperties.put("--blarg",Arrays.asList(new CssToken(CssTokenType.TT_STRING,"blarg")));
+        customProperties.put("--endless-recursion",Arrays.asList(new CssToken(CssTokenType.TT_FUNCTION,"var"),
+                new CssToken(CssTokenType.TT_IDENT,"--endless-recursion"),
+                new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
+        CssFunctionProcessor<Element> instance = new CssFunctionProcessor<>(model,customProperties);
 
         try {
             instance.process(elem, tt, consumer);
@@ -99,7 +103,13 @@ class CssFunctionProcessorTest {
                 dynamicTest("601", () -> doTestProcess("replace(attr(id),\"\\\\d\",\"x\")", "\"ox\"")),
                 //
                 dynamicTest("801", () -> doTestProcess("inside", "inside")),
-                dynamicTest("801", () -> doTestProcess("a b", "a b"))
+                dynamicTest("801", () -> doTestProcess("a b", "a b")),
+                //
+                dynamicTest("901", () -> doTestProcess("var(--blarg)", "\"blarg\"")),
+                dynamicTest("902", () -> doTestProcess("var(--blarg,fallback)", "\"blarg\"")),
+                dynamicTest("902", () -> doTestProcess("var(--foo,fallback)", "fallback")),
+                dynamicTest("903", () -> doTestProcess("var(x,fallback)", null)),
+                dynamicTest("904", () -> doTestProcess("var(--endless-recursion,fallback)", null))
         );
     }
 }

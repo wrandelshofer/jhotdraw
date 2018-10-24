@@ -10,13 +10,13 @@ import static org.jhotdraw8.css.CssTokenType.TT_CDO;
 import static org.jhotdraw8.css.CssTokenType.TT_COMMENT;
 import static org.jhotdraw8.css.CssTokenType.TT_S;
 
-public class CssListTokenizer implements CssTokenizer {
+public class ListCssTokenizer implements CssTokenizer {
     private final List<CssToken> in;
     private int index = 0;
     private boolean pushBack = true;
     private CssToken current;
 
-    public CssListTokenizer(List<CssToken> in) {
+    public ListCssTokenizer(List<CssToken> in) {
         this.in = in;
         current=in.isEmpty()?new CssToken(CssTokenType.TT_EOF):in.get(0);
     }

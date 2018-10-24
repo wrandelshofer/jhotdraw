@@ -1,4 +1,4 @@
-/* @(#)CssStreamTokenizer.java
+/* @(#)StreamCssTokenizer.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css;
@@ -37,7 +37,7 @@ import static org.jhotdraw8.css.CssTokenType.TT_SUFFIX_MATCH;
 import static org.jhotdraw8.css.CssTokenType.TT_URL;
 
 /**
- * {@code CssStreamTokenizer} processes an input stream of characters into tokens for
+ * {@code StreamCssTokenizer} processes an input stream of characters into tokens for
  * the {@code CssParser}.
  * <p>
  * The tokenizer implements the ISO 14977 EBNF productions listed below. Only
@@ -137,7 +137,7 @@ import static org.jhotdraw8.css.CssTokenType.TT_URL;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssStreamTokenizer implements CssTokenizer {
+public class StreamCssTokenizer implements CssTokenizer {
 
     private CssScanner in;
 
@@ -153,15 +153,15 @@ public class CssStreamTokenizer implements CssTokenizer {
     private int startPosition;
     private int endPosition;
 
-    public CssStreamTokenizer(CharBuffer charBuffer) {
+    public StreamCssTokenizer(CharBuffer charBuffer) {
         this(new CharBufferReader(charBuffer));
     }
 
-    public CssStreamTokenizer(CharSequence charSequence) {
+    public StreamCssTokenizer(CharSequence charSequence) {
         this(new CharSequenceReader(charSequence));
     }
 
-    public CssStreamTokenizer(Reader reader) {
+    public StreamCssTokenizer(Reader reader) {
         in = new CssScanner(reader);
     }
 
@@ -383,10 +383,17 @@ public class CssStreamTokenizer implements CssTokenizer {
                         stringValue = "-->";
                         currentToken = TT_CDC;
                     } else {
-                        in.pushBack(next2);
-                        in.pushBack(next1);
-                        currentToken = ch;
-                        stringValue = String.valueOf((char) currentToken);
+                        StringBuilder buf=new StringBuilder();
+                        buf.append("--");
+                        if (nameMacro(next2,buf)) {
+                            currentToken=TT_IDENT;
+                            stringValue=buf.toString();
+                        } else {
+                            in.pushBack(next2);
+                            in.pushBack(next1);
+                            currentToken = ch;
+                            stringValue = String.valueOf((char) currentToken);
+                        }
                     }
                 } else {
                     in.pushBack(next1);

@@ -4,7 +4,6 @@
 package org.jhotdraw8.css;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -267,7 +266,7 @@ public interface SelectorModel<T> {
             setAttribute(element, origin, name, null);
         } else {
             List<CssToken> list = new ArrayList<>();
-            CssStreamTokenizer tt = new CssStreamTokenizer(value);
+            StreamCssTokenizer tt = new StreamCssTokenizer(value);
             try {
                 while (tt.nextNoSkip() != CssTokenType.TT_EOF) list.add(tt.getToken());
             } catch (IOException e) {

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
  * <dl>
  * <dt>attr()</dt><dd>Attribute Reference. Returns the value of an attribute on the element.</dd>
  * <dt>calc()</dt><dd>Mathematical Expressions. Returns the value of a mathematical expression.</dd>
+ * <dt>var()</dt><dd>Cascading variable. Substitutes the value of a property from the value of another property.</dd>
  * </dl>
  * <p>
  * Supported non-standard functions:
@@ -28,22 +30,31 @@ import java.util.regex.Pattern;
  * <p>
  * References:
  * <ul>
- * <li>CSS Values and Units Module, Functional Notations
+ * <li>CSS Values and Units Module, Functional Notations.
  * <a href="https://www.w3.org/TR/css-values-3/#functional-notations">w3.org</a></li>
+ * <li>CSS Custom Properties for Cascading Variables Module Level 1.  Using Cascading Variables: the var() notation.
+ * <a href="https://www.w3.org/TR/css-variables-1/#using-variables">w3.org</a></li>
  * </ul>
  * </p>
  *
  * @param <T> the element type
  */
 public class CssFunctionProcessor<T> {
+    public static final String ATTR_FUNCTION_NAME = "attr";
+    public static final String CALC_FUNCTION_NAME = "calc";
+    public static final String VAR_FUNCTION_NAME = "var";
+    public static final String REPLACE_FUNCTION_NAME = "replace";
+    public static final String CONCAT_FUNCTION_NAME = "concat";
     private final SelectorModel<T> model;
+    private final Map<String, List<CssToken>> customProperties;
 
-    public CssFunctionProcessor(SelectorModel<T> model) {
+    public CssFunctionProcessor(SelectorModel<T> model, Map<String, List<CssToken>> customProperties) {
         this.model = model;
+        this.customProperties = customProperties;
     }
 
     public List<CssToken> process(T element, List<CssToken> in) throws ParseException {
-        CssListTokenizer tt = new CssListTokenizer(in);
+        ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
             process(element, tt, out::add);
@@ -62,22 +73,32 @@ public class CssFunctionProcessor<T> {
         }
     }
 
+    private final static int MAX_RECURSION_DEPTH = 4;
+    int recursion;
+
     private void processToken(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+        if (++recursion > MAX_RECURSION_DEPTH) {
+            throw new ParseException("Max recursion depth exceeded", tt.getStartPosition());
+        }
         if (tt.nextNoSkip() == CssTokenType.TT_FUNCTION) {
             switch (tt.currentStringNonnull()) {
-                case "attr":
+                case ATTR_FUNCTION_NAME:
                     tt.pushBack();
                     processAttrFunction(element, tt, out);
                     break;
-                case "calc":
+                case CALC_FUNCTION_NAME:
                     tt.pushBack();
                     processCalcFunction(element, tt, out);
                     break;
-                case "replace":
+                case VAR_FUNCTION_NAME:
+                    tt.pushBack();
+                    processVarFunction(element, tt, out);
+                    break;
+                case REPLACE_FUNCTION_NAME:
                     tt.pushBack();
                     processReplaceFunction(element, tt, out);
                     break;
-                case "concat":
+                case CONCAT_FUNCTION_NAME:
                     tt.pushBack();
                     processConcatFunction(element, tt, out);
                     break;
@@ -89,6 +110,7 @@ public class CssFunctionProcessor<T> {
         } else {
             out.accept(tt.getToken());
         }
+        --recursion;
     }
 
     /**
@@ -110,7 +132,7 @@ public class CssFunctionProcessor<T> {
      */
     private void processAttrFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈attr〉: function attr() expected.");
-        if (!"attr".equals(tt.currentString())) {
+        if (!ATTR_FUNCTION_NAME.equals(tt.currentString())) {
             throw new ParseException("〈attr〉: function attr() expected.", tt.getStartPosition());
         }
         int line = tt.getLineNumber();
@@ -134,7 +156,7 @@ public class CssFunctionProcessor<T> {
         }
 
         if (tt.next() == CssTokenType.TT_COMMA) {
-            while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+            while (tt.nextNoSkip() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
                 attrFallback.add(tt.getToken());
             }
         }
@@ -148,7 +170,7 @@ public class CssFunctionProcessor<T> {
             if (typeOrUnit == null) {
                 typeOrUnit = "string";
             }
-            CssStreamTokenizer att = new CssStreamTokenizer(attrValue);
+            StreamCssTokenizer att = new StreamCssTokenizer(attrValue);
             Outer:
             switch (typeOrUnit) {
                 case "string":
@@ -227,10 +249,54 @@ public class CssFunctionProcessor<T> {
                     }
             }
         }
-        for (CssToken t : attrFallback) {
-            out.accept(t);
-        }
+        processToken(element, new ListCssTokenizer(attrFallback), out);
 
+    }
+
+    /**
+     * Processes the var() function.
+     * <pre>
+     *     var = "var(" ,  s* , custom-property-name, s* , [ "," ,  s* , declaration-value ] ,  s* , ")" ;
+     *     custom-property-name = ident-token;
+     *     declaration-value = fallback-value;
+     * </pre>
+     * THe custom-property-name must start with two dashes "--".
+     *
+     * @param tt  the tokenizer
+     * @param out the consumer
+     * @throws IOException
+     */
+    private void processVarFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈var〉: function var() expected.");
+        if (!VAR_FUNCTION_NAME.equals(tt.currentString())) {
+            throw new ParseException("〈var〉: function var() expected.", tt.getStartPosition());
+        }
+        int line = tt.getLineNumber();
+        int start = tt.getStartPosition();
+
+        tt.requireNextToken(CssTokenType.TT_IDENT, "〈var〉: function custom-property-name expected.");
+
+        String customPropertyName = tt.currentString();
+        List<CssToken> attrFallback = new ArrayList<>();
+        if (tt.next() == CssTokenType.TT_COMMA) {
+            while (tt.nextNoSkip() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+                attrFallback.add(tt.getToken());
+            }
+        }
+        if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+            throw new ParseException("〈attr〉: right bracket expected. " + tt.current(), tt.getStartPosition());
+        }
+        int end = tt.getEndPosition();
+
+        if (!customPropertyName.startsWith("--")) {
+            throw new ParseException("〈var〉: custom-property-name starting with two dashes \"--\" expected. Found: \"" + customPropertyName + "\"", tt.getStartPosition());
+        }
+        List<CssToken> customValue = customProperties.get(customPropertyName);
+        if (customValue == null) {
+            processToken(element, new ListCssTokenizer(attrFallback), out);
+        } else {
+            processToken(element, new ListCssTokenizer(customValue), out);
+        }
     }
 
     /**
@@ -256,7 +322,7 @@ public class CssFunctionProcessor<T> {
     }
 
     private CssDimension parseDimensionOrDouble(String attrValue, int pos) throws IOException, ParseException {
-        CssStreamTokenizer tt = new CssStreamTokenizer(attrValue);
+        StreamCssTokenizer tt = new StreamCssTokenizer(attrValue);
         if (tt.next() == CssTokenType.TT_DIMENSION) {
             return new CssDimension(tt.currentNumber().doubleValue(), tt.currentString());
         } else if (tt.current() == CssTokenType.TT_NUMBER) {
@@ -318,12 +384,11 @@ public class CssFunctionProcessor<T> {
         } else {
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, dim.getUnits(), dim.getValue(), line, start, end));
         }
-
     }
 
     private CssDimension parseCalcFunction(T element, CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈calc〉: calc() function expected.");
-        if (!"calc".equals(tt.currentStringNonnull())) {
+        if (!CALC_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
             throw new ParseException("〈calc〉: calc() function expected.", tt.getStartPosition());
         }
         CssDimension dim = parseCalcSum(element, tt);
@@ -446,22 +511,22 @@ public class CssFunctionProcessor<T> {
      */
     private void processReplaceFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈replace〉: replace() function expected.");
-        if (!"replace".equals(tt.currentStringNonnull())) {
+        if (!REPLACE_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
             throw new ParseException("〈replace〉: replace() function expected.", tt.getStartPosition());
         }
 
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
 
-        String str = evalString(element, tt, "replace");
+        String str = evalString(element, tt, REPLACE_FUNCTION_NAME);
         if (tt.next() != CssTokenType.TT_COMMA) {
             tt.pushBack();
         }
-        String regex = evalString(element, tt, "replace");
+        String regex = evalString(element, tt, REPLACE_FUNCTION_NAME);
         if (tt.next() != CssTokenType.TT_COMMA) {
             tt.pushBack();
         }
-        String repl = evalString(element, tt, "replace");
+        String repl = evalString(element, tt, REPLACE_FUNCTION_NAME);
         if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
             throw new ParseException("〈replace〉: right bracket ')' expected.", tt.getStartPosition());
         }
@@ -492,7 +557,7 @@ public class CssFunctionProcessor<T> {
      */
     private void processConcatFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈concat〉: concat() function expected.");
-        if (!"concat".equals(tt.currentStringNonnull())) {
+        if (!CONCAT_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
             throw new ParseException("〈concat〉: concat() function expected.", tt.getStartPosition());
         }
 
@@ -510,7 +575,7 @@ public class CssFunctionProcessor<T> {
                     // fall through
                 default:
                     tt.pushBack();
-                    buf.append(evalString(element, tt, "concat"));
+                    buf.append(evalString(element, tt, CONCAT_FUNCTION_NAME));
             }
             first = false;
         }

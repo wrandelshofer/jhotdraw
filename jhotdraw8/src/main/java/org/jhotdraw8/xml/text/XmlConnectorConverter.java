@@ -12,7 +12,7 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.text.CssLocatorConverter;
@@ -77,7 +77,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     @Override
     public Connector fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Connector c;
-        CssTokenizer tt = new CssStreamTokenizer(new CharBufferReader(buf));
+        CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         c = parseConnector(tt);
 
         if (!buf.toString().trim().isEmpty()) {

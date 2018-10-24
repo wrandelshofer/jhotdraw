@@ -172,7 +172,7 @@ public class CssParser {
     @Nonnull
     public Stylesheet parseStylesheet(Reader css) throws IOException {
         exceptions = new ArrayList<>();
-        CssTokenizer tt = new CssStreamTokenizer(css);
+        CssTokenizer tt = new StreamCssTokenizer(css);
         return parseStylesheet(tt);
     }
 
@@ -198,7 +198,7 @@ public class CssParser {
     @Nonnull
     public List<Declaration> parseDeclarationList(Reader css) throws IOException {
         exceptions = new ArrayList<>();
-        CssTokenizer tt = new CssStreamTokenizer(css);
+        CssTokenizer tt = new StreamCssTokenizer(css);
         try {
             return parseDeclarationList(tt);
         } catch (ParseException ex) {

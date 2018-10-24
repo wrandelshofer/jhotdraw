@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.text.CssFont;
 import org.jhotdraw8.io.IdFactory;
@@ -86,7 +86,7 @@ public class XmlCssFontConverter implements Converter<CssFont> {
     @Override
     public CssFont fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
-        CssTokenizer tt = new CssStreamTokenizer(new StringReader(buf.toString()));
+        CssTokenizer tt = new StreamCssTokenizer(new StringReader(buf.toString()));
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
         double fontSize = 12.0;

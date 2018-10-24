@@ -11,7 +11,7 @@ import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
@@ -83,7 +83,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
     @Nullable
     @Override
     public RegexReplace fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new CssStreamTokenizer(new StringReader(in.toString()));
+        CssTokenizer tt = new StreamCssTokenizer(new StringReader(in.toString()));
         String find = null;
         String replace = null;
 

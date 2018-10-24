@@ -24,7 +24,7 @@ import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.SelectorModel;
 import org.w3c.dom.Element;
@@ -124,7 +124,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
             if (attributeName.equals(item.getProperty())) {
                 Object value = item.getStyleableProperty(element).getValue();
                 try {
-                    return value == null ? null : new CssStreamTokenizer(value.toString()).toTokenList();
+                    return value == null ? null : new StreamCssTokenizer(value.toString()).toTokenList();
                 } catch (IOException e) {
                     throw new RuntimeException("unexpected io exception", e);
                 }

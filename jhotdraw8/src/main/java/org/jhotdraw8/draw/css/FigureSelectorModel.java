@@ -5,7 +5,6 @@ package org.jhotdraw8.draw.css;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,11 +28,9 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.CssFunctionProcessor;
-import org.jhotdraw8.css.CssListTokenizer;
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.ListCssTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.text.CssConverter;
@@ -42,7 +39,6 @@ import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
-import org.w3c.dom.Element;
 
 /**
  * FigureSelectorModel.
@@ -70,7 +66,6 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     private HashMap<WriteableStyleableMapAccessor<?>, String> keyToNameMap = new HashMap<>();
     @Nonnull
     private Map<Class<? extends Figure>, Map<String, WriteableStyleableMapAccessor<Object>>> figureToMetaMap = new HashMap<>();
-    private CssFunctionProcessor<Figure> functionProcessor = new CssFunctionProcessor<>(this);
 
     @Nonnull
     public MapProperty<String, Set<Figure>> additionalPseudoClassStatesProperty() {
@@ -353,7 +348,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
            return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin,key),null);
         }else {
             try {
-            CssTokenizer tt = new CssStreamTokenizer(converter.toString(element.getStyled(origin, key)));
+            CssTokenizer tt = new StreamCssTokenizer(converter.toString(element.getStyled(origin, key)));
                 return tt.toTokenList();
             } catch (IOException e) {
                 throw new RuntimeException("unexpected exception",e);
@@ -421,7 +416,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 Object convertedValue;
                 try {
                     if (converter instanceof CssConverter)
-                    convertedValue = ((CssConverter<Object>)converter).parse(new CssListTokenizer(value),null);
+                    convertedValue = ((CssConverter<Object>)converter).parse(new ListCssTokenizer(value),null);
                     else
                         convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
                     elem.setStyled(origin, k, convertedValue);

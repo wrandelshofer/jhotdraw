@@ -8,6 +8,7 @@ import java.net.URI;
 import java.text.ParseException;
 import java.util.AbstractMap;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.ArrayList;
@@ -58,16 +59,20 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private LinkedHashMap<Object, ParsedStylesheetEntry> inlineList = new LinkedHashMap<>();
     @Nonnull
     private Executor executor = Executors.newCachedThreadPool();
+    private    Map<String, List<CssToken>> cachedAuthorCustomProperties;
+    private    Map<String, List<CssToken>> cachedInlineCustomProperties;
+    private    Map<String, List<CssToken>> cachedUserAgentCustomProperties;
 
     public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
         this.selectorModel = selectorModel;
     }
 
-    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, String key, List<CssToken> value) {
+    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, String key, List<CssToken> value,
+                                Map<String, List<CssToken>> customProperties) {
         if (value == null) {
             selectorModel1.setAttribute(elem, styleOrigin, key, null);
         } else {
-            CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel1);
+            CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel1, customProperties);
             List<CssToken> processed = preprocessTerms(elem, processor, value);
             selectorModel1.setAttribute(elem, styleOrigin, key, processed);
         }
@@ -85,12 +90,20 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Override
     public void addStylesheet(@Nonnull StyleOrigin origin, @Nullable URI documentHome, @Nonnull URI uri) {
         URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
+        invalidate();
         getMap(origin).put(resolvedUri, new ParsedStylesheetEntry(origin, resolvedUri));
     }
 
     @Override
     public void addStylesheet(@Nonnull StyleOrigin origin, @Nonnull String str) {
+        invalidate();
         getMap(origin).put(str, new ParsedStylesheetEntry(origin, str));
+    }
+
+    private void invalidate() {
+        cachedAuthorCustomProperties=null;
+        cachedInlineCustomProperties=null;
+        cachedUserAgentCustomProperties=null;
     }
 
     @Override
@@ -99,6 +112,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             authorList.clear();
             userAgentList.clear();
             inlineList.clear();
+            invalidate();
         } else {
             getMap(origin).clear();
         }
@@ -135,6 +149,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     @Override
     public <T> void setStylesheets(@Nonnull StyleOrigin origin, @Nullable URI documentHome, @Nullable List<T> stylesheets) {
+        invalidate();
         LinkedHashMap<Object, ParsedStylesheetEntry> oldMap = getMap(origin);
         if (stylesheets == null) {
             oldMap.clear();
@@ -184,21 +199,26 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     public void applyStylesheetsTo(E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
 
+
         // The stylesheet is a user-agent stylesheet
-        for (Declaration d : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getProperty(), d.getTerms());
+        Collection<ParsedStylesheetEntry> uaStylesheets = getUserAgentStylesheets();
+        Map<String, List<CssToken>> uaCustomProperties = getUserAgentCustomProperties();
+        for (Declaration d : collectApplicableDeclarations(elem, uaStylesheets)) {
+            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getProperty(), d.getTerms(), uaCustomProperties);
         }
 
         // The value of a property was set by the user through a call to a set method with StyleOrigin.USER
         // ... nothing to do!
         // The stylesheet is an external file
+        Map<String, List<CssToken>> authorCustomProperties = getAuthorCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getProperty(), d.getTerms());
+            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getProperty(), d.getTerms(), authorCustomProperties);
         }
 
         // The stylesheet is an internal file
+        Map<String, List<CssToken>> inlineCustomProperties = getInlineCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, getInlineStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getProperty(), d.getTerms());
+            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getProperty(), d.getTerms(), inlineCustomProperties);
         }
 
         // 'inline style attributes' can override all other values
@@ -218,11 +238,33 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + styleValue);
                 ex.printStackTrace();
             }
+                Map<String, List<CssToken>> inlineStyleAttrCustomProperties= Collections.emptyMap();
             for (Map.Entry<String, List<CssToken>> entry : inlineDeclarations.entrySet()) {
-                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey(), entry.getValue());
+                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey(), entry.getValue(), inlineStyleAttrCustomProperties);
             }
             inlineDeclarations.clear();
         }
+    }
+
+    private Map<String, List<CssToken>> getInlineCustomProperties() {
+        if (cachedInlineCustomProperties==null) {
+            cachedInlineCustomProperties=collectCustomProperties(getInlineStylesheets());
+        }
+        return cachedInlineCustomProperties;
+    }
+
+    private Map<String, List<CssToken>> getAuthorCustomProperties() {
+        if (cachedAuthorCustomProperties==null) {
+            cachedAuthorCustomProperties=collectCustomProperties(getAuthorStylesheets());
+        }
+        return cachedAuthorCustomProperties;
+    }
+
+    private Map<String, List<CssToken>> getUserAgentCustomProperties() {
+        if (cachedUserAgentCustomProperties==null) {
+            cachedUserAgentCustomProperties=collectCustomProperties(getUserAgentStylesheets());
+        }
+        return cachedUserAgentCustomProperties;
     }
 
     /**
@@ -268,7 +310,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Override
     public boolean applyStylesheetTo(StyleOrigin styleOrigin, @Nonnull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
-        CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel);
+        final Map<String, List<CssToken>> customProperties = collectCustomProperties(s);
+
+        CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel, customProperties);
         final List<Map.Entry<Integer, Declaration>> applicableDeclarations = collectApplicableDeclarations(elem, s,
                 new ArrayList<>());
         if (applicableDeclarations.isEmpty()) {
@@ -282,6 +326,33 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             && CssTokenType.IDENT_INITIAL.equals(value.get(0).getStringValue()) ? null : value);
         }
         return true;
+    }
+
+    private Map<String, List<CssToken>> collectCustomProperties(Collection<ParsedStylesheetEntry> stylesheets) {
+        Map<String, List<CssToken>> customProperties = new LinkedHashMap<>();
+        for (ParsedStylesheetEntry s : stylesheets) {
+            Stylesheet stylesheet = s.getStylesheet();
+            if (stylesheet != null) {
+                collectCustomProperties(stylesheet, customProperties);
+            }
+        }
+        return customProperties;
+    }
+
+    private Map<String, List<CssToken>> collectCustomProperties(Stylesheet s) {
+        Map<String, List<CssToken>> customProperties = new LinkedHashMap<>();
+        collectCustomProperties(s, customProperties);
+        return customProperties;
+    }
+
+    private void collectCustomProperties(Stylesheet s, Map<String, List<CssToken>> customProperties) {
+        for (StyleRule styleRule : s.getStyleRules()) {
+            for (Declaration declaration : styleRule.getDeclarations()) {
+                if (declaration.getProperty().startsWith("--")) {
+                    customProperties.put(declaration.getProperty(), declaration.getTerms());
+                }
+            }
+        }
     }
 
     @NotNull

@@ -6,7 +6,7 @@ package org.jhotdraw8.css.text;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -59,7 +59,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
         }
-        CssStreamTokenizer tt = new CssStreamTokenizer(value.getName());
+        StreamCssTokenizer tt = new StreamCssTokenizer(value.getName());
         try {
             while (tt.next() != CssTokenType.TT_EOF) {
                 out.accept(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));

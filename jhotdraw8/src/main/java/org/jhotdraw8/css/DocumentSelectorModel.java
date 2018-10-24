@@ -14,8 +14,6 @@ import org.w3c.dom.NodeList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,7 +47,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         String str=getAttributeAsString(element,origin,name);
         if (str==null)return null;
         try {
-            return new CssStreamTokenizer(str).toTokenList();
+            return new StreamCssTokenizer(str).toTokenList();
         } catch (IOException e) {
             throw new RuntimeException("unexpected exception",e);
         }

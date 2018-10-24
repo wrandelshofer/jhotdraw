@@ -150,7 +150,8 @@ public class CssParserTest {
                 dynamicTest("43", () -> testParseStylesheet(".class {a:1}", "<xml><elem class=\"class\"/></xml>", "<xml><elem a=\"1\" class=\"class\"/></xml>")),
                 dynamicTest("44", () -> testParseStylesheet("#id {a:1}", "<xml><elem id=\"id\"/></xml>", "<xml><elem a=\"1\" id=\"id\"/></xml>")),
                 dynamicTest("45", () -> testParseStylesheet("type {a:b}", "<xml><type/></xml>", "<xml><type a=\"b\"/></xml>")),
-                dynamicTest("46", () -> testParseStylesheet("", "<xml/>", "<xml/>"))//
+                dynamicTest("46", () -> testParseStylesheet("", "<xml/>", "<xml/>"))
+                //
         );
 
     }

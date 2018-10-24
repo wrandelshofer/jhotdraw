@@ -1,4 +1,4 @@
-/* @(#)CssStreamTokenizerTest.java
+/* @(#)StreamCssTokenizerTest.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,20 +15,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * CssStreamTokenizerTest.
+ * StreamCssTokenizerTest.
  *
  * @author Werner Randelshofer
  */
-public class CssStreamTokenizerTest {
+public class StreamCssTokenizerTest {
 
-    public CssStreamTokenizerTest() {
+    public StreamCssTokenizerTest() {
     }
 
     /**
      * Test of nextChar method, of class CssScanner.
      */
     public static void testTokenizer(String inputData, String expectedValue) throws Exception {
-        CssStreamTokenizer tt = new CssStreamTokenizer(new StringReader(inputData));
+        StreamCssTokenizer tt = new StreamCssTokenizer(new StringReader(inputData));
         //
         StringBuilder buf = new StringBuilder();
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
@@ -116,7 +116,8 @@ public class CssStreamTokenizerTest {
                 dynamicTest("55", () -> testTokenizer("url(http://www.w3.org/css.html)", "-12:http://www.w3.org/css.html")),
                 dynamicTest("56", () -> testTokenizer("url(http://www.w3.org/css.html   )", "-12:http://www.w3.org/css.html")),
                 dynamicTest("57", () -> testTokenizer("url(   http://www.w3.org/css.html)", "-12:http://www.w3.org/css.html")),
-                dynamicTest("58", () -> testTokenizer("url(   http://www. w3.html)", "-6:http://www. -2:w3 .:. -2:html ):)"))
+                dynamicTest("58", () -> testTokenizer("url(   http://www. w3.html)", "-6:http://www. -2:w3 .:. -2:html ):)")),
+                dynamicTest("59", () -> testTokenizer("--main-color", "-2:--main-color"))
                 //
         );
     }

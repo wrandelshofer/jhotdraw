@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.css.CssStreamTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
@@ -109,7 +109,7 @@ public interface CssConverter<T> extends Converter<T> {
     default T fromString(CharBuffer buf, IdFactory idFactory) throws ParseException {
         try {
             int startPos=buf.position();
-            CssStreamTokenizer tt = new CssStreamTokenizer(buf);
+            StreamCssTokenizer tt = new StreamCssTokenizer(buf);
             T value = parse(tt, idFactory);
             buf.position(startPos+tt.getNextPosition());
             return value;
