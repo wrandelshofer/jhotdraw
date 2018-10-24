@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 import javafx.geometry.Rectangle2D;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -23,16 +24,18 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssRectangle2DConverter  extends AbstractCssConverter<Rectangle2D> {
+public class CssRectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
     private final boolean withSpace;
+    private final boolean withComma;
 
     public CssRectangle2DConverter(boolean nullable) {
-        this(nullable, true);
+        this(nullable, true, false);
     }
 
-    public CssRectangle2DConverter(boolean nullable, boolean withSpace) {
+    public CssRectangle2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
         super(nullable);
-        this.withSpace = withSpace;
+        this.withSpace = withSpace || !withComma;
+        this.withComma = withComma;
     }
 
     @Nonnull
@@ -57,17 +60,23 @@ public class CssRectangle2DConverter  extends AbstractCssConverter<Rectangle2D> 
     @Override
     protected <TT extends Rectangle2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinX()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinY()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getWidth()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }

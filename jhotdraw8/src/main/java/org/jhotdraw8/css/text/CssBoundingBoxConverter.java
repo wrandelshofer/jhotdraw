@@ -26,14 +26,16 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
     private final boolean withSpace;
+    private final boolean withComma;
 
     public CssBoundingBoxConverter(boolean nullable) {
-        this(nullable, true);
+        this(nullable, true, false);
     }
 
-    public CssBoundingBoxConverter(boolean nullable, boolean withSpace) {
+    public CssBoundingBoxConverter(boolean nullable, boolean withSpace, boolean withComma) {
         super(nullable);
-        this.withSpace = withSpace;
+        this.withSpace = withSpace || !withComma;
+        this.withComma = withComma;
     }
 
     @Nonnull
@@ -58,17 +60,23 @@ public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
     @Override
     protected <TT extends BoundingBox> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinX()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinY()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getWidth()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
