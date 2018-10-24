@@ -98,7 +98,7 @@ public interface CssTokenizer {
             case TT_URL:
                 return currentString();
             default:
-                throw new AssertionError("unsupported token type "+ current());
+               return Character.toString((char)current());
         }
     }
 

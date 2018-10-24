@@ -85,7 +85,21 @@ class CssFunctionProcessorTest {
                 dynamicTest("205", () -> doTestProcess("calc(2 + attr(doors number))", "7")),
                 dynamicTest("206", () -> doTestProcess("calc(2% + attr(doors number))", "7%")),
                 dynamicTest("207", () -> doTestProcess("calc(2% + attr(doors mm))", "1773.6535433070867%")),
-                dynamicTest("208", () -> doTestProcess("calc(2mm + attr(doors mm))", "7mm"))
+                dynamicTest("208", () -> doTestProcess("calc(2mm + attr(doors mm))", "7mm")),
+                //
+                dynamicTest("301", () -> doTestProcess("concat()", "\"\"")),
+                dynamicTest("302", () -> doTestProcess("concat(\"a\",\"b\")", "\"ab\"")),
+                //
+                dynamicTest("401", () -> doTestProcess("concat(attr(id),\"x\")", "\"o1x\"")),
+                //
+                dynamicTest("501", () -> doTestProcess("replace(\"aabfooaabfooabfoob\")", null)),
+                dynamicTest("502", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\")", null)),
+                dynamicTest("503", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\",\"-\")", "\"-foo-foo-foo-\"")),
+                //
+                dynamicTest("601", () -> doTestProcess("replace(attr(id),\"\\\\d\",\"x\")", "\"ox\"")),
+                //
+                dynamicTest("801", () -> doTestProcess("inside", "inside")),
+                dynamicTest("801", () -> doTestProcess("a b", "a b"))
         );
     }
 }

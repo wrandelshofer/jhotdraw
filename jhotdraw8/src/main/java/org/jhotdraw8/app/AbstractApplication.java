@@ -136,8 +136,12 @@ public abstract class AbstractApplication extends javafx.application.Application
                 if (buf.length() != 0) {
                     buf.append('\n');
                 }
-                String str = entry.getKey().toString()+'\t'+entry.getValue().getIdentifiers().iterator().next();
-                buf.append(str);
+                URI key = entry.getKey();
+                DataFormat value = entry.getValue();
+                if (key!=null&&value!=null&&value.getIdentifiers()!=null&&!value.getIdentifiers().isEmpty()) {
+                    String str = key.toString() + '\t' + value.getIdentifiers().iterator().next();
+                    buf.append(str);
+                }
             }
             prefs.put(applicationId + RECENT_URIS, buf.toString());
         });

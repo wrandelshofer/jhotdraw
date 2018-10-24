@@ -13,17 +13,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
 import javafx.css.StyleOrigin;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssFunctionProcessor;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.draw.figure.Figure;
@@ -40,6 +45,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public class FigureSelectorModel implements SelectorModel<Figure> {
 
+    private final static Logger LOGGER = Logger.getLogger(FigureSelectorModel.class.getName());
+    private final MapProperty<String, Set<Figure>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
     @Nonnull
     private HashSet<Class<?>> mappedFigureClasses = new HashSet<>();
     /**
@@ -54,8 +61,9 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
      */
     @Nonnull
     private HashMap<WriteableStyleableMapAccessor<?>, String> keyToNameMap = new HashMap<>();
-
-    private final MapProperty<String, Set<Figure>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    @Nonnull
+    private Map<Class<? extends Figure>, Map<String, WriteableStyleableMapAccessor<Object>>> figureToMetaMap = new HashMap<>();
+    private CssFunctionProcessor<Figure> functionProcessor = new CssFunctionProcessor<>(this);
 
     @Nonnull
     public MapProperty<String, Set<Figure>> additionalPseudoClassStatesProperty() {
@@ -299,7 +307,6 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         if (isInitialValue) {
             if ((key instanceof CompositeMapAccessor)) {
                 for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
-                    // FIXME should recurse here
                     if (element.containsKey(origin, subkey)) {
                         isInitialValue = false;
                         break;
@@ -308,7 +315,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             }
         }
         if (isInitialValue) {
-            return INITIAL_VALUE_KEYWORD;
+            return null;
         }
         return key.getConverter().toString(element.getStyled(origin, key));
     }
@@ -319,8 +326,6 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         WriteableStyleableMapAccessor<Object> k = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         return k == null ? null : k.getConverter();
     }
-    @Nonnull
-    private Map<Class<? extends Figure>, Map<String, WriteableStyleableMapAccessor<Object>>> figureToMetaMap = new HashMap<>();
 
     private Map<String, WriteableStyleableMapAccessor<Object>> getMetaMap(Figure elem) {
 
@@ -341,33 +346,24 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@NotNull @Nonnull Figure elem, @NotNull StyleOrigin origin, @NotNull String name, List<CssToken> value) {
+    public void setAttribute(@NotNull @Nonnull Figure elem, @NotNull StyleOrigin origin, @NotNull String name, String value) {
         Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 
         WriteableStyleableMapAccessor<Object> k = metaMap.get(name);
         if (k != null) {
-            if (INITIAL_VALUE_KEYWORD.equals(value)) {
+            if (value == null) {
                 elem.remove(origin, k);
             } else {
                 @SuppressWarnings("unchecked")
                 Converter<Object> converter = k.getConverter();
                 Object convertedValue;
                 try {
-                    convertedValue = converter.fromString(preprocessValue(value));
+                    convertedValue = converter.fromString(value);
                     elem.setStyled(origin, k, convertedValue);
                 } catch (@Nonnull ParseException | IOException ex) {
-                    //FIXME we should mark this as an error somewhere in the GUI
-                    //ex.printStackTrace();
+                    LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
                 }
             }
         }
-    }
-
-    private String preprocessValue(List<CssToken> value) {
-        StringBuilder buf=new StringBuilder();
-        for (CssToken t:value){
-            buf.append(t.fromToken());
-        }
-        return buf.toString();
     }
 }

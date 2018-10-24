@@ -8,9 +8,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
+
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,11 +39,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
 
     @Override
     public String getAttribute(@Nonnull Element elem, @NotNull StyleOrigin origin, @NotNull String name) {
-        if (origin == StyleOrigin.USER) {
-            return getAttribute(elem, name);
-        } else {
-            return SelectorModel.INITIAL_VALUE_KEYWORD;
-        }
+        return getAttribute(elem, name);
     }
 
     @Override
@@ -121,7 +119,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
      * <li>not(...)</li>
      * </ul>
      *
-     * @param element the element
+     * @param element     the element
      * @param pseudoClass the desired pseudo clas
      * @return true if the element has the pseudo class
      */
@@ -261,33 +259,20 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @NotNull String name, List<CssToken> value) {
-        final String valueStr = preprocessValue(value);
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @NotNull String name, String value) {
         switch (origin) {
             case USER:
-                element.setAttribute(name, valueStr);
-                break;
             case USER_AGENT:
-                if (!hasAttribute(element, name)) {
-                    element.setAttribute(name, valueStr);
-                }
-                break;
-            case AUTHOR:
-                element.setAttribute(name, valueStr);
-                break;
             case INLINE:
-                element.setAttribute(name, valueStr);
+            case AUTHOR:
+                if (value == null) {
+                    element.removeAttribute(name);
+                } else {
+                    element.setAttribute(name, value);
+                }
                 break;
             default:
                 throw new UnsupportedOperationException("unsupported origin:" + origin);
         }
-    }
-
-    private String preprocessValue(List<CssToken> value) {
-        StringBuilder buf=new StringBuilder();
-        for (CssToken t:value){
-            buf.append(t.fromToken());
-        }
-        return buf.toString();
     }
 }

@@ -20,7 +20,14 @@ import java.io.StringReader;
 public class CssTokenType {
 
     public final static String IDENT_NONE = "none";
-    public final static String IDENT_INITIAL_VALUE = "initial-value";
+
+    /**
+     * The 'initial' keyword is used to reset a property.
+     *
+     * <a href="https://www.w3.org/TR/css3-cascade/#initial">Resetting a
+     * Property: the 'initial' keyword.</a>
+     */
+    public final static String IDENT_INITIAL = "initial";
 
     /**
      * Defines an at-keyword-token.

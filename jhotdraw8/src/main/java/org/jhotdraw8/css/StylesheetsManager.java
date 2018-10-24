@@ -78,14 +78,14 @@ public interface StylesheetsManager<E> {
      *
      * @param e The element
      */
-    public void applyStylesheetsTo(E e);
+    void applyStylesheetsTo(E e);
 
     /**
      * Returns the selector model of the style manager.
      *
      * @return the selector model
      */
-    public SelectorModel<E> getSelectorModel();
+    SelectorModel<E> getSelectorModel();
 
     /**
      * Applies the provided stylesheet.
@@ -96,7 +96,7 @@ public interface StylesheetsManager<E> {
      * @param element the element
      * @return true if an element was selected
      */
-    public boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element);
+    boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element);
 
     /**
      * Returns true if the provided stylesheet has selectors which match the

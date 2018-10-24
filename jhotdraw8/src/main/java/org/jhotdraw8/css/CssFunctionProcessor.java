@@ -8,14 +8,22 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Takes a list of tokens and evaluates common Css functions.
  * <p>
- * Supported functions:
+ * Supported standard functions:
  * <dl>
  * <dt>attr()</dt><dd>Attribute Reference. Returns the value of an attribute on the element.</dd>
  * <dt>calc()</dt><dd>Mathematical Expressions. Returns the value of a mathematical expression.</dd>
+ * </dl>
+ * <p>
+ * Supported non-standard functions:
+ * <dl>
+ * <dt>replace()</dt><dd>Replace. Replaces all substrings matching a regular expression in a string.</dd>
+ * <dt>concat()</dt><dd>Concat. Concatenates strings.</dd>
  * </dl>
  *
  * <p>
@@ -49,15 +57,15 @@ public class CssFunctionProcessor<T> {
     }
 
     public void process(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
-        while (tt.next() != CssTokenType.TT_EOF) {
+        while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             tt.pushBack();
             processToken(element, tt, out);
         }
     }
 
     private void processToken(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
-        if (tt.next() == CssTokenType.TT_FUNCTION) {
-            switch (tt.currentString()) {
+        if (tt.nextNoSkip() == CssTokenType.TT_FUNCTION) {
+            switch (tt.currentStringNonnull()) {
                 case "attr":
                     tt.pushBack();
                     processAttrFunction(element, tt, out);
@@ -65,6 +73,14 @@ public class CssFunctionProcessor<T> {
                 case "calc":
                     tt.pushBack();
                     processCalcFunction(element, tt, out);
+                    break;
+                case "replace":
+                    tt.pushBack();
+                    processReplaceFunction(element, tt, out);
+                    break;
+                case "concat":
+                    tt.pushBack();
+                    processConcatFunction(element, tt, out);
                     break;
                 default:
                     tt.pushBack();
@@ -95,11 +111,11 @@ public class CssFunctionProcessor<T> {
      */
     private void processAttrFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈attr〉: function attr() expected.");
-        int line = tt.getLineNumber();
-        int start = tt.getStartPosition();
         if (!"attr".equals(tt.currentString())) {
             throw new ParseException("〈attr〉: function attr() expected.", tt.getStartPosition());
         }
+        int line = tt.getLineNumber();
+        int start = tt.getStartPosition();
 
         String attrName = parseAttrName(tt);
         String typeOrUnit = null;
@@ -124,7 +140,7 @@ public class CssFunctionProcessor<T> {
             }
         }
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw new ParseException("〈attr〉: right bracket expected.", tt.getStartPosition());
+            throw new ParseException("〈attr〉: right bracket expected. " + tt.current(), tt.getStartPosition());
         }
         int end = tt.getEndPosition();
 
@@ -133,9 +149,30 @@ public class CssFunctionProcessor<T> {
             if (typeOrUnit == null) {
                 typeOrUnit = "string";
             }
+            CssStreamTokenizer att = new CssStreamTokenizer(attrValue);
+            Outer:
             switch (typeOrUnit) {
                 case "string":
-                    out.accept(new CssToken(CssTokenType.TT_STRING, attrValue, null, line, start, end));
+                    String strValue;
+                    switch (att.next()) {
+                        case CssTokenType.TT_STRING:
+                            strValue = att.currentValue();
+                        case CssTokenType.TT_IDENT:
+                            strValue = att.currentValue();
+                            break;
+                        case CssTokenType.TT_NUMBER:
+                        case CssTokenType.TT_PERCENTAGE:
+                        case CssTokenType.TT_DIMENSION:
+                            strValue = att.getToken().fromToken();
+                            break;
+                        default:
+                            strValue = null;
+                            break;
+                    }
+                    if (strValue == null) {
+                        throw new ParseException("〈attr〉: could not convert attribute value of attribute " + attrName + "=" + attrValue, tt.getStartPosition());
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_STRING, strValue, null, line, start, end));
                     return;
                 case "color":
                     if (attrValue.startsWith("#")) {
@@ -152,14 +189,14 @@ public class CssFunctionProcessor<T> {
                         out.accept(new CssToken(CssTokenType.TT_NUMBER, null, Integer.parseInt(attrValue, start), line, start, end));
                         return;
                     } catch (NumberFormatException e) {
-                        // fall back
+                        break;
                     }
                 case "number":
                     try {
                         out.accept(new CssToken(CssTokenType.TT_NUMBER, null, parseDimensionOrDouble(attrValue, start).getValue(), line, start, end));
                         return;
                     } catch (NumberFormatException e) {
-                        // fall back
+                        break;
                     }
                 case "length":
                 case "angle":
@@ -169,8 +206,8 @@ public class CssFunctionProcessor<T> {
                         CssDimension dim = parseDimensionOrDouble(attrValue, start);
                         out.accept(new CssToken(CssTokenType.TT_DIMENSION, dim.getUnits(), dim.getValue(), line, start, end));
                         return;
-                    } catch (NumberFormatException e) {
-                        // fall back
+                    } catch (NumberFormatException | ParseException e) {
+                        break;
                     }
                 case "%length":
                 case "%angle":
@@ -180,14 +217,14 @@ public class CssFunctionProcessor<T> {
                         out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, "%", parseDimensionOrDouble(attrValue, start).getValue(), line, start, end));
                         return;
                     } catch (NumberFormatException e) {
-                        // fall back
+                        break;
                     }
                 default:
                     try {
                         out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, parseDimensionOrDouble(attrValue, start).getValue(), line, start, end));
                         return;
                     } catch (NumberFormatException e) {
-                        // fall back
+                        break;
                     }
             }
         }
@@ -226,7 +263,7 @@ public class CssFunctionProcessor<T> {
         } else if (tt.current() == CssTokenType.TT_NUMBER) {
             return new CssDimension(tt.currentNumber().doubleValue(), null);
         }
-        throw new ParseException("dimension expected", pos);
+        throw new ParseException("dimension expected, got: \"" + attrValue + "\"", pos);
     }
 
     private String parseAttrName(CssTokenizer tt) throws IOException, ParseException {
@@ -287,6 +324,9 @@ public class CssFunctionProcessor<T> {
 
     private CssDimension parseCalcFunction(T element, CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈calc〉: calc() function expected.");
+        if (!"calc".equals(tt.currentStringNonnull())) {
+            throw new ParseException("〈calc〉: calc() function expected.", tt.getStartPosition());
+        }
         CssDimension dim = parseCalcSum(element, tt);
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈calc〉: right bracket \")\" expected.");
         return dim;
@@ -300,18 +340,20 @@ public class CssFunctionProcessor<T> {
             switch (tt.next()) {
                 case '+': {
                     CssDimension dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits()==null||dim2.getUnits()==null)
+                    if (dim.getUnits() == null || dim2.getUnits() == null) {
                         dim = new CssDimension(dim.getValue() + dim2.getValue(), dim.getUnits());
-                    else
+                    } else {
                         dim = new CssDimension(dim.getValue() + c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    }
                     break;
                 }
                 case '-': {
                     CssDimension dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits()==null||dim2.getUnits()==null)
+                    if (dim.getUnits() == null || dim2.getUnits() == null) {
                         dim = new CssDimension(dim.getValue() - dim2.getValue(), dim.getUnits());
-                    else
-                    dim = new CssDimension(dim.getValue() - c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    } else {
+                        dim = new CssDimension(dim.getValue() - c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    }
                     break;
                 }
                 default:
@@ -330,18 +372,20 @@ public class CssFunctionProcessor<T> {
             switch (tt.next()) {
                 case '*': {
                     CssDimension dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits()==null||dim2.getUnits()==null)
+                    if (dim.getUnits() == null || dim2.getUnits() == null) {
                         dim = new CssDimension(dim.getValue() * dim2.getValue(), dim.getUnits());
-                    else
-                    dim = new CssDimension(dim.getValue() * c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    } else {
+                        dim = new CssDimension(dim.getValue() * c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    }
                     break;
                 }
                 case '/': {
                     CssDimension dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits()==null||dim2.getUnits()==null)
+                    if (dim.getUnits() == null || dim2.getUnits() == null) {
                         dim = new CssDimension(dim.getValue() / dim2.getValue(), dim.getUnits());
-                    else
+                    } else {
                         dim = new CssDimension(dim.getValue() / c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    }
                     break;
                 }
                 default:
@@ -386,6 +430,118 @@ public class CssFunctionProcessor<T> {
             default:
                 throw new ParseException("calc-value: number, percentage, dimension or (sum) expected.", tt.getStartPosition());
         }
+    }
 
+    /**
+     * Processes the replace() function.
+     * <pre>
+     * replace     = "replace(", string, [","], regex, [","], replacement, ")" ;
+     * string      = string-token ;
+     * regex       = string-token ;
+     * replacement = string-token ;
+     * </pre>
+     *
+     * @param tt  the tokenizer
+     * @param out the consumer
+     * @throws IOException
+     */
+    private void processReplaceFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈replace〉: replace() function expected.");
+        if (!"replace".equals(tt.currentStringNonnull())) {
+            throw new ParseException("〈replace〉: replace() function expected.", tt.getStartPosition());
+        }
+
+        int line = tt.getLineNumber();
+        int start = tt.getStartPosition();
+
+        String str = evalString(element, tt, "replace");
+        if (tt.next() != CssTokenType.TT_COMMA) {
+            tt.pushBack();
+        }
+        String regex = evalString(element, tt, "replace");
+        if (tt.next() != CssTokenType.TT_COMMA) {
+            tt.pushBack();
+        }
+        String repl = evalString(element, tt, "replace");
+        if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
+            throw new ParseException("〈replace〉: right bracket ')' expected.", tt.getStartPosition());
+        }
+
+        try {
+            String result = Pattern.compile(regex).matcher(str).replaceAll(repl);
+            int end = tt.getEndPosition();
+            out.accept(new CssToken(CssTokenType.TT_STRING, result, null, line, start, end));
+        } catch (IllegalArgumentException e) {
+            ParseException ex = new ParseException("〈replace〉: " + e.getMessage(), tt.getStartPosition());
+            ex.initCause(e);
+            throw ex;
+        }
+
+    }
+
+    /**
+     * Processes the concat() function.
+     * <pre>
+     * concat              = "concat(", string-list, ")" ;
+     * string-iist         = value ,  { [ ',' ] , value } ;
+     * value               = string | number | dimension | percentage | url ;
+     * </pre>
+     *
+     * @param tt  the tokenizer
+     * @param out the consumer
+     * @throws IOException
+     */
+    private void processConcatFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈concat〉: concat() function expected.");
+        if (!"concat".equals(tt.currentStringNonnull())) {
+            throw new ParseException("〈concat〉: concat() function expected.", tt.getStartPosition());
+        }
+
+        int line = tt.getLineNumber();
+        int start = tt.getStartPosition();
+
+        StringBuilder buf = new StringBuilder();
+        boolean first = true;
+        while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+            switch (tt.current()) {
+                case CssTokenType.TT_COMMA:
+                    if (!first) {
+                        continue;
+                    }
+                    // fall through
+                default:
+                    tt.pushBack();
+                    buf.append(evalString(element, tt, "concat"));
+            }
+            first = false;
+        }
+        if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+            throw new ParseException("〈concat〉: right bracket ')' expected.", tt.getStartPosition());
+        }
+        int end = tt.getEndPosition();
+        out.accept(new CssToken(CssTokenType.TT_STRING, buf.toString(), null, line, start, end));
+    }
+
+    private String evalString(T element, CssTokenizer tt, String expressionName) throws IOException, ParseException {
+        StringBuilder buf = new StringBuilder();
+        List<CssToken> temp = new ArrayList<>();
+        temp.clear();
+        processToken(element, tt, temp::add);
+        for (CssToken t : temp) {
+            switch (t.getType()) {
+                case CssTokenType.TT_STRING:
+                case CssTokenType.TT_URL:
+                    buf.append(t.getStringValue());
+                    break;
+                case CssTokenType.TT_NUMBER:
+                case CssTokenType.TT_DIMENSION:
+                case CssTokenType.TT_PERCENTAGE:
+                    buf.append(t.fromToken());
+                    break;
+                default:
+                    throw new ParseException("〈" + expressionName + "〉: String, Number, Dimension, Percentage or URL expected.", t.getStartPos());
+            }
+        }
+        return buf.toString();
     }
 }

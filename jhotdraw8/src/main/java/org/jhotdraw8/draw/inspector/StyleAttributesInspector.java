@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -39,6 +38,7 @@ import javafx.scene.control.ToggleGroup;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssParser;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -257,7 +257,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (String name : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
-                    attr.put(name, selectorModel.getAttribute(f, origin, name));
+                    String attribute = selectorModel.getAttribute(f, origin, name);
+                    attr.put(name, attribute==null?CssTokenType.IDENT_INITIAL :attribute);
                 }
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
@@ -268,6 +269,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                     String oldAttrValue = attr.get(name);
                     if (oldAttrValue != null) {
                         String newAttrValue = selectorModel.getAttribute(f, origin, name);
+                        if (newAttrValue==null)newAttrValue=CssTokenType.IDENT_INITIAL;
                         if (!oldAttrValue.equals(newAttrValue)) {
                             attr.put(name, "/* multiple values */");
                         }

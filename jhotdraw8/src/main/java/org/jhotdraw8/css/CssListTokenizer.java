@@ -18,6 +18,7 @@ public class CssListTokenizer implements CssTokenizer {
 
     public CssListTokenizer(List<CssToken> in) {
         this.in = in;
+        current=in.isEmpty()?new CssToken(CssTokenType.TT_EOF):in.get(0);
     }
 
     @Nullable

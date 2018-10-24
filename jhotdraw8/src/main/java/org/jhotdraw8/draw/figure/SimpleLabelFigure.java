@@ -49,7 +49,7 @@ public class SimpleLabelFigure extends AbstractLabelFigure implements HideableFi
 
     @Override
     protected String getText(RenderContext ctx) {
-        return get(TEXT);
+        return getStyled(TEXT);
     }
     
     

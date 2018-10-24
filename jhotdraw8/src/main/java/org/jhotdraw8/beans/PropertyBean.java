@@ -18,6 +18,7 @@ import javafx.collections.ObservableMap;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * Interface for beans which support an open number of getProperties in a

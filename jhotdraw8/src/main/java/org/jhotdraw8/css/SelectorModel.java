@@ -22,14 +22,6 @@ import javax.annotation.Nullable;
 public interface SelectorModel<T> {
 
     /**
-     * This keyword is used to reset a property.
-     *
-     * <a href="https://www.w3.org/TR/css3-cascade/#initial">Resetting a
-     * Property: the 'initial' keyword.</a>
-     */
-    String INITIAL_VALUE_KEYWORD = "initial";
-
-    /**
      * Returns true if the element has an attribute with the specified name and
      * the value contains the specified substring.
      *
@@ -113,18 +105,20 @@ public interface SelectorModel<T> {
     }
 
     /**
-     * Returns the attribute value with the given name.
+     * Returns the attribute value with the given name from the USER style origin.
      *
      * @param element The element
      * @param name    The attribute name
-     * @return The attribute value. Returns null if the element does not have an
+     * @return The attribute value. Returns "initial" if the element does not have an
      * attribute with this name.
      */
     @Nullable
-    String getAttribute(@Nonnull T element, @Nonnull String name);
+    default String getAttribute(@Nonnull T element, @Nonnull String name) {
+        return getAttribute(element, StyleOrigin.USER, name);
+    }
 
     @Nullable
-    public String getAttribute(@Nonnull T element, @Nullable StyleOrigin origin, @Nonnull String name);
+    String getAttribute(@Nonnull T element, @Nullable StyleOrigin origin, @Nonnull String name);
 
     /**
      * Returns all styleable attributes of the element.
@@ -254,5 +248,5 @@ public interface SelectorModel<T> {
      * @param value   The attribute value. Null removes the attribute from the
      *                element.
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value);
+    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable String value);
 }

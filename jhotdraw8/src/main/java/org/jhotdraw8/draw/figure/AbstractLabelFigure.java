@@ -131,7 +131,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public Bounds getBoundsInLocal() {
         Bounds boundsInLocal = getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
-        return boundsInLocal == null ? new BoundingBox(0, 0, 0, 0) : boundsInLocal;
+        return boundsInLocal == null ? getLayoutBounds() : boundsInLocal;
     }
 
     /**

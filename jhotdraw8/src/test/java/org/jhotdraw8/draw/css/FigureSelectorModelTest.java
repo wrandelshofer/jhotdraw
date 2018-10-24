@@ -49,7 +49,7 @@ public class FigureSelectorModelTest {
 
         assertEquals(instance.getAttribute(figure, attrName), "initial", "no value has been set, must be 'initial'");
 
-        instance.setAttribute(figure, StyleOrigin.USER, attrName, Arrays.asList(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
+        instance.setAttribute(figure, StyleOrigin.USER, attrName, CssTokenType.IDENT_NONE);//Arrays.asList(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
 
         assertNull(figure.get(key), "figure.get(key) value has been explicitly set to null");
 

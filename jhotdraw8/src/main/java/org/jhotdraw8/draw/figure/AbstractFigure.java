@@ -253,10 +253,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         if (d != null) {
             StylesheetsManager<Figure> styleManager = d.getStyleManager();
             styleManager.applyStylesheetsTo(this);
-            /*
-            for (Figure child : getChildren()) {
-                child.updateCss();// should not recurse, because style manager knows better if it is worthwile?
-            }*/
         }
         invalidateTransforms();
     }

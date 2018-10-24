@@ -5,6 +5,7 @@ package org.jhotdraw8.css;
 
 import java.io.IOException;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,9 +18,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
+
 import javafx.css.StyleOrigin;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
@@ -28,9 +33,9 @@ import org.jhotdraw8.css.ast.Stylesheet;
 /**
  * SimpleStylesheetsManager.
  *
+ * @param <E> the element type that can be styled by this style manager
  * @author Werner Randelshofer
  * @version $Id$
- * @param <E> the element type that can be styled by this style manager
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
@@ -42,7 +47,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, String key, List<CssToken> value) {
-        selectorModel1.setAttribute(elem, styleOrigin, key, value);
+        CssFunctionProcessor<E> processor = new CssFunctionProcessor<>(selectorModel1);
+        String processed = preprocessTerms(elem, processor, value);
+        selectorModel1.setAttribute(elem, styleOrigin, key, processed);
     }
 
     public void getSelectorModel(SelectorModel<E> newValue) {
@@ -94,7 +101,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // retry later
                 } catch (ExecutionException ex) {
                     ex.printStackTrace();
-                    stylesheet=null;
+                    stylesheet = null;
                     future = null;
                 }
             }
@@ -269,7 +276,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * Collects all declarations in all specified stylesheets which are
      * applicable to the specified element.
      *
-     * @param elem an element
+     * @param elem        an element
      * @param stylesheets the stylesheets
      * @return list of applicable declarations
      */
@@ -304,10 +311,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
         return applicableDeclarations;
     }
-
     @Override
     public boolean applyStylesheetTo(StyleOrigin styleOrigin, @Nonnull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
+CssFunctionProcessor<E> processor=new CssFunctionProcessor<>(selectorModel);
         final List<Map.Entry<Integer, Declaration>> applicableDeclarations = collectApplicableDeclarations(elem, s,
                 new ArrayList<>());
         if (applicableDeclarations.isEmpty()) {
@@ -315,8 +322,29 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
         for (Map.Entry<Integer, Declaration> entry : applicableDeclarations) {
             Declaration d = entry.getValue();
-            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(), d.getTerms());
+            String value = preprocessTerms(elem, processor, d.getTerms());
+            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(), CssTokenType.IDENT_INITIAL.equals(value) ? null : value);
         }
         return true;
+    }
+
+    @NotNull
+    private String preprocessTerms(E elem, CssFunctionProcessor<E> processor, List<CssToken> terms) {
+        String value;
+        try {
+          List<CssToken> processed=  processor.process(elem,terms);
+          StringBuilder buf=new StringBuilder();
+          for (CssToken t:processed) {
+              buf.append(t.fromToken());
+          }
+          value=buf.toString();
+        } catch (ParseException e) {
+            StringBuilder buf=new StringBuilder();
+            for (CssToken t:terms) {
+                buf.append(t.fromToken());
+            }
+            value = buf.toString();
+        }
+        return value;
     }
 }
