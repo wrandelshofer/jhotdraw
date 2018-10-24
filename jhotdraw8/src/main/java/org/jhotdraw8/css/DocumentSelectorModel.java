@@ -3,23 +3,19 @@
  */
 package org.jhotdraw8.css;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * {@code DocumentSelectorModel} provides an API for CSS
@@ -38,12 +34,12 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getAttribute(@Nonnull Element elem, @NotNull StyleOrigin origin, @Nonnull @NotNull String name) {
+    public String getAttribute(@Nonnull Element elem, StyleOrigin origin, @Nonnull String name) {
         return getAttribute(elem, name);
     }
 
     @Override
-    public boolean hasId(@Nonnull Element elem, @NotNull String id) {
+    public boolean hasId(@Nonnull Element elem, String id) {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
     }
@@ -54,7 +50,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasType(@Nonnull Element elem, @NotNull String type) {
+    public boolean hasType(@Nonnull Element elem, String type) {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
     }
@@ -65,7 +61,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasStyleClass(@Nonnull Element elem, @Nonnull @NotNull String clazz) {
+    public boolean hasStyleClass(@Nonnull Element elem, @Nonnull String clazz) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return false;
@@ -217,19 +213,19 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasAttribute(@Nonnull Element element, @Nonnull @NotNull String attributeName) {
+    public boolean hasAttribute(@Nonnull Element element, @Nonnull String attributeName) {
         // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@Nonnull Element element, @Nonnull @NotNull String attributeName, @Nonnull String substring) {
+    public boolean attributeValueStartsWith(@Nonnull Element element, @Nonnull String attributeName, @Nonnull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
-    public String getAttribute(@Nonnull Element element, @Nonnull @NotNull String attributeName) {
+    public String getAttribute(@Nonnull Element element, @Nonnull String attributeName) {
         return element.getAttribute(attributeName);
     }
 
@@ -259,7 +255,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull @NotNull String name, String value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull String name, String value) {
         switch (origin) {
             case USER:
             case USER_AGENT:
