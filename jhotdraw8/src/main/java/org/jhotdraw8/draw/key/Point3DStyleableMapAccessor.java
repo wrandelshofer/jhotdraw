@@ -5,11 +5,14 @@ package org.jhotdraw8.draw.key;
 
 import java.util.Map;
 import java.util.function.Function;
+
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point3D;
+
 import javax.annotation.Nonnull;
+
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -36,6 +39,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
     private final MapAccessor<Double> yKey;
     @Nonnull
     private final MapAccessor<Double> zKey;
+    private final Converter<Point3D> converter;
 
     /**
      * Creates a new instance with the specified name.
@@ -46,8 +50,12 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
      * @param zKey the key for the u coordinate of the point
      */
     public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {
-        super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));
+        this(name, xKey, yKey, zKey, new CssPoint3DConverter(false));
+    }
 
+    public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey, Converter<Point3D> converter) {
+        super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));
+        this.converter = converter;
         Function<Styleable, StyleableProperty<Point3D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
@@ -70,8 +78,6 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         return cssMetaData;
 
     }
-
-    private Converter<Point3D> converter=converter = new CssPoint3DConverter(false);
 
     @Override
     public Converter<Point3D> getConverter() {

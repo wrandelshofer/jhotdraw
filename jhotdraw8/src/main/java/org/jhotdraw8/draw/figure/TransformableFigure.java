@@ -13,6 +13,7 @@ import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.css.text.CssTranslate3DConverter;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
@@ -111,7 +112,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * Defines the translation on the axes about the center ofCollection the
      * figure.
      */
-    public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
+    public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new CssTranslate3DConverter(false));
 
     /**
      * Updates a figure node with all transformation properties defined in this

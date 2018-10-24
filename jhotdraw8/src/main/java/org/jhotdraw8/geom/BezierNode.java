@@ -57,6 +57,10 @@ public class BezierNode {
      * this bezier node.
      */
     public static final int MOVE_MASK = 8;
+    /**
+     * Constant for closing the path.
+     */
+    public static final int CLOSE_MASK = 16;
 
     /**
      * This is a hint for editing tools. If this is set to true, the editing

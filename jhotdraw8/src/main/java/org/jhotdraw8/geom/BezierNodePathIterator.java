@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,15 +21,22 @@ public class BezierNodePathIterator implements PathIterator {
     @Nonnull
     private final List<BezierNode> nodes;
     private int index;
-    private final boolean closed;
     private final AffineTransform affine;
-    private final int size ;
+    private final int size;
     private int windingRule;
 
+    private final BezierNode CLOSE_PATH = new BezierNode(0, 0);
+
     public BezierNodePathIterator(List<BezierNode> nodes, boolean closed, int windingRule, AffineTransform affine) {
-        this.nodes = nodes;
-        size = nodes.size();
-        this.closed = closed;
+        this.nodes = new ArrayList<BezierNode>();
+        for (BezierNode n : nodes) {
+            this.nodes.add(n);
+            if ((n.getMask() & BezierNode.CLOSE_MASK) == BezierNode.CLOSE_MASK) {
+                this.nodes.add(CLOSE_PATH);
+            }
+        }
+        if (closed)this.nodes.add(CLOSE_PATH);
+        size = this.nodes.size();
         this.windingRule = windingRule;
         this.affine = affine;
     }
@@ -53,7 +61,7 @@ public class BezierNodePathIterator implements PathIterator {
     public boolean isDone() {
         // open path: we need one additional segment for the initial moveTo
         // closed path: we need two additional segments: one for the initial moveTo and one for the closePath
-        return (index >= size + (closed ? 1: 0));
+        return index >= size;
     }
 
     /**
@@ -67,7 +75,7 @@ public class BezierNodePathIterator implements PathIterator {
             index++;
         }
     }
-
+    private double[] temp_double=new double[6];
     /**
      * Returns the coordinates and type of the current path segment in the
      * iteration. The return value is the path segment type: SEG_MOVETO,
@@ -86,60 +94,9 @@ public class BezierNodePathIterator implements PathIterator {
      */
     @Override
     public int currentSegment(float[] coords) {
-        
-        int numCoords = 0;
-        int type = 0;
-      
-        if (index>size)
-            return SEG_CLOSE;
-        
-        
-                BezierNode previous = nodes.get((index+size-1)%size);
-                BezierNode current = nodes.get(index%size);
-       
-                if (index==0) {
-                        type = SEG_LINETO;
-                        coords[0] = (float) current.getX0();
-                        coords[1] = (float) current.getY0();
-                    return type;
-                }
-        
-                if (!previous.isC2()) {
-                    if (!current.isC1()) {
-                        numCoords = 1;
-                        type = SEG_LINETO;
-                        coords[0] = (float) current.getX0();
-                        coords[1] = (float) current.getY0();
-                    } else {
-                        numCoords = 2;
-                        type = SEG_QUADTO;
-                        coords[0] = (float) current.getX1();
-                        coords[1] = (float) current.getY1();
-                        coords[2] = (float) current.getX0();
-                        coords[3] = (float) current.getY0();
-                    }
-                } else {
-                    if (!current.isC1()) {
-                        numCoords = 2;
-                        type = SEG_QUADTO;
-                        coords[0] = (float) previous.getX2();
-                        coords[1] = (float) previous.getY2();
-                        coords[2] = (float) current.getX0();
-                        coords[3] = (float) current.getY0();
-                    } else {
-                        numCoords = 3;
-                        type = SEG_CUBICTO;
-                        coords[0] = (float) previous.getX2();
-                        coords[1] = (float) previous.getY2();
-                        coords[2] = (float) current.getX1();
-                        coords[3] = (float) current.getY1();
-                        coords[4] = (float) current.getX0();
-                        coords[5] = (float) current.getY0();
-                    }
-                }
-
-        if (affine != null) {
-            affine.transform(coords, 0, coords, 0, numCoords);
+        int type=currentSegment(temp_double);
+        for (int i=0;i<temp_double.length;i++){
+            coords[i]=(float)temp_double[i];
         }
         return type;
     }
@@ -164,59 +121,60 @@ public class BezierNodePathIterator implements PathIterator {
     public int currentSegment(double[] coords) {
         int numCoords = 0;
         int type = 0;
-      if (index >= size) {
-            // We only get here for closed paths
-                    numCoords = 0;
-          type= SEG_CLOSE;
-        } else if (index == 0) {
+
+        if (index == 0) {
             BezierNode current = nodes.get(index);
             coords[0] = current.getX0();
             coords[1] = current.getY0();
             numCoords = 1;
             type = SEG_MOVETO;
+        } else {
+            BezierNode current = nodes.get((index) % size);
+            BezierNode previous = nodes.get((index + size - 1) % size);
 
-        } else if (index < size) {
-            BezierNode current = nodes.get((index)%size);
-            BezierNode previous = nodes.get((index+size - 1)%size);
-
-            if (current.isMoveTo()) {
-                numCoords = 1;
-                type = SEG_MOVETO;
-                coords[0] = (float) current.getX0();
-                coords[1] = (float) current.getY0();
-
-            } else if (!previous.isC2()) {
-                if (!current.isC1()) {
-                    numCoords = 1;
-                    type = SEG_LINETO;
-                    coords[0] = current.getX0();
-                    coords[1] = current.getY0();
-
-                } else {
-                    numCoords = 2;
-                    type = SEG_QUADTO;
-                    coords[0] = current.getX1();
-                    coords[1] = current.getY1();
-                    coords[2] = current.getX0();
-                    coords[3] = current.getY0();
-                }
+            if (current == CLOSE_PATH) {
+                type=SEG_CLOSE;
             } else {
-                if (!current.isC1()) {
-                    numCoords = 2;
-                    type = SEG_QUADTO;
-                    coords[0] = previous.getX2();
-                    coords[1] = previous.getY2();
-                    coords[2] = current.getX0();
-                    coords[3] = current.getY0();
+
+                if (current.isMoveTo()) {
+                    numCoords = 1;
+                    type = SEG_MOVETO;
+                    coords[0] = (float) current.getX0();
+                    coords[1] = (float) current.getY0();
+
+                } else if (!previous.isC2()) {
+                    if (!current.isC1()) {
+                        numCoords = 1;
+                        type = SEG_LINETO;
+                        coords[0] = current.getX0();
+                        coords[1] = current.getY0();
+
+                    } else {
+                        numCoords = 2;
+                        type = SEG_QUADTO;
+                        coords[0] = current.getX1();
+                        coords[1] = current.getY1();
+                        coords[2] = current.getX0();
+                        coords[3] = current.getY0();
+                    }
                 } else {
-                    numCoords = 3;
-                    type = SEG_CUBICTO;
-                    coords[0] = previous.getX2();
-                    coords[1] = previous.getY2();
-                    coords[2] = current.getX1();
-                    coords[3] = current.getY1();
-                    coords[4] = current.getX0();
-                    coords[5] = current.getY0();
+                    if (!current.isC1()) {
+                        numCoords = 2;
+                        type = SEG_QUADTO;
+                        coords[0] = previous.getX2();
+                        coords[1] = previous.getY2();
+                        coords[2] = current.getX0();
+                        coords[3] = current.getY0();
+                    } else {
+                        numCoords = 3;
+                        type = SEG_CUBICTO;
+                        coords[0] = previous.getX2();
+                        coords[1] = previous.getY2();
+                        coords[2] = current.getX1();
+                        coords[3] = current.getY1();
+                        coords[4] = current.getX0();
+                        coords[5] = current.getY0();
+                    }
                 }
             }
         }
