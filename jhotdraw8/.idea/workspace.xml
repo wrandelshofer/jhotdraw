@@ -995,13 +995,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.Ferro">
-    <configuration name="Ferro" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="ch.systransis.arl.ferro.FerroMain" />
-      <module name="ext" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Grapher" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.grapher.GrapherMain" />
       <module name="jhotdraw8" />
