@@ -119,7 +119,7 @@ import org.jhotdraw8.css.text.CssSize2D;
 import org.jhotdraw8.css.text.CssSizeInsets;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * GrapherController.
@@ -127,7 +127,7 @@ import org.jhotdraw8.app.DocumentOrientedViewModel;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewModel, EditorView {
+public class GrapherController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewController, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";

@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -25,7 +25,7 @@ import org.jhotdraw8.app.DocumentOrientedViewModel;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedViewModel> {
+public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,13 +37,13 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
      * @param app the application
      * @param view the view
      */
-    public RevertFileAction(Application app, DocumentOrientedViewModel view) {
-        super(app, view, DocumentOrientedViewModel.class);
+    public RevertFileAction(Application app, DocumentOrientedViewController view) {
+        super(app, view, DocumentOrientedViewController.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedViewModel view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedViewController view) {
         if (isDisabled()) {
             return;
         }
@@ -62,7 +62,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
         }
     }
 
-    private void doIt(DocumentOrientedViewModel view, @Nullable URI uri, DataFormat dataFormat) {
+    private void doIt(DocumentOrientedViewController view, @Nullable URI uri, DataFormat dataFormat) {
         view.addDisabler(this);
 
         final BiFunction<DataFormat, Throwable, Void> handler = (actualDataFormat, throwable) -> {

@@ -20,43 +20,43 @@ import org.jhotdraw8.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DocumentOrientedViewModel extends ViewController {
+public interface DocumentOrientedViewController extends ViewController {
 
     /**
      * The modified property is set to true by the view.
      *
      * @return the property
      */
-    public ReadOnlyBooleanProperty modifiedProperty();
+    ReadOnlyBooleanProperty modifiedProperty();
 
-    default public boolean isModified() {
+    default boolean isModified() {
         return modifiedProperty().get();
     }
 
     /**
      * Clears the modified property.
      */
-    public void clearModified();
+    void clearModified();
 
-    public ObjectProperty<URI> uriProperty();
+    ObjectProperty<URI> uriProperty();
 
     @Nullable
-    default public URI getURI() {
+    default URI getURI() {
         return uriProperty().get();
     }
 
-    default public void setURI(@Nullable URI newValue) {
+    default void setURI(@Nullable URI newValue) {
         uriProperty().set(newValue);
     }
 
-    public ObjectProperty<DataFormat> dataFormatProperty();
+    ObjectProperty<DataFormat> dataFormatProperty();
 
     @Nullable
-    default public DataFormat getDataFormat() {
+    default DataFormat getDataFormat() {
         return dataFormatProperty().get();
     }
 
-    default public void setDataFormat(@Nullable DataFormat newValue) {
+    default void setDataFormat(@Nullable DataFormat newValue) {
         dataFormatProperty().set(newValue);
     }
 
@@ -76,7 +76,7 @@ public interface DocumentOrientedViewModel extends ViewController {
      * @param append whether to append to the current document or to replace it.
      * @return Returns a CompletionStage with the data format that was actually used to load the file.
      */
-    public CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
+    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -92,7 +92,7 @@ public interface DocumentOrientedViewModel extends ViewController {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    public CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<? super Key<?>, Object> options);
+    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<? super Key<?>, Object> options);
 
     /**
      * Clears the view.
@@ -101,7 +101,7 @@ public interface DocumentOrientedViewModel extends ViewController {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    public CompletionStage<Void> clear();
+    CompletionStage<Void> clear();
 
     /**
      * Prints the current document.
@@ -111,9 +111,9 @@ public interface DocumentOrientedViewModel extends ViewController {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    public CompletionStage<Void> print(PrinterJob job);
+    CompletionStage<Void> print(PrinterJob job);
 
-    default public boolean isEmpty() {
+    default boolean isEmpty() {
         return !isModified() && getURI() == null;
     }
 }

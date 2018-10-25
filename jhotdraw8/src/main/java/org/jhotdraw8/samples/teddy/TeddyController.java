@@ -31,7 +31,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * TeddyController.
@@ -39,7 +39,7 @@ import org.jhotdraw8.app.DocumentOrientedViewModel;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewModel, Initializable {
+public class TeddyController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewController, Initializable {
 
   @FXML
   private URL location;

@@ -3,16 +3,17 @@
  */
 package org.jhotdraw8.css.text;
 
-import java.io.IOException;
-import java.nio.CharBuffer;
-import java.text.ParseException;
 import javafx.geometry.Point2D;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.io.IdFactory;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.PatternConverter;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.function.Consumer;
 
 /**
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
@@ -21,46 +22,62 @@ import org.jhotdraw8.text.PatternConverter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSymmetricPoint2DConverter implements Converter<Point2D> {
+public class CssSymmetricPoint2DConverter extends AbstractCssConverter<Point2D> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
+    private final boolean withSpace;
+    private boolean withComma;
 
-    @Override
-    public void toString(Appendable out, IdFactory idFactory, @Nonnull Point2D value) throws IOException {
-        double x = value.getX();
-        double y = value.getY();
-        if (x == y) {
-            formatter.toStr(out, idFactory, 1, value.getX());
-        } else {
-            formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
-        }
+    public CssSymmetricPoint2DConverter(boolean nullable) {
+        this(nullable, true, false);
+    }
+
+    public CssSymmetricPoint2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
+        super(nullable);
+        this.withSpace = withSpace;
+        this.withComma = withComma || !withSpace;
     }
 
     @Nonnull
     @Override
-    public Point2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        Object[] v = formatter.fromString(buf);
-        int count = (Integer) v[0];
-        switch (count) {
-            case 1:
-                return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue());
-            case 2:
-                return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue());
-            default:
-                throw new ParseException("one or two numbers expected, found " + count + " numbers", 0);
+    public Point2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        final double x, y;
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨SymmetricPoint2D⟩: ⟨x⟩ expected.");
+        x = tt.currentNumberNonnull().doubleValue();
+        tt.skipIfPresent(CssTokenType.TT_COMMA);
+        if (tt.next() == CssTokenType.TT_NUMBER) {
+            y = tt.currentNumberNonnull().doubleValue();
+        } else {
+            tt.pushBack();
+            y = x;
+        }
+        return new Point2D(x, y);
+    }
+
+    @Override
+    protected <TT extends Point2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
+        if (value.getX() != value.getY()) {
+            if (withComma) {
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+            }
+            if (withSpace) {
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+            }
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
         }
     }
+
 
     @Nonnull
     @Override
     public Point2D getDefaultValue() {
         return new Point2D(0, 0);
     }
-    
+
     @Nonnull
     @Override
     public String getHelpText() {
         return "Format of ⟨SymmetricPoint2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
     }
-    
+
 }

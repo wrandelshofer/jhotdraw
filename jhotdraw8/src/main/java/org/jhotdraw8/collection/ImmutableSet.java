@@ -42,7 +42,10 @@ public final class ImmutableSet<E> extends AbstractReadableSet<E> {
                 backingSet = Collections.singleton(copyMe.iterator().next());
                 break;
             default:
-                this.backingSet = new LinkedHashSet<>(new SetWrapper<>(copyMe));
+                this.backingSet = new LinkedHashSet<>(Math.max(2 * copyMe.size(), 11));
+                for (E e : copyMe) {
+                    backingSet.add(e);
+                }
         }
     }
 
@@ -126,7 +129,7 @@ public final class ImmutableSet<E> extends AbstractReadableSet<E> {
             case 0:
                 return new ImmutableSet<>(Collections.singleton(item));
             default:
-                Set<T> a = new LinkedHashSet<>(new SetWrapper<>(collection));
+                Set<T> a = new LinkedHashSet<T>(new CollectionWrapper<T>(collection));
                 a.add(item);
                 return new ImmutableSet<>(true, a);
         }
@@ -214,7 +217,7 @@ public final class ImmutableSet<E> extends AbstractReadableSet<E> {
                 }
             default:
                 if (collection.contains(item)) {
-                    Set<T> a = new LinkedHashSet<>(new SetWrapper<>(collection));
+                    Set<T> a = new LinkedHashSet<>(new CollectionWrapper<>(collection));
                     a.remove(item);
                     return new ImmutableSet<>(true, a);
                 } else {

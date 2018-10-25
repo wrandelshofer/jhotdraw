@@ -51,7 +51,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private Supplier<DocumentOrientedViewModel> viewFactory;
+    private Supplier<DocumentOrientedViewController> viewFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
@@ -59,7 +59,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(
-            Supplier<DocumentOrientedViewModel> viewFactory,
+            Supplier<DocumentOrientedViewController> viewFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -68,7 +68,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(String name,
-            Supplier<DocumentOrientedViewModel> viewFactory,
+            Supplier<DocumentOrientedViewController> viewFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -86,11 +86,11 @@ public class SimpleApplicationModel implements ApplicationModel {
         return Preferences.userNodeForPackage(getClass());
     }
 
-    public Supplier<DocumentOrientedViewModel> getViewFactory() {
+    public Supplier<DocumentOrientedViewController> getViewFactory() {
         return viewFactory;
     }
 
-    public void setViewFactory(Supplier<DocumentOrientedViewModel> factory) {
+    public void setViewFactory(Supplier<DocumentOrientedViewController> factory) {
         this.viewFactory = factory;
     }
 
@@ -123,7 +123,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public DocumentOrientedViewModel createView() {
+    public DocumentOrientedViewController createView() {
         return viewFactory.get();
     }
 

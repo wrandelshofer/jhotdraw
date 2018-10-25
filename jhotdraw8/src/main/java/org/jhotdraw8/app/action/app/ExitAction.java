@@ -23,7 +23,7 @@ import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.ViewController;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Exits the application after letting the user review and possibly save all
@@ -40,7 +40,7 @@ public class ExitAction extends AbstractApplicationAction {
     public static final String ID = "application.exit";
     private Node oldFocusOwner;
     @Nullable
-    private DocumentOrientedViewModel unsavedView;
+    private DocumentOrientedViewController unsavedView;
 
     /**
      * Creates a new instance.
@@ -57,10 +57,10 @@ public class ExitAction extends AbstractApplicationAction {
         app.addDisabler(this);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
-        DocumentOrientedViewModel documentToBeReviewed = null;
+        DocumentOrientedViewController documentToBeReviewed = null;
         URI unsavedURI = null;
         for (ViewController pr : app.views()) {
-            DocumentOrientedViewModel p =(DocumentOrientedViewModel)pr;
+            DocumentOrientedViewController p =(DocumentOrientedViewController)pr;
             if (p.isDisabled()) {
                 disabledViewsCount++;
             }
@@ -120,7 +120,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected URIChooser getChooser(@Nonnull DocumentOrientedViewModel view) {
+    protected URIChooser getChooser(@Nonnull DocumentOrientedViewController view) {
         URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -130,7 +130,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChanges() {
-        DocumentOrientedViewModel v = unsavedView;
+        DocumentOrientedViewController v = unsavedView;
         Resources labels=Resources.getResources("org.jhotdraw8.app.Labels");
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
@@ -144,7 +144,7 @@ public class ExitAction extends AbstractApplicationAction {
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (ViewController p : app.views()) {
-                        DocumentOrientedViewModel vi = (DocumentOrientedViewModel)p;
+                        DocumentOrientedViewController vi = (DocumentOrientedViewController)p;
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, labels.getString("application.exit.canNotSaveToOpenFile"));
@@ -219,7 +219,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChangesAndReviewNext() {
-        final DocumentOrientedViewModel v = unsavedView;
+        final DocumentOrientedViewController v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = chooser.showDialog(unsavedView.getNode());
@@ -240,9 +240,9 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewNext() {
         int unsavedViewsCount = 0;
-        DocumentOrientedViewModel documentToBeReviewed = null;
+        DocumentOrientedViewController documentToBeReviewed = null;
         for (ViewController pr : getApplication().views()) {
-            DocumentOrientedViewModel p=(DocumentOrientedViewModel)pr;
+            DocumentOrientedViewController p=(DocumentOrientedViewController)pr;
             if (p.isModified()) {
                 if (!p.isDisabled()) {
                     documentToBeReviewed = p;
@@ -262,7 +262,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFile(@Nonnull final URI uri, final DataFormat format) {
-        final DocumentOrientedViewModel v = unsavedView;
+        final DocumentOrientedViewController v = unsavedView;
         v.write(uri, format,null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -292,7 +292,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format) {
-        final DocumentOrientedViewModel v = unsavedView;
+        final DocumentOrientedViewController v = unsavedView;
         v.write(uri, format,null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -323,7 +323,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void doExit() {
         for (ViewController pr : new ArrayList<>(app.views())) {
-            DocumentOrientedViewModel p=(DocumentOrientedViewModel)pr;
+            DocumentOrientedViewController p=(DocumentOrientedViewController)pr;
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);
             }

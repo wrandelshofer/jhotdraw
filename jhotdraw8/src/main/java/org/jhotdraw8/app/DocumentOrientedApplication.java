@@ -59,7 +59,7 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 /**
- * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedViewModel} objects and
+ * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedViewController} objects and
  * provides windows to present them on screen.
  * 
  * @author Werner Randelshofer
@@ -97,10 +97,10 @@ public class DocumentOrientedApplication extends AbstractApplication {
     {
         activeView.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                handleViewDeactivated((DocumentOrientedViewModel) oldv);
+                handleViewDeactivated((DocumentOrientedViewController) oldv);
             }
             if (newv != null) {
-                handleViewActivated((DocumentOrientedViewModel) newv);
+                handleViewActivated((DocumentOrientedViewController) newv);
             }
         });
     }
@@ -108,9 +108,9 @@ public class DocumentOrientedApplication extends AbstractApplication {
     {
         views.addListener((SetChangeListener.Change<? extends ViewController> change) -> {
             if (change.wasAdded()) {
-                handleViewAdded((DocumentOrientedViewModel) change.getElementAdded());
+                handleViewAdded((DocumentOrientedViewController) change.getElementAdded());
             } else {
-                handleViewRemoved((DocumentOrientedViewModel) change.getElementRemoved());
+                handleViewRemoved((DocumentOrientedViewController) change.getElementRemoved());
             }
         });
     }
@@ -255,7 +255,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(@Nonnull DocumentOrientedViewModel view) {
+    protected void handleViewActivated(@Nonnull DocumentOrientedViewController view) {
         view.activate();
     }
 
@@ -265,7 +265,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(@Nonnull DocumentOrientedViewModel view) {
+    protected void handleViewAdded(@Nonnull DocumentOrientedViewController view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -367,7 +367,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(@Nonnull DocumentOrientedViewModel view) {
+    protected void handleViewDeactivated(@Nonnull DocumentOrientedViewController view) {
         view.deactivate();
     }
 
@@ -377,7 +377,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(@Nonnull DocumentOrientedViewModel view) {
+    protected void handleViewRemoved(@Nonnull DocumentOrientedViewController view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -441,7 +441,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
         final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
         createView().whenComplete((pv, ex1) -> {
-            DocumentOrientedViewModel v = (DocumentOrientedViewModel) pv;
+            DocumentOrientedViewController v = (DocumentOrientedViewController) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 final Alert alert = new Alert(Alert.AlertType.ERROR,

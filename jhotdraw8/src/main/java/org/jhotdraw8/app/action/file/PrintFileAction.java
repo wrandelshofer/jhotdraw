@@ -12,11 +12,11 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link org.jhotdraw8.app.DocumentOrientedViewModel}.
+ * {@link DocumentOrientedViewController}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
@@ -24,7 +24,7 @@ import org.jhotdraw8.app.DocumentOrientedViewModel;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractViewControllerAction<DocumentOrientedViewModel> {
+public class PrintFileAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,13 +45,13 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentOrient
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction( Application app, @Nullable DocumentOrientedViewModel view) {
-        super(app, view, DocumentOrientedViewModel.class);
+    public PrintFileAction( Application app, @Nullable DocumentOrientedViewController view) {
+        super(app, view, DocumentOrientedViewController.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedViewModel view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedViewController view) {
         view.addDisabler(this);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(view.getNode().getScene().getWindow())) {

@@ -3,13 +3,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -17,20 +10,11 @@ import javafx.scene.Parent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
-import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
-
 import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -46,15 +30,30 @@ import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.svg.TransformFlattener;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
-import org.jhotdraw8.xml.text.XmlNumberConverter;
+import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.xml.XmlUtil;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 
 /**
  * Exports a JavaFX scene graph to SVG.

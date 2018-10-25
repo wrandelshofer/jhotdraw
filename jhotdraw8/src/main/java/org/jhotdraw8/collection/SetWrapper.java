@@ -6,9 +6,6 @@ import java.util.Iterator;
 public class SetWrapper<E> extends AbstractSet<E> {
     private final ReadableSet<E> backingSet;
 
-    public SetWrapper(ReadableCollection<E> backingSet) {
-        this.backingSet = ImmutableSet.ofCollection(backingSet);
-    }
     public SetWrapper(ReadableSet<E> backingSet) {
         this.backingSet = backingSet;
     }

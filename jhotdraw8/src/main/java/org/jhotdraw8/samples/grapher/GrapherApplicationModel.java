@@ -17,7 +17,6 @@ import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
 
 /**
  * GrapherApplicationModel.

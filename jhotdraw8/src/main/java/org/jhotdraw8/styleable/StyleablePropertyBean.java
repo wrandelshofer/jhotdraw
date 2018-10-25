@@ -6,11 +6,11 @@ package org.jhotdraw8.styleable;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.MapAccessor;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * {@code StyleablePropertyBean} provides styleable properties.
@@ -51,6 +51,22 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      */
     @Nullable
     <T> T getStyled(MapAccessor<T> key);
+
+    /**
+     * Returns the styled value.
+     *
+     * @param <T> The value type
+     * @param key The property key
+     * @return The styled value.
+     */
+    @Nonnull
+    default <T> T getStyledNonnull(MapAccessor<T> key) {
+        T value = getStyled(key);
+        if (value == null) {
+            throw new NullPointerException("key:" + key + "+value is null");
+        }
+        return value;
+    }
 
     /**
      * Returns the styled value.

@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
  * @version $Id$
  $$
  */
-public abstract class AbstractDocumentOrientedViewController extends AbstractActivity implements DocumentOrientedViewModel {
+public abstract class AbstractDocumentOrientedViewController extends AbstractActivity implements DocumentOrientedViewController {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty() {
         @Override

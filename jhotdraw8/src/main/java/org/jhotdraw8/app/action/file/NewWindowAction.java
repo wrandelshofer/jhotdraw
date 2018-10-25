@@ -4,7 +4,6 @@
 package org.jhotdraw8.app.action.file;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
 
 /**
  * Creates a new view.

@@ -3,24 +3,12 @@
  */
 package org.jhotdraw8.draw.io;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
-import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -30,6 +18,20 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 
 /**
  * AbstractExportOutputFormat.
@@ -51,9 +53,9 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     @Nonnull
     protected abstract String getExtension();
 
-         
+
     @javax.annotation.Nullable
-    private  Function<URI,URI> uriResolver = new UriResolver(null,null);
+    private Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     @Override
     public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
@@ -69,12 +71,12 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
     }
 
-        @javax.annotation.Nullable
-        public Function<URI,URI> getUriResolver() {
+    @javax.annotation.Nullable
+    public Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver( Function<URI,URI>  uriResolver) {
+    public void setUriResolver(Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 
@@ -102,11 +104,12 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
     /**
      * Writes a page.
-     * @param file the output file or null
-     * @param page the page figure
-     * @param node the node of the drawing
-     * @param pageCount the page count
-     * @param pageNumber the page number
+     *
+     * @param file               the output file or null
+     * @param page               the page figure
+     * @param node               the node of the drawing
+     * @param pageCount          the page count
+     * @param pageNumber         the page number
      * @param internalPageNumber the internal page number of the page figure
      * @throws IOException if writing fails
      */
@@ -129,12 +132,12 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
     /**
      * Writes all pages of the drawing.
-     * 
-     * @param dir the output directory, null for print output
+     *
+     * @param dir      the output directory, null for print output
      * @param basename the basename of the pages, null for print output
-     * @param drawing the drawing
-     * @param pages the pages
-     * @param hints the hints
+     * @param drawing  the drawing
+     * @param pages    the pages
+     * @param hints    the hints
      * @throws java.io.IOException in case of failure
      */
     protected void writePages(@javax.annotation.Nullable File dir, String basename, @Nonnull Drawing drawing, @Nonnull List<Page> pages, @Nonnull Map<Key<?>, Object> hints) throws IOException {
@@ -143,7 +146,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         int numberOfPages = 0;
         for (Page page : pages) {
             if (page.getId() != null) {
-                idFactory.putId( page.getId(), page);
+                idFactory.putId(page.getId(), page);
             }
             numberOfPages += page.getNumberOfSubPages();
         }
@@ -171,7 +174,12 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
                     drawingNode.getTransforms().clear();
                 } else {
                     drawingNode.getTransforms().setAll(localToWorld);
-                    parentOfDrawing.getTransforms().setAll(page.getLocalToWorld());
+                    Transform pageLocalToWorld = page.getLocalToWorld();
+                    if (pageLocalToWorld == null) {
+                        parentOfDrawing.getTransforms().clear();
+                    } else {
+                        parentOfDrawing.getTransforms().setAll(pageLocalToWorld);
+                    }
                 }
                 parentOfDrawing.getChildren().add(drawingNode);
                 parentOfDrawing.setClip(pageClip);
@@ -193,10 +201,11 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
     /**
      * Writes the node to the specified file as a Slice. May destroy the state of the node in the process!
-     * @param file a file
+     *
+     * @param file  a file
      * @param slice the Slice
-     * @param node a node
-     * @param dpi dots per inch
+     * @param node  a node
+     * @param dpi   dots per inch
      * @return returns true if the state of the node was destroyed
      * @throws IOException in case of failure
      */
@@ -222,7 +231,6 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     }
 
     /**
-     *
      * @param dir
      * @param drawing
      * @param slices
@@ -238,16 +246,19 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         IdFactory idFactory = new SimpleIdFactory();
         for (Figure slice : slices) {
             if (slice.getId() != null) {
-                idFactory.putId( slice.getId(), slice);
+                idFactory.putId(slice.getId(), slice);
             }
         }
-            Node node = null;
+        Node node = null;
         for (Slice slice : slices) {
             File filename = new File(dir, idFactory.createId(slice, "Slice") + suffix + "." + getExtension());
-            if (node==null)
-            node = toNode(drawing, Collections.singleton(drawing), hints);
-            boolean destroyedNode=writeSlice(filename, slice, node, dpi);
-            if (destroyedNode) node=null;
+            if (node == null) {
+                node = toNode(drawing, Collections.singleton(drawing), hints);
+            }
+            boolean destroyedNode = writeSlice(filename, slice, node, dpi);
+            if (destroyedNode) {
+                node = null;
+            }
         }
     }
 }

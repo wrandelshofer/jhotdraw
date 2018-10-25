@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewModel;
+import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Creates a new view.
@@ -39,7 +39,7 @@ public class NewFileAction extends AbstractApplicationAction {
     @Override
     protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
         app.createView().thenAccept(newView-> {
-            DocumentOrientedViewModel newDOView= (DocumentOrientedViewModel) newView;
+            DocumentOrientedViewController newDOView= (DocumentOrientedViewController) newView;
             app.add(newDOView);
             newDOView.clear().thenRun(() -> {
                 newDOView.clearModified();
