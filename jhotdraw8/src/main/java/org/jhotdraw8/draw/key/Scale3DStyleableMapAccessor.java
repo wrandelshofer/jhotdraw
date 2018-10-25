@@ -47,6 +47,17 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
      * @param zKey the key for the u coordinate of the point
      */
     public Scale3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {
+        this(name,xKey,yKey,zKey,new CssScale3DConverter(false));
+    }
+        /**
+         * Creates a new instance with the specified name.
+         *
+         * @param name the name of the accessor
+         * @param xKey the key for the x coordinate of the point
+         * @param yKey the key for the y coordinate of the point
+         * @param zKey the key for the u coordinate of the point
+         */
+    public Scale3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey,Converter<Point3D> converter) {
         super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<Point3D>> function = s -> {
@@ -56,11 +67,13 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Point3D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(converter);
         CssMetaData<Styleable, Point3D> md
                 = new SimpleCssMetaData<>(property, function,
                         cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
+
+        this.converter=converter;
 
         this.xKey = xKey;
         this.yKey = yKey;
@@ -74,13 +87,10 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     }
 
-    private Converter<Point3D> converter;
+    private final Converter<Point3D> converter ;
 
     @Override
     public Converter<Point3D> getConverter() {
-        if (converter == null) {
-            converter = new CssScale3DConverter();
-        }
         return converter;
     }
 
