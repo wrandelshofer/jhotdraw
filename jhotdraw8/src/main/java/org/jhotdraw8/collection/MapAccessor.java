@@ -90,6 +90,12 @@ public interface MapAccessor<T> extends Serializable {
     @Nullable
     T getDefaultValue();
 
+    default T getDefaultValueNonnull() {
+        T v = getDefaultValue();
+        if (v==null)throw new NullPointerException();
+        return v;
+    }
+
     /**
      * Returns a string representation of the value type and its type
      * parameters.

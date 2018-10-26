@@ -15,6 +15,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.text.CssDimensionRectangle2D;
 import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -64,23 +65,23 @@ public class SimpleImageFigure extends AbstractLeafFigure
     }
 
     public SimpleImageFigure(double x, double y, double width, double height) {
-        set(BOUNDS, new Rectangle2D(x, y, width, height));
+        set(BOUNDS, new CssDimensionRectangle2D(x, y, width, height));
     }
 
-    public SimpleImageFigure(Rectangle2D rect) {
+    public SimpleImageFigure(CssDimensionRectangle2D rect) {
         set(BOUNDS, rect);
     }
 
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        Rectangle2D r = get(BOUNDS);
+        Rectangle2D r = getNonnull(BOUNDS).getConvertedValue();
         return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
-        Rectangle2D r = get(BOUNDS);
+        Rectangle2D r = getNonnull(BOUNDS).getConvertedValue();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
@@ -88,7 +89,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(BOUNDS, new Rectangle2D(x + Math.min(width, 0), y + Math.min(height, 0), Math.abs(width), Math.abs(height)));
+        set(BOUNDS, new CssDimensionRectangle2D(x + Math.min(width, 0), y + Math.min(height, 0), Math.abs(width), Math.abs(height)));
     }
 
     @Nonnull
@@ -107,7 +108,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
         applyTransformableFigureProperties(imageView);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
-        Rectangle2D r = get(BOUNDS);
+        Rectangle2D r = getNonnull(BOUNDS).getConvertedValue();
         imageView.setX(r.getMinX());
         imageView.setY(r.getMinY());
         imageView.setFitWidth(r.getWidth());

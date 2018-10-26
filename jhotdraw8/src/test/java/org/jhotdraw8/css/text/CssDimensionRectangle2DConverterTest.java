@@ -3,9 +3,10 @@
  * You may only use this file in compliance with the accompanying license terms.
  */
 
-package org.jhotdraw8.text;
+package org.jhotdraw8.css.text;
 
-import javafx.geometry.Rectangle2D;
+import org.jhotdraw8.css.text.CssDimensionRectangle2D;
+import org.jhotdraw8.css.text.CssDimensionRectangle2DConverter;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
@@ -25,9 +26,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssRectangle2DConverterTest {
+public class CssDimensionRectangle2DConverterTest {
 
-    public CssRectangle2DConverterTest() {
+    public CssDimensionRectangle2DConverterTest() {
     }
 
 
@@ -36,14 +37,15 @@ public class CssRectangle2DConverterTest {
     /**
      * Test of fromString method, of class CssDoubleConverter.
      */
-    public static void testFromString(Rectangle2D expected, String string) throws Exception {
+    public static void testFromString(CssDimensionRectangle2D expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
-        CssRectangle2DConverter instance = new CssRectangle2DConverter(false);
-        Rectangle2D actual = instance.fromString(buf, idFactory);
+        CssDimensionRectangle2DConverter instance = new CssDimensionRectangle2DConverter(false);
+        CssDimensionRectangle2D actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
+
         String actualString = instance.toString(expected);
         System.out.println("  expectedString: " + string);
         System.out.println("    actualString: " + actualString);
@@ -53,7 +55,9 @@ public class CssRectangle2DConverterTest {
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1",()->  testFromString(new Rectangle2D(11,22,33,44), "11 22 33 44"))
+                dynamicTest("1",()->  testFromString(new CssDimensionRectangle2D(11,22,33,44), "11 22 33 44")),
+                dynamicTest("2",()->  testFromString(new CssDimensionRectangle2D(new CssDimension(0,"cm"),
+                        new CssDimension(0,"cm"),new CssDimension(21,"cm"),new CssDimension(29.7,"cm")), "0cm 0cm 21cm 29.7cm"))
         );
     }
 }
