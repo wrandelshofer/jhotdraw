@@ -27,7 +27,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssDimensionInsets> {
+public class DimensionInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssDimensionInsets> {
 
     private final static long serialVersionUID = 1L;
 
@@ -51,7 +51,7 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
      * @param bottomKey the insets bottom key
      * @param leftKey the insets left key
      */
-    public SizeInsetsStyleableMapAccessor(String name, MapAccessor<CssDimension> topKey, MapAccessor<CssDimension> rightKey, MapAccessor<CssDimension> bottomKey, MapAccessor<CssDimension> leftKey) {
+    public DimensionInsetsStyleableMapAccessor(String name, MapAccessor<CssDimension> topKey, MapAccessor<CssDimension> rightKey, MapAccessor<CssDimension> bottomKey, MapAccessor<CssDimension> leftKey) {
         super(name, CssDimensionInsets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssDimensionInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssDimensionInsets>> function = s -> {

@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
 import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.css.text.CssSize2D;
+import org.jhotdraw8.css.text.CssDimension2D;
 import org.jhotdraw8.draw.figure.Page;
 
 /**
@@ -52,7 +52,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return false;
     }
 
-    public Paper findPaper(@Nonnull CssSize2D paperSize) {
+    public Paper findPaper(@Nonnull CssDimension2D paperSize) {
         UnitConverter uc = new DefaultUnitConverter(72.0);
         double w = uc.convert(paperSize.getX(), UnitConverter.POINTS);
         double h = uc.convert(paperSize.getY(), UnitConverter.POINTS);
@@ -66,7 +66,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    private void printSlice(@Nonnull CssSize2D pageSize, @Nonnull Figure slice, @Nonnull Bounds viewportBounds, @Nonnull Node node, double dpi) throws IOException {
+    private void printSlice(@Nonnull CssDimension2D pageSize, @Nonnull Figure slice, @Nonnull Bounds viewportBounds, @Nonnull Node node, double dpi) throws IOException {
         Paper paper = findPaper(pageSize);
         Point2D psize = pageSize.getConvertedValue();
         PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX() <= psize.getY() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);

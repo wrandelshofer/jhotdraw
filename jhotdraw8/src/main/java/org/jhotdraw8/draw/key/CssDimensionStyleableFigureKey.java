@@ -1,4 +1,4 @@
-/* @(#)Size2DStyleableFigureKey.java
+/* @(#)CssDimensionStyleableFigureKey.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -9,27 +9,28 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.draw.figure.Figure;
+
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssSize2D;
-import org.jhotdraw8.css.text.CssSize2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
- * Size2DStyleableFigureKey.
+ * CssDimensionStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Size2DStyleableFigureKey extends AbstractStyleableFigureKey<CssSize2D> implements WriteableStyleableMapAccessor<CssSize2D> {
+public class CssDimensionStyleableFigureKey extends AbstractStyleableFigureKey<CssDimension> implements WriteableStyleableMapAccessor<CssDimension> {
 
-    private final static long serialVersionUID = 1L;
-    private Converter<CssSize2D> converter;
+    final static long serialVersionUID = 1L;
 
+    private final Converter<CssDimension> converter = new CssSizeConverter(false);
     @Nonnull
-    private final CssMetaData<?, CssSize2D> cssMetaData;
+    private final CssMetaData<? extends Styleable, CssDimension> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -37,7 +38,7 @@ public class Size2DStyleableFigureKey extends AbstractStyleableFigureKey<CssSize
      *
      * @param name The name of the key.
      */
-    public Size2DStyleableFigureKey(String name) {
+    public CssDimensionStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -47,47 +48,43 @@ public class Size2DStyleableFigureKey extends AbstractStyleableFigureKey<CssSize
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public Size2DStyleableFigureKey(String name, CssSize2D defaultValue) {
+    public CssDimensionStyleableFigureKey(String name, CssDimension defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name, mask and default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
-     * @param mask Dirty bit mask.
+     * @param name The name of the key.
+     * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public Size2DStyleableFigureKey(String key, DirtyMask mask, CssSize2D defaultValue) {
-        super(key, CssSize2D.class, mask, defaultValue);
+    public CssDimensionStyleableFigureKey(String name, DirtyMask mask, CssDimension defaultValue) {
+        super(name, CssDimension.class, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<CssSize2D>> function = s -> {
+        Function<Styleable, StyleableProperty<CssDimension>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssSize2D> converter
-                = new StyleConverterAdapter<>(new CssSize2DConverter());
-        CssMetaData<Styleable, CssSize2D> md
+        final StyleConverter<String, CssDimension> cvrtr
+                = new StyleConverterAdapter<>(converter);
+        CssMetaData<Styleable, CssDimension> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                cvrtr, defaultValue, inherits);
         cssMetaData = md;
     }
 
 
+    @Nonnull
     @Override
-    public Converter<CssSize2D> getConverter() {
-        if (converter == null) {
-            converter = new CssSize2DConverter();
-        }
+    public Converter<CssDimension> getConverter() {
         return converter;
     }
     @Nonnull
     @Override
-    public CssMetaData<?, CssSize2D> getCssMetaData() {
+    public CssMetaData<? extends Styleable, CssDimension> getCssMetaData() {
       return cssMetaData;
       
     }

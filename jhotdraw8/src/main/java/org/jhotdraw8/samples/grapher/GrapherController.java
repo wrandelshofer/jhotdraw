@@ -39,6 +39,7 @@ import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.css.text.CssDimension2D;
 import org.jhotdraw8.css.text.CssDimensionInsets;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -74,7 +75,6 @@ import org.jhotdraw8.draw.figure.SimplePolylineFigure;
 import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.figure.SimpleLayer;
-import org.jhotdraw8.draw.figure.SimpleRegionFigure;
 import org.jhotdraw8.draw.figure.SimpleSliceFigure;
 import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -117,7 +117,6 @@ import org.jhotdraw8.gui.dock.SplitPaneTrack;
 import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.svg.SvgExporter;
-import org.jhotdraw8.css.text.CssSize2D;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentOrientedViewController;
@@ -289,7 +288,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 8, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             SimplePageFigure pf = new SimplePageFigure();
-            pf.set(SimplePageFigure.PAPER_SIZE, new CssSize2D(297, 210, "mm"));
+            pf.set(SimplePageFigure.PAPER_SIZE, new CssDimension2D(297, 210, "mm"));
             pf.set(SimplePageFigure.PAGE_INSETS, new CssDimensionInsets(2, 1, 2, 1, "cm"));
             SimplePageLabelFigure pl = new SimplePageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
                     SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),

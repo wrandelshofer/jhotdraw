@@ -12,7 +12,7 @@ import javafx.scene.transform.Transform;
 
 import javax.annotation.Nonnull;
 import org.jhotdraw8.io.DefaultUnitConverter;
-import org.jhotdraw8.css.text.CssSize2D;
+import org.jhotdraw8.css.text.CssDimension2D;
 
 /**
  * Defines a page layout for printing.
@@ -42,7 +42,7 @@ public interface Page extends Figure {
    * @return the internal page number
    */
     default Paper createPaper(int internalPageNumber) {
-    CssSize2D size = getPaperSize();
+    CssDimension2D size = getPaperSize();
     double w = DefaultUnitConverter.getInstance().convert(size.getX(), "pt");
     double h = DefaultUnitConverter.getInstance().convert(size.getY(), "pt");
     for (Field f : Paper.class.getDeclaredFields()) {
@@ -98,7 +98,7 @@ public interface Page extends Figure {
    *
    * @return the page size
    */
-   CssSize2D getPaperSize();
+   CssDimension2D getPaperSize();
 
   @Override
   default boolean isAllowsChildren() {

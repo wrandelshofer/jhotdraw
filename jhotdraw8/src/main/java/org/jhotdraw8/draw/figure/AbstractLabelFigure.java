@@ -26,14 +26,14 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.key.CssDimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.SizeInsetsStyleableMapAccessor;
-import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.DimensionInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -62,10 +62,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_BOTTOM = new SizeStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_LEFT = new SizeStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_RIGHT = new SizeStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static SizeStyleableFigureKey SHAPE_SLICE_TOP = new SizeStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_BOTTOM = new CssDimensionStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_LEFT = new CssDimensionStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_RIGHT = new CssDimensionStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_TOP = new CssDimensionStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
     /**
      * This property specifies inward offsets from the top, right, bottom, and
      * left edges of the border image defined by the {@link #SHAPE_BOUNDS}
@@ -77,7 +77,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
      * Background: border-image-slice</a>.
      */
-    public final static SizeInsetsStyleableMapAccessor SHAPE_SLICE = new SizeInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
+    public final static DimensionInsetsStyleableMapAccessor SHAPE_SLICE = new DimensionInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
     /**
      * This property specifies the bounds of a {@link#SHAPE} property. If the
      * bounds are null or empty, then the bounds of the shape are used.
