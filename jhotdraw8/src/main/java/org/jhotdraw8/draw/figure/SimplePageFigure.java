@@ -30,6 +30,7 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.css.text.Dimension2D;
 import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -54,7 +55,7 @@ public class SimplePageFigure extends AbstractCompositeFigure implements Page, G
 FillableFigure, StrokeableFigure
 {
 
-    public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DimensionStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     public final static DoubleStyleableFigureKey NUM_PAGES_X = new DoubleStyleableFigureKey("num-pages-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     public final static DoubleStyleableFigureKey NUM_PAGES_Y = new DoubleStyleableFigureKey("num-pages-y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     public final static Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
@@ -73,10 +74,10 @@ FillableFigure, StrokeableFigure
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Page";
-    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    public final static DimensionStyleableFigureKey WIDTH =SimpleRectangleFigure.WIDTH;
+    public final static DimensionStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static DimensionStyleableFigureKey Y =SimpleRectangleFigure.Y;
+    public final static DimensionRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
     private final static Object CONTENT_BOUNDS_PROPERTY =new Object();
     private final static Object PAGE_INSETS_PROPERTY = new Object();
     private final static Object PAGE_BOUNDS_PROPERTY = new Object();
@@ -104,8 +105,8 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
      * @return
      */
     private double computeContentAreaFactor() {
-        double contentWidth = get(WIDTH);
-        double contentHeight = get(HEIGHT);
+        double contentWidth = getNonnull(WIDTH).getConvertedValue();
+        double contentHeight = getNonnull(HEIGHT).getConvertedValue();
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
         Dimension2D overlap = getStyled(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
@@ -164,13 +165,16 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
+        return new BoundingBox(getNonnull(X).getConvertedValue(),
+                getNonnull(Y).getConvertedValue(),
+                getNonnull(WIDTH).getConvertedValue(),
+                getNonnull(HEIGHT).getConvertedValue());
     }
 
     @Override
     public int getNumberOfSubPages() {
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
-        int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
+        int numPagesX = Math.max(1, getStyledNonnull(NUM_PAGES_X).intValue());
+        int numPagesY = Math.max(1, getStyledNonnull(NUM_PAGES_Y).intValue());
         return numPagesX * numPagesY;
     }
 
@@ -184,8 +188,8 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
 
-        double pageX = get(X) - insets.getLeft() * contentAreaFactor;
-        double pageY = get(Y) - insets.getTop() * contentAreaFactor;;
+        double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
         double pageW = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageH = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverX = (overX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -205,8 +209,8 @@ private Bounds getContentBounds(int internalPageNumber) {
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
 
-        double pageX = get(X) ;
-        double pageY = get(Y) ;
+        double pageX = getNonnull(X).getConvertedValue() ;
+        double pageY = getNonnull(Y).getConvertedValue() ;
         double pageW = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageH = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double marginH=insets.getLeft() + insets.getRight();
@@ -229,8 +233,8 @@ private Bounds getContentBounds(int internalPageNumber) {
         double oy = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
 
-        double pageX = get(X) - insets.getLeft() * contentAreaFactor;
-        double pageY = get(Y) - insets.getTop() * contentAreaFactor;;
+        double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
         double pageWidth = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageHeight = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (ox + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -268,10 +272,10 @@ private Bounds getContentBounds(int internalPageNumber) {
         double overlapX = overlap.getX().getConvertedValue();
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();
-        double pageX = get(X) - insets.getLeft() * contentAreaFactor;
-        double pageY = get(Y) - insets.getTop() * contentAreaFactor;;
-        double pageWidth = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
-        double pageHeight = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
+        double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
+        double pageWidth = getNonnull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
+        double pageHeight = getNonnull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
         double pageOverlapY = (overlapY + insets.getTop() + insets.getBottom()) * contentAreaFactor;
         double x = pageX + (pageWidth - pageOverlapX) * px;
@@ -294,10 +298,10 @@ private Bounds getContentBounds(int internalPageNumber) {
         double overlapX = overlap.getX().getConvertedValue();
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();
-        double pageX = get(X) - insets.getLeft() * contentAreaFactor;
-        double pageY = get(Y) - insets.getTop() * contentAreaFactor;;
-        double pageWidth = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
-        double pageHeight = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
+        double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
+        double pageWidth = getNonnull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
+        double pageHeight = getNonnull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
         double pageOverlapY = (overlapY + insets.getTop() + insets.getBottom()) * contentAreaFactor;
         double x = (pageWidth - pageOverlapX) * px;
@@ -328,19 +332,19 @@ private Bounds getContentBounds(int internalPageNumber) {
     }
 
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, x + min(width, 0));
-        set(Y, y + min(height, 0));
-        set(WIDTH, abs(width));
-        set(HEIGHT, abs(height));
+        set(X, new CssDimension(x + min(width, 0)));
+        set(Y, new CssDimension(y + min(height, 0)));
+        set(WIDTH, new CssDimension(abs(width)));
+        set(HEIGHT, new CssDimension(abs(height)));
     }
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
         Bounds newBounds = transform.transform(getBoundsInLocal());
-        set(X, newBounds.getMinX());
-        set(Y, newBounds.getMinY());
-        set(WIDTH, newBounds.getWidth());
-        set(HEIGHT, newBounds.getHeight());
+        set(X,new CssDimension( newBounds.getMinX()));
+        set(Y,new CssDimension( newBounds.getMinY()));
+        set(WIDTH, new CssDimension(newBounds.getWidth()));
+        set(HEIGHT, new CssDimension(newBounds.getHeight()));
     }
 
     @Override
@@ -371,10 +375,10 @@ private Bounds getContentBounds(int internalPageNumber) {
             node.setVisible(false);
         }
 
-        double contentWidth = get(WIDTH);
-        double contentHeight = get(HEIGHT);
-        contentBoundsNode.setX(get(X));
-        contentBoundsNode.setY(get(Y));
+        double contentWidth = getNonnull(WIDTH).getConvertedValue();
+        double contentHeight = getNonnull(HEIGHT).getConvertedValue();
+        contentBoundsNode.setX(getNonnull(X).getConvertedValue());
+        contentBoundsNode.setY(getNonnull(Y).getConvertedValue());
         contentBoundsNode.setWidth(contentWidth);
         contentBoundsNode.setHeight(contentHeight);
 
