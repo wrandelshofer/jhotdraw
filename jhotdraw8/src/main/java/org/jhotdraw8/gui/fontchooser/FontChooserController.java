@@ -327,7 +327,7 @@ public class FontChooserController {
     }
 
     @FXML
-    void onRemoveFamllyPerformed(ActionEvent event) {
+    void onRemoveFamilyPerformed(ActionEvent event) {
           FontCollection collection=collectionList.getSelectionModel().getSelectedItem();
           FontFamily family=familyList.getSelectionModel().getSelectedItem();
           if (collection!=null&&!collection.isSmartCollection()&&family!=null) {

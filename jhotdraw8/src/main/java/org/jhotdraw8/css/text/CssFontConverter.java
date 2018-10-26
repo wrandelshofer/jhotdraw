@@ -43,6 +43,14 @@ import org.jhotdraw8.io.IdFactory;
 public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
 
+    public static final String ITALIC_STYLE = "italic";
+    public static final String BOLD_WEIGHT = "bold";
+    public static final String NORMAL_STYLE = "normal";
+    public static final String NORMAL_WEIGHT = "normal";
+    public static final String OBLIQUE_STYLE = "oblique";
+    public static final String BOLDER_WEIGHT = "bolder";
+    public static final String LIGHTER_WEIGHT = "lighter";
+
     public CssFontConverter(boolean nullable) {
         super(nullable);
     }
@@ -58,7 +66,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         if (posture != null) {
             switch (font.getPosture()) {
                 case ITALIC:
-                    out.accept(new CssToken(CssTokenType.TT_IDENT, "italic"));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, ITALIC_STYLE));
                     needsSpace = true;
                     break;
                 case REGULAR:
@@ -76,7 +84,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
                     if (needsSpace) {
                         out.accept(new CssToken(CssTokenType.TT_S, " "));
                     }
-                    out.accept(new CssToken(CssTokenType.TT_IDENT, "bold"));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, BOLD_WEIGHT));
                     break;
                 default:
                     if (needsSpace) {
@@ -107,11 +115,11 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         // parse FontStyle
         if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonnull().toLowerCase()) {
-                case "normal":
+                case NORMAL_STYLE:
                     fontPosture = FontPosture.REGULAR;
                     break;
-                case "italic":
-                case "oblique":
+                case ITALIC_STYLE:
+                case OBLIQUE_STYLE:
                     fontPosture = FontPosture.ITALIC;
                     break;
                 default:
@@ -126,20 +134,20 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         boolean fontWeightConsumed = false;
         if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonnull().toLowerCase()) {
-                case "normal":
+                case NORMAL_WEIGHT:
                     fontWeight = FontWeight.NORMAL;
                     fontWeightConsumed = true;
                     break;
-                case "bold":
+                case BOLD_WEIGHT:
                     fontWeight = FontWeight.BOLD;
                     fontWeightConsumed = true;
                     break;
-                case "bolder":
+                case BOLDER_WEIGHT:
                     // FIXME weight should be relative to parent font
                     fontWeight = FontWeight.BOLD;
                     fontWeightConsumed = true;
                     break;
-                case "lighter":
+                case LIGHTER_WEIGHT:
                     // FIXME weight should be relative to parent font
                     fontWeight = FontWeight.LIGHT;
                     fontWeightConsumed = true;
@@ -228,6 +236,11 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨Font⟩: ［⟨FontStyle⟩］［⟨FontWeight⟩］ ⟨FontSize⟩ ⟨FontFamily⟩";
+        return "Format of ⟨Font⟩: ［⟨FontStyle⟩］［⟨FontWeight⟩］ ⟨FontSize⟩ ⟨FontFamily⟩"
+                +"\n  with ⟨FontStyle⟩: normal｜italic｜oblique"
+                +"\n  with ⟨FontWeight⟩: normal｜bold｜bolder｜lighter｜100｜200｜300｜400｜500｜600｜700｜800｜900"
+                +"\n  with ⟨FontSize⟩: size"
+                +"\n  with ⟨FontFamiliy⟩: identifier｜string"
+                ;
     }
 }

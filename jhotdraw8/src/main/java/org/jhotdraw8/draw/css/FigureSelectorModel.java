@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.ListCssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
@@ -73,22 +74,22 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasId( @Nonnull Figure element,  @Nonnull String id) {
+    public boolean hasId(@Nonnull Figure element, @Nonnull String id) {
         return id.equals(element.getId());
     }
 
     @Override
-    public String getId( @Nonnull Figure element) {
+    public String getId(@Nonnull Figure element) {
         return element.getId();
     }
 
     @Override
-    public boolean hasType( @Nonnull Figure element,  @Nonnull String type) {
+    public boolean hasType(@Nonnull Figure element, @Nonnull String type) {
         return type.equals(element.getTypeSelector());
     }
 
     @Override
-    public String getType( @Nonnull Figure element) {
+    public String getType(@Nonnull Figure element) {
         return element.getTypeSelector();
     }
 
@@ -99,7 +100,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Nonnull
     @Override
-    public Set<String> getStyleClasses( @Nonnull Figure element) {
+    public Set<String> getStyleClasses(@Nonnull Figure element) {
         Collection<String> styleClasses = element.getStyleClass();
         return (styleClasses == null) ? Collections.emptySet() : new HashSet<>(element.getStyleClass());
     }
@@ -218,7 +219,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasPseudoClass( @Nonnull Figure element,  @Nonnull String pseudoClass) {
+    public boolean hasPseudoClass(@Nonnull Figure element, @Nonnull String pseudoClass) {
         Set<Figure> fs = additionalPseudoClassStates.get(pseudoClass);
         if (fs != null && fs.contains(element)) {
             return true;
@@ -229,13 +230,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public Figure getParent( @Nonnull Figure element) {
+    public Figure getParent(@Nonnull Figure element) {
         return element.getParent();
     }
 
     @Nullable
     @Override
-    public Figure getPreviousSibling( @Nonnull Figure element) {
+    public Figure getPreviousSibling(@Nonnull Figure element) {
         if (element.getParent() == null) {
             return null;
         }
@@ -245,14 +246,14 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Nonnull
     @Override
-    public Set<String> getAttributeNames( @Nonnull Figure element) {
+    public Set<String> getAttributeNames(@Nonnull Figure element) {
         // FIXME use keyToName map
         return getMetaMap(element).keySet();
     }
 
     @Nonnull
     @Override
-    public Set<String> getComposedAttributeNames( @Nonnull Figure element) {
+    public Set<String> getComposedAttributeNames(@Nonnull Figure element) {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
         Set<WriteableStyleableMapAccessor<?>> attrk = new HashSet<>();
@@ -275,7 +276,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Nonnull
     @Override
-    public Set<String> getDecomposedAttributeNames( @Nonnull Figure element) {
+    public Set<String> getDecomposedAttributeNames(@Nonnull Figure element) {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
         Set<WriteableStyleableMapAccessor<?>> attrk = new HashSet<>();
@@ -345,13 +346,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         Converter<Object> converter = key.getConverter();
         if (converter instanceof CssConverter) {
-           return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin,key),null);
-        }else {
+            return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin, key), null);
+        } else {
             try {
-            CssTokenizer tt = new StreamCssTokenizer(converter.toString(element.getStyled(origin, key)));
+                CssTokenizer tt = new StreamCssTokenizer(converter.toString(element.getStyled(origin, key)));
                 return tt.toTokenList();
             } catch (IOException e) {
-                throw new RuntimeException("unexpected exception",e);
+                throw new RuntimeException("unexpected exception", e);
             }
         }
     }
@@ -402,6 +403,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             }
         }
     }
+
     @Override
     public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value) {
         Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
@@ -411,14 +413,26 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             if (value == null) {
                 elem.remove(origin, k);
             } else {
+                // Ignore it tokens are bad or just whitespace and comments
+                boolean ignore=true;
+                for (CssToken t:value) {
+                    if (t.getType()!= CssTokenType.TT_S&&t.getType()!=CssTokenType.TT_COMMENT) {
+                        ignore=false;
+                        break;
+                    }
+                }
+                if (ignore||value.isEmpty())return;
+
+
                 @SuppressWarnings("unchecked")
                 Converter<Object> converter = k.getConverter();
                 Object convertedValue;
                 try {
-                    if (converter instanceof CssConverter)
-                    convertedValue = ((CssConverter<Object>)converter).parse(new ListCssTokenizer(value),null);
-                    else
+                    if (converter instanceof CssConverter) {
+                        convertedValue = ((CssConverter<Object>) converter).parse(new ListCssTokenizer(value), null);
+                    } else {
                         convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
+                    }
                     elem.setStyled(origin, k, convertedValue);
                 } catch (@Nonnull ParseException | IOException ex) {
                     LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
