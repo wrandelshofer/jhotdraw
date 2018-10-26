@@ -6,7 +6,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 
-<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <menus>
         <Menu id="file" mnemonicParsing="false" text="%file.text">
             <items>
@@ -40,6 +40,8 @@
             <items>
                 <MenuItem id="edit.bringToFront" mnemonicParsing="false" text="Bring to Front" />
                 <MenuItem id="edit.sendToBack" mnemonicParsing="false" text="Send to Back" />
+            <MenuItem id="edit.bringForward" mnemonicParsing="false" text="Bring Forward" />
+            <MenuItem id="edit.sendBackward" mnemonicParsing="false" text="Send Backward" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem id="edit.group" mnemonicParsing="false" text="Group" />
                 <MenuItem id="edit.combinePaths" mnemonicParsing="false" text="Combine Paths" />

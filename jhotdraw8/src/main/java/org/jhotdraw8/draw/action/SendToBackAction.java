@@ -48,9 +48,9 @@ public class SendToBackAction extends AbstractSelectedAction {
 
     }
 
-    public static void sendToBack(DrawingView view, Collection<Figure> figures) {
+    public void sendToBack(DrawingView view, Collection<Figure> figures) {
         DrawingModel model = view.getModel();
-        for (Figure child : figures) { // XXX Shouldn't the figures be sorted here back to front?
+        for (Figure child : figures) {
             Figure parent = child.getParent();
             if (parent != null && parent.isEditable() && parent.isDecomposable()) {
                 assert parent.isAllowsChildren();

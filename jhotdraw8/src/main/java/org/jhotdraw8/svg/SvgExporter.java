@@ -1123,7 +1123,8 @@ public class SvgExporter {
     private Element writeText(Document doc, Element parent, Text node) {
         Element elem = doc.createElement("text");
         parent.appendChild(elem);
-        elem.appendChild(doc.createTextNode(node.getText()));
+
+        String x = nb.toString(node.getX());
 
         VPos vpos = node.getTextOrigin();
         final double vposOffset;
@@ -1142,10 +1143,28 @@ public class SvgExporter {
                 vposOffset = node.getBoundsInLocal().getHeight();
                 break;
         }
-        elem.setAttribute("x", nb.toString(node.getX()));
+        elem.setAttribute("x", x);
         elem.setAttribute("y", nb.toString(node.getY() + vposOffset));
-
+        double lineSpacing = node.getLineSpacing();
+        double fontSize=node.getFont().getSize()*96/72;
         writeTextAttributes(elem, node);
+
+        String text = node.getText();
+        if (text != null) {
+            String[] lines = text.split("\n");
+            if (lines.length == 1) {
+                elem.appendChild(doc.createTextNode(lines[0]));
+            } else {
+                for (int i = 0; i < lines.length; i++) {
+                    Element tspan = doc.createElement("tspan");
+                    tspan.appendChild(doc.createTextNode(lines[i]));
+                    tspan.setAttribute("x", x);
+                    if (i!=0)
+                    tspan.setAttribute("dy", Double.toString(lineSpacing+fontSize));
+                    elem.appendChild(tspan);
+                }
+            }
+        }
 
         return elem;
     }

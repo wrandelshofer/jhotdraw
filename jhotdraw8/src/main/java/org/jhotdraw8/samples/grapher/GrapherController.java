@@ -120,6 +120,8 @@ import org.jhotdraw8.css.text.CssSizeInsets;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.draw.action.SendBackwardAction;
+import org.jhotdraw8.draw.action.BringForwardAction;
 
 /**
  * GrapherController.
@@ -242,6 +244,8 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
         map.put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         map.put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
+        map.put(BringForwardAction.ID, new BringForwardAction(getApplication(), editor));
+        map.put(SendBackwardAction.ID, new SendBackwardAction(getApplication(), editor));
         map.put(VIEWTOGGLE_PROPERTIES, new ToggleBooleanAction(
                 getApplication(), this,
                 VIEWTOGGLE_PROPERTIES,
