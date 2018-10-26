@@ -1,4 +1,4 @@
-/* @(#)CssDimensionStyleableFigureKey.java
+/* @(#)DimensionStyleableFigureKey.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -19,12 +19,12 @@ import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
- * CssDimensionStyleableFigureKey.
+ * DimensionStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDimensionStyleableFigureKey extends AbstractStyleableFigureKey<CssDimension> implements WriteableStyleableMapAccessor<CssDimension> {
+public class DimensionStyleableFigureKey extends AbstractStyleableFigureKey<CssDimension> implements WriteableStyleableMapAccessor<CssDimension> {
 
     final static long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class CssDimensionStyleableFigureKey extends AbstractStyleableFigureKey<C
      *
      * @param name The name of the key.
      */
-    public CssDimensionStyleableFigureKey(String name) {
+    public DimensionStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -48,7 +48,7 @@ public class CssDimensionStyleableFigureKey extends AbstractStyleableFigureKey<C
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public CssDimensionStyleableFigureKey(String name, CssDimension defaultValue) {
+    public DimensionStyleableFigureKey(String name, CssDimension defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -59,7 +59,7 @@ public class CssDimensionStyleableFigureKey extends AbstractStyleableFigureKey<C
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public CssDimensionStyleableFigureKey(String name, DirtyMask mask, CssDimension defaultValue) {
+    public DimensionStyleableFigureKey(String name, DirtyMask mask, CssDimension defaultValue) {
         super(name, CssDimension.class, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<CssDimension>> function = s -> {

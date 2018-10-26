@@ -35,7 +35,7 @@ import org.jhotdraw8.io.IdFactory;
  * PointToPoint = "from", Point, "to", Point
  * SideOrCorner = "to" ["left" | "right"] , ["top" | "bottom"]
  * Cycle = ( "repeat" | "reflect" )
- * Point = (Number|Dimension|Percentage), (Number|Dimension|Percentage) ;
+ * Point = (Number|CssDimension|Percentage), (Number|CssDimension|Percentage) ;
  * ColorStop = Color, [" ", Offset] ;
  *
  * </pre>

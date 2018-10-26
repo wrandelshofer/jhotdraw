@@ -14,6 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -46,11 +49,11 @@ public class SimpleImageFigure extends AbstractLeafFigure
     @Nullable
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
 
-    public final static DoubleStyleableFigureKey X = SimpleRectangleFigure.X;
-    public final static DoubleStyleableFigureKey Y = SimpleRectangleFigure.Y;
-    public final static DoubleStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
-    public final static DoubleStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    public final static DimensionStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static DimensionStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static DimensionStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static DimensionStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static DimensionRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
     @Nullable
     private Image cachedImage;
     @Nullable

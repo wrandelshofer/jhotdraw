@@ -10,7 +10,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 
-import org.jhotdraw8.css.text.CssDimension2D;
+import org.jhotdraw8.css.text.Dimension2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -24,13 +24,13 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<CssDimension2D> implements WriteableStyleableMapAccessor<CssDimension2D> {
+public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Dimension2D> implements WriteableStyleableMapAccessor<Dimension2D> {
 
     private final static long serialVersionUID = 1L;
-    private Converter<CssDimension2D> converter;
+    private Converter<Dimension2D> converter;
 
     @Nonnull
-    private final CssMetaData<?, CssDimension2D> cssMetaData;
+    private final CssMetaData<?, Dimension2D> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -48,7 +48,7 @@ public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Cs
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public Dimension2DStyleableFigureKey(String name, CssDimension2D defaultValue) {
+    public Dimension2DStyleableFigureKey(String name, Dimension2D defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -61,18 +61,18 @@ public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Cs
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public Dimension2DStyleableFigureKey(String key, DirtyMask mask, CssDimension2D defaultValue) {
-        super(key, CssDimension2D.class, mask, defaultValue);
+    public Dimension2DStyleableFigureKey(String key, DirtyMask mask, Dimension2D defaultValue) {
+        super(key, Dimension2D.class, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<CssDimension2D>> function = s -> {
+        Function<Styleable, StyleableProperty<Dimension2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssDimension2D> converter
+        final StyleConverter<String, Dimension2D> converter
                 = new StyleConverterAdapter<>(new CssSize2DConverter());
-        CssMetaData<Styleable, CssDimension2D> md
+        CssMetaData<Styleable, Dimension2D> md
                 = new SimpleCssMetaData<>(property, function,
                 converter, defaultValue, inherits);
         cssMetaData = md;
@@ -80,7 +80,7 @@ public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Cs
 
 
     @Override
-    public Converter<CssDimension2D> getConverter() {
+    public Converter<Dimension2D> getConverter() {
         if (converter == null) {
             converter = new CssSize2DConverter();
         }
@@ -88,7 +88,7 @@ public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Cs
     }
     @Nonnull
     @Override
-    public CssMetaData<?, CssDimension2D> getCssMetaData() {
+    public CssMetaData<?, Dimension2D> getCssMetaData() {
       return cssMetaData;
       
     }

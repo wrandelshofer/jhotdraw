@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LabelConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.key.CssDimensionStyleableFigureKey;
+import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -73,13 +73,13 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
-    public final static CssDimensionStyleableFigureKey LABEL_OFFSET_Y = new CssDimensionStyleableFigureKey("labelOffsetY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey LABEL_OFFSET_Y = new DimensionStyleableFigureKey("labelOffsetY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
     /**
      * The tangential offset of the label.
      * <p>
      * The offset is on tangent line of the figure.
      */
-    public final static CssDimensionStyleableFigureKey LABEL_OFFSET_X = new CssDimensionStyleableFigureKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey LABEL_OFFSET_X = new DimensionStyleableFigureKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
     public final static Dimension2DStyleableMapAccessor LABELED_OFFSET = new Dimension2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.

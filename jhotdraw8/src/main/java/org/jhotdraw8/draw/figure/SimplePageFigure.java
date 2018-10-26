@@ -28,9 +28,9 @@ import javafx.scene.transform.Translate;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.css.text.CssDimension2D;
+import org.jhotdraw8.css.text.Dimension2D;
 import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.draw.key.CssDimensionStyleableFigureKey;
+import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -58,16 +58,16 @@ FillableFigure, StrokeableFigure
     public final static DoubleStyleableFigureKey NUM_PAGES_X = new DoubleStyleableFigureKey("num-pages-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     public final static DoubleStyleableFigureKey NUM_PAGES_Y = new DoubleStyleableFigureKey("num-pages-y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     public final static Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
-    public final static CssDimensionStyleableFigureKey PAGE_INSETS_BOTTOM = new CssDimensionStyleableFigureKey("page-insets-bottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static CssDimensionStyleableFigureKey PAGE_INSETS_LEFT = new CssDimensionStyleableFigureKey("page-insets-left", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static CssDimensionStyleableFigureKey PAGE_INSETS_RIGHT = new CssDimensionStyleableFigureKey("page-insets-right", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static CssDimensionStyleableFigureKey PAGE_INSETS_TOP = new CssDimensionStyleableFigureKey("page-insets-top", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey PAGE_INSETS_BOTTOM = new DimensionStyleableFigureKey("page-insets-bottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey PAGE_INSETS_LEFT = new DimensionStyleableFigureKey("page-insets-left", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey PAGE_INSETS_RIGHT = new DimensionStyleableFigureKey("page-insets-right", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey PAGE_INSETS_TOP = new DimensionStyleableFigureKey("page-insets-top", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
     public final static DimensionInsetsStyleableMapAccessor PAGE_INSETS = new DimensionInsetsStyleableMapAccessor("page-insets", PAGE_INSETS_TOP, PAGE_INSETS_RIGHT, PAGE_INSETS_BOTTOM, PAGE_INSETS_LEFT);
-    public final static CssDimensionStyleableFigureKey PAGE_OVERLAP_X = new CssDimensionStyleableFigureKey("page-overlap-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static CssDimensionStyleableFigureKey PAGE_OVERLAP_Y = new CssDimensionStyleableFigureKey("page-overlap-y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey PAGE_OVERLAP_X = new DimensionStyleableFigureKey("page-overlap-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey PAGE_OVERLAP_Y = new DimensionStyleableFigureKey("page-overlap-y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
     public final static Dimension2DStyleableMapAccessor PAGE_OVERLAP = new Dimension2DStyleableMapAccessor("page-overlap", PAGE_OVERLAP_X, PAGE_OVERLAP_Y);
-    public final static CssDimensionStyleableFigureKey PAPER_HEIGHT = new CssDimensionStyleableFigureKey("paper-size-height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssDimension(297.0, "mm"));
-    public final static CssDimensionStyleableFigureKey PAPER_WIDTH = new CssDimensionStyleableFigureKey("paper-size-width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssDimension(210.0, "mm"));
+    public final static DimensionStyleableFigureKey PAPER_HEIGHT = new DimensionStyleableFigureKey("paper-size-height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssDimension(297.0, "mm"));
+    public final static DimensionStyleableFigureKey PAPER_WIDTH = new DimensionStyleableFigureKey("paper-size-width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssDimension(210.0, "mm"));
     public final static PaperSizeStyleableMapAccessor PAPER_SIZE = new PaperSizeStyleableMapAccessor("paper-size", PAPER_WIDTH, PAPER_HEIGHT);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -107,7 +107,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         double contentWidth = get(WIDTH);
         double contentHeight = get(HEIGHT);
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
-        CssDimension2D overlap = getStyled(PAGE_OVERLAP);
+        Dimension2D overlap = getStyled(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
@@ -179,7 +179,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
     public Bounds getPageBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
-        CssDimension2D overlap = getStyled(PAGE_OVERLAP);
+        Dimension2D overlap = getStyled(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
@@ -200,7 +200,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
 private Bounds getContentBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
-        CssDimension2D overlap = getStyled(PAGE_OVERLAP);
+        Dimension2D overlap = getStyled(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
@@ -224,7 +224,7 @@ private Bounds getContentBounds(int internalPageNumber) {
     public Shape getPageClip(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
-        CssDimension2D overlap = getStyled(PAGE_OVERLAP);
+        Dimension2D overlap = getStyled(PAGE_OVERLAP);
         double ox = overlap.getX().getConvertedValue();
         double oy = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
@@ -250,7 +250,7 @@ private Bounds getContentBounds(int internalPageNumber) {
     }
 
     @Override
-    public CssDimension2D getPaperSize() {
+    public Dimension2D getPaperSize() {
         return getStyled(PAPER_SIZE);
     }
 
@@ -264,7 +264,7 @@ private Bounds getContentBounds(int internalPageNumber) {
         int px = internalPageNumber % numPagesX;
         int py = internalPageNumber / numPagesX;
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
-        CssDimension2D overlap = getStyled(PAGE_OVERLAP);
+        Dimension2D overlap = getStyled(PAGE_OVERLAP);
         double overlapX = overlap.getX().getConvertedValue();
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();
@@ -290,7 +290,7 @@ private Bounds getContentBounds(int internalPageNumber) {
         int px = internalPageNumber % numPagesX;
         int py = internalPageNumber / numPagesX;
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
-        CssDimension2D overlap = getStyled(PAGE_OVERLAP);
+        Dimension2D overlap = getStyled(PAGE_OVERLAP);
         double overlapX = overlap.getX().getConvertedValue();
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();

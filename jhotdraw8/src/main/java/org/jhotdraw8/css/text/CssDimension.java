@@ -22,6 +22,9 @@ public class CssDimension {
     private final String units;
     private final double value;
 
+    public CssDimension(double value) {
+        this(value,null);
+    }
     public CssDimension(double value, String units) {
         this.value = value;
         this.units = units;

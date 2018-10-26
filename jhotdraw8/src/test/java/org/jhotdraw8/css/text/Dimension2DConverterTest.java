@@ -11,18 +11,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class CssDimension2DConverterTest {
+class Dimension2DConverterTest {
 
     /**
-     * Test of fromString method, of class CssDimension2DConverterTest.
+     * Test of fromString method, of class Dimension2DConverterTest.
      */
     static
-    public void doTestFromString(CssDimension2D expected, String string) throws Exception {
+    public void doTestFromString(Dimension2D expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssSize2DConverter instance = new CssSize2DConverter();
-        CssDimension2D actual = instance.fromString(buf, idFactory);
+        Dimension2D actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
@@ -31,7 +31,7 @@ class CssDimension2DConverterTest {
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> doTestFromString(new CssDimension2D(40,40,"cm"), "40cm 40cm"))
+                dynamicTest("1", () -> doTestFromString(new Dimension2D(40,40,"cm"), "40cm 40cm"))
         );
     }
 }

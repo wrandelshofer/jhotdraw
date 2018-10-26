@@ -132,7 +132,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         IIOMetadataNode vert = new IIOMetadataNode("VerticalPixelSize");
         vert.setAttribute("value", Double.toString(dotsPerMilli));
 
-        IIOMetadataNode dim = new IIOMetadataNode("Dimension");
+        IIOMetadataNode dim = new IIOMetadataNode("CssDimension");
         dim.appendChild(horiz);
         dim.appendChild(vert);
 

@@ -19,6 +19,10 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -36,13 +40,13 @@ import org.jhotdraw8.geom.Shapes;
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
-    public final static DoubleStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static DimensionRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    public final static DimensionStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     @Nullable
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
-    public final static DoubleStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
-    public final static DoubleStyleableFigureKey X = SimpleRectangleFigure.X;
-    public final static DoubleStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static DimensionStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static DimensionStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static DimensionStyleableFigureKey Y = SimpleRectangleFigure.Y;
 
     private transient Path2D.Float pathElements;
 
@@ -67,7 +71,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
+        return new BoundingBox(getNonnull(X).getConvertedValue(), getNonnull(Y).getConvertedValue(), getNonnull(WIDTH).getConvertedValue(), 
+                getNonnull(HEIGHT).getConvertedValue());
     }
 
     @Nonnull
@@ -84,10 +89,10 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, x + min(width, 0));
-        set(Y, y + min(height, 0));
-        set(WIDTH, abs(width));
-        set(HEIGHT, abs(height));
+        set(X, new CssDimension(x + min(width, 0),null));
+        set(Y, new CssDimension(y + min(height, 0),null));
+        set(WIDTH, new CssDimension(abs(width),null));
+        set(HEIGHT, new CssDimension(abs(height),null));
     }
 
 
@@ -103,13 +108,17 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     protected void layoutPath() {
-        String pathstr = getStyled(SHAPE);
+        String pathstr = getStyledNonnull(SHAPE);
 
         if (pathElements == null) {
             pathElements = pathElements=new Path2D.Float();
         }
         pathElements.reset();
-        Bounds b = new BoundingBox(getStyled(X),getStyled(Y),getStyled(WIDTH),getStyled(HEIGHT));
+        Bounds b = new BoundingBox(
+                getStyledNonnull(X).getConvertedValue(),
+                getStyledNonnull(Y).getConvertedValue(),
+                getStyledNonnull(WIDTH).getConvertedValue(),
+                getStyledNonnull(HEIGHT).getConvertedValue());
         Shapes.reshape(pathstr, b, new AWTPathBuilder(pathElements));
     }
 }

@@ -1,4 +1,4 @@
-/* @(#)CssDimensionConverterTest.java
+/* @(#)DimensionConverterTest.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -19,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * CssDimensionConverterTest.
+ * DimensionConverterTest.
  *
  * @author Werner Randelshofer
  * @version $$Id: CssSizeConverterNGTest_1.java 1176 2016-12-11 19:48:19Z
  * rawcoder $$
  */
-public class CssDimensionConverterTest {
+public class DimensionConverterTest {
 
-    public CssDimensionConverterTest() {
+    public DimensionConverterTest() {
     }
 
     /**

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 class CssSymmetricPoint2DConverterTest {
 
     /**
-     * Test of fromString method, of class CssDimension2DConverterTest.
+     * Test of fromString method, of class Dimension2DConverterTest.
      */
     static
     public void doTestFromString(Point2D expected, String string) throws Exception {

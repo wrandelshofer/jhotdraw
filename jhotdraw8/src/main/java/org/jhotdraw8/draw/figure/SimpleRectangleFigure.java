@@ -15,12 +15,16 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SymmetricDimension2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -42,14 +46,14 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 
-    public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
-    public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static SymmetricPoint2DStyleableMapAccessor ARC = new SymmetricPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
+    public final static DimensionStyleableFigureKey X = new DimensionStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey Y = new DimensionStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey WIDTH = new DimensionStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey HEIGHT = new DimensionStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionRectangle2DStyleableMapAccessor BOUNDS = new DimensionRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    public final static DimensionStyleableFigureKey ARC_HEIGHT = new DimensionStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey ARC_WIDTH = new DimensionStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
+    public final static SymmetricDimension2DStyleableMapAccessor ARC = new SymmetricDimension2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
     public SimpleRectangleFigure() {
         this(0, 0, 1, 1);
@@ -67,27 +71,27 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
+        return new BoundingBox(getNonnull(X).getConvertedValue(), getNonnull(Y).getConvertedValue(), getNonnull(WIDTH).getConvertedValue(), getNonnull(HEIGHT).getConvertedValue());
     }
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         Rectangle shape=new Rectangle();
-       shape.setX(get(X));
-        shape.setY(get(Y));
-        shape.setWidth(get(WIDTH));
-        shape.setHeight(get(HEIGHT));
-        shape.setArcWidth(getStyled(ARC_WIDTH));
-        shape.setArcHeight(getStyled(ARC_HEIGHT));        
+       shape.setX(getNonnull(X).getConvertedValue());
+        shape.setY(getNonnull(Y).getConvertedValue());
+        shape.setWidth(getNonnull(WIDTH).getConvertedValue());
+        shape.setHeight(getNonnull(HEIGHT).getConvertedValue());
+        shape.setArcWidth(getStyledNonnull(ARC_WIDTH).getConvertedValue());
+        shape.setArcHeight(getStyledNonnull(ARC_HEIGHT).getConvertedValue());        
        return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, x + min(width, 0));
-        set(Y, y + min(height, 0));
-        set(WIDTH, abs(width));
-        set(HEIGHT, abs(height));
+        set(X, new CssDimension(x + min(width, 0),null));
+        set(Y, new CssDimension(y + min(height, 0),null));
+        set(WIDTH, new CssDimension(abs(width),null));
+        set(HEIGHT, new CssDimension(abs(height),null));
     }
 
     @Nonnull
@@ -105,12 +109,12 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
         applyStrokeableFigureProperties(rectangleNode);
         applyCompositableFigureProperties(rectangleNode);
         applyStyleableFigureProperties(ctx, node);
-        rectangleNode.setX(get(X));
-        rectangleNode.setY(get(Y));
-        rectangleNode.setWidth(get(WIDTH));
-        rectangleNode.setHeight(get(HEIGHT));
-        rectangleNode.setArcWidth(getStyled(ARC_WIDTH));
-        rectangleNode.setArcHeight(getStyled(ARC_HEIGHT));
+        rectangleNode.setX(getNonnull(X).getConvertedValue());
+        rectangleNode.setY(getNonnull(Y).getConvertedValue());
+        rectangleNode.setWidth(getNonnull(WIDTH).getConvertedValue());
+        rectangleNode.setHeight(getNonnull(HEIGHT).getConvertedValue());
+        rectangleNode.setArcWidth(getStyledNonnull(ARC_WIDTH).getConvertedValue());
+        rectangleNode.setArcHeight(getStyledNonnull(ARC_HEIGHT).getConvertedValue());
     }
 
     @Nonnull

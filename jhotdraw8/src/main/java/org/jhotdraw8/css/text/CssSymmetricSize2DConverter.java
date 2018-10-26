@@ -20,12 +20,12 @@ import org.jhotdraw8.text.PatternConverter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSymmetricSize2DConverter implements Converter<CssDimension2D> {
+public class CssSymmetricSize2DConverter implements Converter<Dimension2D> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @Nonnull CssDimension2D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull Dimension2D value) throws IOException {
         CssDimension x = value.getX();
         CssDimension y = value.getY();
         if (x == y) {
@@ -37,14 +37,14 @@ public class CssSymmetricSize2DConverter implements Converter<CssDimension2D> {
 
     @Nonnull
     @Override
-    public CssDimension2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Dimension2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         int count = (Integer) v[0];
         switch (count) {
             case 1:
-                return new CssDimension2D(((CssDimension) v[1]), ((CssDimension) v[1]));
+                return new Dimension2D(((CssDimension) v[1]), ((CssDimension) v[1]));
             case 2:
-                return new CssDimension2D(((CssDimension) v[1]), ((CssDimension) v[2]));
+                return new Dimension2D(((CssDimension) v[1]), ((CssDimension) v[2]));
             default:
                 throw new ParseException("one or two numbers expected, found " + count + " numbers", 0);
         }
@@ -52,8 +52,8 @@ public class CssSymmetricSize2DConverter implements Converter<CssDimension2D> {
 
     @Nullable
     @Override
-    public CssDimension2D getDefaultValue() {
-        return new CssDimension2D(CssDimension.ZERO, CssDimension.ZERO);
+    public Dimension2D getDefaultValue() {
+        return new Dimension2D(CssDimension.ZERO, CssDimension.ZERO);
     }
     
     @Nonnull

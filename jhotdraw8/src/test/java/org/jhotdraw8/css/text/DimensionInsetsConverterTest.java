@@ -11,10 +11,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class CssDimensionInsetsConverterTest {
+class DimensionInsetsConverterTest {
 
     /**
-     * Test of fromString method, of class CssDimension2DConverterTest.
+     * Test of fromString method, of class Dimension2DConverterTest.
      */
     static
     public void doTestFromString(CssDimensionInsets expected, String string) throws Exception {

@@ -603,7 +603,7 @@ public class CssFunctionProcessor<T> {
                     buf.append(t.fromToken());
                     break;
                 default:
-                    throw new ParseException("〈" + expressionName + "〉: String, Number, Dimension, Percentage or URL expected.", t.getStartPos());
+                    throw new ParseException("〈" + expressionName + "〉: String, Number, CssDimension, Percentage or URL expected.", t.getStartPos());
             }
         }
         return buf.toString();

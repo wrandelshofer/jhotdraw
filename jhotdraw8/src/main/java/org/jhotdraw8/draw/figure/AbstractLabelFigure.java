@@ -26,7 +26,7 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.CssDimensionStyleableFigureKey;
+import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -62,10 +62,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
-    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_BOTTOM = new CssDimensionStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_LEFT = new CssDimensionStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_RIGHT = new CssDimensionStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static CssDimensionStyleableFigureKey SHAPE_SLICE_TOP = new CssDimensionStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey SHAPE_SLICE_BOTTOM = new DimensionStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey SHAPE_SLICE_LEFT = new DimensionStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey SHAPE_SLICE_RIGHT = new DimensionStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey SHAPE_SLICE_TOP = new DimensionStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
     /**
      * This property specifies inward offsets from the top, right, bottom, and
      * left edges of the border image defined by the {@link #SHAPE_BOUNDS}

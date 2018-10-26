@@ -5,10 +5,10 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.draw.key.CssDimensionStyleableFigureKey;
+import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.SymmetricSize2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SymmetricDimension2DStyleableMapAccessor;
 
 /**
  * A figure which supports cutting off the start and end of a stroked path.
@@ -18,11 +18,11 @@ import org.jhotdraw8.draw.key.SymmetricSize2DStyleableMapAccessor;
  */
 public interface StrokeCuttableFigure extends Figure {
     /** Cuts off the specified number of pixels from the start of the stroked path. */
-    public final static CssDimensionStyleableFigureKey STROKE_CUT_START = new CssDimensionStyleableFigureKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey STROKE_CUT_START = new DimensionStyleableFigureKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssDimension.ZERO);
     /** Cuts off the specified number of pixels from the end of the stroked path. */
-    public final static CssDimensionStyleableFigureKey STROKE_CUT_END = new CssDimensionStyleableFigureKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssDimension.ZERO);
+    public final static DimensionStyleableFigureKey STROKE_CUT_END = new DimensionStyleableFigureKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssDimension.ZERO);
     /** Cuts off the specified number of pixels from the start and the end of the stroked path. */
-    public static SymmetricSize2DStyleableMapAccessor STROKE_CUT = new SymmetricSize2DStyleableMapAccessor("stroke-cut", STROKE_CUT_START, STROKE_CUT_END);
+    public static SymmetricDimension2DStyleableMapAccessor STROKE_CUT = new SymmetricDimension2DStyleableMapAccessor("stroke-cut", STROKE_CUT_START, STROKE_CUT_END);
 
     default double getStrokeCutStart() {
        return getStyled(STROKE_CUT_START).getValue();

@@ -32,13 +32,13 @@ import org.jhotdraw8.io.IdFactory;
  * Paint := (Color|RadialGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
  * RadialGradient := "radial-gradient(", RadialGradientParameters,  Cycle, ColorStop,{"," ColorStop}")"
  * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius ;
- * FocusAngle = "focus-angle", Dimension"deg";
+ * FocusAngle = "focus-angle", CssDimension"deg";
  * FocusDistance = "focus-distance", Percentage ;
  * Center = "center", Point ;
  * Cycle = ( "repeat" | "reflect" )
  * Radius = "radius", ( Length | Percentage ) ;
  * ColorStop = Color, [" ", Offset] ;
- * Point = (Number|Dimension|Percentage), (Number|Dimension|Percentage) ;
+ * Point = (Number|CssDimension|Percentage), (Number|CssDimension|Percentage) ;
  *
  * </pre>
  *

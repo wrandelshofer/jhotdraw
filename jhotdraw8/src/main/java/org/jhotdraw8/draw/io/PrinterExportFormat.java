@@ -21,14 +21,15 @@ import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.text.Dimension2D;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimplePageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
-import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.css.text.CssDimension2D;
 import org.jhotdraw8.draw.figure.Page;
 
 /**
@@ -52,7 +53,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return false;
     }
 
-    public Paper findPaper(@Nonnull CssDimension2D paperSize) {
+    public Paper findPaper(@Nonnull Dimension2D paperSize) {
         UnitConverter uc = new DefaultUnitConverter(72.0);
         double w = uc.convert(paperSize.getX(), UnitConverter.POINTS);
         double h = uc.convert(paperSize.getY(), UnitConverter.POINTS);
@@ -66,7 +67,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    private void printSlice(@Nonnull CssDimension2D pageSize, @Nonnull Figure slice, @Nonnull Bounds viewportBounds, @Nonnull Node node, double dpi) throws IOException {
+    private void printSlice(@Nonnull Dimension2D pageSize, @Nonnull Figure slice, @Nonnull Bounds viewportBounds, @Nonnull Node node, double dpi) throws IOException {
         Paper paper = findPaper(pageSize);
         Point2D psize = pageSize.getConvertedValue();
         PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX() <= psize.getY() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
@@ -132,7 +133,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         IIOMetadataNode vert = new IIOMetadataNode("VerticalPixelSize");
         vert.setAttribute("value", Double.toString(dotsPerMilli));
 
-        IIOMetadataNode dim = new IIOMetadataNode("Dimension");
+        IIOMetadataNode dim = new IIOMetadataNode("CssDimension");
         dim.appendChild(horiz);
         dim.appendChild(vert);
 

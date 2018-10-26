@@ -1,4 +1,4 @@
-/* @(#)CssDimension2D.java
+/* @(#)Dimension2D.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -11,21 +11,21 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * CssDimension2D.
+ * Dimension2D.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDimension2D {
+public class Dimension2D {
 
     private final CssDimension x;
     private final CssDimension y;
 
-    public CssDimension2D(double x, double y, String units) {
+    public Dimension2D(double x, double y, String units) {
         this(new CssDimension(x, units), new CssDimension(y, units));
     }
 
-    public CssDimension2D(CssDimension x, CssDimension y) {
+    public Dimension2D(CssDimension x, CssDimension y) {
         this.x = x;
         this.y = y;
     }
@@ -41,7 +41,7 @@ public class CssDimension2D {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CssDimension2D other = (CssDimension2D) obj;
+        final Dimension2D other = (Dimension2D) obj;
         if (!Objects.equals(this.x, other.x)) {
             return false;
         }
@@ -75,7 +75,7 @@ public class CssDimension2D {
     @Nonnull
     @Override
     public String toString() {
-        return "CssDimension2D{" + x.getValue() + (x.getUnits()==null? "" : x.getUnits())
+        return "Dimension2D{" + x.getValue() + (x.getUnits()==null? "" : x.getUnits())
                 + ", " + y.getValue() + "" +  (y.getUnits()==null? "" : y.getUnits()) + '}';
     }
 
