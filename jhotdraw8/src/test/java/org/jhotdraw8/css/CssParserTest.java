@@ -312,7 +312,11 @@ public class CssParserTest {
                         "<xml/>")),
                 dynamicTest("26", () -> testCssSyntax(true, "", //
                         "<xml/>",//
-                        "<xml/>"))//
+                        "<xml/>")),//
+                // with comments
+                dynamicTest("31", () -> testCssSyntax(true, "/*comment*/AB {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>"))
         )/**/;
     }
 }

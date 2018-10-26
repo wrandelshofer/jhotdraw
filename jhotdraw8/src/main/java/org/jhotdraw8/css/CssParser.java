@@ -215,6 +215,7 @@ public class CssParser {
                     case CssTokenType.TT_S:
                     case CssTokenType.TT_CDC:
                     case CssTokenType.TT_CDO:
+                    case CssTokenType.TT_COMMENT:
                         break;
                     case CssTokenType.TT_AT_KEYWORD: {
                         tt.pushBack();

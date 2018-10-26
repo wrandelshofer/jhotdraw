@@ -44,6 +44,7 @@ import org.jhotdraw8.draw.figure.SimplePageLabelFigure;
 import org.jhotdraw8.draw.figure.SimplePolygonFigure;
 import org.jhotdraw8.draw.figure.SimplePolylineFigure;
 import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
+import org.jhotdraw8.draw.figure.SimpleRegionFigure;
 import org.jhotdraw8.draw.figure.SimpleSliceFigure;
 import org.jhotdraw8.draw.figure.SimpleTextFigure;
 import org.jhotdraw8.draw.figure.StrokeableFigure;
@@ -108,6 +109,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Layer", SimpleLayer.class);
         addFigureKeysAndNames("Clipping", SimpleClipping.class);
         addFigureKeysAndNames("Rectangle", SimpleRectangleFigure.class);
+        addFigureKeysAndNames("Region", SimpleRegionFigure.class);
         addFigureKeysAndNames("Slice", SimpleSliceFigure.class);
         addFigureKeysAndNames("Group", SimpleGroupFigure.class);
         addFigureKeysAndNames("Polyline", SimplePolylineFigure.class);

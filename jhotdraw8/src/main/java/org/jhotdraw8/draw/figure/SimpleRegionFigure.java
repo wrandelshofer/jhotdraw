@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 public class SimpleRegionFigure extends AbstractRegionFigure
         implements FillableFigure, StrokeableFigure, CompositableFigure,
         StyleableFigure, TransformableFigure, HideableFigure,
-        ConnectableFigure, LockableFigure {
+        ConnectableFigure, LockableFigure, ResizableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.

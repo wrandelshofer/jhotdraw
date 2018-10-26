@@ -109,7 +109,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
             pathElements = pathElements=new Path2D.Float();
         }
         pathElements.reset();
-        Bounds b = getBoundsInLocal();
+        Bounds b = new BoundingBox(getStyled(X),getStyled(Y),getStyled(WIDTH),getStyled(HEIGHT));
         Shapes.reshape(pathstr, b, new AWTPathBuilder(pathElements));
     }
 }
