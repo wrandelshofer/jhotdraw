@@ -30,7 +30,7 @@ public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String
     @Nonnull
     private final CssMetaData<?, String> cssMetaData;
 
-    private Converter<String> converter;
+    private Converter<String> converter=converter = new CssSvgPathConverter(isNullable());
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -94,9 +94,6 @@ public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String
 
     @Override
     public Converter<String> getConverter() {
-        if (converter == null) {
-            converter = new CssSvgPathConverter(isNullable());
-        }
         return converter;
     }
 }

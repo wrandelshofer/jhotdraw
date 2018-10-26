@@ -1,4 +1,4 @@
-/* @(#)CssSizeInsets.java
+/* @(#)CssDimensionInsets.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -11,32 +11,32 @@ import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
 
 /**
- * CssSizeInsets.
+ * CssDimensionInsets.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSizeInsets {
+public class CssDimensionInsets {
 
-    public final static CssSizeInsets ZERO = new CssSizeInsets();
+    public final static CssDimensionInsets ZERO = new CssDimensionInsets();
 
     private final CssDimension bottom;
     private final CssDimension left;
     private final CssDimension right;
     private final CssDimension top;
 
-    public CssSizeInsets(CssDimension top, CssDimension right, CssDimension bottom, CssDimension left) {
+    public CssDimensionInsets(CssDimension top, CssDimension right, CssDimension bottom, CssDimension left) {
         this.top = top;
         this.right = right;
         this.bottom = bottom;
         this.left = left;
     }
 
-    public CssSizeInsets(double top, double right, double bottom, double left, String units) {
+    public CssDimensionInsets(double top, double right, double bottom, double left, String units) {
         this(new CssDimension(top, units), new CssDimension(right, units), new CssDimension(bottom, units), new CssDimension(left, units));
     }
 
-    public CssSizeInsets() {
+    public CssDimensionInsets() {
         this(CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO);
     }
 
@@ -51,7 +51,7 @@ public class CssSizeInsets {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CssSizeInsets other = (CssSizeInsets) obj;
+        final CssDimensionInsets other = (CssDimensionInsets) obj;
         if (!Objects.equals(this.top, other.top)) {
             return false;
         }
@@ -119,7 +119,7 @@ public class CssSizeInsets {
 
     @Override
     public String toString() {
-        return "CssSizeInsets{" +
+        return "CssDimensionInsets{" +
                 "" + bottom +
                 ", " + left +
                 ", " + right +

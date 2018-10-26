@@ -318,7 +318,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                     draggedCellIndex = (int) Math.floor(listView.screenToLocal(0, event.getScreenY()).getY() / listView.getFixedCellSize());
                     if (0 <= draggedCellIndex && draggedCellIndex < listView.getItems().size()) {
                         Label draggedLabel = (Label) event.getSource();
-                        Dragboard dragboard = draggedLabel.startDragAndDrop(new TransferMode[]{TransferMode.MOVE});
+                        Dragboard dragboard = draggedLabel.startDragAndDrop(TransferMode.MOVE);
                         ArrayList<Figure> items = new ArrayList<>();
                         items.add(listView.getItems().get(draggedCellIndex));
                         io.write(dragboard, items);
