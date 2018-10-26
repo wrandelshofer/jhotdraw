@@ -275,7 +275,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(SimpleLineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
         ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(SimpleLineFigure::new), layerFactory), 2, 1, 16);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, SimplePolylineFigure.POINTS, () -> createFigure(SimplePolylineFigure::new), layerFactory), 4, 1);
-        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 5, 1);
+        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 5, 1,0);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, SimpleBezierFigure.PATH, () -> createFigure(SimpleBezierFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
@@ -285,8 +285,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
                 labels.getFormatted("pageLabel.text", SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
                 FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
                 layerFactory), 9, 1);
-        ttbar.addTool(new CreationTool("edit.createRegion", labels, () -> createFigure(SimpleRegionFigure::new), layerFactory), 3, 0, 16);
-        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 4, 0);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 5, 0,0);
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 8, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             SimplePageFigure pf = new SimplePageFigure();
