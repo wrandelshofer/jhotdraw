@@ -108,7 +108,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     protected void layoutPath() {
-        String pathstr = getStyledNonnull(SHAPE);
+        String pathstr = getStyled(SHAPE);
 
         if (pathElements == null) {
             pathElements = pathElements=new Path2D.Float();

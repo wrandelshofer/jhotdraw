@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -495,6 +496,17 @@ public interface DrawingView extends RenderContext {
     @Nullable
     default HandleType getLeadHandleType() {
         return leadHandleTypeProperty().get();
+    }
+
+    @Nullable
+    default Figure getSelectionLead() {
+        ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
+        return selection.isEmpty()?null:selection.get(selection.size()-1);
+    }
+    @Nullable
+    default Figure getSelectionAnchor() {
+        Set<Figure> selection = getSelectedFigures();
+        return selection.isEmpty()?null:selection.iterator().next();
     }
 
     default void setMultiHandleType(@Nullable HandleType newValue) {

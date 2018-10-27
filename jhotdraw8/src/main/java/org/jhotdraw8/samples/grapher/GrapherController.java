@@ -47,6 +47,12 @@ import org.jhotdraw8.draw.EditorView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.action.AddToGroupAction;
+import org.jhotdraw8.draw.action.AlignBottomAction;
+import org.jhotdraw8.draw.action.AlignHorizontalAction;
+import org.jhotdraw8.draw.action.AlignLeftAction;
+import org.jhotdraw8.draw.action.AlignRightAction;
+import org.jhotdraw8.draw.action.AlignTopAction;
+import org.jhotdraw8.draw.action.AlignVerticalAction;
 import org.jhotdraw8.draw.action.BringToFrontAction;
 import org.jhotdraw8.draw.action.GroupAction;
 import org.jhotdraw8.draw.action.RemoveFromGroupAction;
@@ -255,6 +261,12 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
         map.put(AddToGroupAction.ID, new AddToGroupAction(getApplication(), editor));
         map.put(RemoveFromGroupAction.ID, new RemoveFromGroupAction(getApplication(), editor));
+        map.put(AlignTopAction.ID, new AlignTopAction(getApplication(), editor));
+        map.put(AlignRightAction.ID, new AlignRightAction(getApplication(), editor));
+        map.put(AlignBottomAction.ID, new AlignBottomAction(getApplication(), editor));
+        map.put(AlignLeftAction.ID, new AlignLeftAction(getApplication(), editor));
+        map.put(AlignHorizontalAction.ID, new AlignHorizontalAction(getApplication(), editor));
+        map.put(AlignVerticalAction.ID, new AlignVerticalAction(getApplication(), editor));
 
     }
 

@@ -22,6 +22,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.text.CssDimensionRectangle2D;
+import org.jhotdraw8.css.text.CssDimensionRectangle2DConverter;
 import org.jhotdraw8.css.text.Dimension2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.BorderableFigure;
@@ -176,6 +178,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Figure.class, new XmlObjectReferenceConverter<>(Figure.class));
         addConverterForType(CssDimension.class, new CssSizeConverter(false));
         addConverterForType(CssDimensionInsets.class, new CssDimensionInsetsConverter(false));
+        addConverterForType(CssDimensionRectangle2D.class, new CssDimensionRectangle2DConverter(false));
         addConverterForType(Dimension2D.class, new CssSize2DConverter());
         addConverterForType(FillRule.class, new CssEnumConverter<>(FillRule.class));
         addConverterForType(FontWeight.class, new CssEnumConverter<>(FontWeight.class));

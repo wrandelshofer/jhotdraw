@@ -42,6 +42,18 @@
                 <MenuItem id="edit.sendToBack" mnemonicParsing="false" text="Send to Back" />
             <MenuItem id="edit.bringForward" mnemonicParsing="false" text="Bring Forward" />
             <MenuItem id="edit.sendBackward" mnemonicParsing="false" text="Send Backward" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <Menu mnemonicParsing="false" text="%align.text">
+              <items>
+                  <MenuItem id="edit.alignTop" mnemonicParsing="false" text="Align Top" />
+                  <MenuItem id="edit.alignBottom" mnemonicParsing="false" text="Align Bottom" />
+                  <MenuItem id="edit.alignLeft" mnemonicParsing="false" text="Align Left" />
+                  <MenuItem id="edit.alignRight" mnemonicParsing="false" text="Align Right" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem id="edit.alignHorizontal" mnemonicParsing="false" text="Align Horizontal" />
+                  <MenuItem id="edit.alignVertical" mnemonicParsing="false" text="Align Vertical" />
+              </items>
+            </Menu>
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem id="edit.group" mnemonicParsing="false" text="Group" />
                 <MenuItem id="edit.combinePaths" mnemonicParsing="false" text="Combine Paths" />

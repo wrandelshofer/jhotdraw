@@ -823,6 +823,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
             }
         }
+        invalidateConstrainerNode();
     }
 
     private void handleFigureAdded(Figure figure) {
