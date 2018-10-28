@@ -275,13 +275,14 @@ public class LayersInspector extends AbstractDrawingInspector {
             try {
                 LayerCell cell = cellFactory.call(lv);
                 cell.getSelectionLabel().addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
+                cell.addEventHandler(DragEvent.ANY, dndSupport.cellDragHandler);
                 return cell;
             } catch (Throwable t) {
                 t.printStackTrace();
                 return null;
             }
         };
-        listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
+        //listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
         return dndCellFactory;
     }
 
@@ -314,10 +315,17 @@ public class LayersInspector extends AbstractDrawingInspector {
                     return;
                 }
                 if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
-
-                    draggedCellIndex = (int) Math.floor(listView.screenToLocal(0, event.getScreenY()).getY() / listView.getFixedCellSize());
+                    Label draggedLabel = (Label) event.getSource();
+                    Node parent=draggedLabel;
+                    while (parent!=null&&!(parent instanceof LayerCell)) {
+                        parent=parent.getParent();
+                    }
+                    if (parent==null) {
+                        return;
+                    }
+                    LayerCell cell = (LayerCell) parent;
+                    draggedCellIndex = cell.getIndex();
                     if (0 <= draggedCellIndex && draggedCellIndex < listView.getItems().size()) {
-                        Label draggedLabel = (Label) event.getSource();
                         Dragboard dragboard = draggedLabel.startDragAndDrop(TransferMode.MOVE);
                         ArrayList<Figure> items = new ArrayList<>();
                         items.add(listView.getItems().get(draggedCellIndex));
@@ -335,72 +343,79 @@ public class LayersInspector extends AbstractDrawingInspector {
         };
 
         @Nonnull
-        EventHandler<? super DragEvent> listDragHandler = new EventHandler<DragEvent>() {
+        EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
 
-            @Override
-            public void handle(DragEvent event) {
-                if (event.isConsumed()) {
-                    return;
-                }
-                EventType<DragEvent> t = event.getEventType();
-                if (t == DragEvent.DRAG_DROPPED) {
-                    onDragDropped(event);
-                } else if (t == DragEvent.DRAG_OVER) {
-                    onDragOver(event);
-                }
-            }
-
-            private void onDragDropped(@Nonnull DragEvent event) {
-                if (isAcceptable(event)) {
-                    event.acceptTransferModes(TransferMode.MOVE);
-
-                    // XXX foolishly assumes fixed cell height
-                    double cellHeight = listView.getFixedCellSize();
-                    List<Figure> items = listView.getItems();
-                    int index = Math.max(0, Math.min((int) (event.getY() / cellHeight), items.size()));
-
-                    Figure from = items.get(draggedCellIndex);
-                    moveSelectedFiguresFromToLayer((Layer) from, (Layer) items.get(index));
-                    event.setDropCompleted(true);
-                    event.consume();
-                }
-            }
-
-            private boolean isAcceptable(DragEvent event) {
-                boolean isAcceptable = (event.getGestureSource() instanceof Label)
-                        && (((Label) event.getGestureSource()).getParent().getParent() instanceof LayerCell)
-                        && ((LayerCell) ((Label) event.getGestureSource()).getParent().getParent()).getListView() == listView;
-                return isAcceptable;
-            }
-
-            private void onDragOver(@Nonnull DragEvent event) {
-                if (isAcceptable(event)) {
-                    event.acceptTransferModes(TransferMode.MOVE);
-                    event.consume();
-                }
-            }
-
-            private void moveSelectedFiguresFromToLayer(Layer from, @Nonnull Layer to) {
-                DrawingModel model = drawingView.getModel();
-                LinkedHashSet<Figure> selection = new LinkedHashSet<>(drawingView.getSelectedFigures());
-                for (Figure f : selection) {
-                    if (f instanceof Layer) {
-                        continue;
+                @Override
+                public void handle(DragEvent event) {
+                    if (event.isConsumed()) {
+                        return;
                     }
-                    if (f.getLayer() == from) {
-                        // addChild child moves a figure, so we do not need to
-                        // removeChild it explicitly
-                        model.addChildTo(f, to);
+                    EventType<DragEvent> t = event.getEventType();
+                    if (t == DragEvent.DRAG_DROPPED) {
+                        onDragDropped(event);
+                    } else if (t == DragEvent.DRAG_OVER) {
+                        onDragOver(event);
                     }
                 }
 
-                // Update the selection. The selection still contains the
-                // same figures but they have now a different ancestor.
-                drawingView.getSelectedFigures().clear();
-                drawingView.getSelectedFigures().addAll(selection);
-            }
+                private void onDragDropped(@Nonnull DragEvent event) {
+                    if (isAcceptable(event)) {
+                        event.acceptTransferModes(TransferMode.MOVE);
+                        List<Figure> items = listView.getItems();
+
+                        LayerCell source = (LayerCell) event.getSource();
+                        int droppedCellIndex = source.getIndex();
+                        Figure to = droppedCellIndex>=0&&droppedCellIndex<items.size()?items.get(droppedCellIndex):null;
+                        Figure from =draggedCellIndex>=0&&draggedCellIndex<items.size()? items.get(draggedCellIndex):null;
+                        if (to!=null&&from!=null) {
+                        moveSelectedFiguresFromToLayer((Layer) from, (Layer) to);
+                        event.setDropCompleted(true);
+                        }else{
+                            event.setDropCompleted(false);
+                        }
+                        event.consume();
+
+                    }
+                }
+
+                private boolean isAcceptable(DragEvent event) {
+                    boolean isAcceptable = (event.getGestureSource() instanceof Label)
+                            && (((Label) event.getGestureSource()).getParent().getParent() instanceof LayerCell)
+                            && ((LayerCell) ((Label) event.getGestureSource()).getParent().getParent()).getListView() == listView;
+                    return isAcceptable;
+                }
+
+                private void onDragOver(@Nonnull DragEvent event) {
+                    if (isAcceptable(event)) {
+                        event.acceptTransferModes(TransferMode.MOVE);
+                        event.consume();
+                    }
+                }
+
+
+
 
         };
+    }
+    
+    protected void moveSelectedFiguresFromToLayer(Layer from, @Nonnull Layer to) {
+        DrawingModel model = drawingView.getModel();
+        LinkedHashSet<Figure> selection = new LinkedHashSet<>(drawingView.getSelectedFigures());
+        for (Figure f : selection) {
+            if (f instanceof Layer) {
+                continue;
+            }
+            if (f.getLayer() == from) {
+                // addChild child moves a figure, so we do not need to
+                // removeChild it explicitly
+                model.addChildTo(f, to);
+            }
+        }
+
+        // Update the selection. The selection still contains the
+        // same figures but they have now a different ancestor.
+        drawingView.getSelectedFigures().clear();
+        drawingView.getSelectedFigures().addAll(selection);
     }
 
     @Override
