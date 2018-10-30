@@ -1,12 +1,12 @@
 package org.jhotdraw8.css.text;
 
-import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.io.IdFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.ParseException;
@@ -28,7 +28,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     @Override
-    public ImmutableList<T> parse(@NotNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<T> parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
             return ImmutableList.emptyList();
         } else {
@@ -48,7 +48,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public <TT extends ImmutableList<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @NotNull Consumer<CssToken> out) {
+    public <TT extends ImmutableList<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {

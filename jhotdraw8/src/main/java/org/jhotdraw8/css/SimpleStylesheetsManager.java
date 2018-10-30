@@ -26,7 +26,6 @@ import javafx.css.StyleOrigin;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
@@ -357,7 +356,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    @NotNull
+    @Nonnull
     private List<CssToken> preprocessTerms(E elem, CssFunctionProcessor<E> processor, List<CssToken> terms) {
         String value;
         try {

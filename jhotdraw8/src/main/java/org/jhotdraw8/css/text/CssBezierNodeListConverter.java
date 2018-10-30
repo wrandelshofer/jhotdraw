@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -35,7 +34,7 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
     }
 
 
-    @NotNull
+    @Nonnull
     @Override
     public ImmutableList<BezierNode> parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {

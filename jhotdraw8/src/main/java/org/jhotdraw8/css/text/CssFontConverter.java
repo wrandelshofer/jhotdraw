@@ -13,7 +13,6 @@ import javafx.scene.text.FontWeight;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -104,7 +103,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         }
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public CssFont parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         FontPosture fontPosture = FontPosture.REGULAR;

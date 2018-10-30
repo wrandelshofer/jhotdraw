@@ -8,9 +8,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -38,7 +38,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
 
 
     @Override
-    public ImmutableSet<T> parse(@NotNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<T> parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         ArrayList<T> list = new ArrayList<>();
         do {
             T elem = elementConverter.parse(tt, idFactory);
@@ -51,7 +51,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
     }
 
     @Override
-    public <TT extends ImmutableSet<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @NotNull Consumer<CssToken> out) {
+    public <TT extends ImmutableSet<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
