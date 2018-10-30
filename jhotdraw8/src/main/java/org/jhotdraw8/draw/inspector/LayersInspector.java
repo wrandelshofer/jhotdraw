@@ -397,7 +397,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
         };
     }
-    
+
     protected void moveSelectedFiguresFromToLayer(Layer from, @Nonnull Layer to) {
         DrawingModel model = drawingView.getModel();
         LinkedHashSet<Figure> selection = new LinkedHashSet<>(drawingView.getSelectedFigures());

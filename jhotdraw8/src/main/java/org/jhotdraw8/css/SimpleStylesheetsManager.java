@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javafx.css.StyleOrigin;
@@ -59,9 +60,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private LinkedHashMap<Object, ParsedStylesheetEntry> inlineList = new LinkedHashMap<>();
     @Nonnull
     private Executor executor = Executors.newCachedThreadPool();
-    private    Map<String, List<CssToken>> cachedAuthorCustomProperties;
-    private    Map<String, List<CssToken>> cachedInlineCustomProperties;
-    private    Map<String, List<CssToken>> cachedUserAgentCustomProperties;
+    private Map<String, List<CssToken>> cachedAuthorCustomProperties;
+    private Map<String, List<CssToken>> cachedInlineCustomProperties;
+    private Map<String, List<CssToken>> cachedUserAgentCustomProperties;
+    private final static Logger LOGGER = Logger.getLogger(SimpleStylesheetsManager.class.getName());
 
     public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
         this.selectorModel = selectorModel;
@@ -101,9 +103,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private void invalidate() {
-        cachedAuthorCustomProperties=null;
-        cachedInlineCustomProperties=null;
-        cachedUserAgentCustomProperties=null;
+        cachedAuthorCustomProperties = null;
+        cachedInlineCustomProperties = null;
+        cachedUserAgentCustomProperties = null;
     }
 
     @Override
@@ -238,7 +240,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + styleValue);
                 ex.printStackTrace();
             }
-                Map<String, List<CssToken>> inlineStyleAttrCustomProperties= Collections.emptyMap();
+            Map<String, List<CssToken>> inlineStyleAttrCustomProperties = Collections.emptyMap();
             for (Map.Entry<String, List<CssToken>> entry : inlineDeclarations.entrySet()) {
                 doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey(), entry.getValue(), inlineStyleAttrCustomProperties);
             }
@@ -247,22 +249,22 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private Map<String, List<CssToken>> getInlineCustomProperties() {
-        if (cachedInlineCustomProperties==null) {
-            cachedInlineCustomProperties=collectCustomProperties(getInlineStylesheets());
+        if (cachedInlineCustomProperties == null) {
+            cachedInlineCustomProperties = collectCustomProperties(getInlineStylesheets());
         }
         return cachedInlineCustomProperties;
     }
 
     private Map<String, List<CssToken>> getAuthorCustomProperties() {
-        if (cachedAuthorCustomProperties==null) {
-            cachedAuthorCustomProperties=collectCustomProperties(getAuthorStylesheets());
+        if (cachedAuthorCustomProperties == null) {
+            cachedAuthorCustomProperties = collectCustomProperties(getAuthorStylesheets());
         }
         return cachedAuthorCustomProperties;
     }
 
     private Map<String, List<CssToken>> getUserAgentCustomProperties() {
-        if (cachedUserAgentCustomProperties==null) {
-            cachedUserAgentCustomProperties=collectCustomProperties(getUserAgentStylesheets());
+        if (cachedUserAgentCustomProperties == null) {
+            cachedUserAgentCustomProperties = collectCustomProperties(getUserAgentStylesheets());
         }
         return cachedUserAgentCustomProperties;
     }
@@ -377,7 +379,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
-                return p.parseStylesheet(uri);
+                Stylesheet s = p.parseStylesheet(uri);
+                LOGGER.info("Parsed " + uri + ".\nRules: "+s.getStyleRules());
+                List<ParseException> parseExceptions = p.getParseExceptions();
+                if (!parseExceptions.isEmpty()) {
+                    LOGGER.info("Parsed " + uri + ".\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
+                }
+                return s;
             });
             executor.execute(future);
         }
@@ -386,7 +394,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
-                return p.parseStylesheet(str);
+                Stylesheet s = p.parseStylesheet(str);
+                LOGGER.info("Parsed " + str + ".\nRules: "+s.getStyleRules());
+                List<ParseException> parseExceptions = p.getParseExceptions();
+                if (!parseExceptions.isEmpty()) {
+                    LOGGER.info("Parsed " + str + ".\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
+                }
+                return s;
             });
             executor.execute(future);
         }
@@ -404,6 +418,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 } catch (InterruptedException ex) {
                     // retry later
                 } catch (ExecutionException ex) {
+                    LOGGER.throwing(getClass().getName(), "getStylesheet", ex);
                     ex.printStackTrace();
                     stylesheet = null;
                     future = null;

@@ -53,7 +53,7 @@ public class RemoveFromGroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void removeFromGroup(@Nonnull DrawingView view, List<Figure> figures) {
+    public void removeFromGroup(@Nonnull DrawingView view, List<Figure> figures) {
         List<Figure> reparentableFigures = new ArrayList<>();
         for (Figure f : figures) {
             Layer layer = f.getAncestor(Layer.class);

@@ -287,7 +287,7 @@ public class Shapes {
         return p;
     }
 
-    private static Shape awtShapeFromFXRectangle(Rectangle node) {
+    public static Shape awtShapeFromFXRectangle(Rectangle node) {
         if (node.getArcHeight() == 0 && node.getArcWidth() == 0) {
             return new Rectangle2D.Double(
                     node.getX(),
@@ -1266,4 +1266,12 @@ public class Shapes {
         return result;
     }
 
+    public static Shape awtShapeFromFxBounds(Bounds node) {
+            return new Rectangle2D.Double(
+                    node.getMinX(),
+                    node.getMinY(),
+                    node.getWidth(),
+                    node.getHeight()
+            );
+    }
 }

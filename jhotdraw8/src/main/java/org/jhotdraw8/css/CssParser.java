@@ -150,7 +150,7 @@ import org.jhotdraw8.css.ast.UniversalSelector;
  */
 public class CssParser {
 
-    private List<ParseException> exceptions;
+    private List<ParseException> exceptions= new ArrayList<>();
 
     @Nonnull
     public Stylesheet parseStylesheet(@Nonnull URL css) throws IOException {
@@ -597,7 +597,7 @@ public class CssParser {
     private List<Declaration> parseDeclarationList(CssTokenizer tt) throws IOException, ParseException {
         List<Declaration> declarations = new ArrayList<>();
 
-        while (tt.nextNoSkip() != CssTokenType.TT_EOF
+        while (tt.next() != CssTokenType.TT_EOF
                 && tt.current() != '}') {
             switch (tt.current()) {
                 case CssTokenType.TT_IDENT:
@@ -611,11 +611,10 @@ public class CssParser {
                     }
                     break;
                 case ';':
-                case CssTokenType.TT_S:
                     break;
                 default:
                     throw new ParseException(//
-                            "Declaration List: declaration or at-rule expected. Line"//
+                            "Declaration List: declaration or at-rule expected. Line "//
                             + tt.getLineNumber() + ".", //
                             tt.getStartPosition());
 
