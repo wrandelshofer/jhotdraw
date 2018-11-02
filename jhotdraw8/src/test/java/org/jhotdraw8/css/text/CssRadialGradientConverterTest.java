@@ -1,12 +1,10 @@
 package org.jhotdraw8.css.text;
 
-import javafx.geometry.Point2D;
-import org.jhotdraw8.draw.key.CssRadialGradient;
+import org.jhotdraw8.css.CssRadialGradient;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.awt.RadialGradientPaint;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +14,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class CssRadialGradientConverterTest {
     /**
-     * Test of fromString method, of class Dimension2DConverterTest.
+     * Test of fromString method, of class CssPoint2DConverterTest.
      */
     static
     public void doTestFromString(CssRadialGradient expected, String string) throws Exception {

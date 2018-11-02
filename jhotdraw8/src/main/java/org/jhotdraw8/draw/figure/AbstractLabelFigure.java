@@ -23,17 +23,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
-import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.DimensionInsetsStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -53,19 +53,19 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         implements TextFillableFigure, FillableFigure, StrokeableFigure,
         FontableFigure, ConnectableFigure, PathIterableFigure {
 
-    public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static Point2DStyleableMapAccessor ORIGIN = new Point2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
+    public final static CssSizeStyleableFigureKey ORIGIN_X = new CssSizeStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey ORIGIN_Y = new CssSizeStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
 
-    public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
-    public final static DimensionStyleableFigureKey SHAPE_SLICE_BOTTOM = new DimensionStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static DimensionStyleableFigureKey SHAPE_SLICE_LEFT = new DimensionStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static DimensionStyleableFigureKey SHAPE_SLICE_RIGHT = new DimensionStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static DimensionStyleableFigureKey SHAPE_SLICE_TOP = new DimensionStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
+    public final static CssSizeStyleableFigureKey PADDING_BOTTOM = new CssSizeStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey PADDING_LEFT = new CssSizeStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey PADDING_RIGHT = new CssSizeStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey PADDING_TOP = new CssSizeStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssInsetsStyleableMapAccessor PADDING = new CssInsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
+    public final static CssSizeStyleableFigureKey SHAPE_SLICE_BOTTOM = new CssSizeStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey SHAPE_SLICE_LEFT = new CssSizeStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey SHAPE_SLICE_RIGHT = new CssSizeStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey SHAPE_SLICE_TOP = new CssSizeStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     /**
      * This property specifies inward offsets from the top, right, bottom, and
      * left edges of the border image defined by the {@link #SHAPE_BOUNDS}
@@ -77,7 +77,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
      * Background: border-image-slice</a>.
      */
-    public final static DimensionInsetsStyleableMapAccessor SHAPE_SLICE = new DimensionInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
+    public final static CssInsetsStyleableMapAccessor SHAPE_SLICE = new CssInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
     /**
      * This property specifies the bounds of a {@link#SHAPE} property. If the
      * bounds are null or empty, then the bounds of the shape are used.
@@ -108,7 +108,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     public AbstractLabelFigure(double x, double y) {
-        set(ORIGIN, new Point2D(x, y));
+        set(ORIGIN, new CssPoint2D(x, y));
     }
     
     @Nonnull
@@ -145,7 +145,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Text  textNode = new Text();
         updateTextNode(null, textNode);
         Bounds b = textNode.getLayoutBounds();
-        Insets i = getStyled(PADDING);
+        Insets i = getStyledNonnull(PADDING).getConvertedValue();
 
         return new BoundingBox(
                 b.getMinX() - i.getLeft(),
@@ -158,8 +158,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public PathIterator getPathIterator(AffineTransform tx) {
         Text tn = new Text();
         tn.setText(getText(null));
-        tn.setX(getStyled(ORIGIN).getX());
-        tn.setY(getStyled(ORIGIN).getY());
+        tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
+        tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyFontableFigureProperties(null, tn);
         return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
@@ -178,8 +178,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
         Bounds lb = getLayoutBounds();
-        Insets i = getStyled(PADDING);
-        set(ORIGIN, new Point2D(x + i.getLeft(), y + lb.getHeight() - i.getBottom()));
+        Insets i = getStyledNonnull(PADDING).getConvertedValue();
+        set(ORIGIN, new CssPoint2D(x + i.getLeft(), y + lb.getHeight() - i.getBottom()));
         //invalidateBounds();
     }
 
@@ -235,8 +235,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         if (!Objects.equals(text, tn.getText())) {
             tn.setText(text);
         }
-        tn.setX(get(ORIGIN_X));
-        tn.setY(get(ORIGIN_Y));
+        tn.setX(getNonnull(ORIGIN_X).getConvertedValue());
+        tn.setY(getNonnull(ORIGIN_Y).getConvertedValue());
         applyTextFillableFigureProperties(tn);
         applyFontableFigureProperties(ctx, tn);
     }

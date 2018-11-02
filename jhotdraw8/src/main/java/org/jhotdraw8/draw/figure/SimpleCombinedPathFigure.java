@@ -22,7 +22,7 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;

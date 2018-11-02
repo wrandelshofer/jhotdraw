@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.draw.key.CssRadialGradient;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssRadialGradient;
+import org.jhotdraw8.css.CssColor;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -32,13 +32,13 @@ import org.jhotdraw8.io.IdFactory;
  * Paint := (Color|RadialGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
  * RadialGradient := "radial-gradient(", RadialGradientParameters,  Cycle, ColorStop,{"," ColorStop}")"
  * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius ;
- * FocusAngle = "focus-angle", CssDimension"deg";
+ * FocusAngle = "focus-angle", CssSize"deg";
  * FocusDistance = "focus-distance", Percentage ;
  * Center = "center", Point ;
  * Cycle = ( "repeat" | "reflect" )
  * Radius = "radius", ( Length | Percentage ) ;
  * ColorStop = Color, [" ", Offset] ;
- * Point = (Number|CssDimension|Percentage), (Number|CssDimension|Percentage) ;
+ * Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
  *
  * </pre>
  *

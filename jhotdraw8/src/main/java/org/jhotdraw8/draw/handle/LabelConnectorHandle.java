@@ -18,6 +18,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
@@ -55,14 +56,14 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     private final Region targetNode;
     @Nonnull
     private final Line lineNode;
-    protected final MapAccessor<Point2D> originKey;
-    public LabelConnectorHandle(ConnectingFigure figure,  MapAccessor<Point2D> originKey,MapAccessor<Point2D> pointKey,
+    protected final MapAccessor<CssPoint2D> originKey;
+    public LabelConnectorHandle(ConnectingFigure figure,  MapAccessor<CssPoint2D> originKey,MapAccessor<CssPoint2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,originKey, pointKey,
                 connectorKey, targetKey);
     }
 
-    public LabelConnectorHandle(ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected,MapAccessor<Point2D> originKey, MapAccessor<Point2D> pointKey,
+    public LabelConnectorHandle(ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected,MapAccessor<CssPoint2D> originKey, MapAccessor<CssPoint2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure, styleclassDisconnected, styleclassConnected, pointKey,
                 connectorKey, targetKey);
@@ -96,7 +97,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Point2D p = f.get(pointKey);
+        Point2D p = f.getNonnull(pointKey).getConvertedValue();
         pickLocation = p = t == null ? p : t.transform(p);
         boolean isConnected = f.get(connectorKey) != null && f.get(targetKey) != null;
         targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
@@ -109,7 +110,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         if (isConnected) {
             connectorLocation = view.worldToView(f.get(connectorKey).getPositionInWorld(owner, f.get(targetKey)));
             targetNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
-            Point2D origin=t.transform(f.get(originKey));
+            Point2D origin=t.transform(f.getNonnull(originKey).getConvertedValue());
             lineNode.setStartX(origin.getX());
             lineNode.setStartY(origin.getY());
             lineNode.setEndX(connectorLocation.getX());

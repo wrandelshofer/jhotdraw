@@ -18,7 +18,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssPoint3DConverter;
+import org.jhotdraw8.css.text.CssPoint3DConverterOLD;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -50,7 +50,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
      * @param zKey the key for the u coordinate of the point
      */
     public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {
-        this(name, xKey, yKey, zKey, new CssPoint3DConverter(false));
+        this(name, xKey, yKey, zKey, new CssPoint3DConverterOLD(false));
     }
 
     public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey, Converter<Point3D> converter) {

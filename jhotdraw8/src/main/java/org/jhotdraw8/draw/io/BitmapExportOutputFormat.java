@@ -38,7 +38,7 @@ import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -132,7 +132,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         IIOMetadataNode vert = new IIOMetadataNode("VerticalPixelSize");
         vert.setAttribute("value", Double.toString(dotsPerMilli));
 
-        IIOMetadataNode dim = new IIOMetadataNode("CssDimension");
+        IIOMetadataNode dim = new IIOMetadataNode("CssSize");
         dim.appendChild(horiz);
         dim.appendChild(vert);
 
@@ -198,7 +198,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     protected void writePage(@Nonnull File file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssDimension pw = page.get(SimplePageFigure.PAPER_WIDTH);
+        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();

@@ -1,4 +1,4 @@
-/* @(#)CssRectangle2DConverter.java
+/* @(#)CssRectangle2DConverterOLD.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -24,15 +24,15 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssRectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
+public class CssRectangle2DConverterOLD extends AbstractCssConverter<Rectangle2D> {
     private final boolean withSpace;
     private final boolean withComma;
 
-    public CssRectangle2DConverter(boolean nullable) {
+    public CssRectangle2DConverterOLD(boolean nullable) {
         this(nullable, true, false);
     }
 
-    public CssRectangle2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
+    public CssRectangle2DConverterOLD(boolean nullable, boolean withSpace, boolean withComma) {
         super(nullable);
         this.withSpace = withSpace || !withComma;
         this.withComma = withComma;

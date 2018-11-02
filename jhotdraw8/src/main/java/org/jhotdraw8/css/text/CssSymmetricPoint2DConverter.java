@@ -1,19 +1,20 @@
-/* @(#)CssPoint2DConverter.java
+/* @(#)CssPoint2DConverterOLD.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 
-import javafx.geometry.Point2D;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import java.io.IOException;
+import java.nio.CharBuffer;
+import java.text.ParseException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.function.Consumer;
+
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.PatternConverter;
 
 /**
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
@@ -22,62 +23,46 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSymmetricPoint2DConverter extends AbstractCssConverter<Point2D> {
+public class CssSymmetricPoint2DConverter implements Converter<CssPoint2D> {
 
-    private final boolean withSpace;
-    private boolean withComma;
+    private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
-    public CssSymmetricPoint2DConverter(boolean nullable) {
-        this(nullable, true, false);
-    }
-
-    public CssSymmetricPoint2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
-        super(nullable);
-        this.withSpace = withSpace;
-        this.withComma = withComma || !withSpace;
-    }
-
-    @Nonnull
     @Override
-    public Point2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        final double x, y;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨SymmetricPoint2D⟩: ⟨x⟩ expected.");
-        x = tt.currentNumberNonnull().doubleValue();
-        tt.skipIfPresent(CssTokenType.TT_COMMA);
-        if (tt.next() == CssTokenType.TT_NUMBER) {
-            y = tt.currentNumberNonnull().doubleValue();
+    public void toString(Appendable out, IdFactory idFactory, @Nonnull CssPoint2D value) throws IOException {
+        CssSize x = value.getX();
+        CssSize y = value.getY();
+        if (x == y) {
+            formatter.toStr(out, idFactory, 1, value.getX());
         } else {
-            tt.pushBack();
-            y = x;
-        }
-        return new Point2D(x, y);
-    }
-
-    @Override
-    protected <TT extends Point2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-        if (value.getX() != value.getY()) {
-            if (withComma) {
-                out.accept(new CssToken(CssTokenType.TT_COMMA));
-            }
-            if (withSpace) {
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-            }
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
+            formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
         }
     }
-
 
     @Nonnull
     @Override
-    public Point2D getDefaultValue() {
-        return new Point2D(0, 0);
+    public CssPoint2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        Object[] v = formatter.fromString(buf);
+        int count = (Integer) v[0];
+        switch (count) {
+            case 1:
+                return new CssPoint2D(((CssSize) v[1]), ((CssSize) v[1]));
+            case 2:
+                return new CssPoint2D(((CssSize) v[1]), ((CssSize) v[2]));
+            default:
+                throw new ParseException("one or two numbers expected, found " + count + " numbers", 0);
+        }
     }
 
+    @Nullable
+    @Override
+    public CssPoint2D getDefaultValue() {
+        return new CssPoint2D(CssSize.ZERO, CssSize.ZERO);
+    }
+    
     @Nonnull
     @Override
     public String getHelpText() {
-        return "Format of ⟨SymmetricPoint2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
+        return "Format of ⟨SymmetricSize2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
     }
-
+    
 }

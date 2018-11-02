@@ -13,8 +13,11 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
@@ -38,7 +41,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Text";
-    public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static CssPoint2DStyleableFigureKey ORIGIN = new CssPoint2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT), new CssPoint2D(0, 0));
 
     private Text textNode;
 
@@ -52,7 +55,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
 
     public SimpleTextFigure(double x, double y, String text) {
         set(TEXT, text);
-        set(ORIGIN, new Point2D(x, y));
+        set(ORIGIN, new CssPoint2D(x, y));
     }
 
     @Nonnull
@@ -69,14 +72,14 @@ public class SimpleTextFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
-        Point2D o = get(ORIGIN);
+        Point2D o = getNonnull(ORIGIN).getConvertedValue();
         o = transform.transform(o);
-        set(ORIGIN, o);
+        set(ORIGIN, new CssPoint2D(o));
     }
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(ORIGIN, new Point2D(x, y));
+        set(ORIGIN, new CssPoint2D(x, y));
     }
 
     @Nonnull
@@ -89,8 +92,8 @@ public class SimpleTextFigure extends AbstractLeafFigure
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Text tn = (Text) node;
         tn.setText(get(TEXT));
-        tn.setX(getStyled(ORIGIN).getX());
-        tn.setY(getStyled(ORIGIN).getY());
+        tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
+        tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(tn);
@@ -118,8 +121,8 @@ public class SimpleTextFigure extends AbstractLeafFigure
     public PathIterator getPathIterator(AffineTransform tx) {
         Text tn=new Text();
          tn.setText(get(TEXT));
-        tn.setX(getStyled(ORIGIN).getX());
-        tn.setY(getStyled(ORIGIN).getY());
+        tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
+        tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyTextableFigureProperties(tn);
         applyFontableFigureProperties(null, tn);

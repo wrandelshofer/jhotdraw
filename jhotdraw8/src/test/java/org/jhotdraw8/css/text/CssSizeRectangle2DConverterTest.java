@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.css.text.CssDimensionRectangle2D;
-import org.jhotdraw8.css.text.CssDimensionRectangle2DConverter;
-import org.jhotdraw8.css.text.CssRectangle2DConverter;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.junit.jupiter.api.DynamicTest;
@@ -26,9 +25,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDimensionRectangle2DConverterTest {
+public class CssSizeRectangle2DConverterTest {
 
-    public CssDimensionRectangle2DConverterTest() {
+    public CssSizeRectangle2DConverterTest() {
     }
 
 
@@ -37,12 +36,12 @@ public class CssDimensionRectangle2DConverterTest {
     /**
      * Test of fromString method, of class CssDoubleConverter.
      */
-    public static void testFromString(CssDimensionRectangle2D expected, String string) throws Exception {
+    public static void testFromString(CssRectangle2D expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
         CssDimensionRectangle2DConverter instance = new CssDimensionRectangle2DConverter(false);
-        CssDimensionRectangle2D actual = instance.fromString(buf, idFactory);
+        CssRectangle2D actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
 
@@ -55,9 +54,9 @@ public class CssDimensionRectangle2DConverterTest {
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1",()->  testFromString(new CssDimensionRectangle2D(11,22,33,44), "11 22 33 44")),
-                dynamicTest("2",()->  testFromString(new CssDimensionRectangle2D(new CssDimension(0,"cm"),
-                        new CssDimension(0,"cm"),new CssDimension(21,"cm"),new CssDimension(29.7,"cm")), "0cm 0cm 21cm 29.7cm"))
+                dynamicTest("1",()->  testFromString(new CssRectangle2D(11,22,33,44), "11 22 33 44")),
+                dynamicTest("2",()->  testFromString(new CssRectangle2D(new CssSize(0,"cm"),
+                        new CssSize(0,"cm"),new CssSize(21,"cm"),new CssSize(29.7,"cm")), "0cm 0cm 21cm 29.7cm"))
         );
     }
 }

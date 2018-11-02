@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;

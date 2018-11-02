@@ -1,4 +1,4 @@
-/* @(#)Dimension2DStyleableFigureKey.java
+/* @(#)CssPoint2DStyleableFigureKey.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -10,27 +10,28 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 
-import org.jhotdraw8.css.text.Dimension2D;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssSize2DConverter;
+import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
- * Dimension2DStyleableFigureKey.
+ * CssPoint2DStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Dimension2D> implements WriteableStyleableMapAccessor<Dimension2D> {
+public class CssPoint2DStyleableFigureKey extends AbstractStyleableFigureKey<CssPoint2D> implements WriteableStyleableMapAccessor<CssPoint2D> {
 
     private final static long serialVersionUID = 1L;
-    private Converter<Dimension2D> converter;
+    private final Converter<CssPoint2D> converter;
 
     @Nonnull
-    private final CssMetaData<?, Dimension2D> cssMetaData;
+    private final CssMetaData<?, CssPoint2D> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -38,7 +39,7 @@ public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Di
      *
      * @param name The name of the key.
      */
-    public Dimension2DStyleableFigureKey(String name) {
+    public CssPoint2DStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -48,7 +49,7 @@ public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Di
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public Dimension2DStyleableFigureKey(String name, Dimension2D defaultValue) {
+    public CssPoint2DStyleableFigureKey(String name, CssPoint2D defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -61,34 +62,35 @@ public class Dimension2DStyleableFigureKey extends AbstractStyleableFigureKey<Di
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public Dimension2DStyleableFigureKey(String key, DirtyMask mask, Dimension2D defaultValue) {
-        super(key, Dimension2D.class, mask, defaultValue);
+    public CssPoint2DStyleableFigureKey(String key, DirtyMask mask, CssPoint2D defaultValue) {
+        this(key,mask,defaultValue,new CssPoint2DConverter(false));
+    }
+    public CssPoint2DStyleableFigureKey(String key, DirtyMask mask, CssPoint2D defaultValue, CssConverter<CssPoint2D> converter) {
+        super(key, CssPoint2D.class, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<Dimension2D>> function = s -> {
+        Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Dimension2D> converter
-                = new StyleConverterAdapter<>(new CssSize2DConverter());
-        CssMetaData<Styleable, Dimension2D> md
+        this.converter=converter;
+        final StyleConverter<String, CssPoint2D> c
+                = new StyleConverterAdapter<>(new CssPoint2DConverter(false));
+        CssMetaData<Styleable, CssPoint2D> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                c, defaultValue, inherits);
         cssMetaData = md;
     }
 
 
     @Override
-    public Converter<Dimension2D> getConverter() {
-        if (converter == null) {
-            converter = new CssSize2DConverter();
-        }
-        return converter;
+    public Converter<CssPoint2D> getConverter() {
+       return converter;
     }
     @Nonnull
     @Override
-    public CssMetaData<?, Dimension2D> getCssMetaData() {
+    public CssMetaData<?, CssPoint2D> getCssMetaData() {
       return cssMetaData;
       
     }

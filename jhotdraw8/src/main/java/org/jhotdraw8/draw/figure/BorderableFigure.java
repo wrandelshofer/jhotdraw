@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.List;
 import java.util.Objects;
 
 import javafx.scene.paint.Paint;
@@ -21,7 +20,7 @@ import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.css.Paintable;
 
 /**
  * Interface for figures which can render a border.

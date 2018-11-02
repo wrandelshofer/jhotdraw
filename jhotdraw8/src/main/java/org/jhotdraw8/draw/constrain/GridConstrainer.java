@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 
 /**
  * GridConstrainer.

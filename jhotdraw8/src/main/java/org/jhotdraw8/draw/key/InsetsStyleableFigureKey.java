@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssInsetsConverter;
+import org.jhotdraw8.css.text.CssInsetsConverterOLD;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -80,7 +80,7 @@ public class InsetsStyleableFigureKey extends AbstractStyleableFigureKey<Insets>
 
     }
 
-    private final Converter<Insets> converter= new CssInsetsConverter(false);
+    private final Converter<Insets> converter= new CssInsetsConverterOLD(false);
 
     @Override
     public Converter<Insets> getConverter() {

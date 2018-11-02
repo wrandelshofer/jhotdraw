@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.xml.text.XmlDoubleConverter;

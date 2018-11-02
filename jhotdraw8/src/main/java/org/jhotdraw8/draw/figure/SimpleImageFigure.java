@@ -15,14 +15,12 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.text.CssDimensionRectangle2D;
-import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.UriStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 
@@ -50,11 +48,11 @@ public class SimpleImageFigure extends AbstractLeafFigure
     @Nullable
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
 
-    public final static DimensionStyleableFigureKey X = SimpleRectangleFigure.X;
-    public final static DimensionStyleableFigureKey Y = SimpleRectangleFigure.Y;
-    public final static DimensionStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
-    public final static DimensionStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
-    public final static DimensionRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
     @Nullable
     private Image cachedImage;
     @Nullable
@@ -65,10 +63,10 @@ public class SimpleImageFigure extends AbstractLeafFigure
     }
 
     public SimpleImageFigure(double x, double y, double width, double height) {
-        set(BOUNDS, new CssDimensionRectangle2D(x, y, width, height));
+        set(BOUNDS, new CssRectangle2D(x, y, width, height));
     }
 
-    public SimpleImageFigure(CssDimensionRectangle2D rect) {
+    public SimpleImageFigure(CssRectangle2D rect) {
         set(BOUNDS, rect);
     }
 
@@ -89,7 +87,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(BOUNDS, new CssDimensionRectangle2D(x + Math.min(width, 0), y + Math.min(height, 0), Math.abs(width), Math.abs(height)));
+        set(BOUNDS, new CssRectangle2D(x + Math.min(width, 0), y + Math.min(height, 0), Math.abs(width), Math.abs(height)));
     }
 
     @Nonnull

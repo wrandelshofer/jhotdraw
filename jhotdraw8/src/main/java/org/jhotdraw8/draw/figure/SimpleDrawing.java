@@ -19,8 +19,8 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
-import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**

@@ -18,6 +18,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
@@ -42,14 +43,14 @@ public class PointHandle extends AbstractHandle {
     private final Region node;
 
     private Point2D pickLocation;
-    private final MapAccessor<Point2D> pointKey;
+    private final MapAccessor<CssPoint2D> pointKey;
     private final String styleclass;
 
-    public PointHandle(Figure figure, MapAccessor<Point2D> pointKey) {
+    public PointHandle(Figure figure, MapAccessor<CssPoint2D> pointKey) {
         this(figure, STYLECLASS_HANDLE_POINT, pointKey);
     }
 
-    public PointHandle(Figure figure, String styleclass, MapAccessor<Point2D> pointKey) {
+    public PointHandle(Figure figure, String styleclass, MapAccessor<CssPoint2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
         this.styleclass = styleclass;
@@ -95,7 +96,7 @@ public class PointHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
 
-        view.getModel().set(getOwner(), pointKey, getOwner().worldToLocal(newPoint));
+        view.getModel().set(getOwner(), pointKey, new CssPoint2D(getOwner().worldToLocal(newPoint)));
     }
 
     @Override
@@ -115,12 +116,12 @@ public class PointHandle extends AbstractHandle {
     public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Point2D p = f.get(pointKey);
-        pickLocation = p = t == null ? p : t.transform(p);
+        Point2D p = f.getNonnull(pointKey).getConvertedValue();
+        pickLocation = p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+        node.setRotate(f.getStyledNonnull(ROTATE));
+        node.setRotationAxis(f.getStyledNonnull(ROTATION_AXIS));
     }
 
 }

@@ -20,13 +20,11 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
@@ -40,13 +38,13 @@ import org.jhotdraw8.geom.Shapes;
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
-    public final static DimensionRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
-    public final static DimensionStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     @Nullable
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
-    public final static DimensionStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
-    public final static DimensionStyleableFigureKey X = SimpleRectangleFigure.X;
-    public final static DimensionStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
 
     private transient Path2D.Float pathElements;
 
@@ -89,10 +87,10 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, new CssDimension(x + min(width, 0),null));
-        set(Y, new CssDimension(y + min(height, 0),null));
-        set(WIDTH, new CssDimension(abs(width),null));
-        set(HEIGHT, new CssDimension(abs(height),null));
+        set(X, new CssSize(x + min(width, 0),null));
+        set(Y, new CssSize(y + min(height, 0),null));
+        set(WIDTH, new CssSize(abs(width),null));
+        set(HEIGHT, new CssSize(abs(height),null));
     }
 
 

@@ -15,11 +15,16 @@ import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.PointHandle;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -43,32 +48,32 @@ public class SimpleLineFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Line";
 
-    public final static DoubleStyleableFigureKey START_X = new DoubleStyleableFigureKey("startX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static DoubleStyleableFigureKey START_Y = new DoubleStyleableFigureKey("startY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static DoubleStyleableFigureKey END_X = new DoubleStyleableFigureKey("endX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static DoubleStyleableFigureKey END_Y = new DoubleStyleableFigureKey("endY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static Point2DStyleableMapAccessor START = new Point2DStyleableMapAccessor("start", START_X, START_Y);
-    public final static Point2DStyleableMapAccessor END = new Point2DStyleableMapAccessor("end", END_X, END_Y);
+    public final static CssSizeStyleableFigureKey START_X = new CssSizeStyleableFigureKey("startX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey START_Y = new CssSizeStyleableFigureKey("startY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS),  CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey END_X = new CssSizeStyleableFigureKey("endX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS),  CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey END_Y = new CssSizeStyleableFigureKey("endY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS),  CssSize.ZERO);
+    public final static CssPoint2DStyleableMapAccessor START = new CssPoint2DStyleableMapAccessor("start", START_X, START_Y);
+    public final static CssPoint2DStyleableMapAccessor END = new CssPoint2DStyleableMapAccessor("end", END_X, END_Y);
 
     public SimpleLineFigure() {
         this(0, 0, 1, 1);
     }
 
     public SimpleLineFigure(double startX, double startY, double endX, double endY) {
-        set(START, new Point2D(startX, startY));
-        set(END, new Point2D(endX, endY));
+        set(START, new CssPoint2D(startX, startY));
+        set(END, new CssPoint2D(endX, endY));
     }
 
     public SimpleLineFigure(Point2D start, Point2D end) {
-        set(START, start);
-        set(END, end);
+        set(START, new CssPoint2D(start));
+        set(END, new CssPoint2D(end));
     }
 
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        Point2D start = get(START);
-        Point2D end = get(END);
+        Point2D start = getNonnull(START).getConvertedValue();
+        Point2D end = getNonnull(END).getConvertedValue();
         return new BoundingBox(//
                 min(start.getX(), end.getX()),//
                 min(start.getY(), end.getY()),//
@@ -78,19 +83,22 @@ public class SimpleLineFigure extends AbstractLeafFigure
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        return Shapes.awtShapeFromFX(new Line(get(START_X),get(START_Y),get(END_X),get(END_Y))).getPathIterator(tx);
+        return Shapes.awtShapeFromFX(new Line(getNonnull(START_X).getConvertedValue(),
+                getNonnull(START_Y).getConvertedValue(),
+                getNonnull(END_X).getConvertedValue(),
+                getNonnull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
-        set(START, transform.transform(get(START)));
-        set(END, transform.transform(get(END)));
+        set(START, new CssPoint2D(transform.transform(getNonnull(START).getConvertedValue())));
+        set(END, new CssPoint2D(transform.transform(getNonnull(END).getConvertedValue())));
     }
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(START, new Point2D(x, y));
-        set(END, new Point2D(x + width, y + height));
+        set(START, new CssPoint2D(x, y));
+        set(END, new CssPoint2D(x + width, y + height));
     }
 
     @Nonnull
@@ -107,10 +115,10 @@ public class SimpleLineFigure extends AbstractLeafFigure
         applyStrokeableFigureProperties(lineNode);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(lineNode);
-        Point2D start = get(START);
+        Point2D start = getNonnull(START).getConvertedValue();
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());
-        Point2D end = get(END);
+        Point2D end = getNonnull(END).getConvertedValue();
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
         lineNode.applyCss();

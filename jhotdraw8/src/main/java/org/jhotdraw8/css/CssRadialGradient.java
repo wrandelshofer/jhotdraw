@@ -1,7 +1,7 @@
 /* @(#)CssRadialGradient.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.key;
+package org.jhotdraw8.css;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -15,7 +15,7 @@ import javafx.scene.paint.Stop;
 import org.jhotdraw8.css.text.CssStop;
 
 /**
- * CssRadialGradient.
+ * Represents a radial gradient.
  *
  * @author Werner Randelshofer
  * @version $Id$

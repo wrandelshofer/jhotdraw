@@ -2,7 +2,6 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import javafx.geometry.Point2D;
@@ -21,14 +20,14 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 class CssSymmetricPoint2DConverterTest {
 
     /**
-     * Test of fromString method, of class Dimension2DConverterTest.
+     * Test of fromString method, of class CssPoint2DConverterTest.
      */
     static
     public void doTestFromString(Point2D expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssSymmetricPoint2DConverter instance = new CssSymmetricPoint2DConverter(false);
+        CssSymmetricPoint2DConverterOLD instance = new CssSymmetricPoint2DConverterOLD(false);
         Point2D actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

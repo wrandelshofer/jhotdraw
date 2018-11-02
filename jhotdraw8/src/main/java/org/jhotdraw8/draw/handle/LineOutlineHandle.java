@@ -75,14 +75,12 @@ public class LineOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        points[0] = f.get(SimpleLineConnectionFigure.START).getX();
-        points[1] = f.get(SimpleLineConnectionFigure.START).getY();
-        points[2] = f.get(SimpleLineConnectionFigure.END).getX();
-        points[3] = f.get(SimpleLineConnectionFigure.END).getY();
+        points[0] = f.getNonnull(SimpleLineConnectionFigure.START).getX().getConvertedValue();
+        points[1] = f.getNonnull(SimpleLineConnectionFigure.START).getY().getConvertedValue();
+        points[2] = f.getNonnull(SimpleLineConnectionFigure.END).getX().getConvertedValue();
+        points[3] = f.getNonnull(SimpleLineConnectionFigure.END).getY().getConvertedValue();
 
-        if (t != null) {
             t.transform2DPoints(points, 0, points, 0, 2);
-        }
         ObservableList<Double> pp = node.getPoints();
         for (int i = 0; i < points.length; i++) {
             pp.set(i, points[i]);

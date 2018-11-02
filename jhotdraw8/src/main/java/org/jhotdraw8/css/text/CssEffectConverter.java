@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

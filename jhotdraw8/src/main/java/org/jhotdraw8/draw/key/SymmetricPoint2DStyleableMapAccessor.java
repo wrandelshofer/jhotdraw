@@ -3,11 +3,9 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssSymmetricPoint2DConverter;
+import org.jhotdraw8.css.text.CssSymmetricPoint2DConverterOLD;
 
 /**
  * SymmetricPoint2DStyleableMapAccessor.
@@ -20,6 +18,6 @@ public class SymmetricPoint2DStyleableMapAccessor extends Point2DStyleableMapAcc
     private final static long serialVersionUID = 1L;
 
     public SymmetricPoint2DStyleableMapAccessor(String name, @Nonnull MapAccessor<Double> xKey, @Nonnull MapAccessor<Double> yKey) {
-        super(name, xKey, yKey, new CssSymmetricPoint2DConverter(false));
+        super(name, xKey, yKey, new CssSymmetricPoint2DConverterOLD(false));
     }
 }

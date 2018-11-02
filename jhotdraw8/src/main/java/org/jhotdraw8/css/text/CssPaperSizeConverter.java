@@ -1,4 +1,4 @@
-/* @(#)CssPoint2DConverter.java
+/* @(#)CssPoint2DConverterOLD.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -18,48 +20,48 @@ import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 
 /**
- * Converts a {@code Dimension2D} into a {@code String} and vice versa.
+ * Converts a {@code CssPoint2D} into a {@code String} and vice versa.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssPaperSizeConverter implements Converter<Dimension2D> {
+public class CssPaperSizeConverter implements Converter<CssPoint2D> {
 
     private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
     @Nonnull
-    private final static Map<String, Dimension2D> paperSizes;
+    private final static Map<String, CssPoint2D> paperSizes;
     @Nonnull
-    private final static Map<Dimension2D, String> sizePapers;
+    private final static Map<CssPoint2D, String> sizePapers;
 
     static {
-        Map<String, Dimension2D> m = new LinkedHashMap<>();
-        m.put("A0", new Dimension2D(new CssDimension(841, "mm"), new CssDimension(1189, "mm")));
-        m.put("A1", new Dimension2D(new CssDimension(594, "mm"), new CssDimension(841, "mm")));
-        m.put("A2", new Dimension2D(new CssDimension(420, "mm"), new CssDimension(594, "mm")));
-        m.put("A3", new Dimension2D(new CssDimension(297, "mm"), new CssDimension(420, "mm")));
-        m.put("A4", new Dimension2D(new CssDimension(210, "mm"), new CssDimension(297, "mm")));
-        m.put("A5", new Dimension2D(new CssDimension(148, "mm"), new CssDimension(210, "mm")));
-        m.put("A6", new Dimension2D(new CssDimension(105, "mm"), new CssDimension(148, "mm")));
-        m.put("DesignatedLong", new Dimension2D(new CssDimension(110, "mm"), new CssDimension(220, "mm")));
-        m.put("Letter", new Dimension2D(new CssDimension(8.5, "in"), new CssDimension(11, "in")));
-        m.put("Legal", new Dimension2D(new CssDimension(8.4, "in"), new CssDimension(14, "in")));
-        m.put("Tabloid", new Dimension2D(new CssDimension(11.0, "in"), new CssDimension(17.0, "in")));
-        m.put("Executive", new Dimension2D(new CssDimension(7.25, "in"), new CssDimension(10.5, "in")));
-        m.put("x8x10", new Dimension2D(new CssDimension(8, "in"), new CssDimension(10, "in")));
-        m.put("MonarchEnvelope", new Dimension2D(new CssDimension(3.87, "in"), new CssDimension(7.5, "in")));
-        m.put("Number10Envelope", new Dimension2D(new CssDimension(4.125, "in"), new CssDimension(9.5, "in")));
-        m.put("C", new Dimension2D(new CssDimension(17.0, "in"), new CssDimension(22.0, "in")));
-        m.put("B4", new Dimension2D(new CssDimension(257, "mm"), new CssDimension(364, "mm")));
-        m.put("B5", new Dimension2D(new CssDimension(182, "mm"), new CssDimension(257, "mm")));
-        m.put("B6", new Dimension2D(new CssDimension(128, "mm"), new CssDimension(182, "mm")));
-        m.put("JapanesePostcard", new Dimension2D(new CssDimension(100, "mm"), new CssDimension(148, "mm")));
+        Map<String, CssPoint2D> m = new LinkedHashMap<>();
+        m.put("A0", new CssPoint2D(new CssSize(841, "mm"), new CssSize(1189, "mm")));
+        m.put("A1", new CssPoint2D(new CssSize(594, "mm"), new CssSize(841, "mm")));
+        m.put("A2", new CssPoint2D(new CssSize(420, "mm"), new CssSize(594, "mm")));
+        m.put("A3", new CssPoint2D(new CssSize(297, "mm"), new CssSize(420, "mm")));
+        m.put("A4", new CssPoint2D(new CssSize(210, "mm"), new CssSize(297, "mm")));
+        m.put("A5", new CssPoint2D(new CssSize(148, "mm"), new CssSize(210, "mm")));
+        m.put("A6", new CssPoint2D(new CssSize(105, "mm"), new CssSize(148, "mm")));
+        m.put("DesignatedLong", new CssPoint2D(new CssSize(110, "mm"), new CssSize(220, "mm")));
+        m.put("Letter", new CssPoint2D(new CssSize(8.5, "in"), new CssSize(11, "in")));
+        m.put("Legal", new CssPoint2D(new CssSize(8.4, "in"), new CssSize(14, "in")));
+        m.put("Tabloid", new CssPoint2D(new CssSize(11.0, "in"), new CssSize(17.0, "in")));
+        m.put("Executive", new CssPoint2D(new CssSize(7.25, "in"), new CssSize(10.5, "in")));
+        m.put("x8x10", new CssPoint2D(new CssSize(8, "in"), new CssSize(10, "in")));
+        m.put("MonarchEnvelope", new CssPoint2D(new CssSize(3.87, "in"), new CssSize(7.5, "in")));
+        m.put("Number10Envelope", new CssPoint2D(new CssSize(4.125, "in"), new CssSize(9.5, "in")));
+        m.put("C", new CssPoint2D(new CssSize(17.0, "in"), new CssSize(22.0, "in")));
+        m.put("B4", new CssPoint2D(new CssSize(257, "mm"), new CssSize(364, "mm")));
+        m.put("B5", new CssPoint2D(new CssSize(182, "mm"), new CssSize(257, "mm")));
+        m.put("B6", new CssPoint2D(new CssSize(128, "mm"), new CssSize(182, "mm")));
+        m.put("JapanesePostcard", new CssPoint2D(new CssSize(100, "mm"), new CssSize(148, "mm")));
         paperSizes = m;
 
-        Map<Dimension2D, String> x = new LinkedHashMap<>();
-        for (Map.Entry<String, Dimension2D> e : m.entrySet()) {
-            final Dimension2D v = e.getValue();
+        Map<CssPoint2D, String> x = new LinkedHashMap<>();
+        for (Map.Entry<String, CssPoint2D> e : m.entrySet()) {
+            final CssPoint2D v = e.getValue();
             x.put(v, e.getKey() + " portrait");
-            x.put(new Dimension2D(v.getY(), v.getX()), e.getKey() + " landscape");
+            x.put(new CssPoint2D(v.getY(), v.getX()), e.getKey() + " landscape");
         }
         sizePapers = x;
     }
@@ -68,16 +70,16 @@ public class CssPaperSizeConverter implements Converter<Dimension2D> {
     private final static String PORTRAIT = "portrait";
 
     @Nullable
-    private Dimension2D parsePageSize(CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
+    private CssPoint2D parsePageSize(CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT) {
-            Dimension2D paperSize = paperSizes.get(tt.currentString());
+            CssPoint2D paperSize = paperSizes.get(tt.currentString());
             if (paperSize == null) {
                 throw new ParseException("Illegal paper format:" + tt.currentString(), tt.getStartPosition());
             }
             if (tt.next() == CssTokenType.TT_IDENT) {
                 switch (tt.currentString()) {
                     case LANDSCAPE:
-                        paperSize = new Dimension2D(paperSize.getY(), paperSize.getX());
+                        paperSize = new CssPoint2D(paperSize.getY(), paperSize.getX());
                         break;
                     case PORTRAIT:
                         break;
@@ -90,14 +92,14 @@ public class CssPaperSizeConverter implements Converter<Dimension2D> {
             return paperSize;
         } else {
             tt.pushBack();
-            CssDimension x = sizeConverter.parse(tt,idFactory);
-            CssDimension y = sizeConverter.parse(tt, idFactory);
-            return new Dimension2D(x, y);
+            CssSize x = sizeConverter.parse(tt,idFactory);
+            CssSize y = sizeConverter.parse(tt, idFactory);
+            return new CssPoint2D(x, y);
         }
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull Dimension2D value) throws IOException {
+    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull CssPoint2D value) throws IOException {
         String paper = sizePapers.get(value);
         if (paper != null) {
             out.append(paper);
@@ -110,7 +112,7 @@ public class CssPaperSizeConverter implements Converter<Dimension2D> {
 
     @Nullable
     @Override
-    public Dimension2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssPoint2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new StreamCssTokenizer(buf);
         return parsePageSize(tt, idFactory);
 
@@ -118,8 +120,8 @@ public class CssPaperSizeConverter implements Converter<Dimension2D> {
 
     @Nullable
     @Override
-    public Dimension2D getDefaultValue() {
-        return new Dimension2D(new CssDimension(0, null), new CssDimension(0, null));
+    public CssPoint2D getDefaultValue() {
+        return new CssPoint2D(new CssSize(0, null), new CssSize(0, null));
     }
 
     @Nonnull

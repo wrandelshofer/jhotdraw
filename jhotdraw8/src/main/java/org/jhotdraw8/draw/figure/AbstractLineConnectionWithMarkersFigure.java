@@ -89,8 +89,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);
 
-        Point2D start = get(START);
-        Point2D end = get(END);
+        Point2D start = getNonnull(START).getConvertedValue();
+        Point2D end = getNonnull(END).getConvertedValue();
 
         final double startInset = getStrokeCutStart();
         final double endInset = getStrokeCutEnd();
@@ -135,7 +135,11 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         // FIXME include markers in path
-        return Shapes.awtShapeFromFX(new Line(get(START_X), get(START_Y), get(END_X), get(END_Y))).getPathIterator(tx);
+        return Shapes.awtShapeFromFX(new Line(
+                getNonnull(START_X).getConvertedValue(),
+                getNonnull(START_Y).getConvertedValue(),
+                getNonnull(END_X).getConvertedValue(),
+                getNonnull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
     public abstract double getStrokeCutStart();

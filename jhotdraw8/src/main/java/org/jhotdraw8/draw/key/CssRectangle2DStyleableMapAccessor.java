@@ -8,10 +8,9 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.css.text.CssDimensionRectangle2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssDimensionRectangle2DConverter;
-import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -29,20 +28,20 @@ import static java.lang.Math.max;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DimensionRectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssDimensionRectangle2D> {
+public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssRectangle2D> {
 
     private final static long serialVersionUID = 1L;
 
     @Nonnull
-    private final CssMetaData<?, CssDimensionRectangle2D> cssMetaData;
+    private final CssMetaData<?, CssRectangle2D> cssMetaData;
     @Nonnull
-    private final MapAccessor<CssDimension> xKey;
+    private final MapAccessor<CssSize> xKey;
     @Nonnull
-    private final MapAccessor<CssDimension> yKey;
+    private final MapAccessor<CssSize> yKey;
     @Nonnull
-    private final MapAccessor<CssDimension> widthKey;
+    private final MapAccessor<CssSize> widthKey;
     @Nonnull
-    private final MapAccessor<CssDimension> heightKey;
+    private final MapAccessor<CssSize> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -53,20 +52,20 @@ public class DimensionRectangle2DStyleableMapAccessor extends AbstractStyleableF
      * @param widthKey the key for the width of the rectangle
      * @param heightKey the key for the height of the rectangle
      */
-    public DimensionRectangle2DStyleableMapAccessor(String name, MapAccessor<CssDimension> xKey, MapAccessor<CssDimension> yKey, MapAccessor<CssDimension> widthKey, MapAccessor<CssDimension> heightKey) {
-        super(name, CssDimensionRectangle2D.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new CssDimensionRectangle2D(
+    public CssRectangle2DStyleableMapAccessor(String name, MapAccessor<CssSize> xKey, MapAccessor<CssSize> yKey, MapAccessor<CssSize> widthKey, MapAccessor<CssSize> heightKey) {
+        super(name, CssRectangle2D.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new CssRectangle2D(
                 xKey.getDefaultValueNonnull(),
                 yKey.getDefaultValueNonnull(),
                 widthKey.getDefaultValueNonnull(),
                 heightKey.getDefaultValueNonnull()));
 
-        Function<Styleable, StyleableProperty<CssDimensionRectangle2D>> function = s -> {
+        Function<Styleable, StyleableProperty<CssRectangle2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        CssMetaData<Styleable, CssDimensionRectangle2D> md
+        CssMetaData<Styleable, CssRectangle2D> md
                 = new SimpleCssMetaData<>(property, function,
                 new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
         cssMetaData = md;
@@ -79,22 +78,22 @@ public class DimensionRectangle2DStyleableMapAccessor extends AbstractStyleableF
 
     @Nonnull
     @Override
-    public CssMetaData<?, CssDimensionRectangle2D> getCssMetaData() {
+    public CssMetaData<?, CssRectangle2D> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private final Converter<CssDimensionRectangle2D> converter= new CssDimensionRectangle2DConverter(false);
+    private final Converter<CssRectangle2D> converter= new CssDimensionRectangle2DConverter(false);
 
     @Override
-    public Converter<CssDimensionRectangle2D> getConverter() {
+    public Converter<CssRectangle2D> getConverter() {
         return converter;
     }
 
     @Nonnull
     @Override
-    public CssDimensionRectangle2D get(Map<? super Key<?>, Object> a) {
-        return new CssDimensionRectangle2D(xKey.get(a),
+    public CssRectangle2D get(Map<? super Key<?>, Object> a) {
+        return new CssRectangle2D(xKey.get(a),
                 yKey.get(a),
                 widthKey.get(a),
                 heightKey.get(a));
@@ -102,8 +101,8 @@ public class DimensionRectangle2DStyleableMapAccessor extends AbstractStyleableF
 
     @Nonnull
     @Override
-    public CssDimensionRectangle2D put(Map<? super Key<?>, Object> a, @Nonnull CssDimensionRectangle2D value) {
-        CssDimensionRectangle2D oldValue = get(a);
+    public CssRectangle2D put(Map<? super Key<?>, Object> a, @Nonnull CssRectangle2D value) {
+        CssRectangle2D oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
         widthKey.put(a, value.getWidth());
@@ -113,8 +112,8 @@ public class DimensionRectangle2DStyleableMapAccessor extends AbstractStyleableF
 
     @Nonnull
     @Override
-    public CssDimensionRectangle2D remove(Map<? super Key<?>, Object> a) {
-        CssDimensionRectangle2D oldValue = get(a);
+    public CssRectangle2D remove(Map<? super Key<?>, Object> a) {
+        CssRectangle2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);
         widthKey.remove(a);

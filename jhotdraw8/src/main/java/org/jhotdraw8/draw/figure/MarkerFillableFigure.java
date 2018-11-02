@@ -10,11 +10,11 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 
 /**

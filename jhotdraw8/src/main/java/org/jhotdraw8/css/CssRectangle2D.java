@@ -1,48 +1,44 @@
-/* @(#)CssDimensionInsets.java
+/* @(#)CssInsets.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.css.text;
+package org.jhotdraw8.css;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.io.DefaultUnitConverter;
-import org.jhotdraw8.io.UnitConverter;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
- * CssDimensionInsets.
+ * Represents a rectangle with x, y, width and height values specified as {@link CssSize}s.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDimensionRectangle2D {
+public class CssRectangle2D {
 
-    public final static CssDimensionRectangle2D ZERO = new CssDimensionRectangle2D();
+    public final static CssRectangle2D ZERO = new CssRectangle2D();
 
-    private final CssDimension width;
-    private final CssDimension height;
-    private final CssDimension y;
-    private final CssDimension x;
+    private final CssSize width;
+    private final CssSize height;
+    private final CssSize y;
+    private final CssSize x;
 
-    public CssDimensionRectangle2D(CssDimension x, CssDimension y, CssDimension width, CssDimension height) {
+    public CssRectangle2D(CssSize x, CssSize y, CssSize width, CssSize height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
     }
 
-    public CssDimensionRectangle2D(double x, double y, double width, double height, String units) {
-        this(new CssDimension(x, units), new CssDimension(y, units), new CssDimension(width, units), new CssDimension(height, units));
+    public CssRectangle2D(double x, double y, double width, double height, String units) {
+        this(new CssSize(x, units), new CssSize(y, units), new CssSize(width, units), new CssSize(height, units));
     }
 
-    public CssDimensionRectangle2D() {
-        this(CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO);
+    public CssRectangle2D() {
+        this(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ZERO);
     }
 
-    public CssDimensionRectangle2D(double x, double y, double width, double height) {
+    public CssRectangle2D(double x, double y, double width, double height) {
         this(x,y,width,height,null);
     }
 
@@ -57,7 +53,7 @@ public class CssDimensionRectangle2D {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CssDimensionRectangle2D other = (CssDimensionRectangle2D) obj;
+        final CssRectangle2D other = (CssRectangle2D) obj;
         if (!Objects.equals(this.x, other.x)) {
             return false;
         }
@@ -73,19 +69,19 @@ public class CssDimensionRectangle2D {
         return true;
     }
 
-    public CssDimension getWidth() {
+    public CssSize getWidth() {
         return width;
     }
 
-    public CssDimension getHeight() {
+    public CssSize getHeight() {
         return height;
     }
 
-    public CssDimension getMinY() {
+    public CssSize getMinY() {
         return y;
     }
 
-    public CssDimension getMinX() {
+    public CssSize getMinX() {
         return x;
     }
 
@@ -101,7 +97,7 @@ public class CssDimensionRectangle2D {
 
     @Override
     public String toString() {
-        return "CssDimensionRectangle2D{" +
+        return "CssRectangle2D{" +
                 "" + x +
                 ", " + y +
                 ", " + width +

@@ -7,6 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -30,7 +31,7 @@ public class SimpleLabelFigure extends AbstractLabelFigure implements HideableFi
     
     public SimpleLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
-        set(ORIGIN, new Point2D(x, y));
+        set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
             @SuppressWarnings("unchecked") // the set() method will perform the check for us
             Key<Object> key = (Key<Object>) keyValues[i];

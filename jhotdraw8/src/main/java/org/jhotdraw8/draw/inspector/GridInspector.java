@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssColorConverter;

@@ -13,6 +13,7 @@ import javafx.scene.text.FontWeight;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;

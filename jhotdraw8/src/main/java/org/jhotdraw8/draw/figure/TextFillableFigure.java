@@ -8,8 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 
 /**
  * {@code TextFillableFigure} allows to change the fill of the text.

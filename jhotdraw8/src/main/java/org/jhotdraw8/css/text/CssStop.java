@@ -5,7 +5,7 @@ package org.jhotdraw8.css.text;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 import java.util.Objects;
 
 /**

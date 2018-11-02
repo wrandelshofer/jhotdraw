@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.StringStyleableFigureKey;
@@ -39,7 +40,7 @@ public class SimplePageLabelFigure extends AbstractLabelFigure implements Hideab
 
     public SimplePageLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);
-        set(ORIGIN, new Point2D(x, y));
+        set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
             @SuppressWarnings("unchecked") // the set() method will perform the check for us
             Key<Object> key = (Key<Object>) keyValues[i];

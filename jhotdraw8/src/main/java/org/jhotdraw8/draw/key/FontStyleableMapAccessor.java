@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssFontConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.css.text.CssFont;
+import org.jhotdraw8.css.CssFont;
 
 /**
  * FontStyleableMapAccessor.

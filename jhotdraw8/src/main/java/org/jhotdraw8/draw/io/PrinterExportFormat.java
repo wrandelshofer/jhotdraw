@@ -22,8 +22,8 @@ import javax.imageio.metadata.IIOMetadataNode;
 
 import javax.annotation.Nonnull;
 
-import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.css.text.Dimension2D;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimplePageFigure;
@@ -53,7 +53,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return false;
     }
 
-    public Paper findPaper(@Nonnull Dimension2D paperSize) {
+    public Paper findPaper(@Nonnull CssPoint2D paperSize) {
         UnitConverter uc = new DefaultUnitConverter(72.0);
         double w = uc.convert(paperSize.getX(), UnitConverter.POINTS);
         double h = uc.convert(paperSize.getY(), UnitConverter.POINTS);
@@ -67,7 +67,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    private void printSlice(@Nonnull Dimension2D pageSize, @Nonnull Figure slice, @Nonnull Bounds viewportBounds, @Nonnull Node node, double dpi) throws IOException {
+    private void printSlice(@Nonnull CssPoint2D pageSize, @Nonnull Figure slice, @Nonnull Bounds viewportBounds, @Nonnull Node node, double dpi) throws IOException {
         Paper paper = findPaper(pageSize);
         Point2D psize = pageSize.getConvertedValue();
         PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX() <= psize.getY() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
@@ -133,7 +133,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         IIOMetadataNode vert = new IIOMetadataNode("VerticalPixelSize");
         vert.setAttribute("value", Double.toString(dotsPerMilli));
 
-        IIOMetadataNode dim = new IIOMetadataNode("CssDimension");
+        IIOMetadataNode dim = new IIOMetadataNode("CssSize");
         dim.appendChild(horiz);
         dim.appendChild(vert);
 
@@ -145,7 +145,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     @Override
     protected void writePage(File file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssDimension pw = page.get(SimplePageFigure.PAPER_WIDTH);
+        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();

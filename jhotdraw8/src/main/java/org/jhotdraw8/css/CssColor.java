@@ -1,7 +1,7 @@
 /* @(#)CssColor.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.key;
+package org.jhotdraw8.css;
 
 import java.util.Objects;
 import javafx.scene.paint.Color;
@@ -11,8 +11,9 @@ import org.jhotdraw8.css.text.CssConverterFactory;
 import org.jhotdraw8.text.PatternConverter;
 
 /**
- * CssColor wraps a Color object but also retains the name that was used to
- * create the color.
+ * Abstract base class for a color specified in a specific color system.
+ * <p>
+ * FIXME - make this class abstract and implement subclasses for each color system
  *
  * @author Werner Randelshofer
  * @version $Id$

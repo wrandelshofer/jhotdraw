@@ -1,68 +1,80 @@
-/* @(#)CssPoint2DConverter.java
+/* @(#)CssRectangle2DConverterOLD.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.io.IdFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-import javafx.geometry.Point2D;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.io.IdFactory;
-
 /**
- * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
+ * Converts a {@code javafx.geometry.CssPoint2D} into a {@code String} and vice
  * versa.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssPoint2DConverter extends AbstractCssConverter<Point2D> {
-
+public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
     private final boolean withSpace;
+    private final boolean withComma;
 
     public CssPoint2DConverter(boolean nullable) {
-        this(nullable, true);
+        this(nullable, true, false);
     }
 
-    public CssPoint2DConverter(boolean nullable, boolean withSpace) {
+    public CssPoint2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
         super(nullable);
-        this.withSpace = withSpace;
+        this.withSpace = withSpace || !withComma;
+        this.withComma = withComma;
     }
 
     @Nonnull
     @Override
-    public String getHelpText() {
-        return "Format of ⟨Point2D⟩: ⟨x⟩,⟨y⟩";
-    }
-
-    @Nonnull
-    @Override
-    public Point2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        final double x, y;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point2D⟩: ⟨x⟩ expected.");
-        x = tt.currentNumberNonnull().doubleValue();
+    public CssPoint2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        final CssSize x, y;
+        x = parseDimension(tt,"x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point2D⟩: ⟨y⟩ expected.");
-        y = tt.currentNumberNonnull().doubleValue();
+        y = parseDimension(tt,"y");
 
-        return new Point2D(x, y);
+        return new CssPoint2D(x, y);
+    }
+
+    private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
+        switch (tt.next()) {
+            case CssTokenType.TT_NUMBER:
+                return new CssSize(tt.currentNumber().doubleValue(),null);
+            case CssTokenType.TT_DIMENSION:
+                return new CssSize(tt.currentNumber().doubleValue(),tt.currentString());
+            default:
+                throw new ParseException(" ⟨CssPoint2D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
+        }
     }
 
     @Override
-    protected <TT extends Point2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+    protected <TT extends CssPoint2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        CssSize x = value.getX();
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getUnits(),x.getValue()));
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
+        CssSize y = value.getY();
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, y.getUnits(),y.getValue()));
+    }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨CssPoint2D⟩: ⟨x⟩ ⟨y⟩";
     }
 }

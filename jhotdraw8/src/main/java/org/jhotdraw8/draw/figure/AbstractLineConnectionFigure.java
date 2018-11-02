@@ -17,6 +17,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -47,8 +48,8 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     public AbstractLineConnectionFigure(double startX, double startY, double endX, double endY) {
-        set(START, new Point2D(startX, startY));
-        set(END, new Point2D(endX, endY));
+        set(START, new CssPoint2D(startX, startY));
+        set(END, new CssPoint2D(endX, endY));
     }
 
     @Override
@@ -109,8 +110,8 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        Point2D start = get(START);
-        Point2D end = get(END);
+        Point2D start = getNonnull(START).getConvertedValue();
+        Point2D end = getNonnull(END).getConvertedValue();
         return new BoundingBox(//
                 min(start.getX(), end.getX()),//
                 min(start.getY(), end.getY()),//
@@ -163,8 +164,8 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
     @Override
     public void layout() {
-        Point2D start = get(START);
-        Point2D end = get(END);
+        Point2D start = getNonnull(START).getConvertedValue();
+        Point2D end = getNonnull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
@@ -180,15 +181,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         // because
         if (startConnector != null && startTarget != null) {
             final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end));
-            if (p != null) {
-                set(START, p);
-            }
+                set(START,new CssPoint2D( p));
         }
         if (endConnector != null && endTarget != null) {
             final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end));
-            if (p != null) {
-                set(END, p);
-            }
+                set(END, new CssPoint2D(p));
         }
     }
 
@@ -213,20 +210,20 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
         if (get(START_TARGET) == null) {
-            set(START, transform.transform(get(START)));
+            set(START, new CssPoint2D(transform.transform(getNonnull(START).getConvertedValue())));
         }
         if (get(END_TARGET) == null) {
-            set(END, transform.transform(get(END)));
+            set(END, new CssPoint2D(transform.transform(getNonnull(END).getConvertedValue())));
         }
     }
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
         if (get(START_TARGET) == null) {
-            set(START, new Point2D(x, y));
+            set(START, new CssPoint2D(x, y));
         }
         if (get(END_TARGET) == null) {
-            set(END, new Point2D(x + width, y + height));
+            set(END, new CssPoint2D(x + width, y + height));
         }
     }
 

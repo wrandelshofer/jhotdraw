@@ -1,43 +1,44 @@
-/* @(#)CssDimensionInsets.java
+/* @(#)CssInsets.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.css.text;
+package org.jhotdraw8.css;
 
 import java.util.Objects;
 import javafx.geometry.Insets;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
 
 /**
- * CssDimensionInsets.
+ * Represents a set of inside offsets specified as {@link CssSize}s.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDimensionInsets {
+public class CssInsets {
 
-    public final static CssDimensionInsets ZERO = new CssDimensionInsets();
+    public final static CssInsets ZERO = new CssInsets();
 
-    private final CssDimension bottom;
-    private final CssDimension left;
-    private final CssDimension right;
-    private final CssDimension top;
+    private final CssSize bottom;
+    private final CssSize left;
+    private final CssSize right;
+    private final CssSize top;
 
-    public CssDimensionInsets(CssDimension top, CssDimension right, CssDimension bottom, CssDimension left) {
+    public CssInsets(CssSize top, CssSize right, CssSize bottom, CssSize left) {
         this.top = top;
         this.right = right;
         this.bottom = bottom;
         this.left = left;
     }
 
-    public CssDimensionInsets(double top, double right, double bottom, double left, String units) {
-        this(new CssDimension(top, units), new CssDimension(right, units), new CssDimension(bottom, units), new CssDimension(left, units));
+    public CssInsets(double top, double right, double bottom, double left, String units) {
+        this(new CssSize(top, units), new CssSize(right, units), new CssSize(bottom, units), new CssSize(left, units));
     }
 
-    public CssDimensionInsets() {
-        this(CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO, CssDimension.ZERO);
+    public CssInsets() {
+        this(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ZERO);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class CssDimensionInsets {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CssDimensionInsets other = (CssDimensionInsets) obj;
+        final CssInsets other = (CssInsets) obj;
         if (!Objects.equals(this.top, other.top)) {
             return false;
         }
@@ -67,7 +68,7 @@ public class CssDimensionInsets {
         return true;
     }
 
-    public CssDimension getBottom() {
+    public CssSize getBottom() {
         return bottom;
     }
 
@@ -90,20 +91,20 @@ public class CssDimensionInsets {
     }
 
     @Nonnull
-    public Insets getDefaultConvertedValue() {
+    public Insets getConvertedValue() {
         return new Insets(top.getConvertedValue(), right.getConvertedValue(),
                 bottom.getConvertedValue(), left.getConvertedValue());
     }
 
-    public CssDimension getLeft() {
+    public CssSize getLeft() {
         return left;
     }
 
-    public CssDimension getRight() {
+    public CssSize getRight() {
         return right;
     }
 
-    public CssDimension getTop() {
+    public CssSize getTop() {
         return top;
     }
 
@@ -119,7 +120,7 @@ public class CssDimensionInsets {
 
     @Override
     public String toString() {
-        return "CssDimensionInsets{" +
+        return "CssInsets{" +
                 "" + bottom +
                 ", " + left +
                 ", " + right +

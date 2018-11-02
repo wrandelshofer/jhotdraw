@@ -4,11 +4,11 @@
 
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.SymmetricDimension2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
 
 /**
  * A figure which supports cutting off the start and end of a stroked path.
@@ -18,16 +18,16 @@ import org.jhotdraw8.draw.key.SymmetricDimension2DStyleableMapAccessor;
  */
 public interface StrokeCuttableFigure extends Figure {
     /** Cuts off the specified number of pixels from the start of the stroked path. */
-    public final static DimensionStyleableFigureKey STROKE_CUT_START = new DimensionStyleableFigureKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssDimension.ZERO);
+    public final static CssSizeStyleableFigureKey STROKE_CUT_START = new CssSizeStyleableFigureKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /** Cuts off the specified number of pixels from the end of the stroked path. */
-    public final static DimensionStyleableFigureKey STROKE_CUT_END = new DimensionStyleableFigureKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssDimension.ZERO);
+    public final static CssSizeStyleableFigureKey STROKE_CUT_END = new CssSizeStyleableFigureKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /** Cuts off the specified number of pixels from the start and the end of the stroked path. */
-    public static SymmetricDimension2DStyleableMapAccessor STROKE_CUT = new SymmetricDimension2DStyleableMapAccessor("stroke-cut", STROKE_CUT_START, STROKE_CUT_END);
+    public static SymmetricCssPoint2DStyleableMapAccessor STROKE_CUT = new SymmetricCssPoint2DStyleableMapAccessor("stroke-cut", STROKE_CUT_START, STROKE_CUT_END);
 
     default double getStrokeCutStart() {
-       return getStyled(STROKE_CUT_START).getValue();
+       return getStyledNonnull(STROKE_CUT_START).getConvertedValue();
     }
     default double getStrokeCutEnd() {
-       return getStyled(STROKE_CUT_END).getValue();
+       return getStyledNonnull(STROKE_CUT_END).getConvertedValue();
     }
 }

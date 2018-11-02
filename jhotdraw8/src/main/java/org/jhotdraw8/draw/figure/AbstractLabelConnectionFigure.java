@@ -19,14 +19,16 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LabelConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -34,7 +36,6 @@ import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
-import org.jhotdraw8.draw.key.Dimension2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -57,30 +58,30 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The label target.
      */
-    @Nullable
+    @Nonnull
     public final static SimpleFigureKey<Figure> LABEL_TARGET = new SimpleFigureKey<>("labelTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The connector.
      */
-    @Nullable
+    @Nonnull
     public final static SimpleFigureKey<Connector> LABEL_CONNECTOR = new SimpleFigureKey<>("labelConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
-    public final static DoubleStyleableFigureKey LABELED_LOCATION_X = new DoubleStyleableFigureKey("labeledLocationX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static DoubleStyleableFigureKey LABELED_LOCATION_Y = new DoubleStyleableFigureKey("labeledLocationY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static Point2DStyleableMapAccessor LABELED_LOCATION = new Point2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
+    public final static CssSizeStyleableFigureKey LABELED_LOCATION_X = new CssSizeStyleableFigureKey("labeledLocationX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey LABELED_LOCATION_Y = new CssSizeStyleableFigureKey("labeledLocationY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
 
     /**
      * The perpendicular offset of the label.
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
-    public final static DimensionStyleableFigureKey LABEL_OFFSET_Y = new DimensionStyleableFigureKey("labelOffsetY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
+    public final static CssSizeStyleableFigureKey LABEL_OFFSET_Y = new CssSizeStyleableFigureKey("labelOffsetY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
     /**
      * The tangential offset of the label.
      * <p>
      * The offset is on tangent line of the figure.
      */
-    public final static DimensionStyleableFigureKey LABEL_OFFSET_X = new DimensionStyleableFigureKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
-    public final static Dimension2DStyleableMapAccessor LABELED_OFFSET = new Dimension2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
+    public final static CssSizeStyleableFigureKey LABEL_OFFSET_X = new CssSizeStyleableFigureKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssPoint2DStyleableMapAccessor LABELED_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.
      */
@@ -191,15 +192,15 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             tangent = labelConnector.getTangentInWorld(this, labelTarget);
             perp = Geom.perp(tangent);
         } else {
-            labeledLoc = get(LABELED_LOCATION);
+            labeledLoc = getNonnull(LABELED_LOCATION).getConvertedValue();
             tangent = new Point2D(1, 0);
             perp = new Point2D(0, -1);
         }
 
-        set(LABELED_LOCATION, labeledLoc);
+        set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
         Bounds b = getLayoutBounds();
         double hposTranslate = 0;
-        switch (getStyled(TEXT_HPOS)) {
+        switch (getStyledNonnull(TEXT_HPOS)) {
             case CENTER:
                 hposTranslate = b.getWidth() * -0.5;
                 break;
@@ -211,15 +212,15 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
 
         // FIXME must convert with current font size of label!!
-        final double labelOffsetX = getStyled(LABEL_OFFSET_X).getConvertedValue();
-        final double labelOffsetY = getStyled(LABEL_OFFSET_Y).getConvertedValue();
+        final double labelOffsetX = getStyledNonnull(LABEL_OFFSET_X).getConvertedValue();
+        final double labelOffsetY = getStyledNonnull(LABEL_OFFSET_Y).getConvertedValue();
         Point2D origin = labeledLoc
                 .add(perp.multiply(-labelOffsetY))
                 .add(tangent.multiply(labelOffsetX));
 
         Rotate rotate = null;
         final boolean layoutTransforms;
-        switch (getStyled(LABEL_AUTOROTATE)) {
+        switch (getStyledNonnull(LABEL_AUTOROTATE)) {
             case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
                 final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
                 rotate = new Rotate(theta, origin.getX(), origin.getY());
@@ -245,7 +246,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
 
         Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
         origin = origin.add(labelTranslation);
-        set(ORIGIN, origin);
+        set(ORIGIN, new CssPoint2D(origin));
         List<Transform> transforms = new ArrayList<>();
         if (rotate != null) {
             transforms.add(rotate);

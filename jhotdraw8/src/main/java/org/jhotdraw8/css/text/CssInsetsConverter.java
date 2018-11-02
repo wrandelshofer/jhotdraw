@@ -1,4 +1,4 @@
-/* @(#)CssPoint2DConverter.java
+/* @(#)CssPoint2DConverterOLD.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -9,44 +9,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javafx.geometry.Insets;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssInsets;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * Converts a {@code javafx.geometry.Insets} into a {@code String} and vice
- * versa.
- * <p>
- * List of four sizes in the sequence top, right, bottom, left. If left is
- * omitted, it is the same as right. If bottom is omitted, it is the same as
- * top. If right is omitted it is the same as top.
- * <pre>
- * insets       = top-right-bottom-left ;
- * insets       = top-bottom, right-left ;
- * insets       = top , right , bottom, left ;
- * </pre> *
+ * Converts a {@link CssInsets} into a {@code String} and vice versa.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssInsetsConverter extends AbstractCssConverter<Insets> {
+public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
     public CssInsetsConverter(boolean nullable) {
         super(nullable);
     }
 
     @Nonnull
     @Override
-    public Insets parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        List<Number> list=new ArrayList<>(4);
+    public CssInsets parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        List<CssSize> list=new ArrayList<>(4);
         for (int i=0;i<4;i++) {
             switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
-                    list.add(tt.currentNumberNonnull());
+                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(),null));
+                    break;
+                case CssTokenType.TT_DIMENSION:
+                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(),tt.currentString()));
                     break;
                 case CssTokenType.TT_COMMA:
                     break;
@@ -57,50 +51,57 @@ public class CssInsetsConverter extends AbstractCssConverter<Insets> {
         }
         switch (list.size()) {
             case 1:
-                double trbl=list.get(0).doubleValue();
-                return new Insets(trbl);
+                CssSize trbl=list.get(0);
+                return new CssInsets(trbl,trbl,trbl,trbl);
             case 2:
-                double tb=list.get(0).doubleValue();
-                double rl=list.get(1).doubleValue();
-                return new Insets(tb,rl,tb,rl);
+                CssSize tb=list.get(0);
+                CssSize rl=list.get(1);
+                return new CssInsets(tb,rl,tb,rl);
             case 4:
-                double t=list.get(0).doubleValue();
-                double r=list.get(1).doubleValue();
-                double b=list.get(2).doubleValue();
-                double l=list.get(3).doubleValue();
-                return new Insets(t,r,b,l);
+                CssSize t=list.get(0);
+                CssSize r=list.get(1);
+                CssSize b=list.get(2);
+                CssSize l=list.get(3);
+                return new CssInsets(t,r,b,l);
             default:
-                throw new ParseException("⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.",tt.getStartPosition());
+                throw new ParseException("⟨DimensionInsets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.",tt.getStartPosition());
 
         }
     }
     @Nonnull
     @Override
     public String getHelpText() {
-        return "Format of ⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩ ⟨left-right⟩ ｜ ⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
+        return "Format of ⟨DimensionInsets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩ ⟨left-right⟩ ｜ ⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
     }
 
     @Override
-    protected <TT extends Insets> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
-        if (value.getRight() == value.getLeft()) {
-            if (value.getTop() == value.getBottom()) {
-                if (value.getTop() == value.getLeft()) {
-                    out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getTop()));
+    protected <TT extends CssInsets> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        CssSize top = value.getTop();
+        CssSize right = value.getRight();
+        CssSize bottom = value.getBottom();
+        CssSize left = value.getLeft();
+        if (right == left) {
+            if (top == bottom) {
+                if (top == left) {
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION,top.getUnits(), top.getValue()));
                     return;
                 } else {
-                    out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getTop()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(),top.getValue()));
                     out.accept(new CssToken(CssTokenType.TT_S," "));
-                    out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getRight()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(),right.getValue()));
                     return;
                 }
             }
         }
-        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getTop()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(),top.getValue()));
         out.accept(new CssToken(CssTokenType.TT_S," "));
-        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getRight()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(),right.getValue()));
         out.accept(new CssToken(CssTokenType.TT_S," "));
-        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getBottom()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, bottom.getUnits(),bottom.getValue()));
         out.accept(new CssToken(CssTokenType.TT_S," "));
-        out.accept(new CssToken(CssTokenType.TT_NUMBER,value.getLeft()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, left.getUnits(),left.getValue()));
     }
 }
+
+
+

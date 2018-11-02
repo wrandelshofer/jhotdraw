@@ -5,7 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.BasicStroke;
 import static java.lang.Math.abs;
-import java.util.List;
+
 import java.util.Objects;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,8 +21,8 @@ import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 
 /**
  * Interface for figures which render a {@code javafx.scene.shape.Shape} and can

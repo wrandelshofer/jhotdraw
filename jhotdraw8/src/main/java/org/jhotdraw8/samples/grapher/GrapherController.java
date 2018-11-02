@@ -39,8 +39,8 @@ import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
-import org.jhotdraw8.css.text.Dimension2D;
-import org.jhotdraw8.css.text.CssDimensionInsets;
+import org.jhotdraw8.css.CssInsets;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
@@ -300,8 +300,8 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 8, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             SimplePageFigure pf = new SimplePageFigure();
-            pf.set(SimplePageFigure.PAPER_SIZE, new Dimension2D(297, 210, "mm"));
-            pf.set(SimplePageFigure.PAGE_INSETS, new CssDimensionInsets(2, 1, 2, 1, "cm"));
+            pf.set(SimplePageFigure.PAPER_SIZE, new CssPoint2D(297, 210, "mm"));
+            pf.set(SimplePageFigure.PAGE_INSETS, new CssInsets(2, 1, 2, 1, "cm"));
             SimplePageLabelFigure pl = new SimplePageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
                     SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
                     FillableFigure.FILL, null, StrokeableFigure.STROKE, null);

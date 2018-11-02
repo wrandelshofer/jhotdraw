@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.List;
@@ -144,7 +146,7 @@ public class ConnectionTool extends AbstractTool {
                 }
             }
 
-            model.set(figure, SimpleLineConnectionFigure.END, figure.worldToLocal(constrainedPoint));
+            model.set(figure, SimpleLineConnectionFigure.END, new CssPoint2D(figure.worldToLocal(constrainedPoint)));
             model.set(figure, SimpleLineConnectionFigure.END_CONNECTOR, newConnector);
             model.set(figure, SimpleLineConnectionFigure.END_TARGET, newConnectionTarget);
         }

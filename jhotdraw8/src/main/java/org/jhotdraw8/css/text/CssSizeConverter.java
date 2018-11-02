@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -30,7 +31,7 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSizeConverter implements CssConverter<CssDimension> {
+public class CssSizeConverter implements CssConverter<CssSize> {
 
     private final boolean nullable;
 
@@ -41,7 +42,7 @@ public class CssSizeConverter implements CssConverter<CssDimension> {
 
     @Nullable
     @Override
-    public CssDimension parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssSize parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (nullable) {
             if (tt.next() == CssTokenType.TT_IDENT && "none".equals(tt.currentString())) {
                 //tt.skipWhitespace();
@@ -85,12 +86,12 @@ public class CssSizeConverter implements CssConverter<CssDimension> {
             default:
                 throw new ParseException("number expected", tt.getStartPosition());
         }
-        return new CssDimension(value.doubleValue(), units);
+        return new CssSize(value.doubleValue(), units);
     }
 
 
     @Override
-    public <TT extends CssDimension> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends CssSize> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else if (value.getUnits() == null || "".equals(value.getUnits())) {
@@ -109,7 +110,7 @@ public class CssSizeConverter implements CssConverter<CssDimension> {
 
     @Nullable
     @Override
-    public CssDimension getDefaultValue() {
+    public CssSize getDefaultValue() {
         return null;
     }
 

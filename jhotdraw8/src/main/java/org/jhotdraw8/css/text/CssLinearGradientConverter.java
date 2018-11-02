@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.draw.key.CssColor;
-import org.jhotdraw8.draw.key.CssLinearGradient;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssLinearGradient;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -35,7 +35,7 @@ import org.jhotdraw8.io.IdFactory;
  * PointToPoint = "from", Point, "to", Point
  * SideOrCorner = "to" ["left" | "right"] , ["top" | "bottom"]
  * Cycle = ( "repeat" | "reflect" )
- * Point = (Number|CssDimension|Percentage), (Number|CssDimension|Percentage) ;
+ * Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
  * ColorStop = Color, [" ", Offset] ;
  *
  * </pre>

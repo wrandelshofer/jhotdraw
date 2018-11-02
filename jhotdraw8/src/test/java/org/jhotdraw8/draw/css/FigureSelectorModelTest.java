@@ -9,7 +9,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.SimpleLabelFigure;
-import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.text.Converter;
 import org.junit.jupiter.api.Test;

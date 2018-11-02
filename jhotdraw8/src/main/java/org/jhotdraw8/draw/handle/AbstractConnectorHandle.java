@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
@@ -43,19 +44,19 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     private boolean isConnected;
     private boolean isDragging;
     protected Point2D pickLocation;
-    protected final MapAccessor<Point2D> pointKey;
+    protected final MapAccessor<CssPoint2D> pointKey;
     protected final String styleclassConnected;
     protected final String styleclassDisconnected;
     protected final MapAccessor<Figure> targetKey;
     private boolean editable=true;
 
-    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, MapAccessor<Point2D> pointKey,
+    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, MapAccessor<CssPoint2D> pointKey,
                                    MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
                 connectorKey, targetKey);
     }
 
-    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<Point2D> pointKey,
+    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<CssPoint2D> pointKey,
                                    MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure);
         this.pointKey = pointKey;
@@ -141,7 +142,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
             }
         }
 
-        model.set(o, pointKey, getOwner().worldToLocal(constrainedPoint));
+        model.set(o, pointKey, new CssPoint2D(getOwner().worldToLocal(constrainedPoint)));
         model.set(o, connectorKey, newConnector);
         model.set(o, targetKey, newConnectedFigure);
     }

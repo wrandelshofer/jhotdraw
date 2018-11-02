@@ -1,7 +1,7 @@
 /* @(#)CssFont.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.css.text;
+package org.jhotdraw8.css;
 
 import java.util.Map;
 import java.util.Objects;
@@ -15,10 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * CssFont same as {@code javafx.scene.text.Font} but allows to get all
- * properties that were used to create the font.
- * <p>
- * XXX move this into a package for JavaFX font related stuff
+ * Represents a font specified with family, weight, posture and size properties.
  *
  * @author Werner Randelshofer
  * @version $Id$

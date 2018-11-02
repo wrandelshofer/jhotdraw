@@ -12,12 +12,12 @@ import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.css.text.Dimension2D;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssSize2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -26,17 +26,17 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Dimension2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Dimension2D> {
+public class CssPoint2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssPoint2D> {
 
     private final static long serialVersionUID = 1L;
-    private Converter<Dimension2D> converter;
+    private final Converter<CssPoint2D> converter;
 
     @Nonnull
-    private final CssMetaData<?, Dimension2D> cssMetaData;
+    private final CssMetaData<?, CssPoint2D> cssMetaData;
     @Nonnull
-    private final MapAccessor<CssDimension> xKey;
+    private final MapAccessor<CssSize> xKey;
     @Nonnull
-    private final MapAccessor<CssDimension> yKey;
+    private final MapAccessor<CssSize> yKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -45,18 +45,30 @@ public class Dimension2DStyleableMapAccessor extends AbstractStyleableFigureMapA
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public Dimension2DStyleableMapAccessor(String name, MapAccessor<CssDimension> xKey, MapAccessor<CssDimension> yKey) {
-        super(name, Dimension2D.class, new MapAccessor<?>[]{xKey, yKey}, new Dimension2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
+    public CssPoint2DStyleableMapAccessor(String name, MapAccessor<CssSize> xKey, MapAccessor<CssSize> yKey) {
+        this(name, xKey, yKey, new CssPoint2DConverter(false));
+    }
 
-        Function<Styleable, StyleableProperty<Dimension2D>> function = s -> {
+    /**
+     * Creates a new instance with the specified name.
+     *
+     * @param name the name of the accessor
+     * @param xKey the key for the x coordinate of the point
+     * @param yKey the key for the y coordinate of the point
+     */
+    public CssPoint2DStyleableMapAccessor(String name, MapAccessor<CssSize> xKey, MapAccessor<CssSize> yKey, Converter<CssPoint2D> converter) {
+        super(name, CssPoint2D.class, new MapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
+
+        Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Dimension2D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
-        CssMetaData<Styleable, Dimension2D> md
+        this.converter=converter;
+        final StyleConverter<String, CssPoint2D> cnvrtr
+                = new StyleConverterAdapter<>(converter);
+        CssMetaData<Styleable, CssPoint2D> md
                 = new SimpleCssMetaData<>(property, function,
                         cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
@@ -66,21 +78,18 @@ public class Dimension2DStyleableMapAccessor extends AbstractStyleableFigureMapA
     }
     @Nonnull
     @Override
-    public Dimension2D get(Map<? super Key<?>, Object> a) {
-      return new Dimension2D(xKey.get(a), yKey.get(a));
+    public CssPoint2D get(Map<? super Key<?>, Object> a) {
+      return new CssPoint2D(xKey.get(a), yKey.get(a));
     }
 
 
     @Override
-    public Converter<Dimension2D> getConverter() {
-        if (converter == null) {
-            converter = new CssSize2DConverter();
-        }
+    public Converter<CssPoint2D> getConverter() {
         return converter;
     }
     @Nonnull
     @Override
-    public CssMetaData<?, Dimension2D> getCssMetaData() {
+    public CssMetaData<?, CssPoint2D> getCssMetaData() {
       return cssMetaData;
       
     }
@@ -91,8 +100,8 @@ public class Dimension2DStyleableMapAccessor extends AbstractStyleableFigureMapA
 
     @Nonnull
     @Override
-    public Dimension2D put(Map<? super Key<?>, Object> a, @Nonnull Dimension2D value) {
-        Dimension2D oldValue = get(a);
+    public CssPoint2D put(Map<? super Key<?>, Object> a, @Nonnull CssPoint2D value) {
+        CssPoint2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
         return oldValue;
@@ -100,8 +109,8 @@ public class Dimension2DStyleableMapAccessor extends AbstractStyleableFigureMapA
 
     @Nonnull
     @Override
-    public Dimension2D remove(Map<? super Key<?>, Object> a) {
-        Dimension2D oldValue = get(a);
+    public CssPoint2D remove(Map<? super Key<?>, Object> a) {
+        CssPoint2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);
         return oldValue;

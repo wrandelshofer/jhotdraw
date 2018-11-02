@@ -1,8 +1,10 @@
-/* @(#)CssRectangle2DConverter.java
+/* @(#)CssRectangle2DConverterOLD.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -15,13 +17,13 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 /**
- * Converts a {@code javafx.geometry.CssDimensionRectangle2D} into a {@code String} and vice
+ * Converts a {@code javafx.geometry.CssRectangle2D} into a {@code String} and vice
  * versa.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssDimensionRectangle2D> {
+public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssRectangle2D> {
     private final boolean withSpace;
     private final boolean withComma;
 
@@ -37,8 +39,8 @@ public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssDi
 
     @Nonnull
     @Override
-    public CssDimensionRectangle2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        final CssDimension x, y, width, height;
+    public CssRectangle2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        final CssSize x, y, width, height;
         x = parseDimension(tt,"x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         y = parseDimension(tt,"y");
@@ -47,23 +49,23 @@ public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssDi
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         height = parseDimension(tt,"height");
 
-        return new CssDimensionRectangle2D(x, y, width, height);
+        return new CssRectangle2D(x, y, width, height);
     }
 
-    private CssDimension parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
+    private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssDimension(tt.currentNumber().doubleValue(),null);
+                return new CssSize(tt.currentNumber().doubleValue(),null);
             case CssTokenType.TT_DIMENSION:
-                return new CssDimension(tt.currentNumber().doubleValue(),tt.currentString());
+                return new CssSize(tt.currentNumber().doubleValue(),tt.currentString());
             default:
-                throw new ParseException(" ⟨CssDimensionRectangle2D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
+                throw new ParseException(" ⟨CssRectangle2D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
         }
     }
 
     @Override
-    protected <TT extends CssDimensionRectangle2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
-        CssDimension minX = value.getMinX();
+    protected <TT extends CssRectangle2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        CssSize minX = value.getMinX();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, minX.getUnits(),minX.getValue()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
@@ -71,7 +73,7 @@ public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssDi
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        CssDimension minY = value.getMinY();
+        CssSize minY = value.getMinY();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, minY.getUnits(),minY.getValue()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
@@ -79,7 +81,7 @@ public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssDi
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        CssDimension width = value.getWidth();
+        CssSize width = value.getWidth();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getUnits(),width.getValue()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
@@ -87,12 +89,12 @@ public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssDi
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        CssDimension height = value.getHeight();
+        CssSize height = value.getHeight();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, height.getUnits(),height.getValue()));
     }
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨CssDimensionRectangle2D⟩: ⟨x⟩ ⟨y⟩ ⟨width⟩ ⟨height⟩";
+        return "Format of ⟨CssRectangle2D⟩: ⟨x⟩ ⟨y⟩ ⟨width⟩ ⟨height⟩";
     }
 }

@@ -16,16 +16,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
 
-import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.DimensionRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DimensionStyleableFigureKey;
-import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.SymmetricDimension2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -46,14 +44,14 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 
-    public final static DimensionStyleableFigureKey X = new DimensionStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static DimensionStyleableFigureKey Y = new DimensionStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static DimensionStyleableFigureKey WIDTH = new DimensionStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static DimensionStyleableFigureKey HEIGHT = new DimensionStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssDimension.ZERO);
-    public final static DimensionRectangle2DStyleableMapAccessor BOUNDS = new DimensionRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
-    public final static DimensionStyleableFigureKey ARC_HEIGHT = new DimensionStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
-    public final static DimensionStyleableFigureKey ARC_WIDTH = new DimensionStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssDimension.ZERO);
-    public final static SymmetricDimension2DStyleableMapAccessor ARC = new SymmetricDimension2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
+    public final static CssSizeStyleableFigureKey X = new CssSizeStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey Y = new CssSizeStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey WIDTH = new CssSizeStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey HEIGHT = new CssSizeStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    public final static CssSizeStyleableFigureKey ARC_HEIGHT = new CssSizeStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey ARC_WIDTH = new CssSizeStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
     public SimpleRectangleFigure() {
         this(0, 0, 1, 1);
@@ -88,10 +86,10 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, new CssDimension(x + min(width, 0),null));
-        set(Y, new CssDimension(y + min(height, 0),null));
-        set(WIDTH, new CssDimension(abs(width),null));
-        set(HEIGHT, new CssDimension(abs(height),null));
+        set(X, new CssSize(x + min(width, 0),null));
+        set(Y, new CssSize(y + min(height, 0),null));
+        set(WIDTH, new CssSize(abs(width),null));
+        set(HEIGHT, new CssSize(abs(height),null));
     }
 
     @Nonnull

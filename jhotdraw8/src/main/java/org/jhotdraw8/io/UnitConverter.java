@@ -6,7 +6,7 @@ package org.jhotdraw8.io;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.CssSize;
 
 /**
  * UnitConverter.
@@ -121,7 +121,7 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert(@Nonnull CssDimension value, @Nullable String outputUnit) {
+    default double convert(@Nonnull CssSize value, @Nullable String outputUnit) {
         return convert(value.getValue(), value.getUnits(), outputUnit);
     }
 }

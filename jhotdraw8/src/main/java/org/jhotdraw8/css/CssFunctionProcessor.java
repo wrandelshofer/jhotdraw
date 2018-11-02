@@ -1,6 +1,5 @@
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.css.text.CssDimension;
 import org.jhotdraw8.io.DefaultUnitConverter;
 
 import java.io.IOException;
@@ -224,7 +223,7 @@ public class CssFunctionProcessor<T> {
                 case "time":
                 case "frequency":
                     try {
-                        CssDimension dim = parseDimensionOrDouble(attrValue, start);
+                        CssSize dim = parseDimensionOrDouble(attrValue, start);
                         out.accept(new CssToken(CssTokenType.TT_DIMENSION, dim.getUnits(), dim.getValue(), line, start, end));
                         return;
                     } catch (NumberFormatException | ParseException e) {
@@ -321,12 +320,12 @@ public class CssFunctionProcessor<T> {
 
     }
 
-    private CssDimension parseDimensionOrDouble(String attrValue, int pos) throws IOException, ParseException {
+    private CssSize parseDimensionOrDouble(String attrValue, int pos) throws IOException, ParseException {
         StreamCssTokenizer tt = new StreamCssTokenizer(attrValue);
         if (tt.next() == CssTokenType.TT_DIMENSION) {
-            return new CssDimension(tt.currentNumber().doubleValue(), tt.currentString());
+            return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
         } else if (tt.current() == CssTokenType.TT_NUMBER) {
-            return new CssDimension(tt.currentNumber().doubleValue(), null);
+            return new CssSize(tt.currentNumber().doubleValue(), null);
         }
         throw new ParseException("dimension expected, got: \"" + attrValue + "\"", pos);
     }
@@ -375,7 +374,7 @@ public class CssFunctionProcessor<T> {
     private void processCalcFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
-        CssDimension dim = parseCalcFunction(element, tt);
+        CssSize dim = parseCalcFunction(element, tt);
         int end = tt.getEndPosition();
         if (dim.getUnits() == null) {
             out.accept(new CssToken(CssTokenType.TT_NUMBER, null, dim.getValue(), line, start, end));
@@ -386,37 +385,37 @@ public class CssFunctionProcessor<T> {
         }
     }
 
-    private CssDimension parseCalcFunction(T element, CssTokenizer tt) throws IOException, ParseException {
+    private CssSize parseCalcFunction(T element, CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈calc〉: calc() function expected.");
         if (!CALC_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
             throw new ParseException("〈calc〉: calc() function expected.", tt.getStartPosition());
         }
-        CssDimension dim = parseCalcSum(element, tt);
+        CssSize dim = parseCalcSum(element, tt);
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈calc〉: right bracket \")\" expected.");
         return dim;
     }
 
-    private CssDimension parseCalcSum(T element, CssTokenizer tt) throws IOException, ParseException {
-        CssDimension dim = parseCalcProduct(element, tt);
+    private CssSize parseCalcSum(T element, CssTokenizer tt) throws IOException, ParseException {
+        CssSize dim = parseCalcProduct(element, tt);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
         for (; ; ) {
             switch (tt.next()) {
                 case '+': {
-                    CssDimension dim2 = parseCalcProduct(element, tt);
+                    CssSize dim2 = parseCalcProduct(element, tt);
                     if (dim.getUnits() == null || dim2.getUnits() == null) {
-                        dim = new CssDimension(dim.getValue() + dim2.getValue(), dim.getUnits());
+                        dim = new CssSize(dim.getValue() + dim2.getValue(), dim.getUnits());
                     } else {
-                        dim = new CssDimension(dim.getValue() + c.convert(dim2, dim.getUnits()), dim.getUnits());
+                        dim = new CssSize(dim.getValue() + c.convert(dim2, dim.getUnits()), dim.getUnits());
                     }
                     break;
                 }
                 case '-': {
-                    CssDimension dim2 = parseCalcProduct(element, tt);
+                    CssSize dim2 = parseCalcProduct(element, tt);
                     if (dim.getUnits() == null || dim2.getUnits() == null) {
-                        dim = new CssDimension(dim.getValue() - dim2.getValue(), dim.getUnits());
+                        dim = new CssSize(dim.getValue() - dim2.getValue(), dim.getUnits());
                     } else {
-                        dim = new CssDimension(dim.getValue() - c.convert(dim2, dim.getUnits()), dim.getUnits());
+                        dim = new CssSize(dim.getValue() - c.convert(dim2, dim.getUnits()), dim.getUnits());
                     }
                     break;
                 }
@@ -428,27 +427,27 @@ public class CssFunctionProcessor<T> {
         return dim;
     }
 
-    private CssDimension parseCalcProduct(T element, CssTokenizer tt) throws IOException, ParseException {
-        CssDimension dim = parseCalcValue(element, tt);
+    private CssSize parseCalcProduct(T element, CssTokenizer tt) throws IOException, ParseException {
+        CssSize dim = parseCalcValue(element, tt);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
         for (; ; ) {
             switch (tt.next()) {
                 case '*': {
-                    CssDimension dim2 = parseCalcProduct(element, tt);
+                    CssSize dim2 = parseCalcProduct(element, tt);
                     if (dim.getUnits() == null || dim2.getUnits() == null) {
-                        dim = new CssDimension(dim.getValue() * dim2.getValue(), dim.getUnits());
+                        dim = new CssSize(dim.getValue() * dim2.getValue(), dim.getUnits());
                     } else {
-                        dim = new CssDimension(dim.getValue() * c.convert(dim2, dim.getUnits()), dim.getUnits());
+                        dim = new CssSize(dim.getValue() * c.convert(dim2, dim.getUnits()), dim.getUnits());
                     }
                     break;
                 }
                 case '/': {
-                    CssDimension dim2 = parseCalcProduct(element, tt);
+                    CssSize dim2 = parseCalcProduct(element, tt);
                     if (dim.getUnits() == null || dim2.getUnits() == null) {
-                        dim = new CssDimension(dim.getValue() / dim2.getValue(), dim.getUnits());
+                        dim = new CssSize(dim.getValue() / dim2.getValue(), dim.getUnits());
                     } else {
-                        dim = new CssDimension(dim.getValue() / c.convert(dim2, dim.getUnits()), dim.getUnits());
+                        dim = new CssSize(dim.getValue() / c.convert(dim2, dim.getUnits()), dim.getUnits());
                     }
                     break;
                 }
@@ -460,16 +459,16 @@ public class CssFunctionProcessor<T> {
         return dim;
     }
 
-    private CssDimension parseCalcValue(T element, CssTokenizer tt) throws IOException, ParseException {
+    private CssSize parseCalcValue(T element, CssTokenizer tt) throws IOException, ParseException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssDimension(tt.currentNumber().doubleValue(), null);
+                return new CssSize(tt.currentNumber().doubleValue(), null);
             case CssTokenType.TT_PERCENTAGE:
-                return new CssDimension(tt.currentNumber().doubleValue(), "%");
+                return new CssSize(tt.currentNumber().doubleValue(), "%");
             case CssTokenType.TT_DIMENSION:
-                return new CssDimension(tt.currentNumber().doubleValue(), tt.currentString());
+                return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
             case '(':
-                CssDimension dim = parseCalcSum(element, tt);
+                CssSize dim = parseCalcSum(element, tt);
                 tt.requireNextToken(')', "calc-value: right bracket ')' expected.");
                 return dim;
             case CssTokenType.TT_FUNCTION:
@@ -483,11 +482,11 @@ public class CssFunctionProcessor<T> {
                 CssToken token = list.get(0);
                 switch (token.getType()) {
                     case CssTokenType.TT_NUMBER:
-                        return new CssDimension(token.getNumericValue().doubleValue(), null);
+                        return new CssSize(token.getNumericValue().doubleValue(), null);
                     case CssTokenType.TT_PERCENTAGE:
-                        return new CssDimension(token.getNumericValue().doubleValue(), "%");
+                        return new CssSize(token.getNumericValue().doubleValue(), "%");
                     case CssTokenType.TT_DIMENSION:
-                        return new CssDimension(token.getNumericValue().doubleValue(), token.getStringValue());
+                        return new CssSize(token.getNumericValue().doubleValue(), token.getStringValue());
                     default:
                         throw new ParseException("calc-value: function " + name + "() must return numeric value.", tt.getStartPosition());
                 }
@@ -603,7 +602,7 @@ public class CssFunctionProcessor<T> {
                     buf.append(t.fromToken());
                     break;
                 default:
-                    throw new ParseException("〈" + expressionName + "〉: String, Number, CssDimension, Percentage or URL expected.", t.getStartPos());
+                    throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", t.getStartPos());
             }
         }
         return buf.toString();

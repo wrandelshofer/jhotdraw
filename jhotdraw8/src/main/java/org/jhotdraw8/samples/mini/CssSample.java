@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -57,13 +59,13 @@ public class CssSample extends Application {
         edge23.setStartConnection(vertex2, new RectangleConnector());
         edge23.setEndConnection(vertex3, new RectangleConnector());
         edge3Null.setStartConnection(vertex3, new RectangleConnector());
-        edge3Null.set(SimpleLineConnectionFigure.END, new Point2D(145, 15));
-        edgeNullNull.set(SimpleLineConnectionFigure.START, new Point2D(65, 90));
-        edgeNullNull.set(SimpleLineConnectionFigure.END, new Point2D(145, 95));
+        edge3Null.set(SimpleLineConnectionFigure.END, new CssPoint2D(145, 15));
+        edgeNullNull.set(SimpleLineConnectionFigure.START, new CssPoint2D(65, 90));
+        edgeNullNull.set(SimpleLineConnectionFigure.END, new CssPoint2D(145, 95));
 
         SimpleLineFigure line1 = new SimpleLineFigure();
-        line1.set(SimpleLineFigure.START, new Point2D(50, 150));
-        line1.set(SimpleLineFigure.END, new Point2D(100, 150));
+        line1.set(SimpleLineFigure.START, new CssPoint2D(50, 150));
+        line1.set(SimpleLineFigure.END, new CssPoint2D(100, 150));
 
         Layer layer = new SimpleLayer();
         drawing.addChild(layer);

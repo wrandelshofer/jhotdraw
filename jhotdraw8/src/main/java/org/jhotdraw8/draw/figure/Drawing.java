@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.CssColorStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.StylesheetsManager;
 
 /**

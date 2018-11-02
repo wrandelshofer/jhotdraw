@@ -6,7 +6,7 @@ package org.jhotdraw8.text;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.css.text.CssColorConverter;
-import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

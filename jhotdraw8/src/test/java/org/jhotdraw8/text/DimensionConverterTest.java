@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.css.text.CssDimension;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
@@ -39,7 +39,7 @@ public class DimensionConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssSizeConverter instance = new CssSizeConverter(true);
-        instance.toString(out, idFactory, value==null?null:new CssDimension(value, null));
+        instance.toString(out, idFactory, value==null?null:new CssSize(value, null));
         String actual = out.toString();
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -55,7 +55,7 @@ public class DimensionConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
         CssSizeConverter instance = new CssSizeConverter(true);
-        CssDimension actualSize = instance.fromString(buf,idFactory);
+        CssSize actualSize = instance.fromString(buf,idFactory);
         Double actual =actualSize==null?null: actualSize.getConvertedValue();
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

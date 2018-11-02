@@ -13,12 +13,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.text.CssDimension;
-import org.jhotdraw8.css.text.CssDimensionInsets;
+import org.jhotdraw8.css.CssInsets;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssDimensionInsetsConverter;
+import org.jhotdraw8.css.text.CssInsetsConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -27,20 +27,20 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DimensionInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssDimensionInsets> {
+public class CssInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssInsets> {
 
     private final static long serialVersionUID = 1L;
 
     @Nonnull
-    private final CssMetaData<?, CssDimensionInsets> cssMetaData;
+    private final CssMetaData<?, CssInsets> cssMetaData;
     @Nonnull
-    private final MapAccessor<CssDimension> topKey;
+    private final MapAccessor<CssSize> topKey;
     @Nonnull
-    private final MapAccessor<CssDimension> rightKey;
+    private final MapAccessor<CssSize> rightKey;
     @Nonnull
-    private final MapAccessor<CssDimension> bottomKey;
+    private final MapAccessor<CssSize> bottomKey;
     @Nonnull
-    private final MapAccessor<CssDimension> leftKey;
+    private final MapAccessor<CssSize> leftKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -51,18 +51,18 @@ public class DimensionInsetsStyleableMapAccessor extends AbstractStyleableFigure
      * @param bottomKey the insets bottom key
      * @param leftKey the insets left key
      */
-    public DimensionInsetsStyleableMapAccessor(String name, MapAccessor<CssDimension> topKey, MapAccessor<CssDimension> rightKey, MapAccessor<CssDimension> bottomKey, MapAccessor<CssDimension> leftKey) {
-        super(name, CssDimensionInsets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssDimensionInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
+    public CssInsetsStyleableMapAccessor(String name, MapAccessor<CssSize> topKey, MapAccessor<CssSize> rightKey, MapAccessor<CssSize> bottomKey, MapAccessor<CssSize> leftKey) {
+        super(name, CssInsets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
-        Function<Styleable, StyleableProperty<CssDimensionInsets>> function = s -> {
+        Function<Styleable, StyleableProperty<CssInsets>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssDimensionInsets> cnvrtr
+        final StyleConverter<String, CssInsets> cnvrtr
                 = new StyleConverterAdapter<>(getConverter());
-        CssMetaData<Styleable, CssDimensionInsets> md
+        CssMetaData<Styleable, CssInsets> md
                 = new SimpleCssMetaData<>(property, function,
                         cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
@@ -75,40 +75,40 @@ public class DimensionInsetsStyleableMapAccessor extends AbstractStyleableFigure
 
     @Nonnull
     @Override
-    public CssMetaData<?, CssDimensionInsets> getCssMetaData() {
+    public CssMetaData<?, CssInsets> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private final Converter<CssDimensionInsets> converter= new CssDimensionInsetsConverter(false);
+    private final Converter<CssInsets> converter= new CssInsetsConverter(false);
 
     @Override
-    public Converter<CssDimensionInsets> getConverter() {
+    public Converter<CssInsets> getConverter() {
         return converter;
     }
 
     @Nullable
     @Override
-    public CssDimensionInsets get(Map<? super Key<?>, Object> a) {
-        final CssDimension top = topKey.get(a);
-        final CssDimension right = rightKey.get(a);
-        final CssDimension bottom = bottomKey.get(a);
-        final CssDimension left = leftKey.get(a);
+    public CssInsets get(Map<? super Key<?>, Object> a) {
+        final CssSize top = topKey.get(a);
+        final CssSize right = rightKey.get(a);
+        final CssSize bottom = bottomKey.get(a);
+        final CssSize left = leftKey.get(a);
         if (top == null || right == null || bottom == null | left == null) {
             return null;
         }
-        return new CssDimensionInsets(
-                top == null ? CssDimension.ZERO : top,
-                right == null ? CssDimension.ZERO : right,
-                bottom == null ? CssDimension.ZERO : bottom,
-                left == null ? CssDimension.ZERO : left
+        return new CssInsets(
+                top == null ? CssSize.ZERO : top,
+                right == null ? CssSize.ZERO : right,
+                bottom == null ? CssSize.ZERO : bottom,
+                left == null ? CssSize.ZERO : left
         );
     }
 
     @Nullable
     @Override
-    public CssDimensionInsets put(Map<? super Key<?>, Object> a, @Nullable CssDimensionInsets value) {
-        CssDimensionInsets oldValue = get(a);
+    public CssInsets put(Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
+        CssInsets oldValue = get(a);
         if (value == null) {
             topKey.put(a, null);
             rightKey.put(a, null);
@@ -125,8 +125,8 @@ public class DimensionInsetsStyleableMapAccessor extends AbstractStyleableFigure
 
     @Nullable
     @Override
-    public CssDimensionInsets remove(Map<? super Key<?>, Object> a) {
-        CssDimensionInsets oldValue = get(a);
+    public CssInsets remove(Map<? super Key<?>, Object> a) {
+        CssInsets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);
         bottomKey.remove(a);
