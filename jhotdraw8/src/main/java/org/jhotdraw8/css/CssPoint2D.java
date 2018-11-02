@@ -35,11 +35,11 @@ public class CssPoint2D {
     }
 
     public CssPoint2D(double x, double y) {
-        this(x,y,null);
+        this(x, y, null);
     }
 
     public CssPoint2D(Point2D p) {
-        this(p.getX(),p.getY());
+        this(p.getX(), p.getY());
     }
 
     @Override
@@ -88,11 +88,15 @@ public class CssPoint2D {
     }
 
     public Point2D getConvertedValue() {
-        return new Point2D(x.getConvertedValue(),y.getConvertedValue());
+        return new Point2D(x.getConvertedValue(), y.getConvertedValue());
 
     }
 
     public CssPoint2D subtract(CssPoint2D that) {
-        return new CssPoint2D(x.subtract(that.x),y.subtract(that.y));
+        return new CssPoint2D(x.subtract(that.x), y.subtract(that.y));
+    }
+
+    public CssPoint2D add(CssPoint2D that) {
+        return new CssPoint2D(x.add(that.x), y.add(that.y));
     }
 }

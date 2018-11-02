@@ -55,7 +55,8 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimplePageFigure extends AbstractCompositeFigure implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
+public class SimplePageFigure extends AbstractCompositeFigure
+        implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
         FillableFigure, StrokeableFigure {
 
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
@@ -164,6 +165,10 @@ public class SimplePageFigure extends AbstractCompositeFigure implements Page, G
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Bounds getBoundsInLocal() {
+        return getCssBoundsInLocal().getConvertedBoundsValue();
+    }
     @Nonnull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {

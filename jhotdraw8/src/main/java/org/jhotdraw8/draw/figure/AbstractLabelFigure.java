@@ -189,6 +189,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         set(ORIGIN, new CssPoint2D(x.getConvertedValue() + i.getLeft(), y.getConvertedValue() + lb.getHeight() - i.getBottom()));
         //invalidateBounds();
     }
+    @Override
+    public void translateInLocal(@Nonnull CssPoint2D delta) {
+        set(ORIGIN, getNonnull(ORIGIN).add(delta));
+    }
 
     protected void updateGroupNode(RenderContext ctx, Group node) {
 

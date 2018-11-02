@@ -43,7 +43,7 @@ import org.jhotdraw8.geom.Transforms;
 public class MoveHandle extends LocatorHandle {
 
     private Point2D pickLocation;
-    private Point2D oldPoint;
+    private CssPoint2D oldPoint;
     @Nonnull
     private final Region node;
     private final String styleclass;
@@ -108,7 +108,7 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         pressed = true;
-        oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
+        oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY()))));
 
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -123,18 +123,18 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+        CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(newPoint)).getConvertedValue();
+            newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
         }
 
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
             final Transform localToWorld = owner.getLocalToWorld();
-            oldPoint = Transforms.transform(localToWorld, loc);
+            oldPoint = new CssPoint2D(Transforms.transform(localToWorld, loc));
         }
 
         if (oldPoint.equals(newPoint)) {

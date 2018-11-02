@@ -20,7 +20,8 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimplePageLabelFigure extends AbstractLabelFigure implements HideableFigure, FontableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
+public class SimplePageLabelFigure extends AbstractLabelFigure
+        implements HideableFigure, FontableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
  public final static String TYPE_SELECTOR = "PageLabel";
     public final static String NUM_PAGES_PLACEHOLDER = "${numPages}";
     public final static String PAGE_PLACEHOLDER = "${page}";

@@ -93,8 +93,11 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         double anchorY = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
-        Point2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1)))).getConvertedValue();
-        createdFigure.reshapeInLocal(c.getX() - defaultWidth * anchorX, c.getY() - defaultHeight * anchorY, defaultWidth, defaultHeight);
+        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
+        createdFigure.reshapeInLocal(
+                anchorX==0?c.getX():c.getX().subtract( new CssSize(defaultWidth).multiply( anchorX)),
+                anchorY==0?c.getY():c.getY().subtract(new CssSize( defaultHeight).multiply( anchorY)),
+                new CssSize(defaultWidth), new CssSize(defaultHeight));
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getDrawing();
 
