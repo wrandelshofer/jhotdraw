@@ -293,9 +293,9 @@ public class CssFunctionProcessor<T> {
         }
         List<CssToken> customValue = customProperties.get(customPropertyName);
         if (customValue == null) {
-            processToken(element, new ListCssTokenizer(attrFallback), out);
+            process(element, new ListCssTokenizer(attrFallback), out);
         } else {
-            processToken(element, new ListCssTokenizer(customValue), out);
+            process(element, new ListCssTokenizer(customValue), out);
         }
     }
 

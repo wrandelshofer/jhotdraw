@@ -29,7 +29,7 @@ public interface ReadableList<E> extends ReadableCollection<E> {
     }
 
 
-    default List<E> toList() {
+    default ArrayList<E> toList() {
         return new ArrayList<>(new ListWrapper<>(this));
     }
 }

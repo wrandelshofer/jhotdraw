@@ -8,6 +8,8 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -56,6 +58,12 @@ public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double>
      * @param defaultValue The default value.
      */
     public DoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue) {
+        this(name,mask,defaultValue,new CssDoubleConverter(false));
+    }
+    public DoubleStyleableFigureKey(String name, Double defaultValue, CssConverter<Double> converter) {
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue,converter);
+    }
+    public DoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue, CssConverter<Double> converter) {
         super(name, Double.class, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<Double>> function = s -> {
@@ -64,7 +72,7 @@ public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double>
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        this.converter = new CssDoubleConverter(false);
+        this.converter = converter;
         CssMetaData<Styleable, Double> md
                 = new SimpleCssMetaData<>(property, function,
                 new StyleConverterAdapter<>(converter), defaultValue, inherits);

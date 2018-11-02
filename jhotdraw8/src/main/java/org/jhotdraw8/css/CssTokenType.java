@@ -140,13 +140,13 @@ public class CssTokenType {
     /**
      * Defines an ident-token.
      * <pre>
-     *     ident-token = [ '-' ] , first-ident-char , { ident-char } ;
+     *     ident-token = { '-' } , first-ident-char , { ident-char } ;
      *
      *     first-ident-char = ('a'-'z'|'A'-'Z'|'_')
      *                      | non-ASCII
      *                      | escape ;
      *
-     *     ident-char = ( 'a'-'z' | 'A'-'Z' | '_' | '0'-'9' )
+     *     ident-char = ( 'a'-'z' | 'A'-'Z' | '_' | '-' | '0'-'9' )
      *                | non-ASCII
      *                | escape ;
      *

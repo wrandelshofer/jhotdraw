@@ -215,7 +215,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
             tt.pushBack();
         }
 
-        if (tt.next() == CssTokenType.TT_IDENT || tt.current() == CssTokenType.TT_STRING) {
+        if (tt.next() == CssTokenType.TT_IDENT) {
             fontFamily = tt.currentString();
             while (tt.next() == CssTokenType.TT_IDENT) {
                 fontFamily += " " + tt.currentString();

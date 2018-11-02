@@ -129,6 +129,8 @@ public class CssToken /*extends AST*/ {
                 return fromSUBSTRING_MATCH();
             case CssTokenType.TT_COLUMN:
                 return fromCOLUMN();
+            case CssTokenType.TT_EOF:
+                return "<EOF>";
 
         }
         throw new InternalError("Unsupported TTYPE:" + ttype);
@@ -152,8 +154,8 @@ public class CssToken /*extends AST*/ {
         try {
             int ch = r.read();
 
-            // identifier may start with '-'
-            if (ch == '-') {
+            // identifier may start with zero or more '-'
+            while (ch == '-') {
                 out.append((char) ch);
                 ch = r.read();
             }

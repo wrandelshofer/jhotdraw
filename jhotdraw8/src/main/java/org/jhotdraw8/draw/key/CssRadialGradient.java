@@ -32,6 +32,11 @@ public class CssRadialGradient implements Paintable {
     private final CycleMethod cycleMethod;
     private final CssStop[] cstops;
 
+    public CssRadialGradient() {
+        this(0,0,0.5,0.5,
+                1.0,true,CycleMethod.NO_CYCLE);
+    }
+
     public CssRadialGradient(double focusAngle, double focusDistance, double centerX, double centerY, double radius, boolean proportional, CycleMethod cycleMethod,
             CssStop... stops) {
         this.focusAngle = focusAngle;

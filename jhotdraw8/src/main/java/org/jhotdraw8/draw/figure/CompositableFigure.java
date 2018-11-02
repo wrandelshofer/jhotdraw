@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.text.CssPercentageConverter;
 import org.jhotdraw8.draw.key.BlendModeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EffectStyleableFigureKey;
@@ -45,7 +47,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey OPACITY = new DoubleStyleableFigureKey("opacity", 1.0);
+    public static DoubleStyleableFigureKey OPACITY = new DoubleStyleableFigureKey("opacity", 1.0,new CssPercentageConverter(false));
 
     /**
      * Updates a figure node with all effect properties defined in this
