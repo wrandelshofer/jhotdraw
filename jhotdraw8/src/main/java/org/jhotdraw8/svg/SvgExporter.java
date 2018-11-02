@@ -1146,7 +1146,7 @@ public class SvgExporter {
         elem.setAttribute("x", x);
         elem.setAttribute("y", nb.toString(node.getY() + vposOffset));
         double lineSpacing = node.getLineSpacing();
-        double fontSize=node.getFont().getSize()*96/72;
+        double fontSize = node.getFont().getSize() * 96 / 72;
         writeTextAttributes(elem, node);
 
         String text = node.getText();
@@ -1159,8 +1159,9 @@ public class SvgExporter {
                     Element tspan = doc.createElement("tspan");
                     tspan.appendChild(doc.createTextNode(lines[i]));
                     tspan.setAttribute("x", x);
-                    if (i!=0)
-                    tspan.setAttribute("dy", Double.toString(lineSpacing+fontSize));
+                    if (i != 0) {
+                        tspan.setAttribute("dy", Double.toString(lineSpacing + fontSize));
+                    }
                     elem.appendChild(tspan);
                 }
             }
@@ -1183,9 +1184,15 @@ public class SvgExporter {
         // scaleY and rotate transforms.
         List<Transform> txs = new ArrayList<>();
         Point2D pivot = Geom.center(node.getBoundsInLocal());
-        txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
-        txs.add(new Rotate(node.getRotate(), pivot.getX(), pivot.getY()));
-        txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));
+        if (node.getTranslateX() != 0.0 || node.getTranslateY() != 0.0) {
+            txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
+        }
+        if (node.getRotate() != 0.0) {
+            txs.add(new Rotate(node.getRotate(), pivot.getX(), pivot.getY()));
+        }
+        if (node.getScaleX() != 1.0 || node.getScaleY() != 1.0) {
+            txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));
+        }
         txs.addAll(node.getTransforms());
         writeTransformAttributes(elem, txs);
     }

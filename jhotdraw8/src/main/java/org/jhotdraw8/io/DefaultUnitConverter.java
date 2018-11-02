@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
  */
 public class DefaultUnitConverter implements UnitConverter {
 
-    final static DefaultUnitConverter instance = new DefaultUnitConverter(90);
+    final static DefaultUnitConverter instance = new DefaultUnitConverter(96);
 
     @Nonnull
     public static DefaultUnitConverter getInstance() {
@@ -34,7 +34,7 @@ public class DefaultUnitConverter implements UnitConverter {
     }
 
     public DefaultUnitConverter() {
-        this(72.0);
+        this(96.0);
     }
 
     public double getDpi() {
