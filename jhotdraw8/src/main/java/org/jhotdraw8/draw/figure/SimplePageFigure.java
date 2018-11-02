@@ -6,8 +6,10 @@ package org.jhotdraw8.draw.figure;
 import static java.lang.Double.max;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -25,9 +27,12 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+
 import javax.annotation.Nonnull;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
@@ -51,8 +56,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class SimplePageFigure extends AbstractCompositeFigure implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
-FillableFigure, StrokeableFigure
-{
+        FillableFigure, StrokeableFigure {
 
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     public final static DoubleStyleableFigureKey NUM_PAGES_X = new DoubleStyleableFigureKey("num-pages-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
@@ -73,14 +77,14 @@ FillableFigure, StrokeableFigure
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Page";
-    public final static CssSizeStyleableFigureKey WIDTH =SimpleRectangleFigure.WIDTH;
+    public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
     public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
-    public final static CssSizeStyleableFigureKey Y =SimpleRectangleFigure.Y;
+    public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
-    private final static Object CONTENT_BOUNDS_PROPERTY =new Object();
+    private final static Object CONTENT_BOUNDS_PROPERTY = new Object();
     private final static Object PAGE_INSETS_PROPERTY = new Object();
     private final static Object PAGE_BOUNDS_PROPERTY = new Object();
-private final static Object CURRENT_PAGE_PROPERTY = new Object();
+    private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
     public SimplePageFigure() {
         set(FILL, new CssColor(Color.TRANSPARENT));
@@ -100,7 +104,6 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
     }
 
     /**
-     *
      * @return
      */
     private double computeContentAreaFactor() {
@@ -114,8 +117,8 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
         double innerPageW = (get(PAPER_WIDTH).getConvertedValue() - insets.getLeft() - insets.getRight());
         double innerPageH = (get(PAPER_HEIGHT).getConvertedValue() - insets.getTop() - insets.getBottom());
-        double totalInnerPageWidth = innerPageW * numPagesX - overX * max(0,numPagesX - 1);
-        double totalInnerPageHeight = innerPageH * numPagesY - overY * max(0,numPagesY - 1);
+        double totalInnerPageWidth = innerPageW * numPagesX - overX * max(0, numPagesX - 1);
+        double totalInnerPageHeight = innerPageH * numPagesY - overY * max(0, numPagesY - 1);
         double contentRatio = contentWidth / contentHeight;
         double innerPageRatio = totalInnerPageWidth / totalInnerPageHeight;
         double contentAreaFactor;
@@ -144,14 +147,14 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         insetsBoundsNode.setStroke(Color.LIGHTGRAY);
         insetsBoundsNode.setStrokeType(StrokeType.CENTERED);
         insetsBoundsNode.getStrokeDashArray().setAll(5.0);
-        
+
         javafx.scene.Group currentPageNode = new javafx.scene.Group();
 
-        groupNode.getChildren().addAll(pageBoundsNode, insetsBoundsNode,contentBoundsNode, currentPageNode);
+        groupNode.getChildren().addAll(pageBoundsNode, insetsBoundsNode, contentBoundsNode, currentPageNode);
         groupNode.getProperties().put(PAGE_BOUNDS_PROPERTY, pageBoundsNode);
         groupNode.getProperties().put(PAGE_INSETS_PROPERTY, insetsBoundsNode);
         groupNode.getProperties().put(CONTENT_BOUNDS_PROPERTY, contentBoundsNode);
-        groupNode.getProperties().put(CURRENT_PAGE_PROPERTY                , currentPageNode);
+        groupNode.getProperties().put(CURRENT_PAGE_PROPERTY, currentPageNode);
         return groupNode;
     }
 
@@ -163,11 +166,11 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
     @Nonnull
     @Override
-    public Bounds getBoundsInLocal() {
-        return new BoundingBox(getNonnull(X).getConvertedValue(),
-                getNonnull(Y).getConvertedValue(),
-                getNonnull(WIDTH).getConvertedValue(),
-                getNonnull(HEIGHT).getConvertedValue());
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(getNonnull(X),
+                getNonnull(Y),
+                getNonnull(WIDTH),
+                getNonnull(HEIGHT));
     }
 
     @Override
@@ -188,7 +191,8 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
 
         double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
-        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
+        ;
         double pageW = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageH = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverX = (overX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -200,7 +204,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         return new BoundingBox(x, y, pageW, pageH);
     }
 
-private Bounds getContentBounds(int internalPageNumber) {
+    private Bounds getContentBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyled(PAGE_INSETS).getConvertedValue();
         CssPoint2D overlap = getStyled(PAGE_OVERLAP);
@@ -208,20 +212,21 @@ private Bounds getContentBounds(int internalPageNumber) {
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
 
-        double pageX = getNonnull(X).getConvertedValue() ;
-        double pageY = getNonnull(Y).getConvertedValue() ;
+        double pageX = getNonnull(X).getConvertedValue();
+        double pageY = getNonnull(Y).getConvertedValue();
         double pageW = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageH = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
-        double marginH=insets.getLeft() + insets.getRight();
-        double marginV=insets.getTop() + insets.getBottom();
+        double marginH = insets.getLeft() + insets.getRight();
+        double marginV = insets.getTop() + insets.getBottom();
         double pageOverX = (overX + marginH) * contentAreaFactor;
         double pageOverY = (overY + marginV) * contentAreaFactor;
         int px = internalPageNumber % numPagesX;
         int py = internalPageNumber / numPagesX;
         double x = pageX + (pageW - pageOverX) * px;
         double y = pageY + (pageH - pageOverY) * py;
-        return new BoundingBox(x, y, pageW-marginH*contentAreaFactor, pageH-marginV*contentAreaFactor);
+        return new BoundingBox(x, y, pageW - marginH * contentAreaFactor, pageH - marginV * contentAreaFactor);
     }
+
     @Nonnull
     @Override
     public Shape getPageClip(int internalPageNumber) {
@@ -233,7 +238,8 @@ private Bounds getContentBounds(int internalPageNumber) {
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
 
         double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
-        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
+        ;
         double pageWidth = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageHeight = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (ox + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -242,14 +248,14 @@ private Bounds getContentBounds(int internalPageNumber) {
         int py = internalPageNumber / numPagesX;
         double x = pageX + (pageWidth - pageOverlapX) * px;
         double y = pageY + (pageHeight - pageOverlapY) * py;
-        
-  
-      Bounds  b = Geom.intersection(getBoundsInLocal(),  
-              new BoundingBox(x + insets.getLeft() * contentAreaFactor, y + insets.getTop() * contentAreaFactor,
-                pageWidth - (insets.getLeft() + insets.getRight()) * contentAreaFactor,
-                pageHeight - (insets.getTop() + insets.getBottom()) * contentAreaFactor));
-        
-        return new Rectangle(b.getMinX(),b.getMinY(),b.getWidth(),b.getHeight());
+
+
+        Bounds b = Geom.intersection(getBoundsInLocal(),
+                new BoundingBox(x + insets.getLeft() * contentAreaFactor, y + insets.getTop() * contentAreaFactor,
+                        pageWidth - (insets.getLeft() + insets.getRight()) * contentAreaFactor,
+                        pageHeight - (insets.getTop() + insets.getBottom()) * contentAreaFactor));
+
+        return new Rectangle(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
@@ -272,7 +278,8 @@ private Bounds getContentBounds(int internalPageNumber) {
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();
         double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
-        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
+        ;
         double pageWidth = getNonnull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageHeight = getNonnull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -298,7 +305,8 @@ private Bounds getContentBounds(int internalPageNumber) {
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();
         double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
-        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;;
+        double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
+        ;
         double pageWidth = getNonnull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageHeight = getNonnull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -330,18 +338,18 @@ private Bounds getContentBounds(int internalPageNumber) {
         }
     }
 
-    public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, new CssSize(x + min(width, 0)));
-        set(Y, new CssSize(y + min(height, 0)));
-        set(WIDTH, new CssSize(abs(width)));
-        set(HEIGHT, new CssSize(abs(height)));
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        set(X, width.getValue() < 0 ? x.add(width) : x);
+        set(Y, height.getValue() < 0 ? y.add(height) : y);
+        set(WIDTH, width.abs());
+        set(HEIGHT, height.abs());
     }
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
         Bounds newBounds = transform.transform(getBoundsInLocal());
-        set(X,new CssSize( newBounds.getMinX()));
-        set(Y,new CssSize( newBounds.getMinY()));
+        set(X, new CssSize(newBounds.getMinX()));
+        set(Y, new CssSize(newBounds.getMinY()));
         set(WIDTH, new CssSize(newBounds.getWidth()));
         set(HEIGHT, new CssSize(newBounds.getHeight()));
     }
@@ -360,7 +368,7 @@ private Bounds getContentBounds(int internalPageNumber) {
 
         applyFillableFigureProperties(pageBoundsNode);
         applyStrokeableFigureProperties(pageBoundsNode);
-        
+
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
             applyHideableFigureProperties(node);
             contentBoundsNode.setVisible(true);
@@ -384,14 +392,14 @@ private Bounds getContentBounds(int internalPageNumber) {
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
         int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
         final int n = numPagesX * numPagesY;
-        final List<PathElement> pbList = new ArrayList<>(n*4);
-        final List<PathElement> pmList = new ArrayList<>(n*4);
+        final List<PathElement> pbList = new ArrayList<>(n * 4);
+        final List<PathElement> pmList = new ArrayList<>(n * 4);
         for (int i = 0; i < n; i++) {
-            addBounds(pbList,getPageBounds(i));
-            addBounds(pmList,getContentBounds(i));
+            addBounds(pbList, getPageBounds(i));
+            addBounds(pmList, getContentBounds(i));
         }
-       pageBoundsNode.getElements().setAll(pbList);
-       pageInsetsNode.getElements().setAll(pmList);
+        pageBoundsNode.getElements().setAll(pbList);
+        pageInsetsNode.getElements().setAll(pmList);
 
         int currentPage = ctx.get(RenderContext.RENDER_PAGE_INTERNAL_NUMBER);
         currentPageNode.getTransforms().setAll(getPageTranslate(currentPage));
@@ -403,6 +411,6 @@ private Bounds getContentBounds(int internalPageNumber) {
         ObservableList<Node> group = currentPageNode.getChildren();
         if (!group.equals(currentPageChildren)) {
             group.setAll(currentPageChildren);
-        }    
+        }
     }
 }

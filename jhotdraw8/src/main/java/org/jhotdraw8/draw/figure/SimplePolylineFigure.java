@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
@@ -99,6 +100,9 @@ public class SimplePolylineFigure extends AbstractLeafFigure
             maxY = Math.max(maxY, p.getY());
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(getBoundsInLocal());
     }
 
     @Nonnull

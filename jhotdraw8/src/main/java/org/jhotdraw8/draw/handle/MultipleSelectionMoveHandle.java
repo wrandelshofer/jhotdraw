@@ -18,6 +18,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
@@ -101,7 +103,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            newPoint = view.getConstrainer().constrainPoint(getOwner(),new CssPoint2D( newPoint)).getConvertedValue();
         }
 
         if (event.isMetaDown()) {
@@ -137,7 +139,8 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
 
     @Override
     public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        oldPoint = view.getConstrainer().constrainPoint(getOwner(),
+                new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
     }
 

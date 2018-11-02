@@ -6,6 +6,8 @@ package org.jhotdraw8.io;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 
 /**
@@ -113,6 +115,9 @@ public interface UnitConverter {
 
         return value * getFactor(outputUnit) / getFactor(inputUnit);
     }
+    default CssSize convertSize(double value, @Nullable String inputUnit, @Nullable String outputUnit) {
+        return new CssSize(convert(value,inputUnit,outputUnit),outputUnit);
+    }
 
     /**
      * Converts the specified value from input unit to output unit.
@@ -124,4 +129,12 @@ public interface UnitConverter {
     default double convert(@Nonnull CssSize value, @Nullable String outputUnit) {
         return convert(value.getValue(), value.getUnits(), outputUnit);
     }
+    default CssSize convertSize(@Nonnull CssSize value, @Nullable String outputUnit) {
+        return new CssSize(convert(value.getValue(), value.getUnits(), outputUnit),outputUnit);
+    }
+    default CssPoint2D convertPoint2D(CssPoint2D cssPoint2D, String units) {
+        return new CssPoint2D(convertSize(cssPoint2D.getX(),units),
+                convertSize(cssPoint2D.getY(),units));
+    }
+
 }

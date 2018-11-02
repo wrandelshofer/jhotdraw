@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.css.CssColor;
@@ -50,13 +52,13 @@ public class DrawingInspector extends AbstractDrawingInspector {
     @FXML
     private TextField heightField;
     @Nullable
-    private Property<Double> heightProperty;
+    private Property<CssSize> heightProperty;
 
     private Node node;
     @FXML
     private TextField widthField;
     @Nullable
-    private Property<Double> widthProperty;
+    private Property<CssSize> widthProperty;
 
     public DrawingInspector() {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));
@@ -129,8 +131,8 @@ public class DrawingInspector extends AbstractDrawingInspector {
             myBackgroundProperty.bindBidirectional(boundBackgroundProperty);
 
             // FIXME binding to figure properties bypasses the DrawingModel!
-            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new XmlDoubleConverter()));
-            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterAdapter<>(new XmlDoubleConverter()));
+            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
+            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
 
         }
     }

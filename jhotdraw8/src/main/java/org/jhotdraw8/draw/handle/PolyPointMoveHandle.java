@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
@@ -106,13 +107,13 @@ public class PolyPointMoveHandle extends AbstractHandle {
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
+            newPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(newPoint)).getConvertedValue();
         }
 
         if (event.isMetaDown()) {
             // meta snaps the location ofCollection the handle to the grid
             Point2D loc = getLocation();
-            oldPoint = owner.getLocalToWorld().transform(loc);
+            oldPoint = Transforms.transform(owner.getLocalToWorld(),loc);
         }
 
         if (oldPoint.equals(newPoint)) {
@@ -136,7 +137,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
 
     @Override
     public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();

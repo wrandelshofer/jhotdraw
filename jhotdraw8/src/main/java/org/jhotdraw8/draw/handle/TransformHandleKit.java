@@ -17,6 +17,8 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.draw.locator.RelativeLocator;
@@ -197,7 +199,7 @@ public class TransformHandleKit {
                 return;
             }
             TransformableFigure owner = (TransformableFigure) o;
-            Bounds oldBounds = startBounds;
+            Bounds oldBounds = startBounds.getConvertedBoundsValue();
             ImmutableList<Transform> oldTransforms = startTransforms;
 
             double sx = width / oldBounds.getWidth();
@@ -220,6 +222,12 @@ public class TransformHandleKit {
                     break;
             }
         }
+        @Override
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            // FIXME remove this method
+            resize(newPoint.getConvertedValue(),owner,bounds.getConvertedBoundsValue(),model,keepAspect);
+        }
+
     }
 
     private static class NorthEastHandle extends AbstractTransformHandle {

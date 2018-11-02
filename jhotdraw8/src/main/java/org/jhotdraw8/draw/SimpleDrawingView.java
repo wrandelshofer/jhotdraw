@@ -42,6 +42,7 @@ import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.constrain.NullConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -1233,8 +1234,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (d == null) {
             return;
         }
-        double dw = d.get(Drawing.WIDTH);
-        double dh = d.get(Drawing.HEIGHT);
+        CssSize cssWidth = d.get(Drawing.WIDTH);
+        CssSize cssHeight = d.get(Drawing.HEIGHT);
+        double dw = cssWidth==null?0.0:cssWidth.getConvertedValue();
+        double dh = cssHeight==null?0.0:cssHeight.getConvertedValue();
 
         Bounds bounds = drawingPane.getLayoutBounds();
         double x = bounds.getMinX() * f;

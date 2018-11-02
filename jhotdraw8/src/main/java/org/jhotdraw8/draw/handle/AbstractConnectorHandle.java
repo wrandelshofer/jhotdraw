@@ -103,12 +103,12 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
 
-        Point2D constrainedPoint;
+        CssPoint2D constrainedPoint;
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            constrainedPoint = view.getConstrainer().constrainPoint(getOwner(), unconstrainedPoint);
+            constrainedPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(unconstrainedPoint));
         } else {
-            constrainedPoint = unconstrainedPoint;
+            constrainedPoint = new CssPoint2D(unconstrainedPoint);
         }
 
         ConnectingFigure o = getOwner();
@@ -125,14 +125,14 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
             SearchLoop: 
             for (Figure f1 : list) {
                 for (Figure ff : f1.breadthFirstIterable()) {
-                    if (owner != ff && (ff instanceof ConnectableFigure)) {
+                    if (this.owner != ff && (ff instanceof ConnectableFigure)) {
                         ConnectableFigure cff = (ConnectableFigure) ff;
                         Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                         if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                            newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), o);
+                            newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
                             if (newConnector != null && o.canConnect(ff, newConnector)) {
                                 newConnectedFigure = ff;
-                                constrainedPoint = newConnector.getPositionInLocal(o, ff);
+                                constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, ff));
                                 isConnected = true;
                                 break SearchLoop;
                             }
@@ -142,7 +142,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
             }
         }
 
-        model.set(o, pointKey, new CssPoint2D(getOwner().worldToLocal(constrainedPoint)));
+        model.set(o, pointKey, owner.worldToLocal(constrainedPoint));
         model.set(o, connectorKey, newConnector);
         model.set(o, targetKey, newConnectedFigure);
     }

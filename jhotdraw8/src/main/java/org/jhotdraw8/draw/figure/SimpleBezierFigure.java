@@ -18,6 +18,8 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
@@ -112,6 +114,10 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(getBoundsInLocal());
+    }
+
     public int getNodeCount() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
@@ -144,11 +150,6 @@ public class SimpleBezierFigure extends AbstractLeafFigure
             newP.set(i, newP.get(i).transform(transform));
         }
         set(PATH, ImmutableList.ofCollection(newP));
-    }
-
-    @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
     }
 
     @Override

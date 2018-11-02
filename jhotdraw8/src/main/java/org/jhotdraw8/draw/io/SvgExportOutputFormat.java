@@ -87,6 +87,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     @Nullable
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
+    private final CssSizeConverter sc = new CssSizeConverter(false);
     private final Converter<ImmutableList<CssSize>> nbList = new CssListConverter<>(new CssSizeConverter(false));
     private final SvgPaintConverter paint = new SvgPaintConverter(true);
     private boolean skipInvisibleNodes = true;
@@ -175,8 +176,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     }
 
     private void writeDrawingElementAttributes(Element docElement, Drawing drawing) throws IOException {
-        docElement.setAttribute("width", nb.toString(drawing.get(Drawing.WIDTH)));
-        docElement.setAttribute("height", nb.toString(drawing.get(Drawing.HEIGHT)));
+        docElement.setAttribute("width", sc.toString(drawing.get(Drawing.WIDTH)));
+        docElement.setAttribute("height", sc.toString(drawing.get(Drawing.HEIGHT)));
     }
 
     @Override

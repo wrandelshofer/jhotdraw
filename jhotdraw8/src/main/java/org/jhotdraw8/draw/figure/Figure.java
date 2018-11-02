@@ -26,10 +26,16 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
+
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
@@ -45,6 +51,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
 
@@ -483,7 +490,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the local bounds
      */
-    public Bounds getBoundsInLocal();
+    default Bounds getBoundsInLocal() {
+        return getCssBoundsInLocal().getConvertedBoundsValue();
+    }
+
+    CssRectangle2D getCssBoundsInLocal();
 
     /**
      * The bounds that should be used for layout calculations for this figure.
@@ -496,7 +507,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the local bounds
      */
-    default public Bounds getBoundsInParent() {
+    default Bounds getBoundsInParent() {
         Bounds b = getBoundsInLocal();
         double[] points = new double[8];
         points[0] = b.getMinX();
@@ -819,7 +830,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation always returns true.
      *
      * @param others A set of figures.
-     * @return true if the user may reshapeInLocal this figure together with
+     * @return true if the user may reshape this figure together with
      * those in the set.
      */
     default boolean isGroupReshapeableWith(Set<Figure> others) {
@@ -1031,6 +1042,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * Attempts to change the local bounds of the figure.
      * <p>
      * See {#link #reshapeInLocal(Transform)} for a description of this method.
+     * <p>
+     * This is a convenience method which takes all parameters in pixel units.
      *
      * @param x      desired x-position in parent coordinates
      * @param y      desired y-position in parent coordinates
@@ -1038,7 +1051,24 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param height desired height in parent coordinates, may be negative
      */
     default void reshapeInLocal(double x, double y, double width, double height) {
-        Transform tx = Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height);
+        reshapeInLocal(new CssSize(x), new CssSize(y), new CssSize(width), new CssSize(height));
+    }
+
+    /**
+     * Attempts to change the local bounds of the figure.
+     * <p>
+     * See {#link #reshapeInLocal(Transform)} for a description of this method.
+     * <p>
+     * This method takes parameters as {@code CssSize}s. This can be used to avoid rounding
+     * errors when the figure is reshaped in non-pixel units.
+     *
+     * @param x      desired x-position in parent coordinates
+     * @param y      desired y-position in parent coordinates
+     * @param width  desired width in parent coordinates, may be negative
+     * @param height desired height in parent coordinates, may be negative
+     */
+    default void reshapeInLocal(@Nonnull CssSize x,@Nonnull  CssSize y,@Nonnull  CssSize width,@Nonnull  CssSize height) {
+        Transform tx = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
         reshapeInLocal(tx);
     }
 
@@ -1047,8 +1077,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The figure may choose to only partially change its parent bounds.
      * <p>
-     * This method typically changes property values in this figure with null
-     * null null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * This method typically changes property values in this figure with
+     * {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -1057,6 +1087,32 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param transform the desired transformation in parent coordinates
      */
     void reshapeInParent(Transform transform);
+
+    /**
+     * Attempts to translate the parent bounds of the figure.
+     *
+     * @param t the translation in x and in y direction
+     */
+    default void translateInParent(CssPoint2D t) {
+        if (Transforms.isIdentityOrNull(getParentToLocal())) {
+            translateInLocal(t);
+        } else {
+            Point2D p = t.getConvertedValue();
+            reshapeInParent(new Translate(p.getX(), p.getY()));
+        }
+    }
+
+    /**
+     * Attempts to translate the local bounds of the figure.
+     *
+     * @param t the translation in x and in y direction
+     */
+    default void translateInLocal(CssPoint2D t) {
+        CssRectangle2D b = getCssBoundsInLocal();
+        reshapeInLocal(b.getMinX().add(t.getX()),
+                b.getMinY().add(t.getY()),
+                b.getWidth(), b.getHeight());
+    }
 
     /**
      * This method is invoked on a figure by
@@ -1162,7 +1218,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @Nonnull
     default Point2D worldToLocal(@Nonnull Point2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
-        return wtl == null ? pointInWorld : wtl.transform(pointInWorld);
+        return Transforms.isIdentityOrNull(wtl) ? pointInWorld : wtl.transform(pointInWorld);
+    }
+
+    @Nonnull
+    default CssPoint2D worldToLocal(@Nonnull CssPoint2D pointInWorld) {
+        final Transform wtl = getWorldToLocal();
+        return Transforms.isIdentityOrNull(wtl) ? pointInWorld : new CssPoint2D(wtl.transform(pointInWorld.getConvertedValue()));
     }
 
     /**
@@ -1178,6 +1240,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @Nonnull
     default Point2D worldToParent(@Nonnull Point2D pointInWorld) {
         final Transform wtp = getWorldToParent();
-        return wtp == null ? pointInWorld : wtp.transform(pointInWorld);
+        return Transforms.isIdentityOrNull(wtp) ? pointInWorld : wtp.transform(pointInWorld);
     }
 }

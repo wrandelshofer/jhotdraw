@@ -16,6 +16,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.Handle;
@@ -66,13 +67,16 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
-        for (Point2D p : get(POINTS)) {
+        for (Point2D p : getNonnull(POINTS)) {
             minX = Math.min(minX, p.getX());
             minY = Math.min(minY, p.getY());
             maxX = Math.max(maxX, p.getX());
             maxY = Math.max(maxY, p.getY());
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(getBoundsInLocal());
     }
 
     @Nonnull
@@ -94,11 +98,6 @@ public class SimplePolygonFigure extends AbstractLeafFigure
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Polygon();
-    }
-
-    @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
     }
 
     @Override

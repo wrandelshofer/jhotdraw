@@ -4,6 +4,9 @@
 package org.jhotdraw8.draw.model;
 
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.tree.TreeModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -241,7 +244,8 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param transform the desired transformation in the parent coordinate
      * system
      */
-    void reshapeInParent( Figure f,  Transform transform);
+    void reshapeInParent(Figure f,  Transform transform);
+    void translateInParent(Figure f, CssPoint2D tx);
 
     /**
      * Attempts to change the local bounds of the figure and fires appropriate
@@ -256,6 +260,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * negative
      */
     void reshapeInLocal( Figure f, double x, double y, double width, double height);
+    void reshapeInLocal(Figure f, CssSize x, CssSize y, CssSize width, CssSize height);
 
     /**
      * Invokes the layout method of the figure and fires appropriate /

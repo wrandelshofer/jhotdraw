@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.Collection;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -14,14 +11,18 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Shape;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
-import static java.lang.Math.*;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.shape.Shape;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * /**
@@ -44,8 +45,8 @@ public class ResizeHandleKit {
      * Creates handles for each corner of a figure and adds them to the provided
      * collection.
      *
-     * @param f the figure which will own the handles
-     * @param handles the list to which the handles should be added
+     * @param f          the figure which will own the handles
+     * @param handles    the list to which the handles should be added
      * @param styleclass the style class that should be assigned to the handles
      */
     static public void addCornerResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
@@ -59,8 +60,8 @@ public class ResizeHandleKit {
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
      *
-     * @param f the figure which will own the handles
-     * @param handles the list to which the handles should be added
+     * @param f          the figure which will own the handles
+     * @param handles    the list to which the handles should be added
      * @param styleclass the style class that should be assigned to the handles
      */
     static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
@@ -74,8 +75,8 @@ public class ResizeHandleKit {
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
      *
-     * @param f the figure which will own the handles
-     * @param handles the list to which the handles should be added
+     * @param f          the figure which will own the handles
+     * @param handles    the list to which the handles should be added
      * @param styleclass the style class that should be assigned to the handles
      */
     static public void addResizeHandles(Figure f, @Nonnull Collection<Handle> handles, String styleclass) {
@@ -86,7 +87,7 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
@@ -97,7 +98,7 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
@@ -108,7 +109,7 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
@@ -119,7 +120,7 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
@@ -130,7 +131,7 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
@@ -141,7 +142,7 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
@@ -152,7 +153,7 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
@@ -163,13 +164,14 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner the figure which will own the handle
+     * @param owner      the figure which will own the handle
      * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle west(Figure owner, String styleclass) {
         return new WestHandle(owner, styleclass);
     }
+
     protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);
     protected static final Shape EAST_SHAPE = new Rectangle(5, 9);
     protected static final Shape WEST_SHAPE = new Rectangle(5, 9);
@@ -185,6 +187,7 @@ public class ResizeHandleKit {
         SOUTH_EAST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,2.5 -5.5,2.5 -5.5,-2.5 -2.5,-2.5 Z M 5.5,5.5");
         SOUTH_WEST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,-2.5 5.5,-2.5 5.5,2.5 -2.5,2.5 Z M -5.5,5.5");
     }
+
     @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     @Nullable
@@ -202,21 +205,21 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newX = max(bounds.getMinX(), newPoint.getX());
-            double newY = min(bounds.getMaxY(), newPoint.getY());
-            double newWidth = newX - bounds.getMinX();
-            double newHeight = bounds.getMaxY() - newY;
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newX = CssSize.max(newPoint.getX(), bounds.getMinX());
+            CssSize newY = CssSize.min(newPoint.getY(), bounds.getMaxY());
+            CssSize newWidth = newX.subtract(bounds.getMinX());
+            CssSize newHeight = bounds.getMaxY().subtract(newY);
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
+                double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
                 if (newRatio > preferredAspectRatio) {
-                    newHeight = newWidth * preferredAspectRatio;
+                    newHeight = newWidth.multiply(preferredAspectRatio);
                 } else {
-                    newWidth = newHeight / preferredAspectRatio;
+                    newWidth = newHeight.divide(preferredAspectRatio);
                 }
             }
 
-            model.reshapeInLocal(owner, bounds.getMinX(), bounds.getMaxY() - newHeight, newWidth, newHeight);
+            model.reshapeInLocal(owner, bounds.getMinX(), newY, newWidth, newHeight);
         }
     }
 
@@ -232,14 +235,13 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newWidth = max(newPoint.getX(), bounds.getMinX()) - bounds.getMinX();
-            double newHeight = bounds.getMaxY() - bounds.getMinY();
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newWidth = CssSize.max(newPoint.getX(), bounds.getMinX()).subtract(bounds.getMinX());
+            CssSize newHeight = bounds.getMaxY().subtract(bounds.getMinY());
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
-                newHeight = newWidth * preferredAspectRatio;
+                newHeight = newWidth.multiply(preferredAspectRatio);
             }
-            model.reshapeInLocal(owner, bounds.getMinX(), (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
+            model.reshapeInLocal(owner, bounds.getMinX(), (bounds.getMinY().add(bounds.getMaxY()).subtract(newHeight)).multiply(0.5), newWidth, newHeight);
         }
     }
 
@@ -255,15 +257,14 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newY = min(bounds.getMaxY(), newPoint.getY());
-            double newWidth = bounds.getMaxX() - bounds.getMinX();
-            double newHeight = bounds.getMaxY() - newY;
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newY = CssSize.min(bounds.getMaxY(), newPoint.getY());
+            CssSize newWidth = bounds.getMaxX().subtract(bounds.getMinX());
+            CssSize newHeight = bounds.getMaxY().subtract(newY);
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
-                newWidth = newHeight / preferredAspectRatio;
+                newWidth = newHeight.divide(preferredAspectRatio);
             }
-            model.reshapeInLocal(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, newY, newWidth, newHeight);
+            model.reshapeInLocal(owner, (bounds.getMinX().add(bounds.getMaxX()).subtract(newWidth)).multiply(0.5), newY, newWidth, newHeight);
         }
     }
 
@@ -279,21 +280,21 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newX = min(bounds.getMaxX(), newPoint.getX());
-            double newY = min(bounds.getMaxY(), newPoint.getY());
-            double newWidth = bounds.getMaxX() - newX;
-            double newHeight = bounds.getMaxY() - newY;
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newX = CssSize.min(bounds.getMaxX(), newPoint.getX());
+            CssSize newY = CssSize.min(bounds.getMaxY(), newPoint.getY());
+            CssSize newWidth = bounds.getMaxX().subtract(newX);
+            CssSize newHeight = bounds.getMaxY().subtract(newY);
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
+                double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
                 if (newRatio > preferredAspectRatio) {
-                    newHeight = newWidth * preferredAspectRatio;
+                    newHeight = newWidth.multiply(preferredAspectRatio);
                 } else {
-                    newWidth = newHeight / preferredAspectRatio;
+                    newWidth = newHeight.divide(preferredAspectRatio);
                 }
             }
 
-            model.reshapeInLocal(owner, bounds.getMaxX() - newWidth, bounds.getMaxY() - newHeight, newWidth, newHeight);
+            model.reshapeInLocal(owner, newPoint.getX(), newPoint.getY(), newWidth, newHeight);
         }
     }
 
@@ -309,17 +310,17 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newX = max(bounds.getMinX(), newPoint.getX());
-            double newY = max(bounds.getMinY(), newPoint.getY());
-            double newWidth = newX - bounds.getMinX();
-            double newHeight = newY - bounds.getMinY();
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newX = CssSize.max(newPoint.getX(), bounds.getMinX());
+            CssSize newY = CssSize.max(newPoint.getY(), bounds.getMinY());
+            CssSize newWidth = newX .subtract( bounds.getMinX());
+            CssSize newHeight = newY .subtract( bounds.getMinY());
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
+                double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
                 if (newRatio > preferredAspectRatio) {
-                    newHeight = newWidth * preferredAspectRatio;
+                    newHeight = newWidth .multiply( preferredAspectRatio);
                 } else {
-                    newWidth = newHeight / preferredAspectRatio;
+                    newWidth = newHeight .divide( preferredAspectRatio);
                 }
             }
             model.reshapeInLocal(owner, bounds.getMinX(), bounds.getMinY(), newWidth, newHeight);
@@ -338,14 +339,14 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newY = max(bounds.getMinY(), newPoint.getY());
-            double newWidth = bounds.getWidth();
-            double newHeight = newY - bounds.getMinY();
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newY = CssSize.max(bounds.getMinY(), newPoint.getY());
+            CssSize newWidth = bounds.getWidth();
+            CssSize newHeight = newY.subtract(bounds.getMinY());
             if (keepAspect) {
-                newWidth = newHeight / preferredAspectRatio;
+                newWidth = newHeight.divide(preferredAspectRatio);
             }
-            model.reshapeInLocal(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, bounds.getMinY(), newWidth, newHeight);
+            model.reshapeInLocal(owner, (bounds.getMinX().add(bounds.getMaxX()).subtract(newWidth)).multiply(0.5), bounds.getMinY(), newWidth, newHeight);
         }
     }
 
@@ -361,20 +362,20 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newX = min(bounds.getMaxX(), newPoint.getX());
-            double newY = max(bounds.getMinY(), newPoint.getY());
-            double newWidth = bounds.getMaxX() - min(bounds.getMaxX(), newX);
-            double newHeight = newY - bounds.getMinY();
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newX = CssSize.min(newPoint.getX(),bounds.getMaxX());
+            CssSize newY = CssSize.max(newPoint.getY(), bounds.getMinY());
+            CssSize newWidth = bounds.getMaxX().subtract( newX);
+            CssSize newHeight = newY .subtract( bounds.getMinY());
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
+                double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
                 if (newRatio > preferredAspectRatio) {
-                    newHeight = newWidth * preferredAspectRatio;
+                    newHeight = newWidth.multiply( preferredAspectRatio);
                 } else {
-                    newWidth = newHeight / preferredAspectRatio;
+                    newWidth = newHeight.divide( preferredAspectRatio);
                 }
             }
-            model.reshapeInLocal(owner, bounds.getMaxX() - newWidth, bounds.getMinY(), newWidth, newHeight);
+            model.reshapeInLocal(owner, newX, bounds.getMinY(), newWidth, newHeight);
         }
     }
 
@@ -390,15 +391,14 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
-            double newX = min(bounds.getMaxX(), newPoint.getX());
-            double newWidth = bounds.getMaxX() - newX;
-            double newHeight = bounds.getHeight();
+        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+            CssSize newX = CssSize.min(bounds.getMaxX(), newPoint.getX());
+            CssSize newWidth = bounds.getMaxX() .subtract( newX);
+            CssSize newHeight = bounds.getHeight();
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
-                newHeight = newWidth * preferredAspectRatio;
+                newHeight = newWidth.multiply(preferredAspectRatio);
             }
-            model.reshapeInLocal(owner, newX, (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
+            model.reshapeInLocal(owner, newX, (bounds.getMinY().add( bounds.getMaxY()).subtract( newHeight)).multiply(0.5), newWidth, newHeight);
         }
     }
 }

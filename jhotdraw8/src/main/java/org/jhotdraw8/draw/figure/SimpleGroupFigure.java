@@ -9,6 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Transforms;
 
@@ -53,10 +55,10 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
     }
     
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
-        Transform localTransform = Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height);
+        Transform localTransform = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
         //Transform localTransform = transform.createConcatenation(getParentToLocal());
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);

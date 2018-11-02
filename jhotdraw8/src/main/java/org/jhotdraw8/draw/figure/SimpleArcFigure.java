@@ -12,6 +12,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -32,15 +37,15 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
      */
     public final static String TYPE_SELECTOR = "Arc";
 
-    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
-    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static CssSizeStyleableFigureKey CENTER_X = new CssSizeStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey CENTER_Y = new CssSizeStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey RADIUS_X = new CssSizeStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
+    public final static CssSizeStyleableFigureKey RADIUS_Y = new CssSizeStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
     public final static DoubleStyleableFigureKey START_ANGLE = new DoubleStyleableFigureKey("startAngle", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey ARC_LENGTH = new DoubleStyleableFigureKey("arcLength", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 360.0);
     public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<>("arcType", ArcType.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, ArcType.ROUND);
-    public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
-    public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
+    public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
+    public final static CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 
     public SimpleArcFigure() {
         this(0, 0, 1, 1);
@@ -57,9 +62,20 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        double rx = get(RADIUS_X);
-        double ry = get(RADIUS_Y);
-        return new BoundingBox(get(CENTER_X) - rx, get(CENTER_Y) - ry, rx * 2.0, ry * 2.0);
+        double rx = getNonnull(RADIUS_X).getConvertedValue();
+        double ry = getNonnull(RADIUS_Y).getConvertedValue();
+        double cx = getNonnull(CENTER_X).getConvertedValue();
+        double cy = getNonnull(CENTER_Y).getConvertedValue();
+        return new BoundingBox(cx - rx, cy - ry, rx * 2.0, ry * 2.0);
+    }
+    @Nonnull
+    @Override
+    public CssRectangle2D getCssBoundsInLocal() {
+        CssSize rx = getNonnull(RADIUS_X);
+        CssSize ry = getNonnull(RADIUS_Y);
+        CssSize cx = getNonnull(CENTER_X);
+        CssSize cy = getNonnull(CENTER_Y);
+        return new CssRectangle2D(cx .subtract( rx), cy.subtract( ry), rx .multiply( 2.0), ry .multiply( 2.0));
     }
 
     @Override
@@ -71,11 +87,11 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
-        double rx = max(0.0, width) / 2.0;
-        double ry = max(0.0, height) / 2.0;
-        set(CENTER_X, x + rx);
-        set(CENTER_Y, y + ry);
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        CssSize rx = width.getValue()>0? width.multiply(0.5):CssSize.ZERO;
+        CssSize ry = height.getValue()>0? height.multiply(0.5):CssSize.ZERO;
+        set(CENTER_X, x .add( rx));
+        set(CENTER_Y, y .add( ry));
         set(RADIUS_X, rx);
         set(RADIUS_Y, ry);
     }
@@ -95,12 +111,12 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFig
         applyFillableFigureProperties(n);
         applyCompositableFigureProperties(n);
         applyStyleableFigureProperties(ctx, node);
-        n.setCenterX(getStyled(CENTER_X));
-        n.setCenterY(getStyled(CENTER_Y));
-        n.setRadiusX(getStyled(RADIUS_X));
-        n.setRadiusY(getStyled(RADIUS_Y));
-        n.setStartAngle(getStyled(START_ANGLE));
-        n.setLength(getStyled(ARC_LENGTH));
+        n.setCenterX(getStyledNonnull(CENTER_X).getConvertedValue());
+        n.setCenterY(getStyledNonnull(CENTER_Y).getConvertedValue());
+        n.setRadiusX(getStyledNonnull(RADIUS_X).getConvertedValue());
+        n.setRadiusY(getStyledNonnull(RADIUS_Y).getConvertedValue());
+        n.setStartAngle(getStyledNonnull(START_ANGLE));
+        n.setLength(getStyledNonnull(ARC_LENGTH));
         n.setType(getStyled(ARC_TYPE));
         n.applyCss();
     }

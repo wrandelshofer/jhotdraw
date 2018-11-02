@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
@@ -20,6 +21,9 @@ import static java.lang.Double.isNaN;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Affine;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.io.DefaultUnitConverter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,6 +60,19 @@ public class Transforms {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
                 destX, destY, destW, destH
+        );
+    }
+    @Nonnull
+    public static Transform createReshapeTransform(Rectangle2D src, double destX, double destY, double destW, double destH) {
+        return createReshapeTransform(
+                src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
+                destX, destY, destW, destH
+        );
+    }
+    @Nonnull
+    public static Transform createReshapeTransform(CssRectangle2D csssrc, CssSize destX, CssSize destY, CssSize destW, CssSize destH) {
+        return createReshapeTransform(csssrc.getConvertedValue(),
+                destX.getConvertedValue(), destY.getConvertedValue(), destW.getConvertedValue(), destH.getConvertedValue()
         );
     }
 
@@ -260,5 +277,20 @@ public class Transforms {
         double bx = xx * ax + xy * ay + tx;
         double by = yx * ax + yy * ay + ty;
         return new Point2D(bx, by);
+    }
+
+    public static CssRectangle2D transform(Transform transform, CssRectangle2D b) {
+        Bounds tb = transform.transform(b.getConvertedBoundsValue());
+        DefaultUnitConverter c = DefaultUnitConverter.getInstance();
+        return new CssRectangle2D(
+                c.convertSize(tb.getMinX(),null,b.getMinX().getUnits()),
+                c.convertSize(tb.getMinY(),null,b.getMinY().getUnits()),
+                c.convertSize(tb.getWidth(),null,b.getWidth().getUnits()),
+                c.convertSize(tb.getHeight(),null,b.getHeight().getUnits())
+                );
+    }
+
+    public static boolean isIdentityOrNull(Transform t) {
+        return t==null||t.isIdentity();
     }
 }

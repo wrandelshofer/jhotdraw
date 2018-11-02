@@ -16,6 +16,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
@@ -40,8 +43,12 @@ public class SimpleDrawing extends AbstractCompositeFigure
 
     public SimpleDrawing() {
     }
-
     public SimpleDrawing(double width, double height) {
+        this(new CssSize(width),new CssSize(height));
+
+    }
+
+    public SimpleDrawing(CssSize width, CssSize height) {
         set(WIDTH, width);
         set(HEIGHT, height);
     }
@@ -72,9 +79,14 @@ public class SimpleDrawing extends AbstractCompositeFigure
      */
     @Nonnull
     @Override
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getNonnull(WIDTH), getNonnull(HEIGHT));
+    }
+    @Nonnull
+    @Override
     public Bounds getBoundsInLocal() {
-        return new BoundingBox(0.0, 0.0, get(WIDTH), get(HEIGHT));
-
+        // Note: We must override getBoundsInLocal of AbstractCompositeFigure.
+        return getCssBoundsInLocal().getConvertedBoundsValue();
     }
 
     @Nullable
@@ -97,10 +109,10 @@ public class SimpleDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
 
-        set(WIDTH, abs(width));
-        set(HEIGHT, abs(height));
+        set(WIDTH, width.abs());
+        set(HEIGHT, height.abs());
     }
 
     @Override

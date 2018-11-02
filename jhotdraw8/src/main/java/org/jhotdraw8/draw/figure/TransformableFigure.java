@@ -13,6 +13,8 @@ import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -409,7 +411,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * @param height the height
      */
     @Override
-    default void reshapeInLocal(double x, double y, double width, double height) {
+    default void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         throw new UnsupportedOperationException("this method must be overriden in class " + getClass());
     }
 

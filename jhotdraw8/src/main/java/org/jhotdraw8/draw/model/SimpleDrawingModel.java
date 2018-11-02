@@ -21,6 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
@@ -280,6 +282,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         f.reshapeInParent(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
+    @Override
+    public void translateInParent(@Nonnull Figure f, CssPoint2D delta) {
+        f.translateInParent(delta);
+        fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+    }
 
     @Override
     public void transformInParent(@Nonnull Figure f, Transform transform) {
@@ -295,6 +302,12 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void reshapeInLocal(@Nonnull Figure f, double x, double y, double width, double height) {
+        f.reshapeInLocal(x, y, width, height);
+        fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+    }
+
+    @Override
+    public void reshapeInLocal(@Nonnull Figure f, CssSize x, CssSize y, CssSize width, CssSize height) {
         f.reshapeInLocal(x, y, width, height);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }

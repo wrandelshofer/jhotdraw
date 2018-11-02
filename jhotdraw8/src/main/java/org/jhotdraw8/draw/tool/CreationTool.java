@@ -4,12 +4,19 @@
 package org.jhotdraw8.draw.tool;
 
 import java.util.function.Supplier;
+
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+
 import static java.lang.Math.*;
+
 import javafx.scene.Cursor;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -24,17 +31,16 @@ import org.jhotdraw8.geom.Geom;
 /**
  * CreationTool.
  *
- * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
- * abstract factories (Supplier) for creating new {@link Figure}s.
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
+ * abstract factories (Supplier) for creating new {@link Figure}s.
  */
 public class CreationTool extends AbstractCreationTool<Figure> {
 
 
-private double defaultWidth=10;
-private double defaultHeight=10;
+    private double defaultWidth = 10;
+    private double defaultHeight = 10;
     /**
      * The rubber band.
      */
@@ -50,7 +56,7 @@ private double defaultHeight=10;
     }
 
     public CreationTool(String name, Resources rsrc, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
-        super(name, rsrc,figureFactory,layerFactory);
+        super(name, rsrc, figureFactory, layerFactory);
         node.setCursor(Cursor.CROSSHAIR);
     }
 
@@ -82,13 +88,13 @@ private double defaultHeight=10;
         x2 = x1;
         y2 = y1;
         createdFigure = createFigure();
-        
-        double anchorX=Geom.clamp(createdFigure.get(AnchorableFigure.ANCHOR_X),0,1);
-        double anchorY=Geom.clamp(createdFigure.get(AnchorableFigure.ANCHOR_Y),0,1);
-        
-        
-        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToWorld(new Point2D(x1, y1)));
-        createdFigure.reshapeInLocal(c.getX()-defaultWidth*anchorX, c.getY()-defaultHeight*anchorY, defaultWidth, defaultHeight);
+
+        double anchorX = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
+        double anchorY = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
+
+
+        Point2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1)))).getConvertedValue();
+        createdFigure.reshapeInLocal(c.getX() - defaultWidth * anchorX, c.getY() - defaultHeight * anchorY, defaultWidth, defaultHeight);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getDrawing();
 
@@ -103,15 +109,16 @@ private double defaultHeight=10;
     protected void handleMouseReleased(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
-                Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x1, y1));
-                Point2D c2 = dv.getConstrainer().translatePoint(createdFigure, dv.viewToWorld(x1
-                        + minSize, y1 + minSize), Constrainer.DIRECTION_NEAREST);
+                CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
+                CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1
+                        + minSize, y1 + minSize)), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
-                    c2 = new Point2D(c1.getX() + defaultWidth, c1.getY() + defaultHeight);
+                    c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(c1.getX().getConvertedValue() + defaultWidth, c1.getY().getConvertedValue() + defaultHeight));
                 }
                 DrawingModel dm = dv.getModel();
-                dm.reshapeInLocal(createdFigure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
-                        - c1.getY());
+                dm.reshapeInLocal(createdFigure, c1.getX(), c1.getY(),
+                        c2.getX().subtract(c1.getX()),
+                        c2.getY().subtract(c1.getY()));
             }
             dv.selectedFiguresProperty().clear();
             dv.selectedFiguresProperty().add(createdFigure);
@@ -126,19 +133,19 @@ private double defaultHeight=10;
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x1, y1));
-            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x2, y2));
-            double newWidth = c2.getX() - c1.getX();
-            double newHeight = c2.getY() - c1.getY();
+            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
+            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2)));
+            CssSize newWidth = c2.getX().subtract( c1.getX());
+            CssSize newHeight = c2.getY() .subtract( c1.getY());
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
             if (keepAspect) {
                 double preferredAspectRatio = createdFigure.getPreferredAspectRatio();
-                double newRatio = newHeight / newWidth;
+                double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
                 if (newRatio > preferredAspectRatio) {
-                    newHeight = newWidth * preferredAspectRatio;
+                    newHeight = new CssSize(newWidth.getConvertedValue() * preferredAspectRatio);
                 } else {
-                    newWidth = newHeight / preferredAspectRatio;
+                    newWidth =new CssSize( newHeight.getConvertedValue() / preferredAspectRatio);
                 }
             }
 
@@ -151,7 +158,6 @@ private double defaultHeight=10;
     @Override
     protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
     }
-
 
 
     /**

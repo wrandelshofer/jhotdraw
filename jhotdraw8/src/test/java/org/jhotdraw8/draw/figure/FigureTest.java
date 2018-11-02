@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
@@ -109,7 +110,9 @@ public class FigureTest {
         public Bounds getBoundsInLocal() {
             return null;
         }
-
+        public CssRectangle2D getCssBoundsInLocal() {
+            return new CssRectangle2D(getBoundsInLocal());
+        }
         public void reshapeInLocal(Transform transform) {
         }
 

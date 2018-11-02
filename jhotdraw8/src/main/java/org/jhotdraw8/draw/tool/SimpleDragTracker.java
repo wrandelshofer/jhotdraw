@@ -10,6 +10,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
@@ -47,8 +49,8 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     private static final long serialVersionUID = 1L;
     private Set<Figure> groupReshapeableFigures;
     private Figure anchorFigure;
-    private Point2D oldPoint;
-    private Point2D anchor;
+    private CssPoint2D oldPoint;
+    private CssPoint2D anchor;
 
     // --- 
     // Behaviors
@@ -69,7 +71,8 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     @Override
     public void trackMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure, view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure,
+                new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY()))));
     }
 
     @Override
@@ -84,7 +87,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     @Override
     public void trackMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+        CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
@@ -96,12 +99,12 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
             // or whatever corner is specified in the anchor
             Bounds bounds = anchorFigure.getBoundsInLocal();
             
-        double anchorX=Geom.clamp(anchorFigure.get(AnchorableFigure.ANCHOR_X),0,1);
-        double anchorY=Geom.clamp(anchorFigure.get(AnchorableFigure.ANCHOR_Y),0,1);
+        double anchorX=Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_X),0,1);
+        double anchorY=Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_Y),0,1);
         
             Point2D loc = new Point2D(bounds.getMinX()+anchorX*bounds.getWidth(), 
                     bounds.getMinY()+anchorY*bounds.getHeight());
-            oldPoint = anchorFigure.localToWorld(loc);
+            oldPoint = new CssPoint2D(anchorFigure.localToWorld(loc));
         }
 
         if (newPoint.equals(oldPoint)) {

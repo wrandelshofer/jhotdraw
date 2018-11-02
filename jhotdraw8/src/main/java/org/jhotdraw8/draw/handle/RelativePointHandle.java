@@ -16,13 +16,19 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
@@ -41,7 +47,8 @@ public class RelativePointHandle extends AbstractHandle {
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
     @Nonnull
     private final Region node;
-    /** Relative origin.
+    /**
+     * Relative origin.
      * <ul>
      * <li>0,0=top left</li>
      * <li>1,0=top right</li>
@@ -49,17 +56,17 @@ public class RelativePointHandle extends AbstractHandle {
      * <li>1,1=bottom right</li>
      * </ul>
      */
-@Nonnull
-private Point2D origin=new Point2D(0,0);
+    @Nonnull
+    private Point2D origin = new Point2D(0, 0);
     private Point2D pickLocation;
-    private final MapAccessor<Point2D> pointKey;
+    private final MapAccessor<CssPoint2D> pointKey;
     private final String styleclass;
 
-    public RelativePointHandle(Figure figure, MapAccessor<Point2D> pointKey) {
+    public RelativePointHandle(Figure figure, MapAccessor<CssPoint2D> pointKey) {
         this(figure, STYLECLASS_HANDLE_POINT, pointKey);
     }
 
-    public RelativePointHandle(Figure figure, String styleclass, MapAccessor<Point2D> pointKey) {
+    public RelativePointHandle(Figure figure, String styleclass, MapAccessor<CssPoint2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
         this.styleclass = styleclass;
@@ -98,16 +105,16 @@ private Point2D origin=new Point2D(0,0);
 
     @Override
     public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+        CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control switches the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
-        final Point2D localPoint = getOwner().worldToLocal(newPoint);
-        Bounds bounds=getOwner().getBoundsInLocal();
+        final CssPoint2D localPoint = getOwner().worldToLocal(newPoint);
+        CssRectangle2D bounds = getOwner().getCssBoundsInLocal();
 
-        view.getModel().set(getOwner(), pointKey, localPoint.subtract(bounds.getMinX(),bounds.getMinY()));
+        view.getModel().set(getOwner(), pointKey, localPoint.subtract(bounds.getTopLeft()));
     }
 
     @Override
@@ -126,9 +133,9 @@ private Point2D origin=new Point2D(0,0);
     @Override
     public void updateNode(@Nonnull DrawingView view) {
         Figure f = getOwner();
-        Bounds bounds=f.getBoundsInLocal();
+        Bounds bounds = f.getBoundsInLocal();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Point2D p = f.get(pointKey).add(bounds.getMinX(),bounds.getMinY());
+        Point2D p = f.get(pointKey).getConvertedValue().add(bounds.getMinX(), bounds.getMinY());
         pickLocation = p = t == null ? p : t.transform(p);
         node.relocate(pickLocation.getX() - 5, pickLocation.getY() - 5);
         // rotates the node:

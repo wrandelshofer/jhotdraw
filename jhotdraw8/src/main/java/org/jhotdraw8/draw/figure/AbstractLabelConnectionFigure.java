@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
@@ -27,6 +28,7 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LabelConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -89,9 +91,9 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The position relative to the parent (respectively the offset).
      */
-    public static final Point2DStyleableFigureKey LABEL_TRANSLATE = new Point2DStyleableFigureKey(
+    public static final CssPoint2DStyleableFigureKey LABEL_TRANSLATE = new CssPoint2DStyleableFigureKey(
             "labelTranslation", DirtyMask
-                    .of(DirtyBits.NODE, DirtyBits.LAYOUT), new Point2D(0, 0));
+                    .of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssPoint2D(0, 0));
     private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
     public AbstractLabelConnectionFigure() {
@@ -244,7 +246,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
 //        origin=origin.add(tangent.multiply(hposTranslate));
         origin = origin.add(hposTranslate, 0);
 
-        Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
+        Point2D labelTranslation = getStyledNonnull(LABEL_TRANSLATE).getConvertedValue();
         origin = origin.add(labelTranslation);
         set(ORIGIN, new CssPoint2D(origin));
         List<Transform> transforms = new ArrayList<>();
@@ -280,19 +282,20 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         if (get(LABEL_TARGET) == null) {
             super.reshapeInLocal(x, y, width, height);
-            set(LABELED_LOCATION, get(ORIGIN));
-            set(LABEL_TRANSLATE, new Point2D(0, 0));
+            set(LABELED_LOCATION, getNonnull(ORIGIN));
+            set(LABEL_TRANSLATE, new CssPoint2D(0, 0));
         } else {
-            Bounds bounds = getBoundsInLocal();
-            double newX, newY;
-            newX = x + Math.min(0, width);
-            newY = y + Math.min(0, height);
-            Point2D oldValue = get(LABEL_TRANSLATE);
+            CssRectangle2D bounds = getCssBoundsInLocal();
+            CssSize newX, newY;
+            newX = width.getValue()>0?x .add( width):x;
+            newY = height.getValue()>0?y .add(  height):y;
+            CssPoint2D oldValue = getNonnull(LABEL_TRANSLATE);
             set(LABEL_TRANSLATE,
-                    new Point2D(oldValue.getX() + newX - bounds.getMinX(), oldValue.getY() + newY - bounds.getMinY()));
+                    new CssPoint2D(oldValue.getX() .add( newX).subtract( bounds.getMinX()),
+                            oldValue.getY() .add( newY).subtract( bounds.getMinY())));
         }
     }
 

@@ -20,6 +20,7 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
@@ -38,12 +39,17 @@ import org.jhotdraw8.geom.Shapes;
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
+    @Nonnull
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    @Nonnull
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
-    @Nullable
+    @Nonnull
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
+    @Nonnull
     public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    @Nonnull
     public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
+    @Nonnull
     public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
 
     private transient Path2D.Float pathElements;
@@ -68,9 +74,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     @Nonnull
     @Override
-    public Bounds getBoundsInLocal() {
-        return new BoundingBox(getNonnull(X).getConvertedValue(), getNonnull(Y).getConvertedValue(), getNonnull(WIDTH).getConvertedValue(), 
-                getNonnull(HEIGHT).getConvertedValue());
+    public CssRectangle2D getCssBoundsInLocal() {
+        return getNonnull(BOUNDS);
     }
 
     @Nonnull
@@ -86,11 +91,11 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
     
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, new CssSize(x + min(width, 0),null));
-        set(Y, new CssSize(y + min(height, 0),null));
-        set(WIDTH, new CssSize(abs(width),null));
-        set(HEIGHT, new CssSize(abs(height),null));
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        set(X, width.getValue()>0?x .add(width):x);
+        set(Y, height.getValue()>0?x .add(height):y);
+        set(WIDTH, width.abs());
+        set(HEIGHT, height.abs());
     }
 
 

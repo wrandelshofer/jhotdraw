@@ -17,6 +17,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -72,13 +73,14 @@ public class SimpleLineFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        Point2D start = getNonnull(START).getConvertedValue();
-        Point2D end = getNonnull(END).getConvertedValue();
-        return new BoundingBox(//
-                min(start.getX(), end.getX()),//
-                min(start.getY(), end.getY()),//
-                abs(start.getX() - end.getX()), //
-                abs(start.getY() - end.getY()));
+        return getCssBoundsInLocal().getConvertedBoundsValue();
+    }
+    @Nonnull
+    @Override
+    public CssRectangle2D getCssBoundsInLocal() {
+        CssPoint2D start = getNonnull(START);
+        CssPoint2D end = getNonnull(END);
+        return new CssRectangle2D(start,end);
     }
 
     @Override
@@ -96,9 +98,9 @@ public class SimpleLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         set(START, new CssPoint2D(x, y));
-        set(END, new CssPoint2D(x + width, y + height));
+        set(END, new CssPoint2D(x .add( width), y .add( height)));
     }
 
     @Nonnull

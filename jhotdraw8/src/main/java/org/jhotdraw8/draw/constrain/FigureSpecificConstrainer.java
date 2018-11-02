@@ -10,6 +10,8 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.Map;
 import javafx.scene.Node;
@@ -94,12 +96,12 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     }
 
     @Override
-    public Point2D translatePoint(@Nonnull Figure f, Point2D p, Point2D dir) {
+    public CssPoint2D translatePoint(@Nonnull Figure f, CssPoint2D p, CssPoint2D dir) {
         return getConstrainer(f).translatePoint(f, p, dir);
     }
 
     @Override
-    public Rectangle2D translateRectangle(@Nonnull Figure f, Rectangle2D r, Point2D dir) {
+    public CssRectangle2D translateRectangle(@Nonnull Figure f, CssRectangle2D r, CssPoint2D dir) {
         return getConstrainer(f).translateRectangle(f, r, dir);
     }
 
@@ -109,12 +111,12 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     }
 
     @Override
-    public Point2D constrainPoint(@Nonnull Figure f, Point2D p) {
+    public CssPoint2D constrainPoint(@Nonnull Figure f, CssPoint2D p) {
         return getConstrainer(f).constrainPoint(f, p);
     }
 
     @Override
-    public Rectangle2D constrainRectangle(@Nonnull Figure f, Rectangle2D r) {
+    public CssRectangle2D constrainRectangle(@Nonnull Figure f, CssRectangle2D r) {
         return getConstrainer(f).constrainRectangle(f, r);
     }
 

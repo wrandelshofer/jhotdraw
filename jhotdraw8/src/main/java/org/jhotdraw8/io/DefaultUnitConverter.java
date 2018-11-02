@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.io;
 
+import org.jhotdraw8.css.CssPoint2D;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -41,4 +43,5 @@ public class DefaultUnitConverter implements UnitConverter {
     public double getPercentageFactor() {
         return percentageFactor;
     }
+
 }

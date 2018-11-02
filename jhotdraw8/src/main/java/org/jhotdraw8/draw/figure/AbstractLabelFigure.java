@@ -23,7 +23,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -90,11 +92,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     /**
      * Defines the border image as an SVG path.
      */
-    @Nullable
+    @Nonnull
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
-    @Nullable
+    @Nonnull
     public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY = new ObjectKey<>("boundsInLocal", Bounds.class, null, true, true, null);
 
     public AbstractLabelFigure() {
@@ -132,6 +134,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public Bounds getBoundsInLocal() {
         Bounds boundsInLocal = getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
         return boundsInLocal == null ? getLayoutBounds() : boundsInLocal;
+    }
+    @Nonnull
+    @Override
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(getBoundsInLocal());
     }
 
     /**
@@ -176,10 +183,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         Bounds lb = getLayoutBounds();
         Insets i = getStyledNonnull(PADDING).getConvertedValue();
-        set(ORIGIN, new CssPoint2D(x + i.getLeft(), y + lb.getHeight() - i.getBottom()));
+        set(ORIGIN, new CssPoint2D(x.getConvertedValue() + i.getLeft(), y.getConvertedValue() + lb.getHeight() - i.getBottom()));
         //invalidateBounds();
     }
 

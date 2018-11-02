@@ -14,11 +14,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.RelativePointHandle;
 import org.jhotdraw8.draw.handle.ResizeHandleKit;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
@@ -45,14 +51,14 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
      */
     public final static String TYPE_SELECTOR = "Slice";
 
-    public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
-    public final static DoubleStyleableFigureKey SLICE_ORIGIN_X = new DoubleStyleableFigureKey("sliceOriginX", DirtyMask.of(DirtyBits.NODE), 0.0);
-    public final static DoubleStyleableFigureKey SLICE_ORIGIN_Y = new DoubleStyleableFigureKey("sliceOriginY", DirtyMask.of(DirtyBits.NODE), 0.0);
-    public final static Point2DStyleableMapAccessor SLICE_ORIGIN = new Point2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
+    public final static CssSizeStyleableFigureKey X = new CssSizeStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey Y = new CssSizeStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey WIDTH = new CssSizeStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey HEIGHT = new CssSizeStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    public final static CssSizeStyleableFigureKey SLICE_ORIGIN_X = new CssSizeStyleableFigureKey("sliceOriginX", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    public final static CssSizeStyleableFigureKey SLICE_ORIGIN_Y = new CssSizeStyleableFigureKey("sliceOriginY", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    public final static CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 
     public SimpleSliceFigure() {
         this(0, 0, 1, 1);
@@ -80,22 +86,27 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
-        return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
+        return new BoundingBox(get(X).getConvertedValue(), get(Y).getConvertedValue(), get(WIDTH).getConvertedValue(), get(HEIGHT).getConvertedValue());
+    }
+    @Nonnull
+    @Override
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(get(X), get(Y), get(WIDTH), get(HEIGHT));
     }
 
     @Override
     public Point2D getSliceOrigin() {
         Bounds b=getBoundsInLocal();
-        Point2D p = get(SLICE_ORIGIN);
+        Point2D p = getNonnull(SLICE_ORIGIN).getConvertedValue();
         return p.add(b.getMinX(),b.getMinY());
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
-        set(X, x + min(width, 0));
-        set(Y, y + min(height, 0));
-        set(WIDTH, abs(width));
-        set(HEIGHT, abs(height));
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        set(X, width.getValue()<0?x .add(width):x);
+        set(Y, height.getValue()<0?y .add(height):y);
+        set(WIDTH, width.abs());
+        set(HEIGHT, height.abs());
     }
 
     @Nonnull
@@ -116,10 +127,10 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
             rectangleNode.setVisible(false);
         }
         applyTransformableFigureProperties(rectangleNode);
-        rectangleNode.setX(get(X));
-        rectangleNode.setY(get(Y));
-        rectangleNode.setWidth(get(WIDTH));
-        rectangleNode.setHeight(get(HEIGHT));
+        rectangleNode.setX(getNonnull(X).getConvertedValue());
+        rectangleNode.setY(getNonnull(Y).getConvertedValue());
+        rectangleNode.setWidth(getNonnull(WIDTH).getConvertedValue());
+        rectangleNode.setHeight(getNonnull(HEIGHT).getConvertedValue());
     }
 
     @Nonnull

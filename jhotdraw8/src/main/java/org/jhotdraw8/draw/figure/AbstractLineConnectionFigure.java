@@ -18,6 +18,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -109,14 +111,15 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
     @Nonnull
     @Override
-    public Bounds getBoundsInLocal() {
-        Point2D start = getNonnull(START).getConvertedValue();
-        Point2D end = getNonnull(END).getConvertedValue();
-        return new BoundingBox(//
-                min(start.getX(), end.getX()),//
-                min(start.getY(), end.getY()),//
-                abs(start.getX() - end.getX()), //
-                abs(start.getY() - end.getY()));
+    public CssRectangle2D getCssBoundsInLocal() {
+        CssPoint2D start = getNonnull(START);
+        CssPoint2D end = getNonnull(END);
+        return new CssRectangle2D(//
+                CssSize.min(start.getX(), end.getX()),//
+                CssSize.min(start.getY(), end.getY()),//
+                start.getX() .subtract( end.getX()).abs(), //
+                start.getY().subtract(end.getY()).abs()
+        );
     }
 
     /**
@@ -218,12 +221,12 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         if (get(START_TARGET) == null) {
             set(START, new CssPoint2D(x, y));
         }
         if (get(END_TARGET) == null) {
-            set(END, new CssPoint2D(x + width, y + height));
+            set(END, new CssPoint2D(x .add( width), y .add( height)));
         }
     }
 

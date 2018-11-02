@@ -89,14 +89,14 @@ public class PointHandle extends AbstractHandle {
 
     @Override
     public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+        CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control switches the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            newPoint = view.getConstrainer().constrainPoint(getOwner(),newPoint);
         }
 
-        view.getModel().set(getOwner(), pointKey, new CssPoint2D(getOwner().worldToLocal(newPoint)));
+        view.getModel().set(owner, pointKey,owner.worldToLocal(newPoint));
     }
 
     @Override
@@ -114,7 +114,7 @@ public class PointHandle extends AbstractHandle {
 
     @Override
     public void updateNode(@Nonnull DrawingView view) {
-        Figure f = getOwner();
+        Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonnull(pointKey).getConvertedValue();
         pickLocation = p = t.transform(p);

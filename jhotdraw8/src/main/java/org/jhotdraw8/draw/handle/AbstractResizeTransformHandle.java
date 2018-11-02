@@ -11,14 +11,21 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.io.DefaultUnitConverter;
 
 /**
  * AbstractResizeTransformHandle.
@@ -36,7 +43,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
      * The height divided by the width.
      */
     protected double preferredAspectRatio;
-    protected Bounds startBounds;
+    protected CssRectangle2D startBounds;
     private Transform startWorldToLocal;
     private final String styleclass;
 
@@ -67,7 +74,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
     @Override
     public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+        CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
@@ -83,13 +90,19 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
         Transform t = startWorldToLocal;//owner.getWorldToLocal();
 
-        resize(t == null ? newPoint : t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
+        if (t.isIdentity()) {
+            resize(newPoint, owner, startBounds, view.getModel(), keepAspect);
+        } else {
+            resize(
+                    DefaultUnitConverter.getInstance().convertPoint2D(new CssPoint2D(t.transform(newPoint.getConvertedValue())), newPoint.getX().getUnits()),
+                    owner, startBounds, view.getModel(), keepAspect);
+        }
     }
 
     @Override
     public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
-        startBounds = owner.getBoundsInLocal();
+        oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
+        startBounds = owner.getCssBoundsInLocal();
         startWorldToLocal = owner.getWorldToLocal();
         preferredAspectRatio = owner.getPreferredAspectRatio();
     }
@@ -107,14 +120,21 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     /**
      * Resizes the figure.
      *
-     * @param newPoint new point in local coordinates
-     * @param owner the figure
-     * @param bounds the bounds of the figure on mouse pressed
-     * @param model the drawing model
+     * @param newPoint   new point in local coordinates
+     * @param owner      the figure
+     * @param bounds     the bounds of the figure on mouse pressed
+     * @param model      the drawing model
      * @param keepAspect whether the aspect should be preserved. The bounds of
-     * the figure on mouse pressed can be used as a reference.
+     *                   the figure on mouse pressed can be used as a reference.
      */
-    protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
+    // FIXME remove this method - we only want the variant with CssPoint2D and CssRectangle2D
+    protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+        throw new UnsupportedOperationException("don't want to implement this in class "+getClass());
+    }
+
+    protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        resize(newPoint.getConvertedValue(), owner, bounds.getConvertedBoundsValue(), model, keepAspect);
+    }
 
     @Override
     public void updateNode(@Nonnull DrawingView view) {

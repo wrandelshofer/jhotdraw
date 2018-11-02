@@ -22,6 +22,8 @@ import javafx.util.StringConverter;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.css.CssColor;
@@ -109,7 +111,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 gridColorProperty,//
                 gridColorPicker.valueProperty(),//
                 (CssColor c) -> c == null ? null : c.getColor(), //
-                (Color c) -> new CssColor(c)//
+                CssColor::new//
         );
         gridColorField.textProperty().bindBidirectional(gridColorProperty, new StringConverterAdapter<>(
                 new CssColorConverter(false)));
@@ -118,11 +120,27 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @Override
     protected void onDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
-        ChangeListener<Number> prefsGridX = (o, oldv, newv) -> prefs.putDouble("gridX", newv.doubleValue());
-        ChangeListener<Number> prefsGridY = (o, oldv, newv) -> prefs.putDouble("gridY", newv.doubleValue());
-        ChangeListener<Number> prefsGridWidth = (o, oldv, newv) -> prefs.putDouble("gridWidth", newv.doubleValue());
+        ChangeListener<CssSize> prefsGridX = (o, oldv, newv) -> {
+            prefs.putDouble("gridX", newv.getValue());
+            String units = newv.getUnits();
+            prefs.put("gridXUnits",  units==null?"":units);
+        };
+        ChangeListener<CssSize> prefsGridY = (o, oldv, newv) -> {
+            prefs.putDouble("gridY", newv.getValue());
+            String units = newv.getUnits();
+            prefs.put("gridYUnits",  units==null?"":units);
+        };
+        ChangeListener<CssSize> prefsGridWidth = (o, oldv, newv) -> {
+            prefs.putDouble("gridWidth", newv.getValue());
+            String units = newv.getUnits();
+            prefs.put("gridWidthUnits", units==null?"":units);
+        };
+        ChangeListener<CssSize> prefsGridHeight = (o, oldv, newv) -> {
+            prefs.putDouble("gridHeight", newv.getValue());
+            String units = newv.getUnits();
+            prefs.put("gridHeightUnits",  units==null?"":units);
+        };
         ChangeListener<Number> prefsGridAngle = (o, oldv, newv) -> prefs.putDouble("gridAngle", newv.doubleValue());
-        ChangeListener<Number> prefsGridHeight = (o, oldv, newv) -> prefs.putDouble("gridHeight", newv.doubleValue());
         ChangeListener<Number> prefsGridMajorX = (o, oldv, newv) -> prefs.putInt("gridMajorX", newv.intValue());
         ChangeListener<Number> prefsGridMajorY = (o, oldv, newv) -> prefs.putInt("gridMajorY", newv.intValue());
         ChangeListener<CssColor> prefsGridColor = (o, oldv, newv) -> prefs.put("gridColor", newv.getName());
@@ -147,7 +165,11 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 gridConstrainer = (GridConstrainer) newValue.getConstrainer();
             } else {
 
-                gridConstrainer = new GridConstrainer(prefs.getDouble("gridX", 0), prefs.getDouble("gridY", 0), prefs.getDouble("gridWidth", 10), prefs.getDouble("gridHeight", 10),
+                gridConstrainer = new GridConstrainer(
+                        new CssSize(prefs.getDouble("gridX", 0),   prefs.get("gridXUnits",null)),
+                        new CssSize(prefs.getDouble("gridY", 0),   prefs.get("gridYUnits",null)),
+                        new CssSize(prefs.getDouble("gridWidth", 0),   prefs.get("gridWidthUnits",null)),
+                        new CssSize(prefs.getDouble("gridHeight", 0),   prefs.get("gridHeightUnits",null)),
                         prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
                Converter<CssColor> converter=new CssColorConverter(true);
                 try {
@@ -157,15 +179,17 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 }
                 newValue.setConstrainer(gridConstrainer);
             }
-            StringConverter<Number> cc
+            StringConverter<CssSize> sc
+                    = new StringConverterAdapter<>(new CssSizeConverter(false));
+            StringConverter<Number> nc
                     = new StringConverterAdapter<>(new XmlNumberConverter());
-            heightField.textProperty().bindBidirectional(gridConstrainer.heightProperty(), cc);
-            widthField.textProperty().bindBidirectional(gridConstrainer.widthProperty(), cc);
-            xField.textProperty().bindBidirectional(gridConstrainer.xProperty(), cc);
-            yField.textProperty().bindBidirectional(gridConstrainer.yProperty(), cc);
-            majorXField.textProperty().bindBidirectional(gridConstrainer.majorXProperty(), cc);
-            majorYField.textProperty().bindBidirectional(gridConstrainer.majorYProperty(), cc);
-            angleField.textProperty().bindBidirectional(gridConstrainer.angleProperty(), cc);
+            heightField.textProperty().bindBidirectional(gridConstrainer.heightProperty(), sc);
+            widthField.textProperty().bindBidirectional(gridConstrainer.widthProperty(), sc);
+            xField.textProperty().bindBidirectional(gridConstrainer.xProperty(), sc);
+            yField.textProperty().bindBidirectional(gridConstrainer.yProperty(), sc);
+            majorXField.textProperty().bindBidirectional(gridConstrainer.majorXProperty(), nc);
+            majorYField.textProperty().bindBidirectional(gridConstrainer.majorYProperty(), nc);
+            angleField.textProperty().bindBidirectional(gridConstrainer.angleProperty(), nc);
             gridConstrainer.drawGridProperty().set(drawGridCheckBox.isSelected());
             drawGridCheckBox.selectedProperty().bindBidirectional(gridConstrainer.drawGridProperty());
             gridConstrainer.snapToGridProperty().set(snapToGridCheckBox.isSelected());

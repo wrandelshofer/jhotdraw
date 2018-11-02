@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.css.CssRectangle2D;
 
 /**
  * This base class can be used to implement figures which support child figures.
@@ -136,7 +138,10 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
-
+    @Override
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(getBoundsInLocal());
+    }
     @Nonnull
     @Override
     public Bounds getBoundsInParent() {

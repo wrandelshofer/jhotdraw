@@ -7,6 +7,8 @@ import javafx.beans.Observable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -41,7 +43,7 @@ public interface Constrainer extends Observable {
     /**
      * A direction vector with distance of zero.
      */
-    public final static Point2D DIRECTION_NEAREST = Point2D.ZERO;
+    public final static CssPoint2D DIRECTION_NEAREST = CssPoint2D.ZERO;
 
     // ---
     // behavior methods
@@ -56,7 +58,7 @@ public interface Constrainer extends Observable {
      * @param p A point on the drawing.
      * @return Returns the constrained point.
      */ 
-    default Point2D constrainPoint( Figure f,  Point2D p) {
+    default CssPoint2D constrainPoint( Figure f,  CssPoint2D p) {
         return translatePoint(f, p, DIRECTION_NEAREST);
     }
 
@@ -72,7 +74,7 @@ public interface Constrainer extends Observable {
      * nearest constrained location is used.
      * @return Returns the constrained point.
      */ 
-    public Point2D translatePoint( Figure f,  Point2D p,  Point2D dir);
+    public CssPoint2D translatePoint( Figure f,  CssPoint2D p,  CssPoint2D dir);
 
     /**
      * Constrains the placement of a rectangle towards the closest constraint in
@@ -85,7 +87,7 @@ public interface Constrainer extends Observable {
      * @param r A rectangle on the drawing.
      * @return Returns the constrained rectangle.
      */ 
-    default Rectangle2D constrainRectangle( Figure f,  Rectangle2D r) {
+    default CssRectangle2D constrainRectangle( Figure f,  CssRectangle2D r) {
         return translateRectangle(f, r, DIRECTION_NEAREST);
     }
 
@@ -102,7 +104,7 @@ public interface Constrainer extends Observable {
      * nearest constrained location is used.
      * @return Returns the constrained rectangle.
      */ 
-    public Rectangle2D translateRectangle( Figure f,  Rectangle2D r,  Point2D dir);
+    public CssRectangle2D translateRectangle(Figure f, CssRectangle2D r, CssPoint2D dir);
 
     /**
      * Constrains the given angle (in degrees). This method changes the angle

@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -168,7 +169,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control switches the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            newPoint = view.getConstrainer().constrainPoint(getOwner(),new CssPoint2D(newPoint)).getConvertedValue();
         }
 
         ImmutableList<BezierNode> list = owner.get(pointKey);

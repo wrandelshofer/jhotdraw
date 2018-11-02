@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.ArrayList;
@@ -68,7 +70,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
         double y1 = event.getY();
 
         DrawingModel dm = view.getModel();
-        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToWorld(new Point2D(x1, y1)));
+        Point2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1)))).getConvertedValue();
         if (createdFigure == null) {
             createdFigure = createFigure();
             points = new ArrayList<>();
@@ -103,7 +105,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
         if (createdFigure != null) {
             double x2 = event.getX();
             double y2 = event.getY();
-            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x2, y2));
+            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2))).getConvertedValue();
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, c2);
             dm.set(createdFigure, key,  ImmutableList.ofCollection(points));

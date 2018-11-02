@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import java.net.URI;
+
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -12,10 +13,12 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -30,8 +33,8 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleImageFigure extends AbstractLeafFigure 
-        implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure,
+public class SimpleImageFigure extends AbstractLeafFigure
+        implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure,
         HideableFigure {
 
     /**
@@ -45,13 +48,17 @@ public class SimpleImageFigure extends AbstractLeafFigure
      * This property is also set on the ImageView node, so that
      * {@link org.jhotdraw8.draw.io.SvgExportOutputFormat} can pick it up.
      */
-    @Nullable
+    @Nonnull
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
-
+    @Nonnull
     public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
+    @Nonnull
     public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    @Nonnull
     public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    @Nonnull
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    @Nonnull
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
     @Nullable
     private Image cachedImage;
@@ -72,9 +79,8 @@ public class SimpleImageFigure extends AbstractLeafFigure
 
     @Nonnull
     @Override
-    public Bounds getBoundsInLocal() {
-        Rectangle2D r = getNonnull(BOUNDS).getConvertedValue();
-        return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+    public CssRectangle2D getCssBoundsInLocal() {
+        return getNonnull(BOUNDS);
     }
 
     @Override
@@ -86,8 +92,11 @@ public class SimpleImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
-        set(BOUNDS, new CssRectangle2D(x + Math.min(width, 0), y + Math.min(height, 0), Math.abs(width), Math.abs(height)));
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        set(BOUNDS, new CssRectangle2D(
+                width.getValue() < 0 ? x.add(width) : x,
+                height.getValue() < 0 ? y.add(height) : y,
+                width.abs(), height.abs()));
     }
 
     @Nonnull
@@ -118,7 +127,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
-            return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
     @Nonnull
@@ -147,9 +156,9 @@ public class SimpleImageFigure extends AbstractLeafFigure
         if (cachedImageUri == null || !cachedImageUri.equals(absoluteUri)) {
             cachedImageUri = absoluteUri;
             try {
-            cachedImage = new Image(cachedImageUri.toString(), true);
+                cachedImage = new Image(cachedImageUri.toString(), true);
             } catch (IllegalArgumentException e) {
-                System.err.println("could not load image from uri: "+absoluteUri);
+                System.err.println("could not load image from uri: " + absoluteUri);
                 e.printStackTrace();
             }
         }

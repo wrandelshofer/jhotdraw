@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.handle;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -18,12 +19,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Transforms;
@@ -102,7 +108,7 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
         pressed = true;
-        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -121,7 +127,7 @@ public class MoveHandle extends LocatorHandle {
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
+            newPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(newPoint)).getConvertedValue();
         }
 
         if (event.isMetaDown()) {
@@ -154,21 +160,38 @@ public class MoveHandle extends LocatorHandle {
      * Translates the specified figure, given the old and new position of a
      * point.
      *
-     * @param f the figure to be translated
+     * @param f        the figure to be translated
      * @param oldPoint oldPoint in world coordinates
      * @param newPoint newPoint in world coordinates
-     * @param model the drawing model
+     * @param model    the drawing model
      */
     public static void translateFigure(Figure f, @Nonnull Point2D oldPoint, @Nonnull Point2D newPoint, @Nullable DrawingModel model) {
-        Point2D npl = f.worldToParent(newPoint);
-        Point2D opl = f.worldToParent(oldPoint);
-        Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
+        Point2D delta = newPoint.subtract(oldPoint);
         if (model != null) {
-            model.reshapeInParent(f, tx);
+            model.translateInParent(f, new CssPoint2D(delta));
         } else {
-            f.reshapeInParent(tx);
+            f.translateInParent(new CssPoint2D(delta));
         }
     }
+
+    /**
+     * Translates the specified figure, given the old and new position of a
+     * point.
+     *
+     * @param f        the figure to be translated
+     * @param oldPoint oldPoint in world coordinates
+     * @param newPoint newPoint in world coordinates
+     * @param model    the drawing model
+     */
+    public static void translateFigure(Figure f, @Nonnull CssPoint2D oldPoint, @Nonnull CssPoint2D newPoint, @Nullable DrawingModel model) {
+        CssPoint2D delta = newPoint.subtract(oldPoint);
+        if (model != null) {
+            model.translateInParent(f, delta);
+        } else {
+            f.translateInParent(delta);
+        }
+    }
+
 
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {

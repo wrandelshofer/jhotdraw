@@ -15,6 +15,8 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
@@ -69,6 +71,9 @@ public class SimpleTextFigure extends AbstractLeafFigure
         Bounds b = textNode.getBoundsInLocal();
         return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
+    public CssRectangle2D getCssBoundsInLocal() {
+        return new CssRectangle2D(getBoundsInLocal());
+    }
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
@@ -78,7 +83,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         set(ORIGIN, new CssPoint2D(x, y));
     }
 

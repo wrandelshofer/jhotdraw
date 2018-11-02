@@ -8,9 +8,11 @@ import static java.lang.Math.floor;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.round;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -28,11 +30,18 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.io.DefaultUnitConverter;
 
 /**
  * GridConstrainer.
@@ -71,7 +80,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Height of a grid cell. The value 0 turns the constrainer off for the
      * vertical axis.
      */
-    private final DoubleProperty height = new SimpleDoubleProperty(this, "height") {
+    private final ObjectProperty<CssSize> height = new SimpleObjectProperty<CssSize>(this, "height") {
 
         @Override
         public void invalidated() {
@@ -80,7 +89,7 @@ public class GridConstrainer extends AbstractConstrainer {
     };
 
     @Nonnull
-    private Property<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
+    private ObjectProperty<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
         @Override
         public void invalidated() {
             fireInvalidated();
@@ -125,7 +134,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Width of a grid cell. The value 0 turns the constrainer off for the
      * horizontal axis.
      */
-    private final DoubleProperty width = new SimpleDoubleProperty(this, "width") {
+    private final ObjectProperty<CssSize> width = new SimpleObjectProperty<CssSize>(this, "width") {
 
         @Override
         public void invalidated() {
@@ -135,7 +144,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * The x-origin of the grid.
      */
-    private final DoubleProperty x = new SimpleDoubleProperty(this, "x") {
+    private final ObjectProperty<CssSize> x = new SimpleObjectProperty<CssSize>(this, "x") {
 
         @Override
         public void invalidated() {
@@ -145,7 +154,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * The y-origin of the grid.
      */
-    private final DoubleProperty y = new SimpleDoubleProperty(this, "y") {
+    private final ObjectProperty<CssSize> y = new SimpleObjectProperty<CssSize>(this, "y") {
 
         @Override
         public void invalidated() {
@@ -164,7 +173,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Creates a grid of width x height pixels at origin 0,0 and 22.5 degree
      * rotations.
      *
-     * @param width The width of the grid. 0 turns the grid of for the x-axis.
+     * @param width  The width of the grid. 0 turns the grid of for the x-axis.
      * @param height The width of the grid. 0 turns the grid of for the y-axis.
      */
     public GridConstrainer(double width, double height) {
@@ -174,16 +183,20 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * Creates a grid with the specified constraints.
      *
-     * @param x The x-origin of the grid
-     * @param y The y-origin of the grid
-     * @param width The width of the grid. 0 turns the grid of for the x-axis.
+     * @param x      The x-origin of the grid
+     * @param y      The y-origin of the grid
+     * @param width  The width of the grid. 0 turns the grid of for the x-axis.
      * @param height The width of the grid. 0 turns the grid of for the y-axis.
-     * @param angle The angular grid (in degrees). 0 turns the grid off for
-     * rotations.
+     * @param angle  The angular grid (in degrees). 0 turns the grid off for
+     *               rotations.
      * @param majorx the interval for major grid lines on the x-axis
      * @param majory the interval for major grid lines on the y-axis
      */
     public GridConstrainer(double x, double y, double width, double height, double angle, int majorx, int majory) {
+        this(new CssSize(x), new CssSize(y), new CssSize(width), new CssSize(height), angle, majorx, majory);
+    }
+
+    public GridConstrainer(CssSize x, CssSize y, CssSize width, CssSize height, double angle, int majorx, int majory) {
         this.x.set(x);
         this.y.set(y);
         this.width.set(width);
@@ -207,7 +220,7 @@ public class GridConstrainer extends AbstractConstrainer {
         return drawGrid;
     }
 
-    public double getHeight() {
+    public CssSize getHeight() {
         return height.get();
     }
 
@@ -233,20 +246,20 @@ public class GridConstrainer extends AbstractConstrainer {
         return node;
     }
 
-    public double getWidth() {
+    public CssSize getWidth() {
         return width.get();
     }
 
-    public double getX() {
+    public CssSize getX() {
         return x.get();
     }
 
-    public double getY() {
+    public CssSize getY() {
         return y.get();
     }
 
     @Nonnull
-    public DoubleProperty heightProperty() {
+    public ObjectProperty<CssSize> heightProperty() {
         return height;
     }
 
@@ -299,47 +312,60 @@ public class GridConstrainer extends AbstractConstrainer {
 
     @Nonnull
     @Override
-    public Point2D translatePoint(Figure f, @Nonnull Point2D p, @Nonnull Point2D dir) {
+    public CssPoint2D translatePoint(Figure f, @Nonnull CssPoint2D cssp, @Nonnull CssPoint2D dir) {
         if (!snapToGrid.get()) {
-            return p;
+            return cssp;
         }
-        double cx = this.x.get();
-        double cy = this.y.get();
-        double cwidth = this.width.get();
-        double cheight = this.height.get();
 
-        double tx = (cwidth == 0) ? p.getX() : (p.getX() - cx) / cwidth;
-        double ty = (cheight == 0) ? p.getY() : (p.getY() - cy) / cheight;
+        DefaultUnitConverter c = DefaultUnitConverter.getInstance();
+        String wunits = this.width.get().getUnits();
+        String hunits = this.height.get().getUnits();
+        double px = c.convert(cssp.getX(), wunits);
+        double py = c.convert(cssp.getY(), hunits);
 
-        if (dir.getX() > 0) {
+        double cx = c.convert(this.x.get(), wunits);
+        double cy = c.convert(this.y.get(), hunits);
+        double cwidth = this.width.get().getValue();
+        double cheight = this.height.get().getValue();
+
+        double tx = (cwidth == 0) ? px : (px - cx) / cwidth;
+        double ty = (cheight == 0) ? py : (py - cy) / cheight;
+
+        if (dir.getX().getValue() > 0) {
             tx = floor(tx + 1);
-        } else if (dir.getX() < 0) {
+        } else if (dir.getX().getValue() < 0) {
             tx = ceil(tx - 1);
         } else {
             tx = round(tx);
         }
-        if (dir.getY() > 0) {
+        if (dir.getY().getValue() > 0) {
             ty = ceil(ty);
-        } else if (dir.getY() < 0) {
+        } else if (dir.getY().getValue() < 0) {
             ty = floor(ty);
         } else {
             ty = round(ty);
         }
 
-        return new Point2D(tx * cwidth + cx, ty * cheight + cy);
+
+        double x = tx * cwidth + cx;
+        double y = ty * cheight + cy;
+        return new CssPoint2D(new CssSize(x, wunits), new CssSize(y, hunits));
     }
 
     @Nonnull
     @Override
-    public Rectangle2D translateRectangle(Figure f, @Nonnull Rectangle2D r, @Nonnull Point2D dir) {
+    public CssRectangle2D translateRectangle(Figure f, @Nonnull CssRectangle2D cssr, @Nonnull CssPoint2D cssdir) {
         if (!snapToGrid.get()) {
-            return r;
+            return cssr;
         }
 
-        double cx = this.x.get();
-        double cy = this.y.get();
-        double cwidth = this.width.get();
-        double cheight = this.height.get();
+        Rectangle2D r = cssr.getConvertedValue();
+        Point2D dir = cssdir.getConvertedValue();
+
+        double cx = this.x.get().getConvertedValue();
+        double cy = this.y.get().getConvertedValue();
+        double cwidth = this.width.get().getConvertedValue();
+        double cheight = this.height.get().getConvertedValue();
 
         double tx = (cwidth == 0) ? r.getMinX() : (r.getMinX() - cx) / cwidth;
         double ty = (cheight == 0) ? r.getMinY() : (r.getMinY() - cy) / cheight;
@@ -361,7 +387,7 @@ public class GridConstrainer extends AbstractConstrainer {
             ty = round(ty);
         }
 
-        return new Rectangle2D(tx * cwidth + cx, ty * cheight + cy, r.getWidth(), r.getHeight());
+        return new CssRectangle2D(tx * cwidth + cx, ty * cheight + cy, r.getWidth(), r.getHeight());
     }
 
     @Override
@@ -384,13 +410,13 @@ public class GridConstrainer extends AbstractConstrainer {
 
             double dx = 0;
             double dy = 0;
-            double dw = drawing.get(Drawing.WIDTH);
-            double dh = drawing.get(Drawing.HEIGHT);
+            double dw = drawing.getNonnull(Drawing.WIDTH).getConvertedValue();
+            double dh = drawing.getNonnull(Drawing.HEIGHT).getConvertedValue();
 
-            double gx0 = x.get();
-            double gy0 = y.get();
-            double gxdelta = Math.abs(width.get());
-            double gydelta = Math.abs(height.get());
+            double gx0 = x.get().getConvertedValue();
+            double gy0 = y.get().getConvertedValue();
+            double gxdelta = Math.abs(width.get().getConvertedValue());
+            double gydelta = Math.abs(height.get().getConvertedValue());
             if (gx0 < 0) {
                 gx0 = gx0 % gxdelta + gxdelta;
             }
@@ -482,17 +508,17 @@ public class GridConstrainer extends AbstractConstrainer {
     }
 
     @Nonnull
-    public DoubleProperty widthProperty() {
+    public ObjectProperty<CssSize> widthProperty() {
         return width;
     }
 
     @Nonnull
-    public DoubleProperty xProperty() {
+    public ObjectProperty<CssSize> xProperty() {
         return x;
     }
 
     @Nonnull
-    public DoubleProperty yProperty() {
+    public ObjectProperty<CssSize> yProperty() {
         return y;
     }
 

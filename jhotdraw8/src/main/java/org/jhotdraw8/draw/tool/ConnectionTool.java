@@ -117,7 +117,7 @@ public class ConnectionTool extends AbstractTool {
             Point2D constrainedPoint;
             if (!event.isAltDown() && !event.isControlDown()) {
                 // alt or control turns the constrainer off
-                constrainedPoint = view.getConstrainer().constrainPoint(figure, unconstrainedPoint);
+                constrainedPoint = view.getConstrainer().constrainPoint(figure, new CssPoint2D(unconstrainedPoint)).getConvertedValue();
             } else {
                 constrainedPoint = unconstrainedPoint;
             }
@@ -162,7 +162,7 @@ public class ConnectionTool extends AbstractTool {
         }
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
-        Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, unconstrainedPoint);
+        Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, new CssPoint2D(unconstrainedPoint)).getConvertedValue();
         figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getDrawing();

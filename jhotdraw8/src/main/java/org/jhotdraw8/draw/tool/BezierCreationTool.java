@@ -14,6 +14,7 @@ import javafx.scene.shape.Line;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -159,17 +160,17 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         double y1 = event.getY();
 
         DrawingModel dm = view.getModel();
-        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToWorld(new Point2D(x1, y1)));
+        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
         if (createdFigure == null) {
             createdFigure = createFigure();
             points = new ArrayList<>();
-            points.add(new BezierNode(c));
+            points.add(new BezierNode(c.getConvertedValue()));
             Layer layer = getOrCreateLayer(view, createdFigure);
             view.setActiveLayer(layer);
 
             dm.addChildTo(createdFigure, layer);
         } else {
-            points.add(new BezierNode(c));
+            points.add(new BezierNode(c.getConvertedValue()));
         }
         dm.set(createdFigure, key, ImmutableList.ofCollection(points));
 

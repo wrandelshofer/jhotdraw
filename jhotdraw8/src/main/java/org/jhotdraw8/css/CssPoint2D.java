@@ -91,4 +91,8 @@ public class CssPoint2D {
         return new Point2D(x.getConvertedValue(),y.getConvertedValue());
 
     }
+
+    public CssPoint2D subtract(CssPoint2D that) {
+        return new CssPoint2D(x.subtract(that.x),y.subtract(that.y));
+    }
 }

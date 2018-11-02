@@ -132,7 +132,7 @@ public class SimpleLayer extends AbstractCompositeFigure
      * Layers never create handles.
      */
     @Override
-    public void createHandles(HandleType handleType, List<Handle> list) {
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         // empty
     }
 
