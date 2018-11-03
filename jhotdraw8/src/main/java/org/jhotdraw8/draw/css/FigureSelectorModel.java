@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ReadableList;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.ListCssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
@@ -405,7 +406,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value) {
+    public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable ReadableList<CssToken> value) {
         Map<String, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 
         WriteableStyleableMapAccessor<Object> k = metaMap.get(name);

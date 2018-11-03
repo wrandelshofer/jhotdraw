@@ -6,8 +6,10 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.io.UnitConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -56,13 +58,14 @@ public class DimensionConverterTest {
         IdFactory idFactory = new SimpleIdFactory();
         CssSizeConverter instance = new CssSizeConverter(true);
         CssSize actualSize = instance.fromString(buf,idFactory);
-        Double actual =actualSize==null?null: actualSize.getConvertedValue();
+        UnitConverter c=new DefaultUnitConverter(90);
+        Double actual =actualSize==null?null: c.convert(actualSize,null);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         if (expected == null || Double.isNaN(expected)) {
-            assertEquals(actual, expected);
+            assertEquals(expected,actual);
         } else {
-            assertEquals(actual, expected, 1e-4);
+            assertEquals( expected,actual, 1e-4);
         }
     }
 

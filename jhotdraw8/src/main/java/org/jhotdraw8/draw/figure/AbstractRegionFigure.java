@@ -6,8 +6,10 @@ package org.jhotdraw8.draw.figure;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+
 import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -15,6 +17,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
+
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 
 import javax.annotation.Nonnull;
@@ -66,6 +69,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public AbstractRegionFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
+
     @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
@@ -81,7 +85,9 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        if (pathElements==null) pathElements=new Path2D.Float();
+        if (pathElements == null) {
+            pathElements = new Path2D.Float();
+        }
         return pathElements.getPathIterator(tx);
     }
 
@@ -89,15 +95,14 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public void layout() {
         layoutPath();
     }
-    
+
     @Override
     public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
-        set(X, width.getValue()>0?x .add(width):x);
-        set(Y, height.getValue()>0?x .add(height):y);
+        set(X, width.getValue() < 0 ? x.add(width) : x);
+        set(Y, height.getValue() < 0 ? y.add(height) : y);
         set(WIDTH, width.abs());
         set(HEIGHT, height.abs());
     }
-
 
 
     protected void updatePathNode(@Nonnull Path path) {
@@ -114,7 +119,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         String pathstr = getStyled(SHAPE);
 
         if (pathElements == null) {
-            pathElements = pathElements=new Path2D.Float();
+            pathElements = pathElements = new Path2D.Float();
         }
         pathElements.reset();
         Bounds b = new BoundingBox(

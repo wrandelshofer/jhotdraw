@@ -323,7 +323,7 @@ public class CssToken /*extends AST*/ {
     }
 
     private String fromDIMENSION() {
-        return Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + fromIDENT() : fromNUMBER();
+        return stringValue!=null&&Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + fromIDENT() : fromNUMBER();
     }
 
     private String fromURL() {

@@ -33,14 +33,14 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
     @Nonnull
     @Override
     public CssInsets parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        List<CssSize> list=new ArrayList<>(4);
-        for (int i=0;i<4;i++) {
+        List<CssSize> list = new ArrayList<>(4);
+        for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
-                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(),null));
+                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(), null));
                     break;
                 case CssTokenType.TT_DIMENSION:
-                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(),tt.currentString()));
+                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentString()));
                     break;
                 case CssTokenType.TT_COMMA:
                     break;
@@ -51,23 +51,24 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         }
         switch (list.size()) {
             case 1:
-                CssSize trbl=list.get(0);
-                return new CssInsets(trbl,trbl,trbl,trbl);
+                CssSize trbl = list.get(0);
+                return new CssInsets(trbl, trbl, trbl, trbl);
             case 2:
-                CssSize tb=list.get(0);
-                CssSize rl=list.get(1);
-                return new CssInsets(tb,rl,tb,rl);
+                CssSize tb = list.get(0);
+                CssSize rl = list.get(1);
+                return new CssInsets(tb, rl, tb, rl);
             case 4:
-                CssSize t=list.get(0);
-                CssSize r=list.get(1);
-                CssSize b=list.get(2);
-                CssSize l=list.get(3);
-                return new CssInsets(t,r,b,l);
+                CssSize t = list.get(0);
+                CssSize r = list.get(1);
+                CssSize b = list.get(2);
+                CssSize l = list.get(3);
+                return new CssInsets(t, r, b, l);
             default:
-                throw new ParseException("⟨DimensionInsets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.",tt.getStartPosition());
+                throw new ParseException("⟨DimensionInsets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.", tt.getStartPosition());
 
         }
     }
+
     @Nonnull
     @Override
     public String getHelpText() {
@@ -83,23 +84,23 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         if (right == left) {
             if (top == bottom) {
                 if (top == left) {
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION,top.getUnits(), top.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(), top.getValue()));
                     return;
                 } else {
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(),top.getValue()));
-                    out.accept(new CssToken(CssTokenType.TT_S," "));
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(),right.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(), top.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(), right.getValue()));
                     return;
                 }
             }
         }
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(),top.getValue()));
-        out.accept(new CssToken(CssTokenType.TT_S," "));
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(),right.getValue()));
-        out.accept(new CssToken(CssTokenType.TT_S," "));
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, bottom.getUnits(),bottom.getValue()));
-        out.accept(new CssToken(CssTokenType.TT_S," "));
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, left.getUnits(),left.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(), top.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_S, " "));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(), right.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_S, " "));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, bottom.getUnits(), bottom.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_S, " "));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, left.getUnits(), left.getValue()));
     }
 }
 

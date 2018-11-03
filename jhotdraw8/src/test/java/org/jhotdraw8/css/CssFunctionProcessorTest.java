@@ -1,5 +1,7 @@
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
@@ -37,9 +39,9 @@ class CssFunctionProcessorTest {
         Consumer<CssToken> consumer=t->buf.append(t.fromToken());
 
         DocumentSelectorModel model = new DocumentSelectorModel();
-        Map<String,List<CssToken>> customProperties=new LinkedHashMap<>();
-        customProperties.put("--blarg",Arrays.asList(new CssToken(CssTokenType.TT_STRING,"blarg")));
-        customProperties.put("--endless-recursion",Arrays.asList(new CssToken(CssTokenType.TT_FUNCTION,"var"),
+        Map<String, ReadableList<CssToken>> customProperties=new LinkedHashMap<>();
+        customProperties.put("--blarg", ImmutableList.of(new CssToken(CssTokenType.TT_STRING,"blarg")));
+        customProperties.put("--endless-recursion",ImmutableList.of(new CssToken(CssTokenType.TT_FUNCTION,"var"),
                 new CssToken(CssTokenType.TT_IDENT,"--endless-recursion"),
                 new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
         CssFunctionProcessor<Element> instance = new CssFunctionProcessor<>(model,customProperties);
@@ -88,7 +90,7 @@ class CssFunctionProcessorTest {
                 dynamicTest("204", () -> doTestProcess("calc(attr(width length)*attr(length length))", "5125625mm")),
                 dynamicTest("205", () -> doTestProcess("calc(2 + attr(doors number))", "7")),
                 dynamicTest("206", () -> doTestProcess("calc(2% + attr(doors number))", "7%")),
-                dynamicTest("207", () -> doTestProcess("calc(2% + attr(doors mm))", "1773.6535433070867%")),
+                dynamicTest("207", () -> doTestProcess("calc(2% + attr(doors mm))", "1891.763779527559%")),
                 dynamicTest("208", () -> doTestProcess("calc(2mm + attr(doors mm))", "7mm")),
                 //
                 dynamicTest("301", () -> doTestProcess("concat()", "\"\"")),

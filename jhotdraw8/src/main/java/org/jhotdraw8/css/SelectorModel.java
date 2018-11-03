@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadableList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -272,7 +274,7 @@ public interface SelectorModel<T> {
             } catch (IOException e) {
                 throw new RuntimeException("unexpected exception", e);
             }
-            setAttribute(element, origin, name, list);
+            setAttribute(element, origin, name, ImmutableList.ofCollection(list));
         }
     }
 
@@ -285,5 +287,5 @@ public interface SelectorModel<T> {
      * @param value   The attribute value. Null removes the attribute from the
      *                element.
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable List<CssToken> value);
+    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable ReadableList<CssToken> value);
 }

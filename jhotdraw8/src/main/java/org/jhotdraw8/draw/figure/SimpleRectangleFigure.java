@@ -75,12 +75,6 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
 
     @Nonnull
     @Override
-    public Bounds getBoundsInLocal() {
-        return getCssBoundsInLocal().getConvertedBoundsValue();
-    }
-
-    @Nonnull
-    @Override
     public CssRectangle2D getCssBoundsInLocal() {
         return getNonnull(BOUNDS);
     }

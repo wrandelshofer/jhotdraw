@@ -92,7 +92,7 @@ public class MoveHandle extends LocatorHandle {
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t == null ? p : t.transform(p);
+        pickLocation = p = t.transform(p);
 
         // The node is centered around the location. 
         // (The value 5.5 is half of the node size, which is 11,11.
@@ -101,8 +101,8 @@ public class MoveHandle extends LocatorHandle {
         node.relocate(p.getX() - 5, p.getY() - 5);
 
         // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+        node.setRotate(f.getStyledNonnull(ROTATE));
+        node.setRotationAxis(f.getStyledNonnull(ROTATION_AXIS));
     }
 
     @Override

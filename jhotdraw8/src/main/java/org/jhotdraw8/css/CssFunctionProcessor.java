@@ -1,5 +1,7 @@
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadableList;
 import org.jhotdraw8.io.DefaultUnitConverter;
 
 import java.io.IOException;
@@ -45,14 +47,14 @@ public class CssFunctionProcessor<T> {
     public static final String REPLACE_FUNCTION_NAME = "replace";
     public static final String CONCAT_FUNCTION_NAME = "concat";
     private final SelectorModel<T> model;
-    private final Map<String, List<CssToken>> customProperties;
+    private final Map<String, ReadableList<CssToken>> customProperties;
 
-    public CssFunctionProcessor(SelectorModel<T> model, Map<String, List<CssToken>> customProperties) {
+    public CssFunctionProcessor(SelectorModel<T> model, Map<String, ReadableList<CssToken>> customProperties) {
         this.model = model;
         this.customProperties = customProperties;
     }
 
-    public List<CssToken> process(T element, List<CssToken> in) throws ParseException {
+    public ReadableList<CssToken> process(T element, ReadableList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
@@ -60,9 +62,11 @@ public class CssFunctionProcessor<T> {
         } catch (IOException e) {
             e.printStackTrace();
             out.clear();
-            out.addAll(in);
+            for (CssToken t : in) {
+                out.add(t);
+            }
         }
-        return out;
+        return ImmutableList.ofCollection(out);
     }
 
     public void process(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
@@ -290,7 +294,7 @@ public class CssFunctionProcessor<T> {
         if (!customPropertyName.startsWith("--")) {
             throw new ParseException("〈var〉: custom-property-name starting with two dashes \"--\" expected. Found: \"" + customPropertyName + "\"", tt.getStartPosition());
         }
-        List<CssToken> customValue = customProperties.get(customPropertyName);
+        ReadableList<CssToken> customValue = customProperties.get(customPropertyName);
         if (customValue == null) {
             process(element, new ListCssTokenizer(attrFallback), out);
         } else {

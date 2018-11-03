@@ -30,14 +30,15 @@ public class CssSize {
 
     public CssSize(double value, String units) {
         this.value = value;
-        this.units = units==null||units.isEmpty()?null:units;
+        this.units = units == null || units.isEmpty() ? null : units;
     }
 
     public static CssSize max(CssSize a, CssSize b) {
-        return (a.getConvertedValue()>=b.getConvertedValue()) ? a: b;
+        return (a.getConvertedValue() >= b.getConvertedValue()) ? a : b;
     }
+
     public static CssSize min(CssSize a, CssSize b) {
-        return (a.getConvertedValue()<=b.getConvertedValue()) ? a: b;
+        return (a.getConvertedValue() <= b.getConvertedValue()) ? a : b;
     }
 
 
@@ -85,7 +86,7 @@ public class CssSize {
     @Nonnull
     @Override
     public String toString() {
-        return "CssSize{" + value + units + '}';
+        return "CssSize{" + value + (units == null ? null : "\"" + units + "\"") + '}';
     }
 
     public CssSize subtract(CssSize that) {
@@ -101,9 +102,10 @@ public class CssSize {
     }
 
     public CssSize multiply(double factor) {
-        return new CssSize(value*factor,units);
+        return new CssSize(value * factor, units);
     }
+
     public CssSize divide(double divisor) {
-        return new CssSize(value/divisor,units);
+        return new CssSize(value / divisor, units);
     }
 }
