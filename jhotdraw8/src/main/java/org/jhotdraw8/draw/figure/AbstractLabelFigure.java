@@ -188,7 +188,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Insets i = getStyledNonnull(PADDING).getConvertedValue();
         set(ORIGIN, new CssPoint2D(x.getConvertedValue() + i.getLeft(), y.getConvertedValue() + lb.getHeight() - i.getBottom()));
     }
-    
+
     @Override
     public void translateInLocal(@Nonnull CssPoint2D delta) {
         set(ORIGIN, getNonnull(ORIGIN).add(delta));
