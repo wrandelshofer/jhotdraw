@@ -136,9 +136,6 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * new figure and for determining the name of a figure.
      */
     public void addFigure(String name, @Nonnull Class<? extends Figure> figureClass) {
-        if (!nameToFigure.containsKey(name)) {
-            figureToName.remove(nameToFigure.get(name));
-        }
         nameToFigure.put(name, () -> {
             try {
                 return figureClass.getDeclaredConstructor().newInstance();

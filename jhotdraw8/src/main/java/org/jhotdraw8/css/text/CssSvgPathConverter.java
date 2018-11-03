@@ -6,10 +6,13 @@ package org.jhotdraw8.css.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
@@ -23,37 +26,23 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSvgPathConverter implements Converter<String> {
+public class CssSvgPathConverter extends AbstractCssConverter<String> {
 
-    private final boolean nullable;
 
     public CssSvgPathConverter(boolean nullable) {
-        this.nullable = nullable;
+        super(nullable);
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
+    public String parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        tt.requireNextToken(CssTokenType.TT_STRING,"⟨SvgPath⟩: String expected.");
+        return tt.currentStringNonnull();
+    }
 
-        String p = null;
-        if (tt.next() == CssTokenType.TT_IDENT) {
-            if (!nullable) {
-                throw new ParseException("String expected. " + tt.current(), buf.position());
-            }
-            if (!"none".equals(tt.currentString())) {
-                throw new ParseException("none or String expected. " + tt.current()+" "+tt.currentString(), buf.position());
-            }
-            p = null;
-        } else {
-            if (tt.current() != CssTokenType.TT_STRING) {
-                throw new ParseException("Css String expected. " + tt.current(), buf.position());
-            }
-            p = (tt.currentString());
-        }
-        buf.position(buf.limit());
-
-        return p;
+    @Override
+    protected <TT extends String> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_STRING, value));
     }
 
   @Nonnull
@@ -69,50 +58,11 @@ public class CssSvgPathConverter implements Converter<String> {
         return buf.toString();
     }
 
-    @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
-        if (value == null) {
-            if (!nullable) {
-                throw new IllegalArgumentException("value is null");
-            }
-            out.append("none");
-            return;
-        }
-        out.append('"');
-        for (char ch : value.toCharArray()) {
-            switch (ch) {
-                case '"':
-                    out.append('\\');
-                    out.append('"');
-                    break;
-                case ' ':
-                    out.append(ch);
-                    break;
-                case '\n':
-                    out.append('\\');
-                    out.append('\n');
-                    break;
-                default:
-                    if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
-                        out.append('\\');
-                        String hex = Integer.toHexString(ch);
-                        for (int i = 0, n = 6 - hex.length(); i < n; i++) {
-                            out.append('0');
-                        }
-                        out.append(hex);
-                    } else {
-                        out.append(ch);
-                    }
-                    break;
-            }
-        }
-        out.append('"');
-    }
+
 
     @Nullable
     @Override
     public String getDefaultValue() {
-        
         return null;
     }
     
