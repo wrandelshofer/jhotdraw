@@ -34,8 +34,8 @@ public class CssToken /*extends AST*/ {
     private final Number numericValue;
 
     private final int startPos;
-    private final int endPos ;
-    private final int lineNumber ;
+    private final int endPos;
+    private final int lineNumber;
 
     @Nullable
     private final Character preferredQuoteChar;
@@ -43,33 +43,37 @@ public class CssToken /*extends AST*/ {
     private final static XmlNumberConverter NUMBER_CONVERTER = new XmlNumberConverter();
 
     public CssToken(int ttype, String stringValue) {
-        this(ttype, stringValue, null, 0,0, stringValue.length());
+        this(ttype, stringValue, null, 0, 0, stringValue.length());
 
     }
+
     public CssToken(int ttype, String stringValue, @Nullable Character preferredQuoteChar) {
-        this(ttype, stringValue, null, preferredQuoteChar, 0,stringValue.length());
+        this(ttype, stringValue, null, preferredQuoteChar, 0, stringValue.length());
 
     }
 
     public CssToken(int ttype) {
-        this(ttype, Character.toString((char)ttype), null, null,0, 0, 1);
+        this(ttype, Character.toString((char) ttype), null, null, 0, 0, 1);
 
     }
 
     public CssToken(int ttype, String stringValue, Number numericValue) {
-        this(ttype, stringValue, numericValue, null, 0,0, 1);
+        this(ttype, stringValue, numericValue, null, 0, 0, 1);
     }
+
     public CssToken(int ttype, Number numericValue) {
-        this(ttype, "", numericValue, null, 0,0, 1);
+        this(ttype, "", numericValue, null, 0, 0, 1);
     }
+
     public CssToken(int ttype, String stringValue, Number numericValue, int lineNumber, int startPos, int endPos) {
         this(ttype, stringValue, numericValue, null, lineNumber, startPos, endPos);
     }
+
     public CssToken(int ttype, String stringValue, Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
         this.ttype = ttype;
         this.stringValue = stringValue;
         this.numericValue = numericValue;
-        this.lineNumber=lineNumber;
+        this.lineNumber = lineNumber;
         this.startPos = startPos;
         this.endPos = endPos;
         this.preferredQuoteChar = preferredQuoteChar;
@@ -88,7 +92,7 @@ public class CssToken /*extends AST*/ {
             case CssTokenType.TT_IDENT:
                 return fromIDENT();
             case CssTokenType.TT_AT_KEYWORD:
-                return fromHASHorAT('@' ,stringValue);
+                return fromHASHorAT('@', stringValue);
             case CssTokenType.TT_STRING:
                 return fromSTRING();
             case CssTokenType.TT_BAD_STRING:
@@ -96,13 +100,13 @@ public class CssToken /*extends AST*/ {
             //case CssTokenType.TT_BAD_URI : return fromBAD_URI(stringValue) ;
             //case CssTokenType.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
             case CssTokenType.TT_HASH:
-                return fromHASHorAT('#' ,stringValue);
+                return fromHASHorAT('#', stringValue);
             case CssTokenType.TT_NUMBER:
                 return fromNUMBER();
             case CssTokenType.TT_PERCENTAGE:
-                return fromNUMBER() + "%";
+                return fromPERCENTAGE();
             case CssTokenType.TT_DIMENSION:
-                return stringValue==null?fromNUMBER():fromNUMBER() + fromIDENT();
+                return fromDIMENSION();
             case CssTokenType.TT_URL:
                 return fromURL();
             case CssTokenType.TT_UNICODE_RANGE:
@@ -216,12 +220,13 @@ public class CssToken /*extends AST*/ {
             throw new RuntimeException("unexpected IO exception", e);
         }
     }
+
     private String fromHASHorAT(char hashOrAt, @Nonnull String value) {
         StringBuilder out = new StringBuilder();
         out.append(hashOrAt);
         Reader r = new StringReader(value);
         try {
-            for (int ch=r.read();ch!=-1;ch=r.read()) {
+            for (int ch = r.read(); ch != -1; ch = r.read()) {
                 // escape nmchar if necessary
                 if (ch == '_'
                         || 'a' <= ch && ch <= 'z'
@@ -250,9 +255,9 @@ public class CssToken /*extends AST*/ {
 
     private String fromSTRING(String value) {
         char quoteChar =
-                preferredQuoteChar!=null
-                        ?preferredQuoteChar
-                        :value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
+                preferredQuoteChar != null
+                        ? preferredQuoteChar
+                        : value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
         return fromSTRING(value, quoteChar, quoteChar);
     }
 
@@ -262,9 +267,9 @@ public class CssToken /*extends AST*/ {
 
     private String fromBAD_STRING(String value) {
         char quoteChar =
-                preferredQuoteChar!=null
-                        ?preferredQuoteChar
-                        :value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
+                preferredQuoteChar != null
+                        ? preferredQuoteChar
+                        : value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
         return fromSTRING(value, quoteChar, '\n');
     }
 
@@ -310,17 +315,15 @@ public class CssToken /*extends AST*/ {
     }
 
     private String fromNUMBER() {
-
-            return NUMBER_CONVERTER.toString( numericValue);
-
+        return NUMBER_CONVERTER.toString(numericValue);
     }
 
     private String fromPERCENTAGE() {
-        return stringValue;
+        return Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + "%" : fromNUMBER();
     }
 
     private String fromDIMENSION() {
-        return stringValue;
+        return Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + fromIDENT() : fromNUMBER();
     }
 
     private String fromURL() {
@@ -328,7 +331,7 @@ public class CssToken /*extends AST*/ {
         out.append("url(");
         Reader r = new StringReader(stringValue);
         try {
-            for (            int ch = r.read();ch!=-1;ch=r.read()) {
+            for (int ch = r.read(); ch != -1; ch = r.read()) {
                 final boolean escape;
                 switch (ch) {
                     case '"':

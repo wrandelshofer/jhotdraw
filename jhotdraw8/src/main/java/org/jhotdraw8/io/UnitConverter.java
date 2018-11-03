@@ -18,14 +18,15 @@ import org.jhotdraw8.css.CssSize;
  */
 public interface UnitConverter {
 
-    String CM = "cm";
+    String CENTIMETERS = "cm";
     String EM = "em";
     String EX = "ex";
     String INCH = "in";
-    String MM = "mm";
+    String MILLIMETERS = "mm";
+    String QUARTER_MILLIMETERS = "Q";
     String PERCENTAGE = "%";
-    String PICA = "pc";
-    String PIXEL = "px";
+    String PICAS = "pc";
+    String PIXELS = "px";
     String POINTS = "pt";
 
     /**
@@ -34,7 +35,7 @@ public interface UnitConverter {
      * @return dpi
      */
     default double getDpi() {
-        return 72.0;
+        return 96.0;
     }
 
     /**
@@ -53,14 +54,17 @@ public interface UnitConverter {
                 case PERCENTAGE:
                     factor = getPercentageFactor();
                     break;
-                case PIXEL:
+                case PIXELS:
                     factor = 1.0;
                     break;
-                case CM:
+                case CENTIMETERS:
                     factor = 2.54 / getDpi();
                     break;
-                case MM:
+                case MILLIMETERS:
                     factor = 25.4 / getDpi();
+                    break;
+                case QUARTER_MILLIMETERS:
+                    factor = 25.4 * 0.25 / getDpi();
                     break;
                 case INCH:
                     factor = 1.0 / getDpi();
@@ -68,7 +72,7 @@ public interface UnitConverter {
                 case POINTS:
                     factor = 72 / getDpi();
                     break;
-                case PICA:
+                case PICAS:
                     factor = 72 * 12.0 / getDpi();
                     break;
                 case EM:

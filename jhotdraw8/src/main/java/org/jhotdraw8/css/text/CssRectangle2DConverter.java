@@ -1,4 +1,4 @@
-/* @(#)CssRectangle2DConverterOLD.java
+/* @(#)Rectangle2DConverter.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -23,15 +23,15 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssRectangle2D> {
+public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D> {
     private final boolean withSpace;
     private final boolean withComma;
 
-    public CssDimensionRectangle2DConverter(boolean nullable) {
+    public CssRectangle2DConverter(boolean nullable) {
         this(nullable, true, false);
     }
 
-    public CssDimensionRectangle2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
+    public CssRectangle2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
         super(nullable);
         this.withSpace = withSpace || !withComma;
         this.withComma = withComma;
@@ -58,6 +58,17 @@ public class CssDimensionRectangle2DConverter extends AbstractCssConverter<CssRe
                 return new CssSize(tt.currentNumber().doubleValue(),null);
             case CssTokenType.TT_DIMENSION:
                 return new CssSize(tt.currentNumber().doubleValue(),tt.currentString());
+                case CssTokenType.TT_IDENT:
+                    switch (tt.currentStringNonnull()) {
+                        case "INF":
+                            return new CssSize(Double.POSITIVE_INFINITY,null);
+                        case "-INF":
+                            return new CssSize(Double.NEGATIVE_INFINITY,null);
+                        case "NaN":
+                            return new CssSize(Double.NaN,null);
+                        default:
+                            throw new ParseException(" ⟨CssRectangle2D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
+                    }
             default:
                 throw new ParseException(" ⟨CssRectangle2D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
         }

@@ -13,10 +13,10 @@ import javafx.geometry.Rectangle2D;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.text.Rectangle2DConverter;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssRectangle2DConverterOLD;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -76,7 +76,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
 
     }
 
-    private final Converter<Rectangle2D> converter= new CssRectangle2DConverterOLD(false);
+    private final Converter<Rectangle2D> converter= new Rectangle2DConverter(false);
 
     @Override
     public Converter<Rectangle2D> getConverter() {

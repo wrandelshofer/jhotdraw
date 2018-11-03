@@ -26,7 +26,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssPoint3D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.text.CssDimensionRectangle2DConverter;
+import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.css.text.CssPoint3DConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.BorderableFigure;
@@ -180,7 +180,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Figure.class, new XmlObjectReferenceConverter<>(Figure.class));
         addConverterForType(CssSize.class, new CssSizeConverter(false));
         addConverterForType(CssInsets.class, new CssInsetsConverter(false));
-        addConverterForType(CssRectangle2D.class, new CssDimensionRectangle2DConverter(false));
+        addConverterForType(CssRectangle2D.class, new CssRectangle2DConverter(false));
         addConverterForType(CssPoint2D.class, new CssPoint2DConverter(false));
         addConverterForType(CssPoint3D.class, new CssPoint3DConverter(false));
         addConverterForType(FillRule.class, new CssEnumConverter<>(FillRule.class));

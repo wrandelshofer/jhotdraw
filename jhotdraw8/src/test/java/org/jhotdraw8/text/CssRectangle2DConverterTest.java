@@ -5,8 +5,9 @@
 
 package org.jhotdraw8.text;
 
-import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.css.text.CssRectangle2DConverterOLD;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.junit.jupiter.api.DynamicTest;
@@ -36,12 +37,12 @@ public class CssRectangle2DConverterTest {
     /**
      * Test of fromString method, of class CssDoubleConverter.
      */
-    public static void testFromString(Rectangle2D expected, String string) throws Exception {
+    public static void testFromString(CssRectangle2D expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
-        CssRectangle2DConverterOLD instance = new CssRectangle2DConverterOLD(false);
-        Rectangle2D actual = instance.fromString(buf, idFactory);
+        CssRectangle2DConverter instance = new CssRectangle2DConverter(false);
+        CssRectangle2D actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         String actualString = instance.toString(expected);
@@ -53,7 +54,11 @@ public class CssRectangle2DConverterTest {
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1",()->  testFromString(new Rectangle2D(11,22,33,44), "11 22 33 44"))
+                dynamicTest("1",()->  testFromString(new CssRectangle2D(11,22,33,44), "11 22 33 44")),
+                dynamicTest("1",()->  testFromString(new CssRectangle2D(new CssSize(11,"cm"),
+                        new CssSize(22,"cm"),
+                        new CssSize(33,"cm"),
+                        new CssSize(44,"cm")), "11cm 22cm 33cm 44cm"))
         );
     }
 }

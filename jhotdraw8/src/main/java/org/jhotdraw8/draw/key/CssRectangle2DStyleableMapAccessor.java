@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.text.CssDimensionRectangle2DConverter;
+import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -83,7 +83,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableFigureM
 
     }
 
-    private final Converter<CssRectangle2D> converter= new CssDimensionRectangle2DConverter(false);
+    private final Converter<CssRectangle2D> converter= new CssRectangle2DConverter(false);
 
     @Override
     public Converter<CssRectangle2D> getConverter() {

@@ -67,6 +67,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
                 units = null;
                 break;
             case CssTokenType.TT_IDENT: {
+                units = null;
                 switch (tt.currentStringNonnull()) {
                     case "INF":
                         value = Double.POSITIVE_INFINITY;
@@ -80,7 +81,6 @@ public class CssSizeConverter implements CssConverter<CssSize> {
                     default:
                         throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
                 }
-                units = null;
                 break;
             }
             default:
