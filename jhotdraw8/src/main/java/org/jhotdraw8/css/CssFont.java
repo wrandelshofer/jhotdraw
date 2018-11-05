@@ -27,11 +27,12 @@ public class CssFont {
     private final FontWeight weight;
     @Nullable
     private final FontPosture posture;
-    private final double size;
+    @Nonnull
+    private final CssSize size;
     @Nonnull
     private final Font font;
 
-    public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, double size) {
+    public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @Nonnull CssSize size) {
         this.family = family;
         this.weight = weight;
         this.posture = posture;
@@ -39,8 +40,8 @@ public class CssFont {
 
         this.font = (weight == FontWeight.NORMAL || posture == FontPosture.REGULAR
                 || weight == null || posture == null)
-                ? new Font(family, size)
-                : Font.font(family, weight, posture, size);
+                ? new Font(family, size.getConvertedValue())
+                : Font.font(family, weight, posture, size.getConvertedValue());
     }
 
     public String getFamily() {
@@ -57,7 +58,7 @@ public class CssFont {
         return posture;
     }
 
-    public double getSize() {
+    public CssSize getSize() {
         return size;
     }
 
@@ -68,15 +69,15 @@ public class CssFont {
 
     private final static Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
 
-    public static CssFont font(String family, FontWeight weight, FontPosture posture, double size) {
+    public static CssFont font(String family, FontWeight weight, FontPosture posture, CssSize size) {
         return cachedFonts.computeIfAbsent(family
                 + (weight==null?"":weight.name())
                 + (posture==null?"":posture.name())
-                + Double.doubleToRawLongBits(size), str -> new CssFont(family, weight, posture, size));
+                + Double.doubleToRawLongBits(size.getConvertedValue()), str -> new CssFont(family, weight, posture, size));
     }
 
     public static CssFont font(String family, double size) {
-        return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, size);
+        return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(size,null));
     }
 
     @Override
@@ -85,7 +86,7 @@ public class CssFont {
         hash = 97 * hash + Objects.hashCode(this.family);
         hash = 97 * hash + Objects.hashCode(this.weight);
         hash = 97 * hash + Objects.hashCode(this.posture);
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.size) ^ (Double.doubleToLongBits(this.size) >>> 32));
+        hash = 97 * hash + this.size.hashCode();
         return hash;
     }
 
@@ -101,7 +102,7 @@ public class CssFont {
             return false;
         }
         final CssFont other = (CssFont) obj;
-        if (Double.doubleToLongBits(this.size) != Double.doubleToLongBits(other.size)) {
+        if (!Objects.equals(this.size,other.size)) {
             return false;
         }
         if (!Objects.equals(this.family, other.family)) {
@@ -116,4 +117,13 @@ public class CssFont {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "CssFont{" +
+                "family='" + family + '\'' +
+                ", weight=" + weight +
+                ", posture=" + posture +
+                ", size=" + size +
+                '}';
+    }
 }

@@ -13,6 +13,7 @@ import javafx.scene.text.FontWeight;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -39,7 +40,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     @Nonnull
     private final MapAccessor<FontPosture> postureKey;
     @Nonnull
-    private final MapAccessor<Double> sizeKey;
+    private final MapAccessor<CssSize> sizeKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -50,8 +51,12 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
      * @param postureKey the font posture key
      * @param sizeKey the font size key
      */
-    public FontStyleableMapAccessor(String name, MapAccessor<String> familyKey, MapAccessor<FontWeight> weightKey, MapAccessor<FontPosture> postureKey, MapAccessor<Double> sizeKey) {
-        super(name, CssFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey}, CssFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(), sizeKey.getDefaultValue()));
+    public FontStyleableMapAccessor(String name,
+                                    MapAccessor<String> familyKey, MapAccessor<FontWeight> weightKey,
+                                    MapAccessor<FontPosture> postureKey, MapAccessor<CssSize> sizeKey) {
+        super(name, CssFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey},
+                CssFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(),
+                sizeKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssFont>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

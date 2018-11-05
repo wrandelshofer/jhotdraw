@@ -173,7 +173,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(SimpleCombinedPathFigure.CagOperation.class, new CssEnumConverter<>(SimpleCombinedPathFigure.CagOperation.class));
         addConverterForType(VPos.class, new CssEnumConverter<>(VPos.class));
         addConverterForType(HPos.class, new CssEnumConverter<>(HPos.class));
-        addConverterForType(CssFont.class, new XmlCssFontConverter());
+        addConverterForType(CssFont.class, new XmlCssFontConverter(false));
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
         addConverterForType(BlendMode.class, new CssEnumConverter<>(BlendMode.class));
         addConverterForType(Effect.class, new CssEffectConverter());

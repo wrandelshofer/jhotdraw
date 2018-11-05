@@ -83,7 +83,8 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Writeable
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractStyleableFigureMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nonnull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
+    public AbstractStyleableFigureMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters,
+                                              @Nonnull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }

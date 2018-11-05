@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssFont;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -57,7 +58,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
     @Override
     public <TT extends CssFont> void produceTokensNonnull(@Nonnull TT font, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
-        double fontSize = font.getSize();
+        CssSize fontSize = font.getSize();
         String fontFamily = font.getFamily();
         final FontPosture posture = font.getPosture();
 
@@ -95,7 +96,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
             }
         }
         out.accept(new CssToken(CssTokenType.TT_S, " "));
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, fontSize));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, fontSize.getUnits(), fontSize.getValue()));
         out.accept(new CssToken(CssTokenType.TT_S, " "));
         if (fontFamily.contains(" ") || fontFamily.contains("\'") || fontFamily.contains("\"")) {
             out.accept(new CssToken(CssTokenType.TT_STRING, fontFamily));
@@ -109,7 +110,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
     public CssFont parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
-        double fontSize = 12.0;
+        CssSize fontSize = new CssSize(12.0);
         String fontFamily = "System";
 
         // parse FontStyle
@@ -172,9 +173,12 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         }
 
         // parse FontSize
-        if (tt.next() == CssTokenType.TT_NUMBER) {
-            fontSize = tt.currentNumberNonnull().doubleValue();
-
+        if (tt.next() == CssTokenType.TT_DIMENSION || tt.current() == CssTokenType.TT_NUMBER) {
+            if (tt.current() == CssTokenType.TT_DIMENSION) {
+                fontSize = new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentStringNonnull());
+            } else if (tt.current() == CssTokenType.TT_NUMBER) {
+                fontSize = new CssSize(tt.currentNumberNonnull().doubleValue());
+            }
             if (fontWeightOrFontSizeConsumed) {
                 switch ((int) fontWeightOrFontSize) {
                     case 100:
@@ -211,7 +215,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
         } else if (fontWeightOrFontSizeConsumed) {
             tt.pushBack();
-            fontSize = fontWeightOrFontSize;
+            fontSize = new CssSize(fontWeightOrFontSize);
         } else {
             tt.pushBack();
         }
@@ -237,10 +241,10 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
     @Override
     public String getHelpText() {
         return "Format of ⟨Font⟩: ［⟨FontStyle⟩］［⟨FontWeight⟩］ ⟨FontSize⟩ ⟨FontFamily⟩"
-                +"\n  with ⟨FontStyle⟩: normal｜italic｜oblique"
-                +"\n  with ⟨FontWeight⟩: normal｜bold｜bolder｜lighter｜100｜200｜300｜400｜500｜600｜700｜800｜900"
-                +"\n  with ⟨FontSize⟩: size"
-                +"\n  with ⟨FontFamiliy⟩: identifier｜string"
+                + "\n  with ⟨FontStyle⟩: normal｜italic｜oblique"
+                + "\n  with ⟨FontWeight⟩: normal｜bold｜bolder｜lighter｜100｜200｜300｜400｜500｜600｜700｜800｜900"
+                + "\n  with ⟨FontSize⟩: size"
+                + "\n  with ⟨FontFamiliy⟩: identifier｜string"
                 ;
     }
 }
