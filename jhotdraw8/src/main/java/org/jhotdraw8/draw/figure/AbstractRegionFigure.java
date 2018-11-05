@@ -126,8 +126,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         pathElements.reset();
 
         String pathstr = getStyled(SHAPE);
-        if (pathstr==null) {
-            return;
+        if (pathstr==null||pathstr.isEmpty()) {
+            pathstr="0,0 1,0 1,1 0,1z";
         }
 
         double width = getStyledNonnull(WIDTH).getConvertedValue();
