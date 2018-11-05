@@ -263,17 +263,17 @@
     <session id="45138299">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="33" />
-          <entry key="project.open.time.1" value="3" />
+          <entry key="project.closed" value="34" />
+          <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.4" value="3" />
-          <entry key="project.open.time.5" value="10" />
+          <entry key="project.open.time.5" value="11" />
           <entry key="project.open.time.6" value="10" />
           <entry key="project.open.time.7" value="2" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="34" />
+          <entry key="project.opened" value="36" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -308,7 +308,7 @@
           <entry key="css" value="12" />
           <entry key="dummy" value="180" />
           <entry key="fxml" value="32" />
-          <entry key="java" value="82183" />
+          <entry key="java" value="82191" />
           <entry key="properties" value="4" />
           <entry key="txt" value="356" />
           <entry key="xml" value="7" />
@@ -318,7 +318,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="12" />
-          <entry key="JAVA" value="82183" />
+          <entry key="JAVA" value="82191" />
           <entry key="PLAIN_TEXT" value="536" />
           <entry key="Properties" value="4" />
           <entry key="XML" value="42" />
@@ -361,7 +361,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/FontStyleableMapAccessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-691">
+            <state relative-caret-position="630">
               <caret line="42" column="37" selection-start-line="42" selection-start-column="37" selection-end-line="42" selection-end-column="37" />
             </state>
           </provider>
@@ -370,7 +370,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/xml/text/XmlCssFontConverter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
+            <state relative-caret-position="675">
               <caret line="45" column="4" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="4" />
             </state>
           </provider>
@@ -379,7 +379,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssFontConverter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
+            <state relative-caret-position="2505">
               <caret line="167" column="79" selection-start-line="167" selection-start-column="79" selection-end-line="167" selection-end-column="79" />
             </state>
           </provider>
@@ -388,7 +388,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/text/CssFontConverterTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
+            <state relative-caret-position="675">
               <caret line="45" selection-start-line="42" selection-end-line="45" />
             </state>
           </provider>
@@ -397,7 +397,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/io/DefaultFigureFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
+            <state relative-caret-position="2625">
               <caret line="175" column="72" selection-start-line="175" selection-start-column="72" selection-end-line="175" selection-end-column="72" />
             </state>
           </provider>
@@ -406,7 +406,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleRegionFigure.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
+            <state relative-caret-position="510">
               <caret line="34" column="22" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
             </state>
           </provider>
@@ -415,7 +415,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/EditorFigureFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
+            <state relative-caret-position="3675">
               <caret line="245" column="72" selection-start-line="245" selection-start-column="72" selection-end-line="245" selection-end-column="72" />
             </state>
           </provider>
@@ -424,8 +424,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractRegionFigure.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="129" column="37" selection-start-line="129" selection-start-column="37" selection-end-line="129" selection-end-column="37" />
+            <state relative-caret-position="334">
+              <caret line="51" column="163" selection-start-line="51" selection-start-column="163" selection-end-line="51" selection-end-column="163" />
             </state>
           </provider>
         </entry>
@@ -433,7 +433,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/text/CssPoint2DConverterTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="509">
+            <state relative-caret-position="555">
               <caret line="37" selection-start-line="16" selection-end-line="37" />
             </state>
           </provider>
@@ -442,7 +442,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssFont.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
+            <state relative-caret-position="1560">
               <caret line="104" selection-start-line="104" selection-end-line="104" />
             </state>
           </provider>
@@ -826,28 +826,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
-              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
-              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
-              <item name="org" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
-              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
-              <item name="org" type="1f31426a:PackageElementNode" />
-              <item name="jhotdraw8" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -942,14 +920,6 @@
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="text" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -989,15 +959,29 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="text" type="462c0819:PsiDirectoryNode" />
+              <item name="tree" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
+              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
             </path>
             <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
+              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
+              <item name="org" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
+              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
+              <item name="org" type="1f31426a:PackageElementNode" />
+              <item name="jhotdraw8" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -1371,7 +1355,7 @@
     <frame x="280" y="23" width="1714" height="1129" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.46603477" visible="true" weight="0.24940191" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.46603477" visible="true" weight="0.25538278" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -1906,73 +1890,73 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/io/DefaultFigureFactory.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/FontStyleableMapAccessor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="175" column="72" selection-start-line="175" selection-start-column="72" selection-end-line="175" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/EditorFigureFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="245" column="72" selection-start-line="245" selection-start-column="72" selection-end-line="245" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssFont.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="104" selection-start-line="104" selection-end-line="104" />
+        <state relative-caret-position="630">
+          <caret line="42" column="37" selection-start-line="42" selection-start-column="37" selection-end-line="42" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/xml/text/XmlCssFontConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
+        <state relative-caret-position="675">
           <caret line="45" column="4" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/FontStyleableMapAccessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-691">
-          <caret line="42" column="37" selection-start-line="42" selection-start-column="37" selection-end-line="42" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/text/CssPoint2DConverterTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="37" selection-start-line="16" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/text/CssFontConverterTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="45" selection-start-line="42" selection-end-line="45" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssFontConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
+        <state relative-caret-position="2505">
           <caret line="167" column="79" selection-start-line="167" selection-start-column="79" selection-end-line="167" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/text/CssFontConverterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="45" selection-start-line="42" selection-end-line="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/io/DefaultFigureFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2625">
+          <caret line="175" column="72" selection-start-line="175" selection-start-column="72" selection-end-line="175" selection-end-column="72" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleRegionFigure.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
+        <state relative-caret-position="510">
           <caret line="34" column="22" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ext/src/editorold/ch/systransis/arl/editor/io/EditorFigureFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3675">
+          <caret line="245" column="72" selection-start-line="245" selection-start-column="72" selection-end-line="245" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/text/CssPoint2DConverterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" selection-start-line="16" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssFont.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1560">
+          <caret line="104" selection-start-line="104" selection-end-line="104" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractRegionFigure.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="129" column="37" selection-start-line="129" selection-start-column="37" selection-end-line="129" selection-end-column="37" />
+        <state relative-caret-position="334">
+          <caret line="51" column="163" selection-start-line="51" selection-start-column="163" selection-end-line="51" selection-end-column="163" />
         </state>
       </provider>
     </entry>

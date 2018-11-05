@@ -49,7 +49,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Nonnull
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     @Nonnull
-    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
+    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "0,0 1,0 1,1 0,1z");
     @Nonnull
     public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
     @Nonnull
@@ -127,7 +127,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
         String pathstr = getStyled(SHAPE);
         if (pathstr==null||pathstr.isEmpty()) {
-            pathstr="0,0 1,0 1,1 0,1z";
+            return;
         }
 
         double width = getStyledNonnull(WIDTH).getConvertedValue();
