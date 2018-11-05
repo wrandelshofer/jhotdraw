@@ -246,8 +246,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         if (!Objects.equals(text, tn.getText())) {
             tn.setText(text);
         }
-        tn.setX(getNonnull(ORIGIN_X).getConvertedValue());
-        tn.setY(getNonnull(ORIGIN_Y).getConvertedValue());
+        tn.setX(getStyledNonnull(ORIGIN_X).getConvertedValue());
+        tn.setY(getStyledNonnull(ORIGIN_Y).getConvertedValue());
         applyTextFillableFigureProperties(tn);
         applyFontableFigureProperties(ctx, tn);
     }

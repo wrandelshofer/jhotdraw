@@ -117,10 +117,10 @@ public class SimpleLineFigure extends AbstractLeafFigure
         applyStrokeableFigureProperties(lineNode);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(lineNode);
-        Point2D start = getNonnull(START).getConvertedValue();
+        Point2D start = getStyledNonnull(START).getConvertedValue();
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());
-        Point2D end = getNonnull(END).getConvertedValue();
+        Point2D end = getStyledNonnull(END).getConvertedValue();
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
         lineNode.applyCss();

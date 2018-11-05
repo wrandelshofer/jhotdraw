@@ -115,6 +115,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
         applyTransformableFigureProperties(imageView);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
+        applyHideableFigureProperties(node);
         Rectangle2D r = getNonnull(BOUNDS).getConvertedValue();
         imageView.setX(r.getMinX());
         imageView.setY(r.getMinY());

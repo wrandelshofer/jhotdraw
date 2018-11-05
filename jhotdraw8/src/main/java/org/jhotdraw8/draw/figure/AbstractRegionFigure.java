@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+import java.io.IOException;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
@@ -25,6 +26,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -54,6 +56,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
     @Nonnull
     public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
+
+    public final static BooleanStyleableFigureKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableFigureKey("ShapePreserveRatio", DirtyMask.of(DirtyBits.NODE), false);
 
     private transient Path2D.Float pathElements;
 
@@ -116,17 +120,53 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     protected void layoutPath() {
-        String pathstr = getStyled(SHAPE);
-
         if (pathElements == null) {
-            pathElements = pathElements = new Path2D.Float();
+            pathElements = new Path2D.Float();
         }
         pathElements.reset();
-        Bounds b = new BoundingBox(
-                getStyledNonnull(X).getConvertedValue(),
-                getStyledNonnull(Y).getConvertedValue(),
-                getStyledNonnull(WIDTH).getConvertedValue(),
-                getStyledNonnull(HEIGHT).getConvertedValue());
+
+        String pathstr = getStyled(SHAPE);
+        if (pathstr==null) {
+            return;
+        }
+
+        double width = getStyledNonnull(WIDTH).getConvertedValue();
+        double height = getStyledNonnull(HEIGHT).getConvertedValue();
+        double x = getStyledNonnull(X).getConvertedValue();
+        double y = getStyledNonnull(Y).getConvertedValue();
+        final Bounds b;
+        if (getStyledNonnull(SHAPE_PRESERVE_RATIO_KEY)) {
+            AWTPathBuilder awtPathBuilder = new AWTPathBuilder(pathElements);
+            try {
+                Shapes.buildFromSvgString(awtPathBuilder, pathstr);
+                java.awt.geom.Rectangle2D bounds2D = awtPathBuilder.build().getBounds2D();
+                double pathRatio = bounds2D.getHeight()/bounds2D.getWidth();
+                double regionRatio = height/width;
+                if (pathRatio<regionRatio) {
+                    b = new BoundingBox(
+                            x,
+                            y,
+                            width,
+                            pathRatio * width);
+                }else{
+                    b = new BoundingBox(
+                            x,
+                            y,
+                            height/pathRatio,
+                            height);
+                }
+                pathElements.reset();
+            } catch (IOException e) {
+                System.err.println("Illegal SVG path:: "+pathstr);
+                return;
+            }
+        } else {
+            b = new BoundingBox(
+                    x,
+                    y,
+                    width,
+                    height);
+        }
         Shapes.reshape(pathstr, b, new AWTPathBuilder(pathElements));
     }
 }
