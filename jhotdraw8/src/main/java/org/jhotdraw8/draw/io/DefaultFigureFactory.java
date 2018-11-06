@@ -29,7 +29,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.css.text.CssPoint3DConverter;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.figure.BorderableFigure;
+import org.jhotdraw8.draw.figure.SecondStrokeableFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LabelAutorotate;
@@ -199,7 +199,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));
         addConverter(SimplePolylineFigure.POINTS,new CssListConverter<>(new CssPoint2DConverterOLD(false)));
         addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));
-        addConverter(BorderableFigure.BORDER_STROKE_DASH_ARRAY, new CssListConverter<>(new CssDoubleConverter(false)));
+        addConverter(SecondStrokeableFigure.SECOND_STROKE_DASH_ARRAY, new CssListConverter<>(new CssDoubleConverter(false)));
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
