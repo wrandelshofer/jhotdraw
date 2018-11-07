@@ -10,6 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
 import javax.annotation.Nonnull;
 
+import static java.lang.Math.min;
+
 /**
  * Reversed list provides a view on an underlying list with items ordered in
  * reverse.
@@ -102,7 +104,7 @@ public class ReversedList<E> extends TransformationList<E, E> {
     public void add(int index, E element) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
-        src.add(size - index, element);
+        src.add(size - min(size,index), element);
     }
 
     /**

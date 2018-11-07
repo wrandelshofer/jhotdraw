@@ -112,10 +112,10 @@ public class ListViewUtil {
 
                     if (reorderingOnly) {
                         // FIXME only supports single item drag
-                        int to = min(listViewItems.size()-1,droppedCellIndex);
+                        int to = min(listViewItems.size(), droppedCellIndex);
                         if (to < 0) {
-                            success=false;
-                        }else {
+                            success = false;
+                        } else {
                             T item = listViewItems.get(draggedCellIndex);
                             listViewItems.add(to, item);
                             success = true;

@@ -173,12 +173,12 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             ++modCount;
             endChange();
             return true;
-        } else if (oldIndex == index || oldIndex == index - 1) {
+        } else if (oldIndex == index) {
             // the element is already in the list at the desired index
             return false;
         } else {
             // the old element is permuted from the old index to the desired index
-            move(oldIndex, oldIndex < index ? index - 1 : index);
+            move(oldIndex, index);
             return false;
         }
     }
