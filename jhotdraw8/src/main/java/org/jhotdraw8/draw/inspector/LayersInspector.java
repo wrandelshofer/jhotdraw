@@ -377,7 +377,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                     }
                     event.consume();
 
-                }11
+                }
             }
 
             private boolean isAcceptable(DragEvent event) {
