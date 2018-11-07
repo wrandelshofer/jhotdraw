@@ -104,12 +104,12 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     public AbstractLabelFigure(Point2D position) {
         this(position.getX(), position.getY());
-        set(FILL, null);
-        set(STROKE, null);
     }
 
     public AbstractLabelFigure(double x, double y) {
         set(ORIGIN, new CssPoint2D(x, y));
+        set(FILL, null);
+        set(STROKE, null);
     }
     
     @Nonnull

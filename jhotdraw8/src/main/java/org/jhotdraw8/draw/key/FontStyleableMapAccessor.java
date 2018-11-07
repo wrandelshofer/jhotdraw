@@ -11,6 +11,8 @@ import javafx.css.StyleableProperty;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssSize;
@@ -96,12 +98,19 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     }
 
     @Override
-    public CssFont put(Map<? super Key<?>, Object> a, @Nonnull CssFont value) {
+    public CssFont put(Map<? super Key<?>, Object> a, @Nullable CssFont value) {
         CssFont oldValue = get(a);
-        familyKey.put(a, value.getFamily());
-        weightKey.put(a, value.getWeight());
-        postureKey.put(a, value.getPosture());
-        sizeKey.put(a, value.getSize());
+        if (value==null) {
+            familyKey.put(a,null);
+            weightKey.put(a,null);
+            postureKey.put(a,null);
+            sizeKey.put(a,null);
+        }else {
+            familyKey.put(a, value.getFamily());
+            weightKey.put(a, value.getWeight());
+            postureKey.put(a, value.getPosture());
+            sizeKey.put(a, value.getSize());
+        }
         return oldValue;
     }
 

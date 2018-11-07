@@ -101,7 +101,7 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
         shape.setCenterX(getStyledNonnull(CENTER_X).getConvertedValue());
         shape.setCenterY(getStyledNonnull(CENTER_Y).getConvertedValue());
 
-        double strokeWidth = getStyledNonnull(STROKE_WIDTH);
+        double strokeWidth = getStyledNonnull(STROKE_WIDTH).getConvertedValue();
         double offset;
         switch (getStyledNonnull(STROKE_TYPE)) {
             case CENTERED:

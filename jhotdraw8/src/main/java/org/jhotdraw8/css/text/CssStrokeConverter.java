@@ -21,6 +21,19 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
+
+    public static final String INSIDE = "inside";
+    public static final String OUTSIDE = "outside";
+    public static final String CENTERED = "centered";
+    public static final String BUTT = "butt";
+    public static final String MITER = "miter";
+    public static final String ROUND = "round";
+    public static final String BEVEL = "bevel";
+    public static final String SQUARE = "square";
+    public static final String DASH_OFFSET = "dash-offset";
+    public static final String DASH_ARRAY = "dash-array";
+    public static final String MITER_LIMIT = "miter-limit";
+
     public CssStrokeConverter(boolean nullable) {
         super(nullable);
     }
@@ -28,20 +41,20 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
     @Nonnull
     @Override
     public CssStroke parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        CssSize width=                parseSize("width",new CssSize(1.0),tt,idFactory);
+        CssSize width = parseSize("width", new CssSize(1.0), tt, idFactory);
         Paintable paint = new CssPaintableConverter(true).parse(tt, idFactory);
 
         StrokeType type;
         switch (tt.next()) {
             case CssTokenType.TT_IDENT: {
                 switch (tt.currentStringNonnull()) {
-                    case "inside":
+                    case INSIDE:
                         type = StrokeType.INSIDE;
                         break;
-                    case "outside":
+                    case OUTSIDE:
                         type = StrokeType.OUTSIDE;
                         break;
-                    case "centered":
+                    case CENTERED:
                         type = StrokeType.CENTERED;
                         break;
                     default:
@@ -56,18 +69,17 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
                 tt.pushBack();
         }
 
-
         StrokeLineCap lineCap;
         switch (tt.next()) {
             case CssTokenType.TT_IDENT: {
                 switch (tt.currentStringNonnull()) {
-                    case "square":
+                    case SQUARE:
                         lineCap = StrokeLineCap.SQUARE;
                         break;
-                    case "butt":
+                    case BUTT:
                         lineCap = StrokeLineCap.BUTT;
                         break;
-                    case "round":
+                    case ROUND:
                         lineCap = StrokeLineCap.ROUND;
                         break;
                     default:
@@ -86,35 +98,69 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         switch (tt.next()) {
             case CssTokenType.TT_IDENT: {
                 switch (tt.currentStringNonnull()) {
-                    case "miter":
+                    case MITER:
                         lineJoin = StrokeLineJoin.MITER;
                         break;
-                    case "bevel":
+                    case BEVEL:
                         lineJoin = StrokeLineJoin.BEVEL;
                         break;
-                    case "round":
+                    case ROUND:
                         lineJoin = StrokeLineJoin.ROUND;
                         break;
                     default:
-                        lineJoin = StrokeLineJoin.BEVEL;
+                        lineJoin = StrokeLineJoin.MITER;
                         tt.pushBack();
                         break;
                 }
                 break;
             }
             default:
-                lineJoin = StrokeLineJoin.BEVEL;
+                lineJoin = StrokeLineJoin.MITER;
                 tt.pushBack();
         }
-        CssSize miterLimit = parseNumericFunction("miter-limit", new CssSize(10), tt, idFactory);
-        CssSize dashOffset = parseNumericFunction("dash-offset", new CssSize(10), tt, idFactory);
-        ImmutableList<CssSize> dashArray = parseDashArray(tt, idFactory);
 
-        return new CssStroke(width,paint,type, lineCap, lineJoin, miterLimit,dashOffset,dashArray);
+        CssSize miterLimit = new CssSize(4);
+        CssSize dashOffset = new CssSize(0);
+        ImmutableList<CssSize> dashArray = ImmutableList.emptyList();
+
+        while (tt.next() == CssTokenType.TT_FUNCTION) {
+            tt.pushBack();
+            switch (tt.currentStringNonnull()) {
+                case MITER_LIMIT:
+                    miterLimit = parseNumericFunction(MITER_LIMIT, new CssSize(10), tt, idFactory);
+                    break;
+                case DASH_OFFSET:
+                    dashOffset = parseNumericFunction(DASH_OFFSET, new CssSize(0), tt, idFactory);
+                    break;
+                case DASH_ARRAY:
+                    dashArray = parseDashArray(tt, idFactory);
+                    break;
+                default:
+                    throw new ParseException("⟨Stroke⟩: Unsupported function: " + tt.currentStringNonnull(), tt.getStartPosition());
+            }
+        }
+
+        return new CssStroke(width, paint, type, lineCap, lineJoin, miterLimit, dashOffset, dashArray);
     }
 
     private ImmutableList<CssSize> parseDashArray(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() == CssTokenType.TT_FUNCTION) {
+            if (!DASH_ARRAY.equals(tt.currentStringNonnull())) {
+                tt.pushBack();
+                return ImmutableList.emptyList();
+            }
+        } else {
+            tt.pushBack();
+            return ImmutableList.emptyList();
+        }
         List<CssSize> list = new ArrayList<>();
+        while (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_DIMENSION) {
+            tt.pushBack();
+            list.add(parseSize(DASH_ARRAY, null, tt, idFactory));
+
+        }
+        tt.pushBack();
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨Stroke⟩: ⟨" + DASH_ARRAY + "⟩ right bracket expected.");
         return ImmutableList.ofCollection(list);
     }
 
@@ -122,20 +168,20 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         CssSize value;
         if (tt.next() == CssTokenType.TT_FUNCTION) {
             if (functionName.equals(tt.currentStringNonnull())) {
-                value=parseSize(functionName,defaultValue,tt,idFactory);
-                tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "right bracket expected.");
+                value = parseSize(functionName, defaultValue, tt, idFactory);
+                tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨Stroke⟩: ⟨" + functionName + "⟩ right bracket expected.");
             } else {
                 value = defaultValue;
                 tt.pushBack();
             }
         } else {
-            value=defaultValue;
+            value = defaultValue;
             tt.pushBack();
         }
         return value;
     }
 
-    private CssSize parseSize(String name, CssSize defaultValue,CssTokenizer tt, IdFactory idFactory)  throws ParseException, IOException{
+    private CssSize parseSize(String name, CssSize defaultValue, CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
         CssSize value;
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
@@ -168,11 +214,95 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
 
     @Override
     protected <TT extends CssStroke> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
-       CssSize width=value.getWidth();
-       if (width.getConvertedValue()!=1.0) {
-           out.accept(new CssToken(CssTokenType.TT_DIMENSION,width.getUnits(),width.getValue()));
-       }
-       new CssPaintableConverter(true).produceTokens(value.getPaint(),idFactory,out);
-       // FIXME implement the rest
+        boolean needsSpace = false;
+        CssSize width = value.getWidth();
+        if (width.getConvertedValue() != 1.0) {
+            out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getValue(), width.getUnits()));
+            needsSpace = true;
+        }
+        if (needsSpace) {
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+        }
+        new CssPaintableConverter(true).produceTokens(value.getPaint(), idFactory, out);
+
+        switch (value.getType()) {
+            case INSIDE:
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, INSIDE));
+                break;
+            case OUTSIDE:
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, OUTSIDE));
+                break;
+            case CENTERED:
+                // this is the default value
+                break;
+        }
+
+        boolean mustPrintLineCap = value.getLineJoin() != StrokeLineJoin.MITER;
+        boolean mustPrintLineJoin = value.getLineCap() != StrokeLineCap.BUTT;
+
+        switch (value.getLineCap()) {
+            case BUTT:
+                if (mustPrintLineCap) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, BUTT));
+                }
+                break;
+            case ROUND:
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, ROUND));
+                break;
+            case SQUARE:
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, SQUARE));
+                break;
+        }
+        switch (value.getLineJoin()) {
+            case BEVEL:
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, BUTT));
+                break;
+            case ROUND:
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, ROUND));
+                break;
+            case MITER:
+                if (mustPrintLineJoin) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, MITER));
+                }
+                break;
+        }
+
+        CssSize miterLimit = value.getMiterLimit();
+        if (miterLimit.getUnits() != null || miterLimit.getConvertedValue() != 4.0) {
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION, MITER_LIMIT));
+            out.accept(new CssToken(CssTokenType.TT_DIMENSION, miterLimit.getValue(), miterLimit.getUnits()));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+        }
+
+        CssSize dashOffset = value.getDashOffset();
+        if (dashOffset.getUnits() != null || dashOffset.getConvertedValue() != 0.0) {
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASH_OFFSET));
+            out.accept(new CssToken(CssTokenType.TT_DIMENSION, dashOffset.getValue(), dashOffset.getUnits()));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+        }
+
+        ImmutableList<CssSize> dashArray = value.getDashArray();
+        if (!dashArray.isEmpty()) {
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASH_ARRAY));
+            for (int i = 0, n = dashArray.size(); i < n; i++) {
+                if (i != 0) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                }
+                CssSize dash = dashArray.get(i);
+                out.accept(new CssToken(CssTokenType.TT_DIMENSION, dash.getValue(), dash.getUnits()));
+            }
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+        }
     }
 }

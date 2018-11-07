@@ -62,7 +62,7 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
     @Override
     protected <TT extends CssPoint2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         CssSize x = value.getX();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getUnits(),x.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
@@ -70,7 +70,7 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         CssSize y = value.getY();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, y.getUnits(),y.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, y.getValue(), y.getUnits()));
     }
 
     @Override

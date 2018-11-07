@@ -22,6 +22,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -122,17 +123,27 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
     }
 
     @Override
-    public CssStroke put(Map<? super Key<?>, Object> a, @Nonnull CssStroke value) {
+    public CssStroke put(Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
         CssStroke oldValue = get(a);
-        widthKey.put(a, value.getWidth());
-        paintKey.put(a, value.getPaint());
-        dashOffsetKey.put(a, value.getDashOffset());
-        dashArrayKey.put(a, value.getDashArray());
-        typeKey.put(a, value.getType());
-        lineJoinKey.put(a, value.getLineJoin());
-        lineCapKey.put(a, value.getLineCap());
-        miterLimitKey.put(a, value.getMiterLimit());
-
+        if (value==null) {
+            widthKey.put(a, CssSize.ONE);
+            paintKey.put(a, null);
+            dashOffsetKey.put(a, CssSize.ZERO);
+            dashArrayKey.put(a, ImmutableList.emptyList());
+            typeKey.put(a, StrokeType.CENTERED);
+            lineJoinKey.put(a, StrokeLineJoin.MITER);
+            lineCapKey.put(a, StrokeLineCap.SQUARE);
+            miterLimitKey.put(a, new CssSize(10.0));
+        }else {
+            widthKey.put(a, value.getWidth());
+            paintKey.put(a, value.getPaint());
+            dashOffsetKey.put(a, value.getDashOffset());
+            dashArrayKey.put(a, value.getDashArray());
+            typeKey.put(a, value.getType());
+            lineJoinKey.put(a, value.getLineJoin());
+            lineCapKey.put(a, value.getLineCap());
+            miterLimitKey.put(a, value.getMiterLimit());
+        }
         return oldValue;
     }
 

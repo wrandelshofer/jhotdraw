@@ -62,7 +62,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
         StreamCssTokenizer tt = new StreamCssTokenizer(value.getName());
         try {
             while (tt.next() != CssTokenType.TT_EOF) {
-                out.accept(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
+                out.accept(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
             }
         } catch (IOException e) {
             throw new AssertionError("unexpected io exception", e);
@@ -123,7 +123,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                 switch (tt.currentStringNonnull()) {
                     case "rgb":
                         while (i < 3 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
+                            buf.append(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
                             values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() / 255.0 : tt.currentNumberNonnull().doubleValue() / 100.0;
                             if (i < 3) {
                                 if (tt.next() != ',') {
@@ -146,7 +146,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                         break;
                     case "rgba":
                         while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
+                            buf.append(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
                             if (i < 3) {
                                 values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() / 255.0 : tt.currentNumberNonnull().doubleValue() / 100.0;
                             } else {
@@ -173,7 +173,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                         break;
                     case "hsb":
                         while (i < 3 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
+                            buf.append(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
                             if (i < 1) {
                                 values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() * 3.6;
                             } else {
@@ -200,7 +200,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                         break;
                     case "hsba":
                         while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
-                            buf.append(new CssToken(tt.current(), tt.currentString(), tt.currentNumber()));
+                            buf.append(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
                             if (i < 1) {
                                 values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonnull().doubleValue() : tt.currentNumberNonnull().doubleValue() * 3.6;
                             } else if (i < 3) {

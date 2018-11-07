@@ -194,8 +194,8 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
-        addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssListConverter<>(new CssDoubleConverter(false)));
-        addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssDoubleConverter(false)));
+        addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
+        addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));
         addConverter(SimplePolylineFigure.POINTS,new CssListConverter<>(new CssPoint2DConverterOLD(false)));
         addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));

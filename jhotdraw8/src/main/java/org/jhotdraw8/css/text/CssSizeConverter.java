@@ -95,14 +95,14 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else if (value.getUnits() == null || "".equals(value.getUnits())) {
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, "", value.getValue()));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getValue(), ""));
         } else {
             switch (value.getUnits()) {
                 case "%":
-                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, "%", value.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, value.getValue(), "%"));
                     break;
                 default:
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, value.getUnits(), value.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, value.getValue(), value.getUnits()));
                     break;
             }
         }

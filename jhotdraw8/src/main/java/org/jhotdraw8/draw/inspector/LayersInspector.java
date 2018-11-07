@@ -3,15 +3,6 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -37,11 +28,9 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.jhotdraw8.collection.ReversedList;
-import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.SimpleLayer;
@@ -50,6 +39,18 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * FXML Controller class
@@ -125,7 +126,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     private void onSelectionChanged() {
         if (!isUpdateSelection) {
             isUpdateSelection = true;
-            Platform.runLater((Runnable)this::updateSelection);
+            Platform.runLater((Runnable) this::updateSelection);
         }
     }
 
@@ -268,7 +269,8 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     @Nullable
-    private Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(@Nonnull ListView<Figure> listView, @Nonnull Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
+    private Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(
+            @Nonnull ListView<Figure> listView, @Nonnull Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
     ) {
         SelectionLabelDnDSupport dndSupport = new SelectionLabelDnDSupport(listView, clipboardIO);
         Callback<ListView<Figure>, ListCell<Figure>> dndCellFactory = lv -> {
@@ -316,11 +318,11 @@ public class LayersInspector extends AbstractDrawingInspector {
                 }
                 if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
                     Label draggedLabel = (Label) event.getSource();
-                    Node parent=draggedLabel;
-                    while (parent!=null&&!(parent instanceof LayerCell)) {
-                        parent=parent.getParent();
+                    Node parent = draggedLabel;
+                    while (parent != null && !(parent instanceof LayerCell)) {
+                        parent = parent.getParent();
                     }
-                    if (parent==null) {
+                    if (parent == null) {
                         return;
                     }
                     LayerCell cell = (LayerCell) parent;
@@ -345,54 +347,52 @@ public class LayersInspector extends AbstractDrawingInspector {
         @Nonnull
         EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
 
-                @Override
-                public void handle(DragEvent event) {
-                    if (event.isConsumed()) {
-                        return;
-                    }
-                    EventType<DragEvent> t = event.getEventType();
-                    if (t == DragEvent.DRAG_DROPPED) {
-                        onDragDropped(event);
-                    } else if (t == DragEvent.DRAG_OVER) {
-                        onDragOver(event);
-                    }
+            @Override
+            public void handle(DragEvent event) {
+                if (event.isConsumed()) {
+                    return;
                 }
+                EventType<DragEvent> t = event.getEventType();
+                if (t == DragEvent.DRAG_DROPPED) {
+                    onDragDropped(event);
+                } else if (t == DragEvent.DRAG_OVER) {
+                    onDragOver(event);
+                }
+            }
 
-                private void onDragDropped(@Nonnull DragEvent event) {
-                    if (isAcceptable(event)) {
-                        event.acceptTransferModes(TransferMode.MOVE);
-                        List<Figure> items = listView.getItems();
+            private void onDragDropped(@Nonnull DragEvent event) {
+                if (isAcceptable(event)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                    List<Figure> items = listView.getItems();
 
-                        LayerCell source = (LayerCell) event.getSource();
-                        int droppedCellIndex = source.getIndex();
-                        Figure to = droppedCellIndex>=0&&droppedCellIndex<items.size()?items.get(droppedCellIndex):null;
-                        Figure from =draggedCellIndex>=0&&draggedCellIndex<items.size()? items.get(draggedCellIndex):null;
-                        if (to!=null&&from!=null) {
+                    LayerCell source = (LayerCell) event.getSource();
+                    int droppedCellIndex = source.getIndex();
+                    Figure to = droppedCellIndex >= 0 && droppedCellIndex < items.size() ? items.get(droppedCellIndex) : null;
+                    Figure from = draggedCellIndex >= 0 && draggedCellIndex < items.size() ? items.get(draggedCellIndex) : null;
+                    if (to != null && from != null) {
                         moveSelectedFiguresFromToLayer((Layer) from, (Layer) to);
                         event.setDropCompleted(true);
-                        }else{
-                            event.setDropCompleted(false);
-                        }
-                        event.consume();
-
+                    } else {
+                        event.setDropCompleted(false);
                     }
+                    event.consume();
+
+                }11
+            }
+
+            private boolean isAcceptable(DragEvent event) {
+                boolean isAcceptable = (event.getGestureSource() instanceof Label)
+                        && (((Label) event.getGestureSource()).getParent().getParent() instanceof LayerCell)
+                        && ((LayerCell) ((Label) event.getGestureSource()).getParent().getParent()).getListView() == listView;
+                return isAcceptable;
+            }
+
+            private void onDragOver(@Nonnull DragEvent event) {
+                if (isAcceptable(event)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                    event.consume();
                 }
-
-                private boolean isAcceptable(DragEvent event) {
-                    boolean isAcceptable = (event.getGestureSource() instanceof Label)
-                            && (((Label) event.getGestureSource()).getParent().getParent() instanceof LayerCell)
-                            && ((LayerCell) ((Label) event.getGestureSource()).getParent().getParent()).getListView() == listView;
-                    return isAcceptable;
-                }
-
-                private void onDragOver(@Nonnull DragEvent event) {
-                    if (isAcceptable(event)) {
-                        event.acceptTransferModes(TransferMode.MOVE);
-                        event.consume();
-                    }
-                }
-
-
+            }
 
 
         };

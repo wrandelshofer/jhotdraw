@@ -3,37 +3,41 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.BasicStroke;
-import static java.lang.Math.abs;
-
-import java.util.Objects;
+import ch.systransis.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.ListStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
+import java.util.Objects;
+
+import static java.lang.Math.abs;
 
 /**
  * Interface for figures which render a {@code javafx.scene.shape.Shape} and can
  * be stroked.
  *
- * @design.pattern Figure Mixin, Traits.
- *
- * FIXME most doubles should be CSS sizes!
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern Figure Mixin, Traits.
+ * <p>
+ * FIXME most doubles should be CSS sizes!
  */
 public interface StrokeableFigure extends Figure {
 
@@ -46,7 +50,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleStyleableFigureKey STROKE_DASH_OFFSET = new DoubleStyleableFigureKey("stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), 0.0);
+    CssSizeStyleableFigureKey STROKE_DASH_OFFSET = new CssSizeStyleableFigureKey("stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -55,7 +59,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static EnumStyleableFigureKey<StrokeLineCap> STROKE_LINE_CAP = new EnumStyleableFigureKey<>("stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineCap.BUTT);
+    EnumStyleableFigureKey<StrokeLineCap> STROKE_LINE_CAP = new EnumStyleableFigureKey<>("stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -65,7 +69,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static EnumStyleableFigureKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineJoin.MITER);
+    EnumStyleableFigureKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style.
      * <p>
@@ -76,7 +80,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleStyleableFigureKey STROKE_MITER_LIMIT = new DoubleStyleableFigureKey("stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), 4.0);
+    CssSizeStyleableFigureKey STROKE_MITER_LIMIT = new CssSizeStyleableFigureKey("stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(10.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
@@ -86,13 +90,13 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static PaintableStyleableFigureKey STROKE = new PaintableStyleableFigureKey("stroke", new CssColor("black", Color.BLACK));
+    PaintableStyleableFigureKey STROKE = new PaintableStyleableFigureKey("stroke", new CssColor("black", Color.BLACK));
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    public static EnumStyleableFigureKey<StrokeType> STROKE_TYPE = new EnumStyleableFigureKey<>("stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false, StrokeType.CENTERED);
+    EnumStyleableFigureKey<StrokeType> STROKE_TYPE = new EnumStyleableFigureKey<>("stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false, StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -103,21 +107,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleStyleableFigureKey STROKE_WIDTH = new DoubleStyleableFigureKey("stroke-width", DirtyMask.of(DirtyBits.NODE), 1.0);
-    /**
-     * Defines the opacity of the outline of the figure.
-     * <p>
-     * Default value: {@code 1.0}.
-     * <p>
-     * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
-     * /
-     * public static DoubleStyleableFigureKey STROKE_OPACITY = new
-     * DoubleStyleableFigureKey("stroke-opacity", DirtyMask.of(DirtyBits.NODE),
-     * 1.0);
-     */
+    CssSizeStyleableFigureKey STROKE_WIDTH = new CssSizeStyleableFigureKey("stroke-width", DirtyMask.of(DirtyBits.NODE), CssSize.ONE);
     /**
      * Defines the dash array used. Default value: {@code empty array}.
      * <p>
@@ -126,7 +116,14 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleListStyleableFigureKey STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableList.emptyList());
+    ListStyleableFigureKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableFigureKey<>("stroke-dasharray", DirtyMask.of(DirtyBits.NODE),
+            CssSize.class, new CssSizeConverter(false), ImmutableList.emptyList());
+
+    /**
+     * Combined map accessor for all stroke style properties.
+     */
+    StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style", STROKE_WIDTH,
+            STROKE, STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
 
     default void applyStrokeCapAndJoinProperties(@Nonnull Shape shape) {
         double d;
@@ -138,20 +135,24 @@ public interface StrokeableFigure extends Figure {
         if (shape.getStrokeLineJoin() != slj) {
             shape.setStrokeLineJoin(slj);
         }
-        d = getStyled(STROKE_MITER_LIMIT);
+        d = getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue();
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
     }
 
     default void applyStrokeDashProperties(@Nonnull Shape shape) {
-        double d = getStyled(STROKE_DASH_OFFSET);
+        double d = getStyledNonnull(STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        ImmutableList<Double> dashArray = getStyled(STROKE_DASH_ARRAY);
-        if (!dashArray.equals(shape.getStrokeDashArray())) {
-            shape.getStrokeDashArray().setAll(dashArray.toArray(new Double[dashArray.size()]));
+        ImmutableList<CssSize> dashArray = getStyledNonnull(STROKE_DASH_ARRAY);
+        if (dashArray.isEmpty()) {
+            shape.getStrokeDashArray().clear();
+        } else {
+            ArrayList<Double> list = new ArrayList<>(dashArray.size());
+            for (CssSize sz : dashArray) list.add(sz.getConvertedValue());
+            shape.getStrokeDashArray().setAll(list);
         }
     }
 
@@ -188,16 +189,16 @@ public interface StrokeableFigure extends Figure {
     }
 
     default void applyStrokeWidthProperties(@Nonnull Shape shape) {
-        double d = getStyled(STROKE_WIDTH);
+        double d = getStyledNonnull(STROKE_WIDTH).getConvertedValue();
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);
         }
 
     }
 
-        @Nonnull
-        default BasicStroke getStyledStroke() {
-        final double width = getStyled(STROKE_WIDTH);
+    @Nonnull
+    default BasicStroke getStyledStroke() {
+        final double width = getStyledNonnull(STROKE_WIDTH).getConvertedValue();
         final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);
         final int basicCap;
         switch (cap) {
@@ -212,23 +213,17 @@ public interface StrokeableFigure extends Figure {
                 basicCap = BasicStroke.CAP_SQUARE;
                 break;
         }
-        final ImmutableList<Double> dashlist = getStyled(STROKE_DASH_ARRAY);
+        final ImmutableList<CssSize> dashlist = getStyledNonnull(STROKE_DASH_ARRAY);
         float[] dasharray;
         if (dashlist.isEmpty()) {
             dasharray = null;
         } else {
             dasharray = new float[dashlist.size()];
-            boolean allZero = true;
-            for (int i = 0; i < dasharray.length; i++) {
-                dasharray[i] = abs(dashlist.get(i).floatValue());
-                allZero &= dasharray[i] == 0f;
-            }
-            if (allZero) {
-                dasharray = null;
-            }
+            int i=0;
+            for (CssSize sz : dashlist) dasharray[i++]=(float)sz.getConvertedValue();
         }
-        final double dashoffset = getStyled(STROKE_DASH_OFFSET);
-        final StrokeLineJoin join = getStyled(STROKE_LINE_JOIN);
+        final double dashoffset = getStyledNonnull(STROKE_DASH_OFFSET).getConvertedValue();
+        final StrokeLineJoin join = getStyledNonnull(STROKE_LINE_JOIN);
         final int basicJoin;
         switch (join) {
             case BEVEL:
@@ -242,7 +237,7 @@ public interface StrokeableFigure extends Figure {
                 basicJoin = BasicStroke.JOIN_ROUND;
                 break;
         }
-        final double miterlimit = getStyled(STROKE_MITER_LIMIT);
+        final double miterlimit = getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue();
 
         return new BasicStroke((float) width, basicCap, basicJoin, (float) miterlimit, dasharray, (float) dashoffset);
 

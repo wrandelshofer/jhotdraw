@@ -69,7 +69,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         if (focusAngle != 0.0) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, "focus-angle"));
             out.accept(new CssToken(CssTokenType.TT_S, " "));
-            out.accept(new CssToken(CssTokenType.TT_DIMENSION, "deg", focusAngle));
+            out.accept(new CssToken(CssTokenType.TT_DIMENSION, focusAngle, "deg"));
             needsComma = true;
         }
         if (focusDistance != 0.0) {

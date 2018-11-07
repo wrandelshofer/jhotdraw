@@ -5,14 +5,19 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.StringStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 /**
  * SimplePageLabelFigure.
@@ -22,14 +27,15 @@ import org.jhotdraw8.draw.render.RenderContext;
  */
 public class SimplePageLabelFigure extends AbstractLabelFigure
         implements HideableFigure, FontableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
- public final static String TYPE_SELECTOR = "PageLabel";
+    public final static String TYPE_SELECTOR = "PageLabel";
     public final static String NUM_PAGES_PLACEHOLDER = "${numPages}";
     public final static String PAGE_PLACEHOLDER = "${page}";
+    public final static String DATE_PLACEHOLDER = "${date}";
     /**
      * The text. Default value: {@code ""}.
      */
     public final static StringStyleableFigureKey TEXT_WITH_PLACEHOLDERS = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "",
-            "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER);
+            "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER + ", " + DATE_PLACEHOLDER);
 
     public SimplePageLabelFigure() {
         this(0, 0, "");
@@ -44,7 +50,7 @@ public class SimplePageLabelFigure extends AbstractLabelFigure
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
             @SuppressWarnings("unchecked") // the set() method will perform the check for us
-            Key<Object> key = (Key<Object>) keyValues[i];
+                    Key<Object> key = (Key<Object>) keyValues[i];
             set(key, keyValues[i + 1]);
         }
     }
@@ -52,14 +58,19 @@ public class SimplePageLabelFigure extends AbstractLabelFigure
     @Override
     protected String getText(@Nullable RenderContext ctx) {
         String text = get(TEXT_WITH_PLACEHOLDERS);
-        final Integer pageNumber = ctx==null?0:ctx.get(RenderContext.RENDER_PAGE_NUMBER);
-        final Integer numPages =ctx==null?0:ctx.get(RenderContext.RENDER_NUMBER_OF_PAGES);
+        final Integer pageNumber = ctx == null ? 0 : ctx.get(RenderContext.RENDER_PAGE_NUMBER);
+        final Integer numPages = ctx == null ? 0 : ctx.get(RenderContext.RENDER_NUMBER_OF_PAGES);
+        final Instant timestamp = ctx == null ? Instant.now() : ctx.get(RenderContext.RENDER_TIMESTAMP);
+        final String date = timestamp == null ? null : DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(timestamp.atZone(ZoneId.systemDefault()).toLocalDate());
 
         if (pageNumber != null) {
             text = replaceAll(text, PAGE_PLACEHOLDER, "" + (pageNumber + 1));
         }
         if (numPages != null) {
             text = replaceAll(text, NUM_PAGES_PLACEHOLDER, "" + numPages);
+        }
+        if (date != null) {
+            text = replaceAll(text, DATE_PLACEHOLDER, date);
         }
 
         return text;
@@ -79,8 +90,9 @@ public class SimplePageLabelFigure extends AbstractLabelFigure
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
-        applyHideableFigureProperties(node);                
+        applyHideableFigureProperties(node);
     }
+
     @Nonnull
     @Override
     public String getTypeSelector() {

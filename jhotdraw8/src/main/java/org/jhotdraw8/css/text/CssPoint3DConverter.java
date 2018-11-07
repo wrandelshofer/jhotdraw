@@ -64,7 +64,7 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
     @Override
     protected <TT extends CssPoint3D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         CssSize x = value.getX();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getUnits(),x.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
@@ -72,7 +72,7 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         CssSize y = value.getY();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, y.getUnits(),y.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, y.getValue(), y.getUnits()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
@@ -80,7 +80,7 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         CssSize z = value.getZ();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, z.getUnits(),z.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, z.getValue(), z.getUnits()));
     }
 
     @Override

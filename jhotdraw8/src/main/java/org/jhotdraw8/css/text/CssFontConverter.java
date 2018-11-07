@@ -3,22 +3,20 @@
  */
 package org.jhotdraw8.css.text;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.function.Consumer;
-
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.function.Consumer;
 
 /**
  * CssFontConverter.
@@ -86,17 +84,21 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
                         out.accept(new CssToken(CssTokenType.TT_S, " "));
                     }
                     out.accept(new CssToken(CssTokenType.TT_IDENT, BOLD_WEIGHT));
+                    needsSpace = true;
                     break;
                 default:
                     if (needsSpace) {
                         out.accept(new CssToken(CssTokenType.TT_S, " "));
                     }
                     out.accept(new CssToken(CssTokenType.TT_NUMBER, weight.getWeight()));
+                    needsSpace = true;
                     break;
             }
         }
-        out.accept(new CssToken(CssTokenType.TT_S, " "));
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, fontSize.getUnits(), fontSize.getValue()));
+        if (needsSpace) {
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+        }
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, fontSize.getValue(), fontSize.getUnits()));
         out.accept(new CssToken(CssTokenType.TT_S, " "));
         if (fontFamily.contains(" ") || fontFamily.contains("\'") || fontFamily.contains("\"")) {
             out.accept(new CssToken(CssTokenType.TT_STRING, fontFamily));

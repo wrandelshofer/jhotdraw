@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -162,6 +163,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
                 hints.put(RenderContext.RENDER_NUMBER_OF_PAGES, numberOfPages);
                 hints.put(RenderContext.RENDER_PAGE_NUMBER, pageNumber);
                 hints.put(RenderContext.RENDER_PAGE_INTERNAL_NUMBER, internalPageNumber);
+                hints.put(RenderContext.RENDER_TIMESTAMP, Instant.now());
                 renderer.getProperties().putAll(hints);
                 renderer.render(drawing);
                 final Node pageNode = renderer.getNode(page);

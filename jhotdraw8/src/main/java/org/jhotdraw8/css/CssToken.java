@@ -57,7 +57,7 @@ public class CssToken /*extends AST*/ {
 
     }
 
-    public CssToken(int ttype, String stringValue, Number numericValue) {
+    public CssToken(int ttype, Number numericValue, String stringValue) {
         this(ttype, stringValue, numericValue, null, 0, 0, 1);
     }
 

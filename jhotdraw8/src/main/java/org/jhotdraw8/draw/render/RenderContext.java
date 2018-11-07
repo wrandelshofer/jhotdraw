@@ -12,6 +12,8 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.draw.figure.Page;
 
+import java.time.Instant;
+
 /**
  * RenderContext.
  *
@@ -52,6 +54,7 @@ public interface RenderContext extends PropertyBean {
     Key<Integer> RENDER_PAGE_NUMBER = new ObjectKey<>("renderPageNumber", Integer.class, 0);
     Key<Integer> RENDER_NUMBER_OF_PAGES = new ObjectKey<>("renderNumberOfPages", Integer.class, 1);
     Key<Integer> RENDER_PAGE_INTERNAL_NUMBER = new ObjectKey<>("renderPageInternalNumber", Integer.class, 0);
+    Key<Instant> RENDER_TIMESTAMP = new ObjectKey<>("renderTimestamp", Instant.class, Instant.now());
     // ---
     // behavior
     // ---

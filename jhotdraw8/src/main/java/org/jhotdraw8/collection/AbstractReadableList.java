@@ -11,7 +11,7 @@ public abstract class AbstractReadableList<E> implements ReadableList<E> {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ReadableList))
+        if (!(o instanceof Iterable))
             return false;
 
         Iterator<E> e1 = iterator();

@@ -5,6 +5,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.collection.ImmutableList;
 
+import java.util.Objects;
+
 public class CssStroke {
     private final CssSize width;
     private final Paintable paint;
@@ -14,6 +16,16 @@ public class CssStroke {
     private final StrokeLineJoin lineJoin;
     private final StrokeLineCap lineCap;
     private final CssSize miterLimit;
+
+    public CssStroke(Paintable paint) {
+        this(CssSize.ONE,paint,StrokeType.CENTERED,StrokeLineCap.BUTT, StrokeLineJoin.MITER,new CssSize(4.0),
+                CssSize.ZERO,ImmutableList.emptyList());
+    }
+
+    public CssStroke(CssSize width, Paintable paint) {
+        this(width,paint,StrokeType.CENTERED,StrokeLineCap.BUTT, StrokeLineJoin.MITER,new CssSize(4.0),
+                CssSize.ZERO,ImmutableList.emptyList());
+    }
 
     public CssStroke(CssSize width, Paintable paint, StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,
                      CssSize dashOffset,
@@ -58,5 +70,43 @@ public class CssStroke {
 
     public CssSize getMiterLimit() {
         return miterLimit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CssStroke cssStroke = (CssStroke) o;
+        return Objects.equals(width, cssStroke.width) &&
+                Objects.equals(paint, cssStroke.paint) &&
+                Objects.equals(dashOffset, cssStroke.dashOffset) &&
+                Objects.equals(dashArray, cssStroke.dashArray) &&
+                type == cssStroke.type &&
+                lineJoin == cssStroke.lineJoin &&
+                lineCap == cssStroke.lineCap &&
+                Objects.equals(miterLimit, cssStroke.miterLimit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(width, paint, dashOffset, dashArray, type, lineJoin, lineCap, miterLimit);
+    }
+
+    @Override
+    public String toString() {
+        return "CssStroke{" +
+                "width=" + width +
+                ", paint=" + paint +
+                ", type=" + type +
+                ", lineJoin=" + lineJoin +
+                ", lineCap=" + lineCap +
+                ", miterLimit=" + miterLimit +
+                ", dashOffset=" + dashOffset +
+                ", dashArray=" + dashArray +
+                '}';
     }
 }

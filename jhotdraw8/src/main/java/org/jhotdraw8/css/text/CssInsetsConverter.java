@@ -84,23 +84,23 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         if (right == left) {
             if (top == bottom) {
                 if (top == left) {
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(), top.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getValue(), top.getUnits()));
                     return;
                 } else {
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(), top.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getValue(), top.getUnits()));
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(), right.getValue()));
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getValue(), right.getUnits()));
                     return;
                 }
             }
         }
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getUnits(), top.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getValue(), top.getUnits()));
         out.accept(new CssToken(CssTokenType.TT_S, " "));
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getUnits(), right.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getValue(), right.getUnits()));
         out.accept(new CssToken(CssTokenType.TT_S, " "));
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, bottom.getUnits(), bottom.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, bottom.getValue(), bottom.getUnits()));
         out.accept(new CssToken(CssTokenType.TT_S, " "));
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, left.getUnits(), left.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, left.getValue(), left.getUnits()));
     }
 }
 

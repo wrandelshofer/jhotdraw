@@ -148,7 +148,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             return;
         }
         E element = list.remove(oldIndex);
-        list.add(newIndex, element);
+        list.add(newIndex>oldIndex?newIndex-1:newIndex, element);
         beginChange();
         int from = Math.min(oldIndex, newIndex);
         int to = Math.max(oldIndex, newIndex) + 1;

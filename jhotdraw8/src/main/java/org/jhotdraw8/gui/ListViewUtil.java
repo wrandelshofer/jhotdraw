@@ -3,9 +3,7 @@
  */
 package org.jhotdraw8.gui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.SnapshotParameters;
@@ -18,8 +16,16 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import javax.annotation.Nullable;
+import org.jhotdraw8.draw.inspector.LayerCell;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * ListViewUtil.
@@ -52,6 +58,10 @@ public class ListViewUtil {
                 EventType<DragEvent> t = event.getEventType();
                 if (t == DragEvent.DRAG_DONE) {
                     onDragDone(event);
+                } else if (t == DragEvent.DRAG_DROPPED) {
+                    onDragDropped(event);
+                } else if (t == DragEvent.DRAG_OVER) {
+                    onDragOver(event);
                 }
             }
 
@@ -70,6 +80,72 @@ public class ListViewUtil {
                 event.consume();
             }
 
+            private TransferMode[] acceptModes(DragEvent event) {
+                ListView<?> gestureTargetListView = null;
+                if (event.getGestureSource() instanceof ListCell) {
+                    ListCell<?> gestureTargetCell = (ListCell<?>) event.getGestureSource();
+                    gestureTargetListView = gestureTargetCell.getListView();
+                }
+                TransferMode[] mode;
+                if (reorderingOnly) {
+                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} : TransferMode.NONE;
+                } else {
+                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} : new TransferMode[]{TransferMode.COPY};
+                }
+
+                return mode;
+            }
+
+            private void onDragDropped(DragEvent event) {
+                boolean isAcceptable = io.canRead(event.getDragboard());
+                if (isAcceptable) {
+                    boolean success = false;
+                    TransferMode[] mode = acceptModes(event);
+                    if (mode.length == 0) {
+                        return;
+                    }
+                    event.acceptTransferModes(mode);
+
+                    LayerCell source = (LayerCell) event.getSource();
+                    int droppedCellIndex = source.getIndex();
+                    ObservableList<T> listViewItems = listView.getItems();
+
+                    if (reorderingOnly) {
+                        // FIXME only supports single item drag
+                        int to = min(listViewItems.size()-1,droppedCellIndex);
+                        if (to < 0) {
+                            success=false;
+                        }else {
+                            T item = listViewItems.get(draggedCellIndex);
+                            listViewItems.add(to, item);
+                            success = true;
+                        }
+
+                    } else {
+                        List<T> items = io.read(event.getDragboard());
+                        success = items != null;
+                        if (success) {
+                            for (T item : items) {
+                                listViewItems.add(droppedCellIndex, item);
+                                if (droppedCellIndex <= draggedCellIndex) {
+                                    draggedCellIndex++;
+                                }
+                                droppedCellIndex++;
+                            }
+                        }
+                    }
+                    event.setDropCompleted(success);
+                    event.consume();
+                }
+            }
+
+            private void onDragOver(DragEvent event) {
+                boolean isAcceptable = io.canRead(event.getDragboard());
+                if (isAcceptable && (!reorderingOnly || draggedCellIndex != -1)) {
+                    event.acceptTransferModes(acceptModes(event));
+                    event.consume();
+                }
+            }
         };
 
         @Nonnull
@@ -101,7 +177,7 @@ public class ListViewUtil {
         };
 
         @javax.annotation.Nullable
-        EventHandler<? super DragEvent> listDragHandler = new EventHandler<DragEvent>() {
+        EventHandler<? super DragEvent> listDragHandler_DELETE_ME = new EventHandler<DragEvent>() {
 
             @Override
             public void handle(DragEvent event) {
@@ -144,7 +220,7 @@ public class ListViewUtil {
 
                     // XXX foolishly assumes fixed cell height
                     double cellHeight = listView.getFixedCellSize();
-                    int index = Math.max(0, Math.min((int) (event.getY() / cellHeight), listView.getItems().size()));
+                    int index = max(0, min((int) (event.getY() / cellHeight), listView.getItems().size()));
 
                     if (reorderingOnly) {
                         // FIXME only supports single item drag
@@ -183,8 +259,8 @@ public class ListViewUtil {
     /**
      * Adds drag and drop support to the list view
      *
-     * @param <T> the data type of the list view
-     * @param listView the list view
+     * @param <T>         the data type of the list view
+     * @param listView    the list view
      * @param clipboardIO a reader/writer for the clipboard.
      */
     public static <T> void addDragAndDropSupport(@Nonnull ListView<T> listView, ClipboardIO<T> clipboardIO) {
@@ -193,11 +269,11 @@ public class ListViewUtil {
 
     /**
      * Adds drag and drop support to the list view
-     *
+     * <p>
      * FIXME should also add support for cut, copy and paste keys
      *
-     * @param <T> the data type of the list view
-     * @param listView the list view
+     * @param <T>         the data type of the list view
+     * @param listView    the list view
      * @param cellFactory the cell factory of the list view
      * @param clipboardIO a reader/writer for the clipboard.
      */
@@ -210,28 +286,29 @@ public class ListViewUtil {
         DnDSupport<T> dndSupport = new DnDSupport<>(listView, clipboardIO, reorderingOnly);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
             ListCell<T> cell = cellFactory.call(lv);
-            cell.addEventHandler(DragEvent.DRAG_DONE, dndSupport.cellDragHandler);
+            cell.addEventHandler(DragEvent.ANY, dndSupport.cellDragHandler);
             cell.addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
             return cell;
         };
         listView.setCellFactory(dndCellFactory);
-        listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
+        //listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
     }
 
     /**
      * Adds reordering support to the list view.
      *
-     * @param <T> the data type of the list view
+     * @param <T>      the data type of the list view
      * @param listView the list view
      */
     public static <T> void addReorderingSupport(@Nonnull ListView<T> listView) {
         addReorderingSupport(listView, listView.getCellFactory(), null);
     }
+
     /**
      * Adds reordering support to the list view.
      *
-     * @param <T> the data type of the list view
-     * @param listView the list view
+     * @param <T>         the data type of the list view
+     * @param listView    the list view
      * @param clipboardIO the clipboard i/o
      */
     public static <T> void addReorderingSupport(@Nonnull ListView<T> listView, ClipboardIO<T> clipboardIO) {
@@ -245,22 +322,22 @@ public class ListViewUtil {
      * <p>
      * FIXME only supports lists with single item selection (no multiple item selection yet!).
      *
-     * @param <T> the data type of the list view
-     * @param listView the list view
+     * @param <T>         the data type of the list view
+     * @param listView    the list view
      * @param cellFactory the cell factory of the list view
      * @param clipboardIO a reader/writer for the clipboard. You can provide null if you don't want cut/copy/paste functionality.
      */
     public static <T> void addReorderingSupport(@Nonnull ListView<T> listView, @Nonnull Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO) {
-        if (clipboardIO==null) {
-                clipboardIO = new ClipboardIO<T>() {
+        if (clipboardIO == null) {
+            clipboardIO = new ClipboardIO<T>() {
                 @Override
                 public void write(@Nonnull Clipboard clipboard, @Nonnull List<T> items) {
-        // We just write the index of the selected item in the clipboard.
+                    // We just write the index of the selected item in the clipboard.
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }
-                   ClipboardContent content = new ClipboardContent();
-                     content.putString(""+listView.getSelectionModel().getSelectedIndex());
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString("" + listView.getSelectionModel().getSelectedIndex());
                     clipboard.setContent(content);
                 }
 
@@ -279,6 +356,6 @@ public class ListViewUtil {
         }
         addDragAndDropSupport(listView, cellFactory, clipboardIO, true);
     }
-    
+
 
 }

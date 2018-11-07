@@ -45,7 +45,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    @Nullable
+    @Nonnull
     public final static EnumStyleableFigureKey<CagOperation> CAG_OPERATION = new EnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
@@ -81,27 +81,26 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         if (f instanceof StrokeableFigure) {
             Paint stroke = Paintable.getPaint(f.getStyled(STROKE));
             if (stroke != null) {
-                double strokeWidth = f.getStyled(STROKE_WIDTH);
+                double strokeWidth = f.getStyledNonnull(STROKE_WIDTH).getConvertedValue();
                 if (strokeWidth > 0.0) {
                     BasicStroke basicStroke;
-                    final ImmutableList<Double> dashArray = f.getStyled(STROKE_DASH_ARRAY);
-                    if (dashArray != null && !dashArray.isEmpty()) {
-                        double dashOffset = f.getStyled(STROKE_DASH_OFFSET);
+                    final ImmutableList<CssSize> dashArray = f.getStyledNonnull(STROKE_DASH_ARRAY);
+                    if (!dashArray.isEmpty()) {
+                        double dashOffset = f.getStyledNonnull(STROKE_DASH_OFFSET).getConvertedValue();
                         float[] dash = new float[dashArray.size()];
-                        boolean allZero = false;
                         for (int i = 0, n = dashArray.size(); i < n; i++) {
-                            dash[i] = dashArray.get(i).floatValue();
-                            allZero = allZero && dash[i] == 0f;
+                            dash[i] = (float)dashArray.get(i).getConvertedValue();
                         }
-                        if (allZero) {
-                            dash = null;
-                        }
-                        basicStroke = new BasicStroke((float) strokeWidth, Shapes.awtCapFromFX(f.getStyled(STROKE_LINE_CAP)),
-                                Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue(), dash, (float) dashOffset);
+                        basicStroke = new BasicStroke((float) strokeWidth,
+                                Shapes.awtCapFromFX(f.getStyledNonnull(STROKE_LINE_CAP)),
+                                Shapes.awtJoinFromFX(f.getStyledNonnull(STROKE_LINE_JOIN)),
+                                (float)f.getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue(), dash, (float) dashOffset);
 
                     } else {
-                        basicStroke = new BasicStroke((float) strokeWidth, Shapes.awtCapFromFX(f.getStyled(STROKE_LINE_CAP)),
-                                Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue());
+                        basicStroke = new BasicStroke((float) strokeWidth,
+                                Shapes.awtCapFromFX(f.getStyledNonnull(STROKE_LINE_CAP)),
+                                Shapes.awtJoinFromFX(f.getStyledNonnull(STROKE_LINE_JOIN)),
+                                (float)f.getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue());
 
                     }
                     iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AWTPathBuilder(), iter).build()).getPathIterator(null);

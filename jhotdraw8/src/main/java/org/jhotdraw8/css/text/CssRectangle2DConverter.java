@@ -77,7 +77,7 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
     @Override
     protected <TT extends CssRectangle2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         CssSize minX = value.getMinX();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, minX.getUnits(),minX.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, minX.getValue(), minX.getUnits()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
@@ -85,7 +85,7 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         CssSize minY = value.getMinY();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, minY.getUnits(),minY.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, minY.getValue(), minY.getUnits()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
@@ -93,7 +93,7 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         CssSize width = value.getWidth();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getUnits(),width.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getValue(), width.getUnits()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
@@ -101,7 +101,7 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
         CssSize height = value.getHeight();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, height.getUnits(),height.getValue()));
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, height.getValue(), height.getUnits()));
     }
 
     @Override
