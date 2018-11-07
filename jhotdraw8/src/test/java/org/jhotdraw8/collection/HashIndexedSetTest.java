@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author werni
  */
-public class IndexedSetTest {
+public class HashIndexedSetTest {
 
-    public IndexedSetTest() {
+    public HashIndexedSetTest() {
     }
 
     public static void testAdd(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
-        IndexedSet<Character> list = new IndexedSet<Character>(asList(initialList));
+        HashIndexedSet<Character> list = new HashIndexedSet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
@@ -37,7 +37,7 @@ public class IndexedSetTest {
         assertEquals(expectedList,list);
         assertEquals( expectedChanges,recorder.getChanges());
         assertTrue(list.containsAll(expectedList));
-
+        asList("abc").removeAll(expectedList);
         List<Character> invertedList=asList("abcd");
         invertedList.removeAll(expectedList);
         for (Character c:invertedList) {
@@ -76,14 +76,14 @@ public class IndexedSetTest {
     }
 
     public static void testSet(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
-        IndexedSet<Character> list = new IndexedSet<Character>(asList(initialList));
+        HashIndexedSet<Character> list = new HashIndexedSet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
         list.set(index, value);
 
         List<Character> expectedList = asList(expectedListStr);
-        assertEquals(expectedList,list);
+        assertEquals(expectedList, list);
         assertEquals(recorder.getChanges(), expectedChanges);
         assertTrue(list.containsAll(expectedList));
 
@@ -122,7 +122,7 @@ public class IndexedSetTest {
         private StringBuilder buf = new StringBuilder();
 
         @Override
-        public void onChanged(ListChangeListener.Change<? extends Character> c) {
+        public void onChanged(Change<? extends Character> c) {
             while (c.next()) {
                 if (c.wasPermutated()) {
                     buf.append("perm(");

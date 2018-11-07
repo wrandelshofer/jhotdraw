@@ -1,4 +1,4 @@
-/* @(#)IndexedSet.java
+/* @(#)HashIndexedSet.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -25,22 +26,26 @@ import static java.lang.Math.min;
 /**
  * A {@code Set} that provides precise control where each element is inserted.
  * <p>
- * The set is backed by a list.
+ * The set is backed by a list and a set.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
+public class HashIndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
 
     /**
      * The underlying list.
      */
     private final List<E> list;
+    /**
+     * The underlying set.
+     */
+    private final Set<E> set;
 
     /**
      * Creates a new instance which is backed by an array list.
      */
-    public IndexedSet() {
+    public HashIndexedSet() {
         this(new ArrayList<>(), null);
     }
 
@@ -50,7 +55,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
      *
      * @param col A collection.
      */
-    public IndexedSet(Collection<? extends E> col) {
+    public HashIndexedSet(Collection<? extends E> col) {
         this(new ArrayList<>(), col);
     }
 
@@ -61,11 +66,14 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
      * @param backingList the backing list
      * @param col         A collection.
      */
-    public IndexedSet(List<E> backingList, @Nullable Collection<? extends E> col) {
+    public HashIndexedSet(List<E> backingList, @Nullable Collection<? extends E> col) {
         list = backingList;
         list.clear();
         if (col != null) {
+        set=new HashSet<>(col.size());
             addAll(col);
+        }else{
+            set=new HashSet<>();
         }
     }
 
@@ -137,7 +145,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public void add(int index, E element) {
-        doAdd(index, element, true);
+        doAdd(index, element);
     }
 
     /**
@@ -167,12 +175,12 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     }
 
-    protected boolean doAdd(int index, E element, boolean checkForDuplicates) {
-        int oldIndex = checkForDuplicates ? list.indexOf(element) : -1; // linear search!
+    protected boolean doAdd(int index, E element) {
+        int oldIndex = set.add(element)? -1:list.indexOf(element); // linear search!
         int clampedIndex = min(index, size() - 1);
         if (oldIndex == -1) {
-            list.add(index, element);
             beginChange();
+            list.add(index, element);
             nextAdd(index, index + 1);
             onAdded(element);
             ++modCount;
@@ -196,11 +204,13 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public E set(int index, E element) {
-        int oldIndex = list.indexOf(element);
+        int oldIndex = set.contains(element)?list.indexOf(element):-1;
         if (oldIndex == -1) {
             beginChange();
             E old = list.set(index, element);
+            set.remove(old);
             onRemoved(old);
+            set.add(element);
             nextSet(index, old);
             onAdded(element);
             endChange();
@@ -213,6 +223,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             beginChange();
             E old = list.remove(index);
             nextRemove(index, old);
+            set.remove(old);
             onRemoved(old);
             // the old element is permuted
             if (oldIndex > index) {
@@ -225,13 +236,8 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     @Override
-    public boolean contains(Object o) {
-        return list.contains(o); // linear time!
-    }
-
-    @Override
     public boolean remove(Object o) {
-        int i = indexOf(o);
+        int i = set.remove(o)?indexOf(o):-1;
         if (i != -1) {
             remove(i);
             return true;
@@ -243,11 +249,17 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     public E remove(int index) {
         E old = list.remove(index);
         beginChange();
+        set.remove(old);
         nextRemove(index, old);
         ++modCount;
         onRemoved(old);
         endChange();
         return old;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return set.contains(o);
     }
 
     @Nonnull
@@ -268,7 +280,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public boolean add(E e) {
-        return doAdd(size(), e, true);
+        return doAdd(size(), e);
     }
 
     @Nonnull
@@ -517,12 +529,12 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public final boolean offerFirst(E e) {
-        return doAdd(0, e, true);
+        return doAdd(0, e);
     }
 
     @Override
     public final boolean offerLast(E e) {
-        return doAdd(size(), e, true);
+        return doAdd(size(), e);
     }
 
     @Override
