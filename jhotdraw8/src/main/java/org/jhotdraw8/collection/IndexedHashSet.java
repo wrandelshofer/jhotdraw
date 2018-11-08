@@ -1,4 +1,4 @@
-/* @(#)HashIndexedSet.java
+/* @(#)IndexedHashSet.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -31,7 +31,7 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class HashIndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
+public class IndexedHashSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
 
     /**
      * The underlying list.
@@ -45,7 +45,7 @@ public class HashIndexedSet<E> extends ObservableListBase<E> implements Set<E>, 
     /**
      * Creates a new instance which is backed by an array list.
      */
-    public HashIndexedSet() {
+    public IndexedHashSet() {
         this(new ArrayList<>(), null);
     }
 
@@ -55,7 +55,7 @@ public class HashIndexedSet<E> extends ObservableListBase<E> implements Set<E>, 
      *
      * @param col A collection.
      */
-    public HashIndexedSet(Collection<? extends E> col) {
+    public IndexedHashSet(Collection<? extends E> col) {
         this(new ArrayList<>(), col);
     }
 
@@ -66,7 +66,7 @@ public class HashIndexedSet<E> extends ObservableListBase<E> implements Set<E>, 
      * @param backingList the backing list
      * @param col         A collection.
      */
-    public HashIndexedSet(List<E> backingList, @Nullable Collection<? extends E> col) {
+    public IndexedHashSet(List<E> backingList, @Nullable Collection<? extends E> col) {
         list = backingList;
         list.clear();
         if (col != null) {

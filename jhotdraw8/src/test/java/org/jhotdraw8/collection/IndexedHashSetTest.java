@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author werni
  */
-public class HashIndexedSetTest {
+public class IndexedHashSetTest {
 
-    public HashIndexedSetTest() {
+    public IndexedHashSetTest() {
     }
 
     public static void testAdd(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
-        HashIndexedSet<Character> list = new HashIndexedSet<Character>(asList(initialList));
+        IndexedHashSet<Character> list = new IndexedHashSet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
@@ -76,7 +76,7 @@ public class HashIndexedSetTest {
     }
 
     public static void testSet(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
-        HashIndexedSet<Character> list = new HashIndexedSet<Character>(asList(initialList));
+        IndexedHashSet<Character> list = new IndexedHashSet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
