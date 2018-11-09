@@ -38,7 +38,7 @@ public interface RenderContext extends PropertyBean {
     /**
      * The dots per inch of the rendering device.
      */
-    Key<Double> DPI = new ObjectKey<>("dpi", Double.class, 72.0);
+    Key<Double> DPI = new ObjectKey<>("dpi", Double.class, 96.0);
     /**
      * Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
      */

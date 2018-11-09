@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import ch.systransis.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
@@ -25,6 +24,7 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static java.lang.Math.abs;

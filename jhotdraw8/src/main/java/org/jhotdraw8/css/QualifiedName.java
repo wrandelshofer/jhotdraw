@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.css;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -47,7 +45,7 @@ public class QualifiedName implements Comparable<QualifiedName> {
     }
 
     @Override
-    public int compareTo(@NotNull QualifiedName o) {
+    public int compareTo(@Nonnull QualifiedName o) {
         return this.name.compareTo(o.name);
     }
 }

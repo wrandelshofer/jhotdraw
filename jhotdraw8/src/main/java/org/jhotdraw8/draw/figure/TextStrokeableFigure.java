@@ -3,9 +3,9 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
-import ch.systransis.util.ArrayList;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Teddy" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.teddy.TeddyApplication" />
-    <module name="jhotdraw8" />
+    <module name="jhotdraw" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.jhotdraw8.samples.teddy.*" />
