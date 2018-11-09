@@ -4,7 +4,6 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.text.Converter;

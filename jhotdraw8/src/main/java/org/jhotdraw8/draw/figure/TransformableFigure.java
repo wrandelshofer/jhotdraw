@@ -12,8 +12,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -28,7 +28,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javax.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
+
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;

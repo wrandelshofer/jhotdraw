@@ -8,6 +8,8 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -15,7 +17,6 @@ import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssTransformConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**

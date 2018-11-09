@@ -8,6 +8,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssTokenType;
@@ -63,7 +64,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
 
     @Override
     public <TT extends ImmutableList<BezierNode>> void toString(@Nonnull Appendable out, IdFactory idFactory,
-                         @Nullable TT value) throws IOException {
+                                                                @Nullable TT value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is null");

@@ -17,6 +17,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
@@ -30,7 +31,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.locator.Locator;

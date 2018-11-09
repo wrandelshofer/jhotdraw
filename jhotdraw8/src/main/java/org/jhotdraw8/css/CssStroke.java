@@ -19,12 +19,12 @@ public class CssStroke {
 
     public CssStroke(Paintable paint) {
         this(CssSize.ONE,paint,StrokeType.CENTERED,StrokeLineCap.BUTT, StrokeLineJoin.MITER,new CssSize(4.0),
-                CssSize.ZERO,ImmutableList.emptyList());
+                CssSize.ZERO, ImmutableList.emptyList());
     }
 
     public CssStroke(CssSize width, Paintable paint) {
         this(width,paint,StrokeType.CENTERED,StrokeLineCap.BUTT, StrokeLineJoin.MITER,new CssSize(4.0),
-                CssSize.ZERO,ImmutableList.emptyList());
+                CssSize.ZERO, ImmutableList.emptyList());
     }
 
     public CssStroke(CssSize width, Paintable paint, StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,

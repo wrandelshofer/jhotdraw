@@ -4,13 +4,14 @@
 package org.jhotdraw8.collection;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Provides an API for reading a collection.
+ * Provides a read-only API for a collection.
  *
  * @param <E> the element type
  */
@@ -76,4 +77,17 @@ public interface ReadableCollection<E> extends Iterable<E> {
         }
     }
     boolean contains(Object e);
+
+    /**
+     * Returns true if this collection contains all elements of that collection.
+     *
+     * @param c another collection
+     * @return true if this collection contains all of c
+     */
+    default boolean containsAll(Iterable<?> c) {
+        for (Object e : c)
+            if (!contains(e))
+                return false;
+        return true;
+    }
 }

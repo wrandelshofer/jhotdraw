@@ -9,6 +9,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssPoint2DConverterOLD;
 import org.jhotdraw8.draw.figure.Figure;

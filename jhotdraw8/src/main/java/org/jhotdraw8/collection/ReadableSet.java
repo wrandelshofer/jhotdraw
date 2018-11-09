@@ -3,8 +3,13 @@
  */
 package org.jhotdraw8.collection;
 
+import java.util.Set;
+
 /**
- * Provides an API for reading a set.
+ * Provides a read-only API for a set collection.
+ * <p>
+ * Note: a ReadableSet is not equal to a non-readable {@link Set}.
+ * To compare a ReadableSet to a Set, you have to wrap the Set into a {@link ReadableSetWrapper}.
  *
  * @param <E> the element type
  */

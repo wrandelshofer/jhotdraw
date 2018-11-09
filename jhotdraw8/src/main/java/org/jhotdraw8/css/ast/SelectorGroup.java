@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.css.ast;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;

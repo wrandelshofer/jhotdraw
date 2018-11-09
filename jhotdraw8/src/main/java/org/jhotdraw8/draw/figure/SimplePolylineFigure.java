@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.collection.MapAccessor;

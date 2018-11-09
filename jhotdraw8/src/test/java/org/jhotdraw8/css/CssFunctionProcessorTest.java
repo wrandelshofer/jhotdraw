@@ -41,7 +41,7 @@ class CssFunctionProcessorTest {
         DocumentSelectorModel model = new DocumentSelectorModel();
         Map<String, ReadableList<CssToken>> customProperties=new LinkedHashMap<>();
         customProperties.put("--blarg", ImmutableList.of(new CssToken(CssTokenType.TT_STRING,"blarg")));
-        customProperties.put("--endless-recursion",ImmutableList.of(new CssToken(CssTokenType.TT_FUNCTION,"var"),
+        customProperties.put("--endless-recursion", ImmutableList.of(new CssToken(CssTokenType.TT_FUNCTION,"var"),
                 new CssToken(CssTokenType.TT_IDENT,"--endless-recursion"),
                 new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
         CssFunctionProcessor<Element> instance = new CssFunctionProcessor<>(model,customProperties);

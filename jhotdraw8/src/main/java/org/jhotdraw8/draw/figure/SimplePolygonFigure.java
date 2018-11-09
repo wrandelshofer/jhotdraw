@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -28,7 +29,6 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * A figure which draws a closed polygon.

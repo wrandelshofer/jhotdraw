@@ -3,8 +3,6 @@ package org.jhotdraw8.css.text;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssStroke;

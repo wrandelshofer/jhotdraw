@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -15,6 +14,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;

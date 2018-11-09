@@ -9,13 +9,13 @@ import javafx.scene.input.MouseEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.ArrayList;
 import java.util.Objects;
 import javafx.scene.Cursor;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.figure.SimpleLayer;

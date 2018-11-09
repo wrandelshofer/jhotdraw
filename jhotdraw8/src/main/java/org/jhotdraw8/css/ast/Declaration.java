@@ -9,9 +9,7 @@ import org.jhotdraw8.css.CssToken;
 
 import javax.annotation.Nonnull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**

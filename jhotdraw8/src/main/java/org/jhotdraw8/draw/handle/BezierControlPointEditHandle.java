@@ -36,7 +36,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 import org.jhotdraw8.geom.BezierNode;
-import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
