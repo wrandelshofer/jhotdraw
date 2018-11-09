@@ -41,9 +41,6 @@ public class AboutAction extends AbstractApplicationAction {
         addDisabler(this);
         ApplicationModel model = app.getModel();
 
-        String javafxVendor = javafx.application.Application.class.getPackage().getImplementationVendor();
-        String javafxVersion = javafx.application.Application.class.getPackage().getImplementationVersion();
-
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 model.getCopyright()
                 + "\n\nRunning on"
@@ -51,8 +48,6 @@ public class AboutAction extends AbstractApplicationAction {
                 + ", " + System.getProperty("java.vendor")
                 + "\n  JVM: " + System.getProperty("java.vm.version")
                 + ", " + System.getProperty("java.vm.vendor")
-                        + "\n  javaFX: " +javafxVersion
-                        + ", " + javafxVendor
                 + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
                 + ", " + System.getProperty("os.arch"));
                 alert.getDialogPane().setMaxWidth(640.0);

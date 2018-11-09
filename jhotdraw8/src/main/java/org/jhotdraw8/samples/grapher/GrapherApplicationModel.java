@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.samples.grapher;
 
+import java.lang.module.ModuleDescriptor;
 import java.util.ResourceBundle;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
@@ -54,5 +55,11 @@ public final static DataFormat GRAPHER_FORMAT;
     @Override
     public ResourceBundle getResources() {
         return Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
+    }
+
+    @Override
+    public String getCopyright() {
+        ModuleDescriptor descriptor = GrapherApplicationModel.class.getModule().getDescriptor();
+        return "Version "+descriptor.version().orElse(null)+". MIT License.";
     }
 }
