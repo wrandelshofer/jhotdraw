@@ -13,8 +13,6 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
 
 /**

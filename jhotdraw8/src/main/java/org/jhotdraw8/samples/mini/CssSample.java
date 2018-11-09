@@ -6,7 +6,6 @@ package org.jhotdraw8.samples.mini;
 import java.net.URI;
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;

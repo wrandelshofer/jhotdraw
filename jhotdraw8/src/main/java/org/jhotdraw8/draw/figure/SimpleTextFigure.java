@@ -22,7 +22,6 @@ import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;

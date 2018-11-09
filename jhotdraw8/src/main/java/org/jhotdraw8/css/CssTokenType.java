@@ -1,11 +1,6 @@
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.io.IdFactory;
-
 import javax.annotation.Nonnull;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 
 /**
  * Defines CSS 3 token types.

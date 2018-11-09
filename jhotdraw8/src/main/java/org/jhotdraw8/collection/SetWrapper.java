@@ -22,7 +22,6 @@ public class SetWrapper<E> extends AbstractSet<E> {
 
     @Override
     public boolean contains(Object o) {
-        //noinspection unchecked
-        return backingSet.contains((E)o);
+        return backingSet.contains(o);
     }
 }

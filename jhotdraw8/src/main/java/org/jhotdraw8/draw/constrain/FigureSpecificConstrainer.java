@@ -6,8 +6,7 @@ package org.jhotdraw8.draw.constrain;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
+
 import javax.annotation.Nonnull;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.css.CssPoint2D;

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

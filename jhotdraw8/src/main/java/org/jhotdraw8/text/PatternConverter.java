@@ -580,7 +580,7 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     @Nonnull
-    public static AST parseTextFormatPattern(@Nonnull String pattern) throws IOException {
+    static AST parseTextFormatPattern(@Nonnull String pattern) throws IOException {
         return parseTextFormatPattern(pattern, new AST(), 0);
     }
 

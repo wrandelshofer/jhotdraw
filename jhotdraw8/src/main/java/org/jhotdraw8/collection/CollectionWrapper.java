@@ -29,7 +29,6 @@ public class CollectionWrapper<E> extends AbstractCollection<E> {
 
     @Override
     public boolean contains(Object o) {
-        //noinspection unchecked
-        return backingCollection.contains((E)o);
+        return backingCollection.contains(o);
     }
 }

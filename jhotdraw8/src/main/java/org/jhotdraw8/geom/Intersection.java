@@ -116,7 +116,7 @@ public class Intersection {
         return b.toString();
     }
 
-    enum Status {
+    public enum Status {
         INTERSECTION,
         NO_INTERSECTION,
         NO_INTERSECTION_INSIDE,

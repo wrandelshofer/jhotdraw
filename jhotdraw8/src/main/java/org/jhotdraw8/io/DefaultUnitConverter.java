@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.io;
 
-import org.jhotdraw8.css.CssPoint2D;
-
 import javax.annotation.Nonnull;
 
 /**

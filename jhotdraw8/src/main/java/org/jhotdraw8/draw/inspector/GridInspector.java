@@ -17,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

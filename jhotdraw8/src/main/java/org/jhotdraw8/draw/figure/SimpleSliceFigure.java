@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import static java.lang.Math.*;
 import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -30,9 +29,6 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 
 /**
  * This is a special figure which is used to segment a drawing into tiles, when

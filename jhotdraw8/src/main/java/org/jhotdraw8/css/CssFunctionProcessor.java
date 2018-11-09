@@ -180,7 +180,6 @@ public class CssFunctionProcessor<T> {
                     String strValue;
                     switch (att.next()) {
                         case CssTokenType.TT_STRING:
-                            strValue = att.currentValue();
                         case CssTokenType.TT_IDENT:
                             strValue = att.currentValue();
                             break;
@@ -562,10 +561,13 @@ public class CssFunctionProcessor<T> {
                     if (!first) {
                         continue;
                     }
-                    // fall through
+                    tt.pushBack();
+                    buf.append(evalString(element, tt, CONCAT_FUNCTION_NAME));
+                    break;
                 default:
                     tt.pushBack();
                     buf.append(evalString(element, tt, CONCAT_FUNCTION_NAME));
+                    break;
             }
             first = false;
         }

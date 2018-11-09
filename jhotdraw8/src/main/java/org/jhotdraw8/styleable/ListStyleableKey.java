@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 import java.util.function.Function;
 
 public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleableMapAccessor<ImmutableList<T>> {
+    private final static long serialVersionUID=0L;
     @Nonnull
     private final Converter<ImmutableList<T>> converter;
     private final CssMetaData<? extends Styleable, ImmutableList<T>> cssMetaData;

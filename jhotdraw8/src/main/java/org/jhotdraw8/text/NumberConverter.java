@@ -470,7 +470,7 @@ public class NumberConverter implements Converter<Number> {
     @SuppressWarnings({"unchecked", "WeakerAccess"})
     boolean isValidValue(Number value, boolean wantsCCE) {
         try {
-            if (min != null && min.compareTo((Number) value) > 0) {
+            if (min != null && min.compareTo(value) > 0) {
                 return false;
             }
         } catch (ClassCastException cce) {

@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.css;
 
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 
 import javax.annotation.Nullable;

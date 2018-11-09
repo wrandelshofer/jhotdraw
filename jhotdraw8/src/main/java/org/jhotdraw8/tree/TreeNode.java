@@ -61,9 +61,12 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     @Nonnull
     default Iterable<T> breadthFirstIterable() {
-        //noinspection unchecked
         return new SpliteratorIterable<>(
-                () -> new BreadthFirstSpliterator<>(TreeNode::getChildren, (T) this, n -> true));
+                () -> {
+                    @SuppressWarnings("unchecked")
+                    T t = (T) this;
+                    return new BreadthFirstSpliterator<>(TreeNode::getChildren, t, n -> true);
+                });
     }
 
     /**
@@ -214,7 +217,10 @@ public interface TreeNode<T extends TreeNode<T>> {
     default Iterable<T> postorderIterable() {
         //noinspection unchecked
         return new SpliteratorIterable<>(
-                () -> new PostorderSpliterator<>(TreeNode::getChildren, (T) this)
+                () -> {
+                    @SuppressWarnings("unchecked") T t = (T) this;
+                    return new PostorderSpliterator<>(TreeNode::getChildren, t);
+                }
         );
     }
 
@@ -240,7 +246,10 @@ public interface TreeNode<T extends TreeNode<T>> {
     default Iterable<T> preorderIterable() {
         //noinspection unchecked
         return new SpliteratorIterable<>(
-                () -> new PreorderSpliterator<>(TreeNode::getChildren, (T) this)
+                () -> {
+                    @SuppressWarnings("unchecked") T t = (T) this;
+                    return new PreorderSpliterator<>(TreeNode::getChildren, t);
+                }
         );
     }
 

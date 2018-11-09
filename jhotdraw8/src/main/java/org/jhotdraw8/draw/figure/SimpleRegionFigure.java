@@ -5,9 +5,6 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
-import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 

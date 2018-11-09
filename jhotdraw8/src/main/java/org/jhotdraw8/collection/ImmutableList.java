@@ -197,11 +197,10 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
 
     public <T> T[] toArray(T[] a) {
         int size = size();
-        if (a.length < size)
-        // Make a new array of a's runtime type, but my contents:
-        //noinspection unchecked
-        {
-            return (T[]) Arrays.copyOf(array, size, a.getClass());
+        if (a.length < size) {
+            @SuppressWarnings("unchecked")
+            T[] t = (T[]) Arrays.copyOf(array, size, a.getClass());
+            return t;
         }
         System.arraycopy(array, 0, a, 0, size);
         if (a.length > size) {

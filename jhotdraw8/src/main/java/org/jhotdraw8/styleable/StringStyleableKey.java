@@ -15,6 +15,8 @@ import javax.annotation.Nullable;
 import java.util.function.Function;
 
 public class StringStyleableKey extends StringKey implements WriteableStyleableMapAccessor<String> {
+    private final static long serialVersionUID=0L;
+
     private final CssMetaData<? extends Styleable, String> cssMetaData;
     private final CssStringConverter converter=new CssStringConverter();
 

@@ -36,7 +36,6 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;

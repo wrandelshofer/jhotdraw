@@ -38,11 +38,13 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
     }
 
     public <T> T getOldValue() {
-        return (T) oldValue;
+        @SuppressWarnings("unchecked") T oldValue = (T) this.oldValue;
+        return oldValue;
     }
 
     public <T> T getNewValue() {
-        return (T)newValue;
+        @SuppressWarnings("unchecked") T newValue = (T) this.newValue;
+        return newValue;
     }
 
     public EventType getType() {

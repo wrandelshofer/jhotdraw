@@ -4,18 +4,11 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
-import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.gui.PlatformUtil;
 
 import javax.annotation.Nonnull;
@@ -23,9 +16,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.prefs.Preferences;
 
 /**
  * The help inspector displays the current help text of the drawing view.

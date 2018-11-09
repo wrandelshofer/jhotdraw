@@ -7,7 +7,6 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
@@ -22,7 +21,6 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 
 /**
  * Renders a {@code javafx.scene.shape.Arc}.

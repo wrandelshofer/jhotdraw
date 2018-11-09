@@ -9,8 +9,6 @@ import java.awt.geom.PathIterator;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -19,7 +17,6 @@ import javafx.scene.shape.StrokeType;
 
 import javax.annotation.Nonnull;
 
-import javafx.scene.transform.Transform;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -33,7 +30,6 @@ import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.

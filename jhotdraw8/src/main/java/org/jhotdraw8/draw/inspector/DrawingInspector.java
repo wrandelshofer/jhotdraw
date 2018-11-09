@@ -25,7 +25,6 @@ import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
-import org.jhotdraw8.xml.text.XmlDoubleConverter;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 /**

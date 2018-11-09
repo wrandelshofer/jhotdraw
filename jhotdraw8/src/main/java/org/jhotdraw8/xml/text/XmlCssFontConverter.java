@@ -3,24 +3,10 @@
  */
 package org.jhotdraw8.xml.text;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.nio.CharBuffer;
-import java.text.ParseException;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.text.CssFontConverter;
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
 
 /**
  * XmlCssFontConverter.

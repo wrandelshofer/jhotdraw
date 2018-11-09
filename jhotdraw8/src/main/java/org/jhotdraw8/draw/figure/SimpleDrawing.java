@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;

@@ -1,7 +1,6 @@
 <component name="libraryTable">
   <library name="ext">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/ext/lib/annotations-12.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-ARL-rev9524-STI-ARL.jar!/" />
       <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-LIB-APPL-rev9506-STI-LIB-APPL.jar!/" />
       <root url="jar://$PROJECT_DIR$/ext/lib/ch.systransis-STI-LIB-TESTTOOL-rev9506-STI-LIB-TESTTOOL.jar!/" />
@@ -18,6 +17,7 @@
       <root url="jar://$PROJECT_DIR$/ext/lib/org.jetbrains-annotations-13.0-annotations.jar!/" />
       <root url="jar://$PROJECT_DIR$/ext/lib/org.opcfoundation-Opc.Ua.Stack-1.01.330.12-Opc.Ua.Stack.jar!/" />
       <root url="jar://$PROJECT_DIR$/ext/lib/poi-poi-2.5.1-final-20040804-poi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ext/lib/annotations-12.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -45,7 +45,7 @@ public interface ReadableCollection<E> extends Iterable<E> {
     default <T> T[] toArray(T[] a) {
         // Estimate size of array; be prepared to see more or fewer elements
         int size = size();
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         T[] r = a.length >= size ? a : (T[]) Arrays.copyOf(a, size, a.getClass());
         Iterator<E> it = iterator();
 
@@ -53,8 +53,9 @@ public interface ReadableCollection<E> extends Iterable<E> {
             if (!it.hasNext()) { // fewer elements than expected
                 throw new ConcurrentModificationException("fewer elements than expected. expected=" + size);
             }
-            //noinspection unchecked
-            r[i] = (T) it.next();
+            @SuppressWarnings("unchecked")
+            T t = (T) it.next();
+            r[i] = t;
         }
         if (it.hasNext()) {
             throw new ConcurrentModificationException("more elements than expected. expected=" + size);

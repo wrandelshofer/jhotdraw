@@ -4,17 +4,18 @@
  */
 package org.jhotdraw8.javadoc;
 
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.RootDoc;
-import com.sun.javadoc.SeeTag;
-import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.Taglet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+
+import com.sun.source.doctree.DocTree;
+import jdk.javadoc.doclet.Taglet;
+
+import javax.lang.model.element.Element;
 
 /**
  * DesignOverviewTaglet processes the {@literal @design.overview} tag.
@@ -50,64 +51,17 @@ public class DesignOverviewTaglet implements Taglet {
         return NAME;
     }
 
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
     @Override
-    public boolean inField() {
-        return false;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inConstructor() {
-        return false;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inMethod() {
-        return false;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inOverview() {
-        return true;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inPackage() {
-        return false;
-    }
-
-    /**
-     * Will return true.
-     *
-     * @return true
-     */
-    @Override
-    public boolean inType() {
-        return false;
+    public Set<Location> getAllowedLocations() {
+        return Set.of(
+               // Location.CONSTRUCTOR,
+                //Location.FIELD,
+                //Location.MODULE
+                Location.OVERVIEW
+                //Location.PACKAGE,
+                //Location.TYPE,
+                //Location.METHOD
+        );
     }
 
     /**
@@ -134,31 +88,13 @@ public class DesignOverviewTaglet implements Taglet {
         tagletMap.put(tag.getName(), tag);
     }
 
-    /**
-     * Given the <code>Tag</code> representation of this custom tag, return its
-     * string representation.
-     *
-     * @param tag the <code>Tag</code> representation of this custom tag.
-     */
     @Override
-    public String toString(Tag tag) {
-        return toString(new Tag[]{tag});
-    }
-
-    /**
-     * Given an array of <code>Tag</code>s representing this custom tag, return
-     * its string representation.
-     *
-     * @param tags the array of <code>Tag</code>s representing of this custom
-     * tag.
-     */
-    @Override
-    public String toString(Tag[] tags) {
-        if (tags.length == 0) {
+    public String toString(List<? extends DocTree> tags, Element element) {
+        if (tags.size() == 0) {
             return "";
         }
 
-        Tag tag = tags[0];
+        DocTree tag = tags.get(0);
 
         if (!(tag.holder() instanceof RootDoc)) {
             System.err.println(tag.position() + ": error: DesignOverviewTaglet is not in root document.");

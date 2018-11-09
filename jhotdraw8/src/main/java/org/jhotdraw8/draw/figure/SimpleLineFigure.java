@@ -8,7 +8,7 @@ import java.awt.geom.PathIterator;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import java.util.List;
-import javafx.geometry.BoundingBox;
+
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -28,8 +28,6 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;

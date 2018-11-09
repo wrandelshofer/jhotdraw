@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;

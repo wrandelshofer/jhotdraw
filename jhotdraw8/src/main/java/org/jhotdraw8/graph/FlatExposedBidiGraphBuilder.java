@@ -142,12 +142,12 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
 
     @Override
     public V getNext(V vertex, int i) {
-        return (V) getVertexDataNonnull(vertex).getNext(i);
+        return getVertexDataNonnull(vertex).getNext(i);
     }
 
     @Override
     public A getNextArrow(V vertex, int index) {
-        return (A) getVertexDataNonnull(vertex).getNextArrow(index);
+        return getVertexDataNonnull(vertex).getNextArrow(index);
     }
 
     @Override

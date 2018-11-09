@@ -16,7 +16,7 @@ public class HandleEvent extends Event<Handle> {
 
     private final static long serialVersionUID = 1L;
 
-    enum EventType {
+    public enum EventType {
 
         FIGURE_ADDED,
         FIGURE_REMOVED,
