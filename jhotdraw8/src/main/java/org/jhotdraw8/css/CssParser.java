@@ -474,7 +474,7 @@ public class CssParser {
                 case '*':
                     return new UniversalSelector();
                 case CssTokenType.TT_IDENT:
-                    return new TypeSelector(tt.currentString());
+                    return new TypeSelector(null,tt.currentString());// FIXME parse namespace
                 case CssTokenType.TT_HASH:
                     return new IdSelector(tt.currentString());
                 case '.':
@@ -528,7 +528,8 @@ public class CssParser {
         if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
             throw new ParseException("AttributeSelector: Identifier expected. Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
-        String attributeName = tt.currentString();
+        String attributeName = tt.currentStringNonnull();
+        String namespace=null;//FIXME parse namespace
         AbstractAttributeSelector selector;
         switch (tt.nextNoSkip()) {
             case '=':
@@ -537,7 +538,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new EqualsMatchSelector(attributeName, tt.currentString());
+                selector = new EqualsMatchSelector(namespace,attributeName, tt.currentStringNonnull());
                 break;
             case CssTokenType.TT_INCLUDE_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -545,7 +546,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new IncludeMatchSelector(attributeName, tt.currentString());
+                selector = new IncludeMatchSelector(namespace,attributeName, tt.currentStringNonnull());
                 break;
             case CssTokenType.TT_DASH_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -553,7 +554,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new DashMatchSelector(attributeName, tt.currentString());
+                selector = new DashMatchSelector(namespace,attributeName, tt.currentStringNonnull());
                 break;
             case CssTokenType.TT_PREFIX_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -561,7 +562,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new PrefixMatchSelector(attributeName, tt.currentString());
+                selector = new PrefixMatchSelector(namespace,attributeName, tt.currentStringNonnull());
                 break;
             case CssTokenType.TT_SUFFIX_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -569,7 +570,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new SuffixMatchSelector(attributeName, tt.currentString());
+                selector = new SuffixMatchSelector(namespace,attributeName, tt.currentStringNonnull());
                 break;
             case CssTokenType.TT_SUBSTRING_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -577,10 +578,10 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new SubstringMatchSelector(attributeName, tt.currentString());
+                selector = new SubstringMatchSelector(namespace, attributeName, tt.currentStringNonnull());
                 break;
             case ']':
-                selector = new ExistsMatchSelector(attributeName);
+                selector = new ExistsMatchSelector(namespace,attributeName);
                 tt.pushBack();
                 break;
             default:
@@ -643,7 +644,8 @@ public class CssParser {
         List<CssToken> terms = parseTerms(tt);
         int endPos = terms.isEmpty() ? tt.getStartPosition() : terms.get(terms.size() - 1).getEndPos();
 
-        return new Declaration(property, terms, startPos, endPos);
+        String namespace=null;// FIXME parse namespace
+        return new Declaration(namespace, property, terms, startPos, endPos);
 
     }
 

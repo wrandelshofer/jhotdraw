@@ -5,6 +5,7 @@ package org.jhotdraw8.css.ast;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -15,10 +16,13 @@ import org.jhotdraw8.css.SelectorModel;
  * @version $Id$
  */
 public class TypeSelector extends SimpleSelector {
-
+    @Nullable
+    private final String namespace;
+    @Nonnull
     private final String type;
 
-    public TypeSelector(String type) {
+    public TypeSelector(@Nullable String namespace, @Nonnull String type) {
+        this.namespace = namespace;
         this.type = type;
     }
 
@@ -31,7 +35,7 @@ public class TypeSelector extends SimpleSelector {
     @Nullable
     @Override
     public <T> T match(@Nonnull SelectorModel<T> model, @Nullable T element) {
-        return (element != null && model.hasType(element, type)) //
+        return (element != null && model.hasType(element, namespace, type)) //
                 ? element : null;
     }
 

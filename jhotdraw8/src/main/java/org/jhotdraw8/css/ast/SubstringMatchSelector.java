@@ -16,11 +16,15 @@ import org.jhotdraw8.css.SelectorModel;
  * @version $Id$
  */
 public class SubstringMatchSelector extends AbstractAttributeSelector {
-
+    @Nullable
+    private final String namespace;
+    @Nonnull
     private final String attributeName;
+    @Nonnull
     private final String substring;
 
-    public SubstringMatchSelector(String attributeName, String substring) {
+    public SubstringMatchSelector(@Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+        this.namespace=namespace;
         this.attributeName = attributeName;
         this.substring = substring;
     }
@@ -28,7 +32,7 @@ public class SubstringMatchSelector extends AbstractAttributeSelector {
     @Nullable
     @Override
     protected <T> T match(@Nonnull SelectorModel<T> model, T element) {
-        return (model.attributeValueContains(element, attributeName, substring))//
+        return (model.attributeValueContains(element, namespace, attributeName, substring))//
                 ? element : null;
     }
 

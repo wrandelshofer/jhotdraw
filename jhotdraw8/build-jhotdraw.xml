@@ -6,13 +6,13 @@
 <project name="jhotdraw8" basedir="." default="all">
   
     <!-- ignore system classpath to get consistent builds on different platforms -->
-    <property name="build.sysclasspath" value="ignore"/>
+    <propertyName name="build.sysclasspath" value="ignore"/>
 
     <!--
-    <property name="jdk" value="${java.home}"/>
+    <propertyName name="jdk" value="${java.home}"/>
     -->
-    <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home"/>
-    <property name="jdk.version" value="8"/>
+    <propertyName name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home"/>
+    <propertyName name="jdk.version" value="8"/>
 
         <exec executable="git" outputproperty="git.hash.date.author" failifexecutionfails="false" errorproperty="">
             <arg value="log"/>
@@ -26,55 +26,55 @@
             <arg value="HEAD"/>
         </exec>
         
-     <property name="name" value="${ant.project.name}"/>
-    <property name="copyright" value="Copyright (c) 2017 by the authors and contributors of JHotDraw."/>
-    <property name="license.name" value="MIT License"/>
-    <property name="license" value="${license.name}. https://opensource.org/licenses/mit-license.php"/>
-    <property name="version" value="${git.describe}"/>
+     <propertyName name="name" value="${ant.project.name}"/>
+    <propertyName name="copyright" value="Copyright (c) 2017 by the authors and contributors of JHotDraw."/>
+    <propertyName name="license.name" value="MIT License"/>
+    <propertyName name="license" value="${license.name}. https://opensource.org/licenses/mit-license.php"/>
+    <propertyName name="version" value="${git.describe}"/>
     <echo message="${name} ${version} / desc:${git.describe} rev:${git.hash.date.author}"/>
 
-    <property name="manifest.application-name" value="${ant.project.name}"/>
-    <property name="manifest.implementation-version" value="${version}"/>
-    <property name="manifest.implementation-vendor" value="org.jhotdraw"/>
-    <property name="manifest.main-class" value="org.jhotdraw8.samples.grapher.GrapherApplication"/>
+    <propertyName name="manifest.application-name" value="${ant.project.name}"/>
+    <propertyName name="manifest.implementation-version" value="${version}"/>
+    <propertyName name="manifest.implementation-vendor" value="org.jhotdraw"/>
+    <propertyName name="manifest.main-class" value="org.jhotdraw8.samples.grapher.GrapherApplication"/>
 
-    <property name="build" value="build"/>
-    <property name="bin" value="bin"/>
-    <property name="doc" value="doc"/>
-    <property name="dist" value="dist"/>
-    <property name="build.javadoc" value="${build}/javadoc"/>
-    <property name="lib" value="lib"/>
-    <property name="lib.runtime" value="${lib}/runtime"/>
-    <property name="lib.compile" value="${lib}/compile"/>
-    <property name="lib.doc" value="${lib}/doc"/>
-    <property name="build.doc" value="${build}/doc"/>
-    <property name="lib.test" value="${lib}/test"/>
-    <property name="src" value="src"/>
-    <property name="doc" location="doc"/>
-    <property name="build.main.classes" value="${build}/main/classes"/>
-    <property name="build.doc.classes" value="${build}/doc/classes"/>
-    <property name="build.doc.doc" value="${build}/doc/doc"/>
-    <property name="build.doc.tools" value="${build}/doc/tools"/>
-    <property name="lib.doc.docbook" value="${build.doc.tools}/docbook-5.0b5"/>
-    <property name="lib.doc.xalan" value="${build.doc.tools}/xalan-j_2_7_2"/>
-    <property name="lib.doc.docbook-xsl" value="${build.doc.tools}/docbook-xsl-ns-1.79.1"/>
-    <property name="build.doc.html" value="${build}/doc/html"/>
-    <property name="build.doc.chunked" value="${build}/doc/chunk"/>
-    <property name="build.doc" value="${build}/doc"/>
-    <property name="build.main.jars" value="${build}/jars"/>
-    <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
+    <propertyName name="build" value="build"/>
+    <propertyName name="bin" value="bin"/>
+    <propertyName name="doc" value="doc"/>
+    <propertyName name="dist" value="dist"/>
+    <propertyName name="build.javadoc" value="${build}/javadoc"/>
+    <propertyName name="lib" value="lib"/>
+    <propertyName name="lib.runtime" value="${lib}/runtime"/>
+    <propertyName name="lib.compile" value="${lib}/compile"/>
+    <propertyName name="lib.doc" value="${lib}/doc"/>
+    <propertyName name="build.doc" value="${build}/doc"/>
+    <propertyName name="lib.test" value="${lib}/test"/>
+    <propertyName name="src" value="src"/>
+    <propertyName name="doc" location="doc"/>
+    <propertyName name="build.main.classes" value="${build}/main/classes"/>
+    <propertyName name="build.doc.classes" value="${build}/doc/classes"/>
+    <propertyName name="build.doc.doc" value="${build}/doc/doc"/>
+    <propertyName name="build.doc.tools" value="${build}/doc/tools"/>
+    <propertyName name="lib.doc.docbook" value="${build.doc.tools}/docbook-5.0b5"/>
+    <propertyName name="lib.doc.xalan" value="${build.doc.tools}/xalan-j_2_7_2"/>
+    <propertyName name="lib.doc.docbook-xsl" value="${build.doc.tools}/docbook-xsl-ns-1.79.1"/>
+    <propertyName name="build.doc.html" value="${build}/doc/html"/>
+    <propertyName name="build.doc.chunked" value="${build}/doc/chunk"/>
+    <propertyName name="build.doc" value="${build}/doc"/>
+    <propertyName name="build.main.jars" value="${build}/jars"/>
+    <propertyName name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
 
-    <property name="src.main.java" value="${src}/main/java"/>
-    <property name="src.doc.java" value="${src}/doc/java"/>
-    <property name="src.test.java" value="${src}/test/java"/>
-    <property name="src.doc.xsl" value="${src}/doc/xsl"/>
+    <propertyName name="src.main.java" value="${src}/main/java"/>
+    <propertyName name="src.doc.java" value="${src}/doc/java"/>
+    <propertyName name="src.test.java" value="${src}/test/java"/>
+    <propertyName name="src.doc.xsl" value="${src}/doc/xsl"/>
 
     <!-- CheckerFramework-->
-      <property environment="env"/>
-      <!--property name="checkerframework" value="${env.CHECKERFRAMEWORK}" /-->
-      <property name="checkerframework" value="${lib.compile}/checker-framework-2.4.0" />
+      <propertyName environment="env"/>
+      <!--propertyName name="checkerframework" value="${env.CHECKERFRAMEWORK}" /-->
+      <propertyName name="checkerframework" value="${lib.compile}/checker-framework-2.4.0" />
     <!-- On Mac/Linux, use the javac shell script; on Windows, use javac.bat -->
-    <condition property="cfJavac" value="javac.bat" else="javac">
+    <condition propertyName="cfJavac" value="javac.bat" else="javac">
         <os family="windows" />
     </condition>
     <presetdef name="jsr308.javac">
@@ -181,7 +181,7 @@
     </target>
     <target name="do-docbook.asciidoctor" depends="init,do-docbook.copy">
         <!--
-            <pathconvert property="asciidocfiles" pathsep=" ">
+            <pathconvert propertyName="asciidocfiles" pathsep=" ">
                 <map from="${basedir}${file.separator}${build.doc.doc}${file.separator}" to=""/>
                 <fileset dir="${build.doc.doc}">
                     <include name="**/*.txt"/>
@@ -258,8 +258,8 @@
         </exec>
     </target>
     <target name="do-docbook.validate" depends="init,do-docbook.asciidoctor,do-docbook.crossreference">
-        <!--property name="docbookfiles" value="doc/JHotDraw8Handbook.xml"/-->
-        <pathconvert property="docbookfiles" pathsep=" ">
+        <!--propertyName name="docbookfiles" value="doc/JHotDraw8Handbook.xml"/-->
+        <pathconvert propertyName="docbookfiles" pathsep=" ">
             <map from="${basedir}${file.separator}" to=""/>
             
 <!--            <fileset dir="${build.doc.doc}/handbook">
@@ -769,7 +769,7 @@
         </java>
     </target>
     <target name="do-jar" depends="init">
-        <pathconvert property="manifest.class-path" pathsep=" " >
+        <pathconvert propertyName="manifest.class-path" pathsep=" " >
             <map from="${basedir}/${lib.runtime}/" to=""/>
             <fileset dir="${basedir}/${lib.runtime}">
                 <exclude name=".*" />

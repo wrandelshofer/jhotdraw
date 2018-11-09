@@ -18,11 +18,15 @@ import org.jhotdraw8.css.SelectorModel;
  * @version $Id$
  */
 public class DashMatchSelector extends AbstractAttributeSelector {
-
+    @Nullable
+    private final String namespace;
+    @Nonnull
     private final String attributeName;
+    @Nonnull
     private final String substring;
 
-    public DashMatchSelector(String attributeName, String substring) {
+    public DashMatchSelector(@Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+        this.namespace=namespace;
         this.attributeName = attributeName;
         this.substring = substring;
     }
@@ -30,8 +34,8 @@ public class DashMatchSelector extends AbstractAttributeSelector {
     @Nullable
     @Override
     protected <T> T match(@Nonnull SelectorModel<T> model, T element) {
-        return (model.attributeValueEquals(element, attributeName, substring) //
-                || model.attributeValueStartsWith(element, attributeName, substring + '-'))//
+        return (model.attributeValueEquals(element, namespace, attributeName, substring) //
+                || model.attributeValueStartsWith(element, namespace,attributeName, substring + '-'))//
                 ? element : null;
     }
 }

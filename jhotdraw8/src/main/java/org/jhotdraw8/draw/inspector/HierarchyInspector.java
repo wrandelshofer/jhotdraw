@@ -125,7 +125,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         /*
         idColumn.setCellValueFactory(
-                cell -> cell.getValue().getValue().getProperty(StyleableFigure.ID));
+                cell -> cell.getValue().getValue().getPropertyName(StyleableFigure.ID));
 */
             idColumn.setCellValueFactory(
                     cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),

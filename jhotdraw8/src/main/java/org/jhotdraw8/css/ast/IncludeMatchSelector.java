@@ -16,11 +16,15 @@ import org.jhotdraw8.css.SelectorModel;
  * @version $Id$
  */
 public class IncludeMatchSelector extends AbstractAttributeSelector {
-
+    @Nullable
+    private final String namespace;
+    @Nonnull
     private final String attributeName;
+    @Nonnull
     private final String word;
 
-    public IncludeMatchSelector(String attributeName, String word) {
+    public IncludeMatchSelector(@Nullable String namespace, @Nonnull String attributeName, @Nonnull String word) {
+        this.namespace=namespace;
         this.attributeName = attributeName;
         this.word = word;
     }
@@ -28,7 +32,7 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
     @Nullable
     @Override
     protected <T> T match(@Nonnull SelectorModel<T> model, T element) {
-        return model.attributeValueContainsWord(element, attributeName, word) ? element : null;
+        return model.attributeValueContainsWord(element, namespace, attributeName, word) ? element : null;
     }
 
     @Nonnull

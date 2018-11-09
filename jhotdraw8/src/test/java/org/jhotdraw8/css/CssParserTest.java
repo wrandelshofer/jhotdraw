@@ -68,7 +68,7 @@ public class CssParserTest {
                 if (sg.matches(dsd, elem)) {
                     System.out.println("  match " + sg.toString() + " " + elem);
                     for (Declaration d : r.getDeclarations()) {
-                        elem.setAttribute(d.getProperty(), d.getTermsAsString());
+                        elem.setAttribute(d.getPropertyName(), d.getTermsAsString());
                     }
                 } else {
                     System.out.println(" !match " + sg.toString() + " " + elem);
@@ -187,7 +187,7 @@ public class CssParserTest {
                 if (sg.matches(dsd, elem)) {
                     System.out.println("  match " + sg.toString() + " " + elem);
                     for (Declaration d : r.getDeclarations()) {
-                        elem.setAttribute(d.getProperty(), d.getTermsAsString());
+                        elem.setAttribute(d.getPropertyName(), d.getTermsAsString());
                     }
                 } else {
                     System.out.println(" !match " + sg.toString() + " " + elem);

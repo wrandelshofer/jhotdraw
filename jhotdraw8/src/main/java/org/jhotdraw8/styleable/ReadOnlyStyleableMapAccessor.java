@@ -55,6 +55,18 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
     String getCssName();
 
     /**
+     * Returns the CSS namespace uri.
+     * <p>
+     * The default implementation return null.
+     *
+     * @return namespace uri string.
+     */
+    @Nullable
+    default String getCssNamespace() {
+        return null;
+    }
+
+    /**
      * Returns the CSS name string.
      * <p>
      * The default implementation converts the name from "camel case" to "dash

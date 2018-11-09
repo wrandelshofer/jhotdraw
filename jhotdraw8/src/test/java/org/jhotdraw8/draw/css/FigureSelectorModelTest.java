@@ -41,18 +41,19 @@ public class FigureSelectorModelTest {
 
         final PaintableStyleableFigureKey key = FillableFigure.FILL;
         final String attrName = key.getCssName();
+        final String namespace=key.getCssNamespace();
         final Converter<Paintable> converter = key.getConverter();
 
 
         assertNotNull(key.getDefaultValue(), "need a key with a non-null default value for this test");
 
-        assertNull( instance.getAttributeAsString(figure, attrName), "no value has been set, must be null");
+        assertNull( instance.getAttributeAsString(figure,namespace, attrName), "no value has been set, must be null");
 
-        instance.setAttribute(figure, StyleOrigin.USER, attrName, ImmutableList.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
+        instance.setAttribute(figure, StyleOrigin.USER, namespace,attrName, ImmutableList.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
 
         assertNull(figure.get(key), "figure.get(key) value has been explicitly set to null");
 
-        assertEquals(instance.getAttributeAsString(figure, attrName), converter.toString(null), "model.get(figure,key) value has been explicitly set to null");
+        assertEquals(instance.getAttributeAsString(figure, namespace,attrName), converter.toString(null), "model.get(figure,key) value has been explicitly set to null");
 
     }
 

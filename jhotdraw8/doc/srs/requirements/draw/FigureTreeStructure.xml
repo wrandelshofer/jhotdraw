@@ -30,8 +30,8 @@
             <para>A composite figure returns true if asked whether it allows children. Its collection of child figures is modifiable.</para>
         </listitem>
         <listitem>    
-            <para>By convention, a composite figure updates the parent property of a child figure, when a child figure is removed or added to the composite figure. 
-                No other objects may update the parent property.</para>
+            <para>By convention, a composite figure updates the parent propertyName of a child figure, when a child figure is removed or added to the composite figure.
+                No other objects may update the parent propertyName.</para>
         </listitem>
         <listitem>    
             <para>Method isSuitableParent() allows to prevent undesired tree structures. 

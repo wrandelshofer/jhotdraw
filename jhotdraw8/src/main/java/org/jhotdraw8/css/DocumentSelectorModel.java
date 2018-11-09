@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,14 +39,14 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getAttributeAsString(@Nonnull Element elem, StyleOrigin origin, @Nonnull String name) {
-        return getAttributeAsString(elem, name);
+    public String getAttributeAsString(@Nonnull Element elem, StyleOrigin origin, @Nullable String namespace, @Nonnull String name) {
+        return getAttributeAsString(elem, namespace,name);
     }
 
     @Nullable
     @Override
-    public List<CssToken> getAttribute(@Nonnull Element element, @Nullable StyleOrigin origin, @Nonnull String name) {
-        String str=getAttributeAsString(element,origin,name);
+    public List<CssToken> getAttribute(@Nonnull Element element, @Nullable StyleOrigin origin, @Nullable String namespace, @Nonnull String name) {
+        String str=getAttributeAsString(element,origin,namespace,name);
         if (str==null)return null;
         try {
             return new StreamCssTokenizer(str).toTokenList();
@@ -55,7 +56,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasId(@Nonnull Element elem, String id) {
+    public boolean hasId(@Nonnull Element elem, @Nonnull String id) {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
     }
@@ -66,7 +67,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasType(@Nonnull Element elem, String type) {
+    public boolean hasType(@Nonnull Element elem, @Nullable String namespace, @Nonnull String type) {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
     }
@@ -229,49 +230,48 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasAttribute(@Nonnull Element element, @Nonnull String attributeName) {
+    public boolean hasAttribute(@Nonnull Element element, @Nullable String namespace, @Nonnull String attributeName) {
         // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@Nonnull Element element, @Nonnull String attributeName, @Nonnull String substring) {
+    public boolean attributeValueStartsWith(@Nonnull Element element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
-    public String getAttributeAsString(@Nonnull Element element, @Nonnull String attributeName) {
+    public String getAttributeAsString(@Nonnull Element element,@Nullable String namespace,  @Nonnull String attributeName) {
         return element.getAttribute(attributeName);
     }
 
     @Nonnull
     @Override
-    public Set<String> getAttributeNames(@Nonnull Element element) {
-        // FIXME we need the XML schema to return the correct result
-        Set<String> attr = new HashSet<>();
+    public Set<QualifiedName> getAttributeNames(@Nonnull Element element) {
+        Set<QualifiedName> attr = new LinkedHashSet<>();
         NamedNodeMap nnm = element.getAttributes();
         for (int i = 0, n = nnm.getLength(); i < n; i++) {
             Node node = nnm.item(i);
-            attr.add(node.getLocalName());
+            attr.add(new QualifiedName(node.getNamespaceURI(),node.getLocalName()));
         }
         return attr;
     }
 
     @Nonnull
     @Override
-    public Set<String> getComposedAttributeNames(@Nonnull Element element) {
+    public Set<QualifiedName> getComposedAttributeNames(@Nonnull Element element) {
         return getAttributeNames(element);
     }
 
     @Nonnull
     @Override
-    public Set<String> getDecomposedAttributeNames(@Nonnull Element element) {
+    public Set<QualifiedName> getDecomposedAttributeNames(@Nonnull Element element) {
         return getAttributeNames(element);
     }
 
     @Override
-    public void setAttributeAsString(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull String name, String value) {
+    public void setAttributeAsString(@Nonnull Element element, @Nonnull StyleOrigin origin,@Nullable String namespace, @Nonnull String name, String value) {
         switch (origin) {
             case USER:
             case USER_AGENT:
@@ -289,9 +289,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nonnull String name, @Nullable ReadableList<CssToken> value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value) {
         StringBuilder buf = new StringBuilder();
         for (CssToken t : value) buf.append(t.fromToken());
-        setAttributeAsString(element,origin,name, buf.toString());
+        setAttributeAsString(element,origin,namespace, name, buf.toString());
     }
 }

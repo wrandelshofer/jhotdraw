@@ -15,11 +15,15 @@ import org.jhotdraw8.css.SelectorModel;
  * @version $Id$
  */
 public class EqualsMatchSelector extends AbstractAttributeSelector {
-
+    @Nullable
+    private final String namespace;
+    @Nonnull
     private final String attributeName;
+    @Nonnull
     private final String attributeValue;
 
-    public EqualsMatchSelector(String attributeName, String attributeValue) {
+    public EqualsMatchSelector(@Nullable String namespace, @Nonnull String attributeName, @Nonnull String attributeValue) {
+        this.namespace=namespace;
         this.attributeName = attributeName;
         this.attributeValue = attributeValue;
     }
@@ -27,7 +31,7 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
     @Nullable
     @Override
     protected <T> T match(@Nonnull SelectorModel<T> model, T element) {
-        return model.attributeValueEquals(element, attributeName, attributeValue) ? element : null;
+        return model.attributeValueEquals(element, namespace, attributeName, attributeValue) ? element : null;
     }
 
     @Nonnull

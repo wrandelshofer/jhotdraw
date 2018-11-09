@@ -26,8 +26,8 @@
     Example of inserting a HTML postprocessor after javaFX SDK deployment:
 
         <target name="-post-jfx-deploy">
-            <basename property="jfx.deployment.base" file="${jfx.deployment.jar}" suffix=".jar"/>
-            <property name="jfx.deployment.html" location="${jfx.deployment.dir}${file.separator}${jfx.deployment.base}.html"/>
+            <basename propertyName="jfx.deployment.base" file="${jfx.deployment.jar}" suffix=".jar"/>
+            <propertyName name="jfx.deployment.html" location="${jfx.deployment.dir}${file.separator}${jfx.deployment.base}.html"/>
             <custompostprocess>
                 <fileset dir="${jfx.deployment.html}"/>
             </custompostprocess>

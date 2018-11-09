@@ -141,7 +141,7 @@ public class CssFunctionProcessor<T> {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
 
-        String attrName = parseAttrName(tt);
+        QualifiedName attrName = parseAttrName(tt);
         String typeOrUnit = null;
 
         List<CssToken> attrFallback = new ArrayList<>();
@@ -168,7 +168,7 @@ public class CssFunctionProcessor<T> {
         }
         int end = tt.getEndPosition();
 
-        String attrValue = model.getAttributeAsString(element, attrName);
+        String attrValue = model.getAttributeAsString(element, attrName.getNamespace(), attrName.getName());
         if (attrValue != null && !attrValue.isEmpty()) {
             if (typeOrUnit == null) {
                 typeOrUnit = "string";
@@ -334,27 +334,14 @@ public class CssFunctionProcessor<T> {
         throw new ParseException("dimension expected, got: \"" + attrValue + "\"", pos);
     }
 
-    private String parseAttrName(CssTokenizer tt) throws IOException, ParseException {
-        StringBuilder buf = new StringBuilder();
+    private QualifiedName parseAttrName(CssTokenizer tt) throws IOException, ParseException {
+        String name;
         if (tt.next() == CssTokenType.TT_IDENT) {
-            buf.append(tt.currentString());
+            name=tt.currentString();
         } else {
-            tt.pushBack();
+                throw new ParseException("attr-name expected.", tt.getStartPosition());
         }
-        if (tt.nextNoSkip() == CssTokenType.TT_VERTICAL_LINE) {
-            buf.append('|');
-            if (tt.nextNoSkip() == CssTokenType.TT_IDENT) {
-                buf.append(tt.currentString());
-            } else {
-                throw new ParseException("attr-name: identifier expected after \"|\".", tt.getStartPosition());
-            }
-        } else {
-            tt.pushBack();
-        }
-        if (buf.length() == 0) {
-            throw new ParseException("attr-name: identifier expected.", tt.getStartPosition());
-        }
-        return buf.toString();
+        return new QualifiedName(null, name);// FIXME parse namespace
     }
 
     /**

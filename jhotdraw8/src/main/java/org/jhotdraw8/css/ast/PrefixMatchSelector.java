@@ -16,11 +16,15 @@ import org.jhotdraw8.css.SelectorModel;
  * @version $Id$
  */
 public class PrefixMatchSelector extends AbstractAttributeSelector {
-
+    @Nullable
+    private final String namespace;
+    @Nonnull
     private final String attributeName;
+    @Nonnull
     private final String substring;
 
-    public PrefixMatchSelector(String attributeName, String substring) {
+    public PrefixMatchSelector(@Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+        this.namespace=namespace;
         this.attributeName = attributeName;
         this.substring = substring;
     }
@@ -28,7 +32,7 @@ public class PrefixMatchSelector extends AbstractAttributeSelector {
     @Nullable
     @Override
     protected <T> T match(@Nonnull SelectorModel<T> model, T element) {
-        return (model.attributeValueStartsWith(element, attributeName, substring))//
+        return (model.attributeValueStartsWith(element, namespace, attributeName, substring))//
                 ? element : null;
     }
 

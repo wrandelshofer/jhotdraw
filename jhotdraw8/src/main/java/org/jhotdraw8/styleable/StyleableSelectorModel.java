@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.SelectorModel;
@@ -47,9 +48,9 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
     @Nullable
     @Override
-    public String getAttributeAsString(@Nonnull Styleable element, StyleOrigin origin, @Nonnull String name) {
+    public String getAttributeAsString(@Nonnull Styleable element, StyleOrigin origin, @Nullable String namespace, @Nonnull String name) {
         if (origin == StyleOrigin.USER) {
-            String attribute = getAttributeAsString(element, name);
+            String attribute = getAttributeAsString(element, namespace,name);
             return attribute == null ? "" : attribute;
         } else {
             return null;
@@ -67,7 +68,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean hasType(@Nonnull Styleable element, @Nonnull String type) {
+    public boolean hasType(@Nonnull Styleable element, @Nullable String namespace, @Nonnull String type) {
         return type.equals(element.getTypeSelector());
     }
 
@@ -104,7 +105,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean hasAttribute(@Nonnull Styleable element, @Nonnull String attributeName) {
+    public boolean hasAttribute(@Nonnull Styleable element, @Nullable String namespace, @Nonnull String attributeName) {
         // XXX linear time!
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         for (CssMetaData<? extends Styleable, ?> item : list) {
@@ -116,7 +117,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Nullable
-    public List<CssToken> getAttribute(@Nonnull Styleable element, StyleOrigin origin, @Nonnull String attributeName) {
+    public List<CssToken> getAttribute(@Nonnull Styleable element, StyleOrigin origin, @Nullable String namespace, @Nonnull String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -134,7 +135,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return null;
     }
 
-    private Set<String> getWordListAttribute(Styleable element, @Nonnull String attributeName) {
+    private Set<String> getWordListAttribute(Styleable element, @Nullable String namespace, @Nonnull String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -168,65 +169,65 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean attributeValueEquals(@Nonnull Styleable element, @Nonnull String attributeName, @Nonnull String attributeValue) {
-        String actualValue = getAttributeAsString(element, attributeName);
+    public boolean attributeValueEquals(@Nonnull Styleable element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String attributeValue) {
+        String actualValue = getAttributeAsString(element,namespace, attributeName);
         return actualValue != null && actualValue.equals(attributeValue);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@Nonnull Styleable element, @Nonnull String attributeName, @Nonnull String substring) {
-        String actualValue = getAttributeAsString(element, attributeName);
+    public boolean attributeValueStartsWith(@Nonnull Styleable element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+        String actualValue = getAttributeAsString(element,namespace, attributeName);
         return actualValue != null && actualValue.startsWith(substring);
     }
 
     @Override
-    public boolean attributeValueContainsWord(@Nonnull Styleable element, @Nonnull String attributeName, @Nonnull String word) {
-        Set<String> value = getWordListAttribute(element, attributeName);
+    public boolean attributeValueContainsWord(@Nonnull Styleable element,@Nullable String namespace, @Nonnull String attributeName, @Nonnull String word) {
+        Set<String> value = getWordListAttribute(element,namespace, attributeName);
 
         return value != null && value.contains(word);
     }
 
     @Override
-    public boolean attributeValueEndsWith(@Nonnull Styleable element, @Nonnull String attributeName, @Nonnull String substring) {
-        String actualValue = getAttributeAsString(element, attributeName);
+    public boolean attributeValueEndsWith(@Nonnull Styleable element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+        String actualValue = getAttributeAsString(element,namespace, attributeName);
         return actualValue != null && actualValue.endsWith(substring);
     }
 
     @Nonnull
     @Override
-    public Set<String> getAttributeNames(@Nonnull Styleable element) {
-        Set<String> attr = new HashSet<>();
+    public Set<QualifiedName> getAttributeNames(@Nonnull Styleable element) {
+        Set<QualifiedName> attr = new HashSet<>();
         for (CssMetaData<? extends Styleable, ?> item : element.getCssMetaData()) {
-            attr.add(item.getProperty());
+            attr.add(new QualifiedName(null,item.getProperty()));
         }
         return attr;
     }
 
     @Nonnull
     @Override
-    public Set<String> getComposedAttributeNames(@Nonnull Styleable element) {
+    public Set<QualifiedName> getComposedAttributeNames(@Nonnull Styleable element) {
         // FIXME we actually can do this!
         return getAttributeNames(element);
     }
 
     @Nonnull
     @Override
-    public Set<String> getDecomposedAttributeNames(@Nonnull Styleable element) {
+    public Set<QualifiedName> getDecomposedAttributeNames(@Nonnull Styleable element) {
         // FIXME we actually can do this!
         return getAttributeNames(element);
     }
 
     @Override
-    public void setAttribute(@Nonnull Styleable elem, @Nonnull StyleOrigin origin, @Nonnull String name, ReadableList<CssToken> value) {
+    public void setAttribute(@Nonnull Styleable elem, @Nonnull StyleOrigin origin,@Nullable String namespace, @Nonnull String name, ReadableList<CssToken> value) {
         if (value == null) {
-            setAttributeAsString(elem, origin, name, null);
+            setAttributeAsString(elem, origin, namespace,name, null);
         } else {
-            setAttributeAsString(elem, origin, name, value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
+            setAttributeAsString(elem, origin, namespace,name, value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
         }
     }
 
     @Override
-    public void setAttributeAsString(@Nonnull Styleable elem, @Nonnull StyleOrigin origin, @Nonnull String name, String value) {
+    public void setAttributeAsString(@Nonnull Styleable elem, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, String value) {
         List<CssMetaData<? extends Styleable, ?>> metaList = elem.getCssMetaData();
         HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
         for (CssMetaData<? extends Styleable, ?> m : metaList) {

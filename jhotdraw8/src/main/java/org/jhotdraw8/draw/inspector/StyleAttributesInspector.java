@@ -39,13 +39,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.css.StylesheetsManager;
@@ -91,7 +91,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
 
     @Nonnull
-    private Map<String, String> helpTexts = new HashMap<>();
+    private Map<QualifiedName, String> helpTexts = new HashMap<>();
 
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
 
@@ -237,8 +237,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         String id = null;
         String type = null;
         Set<String> styleClasses = new TreeSet<>();
-        Map<String, String> attr = new TreeMap<>();
-        Map<String, String> description = new TreeMap<>();
+        Map<QualifiedName, String> attr = new TreeMap<>();
+        Map<QualifiedName, String> description = new TreeMap<>();
 
         final StyleOrigin origin;
         if (showAttributeValues.isSelected()) {
@@ -257,22 +257,22 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
-                for (String name : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
-                    String attribute = selectorModel.getAttributeAsString(f, origin, name);
-                    attr.put(name, attribute==null?CssTokenType.IDENT_INITIAL :attribute);
+                for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
+                    String attribute = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(),qname.getName());
+                    attr.put(qname, attribute==null?CssTokenType.IDENT_INITIAL :attribute);
                 }
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
                 id = null;
                 type = selectorModel.getType(f).equals(type) ? type : null;
                 styleClasses.retainAll(selectorModel.getStyleClasses(f));
-                for (String name : attr.keySet()) {
-                    String oldAttrValue = attr.get(name);
+                for (QualifiedName qname : attr.keySet()) {
+                    String oldAttrValue = attr.get(qname);
                     if (oldAttrValue != null) {
-                        String newAttrValue = selectorModel.getAttributeAsString(f, origin, name);
+                        String newAttrValue = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(),qname.getName());
                         if (newAttrValue==null)newAttrValue=CssTokenType.IDENT_INITIAL;
                         if (!oldAttrValue.equals(newAttrValue)) {
-                            attr.put(name, "/* multiple values */");
+                            attr.put(qname, "/* multiple values */");
                         }
                     }
                 }
@@ -290,8 +290,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             buf.append('.').append(cssIdentConverter.toString(clazz));
         }
         buf.append(":selected {");
-        for (Map.Entry<String, String> a : attr.entrySet()) {
-            buf.append("\n  ").append(a.getKey()).append(": ");
+        for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
+            buf.append("\n  ").append(a.getKey().getName()).append(": ");
             buf.append(a.getValue());
             buf.append(";");
         }
@@ -443,7 +443,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
         String helpText = null;
         if (d != null) {
-            helpText = helpTexts.get(d.getProperty());
+            helpText = helpTexts.get(d.getPropertyName());
         }
         if (drawingView!=null) {
             drawingView.setHelpText(helpText);
@@ -456,10 +456,10 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         FigureSelectorModel selectorModel = (FigureSelectorModel) styleManager.getSelectorModel();
 
         for (Figure f : figures) {
-            for (String name : selectorModel.getAttributeNames(f)) {
-                Converter<?> c = selectorModel.getConverter(f, name);
+            for (QualifiedName qname : selectorModel.getAttributeNames(f)) {
+                Converter<?> c = selectorModel.getConverter(f, qname.getNamespace(),qname.getName());
                 if (c != null && c.getHelpText() != null) {
-                    helpTexts.put(name, c.getHelpText());
+                    helpTexts.put(qname, c.getHelpText());
                 }
             }
         }

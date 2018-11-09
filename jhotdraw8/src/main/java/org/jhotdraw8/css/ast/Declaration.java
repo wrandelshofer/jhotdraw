@@ -8,42 +8,51 @@ import org.jhotdraw8.collection.ReadableList;
 import org.jhotdraw8.css.CssToken;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * A "declaration" associates a "property" with a list of preserved tokens. If
+ * A "declaration" associates a "propertyName" with a list of preserved tokens. If
  * the list of preserved tokens is empty, the declaration must be ignored.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class Declaration extends AST {
-
-    private final String property;
+    @Nullable
+    private final String propertyNamespace;
+    @Nonnull
+    private final String propertyName;
     @Nonnull
     private final ReadableList<CssToken> terms;
     private int startPos = -1;
     private int endPos = -1;
 
-    public Declaration(String property, CssToken term) {
-        this(property, Arrays.asList(new CssToken[]{term}));
+    public Declaration(@Nullable String propertyNamespace, @Nonnull String propertyName, CssToken term) {
+        this(propertyNamespace,propertyName, Arrays.asList(new CssToken[]{term}));
     }
 
-    public Declaration(String property, @Nonnull List<CssToken> terms) {
-        this(property, terms, -1, -1);
+    public Declaration(@Nullable String propertyNamespace, @Nonnull String propertyName, @Nonnull List<CssToken> terms) {
+        this(propertyNamespace,propertyName, terms, -1, -1);
     }
 
-    public Declaration(String property, @Nonnull List<CssToken> terms, int startPos, int endPos) {
-        this.property = property;
+    public Declaration(@Nullable String propertyNamespace, @Nonnull String propertyName, @Nonnull List<CssToken> terms, int startPos, int endPos) {
+        this.propertyNamespace=propertyNamespace;
+        this.propertyName = propertyName;
         this.terms = ImmutableList.ofCollection(terms);
         this.startPos = startPos;
         this.endPos = endPos;
     }
 
-    public String getProperty() {
-        return property;
+    @Nullable
+    public String getPropertyNamespace() {
+        return propertyNamespace;
+    }
+    @Nonnull
+    public String getPropertyName() {
+        return propertyName;
     }
 
     @Nonnull
@@ -65,7 +74,7 @@ public class Declaration extends AST {
     @Override
     public String toString() {
 
-        return property + ":" + getTermsAsString();
+        return propertyName + ":" + getTermsAsString();
     }
 
     public int getStartPos() {

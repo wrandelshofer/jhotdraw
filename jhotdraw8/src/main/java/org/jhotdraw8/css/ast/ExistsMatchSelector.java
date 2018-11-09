@@ -15,22 +15,25 @@ import org.jhotdraw8.css.SelectorModel;
  * @version $Id$
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
-
+    @Nullable
+    private final String attributeNamespace;
+    @Nonnull
     private final String attributeName;
 
-    public ExistsMatchSelector(String attributeName) {
+    public ExistsMatchSelector(@Nullable String attributeNamespace, @Nonnull String attributeName) {
+        this.attributeNamespace=attributeNamespace;
         this.attributeName = attributeName;
     }
 
     @Nullable
     @Override
     protected <T> T match(@Nonnull SelectorModel<T> model, T element) {
-        return model.hasAttribute(element, attributeName) ? element : null;
+        return model.hasAttribute(element,attributeNamespace, attributeName) ? element : null;
     }
 
     @Nonnull
     @Override
     public String toString() {
-        return "[" + attributeName + ']';
+        return "[" + attributeNamespace+":"+attributeName + ']';
     }
 }
