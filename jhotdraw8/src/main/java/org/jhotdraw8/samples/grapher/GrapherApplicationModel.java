@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.samples.grapher;
 
-import java.lang.module.ModuleDescriptor;
 import java.util.ResourceBundle;
+
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.SimpleApplicationModel;
@@ -26,7 +26,7 @@ import org.jhotdraw8.util.Resources;
  * @version $Id$
  */
 public class GrapherApplicationModel extends SimpleApplicationModel {
-public final static DataFormat GRAPHER_FORMAT;
+    public final static DataFormat GRAPHER_FORMAT;
 
     static {
         DataFormat fmt = DataFormat.lookupMimeType("application/xml+grapher");
@@ -52,6 +52,7 @@ public final static DataFormat GRAPHER_FORMAT;
         map.put(ExportFileAction.ID, new ExportFileAction(app, DrawingExportOptionsPane::createDialog));
         return map;
     }
+
     @Override
     public ResourceBundle getResources() {
         return Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
@@ -59,7 +60,10 @@ public final static DataFormat GRAPHER_FORMAT;
 
     @Override
     public String getCopyright() {
+        return "Version " + GrapherApplicationModel.class.getPackage().getImplementationVersion() + ". MIT License";
+        /* Needs Java SE 9 or higher:
         ModuleDescriptor descriptor = GrapherApplicationModel.class.getModule().getDescriptor();
         return "Version "+descriptor.version().orElse(null)+". MIT License.";
+        */
     }
 }

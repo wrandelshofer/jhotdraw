@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <excludeFromCompile>
-      <file url="file://$PROJECT_DIR$/src/main/java/module-info.java" />
+      <file url="file://$PROJECT_DIR$/src/main/module-info/module-info.java" />
       <file url="file://$PROJECT_DIR$/ext/src/ferro/module-info.java" />
     </excludeFromCompile>
   </component>

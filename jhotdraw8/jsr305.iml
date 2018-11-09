@@ -4,6 +4,7 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/jsr305">
       <sourceFolder url="file://$MODULE_DIR$/jsr305/src/main/java" isTestSource="false" />
+      <excludePattern pattern="src/main/java/module-info.java" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
