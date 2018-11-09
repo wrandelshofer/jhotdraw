@@ -31,6 +31,10 @@ public interface ReadableCollection<E> extends Iterable<E> {
         return size() == 0;
     }
 
+    default Object[] toArray() {
+        return toArray(new Object[size()]);
+    }
+
     /**
      * Converts the collection to an array.
      *
@@ -65,6 +69,11 @@ public interface ReadableCollection<E> extends Iterable<E> {
     default Stream<E> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
-
-    boolean contains(E e);
+    default void copyInto(Object[] out, int offset) {
+        int i = offset;
+        for (E e : this) {
+            out[i++] = e;
+        }
+    }
+    boolean contains(Object e);
 }

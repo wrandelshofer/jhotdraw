@@ -76,7 +76,7 @@ public final class ImmutableSet<E> extends AbstractReadableSet<E> {
     }
 
     @Override
-    public boolean contains(E o) {
+    public boolean contains(Object o) {
         return backingSet.contains(o);
     }
 

@@ -13,6 +13,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.stream.Stream;
 
 import javafx.collections.ObservableListBase;
 
@@ -31,7 +32,7 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IndexedHashSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
+public class IndexedHashSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E>, ReadableSet<E> {
 
     /**
      * The underlying list.
@@ -782,6 +783,11 @@ public class IndexedHashSet<E> extends ObservableListBase<E> implements Set<E>, 
     @Override
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.ORDERED);
+    }
+
+    @Override
+    public Stream<E> stream() {
+        return ReadableSet.super.stream();
     }
 
     public void fireItemUpdated(int index) {

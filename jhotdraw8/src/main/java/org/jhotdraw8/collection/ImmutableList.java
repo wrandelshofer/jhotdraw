@@ -46,7 +46,7 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     }
 
     @Override
-    public boolean contains(E o) {
+    public boolean contains(Object o) {
         for (int i = 0, n = array.length; i < n; i++)
             if (array[i].equals(o)) {
                 return true;
