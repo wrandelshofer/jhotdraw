@@ -26,14 +26,22 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull CssConverter<T> converter) {
         this(key, elemClass, ImmutableList.emptyList(), converter);
     }
-
+    public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull CssListConverter<T> converter) {
+        this(key, elemClass, ImmutableList.emptyList(), converter);
+    }
 
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull ImmutableList<T> defaultValue, @Nonnull CssConverter<T> converter) {
     this(key, ReadOnlyStyleableMapAccessor.toCssName(key),elemClass,defaultValue,converter);
     }
+    public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull ImmutableList<T> defaultValue, @Nonnull CssListConverter<T> converter) {
+    this(key, ReadOnlyStyleableMapAccessor.toCssName(key),elemClass,defaultValue,converter);
+    }
     public ListStyleableKey(@Nonnull String key, String cssName, @Nonnull Class<T> elemClass, @Nonnull ImmutableList<T> defaultValue, @Nonnull CssConverter<T> converter) {
+    this(key, cssName,elemClass,defaultValue,new CssListConverter<>(converter));
+    }
+    public ListStyleableKey(@Nonnull String key, String cssName, @Nonnull Class<T> elemClass, @Nonnull ImmutableList<T> defaultValue, @Nonnull CssListConverter<T> converter) {
         super(key, elemClass, defaultValue);
-        this.converter =new CssListConverter<>(converter);
+        this.converter =converter;
 
         Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

@@ -14,16 +14,22 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
+    public enum Separator {
+        SPACE,
+        COMMA,
+        NEWLINE,
+        NEWLINE_WITH_INITIAL_NEWLINE
+    }
     private final CssConverter<T> elementConverter;
-    private final boolean withComma;
+    private final Separator style;
 
     public CssListConverter(CssConverter<T> elementConverter) {
-        this(elementConverter, true);
+        this(elementConverter, Separator.COMMA);
     }
 
-    public CssListConverter(CssConverter<T> elementConverter, boolean withComma) {
+    public CssListConverter(CssConverter<T> elementConverter, Separator separator) {
         this.elementConverter = elementConverter;
-        this.withComma = withComma;
+        this.style = separator;
     }
 
 
@@ -59,11 +65,29 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                 }
                 if (first) {
                     first = false;
-                } else {
-                    if (withComma) {
-                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    switch (style) {
+                        case SPACE:
+                        case NEWLINE:
+                        case COMMA:
+                            break;
+                        case NEWLINE_WITH_INITIAL_NEWLINE:
+                            out.accept(new CssToken(CssTokenType.TT_S, "\n"));
+                            break;
                     }
-                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                } else {
+                    switch (style) {
+                        case SPACE:
+                            out.accept(new CssToken(CssTokenType.TT_S, " "));
+                            break;
+                        case NEWLINE:
+                        case NEWLINE_WITH_INITIAL_NEWLINE:
+                            out.accept(new CssToken(CssTokenType.TT_S, "\n"));
+                            break;
+                        case COMMA:
+                            out.accept(new CssToken(CssTokenType.TT_COMMA));
+                            out.accept(new CssToken(CssTokenType.TT_S, " "));
+                            break;
+                    }
                 }
                 elementConverter.produceTokens(elem, idFactory, out);
             }
@@ -78,12 +102,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
     @Override
     public String getHelpText() {
-        if (withComma) {
-            return "Format of ⟨List⟩: ⟨Item⟩, ⟨Item⟩, ...\n"
-                    + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
-        } else {
-            return "Format of ⟨List⟩: ⟨Item⟩ ⟨Item⟩, ...\n"
-                    + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
-        }
+        return "Format of ⟨List⟩: ⟨Item⟩, ⟨Item⟩, ...\n"
+                + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
     }
 }
