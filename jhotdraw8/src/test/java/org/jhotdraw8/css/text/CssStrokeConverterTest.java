@@ -30,6 +30,8 @@ class CssStrokeConverterTest {
     static
     public void doTestFromString(CssStroke expected, String string) throws Exception {
         System.out.println("fromString " + string);
+        if (string.equals("none"))expected=null;
+
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssStrokeConverter instance = new CssStrokeConverter(false);
@@ -80,7 +82,11 @@ class CssStrokeConverterTest {
                 dynamicTest("5", () -> doTest(
                         new CssStroke(new CssSize(2),CssColor.BLACK, StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER,new CssSize(3)
                         , new CssSize(4), ImmutableList.of(new CssSize(5),new CssSize(6))),
-                        "2 black inside round miter miter-limit(3) dash-offset(4) dash-array(5 6)"))
+                        "2 black inside round miter miter-limit(3) dash-offset(4) dash-array(5 6)")),
+                dynamicTest("6", () -> doTest(
+                        new CssStroke(new CssSize(1),null, StrokeType.CENTERED, StrokeLineCap.SQUARE, StrokeLineJoin.MITER,new CssSize(10)
+                                , new CssSize(0), ImmutableList.emptyList()),
+                        "none"))
         );
     }
 

@@ -1,7 +1,6 @@
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.css.CssFont;
-import org.jhotdraw8.css.CssPoint2D;
+import javafx.geometry.Point3D;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -13,46 +12,47 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class CssPoint2DConverterTest {
-
+class Point3DConverterTest {
     /**
-     * Test of fromString method, of class CssPoint2DConverter.
+     * Test of fromString method, of class Point3DConverter.
      */
     static
-    public void doTestFromString(CssPoint2D expected, String string) throws Exception {
+    public void doTestFromString(Point3D expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssPoint2DConverter instance = new CssPoint2DConverter(false);
-        CssPoint2D actual = instance.fromString(buf, idFactory);
+        Point3DConverter instance = new Point3DConverter(false);
+        Point3D actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
     }
     /**
-     * Test of toString method, of class CssPoint2DConverter.
+     * Test of toString method, of class Point3DConverter.
      */
     static
-    public void doTestToString(CssPoint2D value, String expected) throws Exception {
+    public void doTestToString(Point3D value, String expected) throws Exception {
         System.out.println("toString " + value);
-        CssPoint2DConverter instance = new CssPoint2DConverter(false);
+        Point3DConverter instance = new Point3DConverter(false);
         String actual = instance.toString(value);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         assertEquals(expected,actual);
     }
     /**
-     * Test of fromString and toString methods, of class CssPoint2DConverter.
+     * Test of fromString and toString methods, of class Point3DConverter.
      */
     static
-    public void doTest(CssPoint2D value, String str) throws Exception {
+    public void doTest(Point3D value, String str) throws Exception {
         doTestFromString(value,str);
         doTestToString(value,str);
     }
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> doTest(new CssPoint2D(40,40,"cm"), "40cm 40cm"))
+                dynamicTest("1", () -> doTest(new Point3D(1,2,3), "1, 2, 3")),
+                dynamicTest("1", () -> doTest(new Point3D(1,2,0), "1, 2"))
         );
     }
+
 }

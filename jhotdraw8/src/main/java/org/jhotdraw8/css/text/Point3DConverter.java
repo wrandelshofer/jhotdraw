@@ -62,8 +62,11 @@ public class Point3DConverter extends AbstractCssConverter<Point3D> {
         out.accept(new CssToken(CssTokenType.TT_COMMA));
         out.accept(new CssToken(CssTokenType.TT_S, " "));
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
-        out.accept(new CssToken(CssTokenType.TT_S, " "));
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getZ()));
+        double z = value.getZ();
+        if (z!=0.0) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, z));
+        }
     }
 }

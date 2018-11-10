@@ -216,6 +216,11 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
 
     @Override
     protected <TT extends CssStroke> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        if (value.getPaint()==null) {
+            out.accept(new CssToken(CssTokenType.TT_IDENT,CssTokenType.IDENT_NONE));
+            return;
+        }
+
         boolean needsSpace = false;
         CssSize width = value.getWidth();
         if (width.getConvertedValue() != 1.0) {

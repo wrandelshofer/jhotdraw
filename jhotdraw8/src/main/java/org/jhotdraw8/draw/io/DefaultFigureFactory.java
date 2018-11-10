@@ -202,7 +202,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));
         addConverter(SimplePolylineFigure.POINTS,new CssListConverter<>(new Point2DConverter(false)));
         addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));
-        addConverter(SecondStrokeableFigure.SECOND_STROKE_DASH_ARRAY, new CssListConverter<>(new CssDoubleConverter(false)));
+        addConverter(SecondStrokeableFigure.SECOND_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
