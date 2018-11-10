@@ -443,7 +443,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
         String helpText = null;
         if (d != null) {
-            helpText = helpTexts.get(d.getPropertyName());
+            helpText = helpTexts.get(new QualifiedName(d.getPropertyNamespace(),d.getPropertyName()));
         }
         if (drawingView!=null) {
             drawingView.setHelpText(helpText);

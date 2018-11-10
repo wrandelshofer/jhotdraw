@@ -82,7 +82,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * The offset is on tangent line of the figure.
      */
     public final static CssSizeStyleableFigureKey LABEL_OFFSET_X = new CssSizeStyleableFigureKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
-    public final static CssPoint2DStyleableMapAccessor LABELED_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
+    public final static CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.
      */
