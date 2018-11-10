@@ -488,9 +488,21 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 }
             }
 
-            // For all figures with dirty flag Node 
-            // we must fireNodeInvalidated node invalidation
+            // For all figures with dirty flag Node
+            // mark all parents also as dirty
             DirtyMask dmNode = DirtyMask.of(DirtyBits.NODE);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmNode)) {
+                    for (Figure p = f.getParent();p!=null;p=p.getParent()) {
+                        markDirty(p, DirtyBits.NODE);
+                    }
+                }
+            }
+
+            // For all figures with dirty flag Node
+            // we must fireNodeInvalidated node
             for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
