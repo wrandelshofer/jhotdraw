@@ -1,4 +1,4 @@
-/* @(#)CssPoint2DConverterOLD.java
+/* @(#)Point2DConverter.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -24,15 +24,15 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssPoint2DConverterOLD extends AbstractCssConverter<Point2D> {
+public class Point2DConverter extends AbstractCssConverter<Point2D> {
 
     private final boolean withSpace;
 
-    public CssPoint2DConverterOLD(boolean nullable) {
+    public Point2DConverter(boolean nullable) {
         this(nullable, true);
     }
 
-    public CssPoint2DConverterOLD(boolean nullable, boolean withSpace) {
+    public Point2DConverter(boolean nullable, boolean withSpace) {
         super(nullable);
         this.withSpace = withSpace;
     }

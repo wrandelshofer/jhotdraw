@@ -71,7 +71,7 @@ import org.jhotdraw8.css.text.CssInsetsConverterOLD;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssPaintConverter;
 import org.jhotdraw8.css.text.CssPaintableConverter;
-import org.jhotdraw8.css.text.CssPoint2DConverterOLD;
+import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.css.text.CssRegexConverter;
 import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
@@ -200,7 +200,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));
-        addConverter(SimplePolylineFigure.POINTS,new CssListConverter<>(new CssPoint2DConverterOLD(false)));
+        addConverter(SimplePolylineFigure.POINTS,new CssListConverter<>(new Point2DConverter(false)));
         addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));
         addConverter(SecondStrokeableFigure.SECOND_STROKE_DASH_ARRAY, new CssListConverter<>(new CssDoubleConverter(false)));
 

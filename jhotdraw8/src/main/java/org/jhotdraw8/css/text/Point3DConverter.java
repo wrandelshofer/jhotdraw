@@ -1,4 +1,4 @@
-/* @(#)CssPoint2DConverterOLD.java
+/* @(#)Point2DConverter.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
@@ -24,9 +24,9 @@ import org.jhotdraw8.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssPoint3DConverterOLD extends AbstractCssConverter<Point3D> {
+public class Point3DConverter extends AbstractCssConverter<Point3D> {
 
-    public CssPoint3DConverterOLD(boolean nullable) {
+    public Point3DConverter(boolean nullable) {
         super(nullable);
     }
 

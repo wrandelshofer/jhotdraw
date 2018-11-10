@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -126,6 +127,15 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         }
         set(POINTS,  ImmutableList.ofCollection(newP));
     }
+    @Override
+    public void translateInLocal(CssPoint2D t) {
+        ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
+        for (int i = 0, n = newP.size(); i < n; i++) {
+            newP.set(i, newP.get(i).add(t.getConvertedValue()));
+        }
+        set(POINTS, ImmutableList.ofCollection(newP));
+    }
+
 
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {

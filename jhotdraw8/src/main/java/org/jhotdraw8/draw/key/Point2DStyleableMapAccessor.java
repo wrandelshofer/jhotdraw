@@ -9,7 +9,7 @@ import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.text.CssPoint2DConverterOLD;
+import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -44,7 +44,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
      * @param yKey the key for the y coordinate of the point
      */
     public Point2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey) {
-        this(name, xKey, yKey, new CssPoint2DConverterOLD(false));
+        this(name, xKey, yKey, new Point2DConverter(false));
     }
 
     /**

@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.text.CssPoint2DConverterOLD;
+import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -70,10 +70,10 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         this.converter=new CssListConverter<>(
-                new CssPoint2DConverterOLD(false),false);
+                new Point2DConverter(false, false),false);
         CssMetaData<Styleable, ImmutableList<Point2D>> md
                 = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<ImmutableList<Point2D>>(this.converter),
+                new StyleConverterAdapter<>(this.converter),
                 defaultValue, inherits);
         cssMetaData = md;
     }

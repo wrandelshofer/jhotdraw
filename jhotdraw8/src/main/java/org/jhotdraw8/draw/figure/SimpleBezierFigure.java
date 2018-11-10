@@ -17,8 +17,10 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -150,6 +152,13 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         }
         set(PATH, ImmutableList.ofCollection(newP));
     }
+    
+    @Override
+    public void translateInLocal(CssPoint2D t) {
+        Transform transform = new Translate(t.getX().getConvertedValue(),t.getY().getConvertedValue());
+        reshapeInLocal(transform);
+    }
+
 
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {

@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -90,6 +91,15 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
+        }
+        set(POINTS, ImmutableList.ofCollection(newP));
+    }
+
+    @Override
+    public void translateInLocal(CssPoint2D t) {
+        ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
+        for (int i = 0, n = newP.size(); i < n; i++) {
+            newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
         set(POINTS, ImmutableList.ofCollection(newP));
     }
