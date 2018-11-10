@@ -293,8 +293,8 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             newY = height.getValue() > 0 ? y.add(height) : y;
             CssPoint2D oldValue = getNonnull(LABEL_TRANSLATE);
             set(LABEL_TRANSLATE,
-                    new CssPoint2D(oldValue.getX().add(newX).subtract(bounds.getMinX()),
-                            oldValue.getY().add(newY).subtract(bounds.getMinY())));
+                    new CssPoint2D(x.subtract(bounds.getMinX()).add(oldValue.getX()),
+                            y.subtract(bounds.getMinY()).add(oldValue.getY())));
         }
     }
 
