@@ -142,12 +142,12 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
 
     @Override
     public V getNext(V vertex, int i) {
-        return (V) getVertexDataNonnull(vertex).next.get(i).end;
+        return getVertexDataNonnull(vertex).next.get(i).end;
     }
 
     @Override
     public A getNextArrow(V vertex, int index) {
-        return (A) getVertexDataNonnull(vertex).next.get(index);
+        return getVertexDataNonnull(vertex).next.get(index);
     }
 
     @Override
