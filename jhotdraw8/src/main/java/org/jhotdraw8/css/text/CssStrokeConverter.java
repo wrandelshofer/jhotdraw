@@ -157,7 +157,9 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         while (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_DIMENSION) {
             tt.pushBack();
             list.add(parseSize(DASH_ARRAY, null, tt, idFactory));
-
+            if (tt.next()!=CssTokenType.TT_COMMA) {
+                tt.pushBack();
+            }
         }
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨Stroke⟩: ⟨" + DASH_ARRAY + "⟩ right bracket expected.");
