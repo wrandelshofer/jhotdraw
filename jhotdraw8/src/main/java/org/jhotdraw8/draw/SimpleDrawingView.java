@@ -1236,8 +1236,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         CssSize cssWidth = d.get(Drawing.WIDTH);
         CssSize cssHeight = d.get(Drawing.HEIGHT);
-        double dw = cssWidth==null?0.0:cssWidth.getConvertedValue();
-        double dh = cssHeight==null?0.0:cssHeight.getConvertedValue();
+        double dw = cssWidth == null ? 0.0 : cssWidth.getConvertedValue();
+        double dh = cssHeight == null ? 0.0 : cssHeight.getConvertedValue();
 
         Bounds bounds = drawingPane.getLayoutBounds();
         double x = bounds.getMinX() * f;
