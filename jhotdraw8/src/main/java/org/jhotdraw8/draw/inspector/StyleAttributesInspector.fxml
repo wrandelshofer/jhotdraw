@@ -11,13 +11,12 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="16" styleClass="flushTopRightLeft" wrapText="true" VBox.vgrow="ALWAYS" />
-    <HBox alignment="BASELINE_LEFT">
+    <HBox alignment="BASELINE_LEFT" spacing="4.0">
       <children>
             <MenuButton mnemonicParsing="false" text="%options.text">
               <items>
@@ -53,13 +52,8 @@
                   </MenuItem>
               </items>
             </MenuButton>
-        <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
             <Button fx:id="selectButton" mnemonicParsing="false" text="%selectButton.text" />
-        <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text">
-          <HBox.margin>
-            <Insets left="4.0" />
-          </HBox.margin>
-        </Button>
+        <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text" />
       </children>
       <VBox.margin>
         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

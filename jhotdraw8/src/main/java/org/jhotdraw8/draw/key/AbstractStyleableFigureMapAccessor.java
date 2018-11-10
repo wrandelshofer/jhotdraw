@@ -24,7 +24,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @param <T> the value type
  */
-public abstract class AbstractStyleableFigureMapAccessor<T> implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
+public abstract class AbstractStyleableFigureMapAccessor<T>
+        implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
 
     @Nonnull
     private final String cssName;

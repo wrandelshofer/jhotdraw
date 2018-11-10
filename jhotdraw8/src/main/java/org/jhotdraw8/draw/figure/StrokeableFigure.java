@@ -80,7 +80,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableFigureKey STROKE_MITER_LIMIT = new CssSizeStyleableFigureKey("stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(10.0));
+    CssSizeStyleableFigureKey STROKE_MITER_LIMIT = new CssSizeStyleableFigureKey("stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
@@ -121,6 +121,8 @@ public interface StrokeableFigure extends Figure {
 
     /**
      * Combined map accessor for all stroke style properties.
+     * <p>
+     * Note: this is a non-standard composite map accessor and thus transient!
      */
     StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style", STROKE_WIDTH,
             STROKE, STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);

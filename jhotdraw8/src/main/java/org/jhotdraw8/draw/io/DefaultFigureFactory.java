@@ -26,8 +26,10 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssPoint3D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.CssStroke;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.css.text.CssPoint3DConverter;
+import org.jhotdraw8.css.text.CssStrokeConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.SecondStrokeableFigure;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -191,7 +193,8 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(StrokeLineJoin.class, new CssEnumConverter<>(StrokeLineJoin.class));
         addConverterForType(StrokeLineCap.class, new CssEnumConverter<>(StrokeLineCap.class));
         addConverterForType(StrokeType.class, new CssEnumConverter<>(StrokeType.class));
-        
+        addConverterForType(CssStroke.class, new CssStrokeConverter(false));
+
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
         addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
@@ -203,7 +206,6 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
-        removeRedundantKeys();
         checkConverters();
     }
 

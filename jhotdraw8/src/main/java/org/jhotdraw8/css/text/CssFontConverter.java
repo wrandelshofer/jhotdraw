@@ -100,8 +100,16 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         }
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, fontSize.getValue(), fontSize.getUnits()));
         out.accept(new CssToken(CssTokenType.TT_S, " "));
-        if (fontFamily.contains(" ") || fontFamily.contains("\'") || fontFamily.contains("\"")) {
+        if (fontFamily.contains("\'") || fontFamily.contains("\"")) {
             out.accept(new CssToken(CssTokenType.TT_STRING, fontFamily));
+        }else            if (fontFamily.contains(" ")) {
+            boolean first=true;
+            for (String part : fontFamily.split(" +")) {
+                if (first)first=false;
+                else
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, part));
+            }
         } else {
             out.accept(new CssToken(CssTokenType.TT_IDENT, fontFamily));
         }

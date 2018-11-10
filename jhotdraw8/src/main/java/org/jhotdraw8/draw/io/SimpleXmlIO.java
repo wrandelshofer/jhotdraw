@@ -30,6 +30,8 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Clipping;
@@ -690,25 +692,44 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     protected void writeElementAttributes(@Nonnull Element elem, @Nonnull Figure figure) throws IOException {
         String id = idFactory.createId(figure);
         setAttribute(elem, figureFactory.getObjectIdAttribute(), id);
-        for (MapAccessor<?> k : figureFactory.figureAttributeKeys(figure)) {
-            if (k.isTransient()) {
-                continue;
-            }
-            @SuppressWarnings("unchecked")
-            MapAccessor<Object> key = (MapAccessor<Object>) k;
-            Object value = figure.get(key);
 
-            if (value instanceof URI) {
-                value = uriResolver.apply((URI) value);
-            }
 
-            if (!key.isTransient() && figure.containsKey(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
-                String name = figureFactory.keyToName(figure, key);
-                if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    setAttribute(elem, name, idFactory.createId(value));
-                } else {
-                    setAttribute(elem, name, figureFactory.valueToString(key, value));
+        Set<MapAccessor<?>> todo = new LinkedHashSet<>(figureFactory.figureAttributeKeys(figure));
+
+        // First write all non-transient composite attributes, then write the remaining non-transient non-composite attributes
+        for (MapAccessor<?> k : new ArrayList<>(todo)) {
+            if (k instanceof CompositeMapAccessor) {
+                todo.remove(k);
+                if (! k.isTransient()) {
+                    @SuppressWarnings("unchecked") CompositeMapAccessor<Object> cmap = (CompositeMapAccessor<Object>) k;
+                    todo.removeAll(cmap.getSubAccessors());
+                    writeElementAttribute(elem, figure, cmap);
                 }
+            }
+        }
+        for (MapAccessor<?> k : todo) {
+            if (!k.isTransient()) {
+                @SuppressWarnings("unchecked") MapAccessor<Object> cmap=(MapAccessor<Object>)k;
+                writeElementAttribute(elem, figure, cmap);
+            }
+        }
+    }
+
+    private void writeElementAttribute(@Nonnull Element elem, @Nonnull Figure figure, MapAccessor<Object> k) throws IOException {
+        @SuppressWarnings("unchecked")
+        MapAccessor<Object> key = k;
+        Object value = figure.get(key);
+
+        if (value instanceof URI) {
+            value = uriResolver.apply((URI) value);
+        }
+
+        if (!key.isTransient() /*&& figure.containsKey(StyleOrigin.USER, key)*/ && !figureFactory.isDefaultValue(figure, key, value)) {
+            String name = figureFactory.keyToName(figure, key);
+            if (Figure.class.isAssignableFrom(key.getValueType())) {
+                setAttribute(elem, name, idFactory.createId(value));
+            } else {
+                setAttribute(elem, name, figureFactory.valueToString(key, value));
             }
         }
     }

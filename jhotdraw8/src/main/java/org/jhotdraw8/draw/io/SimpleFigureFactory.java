@@ -18,8 +18,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
@@ -36,7 +38,7 @@ import org.w3c.dom.Text;
  * @version $Id$
  */
 public class SimpleFigureFactory implements FigureFactory {
-private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(SimpleFigureFactory.class.getName());
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
     private final Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> elemToKey = new HashMap<>();
@@ -72,8 +74,8 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
     /**
      * Adds a converter for the specified key.
      *
-     * @param <T> the type of the value
-     * @param key the key
+     * @param <T>       the type of the value
+     * @param key       the key
      * @param converter the converter
      */
     public <T> void addConverter(MapAccessor<T> key, Converter<T> converter) {
@@ -84,9 +86,9 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
     /**
      * Adds a converter.
      *
-     * @param <T> the value type
+     * @param <T>       the value type
      * @param valueType A value type returned by
-     * {@code MapAccessor.getValueType();}.
+     *                  {@code MapAccessor.getValueType();}.
      * @param converter the converter
      */
     public <T> void addConverterForType(@Nonnull Class<? extends T> valueType, Converter<T> converter) {
@@ -102,8 +104,8 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * Adds a converter.
      *
      * @param fullValueType A value type returned by
-     * {@code MapAccessor.getFullValueType();}.
-     * @param converter the converter
+     *                      {@code MapAccessor.getFullValueType();}.
+     * @param converter     the converter
      */
     public void addConverterForType(String fullValueType, Converter<?> converter) {
         addConverterForType(fullValueType, converter, false);
@@ -131,15 +133,15 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * <p>
      * If a figure with this name has already been added, it will be replaced by this figure.
      *
-     * @param name The element name
+     * @param name        The element name
      * @param figureClass The figure class is used both for instantiation of a
-     * new figure and for determining the name of a figure.
+     *                    new figure and for determining the name of a figure.
      */
     public void addFigure(String name, @Nonnull Class<? extends Figure> figureClass) {
         nameToFigure.put(name, () -> {
             try {
                 return figureClass.getDeclaredConstructor().newInstance();
-            } catch (@Nonnull InstantiationException | IllegalAccessException |NoSuchMethodException|InvocationTargetException e) {
+            } catch (@Nonnull InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 throw new InternalError("Couldn't instantiate " + figureClass, e);
             }
         });
@@ -156,11 +158,11 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * <p>
      * If a figure with this name has already been added, it will be replaced by this figure.
      *
-     * @param name The element name
+     * @param name           The element name
      * @param figureSupplier The figure supplier is used for instantiating a
-     * figure from a name.
-     * @param figureClass The figure class is used for determining the name of a
-     * figure.
+     *                       figure from a name.
+     * @param figureClass    The figure class is used for determining the name of a
+     *                       figure.
      */
     public void addFigure(String name, Class<? extends Figure> figureClass, Supplier<Figure> figureSupplier) {
         if (!nameToFigure.containsKey(name)) {
@@ -173,7 +175,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
     /**
      * Adds the provided keys to the figure.
      *
-     * @param f the figure
+     * @param f    the figure
      * @param keys the keys
      */
     public void addFigureAttributeKeys(Class<? extends Figure> f, @Nonnull Collection<MapAccessor<?>> keys) {
@@ -214,8 +216,8 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * The same key can be added more than once.
      *
      * @param figure the figure
-     * @param name The attribute name
-     * @param key The key
+     * @param name   The attribute name
+     * @param key    The key
      */
     public void addKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
         figureAttributeKeys.computeIfAbsent(figure, k -> new HashSet<>()).add(key);
@@ -233,7 +235,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * <p>
      * The same key can be added more than once.
      *
-     * @param f The figure
+     * @param f    The figure
      * @param keys The mapping from attribute names to keys
      */
     public void addKeys(Class<? extends Figure> f, @Nonnull HashMap<String, MapAccessor<?>> keys) {
@@ -246,8 +248,8 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * Adds the provided keys to the figure.
      *
      * @param figure the figure
-     * @param name the element name
-     * @param key the keys
+     * @param name   the element name
+     * @param key    the keys
      */
     public void addNodeListKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
         if (figureNodeListKeys.containsKey(figure)) {
@@ -273,7 +275,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
      * Adds an attribute to the list of attributes which will be skipped when
      * reading the DOM.
      *
-     * @param figure the figure class
+     * @param figure        the figure class
      * @param attributeName the attribute name
      */
     public void addSkipAttribute(Class<? extends Figure> figure, String attributeName) {
@@ -309,8 +311,8 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
         for (HashMap<MapAccessor<?>, String> map : keyToAttr.values()) {
             for (MapAccessor<?> k : map.keySet()) {
                 String fullValueType = k.getFullValueType();
-                if (!k.isTransient()&&!keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
-                   LOGGER.warning(getClass()+ " can not convert " + fullValueType + " to XML for key " + k + ".");
+                if (!k.isTransient() && !keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
+                    LOGGER.warning(getClass() + " can not convert " + fullValueType + " to XML for key " + k + ".");
                 }
             }
         }
@@ -540,29 +542,6 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
         }
     }
 
-    /**
-     * Removes all accessors which are sub accessors of a composite map
-     * accessor.
-     */
-    protected void removeRedundantKeys() {
-        // FIXME must removeChild redundant keys per figure
-
-        HashSet<MapAccessor<?>> redundantKeys = new HashSet<>();
-
-        for (Map.Entry<Class<? extends Figure>, HashSet<MapAccessor<?>>> entry : figureAttributeKeys.entrySet()) {
-            for (MapAccessor<?> ma : entry.getValue()) {
-                if (ma instanceof CompositeMapAccessor<?>) {
-                    CompositeMapAccessor<?> cma = (CompositeMapAccessor<?>) ma;
-                    redundantKeys.addAll(cma.getSubAccessors());
-                }
-            }
-        }
-
-        for (MapAccessor<?> ma : redundantKeys) {
-            removeKey(ma);
-        }
-    }
-
     @Override
     public <T> T stringToValue(@Nonnull MapAccessor<T> key, @Nonnull String string) throws IOException {
         try {
@@ -580,7 +559,7 @@ private final static Logger LOGGER=Logger.getLogger(SimpleFigureFactory.class.ge
             }
             return converter.fromString(CharBuffer.wrap(string), idFactory);
         } catch (ParseException ex) {
-            throw new IOException(ex+"\nstring: \""+string+"\"",ex);
+            throw new IOException(ex + "\nstring: \"" + string + "\"", ex);
         }
     }
 

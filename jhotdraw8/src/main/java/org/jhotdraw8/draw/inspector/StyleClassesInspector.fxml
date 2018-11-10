@@ -9,11 +9,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <bottom>
-    <HBox BorderPane.alignment="CENTER">
+    <HBox spacing="4.0" BorderPane.alignment="CENTER">
       <children>
-        <TextField fx:id="textField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
         <Button fx:id="addButton" mnemonicParsing="false" text="%addButton.text">
           <tooltip>
             <Tooltip text="%addButton.toolTipText" />
@@ -27,9 +26,10 @@
             <Tooltip text="%removeButton.toolTipText" />
           </tooltip>
           <HBox.margin>
-            <Insets left="4.0" />
+            <Insets />
           </HBox.margin>
         </Button>
+        <TextField fx:id="textField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
       </children>
       <BorderPane.margin>
         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
