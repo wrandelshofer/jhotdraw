@@ -160,6 +160,19 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
                 b.getWidth() + i.getLeft() + i.getRight(),
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
     }
+    /**
+     * Returns the bounds of the text node for layout calculations. These bounds
+     * only includes the text - without padding.
+     *
+     * @return the layout bounds of the text
+     */
+    @Nonnull
+    protected Bounds getTextBounds() {
+        Text  textNode = new Text();
+        updateTextNode(null, textNode);
+        Bounds b = textNode.getLayoutBounds();
+        return b;
+    }
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {

@@ -199,7 +199,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
 
         set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
-        Bounds b = getLayoutBounds();
+        Bounds b = getTextBounds();
         double hposTranslate = 0;
         switch (getStyledNonnull(TEXT_HPOS)) {
             case CENTER:

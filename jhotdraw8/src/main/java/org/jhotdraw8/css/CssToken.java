@@ -370,7 +370,7 @@ public class CssToken /*extends AST*/ {
     }
 
     private String fromS() {
-        return " ";
+        return stringValue;
     }
 
     private String fromCOMMENT() {
