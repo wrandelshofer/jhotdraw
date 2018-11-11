@@ -126,7 +126,7 @@ public class CssParserTest {
                 dynamicTest("19", () -> testParseStylesheet("* {;;;}", "<xml/>", "<xml/>")),
                 dynamicTest("20", () -> testParseStylesheet("* {k1:k1v1}", "<xml/>", "<xml k1=\"k1v1\"/>")),
                 dynamicTest("21", () -> testParseStylesheet("* {k1:k1v1;k2:k2v1}", "<xml/>", "<xml k1=\"k1v1\" k2=\"k2v1\"/>")),
-                dynamicTest("22", () -> testParseStylesheet("* {k1:k1v1 k1v2; k2 : k2v1  k2v2}", "<xml/>", "<xml k1=\"k1v1 k1v2\" k2=\"k2v1 k2v2\"/>")),
+                dynamicTest("22", () -> testParseStylesheet("* {k1:k1v1 k1v2; k2 : k2v1  k2v2}", "<xml/>", "<xml k1=\"k1v1 k1v2\" k2=\"k2v1  k2v2\"/>")),
                 dynamicTest("23", () -> testParseStylesheet("* {k1:k1v1 k1v2; k2 : 'k2v1  k2v2'}", "<xml/>", "<xml k1=\"k1v1 k1v2\" k2=\"&quot;k2v1  k2v2&quot;\"/>")),
                 dynamicTest("24", () -> testParseStylesheet("* {k1:k1v1 k1v2; k2 : 'k2v1 } k2v2'}", "<xml/>", "<xml k1=\"k1v1 k1v2\" k2=\"&quot;k2v1 } k2v2&quot;\"/>")),
                 dynamicTest("25", () -> testParseStylesheet("a~b {x:y}", "<xml><b/><a/><b/><c/><b/></xml>", "<xml><b/><a/><b x=\"y\"/><c/><b x=\"y\"/></xml>")),

@@ -15,14 +15,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class CssFunctionProcessorTest {
+class SimpleCssFunctionProcessorTest {
+
+    protected CssFunctionProcessor<Element> createInstance( DocumentSelectorModel model, Map<String, ReadableList<CssToken>> customProperties) {
+        return new SimpleCssFunctionProcessor<>(model,customProperties);
+    }
 
 
-
-    void doTestProcess(String expression, String expected) throws Exception {
+    protected void doTestProcess(String expression, String expected) throws Exception {
         Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         doc.getDocumentElement();
         Element elem = doc.createElement("Car");
@@ -44,7 +48,7 @@ class CssFunctionProcessorTest {
         customProperties.put("--endless-recursion", ImmutableList.of(new CssToken(CssTokenType.TT_FUNCTION,"var"),
                 new CssToken(CssTokenType.TT_IDENT,"--endless-recursion"),
                 new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
-        CssFunctionProcessor<Element> instance = new CssFunctionProcessor<>(model,customProperties);
+        CssFunctionProcessor<Element> instance = createInstance(model,customProperties);
 
         try {
             instance.process(elem, tt, consumer);
@@ -60,7 +64,7 @@ class CssFunctionProcessorTest {
     }
 
     @TestFactory
-    public List<DynamicTest> testProcessFactory() {
+    public List<DynamicTest> testProcessingOfStandardFunctionsFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestProcess("foo", "foo")),
                 dynamicTest("2", () -> doTestProcess("attr(id)", "\"o1\"")),
@@ -92,17 +96,6 @@ class CssFunctionProcessorTest {
                 dynamicTest("206", () -> doTestProcess("calc(2% + attr(doors number))", "7%")),
                 dynamicTest("207", () -> doTestProcess("calc(2% + attr(doors mm))", "1891.763779527559%")),
                 dynamicTest("208", () -> doTestProcess("calc(2mm + attr(doors mm))", "7mm")),
-                //
-                dynamicTest("301", () -> doTestProcess("concat()", "\"\"")),
-                dynamicTest("302", () -> doTestProcess("concat(\"a\",\"b\")", "\"ab\"")),
-                //
-                dynamicTest("401", () -> doTestProcess("concat(attr(id),\"x\")", "\"o1x\"")),
-                //
-                dynamicTest("501", () -> doTestProcess("replace(\"aabfooaabfooabfoob\")", null)),
-                dynamicTest("502", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\")", null)),
-                dynamicTest("503", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\",\"-\")", "\"-foo-foo-foo-\"")),
-                //
-                dynamicTest("601", () -> doTestProcess("replace(attr(id),\"\\\\d\",\"x\")", "\"ox\"")),
                 //
                 dynamicTest("801", () -> doTestProcess("inside", "inside")),
                 dynamicTest("801", () -> doTestProcess("a b", "a b")),
