@@ -1,9 +1,8 @@
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ReadableList;
-import org.jhotdraw8.io.DefaultUnitConverter;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -19,8 +18,9 @@ import java.util.regex.Pattern;
  * <p>
  * Supported non-standard functions:
  * <dl>
- * <dt>replace()</dt><dd>Replace. Replaces all substrings matching a regular expression in a string.</dd>
  * <dt>concat()</dt><dd>Concat. Concatenates strings.</dd>
+ * <dt>replace()</dt><dd>Replace. Replaces all substrings matching a regular expression in a string.</dd>
+ * <dt>round()</dt><dd>Rounds a number.</dd>
  * </dl>
  *
  * <p>
@@ -37,10 +37,15 @@ import java.util.regex.Pattern;
  */
 public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<T> {
     public static final String REPLACE_FUNCTION_NAME = "replace";
+    public static final String ROUND_FUNCTION_NAME = "round";
     public static final String CONCAT_FUNCTION_NAME = "concat";
 
+    public ExtendedCssFunctionProcessor() {
+        super();
+    }
+
     public ExtendedCssFunctionProcessor(SelectorModel<T> model, Map<String, ReadableList<CssToken>> customProperties) {
-        super(model,customProperties);
+        super(model, customProperties);
     }
 
 
@@ -55,9 +60,13 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
                     tt.pushBack();
                     processConcatFunction(element, tt, out);
                     break;
+                case ROUND_FUNCTION_NAME:
+                    tt.pushBack();
+                    processRoundFunction(element, tt, out);
+                    break;
                 default:
                     tt.pushBack();
-                    super.doProcessToken(element,tt,out);
+                    super.doProcessToken(element, tt, out);
                     break;
             }
         } else {
@@ -180,5 +189,47 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
             }
         }
         return buf.toString();
+    }
+
+    /**
+     * Processes the round() function.
+     * <pre>
+     * round              = "round(", value, ")" ;
+     * value               = number | dimension | percentage ;
+     * </pre>
+     *
+     * @param tt  the tokenizer
+     * @param out the consumer
+     * @throws IOException
+     */
+    private void processRoundFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+        int line = tt.getLineNumber();
+        int start = tt.getStartPosition();
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + ROUND_FUNCTION_NAME + "〉: " + ROUND_FUNCTION_NAME + "() function expected.");
+        if (!ROUND_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
+            throw new ParseException("〈" + ROUND_FUNCTION_NAME + "〉: " + ROUND_FUNCTION_NAME + "() function expected.", tt.getStartPosition());
+        }
+        CssSize dim = parseCalcValue(element, tt);
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈" + ROUND_FUNCTION_NAME + "〉: right bracket \")\" expected.");
+        int end = tt.getEndPosition();
+
+        CssSize rounded = new CssSize(Math.round(dim.getValue()), dim.getUnits());
+        produceNumberPercentageOrDimension(out, rounded, line, start, end);
+    }
+
+    @Override
+    public String getHelpText() {
+        return super.getHelpText()
+                + "\n"
+                + "\n  concat(⟨string⟩, ...)"
+                + "\n    Concatenates a list of strings."
+                + "\n"
+                + "\n  replace(⟨string⟩, ⟨regex⟩, ⟨replacement⟩)"
+                + "\n    Replaces matches of ⟨regex⟩ by ⟨replacement⟩ in the given ⟨string⟩."
+                + "\n"
+                + "\n  round(⟨value⟩)"
+                + "\n    Rounds the specified value."
+                + "\n    The value can be given as a number, dimension or a percentage."
+                ;
     }
 }

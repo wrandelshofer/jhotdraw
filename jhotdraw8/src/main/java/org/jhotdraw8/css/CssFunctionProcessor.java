@@ -6,6 +6,7 @@ import org.jhotdraw8.collection.ReadableList;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -48,5 +49,16 @@ public interface CssFunctionProcessor<T> {
         }
         return ImmutableList.ofCollection(out);
     }
+
+    /**
+     * Returns a localized help text describing the supported functions.
+     *
+     * @return help text
+     */
+    String getHelpText();
+
+    void setModel(SelectorModel<T> model);
+
+    void setCustomProperties(Map<String, ReadableList<CssToken>> customProperties);
 
 }

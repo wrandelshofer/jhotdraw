@@ -65,25 +65,32 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private Map<String, ReadableList<CssToken>> cachedInlineCustomProperties;
     private Map<String, ReadableList<CssToken>> cachedUserAgentCustomProperties;
     private final static Logger LOGGER = Logger.getLogger(SimpleStylesheetsManager.class.getName());
-    private final BiFunction<SelectorModel<E>, Map<String, ReadableList<CssToken>>, CssFunctionProcessor<E>> functionProcessorFactory;
+    @Nullable
+    private final  CssFunctionProcessor<E> functionProcessor;
 
     public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
-        this(selectorModel, SimpleCssFunctionProcessor::new);
+        this(selectorModel, new SimpleCssFunctionProcessor<>());
     }
 
-    public SimpleStylesheetsManager(SelectorModel<E> selectorModel, BiFunction<SelectorModel<E>, Map<String, ReadableList<CssToken>>, CssFunctionProcessor<E>> functionProcessorFactory) {
+    public SimpleStylesheetsManager(SelectorModel<E> selectorModel, @Nullable CssFunctionProcessor<E> functionProcessor) {
         this.selectorModel = selectorModel;
-        this.functionProcessorFactory = functionProcessorFactory;
+        this.functionProcessor = functionProcessor;
     }
 
-    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin, @Nullable String namespace, @Nonnull String name, ReadableList<CssToken> value,
+    private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin,
+                                @Nullable String namespace, @Nonnull String name, ReadableList<CssToken> value,
                                 Map<String, ReadableList<CssToken>> customProperties) {
         if (value == null) {
             selectorModel1.setAttribute(elem, styleOrigin, namespace, name, null);
         } else {
-            CssFunctionProcessor<E> processor = functionProcessorFactory.apply(selectorModel1, customProperties);
-            ReadableList<CssToken> processed = preprocessTerms(elem, processor, value);
-            selectorModel1.setAttribute(elem, styleOrigin, namespace, name, processed);
+            if (functionProcessor != null) {
+                functionProcessor.setModel(selectorModel1);
+                functionProcessor.setCustomProperties(customProperties);
+                ReadableList<CssToken> processed = preprocessTerms(elem, functionProcessor, value);
+                selectorModel1.setAttribute(elem, styleOrigin, namespace, name, processed);
+            }else {
+                selectorModel1.setAttribute(elem, styleOrigin, namespace, name, value);
+            }
         }
     }
 
@@ -335,6 +342,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             && CssTokenType.IDENT_INITIAL.equals(value.get(0).getStringValue()) ? null : value);
         }
         return true;
+    }
+
+    @Override
+    public String getHelpText() {
+        return functionProcessor==null?"":functionProcessor.getHelpText();
     }
 
     private Map<String, ReadableList<CssToken>> collectCustomProperties(Collection<ParsedStylesheetEntry> stylesheets) {

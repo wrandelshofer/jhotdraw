@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 /**
  * Takes a list of tokens and evaluates common Css functions.
@@ -40,11 +39,29 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     private static final String CALC_FUNCTION_NAME = "calc";
     private static final String VAR_FUNCTION_NAME = "var";
 
-    protected final SelectorModel<T> model;
-    protected final Map<String, ReadableList<CssToken>> customProperties;
+    protected SelectorModel<T> model;
+    protected Map<String, ReadableList<CssToken>> customProperties;
 
+    public SimpleCssFunctionProcessor() {
+    }
     public SimpleCssFunctionProcessor(SelectorModel<T> model, Map<String, ReadableList<CssToken>> customProperties) {
         this.model = model;
+        this.customProperties = customProperties;
+    }
+
+    public SelectorModel<T> getModel() {
+        return model;
+    }
+
+    public void setModel(SelectorModel<T> model) {
+        this.model = model;
+    }
+
+    public Map<String, ReadableList<CssToken>> getCustomProperties() {
+        return customProperties;
+    }
+
+    public void setCustomProperties(Map<String, ReadableList<CssToken>> customProperties) {
         this.customProperties = customProperties;
     }
 
@@ -61,6 +78,29 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
             }
         }
         return ImmutableList.ofCollection(out);
+    }
+
+    @Override
+    public String getHelpText() {
+        return "Supported Functions:"
+                + "\n  attr(⟨attr-name⟩ ⟨type-or-unit⟩, ⟨fallback⟩)"
+                + "\n    Retrieves an attribute value by name and converts it to type-or-unit."
+                + "\n    If the attribute does not exist or if the conversion fails, the fallback is used. "
+                + "\n    type-or-unit must be one of 'string', 'color', 'url', 'integer', 'number', 'length' "
+                +"'angle', 'time', 'frequency', '%'."
+                + "\n"
+                + "\n  calc(⟨expression⟩)"
+                + "\n    Computes a mathematical expression with addition (+),"
+                + " subtraction (-), multiplication (*), and division (/)."
+                + "\n    It can be used wherever ⟨length⟩, ⟨frequency⟩, "
+                + "⟨angle⟩, ⟨time⟩, ⟨percentage⟩, ⟨number⟩, or ⟨integer⟩ values are allowed. "
+                + "\n"
+                + "\n  var(⟨custom-property-name⟩, ⟨fallback⟩)"
+                + "\n    Retrieves a custom-property by name."
+                + "\n    If the custom-property is not found, the fallback is used."
+                + "\n    A custom-property is a property defined on a parent element (or on ':root')."
+                + "\n    The name of a custom-property must start with two dashes: '--'."
+                ;
     }
 
     public final void process(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
@@ -326,9 +366,9 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     private QualifiedName parseAttrName(CssTokenizer tt) throws IOException, ParseException {
         String name;
         if (tt.next() == CssTokenType.TT_IDENT) {
-            name=tt.currentString();
+            name = tt.currentString();
         } else {
-                throw new ParseException("attr-name expected.", tt.getStartPosition());
+            throw new ParseException("attr-name expected.", tt.getStartPosition());
         }
         return new QualifiedName(null, name);// FIXME parse namespace
     }
@@ -356,6 +396,10 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         int start = tt.getStartPosition();
         CssSize dim = parseCalcFunction(element, tt);
         int end = tt.getEndPosition();
+        produceNumberPercentageOrDimension(out, dim, line, start, end);
+    }
+
+    protected void produceNumberPercentageOrDimension(Consumer<CssToken> out, CssSize dim, int line, int start, int end) {
         if (dim.getUnits() == null) {
             out.accept(new CssToken(CssTokenType.TT_NUMBER, null, dim.getValue(), line, start, end));
         } else if ("%".equals(dim.getUnits())) {
@@ -366,12 +410,12 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     }
 
     private CssSize parseCalcFunction(T element, CssTokenizer tt) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈calc〉: calc() function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + CALC_FUNCTION_NAME + "〉: " + CALC_FUNCTION_NAME + "() function expected.");
         if (!CALC_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
-            throw new ParseException("〈calc〉: calc() function expected.", tt.getStartPosition());
+            throw new ParseException("〈" + CALC_FUNCTION_NAME + "〉: " + CALC_FUNCTION_NAME + "() function expected.", tt.getStartPosition());
         }
         CssSize dim = parseCalcSum(element, tt);
-        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈calc〉: right bracket \")\" expected.");
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈" + CALC_FUNCTION_NAME + "〉: right bracket \")\" expected.");
         return dim;
     }
 
@@ -439,7 +483,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         return dim;
     }
 
-    private CssSize parseCalcValue(T element, CssTokenizer tt) throws IOException, ParseException {
+    protected CssSize parseCalcValue(T element, CssTokenizer tt) throws IOException, ParseException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 return new CssSize(tt.currentNumber().doubleValue(), null);

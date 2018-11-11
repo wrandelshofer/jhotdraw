@@ -37,7 +37,14 @@ class ExtendedCssFunctionProcessorTest extends SimpleCssFunctionProcessorTest {
                 dynamicTest("502", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\")", null)),
                 dynamicTest("503", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\",\"-\")", "\"-foo-foo-foo-\"")),
                 //
-                dynamicTest("601", () -> doTestProcess("replace(attr(id),\"\\\\d\",\"x\")", "\"ox\""))
+                dynamicTest("601", () -> doTestProcess("replace(attr(id),\"\\\\d\",\"x\")", "\"ox\"")),
+                //
+                dynamicTest("701", () -> doTestProcess("round(0.5)", "1")),
+                dynamicTest("702", () -> doTestProcess("round(-0.5)", "0")),
+                dynamicTest("703", () -> doTestProcess("round(1.6)", "2")),
+                dynamicTest("704", () -> doTestProcess("round(1.4)", "1")),
+                dynamicTest("705", () -> doTestProcess("round(1.6m)", "2m")),
+                dynamicTest("706", () -> doTestProcess("round(1.6%)", "2%"))
         );
     }
 }

@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.prefs.Preferences;
+
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -35,8 +36,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.QualifiedName;
@@ -258,8 +261,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
-                    String attribute = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(),qname.getName());
-                    attr.put(qname, attribute==null?CssTokenType.IDENT_INITIAL :attribute);
+                    String attribute = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(), qname.getName());
+                    attr.put(qname, attribute == null ? CssTokenType.IDENT_INITIAL : attribute);
                 }
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
@@ -269,8 +272,10 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 for (QualifiedName qname : attr.keySet()) {
                     String oldAttrValue = attr.get(qname);
                     if (oldAttrValue != null) {
-                        String newAttrValue = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(),qname.getName());
-                        if (newAttrValue==null)newAttrValue=CssTokenType.IDENT_INITIAL;
+                        String newAttrValue = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(), qname.getName());
+                        if (newAttrValue == null) {
+                            newAttrValue = CssTokenType.IDENT_INITIAL;
+                        }
                         if (!oldAttrValue.equals(newAttrValue)) {
                             attr.put(qname, "/* multiple values */");
                         }
@@ -337,7 +342,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                     matchedFigures.add(f);
                 }
             }
-            
+
             drawingView.getSelectedFigures().clear();
             drawingView.getSelectedFigures().addAll(matchedFigures);
             drawingView.scrollSelectedFiguresToVisible();
@@ -346,9 +351,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             ex.printStackTrace();
             return;
         }
-   
+
     }
-    
+
     private void apply(ActionEvent event) {
         CssParser parser = new CssParser();
         try {
@@ -391,7 +396,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private void invalidateTextArea() {
         if (textAreaValid) {
             textAreaValid = false;
-            Platform.runLater((Runnable)this::updateTextArea);
+            Platform.runLater((Runnable) this::updateTextArea);
         }
     }
 
@@ -411,6 +416,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
     }
+
     @Nonnull
     private List<HelptextLookupEntry> helptextLookupTable = new ArrayList<>();
 
@@ -443,9 +449,21 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
         String helpText = null;
         if (d != null) {
-            helpText = helpTexts.get(new QualifiedName(d.getPropertyNamespace(),d.getPropertyName()));
+            helpText = helpTexts.get(new QualifiedName(d.getPropertyNamespace(), d.getPropertyName()));
         }
-        if (drawingView!=null) {
+
+        if (drawingView != null) {
+            Drawing drawing = drawingView.getDrawing();
+            StylesheetsManager<Figure> sm = drawing.getStyleManager();
+
+            String smHelpText = sm.getHelpText();
+            if (helpText == null) {
+                helpText = smHelpText;
+            } else if (smHelpText == null || !smHelpText.isEmpty()) {
+                helpText = helpText + "\n\n" + smHelpText;
+            }
+
+
             drawingView.setHelpText(helpText);
         }
     }
@@ -457,7 +475,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
         for (Figure f : figures) {
             for (QualifiedName qname : selectorModel.getAttributeNames(f)) {
-                Converter<?> c = selectorModel.getConverter(f, qname.getNamespace(),qname.getName());
+                Converter<?> c = selectorModel.getConverter(f, qname.getNamespace(), qname.getName());
                 if (c != null && c.getHelpText() != null) {
                     helpTexts.put(qname, c.getHelpText());
                 }

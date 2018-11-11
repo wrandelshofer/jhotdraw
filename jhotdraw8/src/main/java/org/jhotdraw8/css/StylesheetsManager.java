@@ -116,4 +116,7 @@ public interface StylesheetsManager<E> {
 
         return false;
     }
+
+    /** Returns a localized help text. */
+    String getHelpText();
 }

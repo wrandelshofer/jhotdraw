@@ -55,8 +55,7 @@ class SimpleCssFunctionProcessorTest {
             if (expected==null) fail("must throw ParseException");
             assertEquals(expected,buf.toString());
         } catch (ParseException e) {
-            e.printStackTrace();
-            if (expected!=null) fail("must not throw ParseException");
+            if (expected!=null) fail("must not throw ParseException "+e);
         }
 
 
