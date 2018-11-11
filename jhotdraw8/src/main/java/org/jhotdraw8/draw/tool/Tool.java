@@ -243,4 +243,7 @@ public interface Tool extends PropertyBean, Disableable {
     default void setDrawingEditor(@Nullable DrawingEditor newValue) {
         drawingEditorProperty().set(newValue);
     }
+
+    /** Returns a localized help text for this tool. */
+    String getHelpText();
 }

@@ -38,7 +38,6 @@ public class ImageCreationTool extends CreationTool {
     @Override
     public void activate(DrawingEditor editor) {
         super.activate(editor);
-
         uri = chooseFile();
     }
 

@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -33,11 +35,10 @@ import org.jhotdraw8.util.Resources;
 /**
  * CreationTool for bezier figures.
  *
- * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
- * abstract factories (Supplier) for creating new {@link Figure}s.
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
+ * abstract factories (Supplier) for creating new {@link Figure}s.
  */
 public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
@@ -82,6 +83,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         requestFocus();
         rubberBand.setVisible(false);
         createdFigure = null;
+        super.activate(editor);
     }
 
     @Override
@@ -225,6 +227,18 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             createdFigure = null;
             points = null;
         }
+    }
+
+    @Override
+    public String getHelpText() {
+        return "BezierCreationTool"
+                + "\n  Click on the drawing view. The tool will create a new bezier curve with a point at that location."
+                + "\n  Continue clicking on the drawing view. The tool will add each clicked point to the created bezier curve."
+                + "\n  Press enter or escape, when you are done."
+                + "\nOr"
+                + "\n  Press and drag the mouse over the drawing view to draw a curve. The tool will create a new bezier curve with a curve fitted to your drawing."
+                + "\n  Continue pressing and dragging on the drawing view. The tool will add additional fitted curves to the bezier curve."
+                + "\n  Press enter or escape when you are done.";
     }
 
 }

@@ -95,8 +95,8 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
         createdFigure.reshapeInLocal(
-                anchorX==0?c.getX():c.getX().subtract( new CssSize(defaultWidth).multiply( anchorX)),
-                anchorY==0?c.getY():c.getY().subtract(new CssSize( defaultHeight).multiply( anchorY)),
+                anchorX == 0 ? c.getX() : c.getX().subtract(new CssSize(defaultWidth).multiply(anchorX)),
+                anchorY == 0 ? c.getY() : c.getY().subtract(new CssSize(defaultHeight).multiply(anchorY)),
                 new CssSize(defaultWidth), new CssSize(defaultHeight));
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getDrawing();
@@ -138,8 +138,8 @@ public class CreationTool extends AbstractCreationTool<Figure> {
             y2 = event.getY();
             CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
             CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2)));
-            CssSize newWidth = c2.getX().subtract( c1.getX());
-            CssSize newHeight = c2.getY() .subtract( c1.getY());
+            CssSize newWidth = c2.getX().subtract(c1.getX());
+            CssSize newHeight = c2.getY().subtract(c1.getY());
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
             if (keepAspect) {
@@ -148,7 +148,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
                 if (newRatio > preferredAspectRatio) {
                     newHeight = new CssSize(newWidth.getConvertedValue() * preferredAspectRatio);
                 } else {
-                    newWidth =new CssSize( newHeight.getConvertedValue() / preferredAspectRatio);
+                    newWidth = new CssSize(newHeight.getConvertedValue() / preferredAspectRatio);
                 }
             }
 
@@ -169,6 +169,15 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     @Override
     public void activate(DrawingEditor editor) {
         requestFocus();
+        super.activate(editor);
+    }
+
+    @Override
+    public String getHelpText() {
+        return "CreationTool"
+                + "\n  Click on the drawing view. The tool will create a new figure with default size at the clicked location."
+                + "\nOr:"
+                + "\n  Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.";
     }
 
 }

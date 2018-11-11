@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.tool;
 
 import java.util.LinkedList;
+
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -19,8 +20,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.Key;
@@ -153,8 +156,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     {
         eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
             try {
-               DrawingView dv = drawingView.get();
-            if (dv!= null) {
+                DrawingView dv = drawingView.get();
+                if (dv != null) {
                     EventType<? extends MouseEvent> type = event.getEventType();
                     if (type == MouseEvent.MOUSE_MOVED) {
                         handleMouseMoved(event, dv);
@@ -178,8 +181,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             }
         });
         eventPane.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
-           DrawingView dv = drawingView.get();
-            if (dv!= null) {
+            DrawingView dv = drawingView.get();
+            if (dv != null) {
                 EventType<? extends KeyEvent> type = event.getEventType();
                 if (type == KeyEvent.KEY_PRESSED) {
                     handleKeyPressed(event, dv);
@@ -191,8 +194,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                 event.consume();
             }
         });
-        eventPane.addEventHandler(ZoomEvent.ANY, (ZoomEvent event)->{DrawingView dv = drawingView.get();
-            if (dv!= null) {
+        eventPane.addEventHandler(ZoomEvent.ANY, (ZoomEvent event) -> {
+            DrawingView dv = drawingView.get();
+            if (dv != null) {
                 EventType<? extends ZoomEvent> type = event.getEventType();
                 if (type == ZoomEvent.ZOOM) {
                     handleZoom(event, dv);
@@ -202,12 +206,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                     handleZoomFinished(event, dv);
                 }
                 event.consume();
-            
+
             }
-            
+
         });
-        
+
     }
+
     /**
      * Listeners.
      */
@@ -216,6 +221,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Constructors
     // ---
+
     /**
      * Creates a new instance.
      */
@@ -245,7 +251,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
-            properties =FXCollections.observableHashMap();
+            properties = FXCollections.observableHashMap();
         }
         return properties;
     }
@@ -350,10 +356,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     protected void handleKeyPressed(@Nonnull KeyEvent event, DrawingView view) {
-        if (event.getCode()==KeyCode.ESCAPE) {
+        if (event.getCode() == KeyCode.ESCAPE) {
             fireToolDone();
-        }else if (event.getCode()==KeyCode.ENTER) {
-            stopEditing();}
+        } else if (event.getCode() == KeyCode.ENTER) {
+            stopEditing();
+        }
     }
 
     protected void handleKeyReleased(KeyEvent event, DrawingView view) {
@@ -363,17 +370,21 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     /**
-     * This implementation is empty.
+     * This implementation sets the help text on the drawing view.
      */
     @Override
-    public void activate( DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
+        DrawingView v = editor.getActiveDrawingView();
+        if (v != null) {
+            v.setHelpText(getHelpText());
+        }
     }
 
     /**
      * This implementation is empty.
      */
     @Override
-    public void deactivate( DrawingEditor editor) {
+    public void deactivate(DrawingEditor editor) {
     }
 
     // ---
@@ -397,10 +408,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     protected void handleZoom(ZoomEvent event, DrawingView dv) {
     }
+
     protected void handleZoomStarted(ZoomEvent event, DrawingView dv) {
     }
+
     protected void handleZoomFinished(ZoomEvent event, DrawingView dv) {
     }
+
     protected void fireToolStarted() {
         fire(new ToolEvent(this, ToolEvent.EventType.TOOL_STARTED));
     }

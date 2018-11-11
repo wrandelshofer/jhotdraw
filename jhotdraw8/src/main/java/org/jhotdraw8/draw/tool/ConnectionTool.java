@@ -4,15 +4,19 @@
 package org.jhotdraw8.draw.tool;
 
 import java.util.function.Supplier;
+
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+
 import java.util.List;
+
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.figure.SimpleLayer;
@@ -28,10 +32,9 @@ import org.jhotdraw8.util.ReversedList;
 /**
  * ConnectionTool.
  *
- * @design.pattern CreationTool AbstractFactory, Client.
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern CreationTool AbstractFactory, Client.
  */
 public class ConnectionTool extends AbstractTool {
 
@@ -57,13 +60,13 @@ public class ConnectionTool extends AbstractTool {
     }
 
     public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory,
-            Supplier<Layer> layerFactory) {
+                          Supplier<Layer> layerFactory) {
         this(name, rsrc, null, figureFactory, layerFactory);
 
     }
 
     public ConnectionTool(String name, Resources rsrc, HandleType handleType, Supplier<ConnectingFigure> figureFactory,
-            Supplier<Layer> layerFactory) {
+                          Supplier<Layer> layerFactory) {
         super(name, rsrc);
         this.handleType = handleType;
         this.figureFactory = figureFactory;
@@ -78,7 +81,7 @@ public class ConnectionTool extends AbstractTool {
      * Finds a layer for the specified figure. Creates a new layer if no
      * suitable layer can be found.
      *
-     * @param dv the drawing view
+     * @param dv        the drawing view
      * @param newFigure the figure
      * @return a suitable layer for the figure
      */
@@ -174,7 +177,7 @@ public class ConnectionTool extends AbstractTool {
         Figure newConnectedFigure = null;
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
-            
+
             SearchLoop:
             for (Figure f1 : list) {
                 for (Figure ff : f1.breadthFirstIterable()) {
@@ -213,6 +216,14 @@ public class ConnectionTool extends AbstractTool {
     @Override
     protected void stopEditing() {
         figure = null;
+    }
+
+    @Override
+    public String getHelpText() {
+        return "ConnectionTool"
+                + "\n  Press the mouse on a figure in the drawing view, and drag the mouse to another figure."
+                + " The tool will create a new figure which connects the two figures."
+                ;
     }
 
 }

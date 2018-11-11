@@ -398,6 +398,7 @@ public class SelectionTool extends AbstractTool {
             view.setLeadHandleType(leadHandleType);
         }
         requestFocus();
+        super.activate(editor);
     }
 
     // ---
@@ -419,4 +420,21 @@ public class SelectionTool extends AbstractTool {
 
     protected void handleZoomFinished(ZoomEvent event, DrawingView dv) {
     }
+
+    @Override
+    public String getHelpText() {
+        return "SelectionTool"
+                + "\n  Click on the drawing view. The tool will select the figure at that location."
+                + "\nOr:"
+                + "\n  Alt+Click on the drawing view. The tool will select the figure behind the currently selected figure at that location."
+                + "\nOr:"
+                + "\n  Shift+Click on the drawing view. The tool will add the figure at that location to the selection."
+                + "\nOr:"
+                + "\n  Command+Click on the drawing view. The tool will toggle the selection of the figure at that location."
+                + "\nOr:"
+                + "\n  Shift+Command+Click on the drawing view. The tool will deselect all figures except the is at that location."
+                + "\nOr:"
+                + "\n  Press and drag the mouse over the drawing view to draw the diagonal of a rectangle. The tool will select all figures that fit into the rectangle.";
+    }
+
 }
