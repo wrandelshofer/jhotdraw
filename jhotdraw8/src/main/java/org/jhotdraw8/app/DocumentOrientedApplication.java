@@ -179,7 +179,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                 .handle((v, e) -> {
                     if (e != null) {
                         e.printStackTrace();
-                        final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                        final Resources labels = Labels.getLabels();
                         Alert alert = new Alert(Alert.AlertType.ERROR,
                                 labels.getString("application.createView.error"));
                         alert.getDialogPane().setMaxWidth(640.0);
@@ -237,7 +237,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @return the resource bundle
      */
     protected Resources getLabels() {
-        return Resources.getResources("org.jhotdraw8.app.Labels");
+        return Labels.getLabels();
     }
 
     @Override
@@ -439,7 +439,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 */
         }
 
-        final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+        final Resources labels = Labels.getLabels();
         createView().whenComplete((pv, ex1) -> {
             DocumentOrientedViewController v = (DocumentOrientedViewController) pv;
             if (ex1 != null) {

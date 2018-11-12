@@ -13,6 +13,7 @@ import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentOrientedViewController;
@@ -39,7 +40,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
      */
     public RevertFileAction(Application app, DocumentOrientedViewController view) {
         super(app, view, DocumentOrientedViewController.class);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     @Override

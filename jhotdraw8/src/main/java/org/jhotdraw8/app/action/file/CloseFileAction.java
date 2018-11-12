@@ -9,6 +9,7 @@ import java.util.concurrent.CompletionStage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentOrientedViewController;
@@ -33,7 +34,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
      */
     public CloseFileAction(Application app, DocumentOrientedViewController view) {
         super(app, view);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     public CloseFileAction(Application app) {

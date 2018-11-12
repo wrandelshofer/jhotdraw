@@ -10,6 +10,7 @@ import javafx.scene.control.Alert.AlertType;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentOrientedViewController;
@@ -47,7 +48,7 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentOrient
      */
     public PrintFileAction( Application app, @Nullable DocumentOrientedViewController view) {
         super(app, view, DocumentOrientedViewController.class);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     @Override

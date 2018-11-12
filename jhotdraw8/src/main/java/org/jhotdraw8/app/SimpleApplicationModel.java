@@ -204,7 +204,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public ResourceBundle getResources() {
-        return Resources.getResources("org.jhotdraw8.app.Labels");
+        return Labels.getLabels();
     }
 
     public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {

@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -42,7 +43,7 @@ public class CutAction extends AbstractSelectionAction {
      */
     public CutAction(Application app, Node target) {
         super(app, target);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     @Override

@@ -19,6 +19,7 @@ import javafx.stage.Window;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
@@ -82,7 +83,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
 
     public void handleActionOnViewPerformed(@Nonnull DocumentOrientedViewController v) {
         if (!v.isDisabled()) {
-            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+            final Resources labels = Labels.getLabels();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
             v.addDisabler(this);
@@ -215,7 +216,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                 }
             } else if (exception != null) {
                 Throwable value = exception;
-                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                Resources labels = Labels.getLabels();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));

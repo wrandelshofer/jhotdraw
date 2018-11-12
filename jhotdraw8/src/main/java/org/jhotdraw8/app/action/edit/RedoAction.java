@@ -5,6 +5,7 @@ package org.jhotdraw8.app.action.edit;
 
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.ViewController;
@@ -22,7 +23,7 @@ public class RedoAction extends AbstractViewControllerAction<ViewController> {
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "edit.redo";
-    private Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+    private Resources labels = Labels.getLabels();
 
     /*
     private PropertyChangeListener redoActionPropertyListener = new PropertyChangeListener() {

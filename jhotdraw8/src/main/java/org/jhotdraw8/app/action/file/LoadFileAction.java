@@ -7,6 +7,7 @@ import java.util.concurrent.CompletionStage;
 
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentOrientedViewController;
@@ -33,7 +34,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
      */
     public LoadFileAction(Application app, DocumentOrientedViewController view) {
         super(app, view);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     /*
@@ -108,7 +109,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
             protected void failed(Throwable value) {
                 value.printStackTrace();
                 
-                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                Resources labels = Labels.getLabels();
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.read.couldntLoad.message", URIUtil.getName(uri)) + "</b><p>"

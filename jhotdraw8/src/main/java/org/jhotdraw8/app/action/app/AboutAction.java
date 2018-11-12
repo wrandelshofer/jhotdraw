@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationModel;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
 
@@ -31,7 +32,7 @@ public class AboutAction extends AbstractApplicationAction {
      */
     public AboutAction(Application app) {
         super(app);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     @Override

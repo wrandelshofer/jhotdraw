@@ -4,6 +4,7 @@
 package org.jhotdraw8.app.action.edit;
 
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.ViewController;
@@ -29,6 +30,6 @@ public abstract class AbstractFindAction<V extends ViewController> extends Abstr
      */
     public AbstractFindAction(Application app, V view, Class<V> viewClass) {
         super(app, view,viewClass);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 }

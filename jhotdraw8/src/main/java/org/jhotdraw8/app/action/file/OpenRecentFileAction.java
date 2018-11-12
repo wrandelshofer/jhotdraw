@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.UriUtil;
@@ -102,7 +103,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     private void handleException(final DocumentOrientedViewController v, Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
-        Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+        Resources labels = Labels.getLabels();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
         alert.getDialogPane().setMaxWidth(640.0);
         alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));

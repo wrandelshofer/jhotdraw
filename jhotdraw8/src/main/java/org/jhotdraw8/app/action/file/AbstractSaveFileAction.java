@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -49,7 +50,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
      * @param saveAs whether to force a file dialog
      */
     public AbstractSaveFileAction(Application app, DocumentOrientedViewController view, String id, boolean saveAs) {
-        this(app, view, id, saveAs, Resources.getResources("org.jhotdraw8.app.Labels"));
+        this(app, view, id, saveAs, Labels.getLabels());
     }
     /**
      * Creates a new instance.
@@ -154,7 +155,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
             } else if (exception != null) {
                 Throwable value = exception;
                 value.printStackTrace();
-                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                Resources labels = Labels.getLabels();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));

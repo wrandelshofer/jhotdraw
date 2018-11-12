@@ -17,6 +17,7 @@ import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.gui.URIChooser;
@@ -49,7 +50,7 @@ public class ExitAction extends AbstractApplicationAction {
      */
     public ExitAction(Application app) {
         super(app);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class ExitAction extends AbstractApplicationAction {
             return;
         }
 
-        final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+        final Resources labels = Labels.getLabels();
         switch (unsavedViewsCount) {
             case 0: {
                 doExit();
@@ -131,7 +132,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveChanges() {
         DocumentOrientedViewController v = unsavedView;
-        Resources labels=Resources.getResources("org.jhotdraw8.app.Labels");
+        Resources labels=Labels.getLabels();
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = null;
@@ -175,7 +176,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewChanges() {
         if (!unsavedView.isDisabled()) {
-            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+            final Resources labels = Labels.getLabels();
             oldFocusOwner = unsavedView.getNode().getScene().getFocusOwner();
             unsavedView.removeDisabler(this);
             URI unsavedURI = unsavedView.getURI();
@@ -272,7 +273,7 @@ public class ExitAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception;
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                Resources labels = Labels.getLabels();
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));
@@ -302,7 +303,7 @@ public class ExitAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception.getCause();
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                Resources labels = Labels.getLabels();
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));

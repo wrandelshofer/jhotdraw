@@ -6,6 +6,7 @@ package org.jhotdraw8.app.action.file;
 import javafx.event.ActionEvent;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentOrientedViewController;
@@ -33,7 +34,7 @@ public class NewFileAction extends AbstractApplicationAction {
 
     public NewFileAction(Application app, String id) {
         super(app);
-        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
+        Labels.getLabels().configureAction(this, ID);
     }
 
     @Override
