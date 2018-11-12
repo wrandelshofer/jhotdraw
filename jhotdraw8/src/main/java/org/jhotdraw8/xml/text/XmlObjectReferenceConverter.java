@@ -49,6 +49,9 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
             return null;
         }
         Object obj = idFactory.getObject(str);
+        if (obj == null) {
+            throw new ParseException("Could not find an object with this id. id=\""+str+"\".",0);
+        }
 
         @SuppressWarnings("unchecked")
         T value = clazz.isInstance(obj) ? (T) obj : null;

@@ -84,7 +84,7 @@ public class SimpleFigureKey<T> extends ObjectKey<T> implements FigureKey<T> {
      * @param dirtyMask the dirty bits
      */
     public SimpleFigureKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
-        super(name, clazz, typeParameters, isNullable, defaultValue);
+        super(name, clazz, typeParameters, isNullable,false, defaultValue);
         this.dirtyMask = dirtyMask;
     }
 

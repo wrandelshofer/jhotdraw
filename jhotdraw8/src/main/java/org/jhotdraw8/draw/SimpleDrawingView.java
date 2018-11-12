@@ -400,10 +400,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
         HandleType handleType = getHandleType();
+            ArrayList<Handle> list=new ArrayList<>();
         for (Figure figure : selection) {
-            List<Handle> list = handles.computeIfAbsent(figure, k -> new ArrayList<>());
             figure.createHandles(handleType, list);
-            handles.put(figure, list);
+        }
+        for (Handle h: list) {
+            Figure figure = h.getOwner();
+            handles.computeIfAbsent(figure, k -> new ArrayList<>()).add(h);
         }
     }
 

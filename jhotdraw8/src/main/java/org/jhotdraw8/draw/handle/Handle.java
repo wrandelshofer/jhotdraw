@@ -136,7 +136,7 @@ public interface Handle {
      *
      * @return a figure
      */
-        Figure getOwner();
+     Figure getOwner();
 
     /**
      * Returns the node which is used to visualize the handle. The node is
