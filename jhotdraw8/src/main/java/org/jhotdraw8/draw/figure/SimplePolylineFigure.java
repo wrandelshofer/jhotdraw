@@ -144,7 +144,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         applyStyleableFigureProperties(ctx, node);
         applyStrokeableFigureProperties(lineNode);
         applyFillableFigureProperties(lineNode);
-        applyTransformableFigureProperties(node);
+        applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(lineNode);
         final ImmutableList<Point2D> points = getStyled(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);

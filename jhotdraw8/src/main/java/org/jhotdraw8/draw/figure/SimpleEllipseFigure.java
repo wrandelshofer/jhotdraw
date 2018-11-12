@@ -138,7 +138,7 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Ellipse n = (Ellipse) node;
         applyHideableFigureProperties(n);
-        applyTransformableFigureProperties(n);
+        applyTransformableFigureProperties(ctx, n);
         applyStrokeableFigureProperties(n);
         applyFillableFigureProperties(n);
         applyCompositableFigureProperties(n);

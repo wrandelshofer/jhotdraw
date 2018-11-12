@@ -112,7 +112,7 @@ public class SimpleImageFigure extends AbstractLeafFigure
         ImageView imageView = (ImageView) node;
         validateImage();
         imageView.setImage(cachedImage);
-        applyTransformableFigureProperties(imageView);
+        applyTransformableFigureProperties(ctx, imageView);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
         applyHideableFigureProperties(node);

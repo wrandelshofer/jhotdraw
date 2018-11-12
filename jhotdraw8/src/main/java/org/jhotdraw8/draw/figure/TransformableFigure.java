@@ -126,10 +126,10 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * {@code ROTATE}, {@code ROTATION_AXIS}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
-     *
+     *  @param ctx
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformableFigureProperties(@Nonnull Node node) {
+    default void applyTransformableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
         if (t.isIdentity()) {
@@ -144,10 +144,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
             transforms.clear();
             transforms.add(t);
         }
-    }
-
-    default void applyTransformableFigureProperties(RenderContext ctx, @Nonnull Node node) {
-        applyTransformableFigureProperties(node);
     }
 
     default void clearTransforms() {

@@ -277,7 +277,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public void updateGroupNode(RenderContext ctx, @Nonnull Group node) {
         super.updateGroupNode(ctx, node);
-        applyTransformableFigureProperties(node);
+        applyTransformableFigureProperties(ctx, node);
     }
 
     @Override

@@ -11,18 +11,13 @@ import java.io.IOException;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.StrokeType;
-
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -108,14 +103,14 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
 
-    protected void updatePathNode(@Nonnull Path path) {
+    protected void updatePathNode(RenderContext ctx, @Nonnull Path path) {
         path.getElements().setAll(Shapes.fxPathElementsFromAWT(pathElements.getPathIterator(null)));
     }
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         Path path = (Path) node;
-        updatePathNode(path);
+        updatePathNode(ctx, path);
     }
 
     protected void layoutPath() {

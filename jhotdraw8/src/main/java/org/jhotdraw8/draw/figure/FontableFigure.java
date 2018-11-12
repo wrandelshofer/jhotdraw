@@ -19,7 +19,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
@@ -72,36 +71,35 @@ public interface FontableFigure extends Figure {
 
     /**
      * Updates a text node with fontable properties.
-     *
      * @param ctx RenderContext, can be null
      * @param text a text node
      */
     default void applyFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
-        Font font = getStyled(FONT).getFont();
+        Font font = getStyledNonnull(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }
-        double d = getStyled(LINE_SPACING);
+        double d = getStyledNonnull(LINE_SPACING);
         if (text.getLineSpacing() != d) {
             text.setLineSpacing(d);
         }
-        d = getStyled(WRAPPING_WIDTH);
+        d = getStyledNonnull(WRAPPING_WIDTH);
         if (text.getWrappingWidth() != d) {
             text.setWrappingWidth(d);
         }
-        TextAlignment ta = getStyled(TEXT_ALIGNMENT);
+        TextAlignment ta = getStyledNonnull(TEXT_ALIGNMENT);
         if (text.getTextAlignment() != ta) {
             text.setTextAlignment(ta);
         }
-        boolean b = getStyled(UNDERLINE);
+        boolean b = getStyledNonnull(UNDERLINE);
         if (text.isUnderline() != b) {
             text.setUnderline(b);
         }
-        b = getStyled(STRIKETHROUGH);
+        b = getStyledNonnull(STRIKETHROUGH);
         if (text.isStrikethrough() != b) {
             text.setStrikethrough(b);
         }
-        VPos vp = getStyled(TEXT_VPOS);
+        VPos vp = getStyledNonnull(TEXT_VPOS);
         if (text.getTextOrigin() != vp) {
             text.setTextOrigin(vp);
         }
@@ -115,24 +113,24 @@ public interface FontableFigure extends Figure {
 
     /**
      * Updates a Laeled node with fontable properties.
-     *
-     * @param ctx context
+     *  @param ctx context
+     * @param figure
      * @param text a text node
      */
     default void applyFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
-        Font font = getStyled(FONT).getFont();
+        Font font =getStyledNonnull(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }
-        double d = getStyled(LINE_SPACING);
+        double d = getStyledNonnull(LINE_SPACING);
         if (text.getLineSpacing() == d) {
             text.setLineSpacing(d);
         }
-        TextAlignment ta = getStyled(TEXT_ALIGNMENT);
+        TextAlignment ta = getStyledNonnull(TEXT_ALIGNMENT);
         if (text.getTextAlignment() == ta) {
             text.setTextAlignment(ta);
         }
-        boolean b = getStyled(UNDERLINE);
+        boolean b = getStyledNonnull(UNDERLINE);
         if (text.isUnderline() == b) {
             text.setUnderline(b);
         }

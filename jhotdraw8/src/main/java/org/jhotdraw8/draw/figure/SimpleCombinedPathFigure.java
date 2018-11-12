@@ -201,11 +201,11 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
     public void updateNode(@Nonnull RenderContext ctx, Node node) {
         Path n = (Path) node;
         applyHideableFigureProperties(n);
-        applyTransformableFigureProperties(n);
+        applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
         applyFillableFigureProperties(n);
         applyStrokeableFigureProperties(n);
-        applyTransformableFigureProperties(n);
+        applyTransformableFigureProperties(ctx, n);
         applyCompositableFigureProperties(n);
 
         n.getElements().setAll(Shapes.fxPathElementsFromAWT(getPathIterator(null)));

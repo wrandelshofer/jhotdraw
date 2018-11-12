@@ -87,7 +87,7 @@ public class SimplePageLabelFigure extends AbstractLabelFigure
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         super.updateNode(ctx, node);
-        applyTransformableFigureProperties(node);
+        applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
         applyHideableFigureProperties(node);

@@ -261,7 +261,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
         tn.setX(getStyledNonnull(ORIGIN_X).getConvertedValue());
         tn.setY(getStyledNonnull(ORIGIN_Y).getConvertedValue());
-        applyTextFillableFigureProperties(tn);
+        applyTextFillableFigureProperties(ctx, tn);
         applyFontableFigureProperties(ctx, tn);
     }
 

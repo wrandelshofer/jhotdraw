@@ -122,7 +122,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
         if (ctx.get(RenderContext.RENDERING_INTENT) != RenderingIntent.EDITOR) {
             rectangleNode.setVisible(false);
         }
-        applyTransformableFigureProperties(rectangleNode);
+        applyTransformableFigureProperties(ctx, rectangleNode);
         rectangleNode.setX(getNonnull(X).getConvertedValue());
         rectangleNode.setY(getNonnull(Y).getConvertedValue());
         rectangleNode.setWidth(getNonnull(WIDTH).getConvertedValue());

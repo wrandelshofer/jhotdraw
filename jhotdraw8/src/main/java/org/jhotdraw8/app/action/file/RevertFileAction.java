@@ -52,7 +52,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
         final DataFormat dataFormat = view.getDataFormat();
         if (view.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
-                    "Do you want to revert?\nYou will lose your changes when you revert.", ButtonType.YES, ButtonType.CANCEL);
+                    Labels.getLabels().getString("file.revert.doYouWantToRevert.message"), ButtonType.YES, ButtonType.CANCEL);
             alert.getDialogPane().setMaxWidth(640.0);
             Optional<ButtonType> answer = alert.showAndWait();
             if (answer.isPresent() && answer.get() == ButtonType.YES) {

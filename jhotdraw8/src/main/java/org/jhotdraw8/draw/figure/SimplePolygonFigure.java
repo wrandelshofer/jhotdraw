@@ -117,7 +117,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         applyFillableFigureProperties(lineNode);
         applyStyleableFigureProperties(ctx, node);
         applyStrokeableFigureProperties(lineNode);
-        applyTransformableFigureProperties(node);
+        applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(lineNode);
         final ImmutableList<Point2D> points = getStyled(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);

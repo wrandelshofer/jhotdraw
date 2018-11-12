@@ -36,7 +36,7 @@ public class OpenFileAction extends AbstractApplicationAction {
 
     /**
      * Creates a new instance.
-     *
+     *v
      * @param app the application
      */
     public OpenFileAction(Application app) {

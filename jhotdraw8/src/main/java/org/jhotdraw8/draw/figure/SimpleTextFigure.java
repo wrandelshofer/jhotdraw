@@ -100,7 +100,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
         tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyHideableFigureProperties(node);
-        applyTransformableFigureProperties(tn);
+        applyTransformableFigureProperties(ctx, tn);
         applyTextableFigureProperties(tn);
         applyStrokeableFigureProperties(tn);
         applyFillableFigureProperties(tn);

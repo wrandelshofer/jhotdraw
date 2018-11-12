@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * {@code TextFillableFigure} allows to change the fill of the text.
@@ -29,10 +30,10 @@ public interface TextFillableFigure extends Figure {
 
     /**
      * Updates a text node with label properties.
-     *
+     *  @param ctx
      * @param text a text node
      */
-    default void applyTextFillableFigureProperties(@Nonnull Text text) {
+    default void applyTextFillableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Text text) {
         text.setFill(Paintable.getPaint(getStyled(TEXT_FILL)));
     }
 
@@ -41,7 +42,7 @@ public interface TextFillableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyTextFillableFigureProperties(@Nonnull Labeled text) {
+    default void applyTextFillableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Labeled text) {
         text.setTextFill(Paintable.getPaint(getStyled(TEXT_FILL)));
     }
 }

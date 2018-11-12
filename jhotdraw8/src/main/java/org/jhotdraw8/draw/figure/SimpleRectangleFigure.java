@@ -13,7 +13,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 
 import javax.annotation.Nonnull;
 
@@ -110,7 +109,7 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(node);
-        applyTransformableFigureProperties(rectangleNode);
+        applyTransformableFigureProperties(ctx, rectangleNode);
         applyFillableFigureProperties(rectangleNode);
         applyStrokeableFigureProperties(rectangleNode);
         applyCompositableFigureProperties(rectangleNode);

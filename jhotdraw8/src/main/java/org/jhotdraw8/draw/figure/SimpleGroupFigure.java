@@ -68,7 +68,7 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
         applyHideableFigureProperties(n);
-        applyTransformableFigureProperties(n);
+        applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
         applyCompositableFigureProperties(n);
         
