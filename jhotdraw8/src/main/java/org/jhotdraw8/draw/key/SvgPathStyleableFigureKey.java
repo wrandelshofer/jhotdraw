@@ -30,7 +30,7 @@ public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String
     @Nonnull
     private final CssMetaData<?, String> cssMetaData;
 
-    private Converter<String> converter=converter = new CssSvgPathConverter(isNullable());
+    private final Converter<String> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -63,18 +63,13 @@ public class SvgPathStyleableFigureKey extends AbstractStyleableFigureKey<String
      */
     public SvgPathStyleableFigureKey(String key, DirtyMask mask, String defaultValue) {
         super(key, String.class, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createSVGPathCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
 
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
+
+        converter = new CssSvgPathConverter(isNullable());
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, String> converter

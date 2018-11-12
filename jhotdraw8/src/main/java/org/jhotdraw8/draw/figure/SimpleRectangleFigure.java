@@ -62,7 +62,6 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
 
     public SimpleRectangleFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
-        set(STROKE_TYPE, StrokeType.INSIDE);
     }
 
     public SimpleRectangleFigure(Rectangle2D rect) {

@@ -113,7 +113,7 @@ public class ObjectKey<T> implements Key<T> {
      * @param defaultValue The default value.
      */
     public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
-        this(name,clazz,typeParameters,isNullable,false,defaultValue);
+        this(name,clazz,typeParameters,isNullable,defaultValue==null,defaultValue);
     }
     public ObjectKey(@javax.annotation.Nullable String name, @javax.annotation.Nullable Class<?> clazz, @javax.annotation.Nullable Class<?>[] typeParameters, boolean isNullable, boolean isTransient, @javax.annotation.Nullable T defaultValue) {
         if (name == null) {

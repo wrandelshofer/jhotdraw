@@ -67,7 +67,6 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     public AbstractRegionFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
-        setStyled(StyleOrigin.USER_AGENT, STROKE_TYPE, StrokeType.INSIDE);
     }
 
     public AbstractRegionFigure(Rectangle2D rect) {
