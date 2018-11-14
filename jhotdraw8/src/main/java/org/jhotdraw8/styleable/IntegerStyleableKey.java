@@ -5,7 +5,6 @@ package org.jhotdraw8.styleable;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
@@ -24,7 +23,7 @@ public class IntegerStyleableKey extends SimpleStyleableKey<Integer> implements 
     private final static long serialVersionUID = 1L;
 
     public IntegerStyleableKey(String key) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key));
+        this(key, ReadableStyleableMapAccessor.toCssName(key));
     }
 
     public IntegerStyleableKey(String key, String cssName) {

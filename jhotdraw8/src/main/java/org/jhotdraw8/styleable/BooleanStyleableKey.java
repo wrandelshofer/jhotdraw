@@ -18,14 +18,14 @@ public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> implements 
     private final static long serialVersionUID = 1L;
 
     public BooleanStyleableKey(String key) {
-        this(key,  ReadOnlyStyleableMapAccessor.toCssName(key),null);
+        this(key,  ReadableStyleableMapAccessor.toCssName(key),null);
     }
     public BooleanStyleableKey(String key, Boolean defaultValue) {
-        this(key,  ReadOnlyStyleableMapAccessor.toCssName(key),defaultValue);
+        this(key,  ReadableStyleableMapAccessor.toCssName(key),defaultValue);
     }
 
     public BooleanStyleableKey(String key, String cssName) {
-        this(key,  ReadOnlyStyleableMapAccessor.toCssName(key),null);
+        this(key,  ReadableStyleableMapAccessor.toCssName(key),null);
     }
 
     public BooleanStyleableKey(String key, @Nonnull String cssName, Boolean defaultValue) {

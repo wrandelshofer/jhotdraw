@@ -11,7 +11,7 @@ import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
@@ -22,7 +22,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey<String> implements ReadOnlyStyleableMapAccessor<String> {
+public class StringReadableStyleableFigureKey extends AbstractStyleableFigureKey<String> implements ReadableStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
     @Nonnull
@@ -34,7 +34,7 @@ public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey
      *
      * @param name The name of the key.
      */
-    public StringReadOnlyStyleableFigureKey(String name) {
+    public StringReadableStyleableFigureKey(String name) {
         this(name, "");
     }
 
@@ -44,7 +44,7 @@ public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public StringReadOnlyStyleableFigureKey(String name, String defaultValue) {
+    public StringReadableStyleableFigureKey(String name, String defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
@@ -55,7 +55,7 @@ public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public StringReadOnlyStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
+    public StringReadableStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
         this(name, mask, defaultValue, null);
     }
 
@@ -67,7 +67,7 @@ public class StringReadOnlyStyleableFigureKey extends AbstractStyleableFigureKey
      * @param defaultValue The default value.
      * @param helpText the help text
      */
-    public StringReadOnlyStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
+    public StringReadableStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
         super(name, String.class, true, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);

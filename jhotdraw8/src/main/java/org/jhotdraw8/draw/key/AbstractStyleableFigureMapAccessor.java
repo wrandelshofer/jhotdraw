@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
@@ -109,7 +109,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T>
             }
         }
         dirtyMask = m;
-        cssName = ReadOnlyStyleableMapAccessor.toCssName(name);
+        cssName = ReadableStyleableMapAccessor.toCssName(name);
     }
 
     @Override

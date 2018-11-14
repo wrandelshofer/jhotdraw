@@ -12,7 +12,7 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
+public class SimpleStyleableKey<T> extends SimpleReadableStyleableKey<T> {
 
     private final static long serialVersionUID = 1L;
 

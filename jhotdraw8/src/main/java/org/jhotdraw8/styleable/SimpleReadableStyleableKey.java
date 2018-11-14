@@ -14,7 +14,7 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadOnlyStyleableMapAccessor<T> {
+public class SimpleReadableStyleableKey<T> extends ObjectKey<T> implements ReadableStyleableMapAccessor<T> {
 @Nonnull
 private final String cssName;
     private final static long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ private final String cssName;
      * @param metaData The CSS meta data.
      * @param converter the converter
      */
-    public SimpleReadOnlyStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
+    public SimpleReadableStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
         this(key, clazz, null, metaData, converter, null);
     }
 
@@ -45,7 +45,7 @@ private final String cssName;
      * @param converter the converter
      * @param defaultValue The default value.
      */
-    public SimpleReadOnlyStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+    public SimpleReadableStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
         this(key, clazz, null, metaData, converter, defaultValue);
     }
 
@@ -61,11 +61,11 @@ private final String cssName;
      * @param converter the converter
      * @param defaultValue The default value.
      */
-    public SimpleReadOnlyStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+    public SimpleReadableStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
         super(key, clazz, typeParameters, defaultValue);
         this.converter = converter;
         this.cssMetaData = metaData;
-        this.cssName=ReadOnlyStyleableMapAccessor.toCssName(key);
+        this.cssName= ReadableStyleableMapAccessor.toCssName(key);
     }
 
     @Override

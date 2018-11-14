@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ObjectKey;
-import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
 
 /**
  * SimpleFigureKey.
@@ -89,7 +89,7 @@ public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements Figur
     public AbstractStyleableFigureKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
         super(name, clazz, typeParameters, isNullable, defaultValue);
         this.dirtyMask = dirtyMask;
-        this.cssName = ReadOnlyStyleableMapAccessor.toCssName(name);
+        this.cssName = ReadableStyleableMapAccessor.toCssName(name);
     }
 
     @Nonnull

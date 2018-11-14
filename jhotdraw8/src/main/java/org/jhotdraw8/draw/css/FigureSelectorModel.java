@@ -38,7 +38,7 @@ import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
@@ -61,7 +61,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Nonnull
     private HashMap<QualifiedName, WriteableStyleableMapAccessor<?>> nameToKeyMap = new HashMap<>();
     @Nonnull
-    private HashMap<QualifiedName, ReadOnlyStyleableMapAccessor<?>> nameToReadOnlyKeyMap = new HashMap<>();
+    private HashMap<QualifiedName, ReadableStyleableMapAccessor<?>> nameToReadOnlyKeyMap = new HashMap<>();
     /**
      * Maps a key to an attribute name.
      */
@@ -113,8 +113,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) k;
                 nameToKeyMap.put(new QualifiedName(sk.getCssNamespace(),element.getClass() + "$" + sk.getCssName()), sk);
             }
-            if (k instanceof ReadOnlyStyleableMapAccessor) {
-                ReadOnlyStyleableMapAccessor<?> sk = (ReadOnlyStyleableMapAccessor<?>) k;
+            if (k instanceof ReadableStyleableMapAccessor) {
+                ReadableStyleableMapAccessor<?> sk = (ReadableStyleableMapAccessor<?>) k;
                 nameToReadOnlyKeyMap.put(new QualifiedName(sk.getCssNamespace(),element.getClass() + "$" + sk.getCssName()), sk);
             }
         }
@@ -128,7 +128,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         return result;
     }
 
-    private ReadOnlyStyleableMapAccessor<?> findReadOnlyKey(Figure element,@Nullable String namespace, String attributeName) {
+    private ReadableStyleableMapAccessor<?> findReadOnlyKey(Figure element, @Nullable String namespace, String attributeName) {
         if (mappedFigureClasses.add(element.getClass())) {
             mapFigureClass(element);
         }
@@ -158,15 +158,15 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Nullable
-    protected ReadOnlyStyleableMapAccessor<Object> getReadOnlyAttributeAccessor(@Nonnull Figure element, @Nullable String namespace,String attributeName) {
+    protected ReadableStyleableMapAccessor<Object> getReadOnlyAttributeAccessor(@Nonnull Figure element, @Nullable String namespace, String attributeName) {
         @SuppressWarnings("unchecked")
-        ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadOnlyKey(element,namespace, attributeName);
+        ReadableStyleableMapAccessor<Object> k = (ReadableStyleableMapAccessor<Object>) findReadOnlyKey(element,namespace, attributeName);
         return k;
     }
 
     @Nullable
     protected String getReadOnlyAttributeValueAsString(@Nonnull Figure element,@Nullable String namespace, String attributeName) {
-        ReadOnlyStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, namespace,attributeName);
+        ReadableStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, namespace,attributeName);
         if (k == null) {
             return null;
         }
@@ -193,7 +193,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean attributeValueContainsWord(@Nonnull Figure element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String word) {
-        ReadOnlyStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, namespace,attributeName);
+        ReadableStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, namespace,attributeName);
         if (k == null) {
             return false;
         }
