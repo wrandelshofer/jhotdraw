@@ -1,30 +1,29 @@
-/* @(#)SecondStrokeableFigure.java
+/* @(#)SecondStrokableFigure.java
  * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.ListStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Interface for figures which can render a second stroke.
@@ -38,7 +37,7 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface SecondStrokeableFigure extends Figure {
+public interface MarkerStrokableFigure extends Figure {
 
     /**
      * Defines the distance in user coordinates for the dashing pattern. Default
@@ -49,7 +48,7 @@ public interface SecondStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableFigureKey SECOND_STROKE_DASH_OFFSET = new CssSizeStyleableFigureKey("second-stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    CssSizeStyleableFigureKey MARKER_STROKE_DASH_OFFSET = new CssSizeStyleableFigureKey("marker-stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -58,7 +57,7 @@ public interface SecondStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineCap> SECOND_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("second-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE),false, StrokeLineCap.BUTT);
+    EnumStyleableFigureKey<StrokeLineCap> MARKER_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("marker-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE),false, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -68,7 +67,7 @@ public interface SecondStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineJoin> SECOND_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("second-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false,StrokeLineJoin.MITER);
+    EnumStyleableFigureKey<StrokeLineJoin> MARKER_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("marker-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false,StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. 
      * <p>
@@ -79,7 +78,7 @@ public interface SecondStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableFigureKey SECOND_STROKE_MITER_LIMIT = new CssSizeStyleableFigureKey("second-stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(4.0));
+    CssSizeStyleableFigureKey MARKER_STROKE_MITER_LIMIT = new CssSizeStyleableFigureKey("marker-stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
@@ -90,13 +89,13 @@ public interface SecondStrokeableFigure extends Figure {
      * Stroke Properties</a>
      */
     @Nullable
-    PaintableStyleableFigureKey SECOND_STROKE = new PaintableStyleableFigureKey("second-stroke", null);
+    PaintableStyleableFigureKey MARKER_STROKE = new PaintableStyleableFigureKey("marker-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    EnumStyleableFigureKey<StrokeType> SECOND_STROKE_TYPE = new EnumStyleableFigureKey<>("second-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false,StrokeType.CENTERED);
+    EnumStyleableFigureKey<StrokeType> MARKER_STROKE_TYPE = new EnumStyleableFigureKey<>("marker-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false,StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -107,7 +106,7 @@ public interface SecondStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableFigureKey SECOND_STROKE_WIDTH = new CssSizeStyleableFigureKey("second-stroke-width", DirtyMask.of(DirtyBits.NODE), CssSize.ONE);
+    CssSizeStyleableFigureKey MARKER_STROKE_WIDTH = new CssSizeStyleableFigureKey("marker-stroke-width", DirtyMask.of(DirtyBits.NODE), CssSize.ONE);
     /**
      * Defines the opacity of the outline of the figure.
      * <p>
@@ -130,7 +129,7 @@ public interface SecondStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    ListStyleableFigureKey<CssSize> SECOND_STROKE_DASH_ARRAY = new ListStyleableFigureKey<>("second-stroke-dasharray", DirtyMask.of(DirtyBits.NODE),
+    ListStyleableFigureKey<CssSize> MARKER_STROKE_DASH_ARRAY = new ListStyleableFigureKey<>("marker-stroke-dasharray", DirtyMask.of(DirtyBits.NODE),
             CssSize.class, new CssSizeConverter(false), ImmutableList.emptyList());
 
     /**
@@ -138,32 +137,32 @@ public interface SecondStrokeableFigure extends Figure {
      * <p>
      * Note: this is a non-standard composite map accessor and thus transient!
      */
-    StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("second-stroke-style", SECOND_STROKE_WIDTH,
-            SECOND_STROKE, SECOND_STROKE_TYPE, SECOND_STROKE_LINE_CAP, SECOND_STROKE_LINE_JOIN, SECOND_STROKE_MITER_LIMIT,
-            SECOND_STROKE_DASH_OFFSET, SECOND_STROKE_DASH_ARRAY);
+    StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("marker-stroke-style", MARKER_STROKE_WIDTH,
+            MARKER_STROKE, MARKER_STROKE_TYPE, MARKER_STROKE_LINE_CAP, MARKER_STROKE_LINE_JOIN, MARKER_STROKE_MITER_LIMIT,
+            MARKER_STROKE_DASH_OFFSET, MARKER_STROKE_DASH_ARRAY);
 
-    default void applySecondStrokeCapAndJoinProperties(@Nonnull Shape shape) {
+    default void applyMarkerStrokeCapAndJoinProperties(@Nonnull Shape shape) {
         double d;
-        StrokeLineCap slp = getStyled(SECOND_STROKE_LINE_CAP);
+        StrokeLineCap slp = getStyled(MARKER_STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
             shape.setStrokeLineCap(slp);
         }
-        StrokeLineJoin slj = getStyled(SECOND_STROKE_LINE_JOIN);
+        StrokeLineJoin slj = getStyled(MARKER_STROKE_LINE_JOIN);
         if (shape.getStrokeLineJoin() != slj) {
             shape.setStrokeLineJoin(slj);
         }
-        d = getStyledNonnull(SECOND_STROKE_MITER_LIMIT).getConvertedValue();
+        d = getStyledNonnull(MARKER_STROKE_MITER_LIMIT).getConvertedValue();
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
     }
 
-    default void applySecondStrokeDashProperties(@Nonnull Shape shape) {
-        double d = getStyledNonnull(SECOND_STROKE_DASH_OFFSET).getConvertedValue();
+    default void applyMarkerStrokeDashProperties(@Nonnull Shape shape) {
+        double d = getStyledNonnull(MARKER_STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        ImmutableList<CssSize> dashArray = getStyledNonnull(SECOND_STROKE_DASH_ARRAY);
+        ImmutableList<CssSize> dashArray = getStyledNonnull(MARKER_STROKE_DASH_ARRAY);
         if (dashArray.isEmpty()) {
             shape.getStrokeDashArray().clear();
         } else {
@@ -173,8 +172,8 @@ public interface SecondStrokeableFigure extends Figure {
         }
     }
 
-    default void applySecondStrokeTypeProperties(@Nonnull Shape shape) {
-        StrokeType st = getStyled(SECOND_STROKE_TYPE);
+    default void applyMarkerStrokeTypeProperties(@Nonnull Shape shape) {
+        StrokeType st = getStyled(MARKER_STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
         }
@@ -185,22 +184,22 @@ public interface SecondStrokeableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applySecondStrokeableFigureProperties(@Nonnull Shape shape) {
-         applySecondStrokeColorProperties( shape) ;
-         applySecondStrokeWidthProperties( shape) ;
-        applySecondStrokeCapAndJoinProperties(shape);
+    default void applyMarkerStrokableFigureProperties(@Nonnull Shape shape) {
+         applyMarkerStrokeColorProperties( shape) ;
+         applyMarkerStrokeWidthProperties( shape) ;
+        applyMarkerStrokeCapAndJoinProperties(shape);
 
-        applySecondStrokeTypeProperties(shape);
-        applySecondStrokeDashProperties(shape);
+        applyMarkerStrokeTypeProperties(shape);
+        applyMarkerStrokeDashProperties(shape);
     }
-    default void applySecondStrokeColorProperties(@Nonnull Shape shape) {
-        Paint p = Paintable.getPaint(getStyled(SECOND_STROKE));
+    default void applyMarkerStrokeColorProperties(@Nonnull Shape shape) {
+        Paint p = Paintable.getPaint(getStyled(MARKER_STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
-    default void applySecondStrokeWidthProperties(@Nonnull Shape shape) {
-       double d = getStyledNonnull(SECOND_STROKE_WIDTH).getConvertedValue();
+    default void applyMarkerStrokeWidthProperties(@Nonnull Shape shape) {
+       double d = getStyledNonnull(MARKER_STROKE_WIDTH).getConvertedValue();
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);
         }

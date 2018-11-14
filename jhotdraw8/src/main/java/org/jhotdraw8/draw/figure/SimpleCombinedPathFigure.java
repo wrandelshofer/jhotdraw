@@ -204,7 +204,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
         applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
         applyFillableFigureProperties(n);
-        applyStrokeableFigureProperties(n);
+        applyStrokableFigureProperties(n);
         applyTransformableFigureProperties(ctx, n);
         applyCompositableFigureProperties(n);
 

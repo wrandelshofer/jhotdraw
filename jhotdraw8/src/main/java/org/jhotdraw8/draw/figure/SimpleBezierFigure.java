@@ -166,7 +166,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
 
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
-        applyStrokeableFigureProperties(pathNode);
+        applyStrokableFigureProperties(pathNode);
         applyFillableFigureProperties(pathNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(pathNode);

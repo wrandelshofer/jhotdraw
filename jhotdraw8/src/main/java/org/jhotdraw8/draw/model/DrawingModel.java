@@ -222,8 +222,20 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the value
      */
     @Nullable
-    default <T> T get(@Nonnull Figure figure, @Nullable MapAccessor<T> key) {
+    default <T> T get(@Nonnull Figure figure, @Nonnull MapAccessor<T> key) {
         return figure.get(key);
+    }
+    /**
+     * Gets the specified property from the figure.
+     *
+     * @param <T> the value type
+     * @param figure the figure
+     * @param key the key
+     * @return the value
+     */
+    @Nonnull
+    default <T> T getNonnull(@Nonnull Figure figure, @Nonnull MapAccessor<T> key) {
+        return figure.getNonnull(key);
     }
 
     /**

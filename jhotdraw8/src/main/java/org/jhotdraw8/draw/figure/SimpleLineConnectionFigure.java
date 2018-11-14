@@ -63,7 +63,7 @@ public class SimpleLineConnectionFigure extends AbstractLineConnectionFigure
         lineNode.setEndY(end.getY());
 
         applyHideableFigureProperties(lineNode);
-        applyStrokeableFigureProperties(lineNode);
+        applyStrokableFigureProperties(lineNode);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
     }

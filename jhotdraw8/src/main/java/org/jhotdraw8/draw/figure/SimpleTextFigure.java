@@ -102,7 +102,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(ctx, tn);
         applyTextableFigureProperties(tn);
-        applyStrokeableFigureProperties(tn);
+        applyStrokableFigureProperties(tn);
         applyFillableFigureProperties(tn);
         applyCompositableFigureProperties(tn);
         applyFontableFigureProperties(ctx, tn);

@@ -18,6 +18,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurveTo;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -182,6 +183,16 @@ public class TransformFlattener {
         path.setEndY(p2.getY());
     }
 
+    private void flattenTranslatesInRectangle(@Nonnull Rectangle path) {
+        if (!canFlattenTranslate(path)) {
+            return;
+        }
+        Translate t = flattenTranslate(path);
+        Point2D p = t.transform(path.getX(), path.getY());
+        path.setX(p.getX());
+        path.setY(p.getY());
+    }
+    
     private void flattenTranslatesInShape(Shape shape) {
         if (shape instanceof Path) {
             flattenTranslatesInPath((Path) shape);
@@ -191,6 +202,8 @@ public class TransformFlattener {
             flattenTranslatesInPolyline((Polyline) shape);
         } else if (shape instanceof Line) {
             flattenTranslatesInLine((Line) shape);
+        } else if (shape instanceof Rectangle) {
+            flattenTranslatesInRectangle((Rectangle) shape);
         }
         // FIXME implement more shapes
     }

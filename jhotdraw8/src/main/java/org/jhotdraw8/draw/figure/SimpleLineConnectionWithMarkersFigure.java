@@ -55,7 +55,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     @Override
     protected void updateLineNode(RenderContext ctx, @Nonnull Line node) {
         super.updateLineNode(ctx, node); 
-        applyStrokeableFigureProperties(node);
+        applyStrokableFigureProperties(node);
     }
 
     @Override
