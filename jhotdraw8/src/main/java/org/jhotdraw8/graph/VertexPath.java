@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * Represents a vertex path through a graph.
  * <p>
- * Path elements are nextArrows.
+ * Path elements are vertices.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -67,10 +67,10 @@ public class VertexPath<V> {
     }
 
     /**
-     * Creates a new VertexPath with the specified nextArrows.
+     * Creates a new VertexPath with the specified vertices.
      *
      * @param <VV> the vertex type
-     * @param vertices the nextArrows
+     * @param vertices the vertices
      * @return the vertex path
      */
     @SafeVarargs

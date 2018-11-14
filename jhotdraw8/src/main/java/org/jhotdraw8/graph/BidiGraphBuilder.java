@@ -28,7 +28,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     private final Map<V, VertexData<V, A>> vertices;
 
     /**
-     * Creates a new instance with default capacity for nextArrows and arrows.
+     * Creates a new instance with default capacity for vertices and arrows.
      */
     public BidiGraphBuilder() {
         this(10, 10);

@@ -19,7 +19,7 @@ import java.util.Map;
 public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDirectedGraph<V,A> {
 
     /**
-     * Holds the indices of the nextArrows at the arrow heads.
+     * Holds the indices of the vertices at the arrow heads.
      */
     @Nonnull
     protected final int[] arrowHeads;
@@ -33,7 +33,7 @@ public class ImmutableAttributedIntDirectedGraph<V,A> implements AttributedIntDi
     /** Holds the arrows. */
     @Nonnull
     protected final Object[] arrows;
-    /** Holds the nextArrows. */
+    /** Holds the vertices. */
     @Nonnull
     protected final Object[] vertexObjects;
 

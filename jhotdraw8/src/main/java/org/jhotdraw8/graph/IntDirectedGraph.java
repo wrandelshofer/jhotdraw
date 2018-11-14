@@ -17,7 +17,7 @@ import java.util.function.IntConsumer;
  * Provides indexed read access to a directed graph {@code G = (V, A) }.
  * <ul>
  * <li>{@code G} is a tuple {@code (V, A) }.</li>
- * <li>{@code V} is the set of nextArrows with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
+ * <li>{@code V} is the set of vertices with elements {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
  * <li>{@code A} is the set of ordered pairs with elements {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1} }.</li>
  * </ul>
  * <p>
@@ -53,15 +53,15 @@ public interface IntDirectedGraph {
     int getNext(int vids, int k);
 
     /**
-     * Returns the number of next nextArrows of v.
+     * Returns the number of next vertices of v.
      *
      * @param vids a vertex
-     * @return the number of next nextArrows of v.
+     * @return the number of next vertices of v.
      */
     int getNextCount(int vids);
 
     /**
-     * Returns the number of nextArrows {@code V}.
+     * Returns the number of vertices {@code V}.
      *
      * @return vertex count
      */
@@ -121,10 +121,10 @@ public interface IntDirectedGraph {
     }
     
         /**
-     * Returns the direct successor nextArrows of the specified vertex.
+     * Returns the direct successor vertices of the specified vertex.
      *
      * @param vidx a vertex index
-     * @return a collection view on the direct successor nextArrows of vertex
+     * @return a collection view on the direct successor vertices of vertex
      */
     default Spliterator.OfInt getNextVertices(int vidx) {
         class MySpliterator extends AbstractIntSpliterator{

@@ -48,7 +48,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
     private final Set<V> vertices;
 
     /**
-     * Creates a new instance with default capacity for nextArrows and arrows.
+     * Creates a new instance with default capacity for vertices and arrows.
      */
     public ExposedBidiGraphBuilder() {
         this(10, 10);

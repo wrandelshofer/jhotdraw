@@ -125,7 +125,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      */
     protected void buildSetVertexCount(int newValue) {
         if (newValue < vertexCount) {
-            throw new IllegalArgumentException("can only add nextArrows:" + newValue);
+            throw new IllegalArgumentException("can only add vertices:" + newValue);
         }
         vertexCount = newValue;
         if (nextLastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {

@@ -50,7 +50,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
     private final Set<V> vertices;
 
     /**
-     * Creates a new instance with default capacity for nextArrows and arrows.
+     * Creates a new instance with default capacity for vertices and arrows.
      */
     public FlatExposedBidiGraphBuilder() {
         this(10, 10);

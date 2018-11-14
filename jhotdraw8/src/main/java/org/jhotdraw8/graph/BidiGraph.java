@@ -126,18 +126,18 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
     }
 
     /**
-     * Returns the number of direct predecessor nextArrows of v.
+     * Returns the number of direct predecessor vertices of v.
      *
      * @param vertex a vertex
-     * @return the number of next nextArrows of v.
+     * @return the number of next vertices of v.
      */
     int getPrevCount(V vertex);
 
     /**
-     * Returns the direct predecessor nextArrows of the specified vertex.
+     * Returns the direct predecessor vertices of the specified vertex.
      *
      * @param vertex a vertex
-     * @return a collection view on the direct predecessor nextArrows of vertex
+     * @return a collection view on the direct predecessor vertices of vertex
      */
     @Nonnull
     default Collection<V> getPrevVertices(V vertex) {
