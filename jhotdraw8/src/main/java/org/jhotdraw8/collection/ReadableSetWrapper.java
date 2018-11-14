@@ -17,7 +17,7 @@ public final class ReadableSetWrapper<E> extends AbstractReadableSet<E> {
 
     private final Set<? extends E> backingSet;
 
-    private ReadableSetWrapper(Set<? extends E> backingSet) {
+    public ReadableSetWrapper(Set<? extends E> backingSet) {
         this.backingSet = backingSet;
     }
 
