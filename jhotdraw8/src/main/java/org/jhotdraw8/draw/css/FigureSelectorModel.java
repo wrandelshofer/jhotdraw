@@ -322,7 +322,34 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         if (isInitialValue) {
             return null;
         }
-        return key.getConverter().toString(element.getStyled(origin, key));
+        StringBuilder buf=new StringBuilder();
+        Converter<Object> converter = key.getConverter();
+        if (converter instanceof CssConverter) {// FIXME this is questionable
+            CssConverter<Object> c = (CssConverter<Object>)converter;
+            for (CssToken t : c.toTokens(element.getStyled(origin, key), null)) {
+                switch (t.getType()) {
+                    case CssTokenType.TT_NUMBER:
+                        buf.append(t.getNumericValue().toString());
+                        break;
+                    case CssTokenType.TT_PERCENTAGE:
+                        buf.append(t.getNumericValue().toString());
+                        buf.append('%');
+                        break;
+                    case CssTokenType.TT_DIMENSION:
+                        buf.append(t.getNumericValue().toString());
+                        if (t.getStringValue()!=null)
+                        buf.append(t.getStringValue());
+                        break;
+                    default:
+                        buf.append(t.getStringValue());
+                        break;
+                }
+            }
+        }else{
+            buf.append(converter.toString(element.getStyled(origin, key)));// XXX THIS IS WRONG!!)
+        }
+
+        return buf.toString();
     }
 
     @Nullable

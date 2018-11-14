@@ -7,6 +7,8 @@ import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.jhotdraw8.css.text.CssIntegerConverter;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
@@ -27,7 +29,7 @@ public class IntegerStyleableKey extends SimpleStyleableKey<Integer> implements 
     }
 
     public IntegerStyleableKey(String key, String cssName) {
-        this(key, cssName, new XmlIntegerConverter());
+        this(key, cssName, new CssIntegerConverter(false));
     }
     public IntegerStyleableKey(String key, String cssName, Converter<Integer> converter) {
         super(key, Integer.class, null,converter);

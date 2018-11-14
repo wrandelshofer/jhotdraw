@@ -41,6 +41,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssParser;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
@@ -261,7 +262,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
-                    String attribute = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(), qname.getName());
+                    String attribute = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
                     attr.put(qname, attribute == null ? CssTokenType.IDENT_INITIAL : attribute);
                 }
             } else {
@@ -272,7 +273,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 for (QualifiedName qname : attr.keySet()) {
                     String oldAttrValue = attr.get(qname);
                     if (oldAttrValue != null) {
-                        String newAttrValue = selectorModel.getAttributeAsString(f, origin, qname.getNamespace(), qname.getName());
+                        String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
                         if (newAttrValue == null) {
                             newAttrValue = CssTokenType.IDENT_INITIAL;
                         }
@@ -310,6 +311,14 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             }
         }
         textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
+    }
+
+    @Nullable
+    private String buildString(@Nullable List<CssToken> attribute) {
+        if (attribute==null)return null;
+        StringBuilder buf = new StringBuilder();
+        for (CssToken t:attribute)buf.append(t.fromToken());
+        return buf.toString();
     }
 
     private void select(ActionEvent event) {
