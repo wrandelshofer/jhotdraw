@@ -17,7 +17,7 @@ public final class ReadableListWrapper<E> extends AbstractReadableList<E> {
 
     private final List<? extends E> backingList;
 
-    private ReadableListWrapper(List<? extends E> backingList) {
+    public ReadableListWrapper(List<? extends E> backingList) {
         this.backingList = backingList;
     }
 

@@ -24,7 +24,10 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
 
     private final Object[] array;
 
-    private ImmutableList(@javax.annotation.Nullable Collection<E> copyItems) {
+    private ImmutableList(@Nullable Collection<E> copyItems) {
+        this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
+    }
+    private ImmutableList(@Nullable ReadableCollection<E> copyItems) {
         this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
     }
 
@@ -131,6 +134,10 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
 
     @Nonnull
     public static <T> ImmutableList<T> ofCollection(Collection<T> collection) {
+        return collection.isEmpty() ? emptyList() : new ImmutableList<>(collection);
+    }
+    @Nonnull
+    public static <T> ImmutableList<T> ofCollection(ReadableCollection<T> collection) {
         return collection.isEmpty() ? emptyList() : new ImmutableList<>(collection);
     }
 

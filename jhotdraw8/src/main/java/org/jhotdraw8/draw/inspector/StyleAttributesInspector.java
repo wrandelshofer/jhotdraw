@@ -317,7 +317,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         try {
             Stylesheet s = parser.parseStylesheet(textArea.getText());
             if (!parser.getParseExceptions().isEmpty()) {
-                System.out.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
+                System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
             }
 
             Drawing d = drawingView.getDrawing();

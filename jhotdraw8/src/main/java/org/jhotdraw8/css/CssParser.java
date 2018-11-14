@@ -491,7 +491,11 @@ public class CssParser {
                 case '[':
                     tt.pushBack();
                     return parseAttributeSelector(tt);
+                case '{':
+                    tt.pushBack();
+                    throw new ParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
                 default:
+                    // don't push back!
                     throw new ParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
             }
         } catch (ParseException e) {
