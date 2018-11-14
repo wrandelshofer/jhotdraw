@@ -82,7 +82,7 @@ public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String>
          StyleablePropertyBean spb = (StyleablePropertyBean) s;
          return spb.getStyleableProperty(this);
          });*/
-        converter = new CssStringConverter('\'', helpText);
+        converter = new CssStringConverter(false,'\'', helpText);
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);

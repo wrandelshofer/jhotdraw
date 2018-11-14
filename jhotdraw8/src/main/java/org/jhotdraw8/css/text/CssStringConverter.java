@@ -6,10 +6,12 @@ package org.jhotdraw8.css.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -23,50 +25,41 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssStringConverter implements Converter<String> {
+public class CssStringConverter extends AbstractCssConverter<String> {
     private final String helpText;
     private final char quoteChar;
     @Nonnull
     private final String defaultValue;
 
     public CssStringConverter() {
-        this('\"', null);
+        this(false,'\"', null);
     }
 
-    public CssStringConverter(char quoteChar, String helpText) {
+    public CssStringConverter(boolean nullable, char quoteChar, String helpText) {
+        super(nullable);
         this.quoteChar = quoteChar;
         this.helpText = helpText;
         defaultValue = "" + quoteChar + quoteChar;
     }
 
 
-    @Nullable
-    @Override
-    public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
-        if (tt.next()==CssTokenType.TT_IDENT&&CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return null;
-        }else{
-            tt.pushBack();
-        }
-        if (tt.next() != CssTokenType.TT_STRING) {
-            throw new ParseException("Css String expected. " + tt.current(), buf.position());
-        }
-        return tt.currentString();
-    }
-
     @Override
     public String getHelpText() {
         return helpText;
     }
 
+    @Nonnull
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
-        if (value == null) {
-            out.append(CssTokenType.IDENT_NONE);
-        } else {
-            out.append(new CssToken(CssTokenType.TT_STRING, value, quoteChar).fromToken());
+    public String parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_STRING) {
+            throw new ParseException("Css String expected. " + tt.current(), tt.getStartPosition());
         }
+        return tt.currentStringNonnull();
+    }
+
+    @Override
+    protected <TT extends String> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_STRING, value, quoteChar));
     }
 
     @Nonnull
