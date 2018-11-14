@@ -3,21 +3,23 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import java.util.HashSet;
-import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javax.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
+import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
+
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
 
 /**
  * |@code SimpleDragTracker} implements interactions with the content area of a
@@ -39,10 +41,9 @@ import org.jhotdraw8.geom.Geom;
  * Partners: {@link SelectAreaTracker} as State, {@link SelectionTool} as
  * Context, {@link HandleTracker} as State.
  *
- * @see SelectionTool
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @see SelectionTool
  */
 public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
@@ -67,6 +68,17 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
                 groupReshapeableFigures.add(f);
             }
         }
+
+        // if the layout of the anchor figure does not depend on the layout of other figures,
+        // remove all figures that do depend from the group
+        if (anchor.getLayoutSubjects().isEmpty()) {
+            for (Iterator<Figure> i = groupReshapeableFigures.iterator();i.hasNext();) {
+                Figure f=i.next();
+                if (!f.getLayoutSubjects().isEmpty()) {
+                    i.remove();
+                }
+            }
+        }
     }
 
     @Override
@@ -81,6 +93,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
         dv.recreateHandles();
         //  fireToolDone();
     }
+
     @Override
     public void trackMouseClicked(MouseEvent event, DrawingView dv) {
     }
@@ -98,12 +111,12 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
             // meta snaps the top left corner of the anchor figure to the grid
             // or whatever corner is specified in the anchor
             Bounds bounds = anchorFigure.getBoundsInLocal();
-            
-        double anchorX=Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_X),0,1);
-        double anchorY=Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_Y),0,1);
-        
-            Point2D loc = new Point2D(bounds.getMinX()+anchorX*bounds.getWidth(), 
-                    bounds.getMinY()+anchorY*bounds.getHeight());
+
+            double anchorX = Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
+            double anchorY = Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
+
+            Point2D loc = new Point2D(bounds.getMinX() + anchorX * bounds.getWidth(),
+                    bounds.getMinY() + anchorY * bounds.getHeight());
             oldPoint = new CssPoint2D(anchorFigure.localToWorld(loc));
         }
 

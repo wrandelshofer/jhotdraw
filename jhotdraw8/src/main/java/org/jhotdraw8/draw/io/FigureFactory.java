@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
@@ -182,7 +183,7 @@ public interface FigureFactory {
      */
     default <T> boolean isDefaultValue(Figure f, @Nonnull MapAccessor<T> key, @Nullable T value) {
         T defaultValue = key.getDefaultValue();
-        return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
+        return Objects.equals(defaultValue,value);
     }
 
     /**

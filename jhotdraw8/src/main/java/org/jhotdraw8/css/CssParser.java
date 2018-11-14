@@ -247,10 +247,12 @@ public class CssParser {
         return exceptions;
     }
 
-    private void skipWhitespace(CssTokenizer tt) throws IOException, ParseException {
+    private void skipWhitespaceAndComments(CssTokenizer tt) throws IOException, ParseException {
         while (tt.current() == CssTokenType.TT_S//
                 || tt.current() == CssTokenType.TT_CDC//
-                || tt.current() == CssTokenType.TT_CDO) {
+                || tt.current() == CssTokenType.TT_CDO
+        || tt.current()==CssTokenType.TT_COMMENT
+        || tt.current()==CssTokenType.TT_BAD_COMMENT) {
             tt.nextNoSkip();
         }
     }
@@ -372,7 +374,7 @@ public class CssParser {
     private Object parseQualifiedRule(CssTokenizer tt) throws IOException, ParseException {
         // Fixme don't throw away a qualified rule
         tt.nextNoSkip();
-        skipWhitespace(tt);
+        skipWhitespaceAndComments(tt);
         while (tt.current() != CssTokenType.TT_EOF
                 && tt.current() != '{'//
                 && tt.current() != ';') {
@@ -388,7 +390,7 @@ public class CssParser {
     private StyleRule parseStyleRule(CssTokenizer tt) throws IOException, ParseException {
         SelectorGroup selectorGroup;
         tt.nextNoSkip();
-        skipWhitespace(tt);
+        skipWhitespaceAndComments(tt);
         if (tt.current() == '{') {
             tt.pushBack();
             selectorGroup = new SelectorGroup(new UniversalSelector());
@@ -396,13 +398,13 @@ public class CssParser {
             tt.pushBack();
             selectorGroup = parseSelectorGroup(tt);
         }
-        skipWhitespace(tt);
+        skipWhitespaceAndComments(tt);
         if (tt.nextNoSkip() != '{') {
             throw new ParseException("StyleRule: '{' expected.", tt.getLineNumber());
         }
         List<Declaration> declarations = parseDeclarationList(tt);
         tt.nextNoSkip();
-        skipWhitespace(tt);
+        skipWhitespaceAndComments(tt);
         if (tt.current() != '}') {
             throw new ParseException("StyleRule: '}' expected.", tt.getLineNumber());
         }
@@ -414,12 +416,12 @@ public class CssParser {
         selectors.add(parseSelector(tt));
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
                 && tt.current() != '{') {
-            skipWhitespace(tt);
+            skipWhitespaceAndComments(tt);
             if (tt.current() != ',') {
                 throw new ParseException("SelectorGroup: ',' expected.", tt.getLineNumber());
             }
             tt.nextNoSkip();
-            skipWhitespace(tt);
+            skipWhitespaceAndComments(tt);
             tt.pushBack();
             selectors.add(parseSelector(tt));
         }
@@ -436,7 +438,7 @@ public class CssParser {
             boolean potentialDescendantCombinator = false;
             if (tt.current() == CssTokenType.TT_S) {
                 potentialDescendantCombinator = true;
-                skipWhitespace(tt);
+                skipWhitespaceAndComments(tt);
             }
             if (tt.current() == CssTokenType.TT_EOF
                     || tt.current() == '{' || tt.current() == ',') {
@@ -468,7 +470,8 @@ public class CssParser {
 
     private SimpleSelector parseSimpleSelector(CssTokenizer tt) throws IOException, ParseException {
         tt.nextNoSkip();
-        skipWhitespace(tt);
+        skipWhitespaceAndComments(tt);
+
         try {
             switch (tt.current()) {
                 case '*':
@@ -637,7 +640,7 @@ public class CssParser {
         String property = tt.currentString();
         int startPos = tt.getStartPosition();
         tt.nextNoSkip();
-        skipWhitespace(tt);
+        skipWhitespaceAndComments(tt);
         if (tt.current() != ':') {
             throw new ParseException("Declaration: ':' expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
@@ -653,7 +656,7 @@ public class CssParser {
     private List<CssToken> parseTerms(CssTokenizer tt) throws IOException, ParseException {
         List<CssToken> terms = new ArrayList<>();
         tt.nextNoSkip();
-        skipWhitespace(tt);
+        skipWhitespaceAndComments(tt);
         tt.pushBack();
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
                 && //

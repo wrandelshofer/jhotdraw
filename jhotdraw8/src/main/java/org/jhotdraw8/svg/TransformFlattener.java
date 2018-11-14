@@ -3,19 +3,25 @@
  */
 package org.jhotdraw8.svg;
 
+import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -54,7 +60,7 @@ public class TransformFlattener {
         }
         node.setTranslateX(0.0);
         node.setTranslateY(0.0);
-        node.getTransforms().clear();;
+        node.getTransforms().clear();
         return translate;
     }
 
@@ -134,9 +140,57 @@ public class TransformFlattener {
         }
     }
 
+    private void flattenTranslatesInPolygon(@Nonnull Polygon path) {
+        if (!canFlattenTranslate(path)) {
+            return;
+        }
+        Translate t = flattenTranslate(path);
+        ObservableList<Double> points = path.getPoints();
+        for (int i = 0, n = points.size(); i < n; i += 2) {
+            double x = points.get(i);
+            double y = points.get(i + 1);
+            Point2D p = t.transform(x, y);
+            points.set(i, p.getX());
+            points.set(i + 1, p.getY());
+        }
+    }
+    private void flattenTranslatesInPolyline(@Nonnull Polyline path) {
+        if (!canFlattenTranslate(path)) {
+            return;
+        }
+        Translate t = flattenTranslate(path);
+        ObservableList<Double> points = path.getPoints();
+        for (int i = 0, n = points.size(); i < n; i += 2) {
+            double x = points.get(i);
+            double y = points.get(i + 1);
+            Point2D p = t.transform(x, y);
+            points.set(i, p.getX());
+            points.set(i + 1, p.getY());
+        }
+    }
+
+    private void flattenTranslatesInLine(@Nonnull Line path) {
+        if (!canFlattenTranslate(path)) {
+            return;
+        }
+        Translate t = flattenTranslate(path);
+        Point2D p = t.transform(path.getStartX(), path.getStartY());
+        path.setStartX(p.getX());
+        path.setStartY(p.getY());
+        Point2D p2 = t.transform(path.getEndX(), path.getEndY());
+        path.setEndX(p2.getX());
+        path.setEndY(p2.getY());
+    }
+
     private void flattenTranslatesInShape(Shape shape) {
         if (shape instanceof Path) {
             flattenTranslatesInPath((Path) shape);
+        } else if (shape instanceof Polygon) {
+            flattenTranslatesInPolygon((Polygon) shape);
+        } else if (shape instanceof Polyline) {
+            flattenTranslatesInPolyline((Polyline) shape);
+        } else if (shape instanceof Line) {
+            flattenTranslatesInLine((Line) shape);
         }
         // FIXME implement more shapes
     }

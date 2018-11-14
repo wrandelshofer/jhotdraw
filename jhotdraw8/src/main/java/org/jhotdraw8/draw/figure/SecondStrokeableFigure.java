@@ -28,6 +28,8 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 
 /**
  * Interface for figures which can render a second stroke.
+ * <p>
+ * FIXME move out of JHotDraw.
  *
  * @design.pattern Figure Mixin, Traits.
  * 

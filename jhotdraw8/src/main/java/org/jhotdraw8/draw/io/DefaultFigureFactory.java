@@ -101,6 +101,8 @@ import java.util.Set;
 /**
  * DefaultFigureFactory.
  *
+ * FIXME rename to GrapherFigureFactory.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -189,7 +191,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(FontWeight.class, new CssEnumConverter<>(FontWeight.class));
         addConverterForType(FontPosture.class, new CssEnumConverter<>(FontPosture.class));
         addConverterForType(LabelAutorotate.class, new CssEnumConverter<>(LabelAutorotate.class));
-        addConverterForType(RegexReplace.class, new CssRegexConverter(true));
+        addConverterForType(RegexReplace.class, new CssRegexConverter(true));// FIXME remove from JHotDraw
         addConverterForType(StrokeLineJoin.class, new CssEnumConverter<>(StrokeLineJoin.class));
         addConverterForType(StrokeLineCap.class, new CssEnumConverter<>(StrokeLineCap.class));
         addConverterForType(StrokeType.class, new CssEnumConverter<>(StrokeType.class));
