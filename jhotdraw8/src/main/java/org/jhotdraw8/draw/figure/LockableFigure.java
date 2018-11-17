@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.collection.BooleanKey;
+import org.jhotdraw8.styleable.BooleanStyleableKey;
 
 /**
  * LockableFigure.
@@ -26,7 +27,7 @@ public interface LockableFigure extends Figure {
      * This key can be used by the user to prevent accidental selection or
      * editing of a figure.
      */
-    public static BooleanKey LOCKED = new BooleanKey("locked", false);
+    BooleanStyleableKey LOCKED = new BooleanStyleableKey("locked", false);
 
     /**
      * Whether this figure is not locked and all its parents are editable.

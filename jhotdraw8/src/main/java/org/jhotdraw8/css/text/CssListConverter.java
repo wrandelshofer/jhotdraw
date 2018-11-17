@@ -18,7 +18,8 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         SPACE,
         COMMA,
         NEWLINE,
-        NEWLINE_WITH_INITIAL_NEWLINE
+        NEWLINE_WITH_INITIAL_NEWLINE,
+        TWO_NEWLINES_WITH_TWO_INITIAL_NEWLINES
     }
     private final CssConverter<T> elementConverter;
     private final Separator style;
@@ -73,6 +74,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                         case NEWLINE_WITH_INITIAL_NEWLINE:
                             out.accept(new CssToken(CssTokenType.TT_S, "\n"));
                             break;
+                        case TWO_NEWLINES_WITH_TWO_INITIAL_NEWLINES:
+                            out.accept(new CssToken(CssTokenType.TT_S, "\n\n"));
+                            break;
                     }
                 } else {
                     switch (style) {
@@ -82,6 +86,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                         case NEWLINE:
                         case NEWLINE_WITH_INITIAL_NEWLINE:
                             out.accept(new CssToken(CssTokenType.TT_S, "\n"));
+                            break;
+                        case TWO_NEWLINES_WITH_TWO_INITIAL_NEWLINES:
+                            out.accept(new CssToken(CssTokenType.TT_S, "\n\n"));
                             break;
                         case COMMA:
                             out.accept(new CssToken(CssTokenType.TT_COMMA));
