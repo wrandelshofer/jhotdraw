@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -204,17 +203,17 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
         boolean first = true;
         for (Figure f : newValue) {
-            ImmutableList<String> tags = f.get(tagsKey);
+            ImmutableList<String> tags = f.getNonnull(tagsKey);
             if (first) {
-                intersection.addAll(new ListWrapper<>(tags));
+                intersection.addAll(tags.asList());
                 first = false;
             } else {
                 if (!intersection.isEmpty()) {
-                    intersection.retainAll(new ListWrapper<>(tags));
+                    intersection.retainAll(tags.asList());
                 }
             }
             if (!tags.isEmpty()) {
-                union.addAll(new ListWrapper<>(tags));
+                union.addAll(tags.asList());
             }
         }
 

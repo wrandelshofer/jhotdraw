@@ -53,7 +53,7 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
     @Override
     public <TT extends ImmutableSet<String>> void toString(Appendable out, IdFactory idFactory, @Nonnull TT value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
-        tokens.addAll(new SetWrapper<>(value));
+        tokens.addAll(value.asSet());
         Object[] v = new Object[tokens.size() + 1];
         v[0] = value.size();
         value.copyInto(v, 1);

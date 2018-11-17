@@ -1,14 +1,18 @@
-/* @(#)ImmutableSet.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+/* @(#)ReadableSetWrapper.java
+ * Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
- * ImmutableSet preserves insertion order of items.
+ * Wraps a {@link Set} in the {@link ReadableSet} API.
+ * <p>
+ * The underlying Set is referenced - not copied. This allows to pass a
+ * set to a client while preventing that the client can modify the set directly.
  *
  * @author Werner Randelshofer
  * @version $Id$

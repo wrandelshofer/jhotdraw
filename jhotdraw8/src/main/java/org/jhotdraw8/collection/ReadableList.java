@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.collection;
 
+import javafx.collections.ObservableList;
+
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,8 +44,30 @@ public interface ReadableList<E> extends ReadableCollection<E> {
         return new ReadableListIterator<>(this);
     }
 
+    /**
+     * Copies this list into an ArrayList.
+     *
+     * @return a new ArrayList.
+     */
+    default ArrayList<E> toArrayList() {
+        return new ArrayList<>(this.asList());
+    }
 
-    default ArrayList<E> toList() {
-        return new ArrayList<>(new ListWrapper<>(this));
+    /**
+     * Wraps this list in the List API - without copying.
+     *
+     * @return the wrapped list
+     */
+    default List<E> asList() {
+        return new ListWrapper<>(this);
+    }
+
+    /**
+     * Wraps this list in the ObservableList API - without copying.
+     *
+     * @return the wrapped list
+     */
+    default ObservableList<E> asObservableList() {
+        return new ObservableListWrapper<>(this);
     }
 }

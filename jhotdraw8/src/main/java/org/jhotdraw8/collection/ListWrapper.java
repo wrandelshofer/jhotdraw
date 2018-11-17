@@ -4,7 +4,17 @@
 package org.jhotdraw8.collection;
 
 import java.util.AbstractList;
+import java.util.List;
 
+/**
+ * Wraps a {@link ReadableList} in the {@link List} API.
+ * <p>
+ * The underlying ReadableList is referenced - not copied. This allows to pass a
+ * ReadableList to a client who does not understand the ReadableList APi.
+ *
+ * @author Werner Randelshofer
+ * @version $Id$
+ */
 public class ListWrapper<E> extends AbstractList<E> {
     private final ReadableList<E> backingList;
 

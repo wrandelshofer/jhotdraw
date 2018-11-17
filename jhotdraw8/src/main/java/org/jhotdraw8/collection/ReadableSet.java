@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.collection;
 
+import javafx.collections.ObservableSet;
+
 import java.util.Set;
 
 /**
@@ -14,4 +16,20 @@ import java.util.Set;
  * @param <E> the element type
  */
 public interface ReadableSet<E> extends ReadableCollection<E> {
+    /**
+     * Wraps this set in the Set API - without copying.
+     *
+     * @return the wrapped set
+     */
+    default Set<E> asSet() {
+        return new SetWrapper<>(this);
+    }
+    /**
+     * Wraps this set in the ObservableSet API - without copying.
+     *
+     * @return the wrapped set
+     */
+    default ObservableSet<E> asObservableSet() {
+        return new ObservableSetWrapper<>(this);
+    }
 }

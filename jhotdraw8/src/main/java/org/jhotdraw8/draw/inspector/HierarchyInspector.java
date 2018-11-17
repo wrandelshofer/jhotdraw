@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -244,9 +243,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                     @Override
                     public void commitEdit(@Nonnull ImmutableList<String> newValue) {
-                        LinkedHashSet<String> newValueSet = new LinkedHashSet<>(new ListWrapper<>(newValue));
-                        newValueSet.removeAll(syntheticClasses);
-                        super.commitEdit(ImmutableList.ofCollection(newValueSet));
+                        ImmutableList<String> newValueSet=ImmutableList.removeAll(newValue,syntheticClasses);
+                        super.commitEdit(newValueSet);
                     }
 
                     @Override
@@ -255,7 +253,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         figure.get(StyleableFigure.STYLE_CLASS);
                         syntheticClasses.clear();
                         syntheticClasses.addAll(figure.getStyleClass());
-                        syntheticClasses.removeAll(new ListWrapper<>(figure.get(StyleableFigure.STYLE_CLASS)));
+                        syntheticClasses.removeAll(figure.getNonnull(StyleableFigure.STYLE_CLASS).asList());
                         super.startEdit();
                     }
 

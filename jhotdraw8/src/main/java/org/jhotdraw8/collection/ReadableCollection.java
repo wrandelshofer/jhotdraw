@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -90,5 +91,14 @@ public interface ReadableCollection<E> extends Iterable<E> {
             if (!contains(e))
                 return false;
         return true;
+    }
+
+    /**
+     * Wraps this collection in the Collection API - without copying.
+     *
+     * @return the wrapped collection
+     */
+    default Collection<E> asCollection() {
+        return new CollectionWrapper<>(this);
     }
 }

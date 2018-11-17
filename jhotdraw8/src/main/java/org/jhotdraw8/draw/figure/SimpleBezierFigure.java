@@ -146,7 +146,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(Transform transform) {
-        ArrayList<BezierNode> newP = new ArrayList<>(new ListWrapper<>(get(PATH)));
+        ArrayList<BezierNode> newP = getNonnull(PATH).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).transform(transform));
         }

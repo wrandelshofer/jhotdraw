@@ -12,7 +12,6 @@ import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.collection.SetWrapper;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -38,30 +37,32 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    @javax.annotation.Nullable
-    public static StringReadableStyleableFigureKey ID = new StringReadableStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE),null );
+    @Nonnull
+    StringReadableStyleableFigureKey ID = new StringReadableStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE),null );
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableList.emptyList());
+    @Nonnull
+    ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableList.emptyList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS. The should not be made persistent.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ImmutableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableSet.emptySet());
+    @Nonnull
+    SimpleFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ImmutableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableSet.emptySet());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.
      *
      * Default value: {@code null}.
      */
-    @javax.annotation.Nullable
-    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
+    @Nonnull
+    SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
 
     /**
      * Updates a figure node with all style and effect properties defined in
@@ -90,12 +91,12 @@ public interface StyleableFigure extends Figure {
 
     @Override  
     default ObservableList<String> getStyleClass() {
-        return FXCollections.observableList(new ListWrapper<>(get(STYLE_CLASS)));
+        return getNonnull(STYLE_CLASS).asObservableList();
     }
 
     @Override
     default ObservableSet<PseudoClass> getPseudoClassStates() {
-        return FXCollections.observableSet(new SetWrapper<>(get(PSEUDO_CLASS_STATES)));
+        return getNonnull(PSEUDO_CLASS_STATES).asObservableSet();
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
@@ -42,6 +43,19 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
 
     private ImmutableList(boolean privateMethod, Object[] array) {
         this.array = array;
+    }
+
+    public static <E> ImmutableList<E> removeAll(ImmutableList<E> list, Collection<? extends E> collection) {
+        int n = list.size();
+        Object[] a=new Object[n];
+        int j=0;
+        for (E e :list) {
+            if (!collection.contains(e)) {
+                a[j++]=e;
+            }
+        }
+
+        return new ImmutableList<E>(a,0,j);
     }
 
     public void copyInto(@Nonnull Object[] out, int offset) {

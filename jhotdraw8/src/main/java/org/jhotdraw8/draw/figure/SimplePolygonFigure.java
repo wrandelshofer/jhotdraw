@@ -16,7 +16,6 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.connector.Connector;
@@ -83,12 +82,12 @@ public class SimplePolygonFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        return Shapes.pathIteratorFromPoints(new ListWrapper<>(get(POINTS)),true,PathIterator.WIND_EVEN_ODD,tx);
+        return Shapes.pathIteratorFromPoints(getNonnull(POINTS).asList(),true,PathIterator.WIND_EVEN_ODD,tx);
     }
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
-        ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
+        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
@@ -97,7 +96,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
 
     @Override
     public void translateInLocal(CssPoint2D t) {
-        ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
+        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }

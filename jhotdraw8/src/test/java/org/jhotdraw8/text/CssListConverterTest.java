@@ -59,7 +59,7 @@ public class CssListConverterTest {
         ImmutableList<Double> actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
-        assertEquals( expected, actual.toList());
+        assertEquals( expected, actual.toArrayList());
     }
 
     @TestFactory

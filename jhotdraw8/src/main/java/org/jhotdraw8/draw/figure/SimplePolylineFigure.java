@@ -16,7 +16,6 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -110,7 +109,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-       return Shapes.pathIteratorFromPoints(new ListWrapper<>(get(POINTS)), false, PathIterator.WIND_NON_ZERO, tx);
+       return Shapes.pathIteratorFromPoints(getNonnull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
     @Nonnull
@@ -121,7 +120,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@Nonnull Transform transform) {
-        ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
+        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
@@ -129,7 +128,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     }
     @Override
     public void translateInLocal(CssPoint2D t) {
-        ArrayList<Point2D> newP = new ArrayList<>(new ListWrapper<>(get(POINTS)));
+        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
@@ -146,7 +145,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         applyFillableFigureProperties(lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(lineNode);
-        final ImmutableList<Point2D> points = getStyled(POINTS);
+        final ImmutableList<Point2D> points = getStyledNonnull(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {
             list.add(p.getX());
@@ -158,7 +157,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
 
     @Nonnull
     public static double[] toPointArray(Figure f, MapAccessor<ImmutableList<Point2D>> key) {
-        ImmutableList<Point2D> points = f.get(key);
+        ImmutableList<Point2D> points = f.getNonnull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {
             Point2D p = points.get(i);

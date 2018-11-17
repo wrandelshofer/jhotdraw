@@ -13,7 +13,6 @@ import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -238,12 +237,12 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
         Point2D center = getCenterInLocal();
 
-        ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
-        double sx = styled ? getStyled(SCALE_X) : get(SCALE_X);
-        double sy = styled ? getStyled(SCALE_Y) : get(SCALE_Y);
-        double r = styled ? getStyled(ROTATE) : get(ROTATE);
-        double tx = styled ? getStyled(TRANSLATE_X) : get(TRANSLATE_X);
-        double ty = styled ? getStyled(TRANSLATE_Y) : get(TRANSLATE_Y);
+        ImmutableList<Transform> t = styled ? getStyledNonnull(TRANSFORMS) : getNonnull(TRANSFORMS);
+        double sx = styled ? getStyledNonnull(SCALE_X) : getNonnull(SCALE_X);
+        double sy = styled ? getStyledNonnull(SCALE_Y) : getNonnull(SCALE_Y);
+        double r = styled ? getStyledNonnull(ROTATE) : getNonnull(ROTATE);
+        double tx = styled ? getStyledNonnull(TRANSLATE_X) : getNonnull(TRANSLATE_X);
+        double ty = styled ? getStyledNonnull(TRANSLATE_Y) : getNonnull(TRANSLATE_Y);
 
         if (tx != 0.0 || ty != 0.0) {
             Translate tt = new Translate(tx, ty);
@@ -257,8 +256,8 @@ public interface TransformableFigure extends TransformCacheableFigure {
             Scale ts = new Scale(sx, sy, center.getX(), center.getY());
             list.add(ts);
         }
-        if (t != null && !t.isEmpty()) {
-            list.addAll(new ListWrapper<>(t));
+        if ( !t.isEmpty()) {
+            list.addAll(t.asList());
         }
         return list;
     }
