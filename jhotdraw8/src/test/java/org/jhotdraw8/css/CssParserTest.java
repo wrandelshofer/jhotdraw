@@ -4,7 +4,9 @@
  */
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.collection.ReadableList;
 import org.jhotdraw8.css.ast.Declaration;
+import org.jhotdraw8.css.ast.Rule;
 import org.jhotdraw8.css.ast.SelectorGroup;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
@@ -151,7 +153,6 @@ public class CssParserTest {
                 dynamicTest("44", () -> testParseStylesheet("#id {a:1}", "<xml><elem id=\"id\"/></xml>", "<xml><elem a=\"1\" id=\"id\"/></xml>")),
                 dynamicTest("45", () -> testParseStylesheet("type {a:b}", "<xml><type/></xml>", "<xml><type a=\"b\"/></xml>")),
                 dynamicTest("46", () -> testParseStylesheet("", "<xml/>", "<xml/>"))
-                //
         );
 
     }
@@ -211,8 +212,8 @@ public class CssParserTest {
         }
         System.out.println(" expected: " + expectedValue);
         //---
-        assertEquals(actualValue, expectedValue);
-        assertEquals(p.getParseExceptions().isEmpty(), valid);
+        assertEquals(expectedValue, actualValue);
+        assertEquals(valid, p.getParseExceptions().isEmpty());
     }
 
     /**
@@ -316,7 +317,65 @@ public class CssParserTest {
                 // with comments
                 dynamicTest("31", () -> testCssSyntax(true, "/*comment*/AB {x:y}", //
                         "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>")),
+
+                // selector missing afer comma
+                dynamicTest("32", () -> testCssSyntax(false, "AB, {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>")),
+
+                dynamicTest("33", () -> testCssSyntax(false, "AB,, {x:y}", //
+                        "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>"))
         )/**/;
+    }
+
+
+    @TestFactory
+    public List<DynamicTest> testAtRuleFactory() {
+        return Arrays.asList(
+                // at rules
+                dynamicTest("1", () -> testAtRule(true, "@charset \"UTF-8\"; AB {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("2", () -> testAtRule(true, "@import url('landscape.css') screen and (orientation:landscape); AB {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("3", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); AB {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("4", () -> testAtRule(true, "@namespace svg url(http://www.w3.org/2000/svg); AB {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("5", () -> testAtRule(true, "@media print {\n" +
+                                "  body { font-size: 10pt }\n" +
+                                "} AB {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("6", () -> testAtRule(true, "@document url(http://www.w3.org/),\n" +
+                                "               url-prefix(http://www.w3.org/Style/),\n" +
+                                "               domain(mozilla.org),\n" +
+                                "               regexp(\"https:.*\")\n" +
+                                "{\n" +
+                                "  body {\n" +
+                                "    color: purple;\n" +
+                                "    background: yellow;\n" +
+                                "  }\n" +
+                                "} AB {x:y}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"y\"/></xml>"))
+        )/**/;
+    }
+
+    /**
+     * Tests parsing of at rules.
+     */
+    public static void testAtRule(boolean valid, String stylesheetStr, String before, String expectedValue) throws Exception {
+        testCssSyntax(valid, stylesheetStr, before, expectedValue);
+
+        CssParser p=new CssParser();
+        Stylesheet stylesheet = p.parseStylesheet(stylesheetStr);
+        ReadableList<Rule> rules = stylesheet.getRules();
+        System.out.println(rules);
     }
 }

@@ -10,12 +10,14 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 
 /**
+ * API for inspectors.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface Inspector {
 
-    public void setDrawingView(@Nullable DrawingView view);
+    void setDrawingView(@Nullable DrawingView view);
 
-    public Node getNode();
+    Node getNode();
 }

@@ -25,10 +25,10 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
 
     private final Object[] array;
 
-    private ImmutableList(@Nullable Collection<E> copyItems) {
+    private ImmutableList(@Nullable Collection<? extends E> copyItems) {
         this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
     }
-    private ImmutableList(@Nullable ReadableCollection<E> copyItems) {
+    private ImmutableList(@Nullable ReadableCollection<? extends E> copyItems) {
         this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
     }
 
@@ -105,7 +105,7 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> add(@javax.annotation.Nullable Collection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> add(@Nullable Collection<T> collection, int index, T item) {
         if (collection == null || collection.isEmpty() && index == 0) {
             return ImmutableList.of(item);
         }
@@ -119,7 +119,7 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> add(@javax.annotation.Nullable ReadableCollection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> add(@Nullable ReadableCollection<T> collection, int index, T item) {
         if (collection == null || collection.isEmpty() && index == 0) {
             return ImmutableList.of(item);
         }
@@ -147,12 +147,12 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> ofCollection(Collection<T> collection) {
-        return collection.isEmpty() ? emptyList() : new ImmutableList<>(collection);
+    public static <T> ImmutableList<T> ofCollection(Collection<? extends T> collection) {
+        return collection.isEmpty() ? emptyList() : new ImmutableList<T>(collection);
     }
     @Nonnull
-    public static <T> ImmutableList<T> ofCollection(ReadableCollection<T> collection) {
-        return collection.isEmpty() ? emptyList() : new ImmutableList<>(collection);
+    public static <T> ImmutableList<T> ofCollection(ReadableCollection<? extends T> collection) {
+        return collection.isEmpty() ? emptyList() : new ImmutableList<T>(collection);
     }
 
     @Nonnull
@@ -161,7 +161,7 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> remove(@javax.annotation.Nullable ReadableCollection<T> collection, int index) {
+    public static <T> ImmutableList<T> remove(@Nullable ReadableCollection<T> collection, int index) {
         if (collection == null || collection.size() == 1 && index == 0) {
             return ImmutableList.emptyList();
         }
@@ -174,7 +174,7 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> remove(@javax.annotation.Nullable Collection<T> collection, int index) {
+    public static <T> ImmutableList<T> remove(@Nullable Collection<T> collection, int index) {
         if (collection == null || collection.size() == 1 && index == 0) {
             return ImmutableList.emptyList();
         }
@@ -187,7 +187,7 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> remove(@javax.annotation.Nullable Collection<T> collection, T item) {
+    public static <T> ImmutableList<T> remove(@Nullable Collection<T> collection, T item) {
         if (collection == null || collection.size() == 1 && collection.contains(item)) {
             return ImmutableList.emptyList();
         }

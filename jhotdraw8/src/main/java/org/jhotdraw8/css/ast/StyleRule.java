@@ -14,7 +14,7 @@ import java.util.List;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StyleRule extends AST {
+public class StyleRule extends Rule {
 
     private final SelectorGroup selectorList;
     @Nonnull

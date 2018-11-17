@@ -386,24 +386,25 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
             dock.getItems().add(addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
             d.add(dock);
             return d;
-        }).thenAccept(list -> {
-            ScrollableVBoxTrack vtrack = new ScrollableVBoxTrack();
-            Set<DockItem> items = new LinkedHashSet<>();
-            for (Dock dock : list) {
-                for (DockItem n : dock.getItems()) {
-                    items.add(n);
-                    Inspector i = (Inspector) n.getProperties().get("inspector");
-                    i.setDrawingView(drawingView);
+        }).whenComplete((list,e) -> {
+            if (e==null) {
+                ScrollableVBoxTrack vtrack = new ScrollableVBoxTrack();
+                Set<DockItem> items = new LinkedHashSet<>();
+                for (Dock dock : list) {
+                    for (DockItem n : dock.getItems()) {
+                        items.add(n);
+                        Inspector i = (Inspector) n.getProperties().get("inspector");
+                        i.setDrawingView(drawingView);
+                    }
+                    vtrack.getItems().add(dock.getNode());
                 }
-                vtrack.getItems().add(dock.getNode());
+                SplitPaneTrack htrack = SplitPaneTrack.createHorizontalTrack();
+                htrack.getItems().add(vtrack.getNode());
+                dockRoot.addTrack(htrack);
+                dockRoot.setDockableItems(FXCollections.observableSet(items));
+            }else {
+                e.printStackTrace();
             }
-            SplitPaneTrack htrack = SplitPaneTrack.createHorizontalTrack();
-            htrack.getItems().add(vtrack.getNode());
-            dockRoot.addTrack(htrack);
-            dockRoot.setDockableItems(FXCollections.observableSet(items));
-        }).exceptionally(e -> {
-            e.printStackTrace();
-            return null;
         });
 
     }

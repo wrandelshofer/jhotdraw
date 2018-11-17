@@ -6,6 +6,7 @@ package org.jhotdraw8.concurrent;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 import javafx.application.Platform;
 import javax.annotation.Nonnull;
@@ -27,7 +28,7 @@ public class FXWorker {
      */
     @Nonnull
     public static CompletableFuture<Void> run(@Nonnull CheckedRunnable runnable) {
-        return run(Executors.newSingleThreadExecutor(), runnable);
+        return run(r->new Thread(r).start(), runnable);
     }
 
     /**
@@ -54,7 +55,7 @@ public class FXWorker {
     }
 
     /**
-     * Calls the supplier on a new Thread. The completion stage is
+     * Calls the supplier on a thread of the common fork join pool. The completion stage is
      * completed on the FX Application Thread.
      *
      * @param <T> the value type
@@ -63,7 +64,7 @@ public class FXWorker {
      */
     @Nonnull
     public static <T> CompletableFuture<T> supply(@Nonnull CheckedSupplier<T> supplier) {
-        return supply(Executors.newSingleThreadExecutor(), supplier);
+        return supply(ForkJoinPool.commonPool(), supplier);
     }
 
     /**

@@ -3,10 +3,14 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadableList;
+
 import javax.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A stylesheet is a list of rules.
@@ -17,10 +21,17 @@ import java.util.List;
 public class Stylesheet extends AST {
 
     @Nonnull
-    private final List<StyleRule> rules;
+    private final ImmutableList<Rule> rules;
+    @Nonnull
+    private final ImmutableList<StyleRule> styleRules;
 
-    public Stylesheet(@Nonnull List<StyleRule> rules) {
-        this.rules = Collections.unmodifiableList(rules);
+    public Stylesheet(@Nonnull List<Rule> rules) {
+        this.rules = ImmutableList.ofCollection(rules);
+        this.styleRules = ImmutableList.ofCollection(
+                rules.stream()
+                        .filter(r->r instanceof StyleRule)
+                        .map(r->(StyleRule)r)
+                        .collect(Collectors.toList()));
     }
 
     /**
@@ -29,7 +40,16 @@ public class Stylesheet extends AST {
      * @return the rules
      */
     @Nonnull
-    public List<StyleRule> getStyleRules() {
+    public ReadableList<StyleRule> getStyleRules() {
+        return styleRules;
+    }
+    /**
+     * Returns rules in the stylesheet.
+     *
+     * @return the rules
+     */
+    @Nonnull
+    public ReadableList<Rule> getRules() {
         return rules;
     }
 
@@ -38,7 +58,7 @@ public class Stylesheet extends AST {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         boolean first = true;
-        for (StyleRule r : rules) {
+        for (Rule r : rules) {
             if (first) {
                 first = false;
             } else {
