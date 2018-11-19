@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -79,7 +78,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private void doSetAttribute(SelectorModel<E> selectorModel1, E elem, StyleOrigin styleOrigin,
                                 @Nullable String namespace, @Nonnull String name, ReadableList<CssToken> value,
-                                Map<String, ReadableList<CssToken>> customProperties) {
+                                Map<String, ReadableList<CssToken>> customProperties) throws ParseException {
         if (value == null) {
             selectorModel1.setAttribute(elem, styleOrigin, namespace, name, null);
         } else {
@@ -220,7 +219,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         Collection<ParsedStylesheetEntry> uaStylesheets = getUserAgentStylesheets();
         Map<String, ReadableList<CssToken>> uaCustomProperties = getUserAgentCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, uaStylesheets)) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), uaCustomProperties);
+            try {
+                doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), uaCustomProperties);
+            } catch (ParseException e) {
+                LOGGER.throwing(SimpleStylesheetsManager.class.getName(),"applyStylesheetsTo", e);
+            }
         }
 
         // The value of a property was set by the user through a call to a set method with StyleOrigin.USER
@@ -228,13 +231,21 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         // The stylesheet is an external file
         Map<String, ReadableList<CssToken>> authorCustomProperties = getAuthorCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), authorCustomProperties);
+            try {
+                doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), authorCustomProperties);
+            } catch (ParseException e) {
+                LOGGER.throwing(SimpleStylesheetsManager.class.getName(),"applyStylesheetsTo", e);
+            }
         }
 
         // The stylesheet is an internal file
         Map<String, ReadableList<CssToken>> inlineCustomProperties = getInlineCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, getInlineStylesheets())) {
-            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), inlineCustomProperties);
+            try {
+                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), inlineCustomProperties);
+            } catch (ParseException e) {
+                LOGGER.throwing(SimpleStylesheetsManager.class.getName(),"applyStylesheetsTo", e);
+            }
         }
 
         // 'inline style attributes' can override all other values
@@ -256,7 +267,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             }
             Map<String, ReadableList<CssToken>> inlineStyleAttrCustomProperties = Collections.emptyMap();
             for (Map.Entry<QualifiedName, ReadableList<CssToken>> entry : inlineDeclarations.entrySet()) {
-                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties);
+                try {
+                    doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties);
+                } catch (ParseException e) {
+                    LOGGER.throwing(SimpleStylesheetsManager.class.getName(),"applyStylesheetsTo", e);
+                }
             }
             inlineDeclarations.clear();
         }
@@ -324,7 +339,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Override
-    public boolean applyStylesheetTo(StyleOrigin styleOrigin, @Nonnull Stylesheet s, E elem) {
+    public boolean applyStylesheetTo(StyleOrigin styleOrigin, @Nonnull Stylesheet s, E elem, boolean suppressParseException) throws ParseException {
         SelectorModel<E> selectorModel = getSelectorModel();
         final Map<String, ReadableList<CssToken>> customProperties = collectCustomProperties(s);
 
@@ -337,9 +352,15 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         for (Map.Entry<Integer, Declaration> entry : applicableDeclarations) {
             Declaration d = entry.getValue();
             ReadableList<CssToken> value = preprocessTerms(elem, processor, d.getTerms());
-            selectorModel.setAttribute(elem, styleOrigin, d.getPropertyNamespace(), d.getPropertyName(),
-                    value.size() == 1 && value.get(0).getType() == CssTokenType.TT_IDENT
-                            && CssTokenType.IDENT_INITIAL.equals(value.get(0).getStringValue()) ? null : value);
+            try {
+                selectorModel.setAttribute(elem, styleOrigin, d.getPropertyNamespace(), d.getPropertyName(),
+                        value.size() == 1 && value.get(0).getType() == CssTokenType.TT_IDENT
+                                && CssTokenType.IDENT_INITIAL.equals(value.get(0).getStringValue()) ? null : value);
+            } catch (ParseException e) {
+                if (suppressParseException)
+                LOGGER.throwing(SimpleStylesheetsManager.class.getName(),"applyStylesheetsTo", e);
+                else throw e;
+            }
         }
         return true;
     }

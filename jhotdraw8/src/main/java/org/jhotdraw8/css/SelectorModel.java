@@ -4,6 +4,7 @@
 package org.jhotdraw8.css;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -292,6 +293,7 @@ public interface SelectorModel<T> {
      * @param name    The attribute name
      * @param value   The attribute value. Null removes the attribute from the
      *                element.
+     * @throws ParseException if parsing the value failed
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value);
+    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value) throws ParseException;
 }

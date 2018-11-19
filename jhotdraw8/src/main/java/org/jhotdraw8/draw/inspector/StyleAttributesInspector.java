@@ -388,7 +388,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             for (Figure f : d.breadthFirstIterable()) {
-                if (sm.applyStylesheetTo(StyleOrigin.USER, s, f)) {
+                if (sm.applyStylesheetTo(StyleOrigin.USER, s, f, true)) {
                     m.fireStyleInvalidated(f);
                     m.fireNodeInvalidated(f);
                     m.fireTransformInvalidated(f);
@@ -399,6 +399,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         } catch (IOException ex) {
             ex.printStackTrace();
             return;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
         }
     }
 

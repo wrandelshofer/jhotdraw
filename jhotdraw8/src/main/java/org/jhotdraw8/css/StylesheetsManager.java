@@ -4,6 +4,7 @@
 package org.jhotdraw8.css;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.util.List;
 import javafx.css.StyleOrigin;
 import javax.annotation.Nonnull;
@@ -94,9 +95,10 @@ public interface StylesheetsManager<E> {
      * values
      * @param s the stylesheet
      * @param element the element
+     * @param suppressParseException
      * @return true if an element was selected
      */
-    boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element);
+    boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element, boolean suppressParseException) throws ParseException;
 
     /**
      * Returns true if the provided stylesheet has selectors which match the
