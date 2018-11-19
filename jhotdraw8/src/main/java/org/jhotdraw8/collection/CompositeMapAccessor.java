@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * CompositeMapAccessor.
+ * CompositeMapAccessor composes one or more {@link MapAccessor}s.
  *
  * @param <T> the value type
  * @author Werner Randelshofer
@@ -29,7 +29,8 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
         return true;
     }
 
+    // FIXME refactor this to ReadableCollection, because we do not allow writes
     @Nonnull
-    public Collection<MapAccessor<?>> getSubAccessors();
+    Collection<MapAccessor<?>> getSubAccessors();
 
 }

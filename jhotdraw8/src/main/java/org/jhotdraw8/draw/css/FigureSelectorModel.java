@@ -267,7 +267,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         for (MapAccessor<?> key : element.getSupportedKeys()) {
             if (key instanceof CompositeMapAccessor) {
-                attrk.removeAll(((CompositeMapAccessor) key).getSubAccessors());
+                attrk.removeAll(((CompositeMapAccessor<?>) key).getSubAccessors());
             }
         }
         for (WriteableStyleableMapAccessor<?> key : attrk) {
