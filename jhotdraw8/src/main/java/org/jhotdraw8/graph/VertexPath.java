@@ -29,6 +29,10 @@ public class VertexPath<V> {
     public VertexPath(@Nonnull Collection<V> elements) {
         this.vertices = Collections.unmodifiableList(new ArrayList<>(elements));
     }
+    @SafeVarargs
+    public VertexPath(@Nonnull V... elements) {
+        this.vertices = Collections.unmodifiableList(Arrays.asList(elements));
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

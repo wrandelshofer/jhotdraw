@@ -218,16 +218,14 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Styleable elem, @Nonnull StyleOrigin origin,@Nullable String namespace, @Nonnull String name, ReadableList<CssToken> value) {
-        if (value == null) {
-            setAttributeAsString(elem, origin, namespace,name, null);
+    public void setAttribute(@Nonnull Styleable elem, @Nonnull StyleOrigin origin,@Nullable String namespace, @Nonnull String name, ReadableList<CssToken> valueAsTokens) {
+        String value;
+        if (valueAsTokens == null) {
+            value=null;
         } else {
-            setAttributeAsString(elem, origin, namespace,name, value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
+           value= valueAsTokens.stream().map(CssToken::fromToken).collect(Collectors.joining());
         }
-    }
 
-    @Override
-    public void setAttributeAsString(@Nonnull Styleable elem, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, String value) {
         List<CssMetaData<? extends Styleable, ?>> metaList = elem.getCssMetaData();
         HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
         for (CssMetaData<? extends Styleable, ?> m : metaList) {

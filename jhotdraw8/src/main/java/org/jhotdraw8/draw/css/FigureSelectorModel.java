@@ -412,28 +412,6 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public void setAttributeAsString(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable String value) {
-        Map<QualifiedName, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
-
-        WriteableStyleableMapAccessor<Object> k = metaMap.get(new QualifiedName(namespace,name));
-        if (k != null) {
-            if (value == null) {
-                elem.remove(origin, k);
-            } else {
-                @SuppressWarnings("unchecked")
-                Converter<Object> converter = k.getConverter();
-                Object convertedValue;
-                try {
-                    convertedValue = converter.fromString(value);
-                    elem.setStyled(origin, k, convertedValue);
-                } catch (@Nonnull ParseException | IOException ex) {
-                    LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
-                }
-            }
-        }
-    }
-
-    @Override
     public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value) {
         Map<QualifiedName, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 

@@ -267,7 +267,7 @@ public interface SelectorModel<T> {
      * @param name    The attribute name
      * @param value   The attribute value. Null removes the attribute from the
      *                element.
-     */
+     * /
     default void setAttributeAsString(@Nonnull T element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable String value) {
         if (value == null) {
             setAttribute(element, origin, namespace, name, null);
@@ -281,7 +281,7 @@ public interface SelectorModel<T> {
             }
             setAttribute(element, origin, namespace, name, ImmutableList.ofCollection(list));
         }
-    }
+    }*/
 
     /**
      * Sets an attribute value.

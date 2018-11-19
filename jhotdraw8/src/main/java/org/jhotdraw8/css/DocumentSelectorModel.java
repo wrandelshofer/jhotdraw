@@ -271,27 +271,23 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttributeAsString(@Nonnull Element element, @Nonnull StyleOrigin origin,@Nullable String namespace, @Nonnull String name, String value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value) {
+        StringBuilder buf = new StringBuilder();
+        for (CssToken t : value) buf.append(t.fromToken());
+        String value1 = buf.toString();
         switch (origin) {
             case USER:
             case USER_AGENT:
             case INLINE:
             case AUTHOR:
-                if (value == null) {
+                if (value1 == null) {
                     element.removeAttribute(name);
                 } else {
-                    element.setAttribute(name, value);
+                    element.setAttribute(name, value1);
                 }
                 break;
             default:
                 throw new UnsupportedOperationException("unsupported origin:" + origin);
         }
-    }
-
-    @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value) {
-        StringBuilder buf = new StringBuilder();
-        for (CssToken t : value) buf.append(t.fromToken());
-        setAttributeAsString(element,origin,namespace, name, buf.toString());
     }
 }

@@ -32,9 +32,8 @@ public class CssListConverterTest {
     }
 
     /**
-     * Test of toString method, ofclass CssDoubleListConverter.
+     * Test of toString method.
      */
-    static
     public void doTestToString(List<Double> value, String expected) throws Exception {
         System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
@@ -48,9 +47,8 @@ public class CssListConverterTest {
     }
 
     /**
-     * Test of fromString method, of class CssDoubleListConverter.
+     * Test of fromString method.
      */
-    static
     public void doTestFromString(List<Double> expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
