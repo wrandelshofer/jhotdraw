@@ -347,7 +347,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     private void processUnknownFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈func〉: function expected.");
         out.accept(tt.getToken());
-        while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+        while (tt.nextNoSkip() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             tt.pushBack();
             processToken(element, tt, out);
         }

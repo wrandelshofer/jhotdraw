@@ -34,6 +34,9 @@ public class CssStringConverter extends AbstractCssConverter<String> {
     public CssStringConverter() {
         this(false,'\"', null);
     }
+    public CssStringConverter(boolean  nullable) {
+        this(nullable,'\"', null);
+    }
 
     public CssStringConverter(boolean nullable, char quoteChar, String helpText) {
         super(nullable);

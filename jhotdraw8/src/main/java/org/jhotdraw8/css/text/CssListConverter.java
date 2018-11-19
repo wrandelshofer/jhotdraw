@@ -17,6 +17,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Parses a list with items separated by commas or whitespace.
+ *
+ * @param <T>
+ */
 public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
     private final CssConverter<T> elementConverter;
@@ -76,14 +81,30 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
             tt.pushBack();
         }
 
-
         ArrayList<T> list = new ArrayList<>();
-        do {
-            T elem = elementConverter.parse(tt, idFactory);
-            if (elem != null) {
-                list.add(elem);
+        Loop:
+        for (; ; ) {
+            switch (tt.nextNoSkip()) {
+                case CssTokenType.TT_COMMA:
+                case CssTokenType.TT_S:
+                    continue Loop;
+                case CssTokenType.TT_EOF:
+                case CssTokenType.TT_SEMICOLON:
+                case CssTokenType.TT_RIGHT_BRACKET:
+                case CssTokenType.TT_RIGHT_CURLY_BRACKET:
+                case CssTokenType.TT_RIGHT_SQUARE_BRACKET:
+                    tt.pushBack();
+                    break Loop;
+                default:
+                    tt.pushBack();
+                    T elem = elementConverter.parse(tt, idFactory);
+                    if (elem != null) {
+                        list.add(elem);
+                    }
+                    break;
             }
-        } while (tt.nextNoSkip() == CssTokenType.TT_COMMA || tt.current() == CssTokenType.TT_S);
+
+        }
         tt.pushBack();
         return ImmutableList.ofCollection(list);
     }
