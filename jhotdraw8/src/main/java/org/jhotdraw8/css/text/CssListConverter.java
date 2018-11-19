@@ -1,9 +1,11 @@
 package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadableList;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 
 import javax.annotation.Nonnull;
@@ -11,26 +13,58 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
-    public enum Separator {
-        SPACE,
-        COMMA,
-        NEWLINE,
-        NEWLINE_WITH_INITIAL_NEWLINE,
-        TWO_NEWLINES_WITH_TWO_INITIAL_NEWLINES
-    }
+
     private final CssConverter<T> elementConverter;
-    private final Separator style;
+    private final ImmutableList<CssToken> delimiter;
+    private final ImmutableList<CssToken> prefix;
+    private final ImmutableList<CssToken> suffix;
 
     public CssListConverter(CssConverter<T> elementConverter) {
-        this(elementConverter, Separator.COMMA);
+        this(elementConverter, ", ");
     }
 
-    public CssListConverter(CssConverter<T> elementConverter, Separator separator) {
+    public CssListConverter(CssConverter<T> elementConverter, String delimiter) {
+        this(elementConverter, delimiter, "", "");
+    }
+
+    public CssListConverter(CssConverter<T> elementConverter, String delimiter, String prefix, String suffix) {
+        this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix));
+    }
+
+    private static List<CssToken> parseDelim(String delim) {
+        try {
+            return new StreamCssTokenizer(delim).toTokenList();
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+
+    public CssListConverter(CssConverter<T> elementConverter,
+                            ReadableList<CssToken> delimiter,
+                            ReadableList<CssToken> prefix,
+                            ReadableList<CssToken> suffix
+    ) {
         this.elementConverter = elementConverter;
-        this.style = separator;
+        this.delimiter = ImmutableList.ofCollection(delimiter);
+        this.prefix = ImmutableList.ofCollection(prefix);
+        this.suffix = ImmutableList.ofCollection(suffix);
+    }
+
+    public CssListConverter(CssConverter<T> elementConverter,
+                            List<? extends CssToken> delimiter,
+                            List<? extends CssToken> prefix,
+                            List<? extends CssToken> suffix
+    ) {
+        this.elementConverter = elementConverter;
+        this.delimiter = ImmutableList.ofCollection(delimiter);
+        this.prefix = ImmutableList.ofCollection(prefix);
+        this.suffix = ImmutableList.ofCollection(suffix);
     }
 
 
@@ -59,6 +93,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
+            for (CssToken t : prefix) {
+                out.accept(t);
+            }
             boolean first = true;
             for (T elem : value) {
                 if (elem == null) {
@@ -66,37 +103,15 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                 }
                 if (first) {
                     first = false;
-                    switch (style) {
-                        case SPACE:
-                        case NEWLINE:
-                        case COMMA:
-                            break;
-                        case NEWLINE_WITH_INITIAL_NEWLINE:
-                            out.accept(new CssToken(CssTokenType.TT_S, "\n"));
-                            break;
-                        case TWO_NEWLINES_WITH_TWO_INITIAL_NEWLINES:
-                            out.accept(new CssToken(CssTokenType.TT_S, "\n\n"));
-                            break;
-                    }
                 } else {
-                    switch (style) {
-                        case SPACE:
-                            out.accept(new CssToken(CssTokenType.TT_S, " "));
-                            break;
-                        case NEWLINE:
-                        case NEWLINE_WITH_INITIAL_NEWLINE:
-                            out.accept(new CssToken(CssTokenType.TT_S, "\n"));
-                            break;
-                        case TWO_NEWLINES_WITH_TWO_INITIAL_NEWLINES:
-                            out.accept(new CssToken(CssTokenType.TT_S, "\n\n"));
-                            break;
-                        case COMMA:
-                            out.accept(new CssToken(CssTokenType.TT_COMMA));
-                            out.accept(new CssToken(CssTokenType.TT_S, " "));
-                            break;
+                    for (CssToken t : delimiter) {
+                        out.accept(t);
                     }
                 }
                 elementConverter.produceTokens(elem, idFactory, out);
+            }
+            for (CssToken t : suffix) {
+                out.accept(t);
             }
         }
     }

@@ -38,7 +38,7 @@ public class CssListConverterTest {
         System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
-        CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), CssListConverter.Separator.SPACE);
+        CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), " ");
         instance.toString(out, idFactory, value == null ? null : ImmutableList.ofCollection(value));
         String actual = out.toString();
         System.out.println("  expected: " + expected);
