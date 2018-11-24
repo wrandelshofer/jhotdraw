@@ -41,7 +41,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class SimpleCombinedPathFigure extends AbstractCompositeFigure
-        implements StrokeableFigure, FillableFigure, Grouping,
+        implements StrokableFigure, FillableFigure, Grouping,
         ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure,
         ConnectableFigure, PathIterableFigure {
@@ -79,7 +79,7 @@ public class SimpleCombinedPathFigure extends AbstractCompositeFigure
             }
         }
         PathIterator iter = f.getPathIterator(childTx);
-        if (f instanceof StrokeableFigure) {
+        if (f instanceof StrokableFigure) {
             Paint stroke = Paintable.getPaint(f.getStyled(STROKE));
             if (stroke != null) {
                 double strokeWidth = f.getStyledNonnull(STROKE_WIDTH).getConvertedValue();

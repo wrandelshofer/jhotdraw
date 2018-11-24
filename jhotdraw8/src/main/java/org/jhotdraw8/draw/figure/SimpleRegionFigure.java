@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class SimpleRegionFigure extends AbstractRegionFigure
-        implements FillableFigure, StrokeableFigure, CompositableFigure,
+        implements FillableFigure, StrokableFigure, CompositableFigure,
         StyleableFigure, TransformableFigure, HideableFigure,
         ConnectableFigure, LockableFigure, ResizableFigure {
 

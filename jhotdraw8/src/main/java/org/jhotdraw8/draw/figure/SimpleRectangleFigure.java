@@ -37,7 +37,7 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class SimpleRectangleFigure extends AbstractLeafFigure
-        implements StrokeableFigure, FillableFigure, TransformableFigure,
+        implements StrokableFigure, FillableFigure, TransformableFigure,
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 

@@ -55,7 +55,7 @@ import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleRegionFigure;
 import org.jhotdraw8.draw.figure.SimpleSliceFigure;
 import org.jhotdraw8.draw.figure.SimpleTextFigure;
-import org.jhotdraw8.draw.figure.StrokeableFigure;
+import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TextStrokeableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
@@ -199,7 +199,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
         addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
-        addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
+        addConverter(StrokableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));
         addConverter(SimplePolylineFigure.POINTS,new CssListConverter<>(new Point2DConverter(false)));
         addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));

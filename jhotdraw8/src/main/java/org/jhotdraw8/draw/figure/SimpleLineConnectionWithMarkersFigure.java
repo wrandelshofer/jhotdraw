@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  */
 public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure, 
-        LockableFigure, CompositableFigure, MarkerFillableFigure, StrokeableFigure, StartAndEndMarkerableFigure, StrokeCuttableFigure {
+        LockableFigure, CompositableFigure, MarkerFillableFigure, StrokableFigure, StartAndEndMarkerableFigure, StrokeCuttableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.

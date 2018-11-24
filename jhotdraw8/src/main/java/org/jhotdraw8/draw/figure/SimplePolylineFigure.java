@@ -37,7 +37,7 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class SimplePolylineFigure extends AbstractLeafFigure
-        implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, 
+        implements StrokableFigure, FillableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure{
 

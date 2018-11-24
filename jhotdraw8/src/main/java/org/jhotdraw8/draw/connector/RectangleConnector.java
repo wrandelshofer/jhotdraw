@@ -8,13 +8,13 @@ import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_WIDTH;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
 import org.jhotdraw8.geom.Intersections;
 
 /**

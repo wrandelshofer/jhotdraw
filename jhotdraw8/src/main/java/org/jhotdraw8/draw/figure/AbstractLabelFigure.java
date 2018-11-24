@@ -52,7 +52,7 @@ import java.util.Objects;
  * @version $Id$
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure
-        implements TextFillableFigure, FillableFigure, StrokeableFigure,
+        implements TextFillableFigure, FillableFigure, StrokableFigure,
         FontableFigure, ConnectableFigure, PathIterableFigure {
 
     public final static CssSizeStyleableFigureKey ORIGIN_X = new CssSizeStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);

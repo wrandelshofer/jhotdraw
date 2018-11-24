@@ -39,7 +39,7 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class SimpleLineFigure extends AbstractLeafFigure 
-        implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, 
+        implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure, TransformableFigure, PathIterableFigure {
 
     /**

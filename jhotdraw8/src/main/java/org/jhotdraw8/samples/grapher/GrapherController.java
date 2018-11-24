@@ -82,7 +82,7 @@ import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.SimpleSliceFigure;
-import org.jhotdraw8.draw.figure.StrokeableFigure;
+import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.MultiClipboardInputFormat;
@@ -289,12 +289,12 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 5, 1,0);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, SimpleBezierFigure.PATH, () -> createFigure(SimpleBezierFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
-                () -> createFigure(() -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
+                () -> createFigure(() -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
                 layerFactory), 6, 0);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new SimplePageLabelFigure(0, 0,
                 labels.getFormatted("pageLabel.text", SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
-                FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
+                FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
                 layerFactory), 9, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 5, 0,0);
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 8, 0, 16);
@@ -304,7 +304,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
             pf.set(SimplePageFigure.PAGE_INSETS, new CssInsets(2, 1, 2, 1, "cm"));
             SimplePageLabelFigure pl = new SimplePageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
                     SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
-                    FillableFigure.FILL, null, StrokeableFigure.STROKE, null);
+                    FillableFigure.FILL, null, StrokableFigure.STROKE, null);
             pf.addChild(pl);
             return pf;
         }), layerFactory), 8, 1, 16);

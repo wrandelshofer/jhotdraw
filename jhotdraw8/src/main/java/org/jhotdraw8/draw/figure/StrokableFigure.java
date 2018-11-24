@@ -39,7 +39,7 @@ import static java.lang.Math.abs;
  * <p>
  * FIXME most doubles should be CSS sizes!
  */
-public interface StrokeableFigure extends Figure {
+public interface StrokableFigure extends Figure {
 
     /**
      * Defines the distance in user coordinates for the dashing pattern. Default

@@ -19,7 +19,6 @@ import javax.annotation.Nonnull;
 
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ListWrapper;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.connector.Connector;
@@ -49,7 +48,7 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class SimpleBezierFigure extends AbstractLeafFigure
-        implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure,
+        implements StrokableFigure, FillableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 

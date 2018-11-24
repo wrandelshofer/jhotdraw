@@ -19,7 +19,7 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class SimpleLineConnectionFigure extends AbstractLineConnectionFigure
-        implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
+        implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         PathIterableFigure {
 
     /**

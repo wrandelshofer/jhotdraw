@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class SimpleArcFigure extends AbstractLeafFigure implements StrokableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.

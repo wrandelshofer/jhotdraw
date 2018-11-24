@@ -34,7 +34,7 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class SimpleTextFigure extends AbstractLeafFigure
-        implements StrokeableFigure, FillableFigure, TransformableFigure, FontableFigure,
+        implements StrokableFigure, FillableFigure, TransformableFigure, FontableFigure,
         TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 

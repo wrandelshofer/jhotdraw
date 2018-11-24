@@ -57,7 +57,7 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class SimplePageFigure extends AbstractCompositeFigure
         implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
-        FillableFigure, StrokeableFigure {
+        FillableFigure, StrokableFigure {
 
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     public final static DoubleStyleableFigureKey NUM_PAGES_X = new DoubleStyleableFigureKey("num-pages-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);

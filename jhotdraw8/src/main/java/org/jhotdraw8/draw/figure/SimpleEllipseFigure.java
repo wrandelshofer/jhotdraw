@@ -36,7 +36,7 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class SimpleEllipseFigure extends AbstractLeafFigure
-        implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,
+        implements StrokableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, ConnectableFigure, PathIterableFigure {
 
     public final static CssSizeStyleableFigureKey CENTER_X = new CssSizeStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
