@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,9 +26,11 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javafx.css.StyleOrigin;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
@@ -57,6 +60,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 
 /**
  * SimpleXmlIO.
@@ -134,7 +139,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     protected Element createElement(@Nonnull Document doc, String unqualifiedName) throws IOException {
-        if (namespaceURI == null || namespaceQualifier == null) {
+        if (namespaceURI == null) {
             return doc.createElement(unqualifiedName);
         }
         if (namespaceQualifier == null) {
@@ -222,9 +227,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         try {
             URI documentHome = file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI();
             final Drawing newDrawing;
-            try ( BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
-                newDrawing = (Drawing) read(in, drawing, documentHome);
-            }
+            newDrawing = (Drawing) read(new InputSource(file.toURI().toASCIIString()), drawing, documentHome);
             return newDrawing;
         } catch (IOException e) {
             throw new IOException("Error reading " + file + ".", e);
@@ -233,7 +236,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @javax.annotation.Nullable
     public Figure read(InputStream in, Drawing drawing, URI documentHome) throws IOException {
-        Document doc = XmlUtil.read(in, isNamespaceAware());
+        Document doc = XmlUtil.readWithLocations(new InputSource(in), isNamespaceAware());
+        return read(doc, drawing, documentHome);
+    }
+
+    @javax.annotation.Nullable
+    public Figure read(InputSource in, Drawing drawing, URI documentHome) throws IOException {
+        Document doc = XmlUtil.readWithLocations(in, isNamespaceAware());
         return read(doc, drawing, documentHome);
     }
 
@@ -244,7 +253,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @javax.annotation.Nullable
     protected Figure read(@Nonnull String string, Drawing drawing, URI documentHome) throws IOException {
-        try ( StringReader in = new StringReader(string)) {
+        try (StringReader in = new StringReader(string)) {
             return read(in, drawing, documentHome);
         }
     }
@@ -296,7 +305,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * must have been initialized before this method is called.
      *
      * @param drawingElement the drawing element
-     * @param oldDrawing a drawing or null
+     * @param oldDrawing     a drawing or null
      * @return the figure
      * @throws IOException in case of failure
      */
@@ -318,9 +327,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
                 switch (node.getNodeType()) {
-                case Node.PROCESSING_INSTRUCTION_NODE:
-                    readProcessingInstruction(drawingElement.getOwnerDocument(), (ProcessingInstruction) node, external);
-                    break;
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        readProcessingInstruction(drawingElement.getOwnerDocument(), (ProcessingInstruction) node, external);
+                        break;
                 }
             }
         }
@@ -358,8 +367,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Reads drawing or clipping starting from the specified node. The idFactory
      * must have been initialized before this method is called.
      *
-     * @param doc the document
-     * @param oldDrawing the drawing
+     * @param doc          the document
+     * @param oldDrawing   the drawing
      * @param documentHome documentHome
      * @return a figure
      * @throws IOException in case of failure
@@ -375,25 +384,25 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         for (int i = 0, n = list.getLength(); i < n; i++) {
             Node node = list.item(i);
             switch (node.getNodeType()) {
-            case Node.COMMENT_NODE:
-                comments.add(((Comment) node).getTextContent());
-                break;
-            case Node.ELEMENT_NODE:
-                Figure f = readNodesRecursively(node);
-                if (f instanceof Drawing) {
-                    external = (Drawing) f;
-                } else if (f instanceof Clipping) {
-                    clipping = (Clipping) f;
-                }
+                case Node.COMMENT_NODE:
+                    comments.add(((Comment) node).getTextContent());
+                    break;
+                case Node.ELEMENT_NODE:
+                    Figure f = readNodesRecursively(node);
+                    if (f instanceof Drawing) {
+                        external = (Drawing) f;
+                    } else if (f instanceof Clipping) {
+                        clipping = (Clipping) f;
+                    }
             }
         }
         if (external != null) {
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
                 switch (node.getNodeType()) {
-                case Node.PROCESSING_INSTRUCTION_NODE:
-                    readProcessingInstruction(doc.getOwnerDocument(), (ProcessingInstruction) node, external);
-                    break;
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        readProcessingInstruction(doc.getOwnerDocument(), (ProcessingInstruction) node, external);
+                        break;
                 }
             }
         }
@@ -433,7 +442,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Reads the attributes of the specified element.
      *
      * @param figure the figure
-     * @param elem an element with attributes for the figure
+     * @param elem   an element with attributes for the figure
      * @throws java.io.IOException in case of failure
      */
     protected void readElementAttributes(@Nonnull Figure figure, @Nonnull Element elem) throws IOException {
@@ -444,9 +453,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 continue;
             }
 
-            /*if (idFactory.getObjectIdAttribute().equals(attr.getLocalName())) {
-                continue;
-            }*/
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) figureFactory.nameToKey(figure, attr.getLocalName());
             if (key != null && figureFactory.figureAttributeKeys(figure).contains(key)) {
@@ -455,7 +461,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 if (keyValueTypeIsFigure.computeIfAbsent(key, k -> Figure.class.isAssignableFrom(k.getValueType()))) {
                     value = getFigure(attr.getValue());
                 } else {
-                    value = figureFactory.stringToValue(key, attr.getValue());
+                    try {
+                        value = figureFactory.stringToValue(key, attr.getValue());
+                    } catch (IOException e) {
+                        throw createIOException(elem, e);
+                    }
                 }
 
                 if (value instanceof URI) {
@@ -464,6 +474,19 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
                 figure.set(key, value);
             }
+        }
+    }
+
+    private IOException createIOException(Element elem, IOException ex) {
+        Locator locator = XmlUtil.getLocator(elem);
+        if (locator == null) {
+            return ex;
+        } else {
+            return new IOException(
+                    "In " + ((locator.getSystemId() == null) ? "" : "file: \"" + locator.getSystemId() + "\", ")
+                            + "line: " + locator.getLineNumber()
+                            + ", column: " + locator.getColumnNumber() + ".",
+                    ex);
         }
     }
 
@@ -478,7 +501,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Reads the children of the specified element as a node list.
      *
      * @param figure the figure to which the node list will be applied
-     * @param elem the element
+     * @param elem   the element
      * @throws java.io.IOException in case of failure
      */
     protected void readElementNodeList(@Nonnull Figure figure, @Nonnull Element elem) throws IOException {
@@ -568,32 +591,32 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     @javax.annotation.Nullable
     protected Figure readNodesRecursively(@Nonnull Node node) throws IOException {
         switch (node.getNodeType()) {
-        case Node.ELEMENT_NODE:
-            Figure figure = readNode(node);
-            if (!comments.isEmpty()) {
-                figure.set(XML_HEAD_COMMENT_KEY, comments);
-                comments = new ArrayList<>();
-            }
-            NodeList list = node.getChildNodes();
-            for (int i = 0; i < list.getLength(); i++) {
-                Figure child = readNodesRecursively(list.item(i));
-                if (child instanceof Figure) {
-                    if (!child.isSuitableParent(figure)) {
-                        throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
-                    }
-                    figure.addChild(child);
+            case Node.ELEMENT_NODE:
+                Figure figure = readNode(node);
+                if (!comments.isEmpty()) {
+                    figure.set(XML_HEAD_COMMENT_KEY, comments);
+                    comments = new ArrayList<>();
                 }
-            }
-            if (!comments.isEmpty()) {
-                figure.set(XML_BODY_COMMENT_KEY, comments);
-                comments = new ArrayList<>();
-            }
-            return figure;
-        case Node.COMMENT_NODE:
-            comments.add(node.getTextContent());
-            return null;
-        default:
-            return null;
+                NodeList list = node.getChildNodes();
+                for (int i = 0; i < list.getLength(); i++) {
+                    Figure child = readNodesRecursively(list.item(i));
+                    if (child instanceof Figure) {
+                        if (!child.isSuitableParent(figure)) {
+                            throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
+                        }
+                        figure.addChild(child);
+                    }
+                }
+                if (!comments.isEmpty()) {
+                    figure.set(XML_BODY_COMMENT_KEY, comments);
+                    comments = new ArrayList<>();
+                }
+                return figure;
+            case Node.COMMENT_NODE:
+                comments.add(node.getTextContent());
+                return null;
+            default:
+                return null;
         }
     }
 
@@ -700,7 +723,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         for (MapAccessor<?> k : new ArrayList<>(todo)) {
             if (k instanceof CompositeMapAccessor) {
                 todo.remove(k);
-                if (! k.isTransient()) {
+                if (!k.isTransient()) {
                     @SuppressWarnings("unchecked") CompositeMapAccessor<Object> cmap = (CompositeMapAccessor<Object>) k;
                     todo.removeAll(cmap.getSubAccessors());
                     writeElementAttribute(elem, figure, cmap);
@@ -709,7 +732,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
         for (MapAccessor<?> k : todo) {
             if (!k.isTransient()) {
-                @SuppressWarnings("unchecked") MapAccessor<Object> cmap=(MapAccessor<Object>)k;
+                @SuppressWarnings("unchecked") MapAccessor<Object> cmap = (MapAccessor<Object>) k;
                 writeElementAttribute(elem, figure, cmap);
             }
         }

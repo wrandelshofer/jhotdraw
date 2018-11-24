@@ -66,7 +66,7 @@ public class XmlUtil {
     }
 
     /**
-     * Creates a document.
+     * Creates a namespace aware document.
      *
      * @param nsURI nullable namespace URI
      * @param nsQualifier nullable namespace qualifier
@@ -122,9 +122,7 @@ public class XmlUtil {
     public static Document read(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            if (namespaceAware) {
-                builderFactory.setNamespaceAware(true);
-            }
+                builderFactory.setNamespaceAware(namespaceAware);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(inputSource);
             return doc;
@@ -152,12 +150,15 @@ public class XmlUtil {
         try {
             // Create transformer SAX source that adds current element position to
             // the element as attributes.
-            XMLReader xmlReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            saxParserFactory.setNamespaceAware(namespaceAware);
+            XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
             LocationFilter locationFilter = new LocationFilter(xmlReader);
             SAXSource saxSource = new SAXSource(locationFilter, inputSource);
 
             // Perform an empty transformation from SAX source to DOM result.
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
             Transformer transformer = transformerFactory.newTransformer();
             DOMResult domResult = new DOMResult();
             transformer.transform(saxSource, domResult);
