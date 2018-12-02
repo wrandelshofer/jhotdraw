@@ -64,7 +64,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
 
     @Override
     public <TT extends ImmutableList<BezierNode>> void toString(@Nonnull Appendable out, IdFactory idFactory,
-                                                                @Nullable TT value) throws IOException {
+                                                                     @Nullable TT value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is null");

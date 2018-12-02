@@ -8,18 +8,18 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Wraps a {@link ReadableSet} in the {@link Set} API.
+ * Wraps a {@link ReadOnlySet} in the {@link Set} API.
  * <p>
- * The underlying ReadableSet is referenced - not copied. This allows to pass a
- * ReadableSet to a client who does not understand the ReadableSet APi.
+ * The underlying ReadOnlySet is referenced - not copied. This allows to pass a
+ * ReadOnlySet to a client who does not understand the ReadOnlySet APi.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class SetWrapper<E> extends AbstractSet<E> {
-    private final ReadableSet<E> backingSet;
+    private final ReadOnlySet<E> backingSet;
 
-    public SetWrapper(ReadableSet<E> backingSet) {
+    public SetWrapper(ReadOnlySet<E> backingSet) {
         this.backingSet = backingSet;
     }
 

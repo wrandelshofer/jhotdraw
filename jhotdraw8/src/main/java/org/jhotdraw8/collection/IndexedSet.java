@@ -31,7 +31,7 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E>,ReadableSet<E> {
+public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E>, ReadOnlySet<E> {
 
     /**
      * The underlying list.
@@ -775,7 +775,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public Stream<E> stream() {
-        return ReadableSet.super.stream();
+        return ReadOnlySet.super.stream();
     }
 
     public void fireItemUpdated(int index) {

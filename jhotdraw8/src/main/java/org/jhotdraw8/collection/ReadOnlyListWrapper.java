@@ -1,4 +1,4 @@
-/* @(#)ReadableListWrapper.java
+/* @(#)ReadOnlyListWrapper.java
  * Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Wraps a {@link List} in the {@link ReadableList} API.
+ * Wraps a {@link List} in the {@link ReadOnlyList} API.
  * <p>
  * The underlying List is referenced - not copied. This allows to pass a
  * list to a client while preventing that the client can modify the list directly.
@@ -16,11 +16,11 @@ import java.util.List;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public final class ReadableListWrapper<E> extends AbstractReadableList<E> {
+public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
 
     private final List<? extends E> backingList;
 
-    public ReadableListWrapper(List<? extends E> backingList) {
+    public ReadOnlyListWrapper(List<? extends E> backingList) {
         this.backingList = backingList;
     }
 

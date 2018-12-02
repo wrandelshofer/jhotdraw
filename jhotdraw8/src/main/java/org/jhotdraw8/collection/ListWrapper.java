@@ -7,18 +7,18 @@ import java.util.AbstractList;
 import java.util.List;
 
 /**
- * Wraps a {@link ReadableList} in the {@link List} API.
+ * Wraps a {@link ReadOnlyList} in the {@link List} API.
  * <p>
- * The underlying ReadableList is referenced - not copied. This allows to pass a
- * ReadableList to a client who does not understand the ReadableList APi.
+ * The underlying ReadOnlyList is referenced - not copied. This allows to pass a
+ * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class ListWrapper<E> extends AbstractList<E> {
-    private final ReadableList<E> backingList;
+    private final ReadOnlyList<E> backingList;
 
-    public ListWrapper(ReadableList<E> backingList) {
+    public ListWrapper(ReadOnlyList<E> backingList) {
         this.backingList = backingList;
     }
 

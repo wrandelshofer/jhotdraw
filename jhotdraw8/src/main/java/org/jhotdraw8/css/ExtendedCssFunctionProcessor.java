@@ -1,8 +1,8 @@
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
         super();
     }
 
-    public ExtendedCssFunctionProcessor(SelectorModel<T> model, Map<String, ReadableList<CssToken>> customProperties) {
+    public ExtendedCssFunctionProcessor(SelectorModel<T> model, Map<String, ImmutableList<CssToken>> customProperties) {
         super(model, customProperties);
     }
 

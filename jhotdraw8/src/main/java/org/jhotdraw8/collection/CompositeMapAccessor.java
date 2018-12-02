@@ -29,7 +29,7 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
         return true;
     }
 
-    // FIXME refactor this to ReadableCollection, because we do not allow writes
+    // FIXME refactor this to ReadOnlyCollection, because we do not allow writes
     @Nonnull
     Collection<MapAccessor<?>> getSubAccessors();
 

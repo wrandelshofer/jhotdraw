@@ -14,10 +14,10 @@ public class SetKey<E> extends ObjectKey<ImmutableSet<E>> {
     private final static long serialVersionUID = 1L;
 
     public SetKey(String key, Class<E> elemClass) {
-        super(key, ImmutableSet.class, new Class<?>[]{elemClass},ImmutableSet.emptySet());
+        super(key, ImmutableSet.class, new Class<?>[]{elemClass}, ImmutableSet.emptySet());
     }
 
     public SetKey(String key, Class<E> elemClass, ImmutableSet<E> defaultValue) {
-        super(key, ImmutableList.class, new Class<?>[]{elemClass},defaultValue);
+        super(key, ImmutableArrayList.class, new Class<?>[]{elemClass},defaultValue);
     }
 }

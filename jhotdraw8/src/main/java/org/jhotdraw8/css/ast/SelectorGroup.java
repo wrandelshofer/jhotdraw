@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
@@ -22,7 +22,7 @@ import org.jhotdraw8.css.SelectorModel;
 public class SelectorGroup extends AST {
 
     @Nonnull
-    private final ReadableList<Selector> selectors;
+    private final ReadOnlyList<Selector> selectors;
 
     public SelectorGroup(Selector selector) {
         this.selectors = ImmutableList.of(new Selector[]{selector});

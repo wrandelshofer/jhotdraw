@@ -1,15 +1,13 @@
-/* @(#)ReadableSetWrapper.java
+/* @(#)ReadOnlySetWrapper.java
  * Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
-import javax.annotation.Nonnull;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
- * Wraps a {@link Set} in the {@link ReadableSet} API.
+ * Wraps a {@link Set} in the {@link ReadOnlySet} API.
  * <p>
  * The underlying Set is referenced - not copied. This allows to pass a
  * set to a client while preventing that the client can modify the set directly.
@@ -17,11 +15,11 @@ import java.util.Set;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public final class ReadableSetWrapper<E> extends AbstractReadableSet<E> {
+public final class ReadOnlySetWrapper<E> extends AbstractReadOnlySet<E> {
 
     private final Set<? extends E> backingSet;
 
-    public ReadableSetWrapper(Set<? extends E> backingSet) {
+    public ReadOnlySetWrapper(Set<? extends E> backingSet) {
         this.backingSet = backingSet;
     }
 

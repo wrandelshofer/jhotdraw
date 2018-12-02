@@ -7,19 +7,17 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
-import java.util.Set;
-
 /**
- * Wraps a {@link ReadableSet} in the {@link ObservableSet} API.
+ * Wraps a {@link ReadOnlySet} in the {@link ObservableSet} API.
  * <p>
- * The underlying ReadableSet is referenced - not copied. This allows to pass a
- * ReadableSet to a client who does not understand the ReadableSet APi.
+ * The underlying ReadOnlySet is referenced - not copied. This allows to pass a
+ * ReadOnlySet to a client who does not understand the ReadOnlySet APi.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class ObservableSetWrapper<E> extends SetWrapper<E> implements ObservableSet<E>{
-    public ObservableSetWrapper(ReadableSet<E> backingSet) {
+    public ObservableSetWrapper(ReadOnlySet<E> backingSet) {
         super(backingSet);
     }
 

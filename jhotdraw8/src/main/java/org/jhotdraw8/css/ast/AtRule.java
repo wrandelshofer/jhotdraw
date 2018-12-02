@@ -4,13 +4,11 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,12 +60,12 @@ public class AtRule extends Rule {
     }
 
     @Nonnull
-    public ReadableList<CssToken> getHeader() {
+    public ReadOnlyList<CssToken> getHeader() {
         return header;
     }
 
     @Nonnull
-    public ReadableList<CssToken>  getBody() {
+    public ReadOnlyList<CssToken> getBody() {
         return body;
     }
 

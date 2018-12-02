@@ -1,7 +1,8 @@
 package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssToken;
@@ -13,7 +14,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -51,9 +51,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     public CssListConverter(CssConverter<T> elementConverter,
-                            ReadableList<CssToken> delimiter,
-                            ReadableList<CssToken> prefix,
-                            ReadableList<CssToken> suffix
+                            ReadOnlyList<CssToken> delimiter,
+                            ReadOnlyList<CssToken> prefix,
+                            ReadOnlyList<CssToken> suffix
     ) {
         this.elementConverter = elementConverter;
         this.delimiter = ImmutableList.ofCollection(delimiter);

@@ -7,14 +7,14 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 public class ReadableListIterator<E> implements Iterator<E>, ListIterator<E> {
-    private final ReadableList<E> list;
+    private final ReadOnlyList<E> list;
     int index = 0;
     final int size;
 
-    public ReadableListIterator(ReadableList<E> list) {
+    public ReadableListIterator(ReadOnlyList<E> list) {
         this(list,0);
     }
-    public ReadableListIterator(ReadableList<E> list, int index) {
+    public ReadableListIterator(ReadOnlyList<E> list, int index) {
         this.list = list;
         this.size = list.size();
         this.index=index;

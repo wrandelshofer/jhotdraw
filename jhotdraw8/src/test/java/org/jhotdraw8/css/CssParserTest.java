@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Rule;
 import org.jhotdraw8.css.ast.SelectorGroup;
@@ -375,7 +375,7 @@ public class CssParserTest {
 
         CssParser p=new CssParser();
         Stylesheet stylesheet = p.parseStylesheet(stylesheetStr);
-        ReadableList<Rule> rules = stylesheet.getRules();
+        ReadOnlyList<Rule> rules = stylesheet.getRules();
         System.out.println(rules);
     }
 }

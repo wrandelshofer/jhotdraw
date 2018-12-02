@@ -1,7 +1,8 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import static org.jhotdraw8.css.CssTokenType.TT_COMMENT;
 import static org.jhotdraw8.css.CssTokenType.TT_S;
 
 public class ListCssTokenizer implements CssTokenizer {
-    private final ReadableList<CssToken> in;
+    private final ImmutableList<CssToken> in;
     private int index = 0;
     private boolean pushBack = true;
     private CssToken current;
@@ -22,8 +23,8 @@ public class ListCssTokenizer implements CssTokenizer {
     public ListCssTokenizer(List<CssToken> in) {
         this(ImmutableList.ofCollection(in));
     }
-    public ListCssTokenizer(ReadableList<CssToken> in) {
-        this.in = in;
+    public ListCssTokenizer(ReadOnlyList<CssToken> in) {
+        this.in = ImmutableList.ofCollection(in);
         current = in.isEmpty() ? new CssToken(CssTokenType.TT_EOF) : in.get(0);
     }
 

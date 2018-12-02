@@ -91,7 +91,7 @@ is divided into following sections:
                 </not>
             </condition>
         </fail>
-        <j2seproject3:modulename property="module.name" sourcepath="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}"/>
+        <j2seproject3:modulename property="module.name" sourcepath="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}"/>
         <condition property="named.module.internal">
             <and>
                 <isset property="module.name"/>
@@ -236,12 +236,12 @@ is divided into following sections:
         </condition>
         <condition property="have.sources">
             <or>
+                <available file="${src.java6.dir}"/>
                 <available file="${src.java.dir}"/>
                 <available file="${src.java2.dir}"/>
-                <available file="${src.editorold.dir}"/>
-                <available file="${src.gen.dir}"/>
-                <available file="${src.ferro.dir}"/>
-                <available file="${src.graphlayout.dir}"/>
+                <available file="${src.java3.dir}"/>
+                <available file="${src.java4.dir}"/>
+                <available file="${src.java5.dir}"/>
             </or>
         </condition>
         <condition property="netbeans.home+have.tests">
@@ -330,12 +330,12 @@ is divided into following sections:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init" name="-init-check">
+        <fail unless="src.java6.dir">Must set src.java6.dir</fail>
         <fail unless="src.java.dir">Must set src.java.dir</fail>
         <fail unless="src.java2.dir">Must set src.java2.dir</fail>
-        <fail unless="src.editorold.dir">Must set src.editorold.dir</fail>
-        <fail unless="src.gen.dir">Must set src.gen.dir</fail>
-        <fail unless="src.ferro.dir">Must set src.ferro.dir</fail>
-        <fail unless="src.graphlayout.dir">Must set src.graphlayout.dir</fail>
+        <fail unless="src.java3.dir">Must set src.java3.dir</fail>
+        <fail unless="src.java4.dir">Must set src.java4.dir</fail>
+        <fail unless="src.java5.dir">Must set src.java5.dir</fail>
         <fail unless="test.java.dir">Must set test.java.dir</fail>
         <fail unless="test.editorold.dir">Must set test.editorold.dir</fail>
         <fail unless="test.ferro.dir">Must set test.ferro.dir</fail>
@@ -359,7 +359,7 @@ is divided into following sections:
     </target>
     <target depends="-init-ap-cmdline-properties,-init-source-module-properties" if="modules.supported.internal" name="-init-macrodef-javac-with-module">
         <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}" name="srcdir"/>
+            <attribute default="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <attribute default="${javac.modulepath}" name="modulepath"/>
@@ -371,7 +371,7 @@ is divided into following sections:
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
             <attribute default="${empty.dir}" name="sourcepath" unless:set="named.module.internal"/>
-            <attribute default="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}" if:set="named.module.internal" name="sourcepath"/>
+            <attribute default="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}" if:set="named.module.internal" name="sourcepath"/>
             <attribute default="${empty.dir}" name="gensrcdir"/>
             <element name="customize" optional="true"/>
             <sequential>
@@ -426,7 +426,7 @@ is divided into following sections:
     </target>
     <target depends="-init-ap-cmdline-properties,-init-source-module-properties" if="ap.supported.internal" name="-init-macrodef-javac-with-processors" unless="modules.supported.internal">
         <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}" name="srcdir"/>
+            <attribute default="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <attribute default="${javac.modulepath}" name="modulepath"/>
@@ -469,7 +469,7 @@ is divided into following sections:
     </target>
     <target depends="-init-ap-cmdline-properties,-init-source-module-properties" name="-init-macrodef-javac-without-processors" unless="ap.supported.internal">
         <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}" name="srcdir"/>
+            <attribute default="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <attribute default="${javac.modulepath}" name="modulepath"/>
@@ -504,7 +504,7 @@ is divided into following sections:
     </target>
     <target depends="-init-macrodef-javac-with-module,-init-macrodef-javac-with-processors,-init-macrodef-javac-without-processors" name="-init-macrodef-javac">
         <macrodef name="depend" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}" name="srcdir"/>
+            <attribute default="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <sequential>
@@ -1154,17 +1154,17 @@ is divided into following sections:
                 <include name="*"/>
             </dirset>
         </pathconvert>
-        <j2seproject3:depend srcdir="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}:${build.generated.subdirs}"/>
+        <j2seproject3:depend srcdir="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}:${build.generated.subdirs}"/>
     </target>
     <target depends="init,deps-jar,-pre-pre-compile,-pre-compile, -copy-persistence-xml,-compile-depend" if="have.sources" name="-do-compile">
         <j2seproject3:javac gensrcdir="${build.generated.sources.dir}"/>
         <copy todir="${build.classes.dir}">
+            <fileset dir="${src.java6.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
             <fileset dir="${src.java.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
             <fileset dir="${src.java2.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${src.editorold.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${src.gen.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${src.ferro.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${src.graphlayout.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${src.java3.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${src.java4.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${src.java5.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target if="has.persistence.xml" name="-copy-persistence-xml">
@@ -1185,7 +1185,7 @@ is divided into following sections:
     <target depends="init,deps-jar,-pre-pre-compile" name="-do-compile-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
         <j2seproject3:force-recompile/>
-        <j2seproject3:javac excludes="" gensrcdir="${build.generated.sources.dir}" includes="${javac.includes}, module-info.java" sourcepath="${src.java.dir}:${src.java2.dir}:${src.editorold.dir}:${src.gen.dir}:${src.ferro.dir}:${src.graphlayout.dir}"/>
+        <j2seproject3:javac excludes="" gensrcdir="${build.generated.sources.dir}" includes="${javac.includes}, module-info.java" sourcepath="${src.java6.dir}:${src.java.dir}:${src.java2.dir}:${src.java3.dir}:${src.java4.dir}:${src.java5.dir}"/>
     </target>
     <target name="-post-compile-single">
         <!-- Empty placeholder for easier customization. -->
@@ -1566,22 +1566,22 @@ is divided into following sections:
             <classpath>
                 <path path="${javac.classpath}"/>
             </classpath>
+            <fileset dir="${src.java6.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
             <fileset dir="${src.java.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
             <fileset dir="${src.java2.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
-            <fileset dir="${src.editorold.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+            <fileset dir="${src.java3.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
-            <fileset dir="${src.gen.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+            <fileset dir="${src.java4.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
-            <fileset dir="${src.ferro.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
-            <fileset dir="${src.graphlayout.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+            <fileset dir="${src.java5.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
             <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
@@ -1592,22 +1592,22 @@ is divided into following sections:
             <arg line="${javadoc.html5.cmd.line.arg}"/>
         </javadoc>
         <copy todir="${dist.javadoc.dir}">
+            <fileset dir="${src.java6.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
             <fileset dir="${src.java.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
             <fileset dir="${src.java2.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
-            <fileset dir="${src.editorold.dir}" excludes="${excludes}" includes="${includes}">
+            <fileset dir="${src.java3.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
-            <fileset dir="${src.gen.dir}" excludes="${excludes}" includes="${includes}">
+            <fileset dir="${src.java4.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
-            <fileset dir="${src.ferro.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
-            <fileset dir="${src.graphlayout.dir}" excludes="${excludes}" includes="${includes}">
+            <fileset dir="${src.java5.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
             <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">

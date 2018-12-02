@@ -1,26 +1,20 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.text.ParseException;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class ExtendedCssFunctionProcessorTest extends SimpleCssFunctionProcessorTest {
 
-    protected CssFunctionProcessor<Element> createInstance( DocumentSelectorModel model, Map<String, ReadableList<CssToken>> customProperties) {
+    protected CssFunctionProcessor<Element> createInstance( DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         return new ExtendedCssFunctionProcessor<>(model,customProperties);
     }
 

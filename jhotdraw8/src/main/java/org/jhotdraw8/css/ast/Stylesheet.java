@@ -3,12 +3,12 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 
 import javax.annotation.Nonnull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +40,7 @@ public class Stylesheet extends AST {
      * @return the rules
      */
     @Nonnull
-    public ReadableList<StyleRule> getStyleRules() {
+    public ReadOnlyList<StyleRule> getStyleRules() {
         return styleRules;
     }
     /**
@@ -49,7 +49,7 @@ public class Stylesheet extends AST {
      * @return the rules
      */
     @Nonnull
-    public ReadableList<Rule> getRules() {
+    public ReadOnlyList<Rule> getRules() {
         return rules;
     }
 

@@ -1,7 +1,7 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -39,7 +39,7 @@ public interface CssFunctionProcessor<T> {
      * @return the processed tokens
      * @throws ParseException in case of a parsing failure
      */
-    default ReadableList<CssToken> process(T element, ReadableList<CssToken> in) throws ParseException {
+    default ImmutableList<CssToken> process(T element, ReadOnlyList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
@@ -59,6 +59,6 @@ public interface CssFunctionProcessor<T> {
 
     void setModel(SelectorModel<T> model);
 
-    void setCustomProperties(Map<String, ReadableList<CssToken>> customProperties);
+    void setCustomProperties(Map<String, ImmutableList<CssToken>> customProperties);
 
 }

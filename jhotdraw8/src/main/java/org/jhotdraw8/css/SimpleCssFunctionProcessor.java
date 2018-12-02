@@ -1,7 +1,8 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.io.DefaultUnitConverter;
 
 import java.io.IOException;
@@ -40,11 +41,11 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     private static final String VAR_FUNCTION_NAME = "var";
 
     protected SelectorModel<T> model;
-    protected Map<String, ReadableList<CssToken>> customProperties;
+    protected Map<String, ImmutableList<CssToken>> customProperties;
 
     public SimpleCssFunctionProcessor() {
     }
-    public SimpleCssFunctionProcessor(SelectorModel<T> model, Map<String, ReadableList<CssToken>> customProperties) {
+    public SimpleCssFunctionProcessor(SelectorModel<T> model, Map<String, ImmutableList<CssToken>> customProperties) {
         this.model = model;
         this.customProperties = customProperties;
     }
@@ -57,15 +58,15 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         this.model = model;
     }
 
-    public Map<String, ReadableList<CssToken>> getCustomProperties() {
+    public Map<String, ImmutableList<CssToken>> getCustomProperties() {
         return customProperties;
     }
 
-    public void setCustomProperties(Map<String, ReadableList<CssToken>> customProperties) {
+    public void setCustomProperties(Map<String, ImmutableList<CssToken>> customProperties) {
         this.customProperties = customProperties;
     }
 
-    public final ReadableList<CssToken> process(T element, ReadableList<CssToken> in) throws ParseException {
+    public final ReadOnlyList<CssToken> process(T element, ImmutableList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
@@ -327,7 +328,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         if (!customPropertyName.startsWith("--")) {
             throw new ParseException("〈var〉: custom-property-name starting with two dashes \"--\" expected. Found: \"" + customPropertyName + "\"", tt.getStartPosition());
         }
-        ReadableList<CssToken> customValue = customProperties.get(customPropertyName);
+        ReadOnlyList<CssToken> customValue = customProperties.get(customPropertyName);
         if (customValue == null) {
             process(element, new ListCssTokenizer(attrFallback), out);
         } else {

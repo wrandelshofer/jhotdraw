@@ -14,7 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.SetWrapper;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.PatternConverter;

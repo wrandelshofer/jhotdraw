@@ -3,15 +3,12 @@
  */
 package org.jhotdraw8.css;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -280,7 +277,7 @@ public interface SelectorModel<T> {
             } catch (IOException e) {
                 throw new RuntimeException("unexpected exception", e);
             }
-            setAttribute(element, origin, namespace, name, ImmutableList.ofCollection(list));
+            setAttribute(element, origin, namespace, name, ImmutableArrayList.ofCollection(list));
         }
     }*/
 
@@ -295,5 +292,5 @@ public interface SelectorModel<T> {
      *                element.
      * @throws ParseException if parsing the value failed
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value) throws ParseException;
+    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadOnlyList<CssToken> value) throws ParseException;
 }

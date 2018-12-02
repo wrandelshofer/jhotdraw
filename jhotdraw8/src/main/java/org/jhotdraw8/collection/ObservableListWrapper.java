@@ -5,19 +5,18 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
- * Wraps a {@link ReadableList} in the {@link ObservableList} API.
+ * Wraps a {@link ReadOnlyList} in the {@link ObservableList} API.
  * <p>
- * The underlying ReadableList is referenced - not copied. This allows to pass a
- * ReadableList to a client who does not understand the ReadableList APi.
+ * The underlying ReadOnlyList is referenced - not copied. This allows to pass a
+ * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class ObservableListWrapper<E> extends ListWrapper<E> implements ObservableList<E> {
-    public ObservableListWrapper(ReadableList<E> backingList) {
+    public ObservableListWrapper(ReadOnlyList<E> backingList) {
         super(backingList);
     }
 

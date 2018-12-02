@@ -24,7 +24,7 @@ import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.CssToken;
@@ -218,7 +218,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Styleable elem, @Nonnull StyleOrigin origin,@Nullable String namespace, @Nonnull String name, ReadableList<CssToken> valueAsTokens) {
+    public void setAttribute(@Nonnull Styleable elem, @Nonnull StyleOrigin origin,@Nullable String namespace, @Nonnull String name, ReadOnlyList<CssToken> valueAsTokens) {
         String value;
         if (valueAsTokens == null) {
             value=null;

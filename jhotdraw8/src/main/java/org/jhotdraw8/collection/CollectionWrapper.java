@@ -10,9 +10,9 @@ import java.util.Iterator;
  * @author Werner Randelshofer
  */
 public class CollectionWrapper<E> extends AbstractCollection<E> {
-    private final ReadableCollection<E> backingCollection;
+    private final ReadOnlyCollection<E> backingCollection;
 
-    public CollectionWrapper(ReadableCollection<E> backingCollection) {
+    public CollectionWrapper(ReadOnlyCollection<E> backingCollection) {
         this.backingCollection = backingCollection;
     }
 

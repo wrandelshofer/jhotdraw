@@ -13,6 +13,7 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssSizeConverter;

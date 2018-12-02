@@ -6,7 +6,7 @@ package org.jhotdraw8.css;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -271,7 +271,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadableList<CssToken> value) {
+    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadOnlyList<CssToken> value) {
         StringBuilder buf = new StringBuilder();
         for (CssToken t : value) buf.append(t.fromToken());
         String value1 = buf.toString();

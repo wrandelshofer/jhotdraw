@@ -1,96 +1,27 @@
-/* @(#)ImmutableList.java
- * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
- */
 package org.jhotdraw8.collection;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
 
 /**
- * An immutable observable list.
+ * Classes with this interface guarantee that the content of the list is immutable.
  *
- * @param <E> element type
- * @author Werner Randelshofer
- * @version $Id$
+ * @param <E> the element type
  */
-public final class ImmutableList<E> extends AbstractReadableList<E> {
-
-    private final static ImmutableList<Object> EMPTY = new ImmutableList<>(true, new Object[0]);
-
-    private final Object[] array;
-
-    private ImmutableList(@Nullable Collection<? extends E> copyItems) {
-        this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
-    }
-    private ImmutableList(@Nullable ReadableCollection<? extends E> copyItems) {
-        this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
-    }
-
-    private ImmutableList(@Nonnull Object[] array) {
-        this(array, 0, array.length);
-    }
-
-    private ImmutableList(@Nonnull Object[] a, int offset, int length) {
-        this.array = new Object[length];
-        System.arraycopy(a, offset, array, 0, length);
-    }
-
-    private ImmutableList(boolean privateMethod, Object[] array) {
-        this.array = array;
-    }
-
-    public static <E> ImmutableList<E> removeAll(ImmutableList<E> list, Collection<? extends E> collection) {
-        int n = list.size();
-        Object[] a=new Object[n];
-        int j=0;
-        for (E e :list) {
-            if (!collection.contains(e)) {
-                a[j++]=e;
-            }
-        }
-
-        return new ImmutableList<E>(a,0,j);
-    }
-
-    public void copyInto(@Nonnull Object[] out, int offset) {
-        System.arraycopy(array, 0, out, offset, array.length);
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        for (int i = 0, n = array.length; i < n; i++)
-            if (array[i].equals(o)) {
-                return true;
-            }
-        return false;
-    }
+public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E> {
 
     @Nonnull
-    public E get(int index) {
-        @SuppressWarnings("unchecked")
-        E value = (E) array[index];
-        return value;
-    }
-
-    public int size() {
-        return array.length;
-    }
-
-    @Nonnull
-    public static <T> ImmutableList<T> add(@Nullable ReadableCollection<T> collection, T item) {
+    public static <T> ImmutableList<T> add(@Nullable ReadOnlyCollection<T> collection, T item) {
         if (collection == null || collection.isEmpty()) {
             return ImmutableList.of(item);
         }
         Object[] a = new Object[collection.size() + 1];
         a = collection.toArray(a);
         a[a.length - 1] = item;
-        return new ImmutableList<>(true, a);
+        return new ImmutableArrayList<>(true, a);
     }
 
     @Nonnull
@@ -101,7 +32,7 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
         Object[] a = new Object[collection.size() + 1];
         a = collection.toArray(a);
         a[a.length - 1] = item;
-        return new ImmutableList<>(true, a);
+        return new ImmutableArrayList<>(true, a);
     }
 
     @Nonnull
@@ -115,11 +46,11 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index, b, index + 1, a.length - index);
         b[index] = item;
-        return new ImmutableList<>(true, b);
+        return new ImmutableArrayList<>(true, b);
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> add(@Nullable ReadableCollection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> add(@Nullable ReadOnlyCollection<T> collection, int index, T item) {
         if (collection == null || collection.isEmpty() && index == 0) {
             return ImmutableList.of(item);
         }
@@ -129,13 +60,13 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index, b, index + 1, a.length - index);
         b[index] = item;
-        return new ImmutableList<>(true, b);
+        return new ImmutableArrayList<>(true, b);
     }
 
     @Nonnull
     @SuppressWarnings("unchecked")
     public static <T> ImmutableList<T> emptyList() {
-        return (ImmutableList<T>) EMPTY;
+        return (ImmutableArrayList<T>) ImmutableArrayList.EMPTY;
     }
 
     @Nonnull
@@ -143,53 +74,58 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
     @SuppressWarnings("varargs")
     public static <T> ImmutableList<T> of(T... items) {
         // FIXME we should copy the items array, because caller might keep reference on mutable items array
-        return items.length == 0 ? emptyList() : new ImmutableList<>(true, items);
+        return items.length == 0 ? emptyList() : new ImmutableArrayList<>(true, items);
     }
 
     @Nonnull
     public static <T> ImmutableList<T> ofCollection(Collection<? extends T> collection) {
-        return collection.isEmpty() ? emptyList() : new ImmutableList<T>(collection);
+        return collection.isEmpty() ? emptyList() : new ImmutableArrayList<T>(collection);
     }
+
     @Nonnull
-    public static <T> ImmutableList<T> ofCollection(ReadableCollection<? extends T> collection) {
-        return collection.isEmpty() ? emptyList() : new ImmutableList<T>(collection);
+    public static <T> ImmutableList<T> ofCollection(ReadOnlyCollection<? extends T> collection) {
+        if (collection instanceof ImmutableList) {
+            //noinspection unchecked
+            return (ImmutableList<T>) collection;
+        }
+        return collection.isEmpty() ? emptyList() : new ImmutableArrayList<T>(collection);
     }
 
     @Nonnull
     public static <T> ImmutableList<T> ofArray(@Nonnull Object[] a, int offset, int length) {
-        return length == 0 ? emptyList() : new ImmutableList<>(a, offset, length);
+        return length == 0 ? emptyList() : new ImmutableArrayList<>(a, offset, length);
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> remove(@Nullable ReadableCollection<T> collection, int index) {
+    public static <T> ImmutableList<T> remove(@Nullable ReadOnlyCollection<T> collection, int index) {
         if (collection == null || collection.size() == 1 && index == 0) {
-            return ImmutableList.emptyList();
+            return emptyList();
         }
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         Object[] b = new Object[a.length - 1];
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index + 1, b, index, b.length - index);
-        return new ImmutableList<>(true, b);
+        return new ImmutableArrayList<>(true, b);
     }
 
     @Nonnull
     public static <T> ImmutableList<T> remove(@Nullable Collection<T> collection, int index) {
         if (collection == null || collection.size() == 1 && index == 0) {
-            return ImmutableList.emptyList();
+            return emptyList();
         }
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         Object[] b = new Object[a.length - 1];
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index + 1, b, index, b.length - index);
-        return new ImmutableList<>(true, b);
+        return new ImmutableArrayList<>(true, b);
     }
 
     @Nonnull
     public static <T> ImmutableList<T> remove(@Nullable Collection<T> collection, T item) {
         if (collection == null || collection.size() == 1 && collection.contains(item)) {
-            return ImmutableList.emptyList();
+            return emptyList();
         }
         if (collection instanceof List) {
             @SuppressWarnings("unchecked")
@@ -198,35 +134,33 @@ public final class ImmutableList<E> extends AbstractReadableList<E> {
         } else {
             List<T> a = new ArrayList<>(collection);// linear
             a.remove(item);// linear
-            return new ImmutableList<>(a);// linear
+            return new ImmutableArrayList<>(a);// linear
         }
     }
 
-    public static <T> ImmutableList<T> set(ReadableCollection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> set(ReadOnlyCollection<T> collection, int index, T item) {
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         a[index] = item;
-        return new ImmutableList<>(true, a);
+        return new ImmutableArrayList<>(true, a);
     }
 
     public static <T> ImmutableList<T> set(Collection<T> collection, int index, T item) {
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         a[index] = item;
-        return new ImmutableList<>(true, a);
+        return new ImmutableArrayList<>(true, a);
     }
+    public static <E> ImmutableList<E> removeAll(ReadOnlyCollection<E> list, Collection<? extends E> collection) {
+        int n = list.size();
+        Object[] a = new Object[n];
+        int j = 0;
+        for (E e : list) {
+            if (!collection.contains(e)) {
+                a[j++] = e;
+            }
+        }
 
-    public <T> T[] toArray(T[] a) {
-        int size = size();
-        if (a.length < size) {
-            @SuppressWarnings("unchecked")
-            T[] t = (T[]) Arrays.copyOf(array, size, a.getClass());
-            return t;
-        }
-        System.arraycopy(array, 0, a, 0, size);
-        if (a.length > size) {
-            a[size] = null;
-        }
-        return a;
+        return new ImmutableArrayList<E>(a, 0, j);
     }
 }

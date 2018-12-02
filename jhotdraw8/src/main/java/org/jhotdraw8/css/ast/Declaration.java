@@ -3,8 +3,9 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 
 import javax.annotation.Nonnull;
@@ -26,7 +27,7 @@ public class Declaration extends AST {
     @Nonnull
     private final String propertyName;
     @Nonnull
-    private final ReadableList<CssToken> terms;
+    private final ImmutableList<CssToken> terms;
     private int startPos = -1;
     private int endPos = -1;
 
@@ -56,7 +57,7 @@ public class Declaration extends AST {
     }
 
     @Nonnull
-    public ReadableList<CssToken> getTerms() {
+    public ImmutableList<CssToken> getTerms() {
         return terms;
     }
 

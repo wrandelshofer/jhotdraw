@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
@@ -12,7 +11,6 @@ import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.SetWrapper;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.key.DirtyBits;

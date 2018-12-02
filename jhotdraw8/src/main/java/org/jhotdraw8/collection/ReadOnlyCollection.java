@@ -1,4 +1,4 @@
-/* @(#)ReadableCollection.java
+/* @(#)ReadOnlyCollection.java
  * Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -16,7 +16,7 @@ import java.util.stream.StreamSupport;
  *
  * @param <E> the element type
  */
-public interface ReadableCollection<E> extends Iterable<E> {
+public interface ReadOnlyCollection<E> extends Iterable<E> {
     /**
      * Returns the size of the collection.
      *

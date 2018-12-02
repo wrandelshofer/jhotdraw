@@ -1,7 +1,8 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadableList;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class SimpleCssFunctionProcessorTest {
 
-    protected CssFunctionProcessor<Element> createInstance( DocumentSelectorModel model, Map<String, ReadableList<CssToken>> customProperties) {
+    protected CssFunctionProcessor<Element> createInstance( DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         return new SimpleCssFunctionProcessor<>(model,customProperties);
     }
 
@@ -43,7 +44,7 @@ class SimpleCssFunctionProcessorTest {
         Consumer<CssToken> consumer=t->buf.append(t.fromToken());
 
         DocumentSelectorModel model = new DocumentSelectorModel();
-        Map<String, ReadableList<CssToken>> customProperties=new LinkedHashMap<>();
+        Map<String, ImmutableList<CssToken>> customProperties=new LinkedHashMap<>();
         customProperties.put("--blarg", ImmutableList.of(new CssToken(CssTokenType.TT_STRING,"blarg")));
         customProperties.put("--endless-recursion", ImmutableList.of(new CssToken(CssTokenType.TT_FUNCTION,"var"),
                 new CssToken(CssTokenType.TT_IDENT,"--endless-recursion"),

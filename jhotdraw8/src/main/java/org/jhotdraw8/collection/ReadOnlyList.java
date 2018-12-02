@@ -1,4 +1,4 @@
-/* @(#)ReadableList.java
+/* @(#)ReadOnlyList.java
  * Copyright © 2018 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -15,11 +15,11 @@ import java.util.ListIterator;
  * Provides a read-only API for a list collection.
  * <p>
  * Note: a ReadbleList is not equal to a non-readable {@link List}.
- * To compare a ReadbleList to a List, you have to wrap the List into a {@link ReadableListWrapper}.
+ * To compare a ReadbleList to a List, you have to wrap the List into a {@link ReadOnlyListWrapper}.
  *
  * @param <E> the element type
  */
-public interface ReadableList<E> extends ReadableCollection<E> {
+public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
 
     E get(int index);
 
