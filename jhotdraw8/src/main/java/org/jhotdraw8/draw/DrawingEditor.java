@@ -6,7 +6,9 @@ package org.jhotdraw8.draw;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
+
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.draw.tool.Tool;
 
 /**
@@ -16,12 +18,11 @@ import org.jhotdraw8.draw.tool.Tool;
  * The DrawingEditor invokes {@code activate()} and {@code deactivate()} methods
  * on the {@code Tool} if it becomes the active tool or loses this status.
  *
+ * @author Werner Randelshofer
+ * @version $Id$
  * @design.pattern org.jhotdraw8.draw.figure.Drawing Framework, KeyAbstraction.
  * @design.pattern DrawingEditor Mediator, Mediator. The DrawingEditor allows to
  * use the same {@code Tool} with multiple {@code DrawingView}s.
- *
- * @author Werner Randelshofer
- * @version $Id$
  */
 public interface DrawingEditor {
 
@@ -48,26 +49,27 @@ public interface DrawingEditor {
     // ---
     // properties
     // ---
+
     /**
      * The drawing views associated with this editor.
      *
      * @return the property
      */
-        ReadOnlySetProperty<DrawingView> drawingViewsProperty();
+    ReadOnlySetProperty<DrawingView> drawingViewsProperty();
 
     /**
      * The currently active drawing view.
      *
      * @return the property
      */
-        ObjectProperty<DrawingView> activeDrawingViewProperty();
+    ObjectProperty<DrawingView> activeDrawingViewProperty();
 
     /**
      * The currently active tool.
      *
      * @return the property
      */
-        ObjectProperty<Tool> activeToolProperty();
+    ObjectProperty<Tool> activeToolProperty();
 
     /**
      * The default tool. When the value is not null, the default tool is made
@@ -75,17 +77,18 @@ public interface DrawingEditor {
      *
      * @return the property
      */
-        ObjectProperty<Tool> defaultToolProperty();
+    ObjectProperty<Tool> defaultToolProperty();
 
     // ---
     // convenience methods
     // ---
+
     /**
      * Adds a drawing view to this editor.
      *
      * @param drawingView the drawing view
      */
-    default void addDrawingView( DrawingView drawingView) {
+    default void addDrawingView(DrawingView drawingView) {
         drawingViewsProperty().add(drawingView);
     }
 
@@ -94,7 +97,7 @@ public interface DrawingEditor {
      *
      * @param drawingView the drawing view
      */
-    default void removeDrawingView( DrawingView drawingView) {
+    default void removeDrawingView(DrawingView drawingView) {
         drawingViewsProperty().remove(drawingView);
     }
 
@@ -113,7 +116,7 @@ public interface DrawingEditor {
      *
      * @return the active drawing view or empty
      */
-        default ObservableSet<DrawingView> getDrawingViews() {
+    default ObservableSet<DrawingView> getDrawingViews() {
         return drawingViewsProperty().get();
     }
 

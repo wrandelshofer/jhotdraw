@@ -9,17 +9,17 @@ import javafx.beans.property.SimpleObjectProperty;
  * A {@code NonnullProperty} throws an {@code IllegalArgumentException} when
  * attempting to set its value to null.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  * @version $Id$
- * @param <T> the value type
  */
 public class NonnullProperty<T> extends SimpleObjectProperty<T> {
 
     /**
      * Creates a new instance.
      *
-     * @param bean The bean which holds this property
-     * @param name The name of the property
+     * @param bean         The bean which holds this property
+     * @param name         The name of the property
      * @param initialValue The initial value. Nonnull.
      */
     public NonnullProperty(Object bean, String name, T initialValue) {
@@ -28,10 +28,15 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
 
     @Override
     protected void fireValueChangedEvent() {
-        if (get() == null) {
-            throw new NullPointerException("newValue is null");
-        }
         super.fireValueChangedEvent();
+    }
+
+    /** Sets a new value if it is not null. */
+    @Override
+    public void set(T newValue) {
+        if (newValue != null) {
+            super.set(newValue);
+        }
     }
 
     public T getNonnull() {
@@ -39,6 +44,7 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
     }
 
     public void setNonnull(T newValue) {
+        if (newValue == null) throw new NullPointerException("newValue");
         super.set(newValue);
     }
 

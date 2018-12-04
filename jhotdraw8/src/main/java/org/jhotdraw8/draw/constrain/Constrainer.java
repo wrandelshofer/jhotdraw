@@ -31,11 +31,11 @@ public interface Constrainer extends Observable {
     /**
      * Style class for constrainers which draw a grid.
      */
-    public final static String STYLECLASS_CONSTRAINER_MINOR_GRID = "constrainer-minor-grid";
+    String STYLECLASS_CONSTRAINER_MINOR_GRID = "constrainer-minor-grid";
     /**
      * Style class for constrainers which draw a grid.
      */
-    public final static String STYLECLASS_CONSTRAINER_MAJOR_GRID = "constrainer-major-grid";
+    String STYLECLASS_CONSTRAINER_MAJOR_GRID = "constrainer-major-grid";
 
     // ---
     // constant declarations
@@ -43,7 +43,7 @@ public interface Constrainer extends Observable {
     /**
      * A direction vector with distance of zero.
      */
-    public final static CssPoint2D DIRECTION_NEAREST = CssPoint2D.ZERO;
+    CssPoint2D DIRECTION_NEAREST = CssPoint2D.ZERO;
 
     // ---
     // behavior methods
@@ -73,8 +73,8 @@ public interface Constrainer extends Observable {
      * @param dir A direction vector. If the vector length is zero, then the
      * nearest constrained location is used.
      * @return Returns the constrained point.
-     */ 
-    public CssPoint2D translatePoint( Figure f,  CssPoint2D p,  CssPoint2D dir);
+     */
+    CssPoint2D translatePoint(Figure f, CssPoint2D p, CssPoint2D dir);
 
     /**
      * Constrains the placement of a rectangle towards the closest constraint in
@@ -103,8 +103,8 @@ public interface Constrainer extends Observable {
      * @param dir A direction vector. If the vector length is zero, then the
      * nearest constrained location is used.
      * @return Returns the constrained rectangle.
-     */ 
-    public CssRectangle2D translateRectangle(Figure f, CssRectangle2D r, CssPoint2D dir);
+     */
+    CssRectangle2D translateRectangle(Figure f, CssRectangle2D r, CssPoint2D dir);
 
     /**
      * Constrains the given angle (in degrees). This method changes the angle
@@ -129,19 +129,19 @@ public interface Constrainer extends Observable {
      * @return The closest constrained angle (in radians) in the specified
      * direction.
      */
-    public double translateAngle( Figure f, double angle, double dir);
+    double translateAngle(Figure f, double angle, double dir);
 
     /**
      * Returns a node that renders the grid in view coordinates.
      *
      * @return the node
      */
-    public Node getNode();
+    Node getNode();
 
     /**
      * Updates the node.
      *
      * @param drawingView the drawing view
      */
-    public void updateNode( DrawingView drawingView);
+    void updateNode(DrawingView drawingView);
 }

@@ -4,7 +4,6 @@
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-modular-project/1">
             <name>jhotdraw7</name>
-            <explicit-platform explicit-source-supported="true"/>
             <source-roots>
                 <root id="src.dir" pathref="src.dir.path"/>
             </source-roots>

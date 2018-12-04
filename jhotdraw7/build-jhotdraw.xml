@@ -24,7 +24,7 @@
     <target depends="init" description="Javadoc for my API." name="javadoc">
         <mkdir dir="${javadoc}"/>
         <javadoc destdir="${javadoc}" 
-        footer="&lt;font size=-2>Copyright 1996-2010 (c) by the authors and contributors of the JHotDraw project.&lt;br>Some rights reserved.&lt;/font>"
+        footer="&lt;font size=-2>Copyright 1996-2010 (c) by the authors and contributors of the JHotDraw project.&lt;br>MIT License.&lt;/font>"
         header="JHotDraw ${version}" 
         windowtitle="JHotDraw ${version}"
         maxmemory="256M"
@@ -38,17 +38,13 @@
                 <pathelement location="${src}"/>
             </sourcepath>
             <classpath>
-                <pathelement location="${lib}/quaqua.jar"/>
-                <pathelement location="${lib}/java_30.zip"/>
-                <pathelement location="${lib}/annotations.jar"/>
-                <pathelement location="${lib}/jsr305.jar"/>
             </classpath>
         </javadoc>
     </target>
     <target name="compile" depends="init,clean">
         <mkdir dir="${classes}"/>
         <javac  destdir="${classes}"
-                srcdir="${src}"
+                modulesourcepath="${src}"
                 
                 debug="${javac.debug}"
                 optimize="${javac.optimize}"
@@ -58,11 +54,8 @@
                 target="${javac.target}"
                 bootclasspath="${javac.bootclasspath}"
                 classpath="${javac.classpath}"
-                extdirs="${javac.extdirs}"
          >
             <compilerarg value="-version"/>
-            <compilerarg value="-endorseddirs"/>
-            <compilerarg value="${javac.endorseddirs}"/>
             <compilerarg value="-Xlint:all"/>
             
             <classpath path="${lib}/quaqua.jar"/>

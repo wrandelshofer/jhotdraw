@@ -10,9 +10,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
@@ -20,8 +24,11 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import javafx.scene.paint.Color;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.beans.SimplePropertyBean;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
@@ -53,6 +60,8 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
     private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
 
     private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
+    private NonnullProperty<CssColor> handleColor=new NonnullProperty<>(this,HANDLE_COLOR_PROPERTY, CssColor.valueOf("blue"));
+    private IntegerProperty handleSize=new SimpleIntegerProperty(this,HANDLE_SIZE_PROPERTY,11);
 
     {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
@@ -213,5 +222,15 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
     @Override
     public ObjectProperty<String> helpTextProperty() {
         return helpText;
+    }
+
+    @Override
+    public IntegerProperty handleSizeProperty() {
+        return handleSize;
+    }
+
+    @Override
+    public NonnullProperty<CssColor> handleColorProperty() {
+        return handleColor;
     }
 }

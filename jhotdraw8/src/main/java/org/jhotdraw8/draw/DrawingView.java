@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -24,6 +25,7 @@ import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -73,59 +75,63 @@ public interface DrawingView extends RenderContext {
     /**
      * The name of the model property.
      */
-    public final static String MODEL_PROPERTY = "model";
+    String MODEL_PROPERTY = "model";
     /**
      * The name of the tool property.
      */
-    public final static String TOOL_PROPERTY = "tool";
+    String TOOL_PROPERTY = "tool";
     /**
      * The name of the focused property.
      */
-    public final static String FOCUSED_PROPERTY = "focused";
+    String FOCUSED_PROPERTY = "focused";
     /**
      * The name of the scale factor property.
      */
-    public final static String ZOOM_FACTOR_PROPERTY = "scaleFactor";
+    String ZOOM_FACTOR_PROPERTY = "scaleFactor";
     /**
      * The name of the constrainer property.
      */
-    public final static String CONSTRAINER_PROPERTY = "constrainer";
+    String CONSTRAINER_PROPERTY = "constrainer";
     /**
      * The name of the selection property.
      */
-    public final static String SELECTED_FIGURES_PROPERTY = "selectedFigures";
+    String SELECTED_FIGURES_PROPERTY = "selectedFigures";
     /**
      * The name of the active handle property.
      */
-    public final static String ACTIVE_HANDLE_PROPERTY = "activeHandle";
+    String ACTIVE_HANDLE_PROPERTY = "activeHandle";
     /**
      * The name of the active layer property.
      */
-    public final static String ACTIVE_LAYER_PROPERTY = "activeLayer";
+    String ACTIVE_LAYER_PROPERTY = "activeLayer";
     /**
      * The name of the clipboardInputFormat property.
      */
-    public final static String CLIPBOARD_INPUT_FORMAT_PROPERTY = "clipboardInputFormat";
+    String CLIPBOARD_INPUT_FORMAT_PROPERTY = "clipboardInputFormat";
     /**
      * The name of the clibpoardOutputFormat property.
      */
-    public final static String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
+    String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
     /**
      * The name of the helpText property.
      */
-    public final static String HELP_TEXT_PROPERTY = "helpText";
+    String HELP_TEXT_PROPERTY = "helpText";
     /**
      * The name of the drawing property.
      */
-    public final static String DRAWING_PROPERTY = "drawing";
+    String DRAWING_PROPERTY = "drawing";
     /**
      * The name of the handle type property for single selection.
      */
-    public final static String HANDLE_TYPE_PROPERTY = "handleType";
+    String HANDLE_TYPE_PROPERTY = "handleType";
     /**
      * The name of the handle type property for multiple selection.
      */
-    public final static String MULTI_HANDLE_TYPE_PROPERTY = "multiHandleType";
+    String MULTI_HANDLE_TYPE_PROPERTY = "multiHandleType";
+
+    String HANDLE_SIZE_PROPERTY = "handleSize";
+
+    String HANDLE_COLOR_PROPERTY = "handleColor";
 
     // ---
     // properties
@@ -273,7 +279,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return a node
      */
-    public Node getNode();
+    Node getNode();
 
     /**
      * Gets the node which is used to render the specified figure by the drawing
@@ -282,7 +288,7 @@ public interface DrawingView extends RenderContext {
      * @param f The figure
      * @return The node associated to the figure
      */
-    public Node getNode(Figure f);
+    Node getNode(Figure f);
 
     /**
      * Finds the handle at the given view coordinates. Handles are searched in
@@ -339,7 +345,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
+    List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     /**
      * Returns all figures that intersect the specified bounds given in view
@@ -353,7 +359,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
+    List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     // Handles
 
@@ -364,7 +370,7 @@ public interface DrawingView extends RenderContext {
      * @param handle  a handle
      * @return A collection containing the figures with compatible handles.
      */
-    public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
+    Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
 
     /**
      * Returns the world to view transformation.
@@ -541,7 +547,8 @@ public interface DrawingView extends RenderContext {
      * @return the tolerance radius
      */
     default double getTolerance() {
-        return 5;
+        // handle size * 0.5 * sqrt(2).
+        return getHandleSize()*0.71;
     }
 
     default ObservableSet<Figure> getSelectedFigures() {
@@ -646,12 +653,12 @@ public interface DrawingView extends RenderContext {
         return clipboardInputFormatProperty().get();
     }
 
-    public void recreateHandles();
+    void recreateHandles();
 
     /**
      * Plays a short animation on the handles to make them easier discoverable.
      */
-    public void jiggleHandles();
+    void jiggleHandles();
 
     /**
      * Scrolls the specified figure to visible.
@@ -692,4 +699,31 @@ public interface DrawingView extends RenderContext {
         helpTextProperty().set(newValue);
     }
 
+    /**
+     * Holds the size (width and height) of a handle.
+     *
+     * @return size of handle
+     */
+    IntegerProperty handleSizeProperty();
+
+    default int getHandleSize() {
+        return handleSizeProperty().get();
+    }
+    default void setHandleSize(int newValue) {
+        handleSizeProperty().set(newValue);
+    }
+
+    /**
+     * Holds the color of the handles.
+     *
+     * @return color of handle
+     */
+    NonnullProperty<CssColor> handleColorProperty();
+
+    default CssColor getHandleColor() {
+        return handleColorProperty().get();
+    }
+    default void setHandleColor(CssColor newValue) {
+        handleColorProperty().set(newValue);
+    }
 }

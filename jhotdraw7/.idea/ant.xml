@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AntConfiguration">
+    <defaultAnt name="Apache Ant version 1.10.5" />
+    <buildFile url="file://$PROJECT_DIR$/build-jhotdraw.xml" />
+  </component>
+</project>

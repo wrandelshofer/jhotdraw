@@ -89,6 +89,7 @@ import org.jhotdraw8.draw.input.MultiClipboardInputFormat;
 import org.jhotdraw8.draw.input.MultiClipboardOutputFormat;
 import org.jhotdraw8.draw.inspector.DrawingInspector;
 import org.jhotdraw8.draw.inspector.GridInspector;
+import org.jhotdraw8.draw.inspector.HandlesInspector;
 import org.jhotdraw8.draw.inspector.HelpTextInspector;
 import org.jhotdraw8.draw.inspector.HierarchyInspector;
 import org.jhotdraw8.draw.inspector.Inspector;
@@ -168,29 +169,6 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         dockItem.setContent(inspector.getNode());
         dockItem.getProperties().put("inspector", inspector);
         return dockItem;
-    }
-
-    private void addInspectorOLD(Inspector inspector, String id, Priority grow) {
-        Resources r = Labels.getResources();
-
-        Accordion a = new Accordion();
-        a.getStyleClass().setAll("inspector", "flush");
-        Pane n = (Pane) inspector.getNode();
-        TitledPane t = new TitledPane(r.getString(id + ".toolbar"), n);
-        a.getPanes().add(t);
-        a.getProperties().put("inspector", inspector);
-
-        // Make sure that an expanded accordion has the specified grow priority.
-        // But when it is collapsed it should have none.
-        t.expandedProperty().addListener((o, oldValue, newValue) -> {
-            VBox.setVgrow(a, newValue ? grow : Priority.NEVER);
-        });
-
-        PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherController.class), id + ".expanded", t.expandedProperty());
-        if (t.isExpanded()) {
-            a.setExpandedPane(t);
-            VBox.setVgrow(a, grow);
-        }
     }
 
     @Nonnull
@@ -355,7 +333,11 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
         ZoomToolbar ztbar = new ZoomToolbar();
         ztbar.zoomFactorProperty().bindBidirectional(drawingView.zoomFactorProperty());
         toolsToolBar.getItems().add(ztbar);
+        initInspectors(viewScrollPane, layerFactory);
 
+    }
+
+    private void initInspectors(ScrollPane viewScrollPane, Supplier<Layer> layerFactory) {
         // set up the docking framework
         dockRoot = new DockRoot();
         dockRoot.setDockFactory(TabbedAccordionDock::new);
@@ -383,6 +365,7 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
             dock = new TabbedAccordionDock();
             dock.getItems().add(addInspector(new DrawingInspector(), "drawing", Priority.NEVER));
             dock.getItems().add(addInspector(new GridInspector(), "grid", Priority.NEVER));
+            dock.getItems().add(addInspector(new HandlesInspector(), "handles", Priority.NEVER));
             dock.getItems().add(addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
             d.add(dock);
             return d;
@@ -406,7 +389,6 @@ public class GrapherController extends AbstractDocumentOrientedViewController im
                 e.printStackTrace();
             }
         });
-
     }
 
     @Override

@@ -22,40 +22,258 @@
     <option name="FILTER_BY_CURRENT_PROJECT" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d585e6fa-2787-44e2-bd76-a5062a840704" name="Default" comment="" />
+    <list default="true" id="d585e6fa-2787-44e2-bd76-a5062a840704" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/jhotdraw.util/classes/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/jhotdraw.util/jhotdraw.util.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhotdraw8/.idea/runConfigurations/OldArlEditor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/.project" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/JHDTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/JHDTestCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CTXCommandMenuTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CTXCommandMenuTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CTXWindowMenuTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CTXWindowMenuTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ChopDiamondConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ChopDiamondConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ChopPolygonConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ChopPolygonConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ClippingUpdateStrategyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ClippingUpdateStrategyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CommandCheckBoxMenuItemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CommandCheckBoxMenuItemTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CommandMenuItemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CommandMenuItemTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ComponentFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/ComponentFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CompositeFigureCreationToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CompositeFigureCreationToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CustomSelectionToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CustomSelectionToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CustomToolBarTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/CustomToolBarTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/DesktopEventServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/DesktopEventServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/DiamondFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/DiamondFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/FloatingTextAreaTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/FloatingTextAreaTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/GraphicalCompositeFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/GraphicalCompositeFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/HelperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/HelperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/JPanelDesktopTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/JPanelDesktopTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/JScrollPaneDesktopTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/JScrollPaneDesktopTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/MDIDesktopPaneTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/MDIDesktopPaneTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/MDI_DrawApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/MDI_DrawApplicationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/MiniMapViewTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/MiniMapViewTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/NestedCreationToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/NestedCreationToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/PolygonFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/PolygonFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/PolygonHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/PolygonHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/PolygonToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/PolygonToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SVGDrawAppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SVGDrawAppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SVGStorageFormatTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SVGStorageFormatTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SimpleLayouterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SimpleLayouterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SplitConnectionToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/SplitConnectionToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/StandardLayouterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/StandardLayouterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/TextAreaFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/TextAreaFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/TextAreaToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/TextAreaToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/TriangleFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/TriangleFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/WindowMenuTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/contrib/WindowMenuTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ArrowTipTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ArrowTipTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/BorderDecoratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/BorderDecoratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/BorderToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/BorderToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ChopEllipseConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ChopEllipseConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ConnectedTextToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ConnectedTextToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ElbowConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ElbowConnectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ElbowHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ElbowHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/EllipseFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/EllipseFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/FigureAttributesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/FigureAttributesTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/FiguresSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/FiguresSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/FontSizeHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/FontSizeHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/GroupCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/GroupCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/GroupFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/GroupFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ImageFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ImageFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/InsertImageCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/InsertImageCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/LineConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/LineConnectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/LineFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/LineFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/NullConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/NullConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/NullFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/NullFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/NumberTextFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/NumberTextFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/PolyLineConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/PolyLineConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/PolyLineFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/PolyLineFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/PolyLineHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/PolyLineHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/RectangleFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/RectangleFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/RoundRectangleFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/RoundRectangleFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ScribbleToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ScribbleToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ShortestDistanceConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/ShortestDistanceConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/TextFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/TextFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/TextToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/TextToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/UngroupCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/figures/UngroupCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/DrawingChangeEventTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/DrawingChangeEventTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/FigureAttributeConstantTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/FigureAttributeConstantTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/FigureChangeEventTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/FigureChangeEventTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/FrameworkSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/framework/FrameworkSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/AnimationDecoratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/AnimationDecoratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/AnimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/AnimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/BouncingDrawingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/BouncingDrawingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavaDrawAppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavaDrawAppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavaDrawAppletTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavaDrawAppletTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavaDrawViewerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavaDrawViewerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavadrawSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/JavadrawSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/MySelectionToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/MySelectionToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/PatternPainterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/PatternPainterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/URLToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/javadraw/URLToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/MiniMapApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/MiniMapApplicationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/MiniMapDesktopTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/MiniMapDesktopTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/MinimapSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/minimap/MinimapSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/NetAppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/NetAppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/NetSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/NetSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/NodeFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/net/NodeFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/NothingAppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/NothingAppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/NothingAppletTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/NothingAppletTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/NothingSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/nothing/NothingSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertAppletTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertAppletTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertApplicationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertDependencyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertDependencyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertFigureCreationToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertFigureCreationToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertFigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertFigureTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/samples/pert/PertSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/AlignCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/AlignCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/BoxHandleKitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/BoxHandleKitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/BringToFrontCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/BringToFrontCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/BufferedUpdateStrategyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/BufferedUpdateStrategyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChangeAttributeCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChangeAttributeCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChangeConnectionEndHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChangeConnectionEndHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChangeConnectionStartHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChangeConnectionStartHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChopBoxConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ChopBoxConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ConnectionHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ConnectionHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ConnectionToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ConnectionToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/CopyCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/CopyCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/CreationToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/CreationToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/CutCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/CutCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DeleteCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DeleteCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DeleteFromDrawingVisitorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DeleteFromDrawingVisitorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DragTrackerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DragTrackerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DuplicateCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/DuplicateCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FastBufferedUpdateStrategyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FastBufferedUpdateStrategyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureAndEnumeratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureAndEnumeratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureChangeAdapterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureChangeAdapterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureChangeEventMulticasterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureChangeEventMulticasterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureEnumeratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/FigureEnumeratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/GridConstrainerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/GridConstrainerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/HandleAndEnumeratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/HandleAndEnumeratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/HandleEnumeratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/HandleEnumeratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/HandleTrackerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/HandleTrackerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/InsertIntoDrawingVisitorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/InsertIntoDrawingVisitorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/LocatorConnectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/LocatorConnectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/LocatorHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/LocatorHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/NullDrawingViewTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/NullDrawingViewTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/NullHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/NullHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/NullToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/NullToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/OffsetLocatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/OffsetLocatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/PasteCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/PasteCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/PeripheralLocatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/PeripheralLocatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/RelativeLocatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/RelativeLocatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ReverseFigureEnumeratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ReverseFigureEnumeratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SelectAllCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SelectAllCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SelectAreaTrackerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SelectAreaTrackerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SelectionToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SelectionToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SendToBackCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SendToBackCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SimpleUpdateStrategyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SimpleUpdateStrategyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SingleFigureEnumeratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/SingleFigureEnumeratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardDrawingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardDrawingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardDrawingViewTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardDrawingViewTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardFigureSelectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardFigureSelectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/StandardSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ToggleGridCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ToggleGridCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ToolButtonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/standard/ToolButtonTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/BoundsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/BoundsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/ClipboardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/ClipboardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/ColorMapTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/ColorMapTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/CommandButtonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/CommandButtonTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/CommandChoiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/CommandChoiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/CommandMenuTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/CommandMenuTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/FillerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/FillerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/FloatingTextFieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/FloatingTextFieldTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/GeomTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/GeomTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/GraphLayoutTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/GraphLayoutTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/IconkitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/IconkitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/JDOStorageFormatTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/JDOStorageFormatTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/PaletteIconTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/PaletteIconTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/PaletteLayoutTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/PaletteLayoutTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/RedoCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/RedoCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/ReverseListEnumeratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/ReverseListEnumeratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/SerializationStorageFormatTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/SerializationStorageFormatTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StandardStorageFormatTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StandardStorageFormatTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StandardVersionControlStrategyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StandardVersionControlStrategyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StorableInputTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StorableInputTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StorableOutputTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StorableOutputTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StorageFormatManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/StorageFormatManagerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoManagerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoRedoActivityTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoRedoActivityTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableAdapterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableAdapterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableHandleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableHandleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableToolTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UndoableToolTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UtilSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/UtilSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/VersionManagementTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/VersionManagementTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/CollectionsFactoryJDK11Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/CollectionsFactoryJDK11Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/IteratorWrapperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/IteratorWrapperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/Jdk11Suite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/Jdk11Suite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/ListWrapperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/ListWrapperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/MapWrapperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/MapWrapperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/SetWrapperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk11/SetWrapperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk12/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk12/AllTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk12/CollectionsFactoryJDK12Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk12/CollectionsFactoryJDK12Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk12/Jdk12Suite.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw6/src/test/java/org/jhotdraw/test/util/collections/jdk12/Jdk12Suite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/.project" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/nbproject/private/private.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/nbproject/private/private.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw8/doc/config/CatalogManager.properties" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw8/doc/config/CatalogManager.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw8/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw8/nbproject/project.properties" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1715417614">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SpliteratorIterable.java" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/collection/SpliteratorIterable.java">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file leaf-file-name="CustomBinding.java" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/binding/CustomBinding.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="621">
+            <state relative-caret-position="705">
               <caret line="47" selection-start-line="47" selection-end-line="47" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DrawingModel.java" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/draw/model/DrawingModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-890">
+            <state relative-caret-position="4320">
               <caret line="288" column="66" selection-start-line="288" selection-start-column="66" selection-end-line="288" selection-end-column="66" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DrawingModelFigureProperty.java" pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/draw/model/DrawingModelFigureProperty.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
@@ -79,8 +297,14 @@
       </list>
     </option>
   </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="704" />
+    <option name="x" value="274" />
     <option name="y" value="22" />
     <option name="width" value="1600" />
     <option name="height" value="1274" />
@@ -90,7 +314,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -102,6 +325,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -131,47 +355,29 @@
   <component name="RunManager">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <patterns />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
       <properties />
       <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
   </component>
   <component name="SvnConfiguration">
@@ -185,6 +391,7 @@
       <option name="presentableId" value="Default" />
       <updated>1529908368751</updated>
       <workItem from="1529908369929" duration="688000" />
+      <workItem from="1540449059110" duration="47000" />
     </task>
     <task id="LOCAL-00001" summary="When an ID of a figure was changed, the drawing view was not always updated.">
       <created>1530563719550</created>
@@ -197,41 +404,44 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="688000" />
+    <option name="totallyTimeSpent" value="735000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="704" y="22" width="1600" height="1274" extended-state="0" />
+    <frame x="274" y="22" width="1600" height="1274" extended-state="0" />
     <layout>
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Palette&#9;" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="right" id="Maven Projects" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32928944" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info id="Designer" order="2" />
-      <window_info anchor="bottom" id="Run with VisualVM" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25288832" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25609756" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info id="UI Designer" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug with VisualVM" order="7" />
-      <window_info anchor="bottom" id="Reviews" order="7" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="News Feed" order="3" />
-      <window_info anchor="bottom" id="TeamCity" order="7" />
-      <window_info anchor="right" id="Database" order="3" />
+      <window_info id="Designer" order="2" />
+      <window_info id="UI Designer" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Statistic" order="7" />
       <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Reviews" order="7" />
+      <window_info anchor="bottom" id="Run with VisualVM" order="8" />
+      <window_info anchor="bottom" id="Debug with VisualVM" order="9" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TeamCity" order="11" />
+      <window_info anchor="bottom" id="Terminal" order="12" />
+      <window_info anchor="bottom" id="Event Log" order="13" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="14" visible="true" weight="0.32901555" />
+      <window_info anchor="bottom" id="Statistic" order="15" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="News Feed" order="4" />
+      <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="right" id="Palette&#9;" order="6" />
+      <window_info anchor="right" id="Maven Projects" order="7" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -242,36 +452,28 @@
     <MESSAGE value="When an ID of a figure was changed, the drawing view was not always updated." />
     <option name="LAST_COMMIT_MESSAGE" value="When an ID of a figure was changed, the drawing view was not always updated." />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="1" />
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/collection/SpliteratorIterable.java">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/draw/figure/StyleableFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="38" column="161" selection-start-line="38" selection-start-column="161" selection-end-line="38" selection-end-column="161" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/collection/SpliteratorIterable.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/binding/CustomBinding.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="621">
+        <state relative-caret-position="705">
           <caret line="47" selection-start-line="47" selection-end-line="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/draw/model/DrawingModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-890">
+        <state relative-caret-position="4320">
           <caret line="288" column="66" selection-start-line="288" selection-start-column="66" selection-end-line="288" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jhotdraw8/src/main/java/org/jhotdraw8/draw/figure/StyleableFigure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="38" column="161" selection-start-line="38" selection-start-column="161" selection-end-line="38" selection-end-column="161" />
         </state>
       </provider>
     </entry>
