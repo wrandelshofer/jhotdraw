@@ -5,7 +5,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ViewController;
+import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -32,7 +32,7 @@ public class AlignVerticalAction extends AbstractSelectedAction {
         labels.configureAction(this, ID);
     }
     @Override
-    protected void handleActionPerformed(ActionEvent event, ViewController view) {
+    protected void handleActionPerformed(ActionEvent event, ActivityViewController view) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

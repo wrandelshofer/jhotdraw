@@ -10,14 +10,13 @@ import javafx.scene.control.Alert.AlertType;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
-import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link DocumentOrientedViewController}.
+ * {@link DocumentOrientedActivityViewController}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
@@ -25,7 +24,7 @@ import org.jhotdraw8.app.DocumentOrientedViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractViewControllerAction<DocumentOrientedViewController> {
+public class PrintFileAction extends AbstractViewControllerAction<DocumentOrientedActivityViewController> {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,13 +45,13 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentOrient
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction( Application app, @Nullable DocumentOrientedViewController view) {
-        super(app, view, DocumentOrientedViewController.class);
+    public PrintFileAction( Application app, @Nullable DocumentOrientedActivityViewController view) {
+        super(app, view, DocumentOrientedActivityViewController.class);
         Labels.getLabels().configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedViewController view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedActivityViewController view) {
         view.addDisabler(this);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(view.getNode().getScene().getWindow())) {

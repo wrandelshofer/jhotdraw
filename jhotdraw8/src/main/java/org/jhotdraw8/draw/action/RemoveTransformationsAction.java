@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Set;
 import javafx.event.ActionEvent;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -16,7 +18,6 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ViewController;
 
 /**
  * RemoveTransformationsAction.
@@ -42,7 +43,7 @@ public class RemoveTransformationsAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

@@ -59,7 +59,7 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 /**
- * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedViewController} objects and
+ * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedActivityViewController} objects and
  * provides windows to present them on screen.
  * 
  * @author Werner Randelshofer
@@ -79,7 +79,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
-    private final ReadOnlyObjectWrapper<ViewController> activeView = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<ActivityViewController> activeView = new ReadOnlyObjectWrapper<>();
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
         Thread t = new Thread(r);
         t.setUncaughtExceptionHandler((Thread t1, Throwable e) -> {
@@ -89,7 +89,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     });
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
-    private final SetProperty<ViewController> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    private final SetProperty<ActivityViewController> views = new SimpleSetProperty<>(FXCollections.observableSet());
     @Nonnull
     private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
     private List<Menu> systemMenus;
@@ -97,20 +97,20 @@ public class DocumentOrientedApplication extends AbstractApplication {
     {
         activeView.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                handleViewDeactivated((DocumentOrientedViewController) oldv);
+                handleViewDeactivated((DocumentOrientedActivityViewController) oldv);
             }
             if (newv != null) {
-                handleViewActivated((DocumentOrientedViewController) newv);
+                handleViewActivated((DocumentOrientedActivityViewController) newv);
             }
         });
     }
 
     {
-        views.addListener((SetChangeListener.Change<? extends ViewController> change) -> {
+        views.addListener((SetChangeListener.Change<? extends ActivityViewController> change) -> {
             if (change.wasAdded()) {
-                handleViewAdded((DocumentOrientedViewController) change.getElementAdded());
+                handleViewAdded((DocumentOrientedActivityViewController) change.getElementAdded());
             } else {
-                handleViewRemoved((DocumentOrientedViewController) change.getElementRemoved());
+                handleViewRemoved((DocumentOrientedActivityViewController) change.getElementRemoved());
             }
         });
     }
@@ -120,7 +120,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public ReadOnlyObjectProperty<ViewController> activeViewProperty() {
+    public ReadOnlyObjectProperty<ActivityViewController> activeViewProperty() {
         return activeView.getReadOnlyProperty();
     }
 
@@ -174,7 +174,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public CompletionStage<ViewController> createView() {
+    public CompletionStage<ActivityViewController> createView() {
         return FXWorker.supply(() -> getModel().createView())
                 .handle((v, e) -> {
                     if (e != null) {
@@ -190,22 +190,22 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     private void disambiguateViews() {
-        HashMap<String, ArrayList<ViewController>> titles = new HashMap<>();
-        for (ViewController v : views) {
+        HashMap<String, ArrayList<ActivityViewController>> titles = new HashMap<>();
+        for (ActivityViewController v : views) {
             String t = v.getTitle();
             titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
         }
-        for (ArrayList<ViewController> list : titles.values()) {
+        for (ArrayList<ActivityViewController> list : titles.values()) {
             if (list.size() == 1) {
                 list.get(0).setDisambiguation(0);
             } else {
                 int max = 0;
-                for (ViewController v : list) {
+                for (ActivityViewController v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
                 Collections.sort(list, (a, b) -> a.getDisambiguation() - b.getDisambiguation());
                 int prev = 0;
-                for (ViewController v : list) {
+                for (ActivityViewController v : list) {
                     int current = v.getDisambiguation();
                     if (current == prev) {
                         v.setDisambiguation(++max);
@@ -255,7 +255,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(@Nonnull DocumentOrientedViewController view) {
+    protected void handleViewActivated(@Nonnull DocumentOrientedActivityViewController view) {
         view.activate();
     }
 
@@ -265,7 +265,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(@Nonnull DocumentOrientedViewController view) {
+    protected void handleViewAdded(@Nonnull DocumentOrientedActivityViewController view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -342,7 +342,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
             Outer:
             for (int retries = views.getSize(); retries > 0; retries--) {
-                for (ViewController v : views) {
+                for (ActivityViewController v : views) {
                     if (v != view) {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
@@ -367,7 +367,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(@Nonnull DocumentOrientedViewController view) {
+    protected void handleViewDeactivated(@Nonnull DocumentOrientedActivityViewController view) {
         view.deactivate();
     }
 
@@ -377,7 +377,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(@Nonnull DocumentOrientedViewController view) {
+    protected void handleViewRemoved(@Nonnull DocumentOrientedActivityViewController view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -411,7 +411,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
     @Nonnull
     @Override
-    public SetProperty<ViewController> viewsProperty() {
+    public SetProperty<ActivityViewController> viewsProperty() {
         return views;
     }
 
@@ -441,7 +441,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
         final Resources labels = Labels.getLabels();
         createView().whenComplete((pv, ex1) -> {
-            DocumentOrientedViewController v = (DocumentOrientedViewController) pv;
+            DocumentOrientedActivityViewController v = (DocumentOrientedActivityViewController) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -481,7 +481,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                 updateRecentMenuItemsMB(systemMenus);
             }
         } else {
-            for (ViewController v : views()) {
+            for (ActivityViewController v : views()) {
                 BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();
                 MenuBar mb = (MenuBar) bp.getTop();
                 if (mb != null) {

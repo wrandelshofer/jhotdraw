@@ -9,10 +9,11 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ViewController;
 
 /**
  * ToggleViewPropertyAction.
@@ -20,15 +21,15 @@ import org.jhotdraw8.app.ViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ToggleViewPropertyAction extends AbstractViewControllerAction<ViewController> {
+public class ToggleViewPropertyAction extends AbstractViewControllerAction<ActivityViewController> {
 
     private static final long serialVersionUID = 1L;
     @Nullable
     private BooleanProperty property;
     @Nullable
-    private final Function<ViewController, Node> nodeGetter;
+    private final Function<ActivityViewController, Node> nodeGetter;
 
-    public ToggleViewPropertyAction(Application app, ViewController view, @Nonnull BooleanProperty property, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application app, ActivityViewController view, @Nonnull BooleanProperty property, String id, Resources labels) {
         super(app, view,null);
         labels.configureAction(this, id);
         this.property = property;
@@ -36,7 +37,7 @@ public class ToggleViewPropertyAction extends AbstractViewControllerAction<ViewC
 selectedProperty().bindBidirectional(  property);
     }
 
-    public ToggleViewPropertyAction(Application app, ViewController view, Function<ViewController, Node> nodeGetter, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application app, ActivityViewController view, Function<ActivityViewController, Node> nodeGetter, String id, Resources labels) {
         super(app, view,null);
         labels.configureAction(this, id);
         this.property = null;
@@ -44,7 +45,7 @@ selectedProperty().bindBidirectional(  property);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, ViewController view) {
+    protected void handleActionPerformed(ActionEvent event, ActivityViewController view) {
         if (property != null) {
             property.set(!property.get());
         } else {

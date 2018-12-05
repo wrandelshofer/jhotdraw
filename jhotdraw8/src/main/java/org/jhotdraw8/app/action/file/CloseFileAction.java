@@ -11,8 +11,7 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
-import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 
 /**
  * Closes the active view after letting the user save unsaved changes.
@@ -32,7 +31,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app the application
      * @param view the view
      */
-    public CloseFileAction(Application app, DocumentOrientedViewController view) {
+    public CloseFileAction(Application app, DocumentOrientedActivityViewController view) {
         super(app, view);
         Labels.getLabels().configureAction(this, ID);
     }
@@ -43,7 +42,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 
     @Nonnull
     @Override
-    protected CompletionStage<Void> doIt(@Nullable DocumentOrientedViewController view) {
+    protected CompletionStage<Void> doIt(@Nullable DocumentOrientedActivityViewController view) {
         if (view != null) {
             app.remove(view);
         }

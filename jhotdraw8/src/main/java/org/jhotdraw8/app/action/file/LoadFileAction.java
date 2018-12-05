@@ -7,10 +7,9 @@ import java.util.concurrent.CompletionStage;
 
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
-import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -32,7 +31,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app the application
      * @param view the view
      */
-    public LoadFileAction(Application app, DocumentOrientedViewController view) {
+    public LoadFileAction(Application app, DocumentOrientedActivityViewController view) {
         super(app, view);
         Labels.getLabels().configureAction(this, ID);
     }
@@ -128,7 +127,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
 
     @Nonnull
     @Override
-    public CompletionStage<Void> doIt(final DocumentOrientedViewController view) {
+    public CompletionStage<Void> doIt(final DocumentOrientedActivityViewController view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

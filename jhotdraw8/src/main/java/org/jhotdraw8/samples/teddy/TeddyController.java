@@ -26,12 +26,12 @@ import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.app.AbstractDocumentOrientedViewController;
+import org.jhotdraw8.app.AbstractDocumentOrientedActivityViewController;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 
 /**
  * TeddyController.
@@ -39,7 +39,7 @@ import org.jhotdraw8.app.DocumentOrientedViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewController, Initializable {
+public class TeddyController extends AbstractDocumentOrientedActivityViewController implements DocumentOrientedActivityViewController, Initializable {
 
   @FXML
   private URL location;

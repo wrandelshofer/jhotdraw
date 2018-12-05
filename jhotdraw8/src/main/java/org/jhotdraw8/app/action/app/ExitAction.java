@@ -17,14 +17,14 @@ import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ViewController;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * Exits the application after letting the user review and possibly save all
@@ -41,7 +41,7 @@ public class ExitAction extends AbstractApplicationAction {
     public static final String ID = "application.exit";
     private Node oldFocusOwner;
     @Nullable
-    private DocumentOrientedViewController unsavedView;
+    private DocumentOrientedActivityViewController unsavedView;
 
     /**
      * Creates a new instance.
@@ -58,10 +58,10 @@ public class ExitAction extends AbstractApplicationAction {
         app.addDisabler(this);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
-        DocumentOrientedViewController documentToBeReviewed = null;
+        DocumentOrientedActivityViewController documentToBeReviewed = null;
         URI unsavedURI = null;
-        for (ViewController pr : app.views()) {
-            DocumentOrientedViewController p =(DocumentOrientedViewController)pr;
+        for (ActivityViewController pr : app.views()) {
+            DocumentOrientedActivityViewController p =(DocumentOrientedActivityViewController)pr;
             if (p.isDisabled()) {
                 disabledViewsCount++;
             }
@@ -121,7 +121,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected URIChooser getChooser(@Nonnull DocumentOrientedViewController view) {
+    protected URIChooser getChooser(@Nonnull DocumentOrientedActivityViewController view) {
         URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -131,7 +131,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChanges() {
-        DocumentOrientedViewController v = unsavedView;
+        DocumentOrientedActivityViewController v = unsavedView;
         Resources labels=Labels.getLabels();
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
@@ -144,8 +144,8 @@ public class ExitAction extends AbstractApplicationAction {
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (ViewController p : app.views()) {
-                        DocumentOrientedViewController vi = (DocumentOrientedViewController)p;
+                    for (ActivityViewController p : app.views()) {
+                        DocumentOrientedActivityViewController vi = (DocumentOrientedActivityViewController)p;
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, labels.getString("application.exit.canNotSaveToOpenFile"));
@@ -220,7 +220,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChangesAndReviewNext() {
-        final DocumentOrientedViewController v = unsavedView;
+        final DocumentOrientedActivityViewController v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = chooser.showDialog(unsavedView.getNode());
@@ -241,9 +241,9 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewNext() {
         int unsavedViewsCount = 0;
-        DocumentOrientedViewController documentToBeReviewed = null;
-        for (ViewController pr : getApplication().views()) {
-            DocumentOrientedViewController p=(DocumentOrientedViewController)pr;
+        DocumentOrientedActivityViewController documentToBeReviewed = null;
+        for (ActivityViewController pr : getApplication().views()) {
+            DocumentOrientedActivityViewController p=(DocumentOrientedActivityViewController)pr;
             if (p.isModified()) {
                 if (!p.isDisabled()) {
                     documentToBeReviewed = p;
@@ -263,7 +263,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFile(@Nonnull final URI uri, final DataFormat format) {
-        final DocumentOrientedViewController v = unsavedView;
+        final DocumentOrientedActivityViewController v = unsavedView;
         v.write(uri, format,null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -293,7 +293,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format) {
-        final DocumentOrientedViewController v = unsavedView;
+        final DocumentOrientedActivityViewController v = unsavedView;
         v.write(uri, format,null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -323,8 +323,8 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void doExit() {
-        for (ViewController pr : new ArrayList<>(app.views())) {
-            DocumentOrientedViewController p=(DocumentOrientedViewController)pr;
+        for (ActivityViewController pr : new ArrayList<>(app.views())) {
+            DocumentOrientedActivityViewController p=(DocumentOrientedActivityViewController)pr;
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);
             }

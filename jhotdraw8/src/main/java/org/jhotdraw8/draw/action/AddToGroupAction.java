@@ -8,6 +8,8 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -16,7 +18,6 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Grouping;
-import org.jhotdraw8.app.ViewController;
 
 /**
  * AddToGroupAction.
@@ -41,7 +42,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ViewController viewController) {
+    protected void handleActionPerformed(ActionEvent e, ActivityViewController activityViewController) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

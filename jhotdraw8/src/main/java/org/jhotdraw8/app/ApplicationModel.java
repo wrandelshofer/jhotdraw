@@ -31,11 +31,11 @@ public interface ApplicationModel {
      *
      * @return a new instance
      */
-    default CompletionStage<ViewController> createViewAsync() {
+    default CompletionStage<ActivityViewController> createViewAsync() {
         return FXWorker.supply(this::createView);
     }
 
-    public ViewController createView();
+    public ActivityViewController createView();
     // URI choosers
 
     /**

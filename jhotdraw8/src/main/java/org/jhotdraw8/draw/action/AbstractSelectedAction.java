@@ -2,12 +2,13 @@ package org.jhotdraw8.draw.action;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
-import org.jhotdraw8.app.ViewController;
 
 /* @(#)AbstractSelectedAction.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
@@ -24,7 +25,7 @@ import org.jhotdraw8.app.ViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSelectedAction extends AbstractViewControllerAction<ViewController> {
+public abstract class AbstractSelectedAction extends AbstractViewControllerAction<ActivityViewController> {
 
     private DrawingEditor editor;
 
@@ -69,7 +70,7 @@ public abstract class AbstractSelectedAction extends AbstractViewControllerActio
     @Nullable
     protected DrawingView getView() {
         if (editor == null) {
-            ViewController v = getActiveView();
+            ActivityViewController v = getActiveView();
             if (v instanceof EditorView) {
                 EditorView ev = (EditorView) v;
                 return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;

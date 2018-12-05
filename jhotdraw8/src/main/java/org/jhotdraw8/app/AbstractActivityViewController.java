@@ -1,4 +1,4 @@
-/* @(#)AbstractActivity.java
+/* @(#)AbstractActivityViewController.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -17,12 +17,12 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.Key;
 
 /**
- * AbstractActivity.
+ * AbstractActivityViewController.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractActivity extends AbstractDisableable implements ViewController {
+public abstract class AbstractActivityViewController extends AbstractDisableable implements ActivityViewController {
 
     @Nonnull
     protected ObjectProperty<Application> application = new SimpleObjectProperty<>();

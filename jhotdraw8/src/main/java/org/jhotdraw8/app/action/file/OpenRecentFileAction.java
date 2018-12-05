@@ -11,12 +11,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentOrientedViewController;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -73,9 +73,9 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
         {
             // Search for an empty view
-            DocumentOrientedViewController emptyView;
+            DocumentOrientedActivityViewController emptyView;
             if (reuseEmptyViews) {
-                emptyView = (DocumentOrientedViewController) app.getActiveView();//FIXME class cast exception
+                emptyView = (DocumentOrientedActivityViewController) app.getActiveView();//FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -88,7 +88,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             if (emptyView == null) {
                 app.createView().thenAccept(v -> {
                     app.add(v);
-                    doIt((DocumentOrientedViewController) v, true);
+                    doIt((DocumentOrientedActivityViewController) v, true);
                 });
             } else {
                 doIt(emptyView, false);
@@ -96,11 +96,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(@Nonnull DocumentOrientedViewController view, boolean disposeView) {
+    public void doIt(@Nonnull DocumentOrientedActivityViewController view, boolean disposeView) {
         openViewFromURI(view, uri, format);
     }
 
-    private void handleException(final DocumentOrientedViewController v, Throwable exception) throws MissingResourceException {
+    private void handleException(final DocumentOrientedActivityViewController v, Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         Resources labels = Labels.getLabels();
@@ -114,7 +114,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         v.removeDisabler(this);
     }
 
-    protected void openViewFromURI(@Nonnull final DocumentOrientedViewController v, @Nonnull final URI uri, DataFormat format) {
+    protected void openViewFromURI(@Nonnull final DocumentOrientedActivityViewController v, @Nonnull final URI uri, DataFormat format) {
         final Application app = getApplication();
         v.addDisabler(this);
 

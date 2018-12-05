@@ -4,11 +4,11 @@
 package org.jhotdraw8.app.action.edit;
 
 import javafx.event.ActionEvent;
+import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ViewController;
 
 /**
  * Redoes the last user action on the active view.
@@ -18,7 +18,7 @@ import org.jhotdraw8.app.ViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RedoAction extends AbstractViewControllerAction<ViewController> {
+public class RedoAction extends AbstractViewControllerAction<ActivityViewController> {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class RedoAction extends AbstractViewControllerAction<ViewController> {
      * @param app the application
      * @param view the view
      */
-    public RedoAction(Application app, ViewController view) {
+    public RedoAction(Application app, ActivityViewController view) {
         super(app, view,null);
         labels.configureAction(this, ID);
     }
@@ -61,7 +61,7 @@ public class RedoAction extends AbstractViewControllerAction<ViewController> {
     }
 
     @Override
-    protected void updateView(ViewController oldValue, ViewController newValue) {
+    protected void updateView(ActivityViewController oldValue, ActivityViewController newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //
@@ -76,7 +76,7 @@ public class RedoAction extends AbstractViewControllerAction<ViewController> {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void installViewListeners(ViewController p) {
+    protected void installViewListeners(ActivityViewController p) {
         super.installViewListeners(p);
         Action redoActionInView = p.getActionMap().get(ID);
         if (redoActionInView != null && redoActionInView != this) {
@@ -88,7 +88,7 @@ public class RedoAction extends AbstractViewControllerAction<ViewController> {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void uninstallViewListeners(ViewController p) {
+    protected void uninstallViewListeners(ActivityViewController p) {
         super.uninstallViewListeners(p);
         Action redoActionInView = p.getActionMap().get(ID);
         if (redoActionInView != null && redoActionInView != this) {
@@ -116,7 +116,7 @@ public class RedoAction extends AbstractViewControllerAction<ViewController> {
      */
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, ViewController view) {
+    protected void handleActionPerformed(ActionEvent event, ActivityViewController view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

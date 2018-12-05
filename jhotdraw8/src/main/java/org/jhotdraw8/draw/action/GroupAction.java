@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.collection.Iterators;
-import org.jhotdraw8.app.ViewController;
+import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * GroupAction.
@@ -57,7 +57,7 @@ public class GroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ViewController view) {
+    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

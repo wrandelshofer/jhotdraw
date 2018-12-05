@@ -23,17 +23,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javax.annotation.Nonnull;
-import org.jhotdraw8.app.AbstractDocumentOrientedViewController;
+
+import org.jhotdraw8.app.AbstractDocumentOrientedActivityViewController;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -125,8 +123,7 @@ import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.util.prefs.PreferencesUtil;
-import org.jhotdraw8.app.DocumentOrientedViewController;
+import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 import org.jhotdraw8.draw.action.SendBackwardAction;
 import org.jhotdraw8.draw.action.BringForwardAction;
 
@@ -136,7 +133,7 @@ import org.jhotdraw8.draw.action.BringForwardAction;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherController extends AbstractDocumentOrientedViewController implements DocumentOrientedViewController, EditorView {
+public class GrapherController extends AbstractDocumentOrientedActivityViewController implements DocumentOrientedActivityViewController, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";

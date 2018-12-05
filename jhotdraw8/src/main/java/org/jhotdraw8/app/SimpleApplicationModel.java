@@ -36,7 +36,6 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
-import org.jhotdraw8.util.Resources;
 
 /**
  * SimpleApplicationModel.
@@ -51,7 +50,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private Supplier<DocumentOrientedViewController> viewFactory;
+    private Supplier<DocumentOrientedActivityViewController> viewFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
@@ -59,7 +58,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(
-            Supplier<DocumentOrientedViewController> viewFactory,
+            Supplier<DocumentOrientedActivityViewController> viewFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -68,7 +67,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(String name,
-            Supplier<DocumentOrientedViewController> viewFactory,
+            Supplier<DocumentOrientedActivityViewController> viewFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -86,11 +85,11 @@ public class SimpleApplicationModel implements ApplicationModel {
         return Preferences.userNodeForPackage(getClass());
     }
 
-    public Supplier<DocumentOrientedViewController> getViewFactory() {
+    public Supplier<DocumentOrientedActivityViewController> getViewFactory() {
         return viewFactory;
     }
 
-    public void setViewFactory(Supplier<DocumentOrientedViewController> factory) {
+    public void setViewFactory(Supplier<DocumentOrientedActivityViewController> factory) {
         this.viewFactory = factory;
     }
 
@@ -123,7 +122,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public DocumentOrientedViewController createView() {
+    public DocumentOrientedActivityViewController createView() {
         return viewFactory.get();
     }
 

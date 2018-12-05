@@ -14,13 +14,13 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 
 /**
- * A {@code DocumentOrientedViewModel} is a specialization of {@link ViewController} for document
+ * A {@code DocumentOrientedViewModel} is a specialization of {@link ActivityViewController} for document
  * oriented applications.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DocumentOrientedViewController extends ViewController {
+public interface DocumentOrientedActivityViewController extends ActivityViewController {
 
     /**
      * The modified property is set to true by the view.

@@ -1,11 +1,10 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ViewController;
+import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -13,8 +12,6 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.util.Resources;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class AlignRightAction extends AbstractSelectedAction {
@@ -34,7 +31,7 @@ public class AlignRightAction extends AbstractSelectedAction {
         labels.configureAction(this, ID);
     }
     @Override
-    protected void handleActionPerformed(ActionEvent event, ViewController view) {
+    protected void handleActionPerformed(ActionEvent event, ActivityViewController view) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

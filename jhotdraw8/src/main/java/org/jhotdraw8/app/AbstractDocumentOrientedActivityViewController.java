@@ -1,4 +1,4 @@
-/* @(#)AbstractDocumentOrientedViewController.java
+/* @(#)AbstractDocumentOrientedActivityViewController.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -12,13 +12,13 @@ import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 
 /**
- * AbstractDocumentOrientedViewController.
+ * AbstractDocumentOrientedActivityViewController.
  *
  * @author Werner Randelshofer
  * @version $Id$
  $$
  */
-public abstract class AbstractDocumentOrientedViewController extends AbstractActivity implements DocumentOrientedViewController {
+public abstract class AbstractDocumentOrientedActivityViewController extends AbstractActivityViewController implements DocumentOrientedActivityViewController {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty() {
         @Override
