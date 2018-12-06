@@ -1,5 +1,5 @@
 /* @(#)CSSLoader.java
- * Copyright © 1996-2017 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  *
  * Original code taken from article "Swing and CSS" by Joshua Marinacci 10/14/2003
  * http://today.java.net/pub/a/today/2003/10/14/swingcss.html

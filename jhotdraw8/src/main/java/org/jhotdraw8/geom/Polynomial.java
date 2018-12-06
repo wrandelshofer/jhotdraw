@@ -1,5 +1,5 @@
 /* @(#)Polynomial.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  *
  * This class is a based on:
 *

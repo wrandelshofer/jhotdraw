@@ -1,5 +1,5 @@
 /* @(#)RemoveAction.java
- * Copyright © 1996-2017 by the original authors of JHotDraw
+ * Copyright © by the original authors of JHotDraw
  * and all its contributors.
  * All rights reserved.
  * 

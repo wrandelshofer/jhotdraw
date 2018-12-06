@@ -1,5 +1,5 @@
 /* @(#)Intersection.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  *
  * This class is a based on:
 *
@@ -42,7 +42,7 @@ import org.jhotdraw8.geom.Intersection.Status;
  * 2000-2003 (c) David Eberly. Magic Software, Inc.
  * <p>
  * <a href="http://pomax.github.io/bezierinfo/">A Primer on Bézier Curves</a>,
- * Copyright © 2011-2016 Mike "Pomax" Kamermansy.
+ * Copyright ©-2016 Mike "Pomax" Kamermansy.
  *
  * @author Werner Randelshofer
  * @version $Id$

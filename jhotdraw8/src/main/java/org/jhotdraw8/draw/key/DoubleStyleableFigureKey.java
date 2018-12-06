@@ -1,5 +1,5 @@
 /* @(#)DoubleStyleableFigureKey.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 

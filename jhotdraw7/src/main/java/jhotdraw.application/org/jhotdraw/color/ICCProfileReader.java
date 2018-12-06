@@ -1,5 +1,5 @@
 /* @(#)ICCProfileReader.java
- * Copyright © 1996-2017 by the authors and contributors of JHotDraw.
+ * Copyright © by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.color;

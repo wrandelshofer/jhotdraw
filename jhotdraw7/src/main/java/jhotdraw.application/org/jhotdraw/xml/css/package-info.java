@@ -1,5 +1,5 @@
 /* @(#)package-info.java
- * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * Copyright © The authors and contributors of JHotDraw.
  *
  * The copyright of this software is owned by the authors and  
  * contributors of the JHotDraw project ("the copyright holders").  

@@ -1,5 +1,5 @@
 /* @(#)CssRectangle2DConverterTest.java
- * Copyright (c) 2016 by the authors and contributors of JHotDraw.
+ * Copyright (c) 2016 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 

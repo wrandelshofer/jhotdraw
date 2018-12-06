@@ -1,5 +1,5 @@
 /* @(#)SimplePageFigure.java
- * Copyright © 2017 by the authors and contributors ofCollection JHotDraw. MIT License.
+ * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 

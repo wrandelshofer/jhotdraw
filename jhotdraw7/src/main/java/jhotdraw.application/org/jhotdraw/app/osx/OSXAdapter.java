@@ -1,5 +1,5 @@
 /* @(#)OSXAdapter.java
- * Copyright © 1996-2017 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  *
  * This class has been derived from class OSXAdapter 2.0 by Apple Inc.
  * http://developer.apple.com/mac/library/samplecode/OSXAdapter/listing3.html
@@ -56,7 +56,7 @@
  * AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
  * STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * Copyright © 2003-2007 Apple, Inc., All Rights Reserved
+ * Copyright © Apple, Inc., All Rights Reserved
  */
 package org.jhotdraw.app.osx;
 

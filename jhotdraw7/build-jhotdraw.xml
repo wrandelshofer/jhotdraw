@@ -24,7 +24,7 @@
     <target depends="init" description="Javadoc for my API." name="javadoc">
         <mkdir dir="${javadoc}"/>
         <javadoc destdir="${javadoc}" 
-        footer="&lt;font size=-2>Copyright 1996-2018 (c) ${author}.&lt;br>${license}.&lt;/font>"
+        footer="&lt;font size=-2>Copyright (c) ${author}.&lt;br>${license}.&lt;/font>"
         header="JHotDraw ${version}" 
         windowtitle="JHotDraw ${version}"
         maxmemory="256M"

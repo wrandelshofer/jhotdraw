@@ -1,5 +1,5 @@
 /* @(#)DoubleFigureKey.java
- * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 

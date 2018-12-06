@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
 
 /* @(#)AbstractSelectedAction.java
- * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * This abstract class can be extended to implement an {@code Action} that acts

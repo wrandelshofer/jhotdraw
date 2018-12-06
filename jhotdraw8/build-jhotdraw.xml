@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * @(#)build-jhotdraw8.xml
- * Copyright (c) 2015-2017 by the authors and contributors of JHotDraw. MIT License.
+ * Copyright (c) 2015-2017 The authors and contributors of JHotDraw. MIT License.
 -->
 <project name="jhotdraw8" basedir="." default="all">
   
@@ -24,7 +24,7 @@
         </exec>
         
      <property name="name" value="${ant.project.name}"/>
-    <property name="copyright" value="Copyright (c) 2017 by the authors and contributors of JHotDraw."/>
+    <property name="copyright" value="Copyright (c) 2017 The authors and contributors of JHotDraw."/>
     <property name="license.name" value="MIT License"/>
     <property name="license" value="${license.name}. https://opensource.org/licenses/mit-license.php"/>
     <property name="version" value="${git.describe}"/>
