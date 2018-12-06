@@ -3,14 +3,28 @@
  */
 package org.jhotdraw.samples.teddy;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.DefaultApplicationModel;
+import org.jhotdraw.app.DefaultMenuBuilder;
+import org.jhotdraw.app.MenuBuilder;
+import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.ActionUtil;
 import org.jhotdraw.app.action.file.PrintFileAction;
-import javax.swing.*;
-import org.jhotdraw.app.*;
-import java.util.*;
-import org.jhotdraw.app.action.*;
 import org.jhotdraw.gui.JFileURIChooser;
-import org.jhotdraw.samples.teddy.action.*;
+import org.jhotdraw.samples.teddy.action.FindAction;
+import org.jhotdraw.samples.teddy.action.ToggleLineNumbersAction;
+import org.jhotdraw.samples.teddy.action.ToggleLineWrapAction;
+import org.jhotdraw.samples.teddy.action.ToggleStatusBarAction;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JToolBar;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Provides meta-data and factory methods for an application.

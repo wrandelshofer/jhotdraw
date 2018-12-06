@@ -4,11 +4,12 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
+import org.jhotdraw.color.ColorSliderUI;
+
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.plaf.ComponentUI;
-import org.jhotdraw.color.ColorSliderUI;
 
 /**
  * PaletteColorSliderUI.

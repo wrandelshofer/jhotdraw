@@ -3,12 +3,17 @@
  */
 package org.jhotdraw.draw.gui;
 
-import java.awt.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
 import org.jhotdraw.gui.AttributeEditor;
 import org.jhotdraw.gui.JLifeFormattedTextArea;
-import org.jhotdraw.util.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.JComponent;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.util.ResourceBundle;
 
 /**
  * An entry field that can be used to edit an attribute of a {@code Figure}.

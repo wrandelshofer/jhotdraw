@@ -4,14 +4,14 @@
 package org.jhotdraw.text;
 
 import javax.annotation.Nullable;
+import javax.swing.JFormattedTextField.AbstractFormatterFactory;
+import javax.swing.text.DefaultFormatter;
+import javax.swing.text.DefaultFormatterFactory;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
-import javax.swing.JFormattedTextField.AbstractFormatterFactory;
-import javax.swing.text.DefaultFormatter;
-import javax.swing.text.DefaultFormatterFactory;
 
 /**
  * {@code ScaledNumberFormatter} is used to format numbers written in the

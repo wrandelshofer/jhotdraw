@@ -3,7 +3,9 @@
  */
 package org.jhotdraw.samples.teddy.io;
 
-import java.io.*;
+import java.io.FilterWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * A character-output stream that converts line terminators into a configurable

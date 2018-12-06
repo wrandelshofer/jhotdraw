@@ -4,13 +4,24 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.event.FigureEvent;
-import org.jhotdraw.geom.QuadTree;
-import java.awt.*;
-import java.awt.geom.*;
-import org.jhotdraw.util.*;
-import java.util.*;
 import org.jhotdraw.geom.Geom;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.geom.QuadTree;
+import org.jhotdraw.util.ReversedList;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_OPACITY;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_HEIGHT;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_WIDTH;
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * An implementation of {@link Drawing} which uses a

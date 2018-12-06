@@ -5,9 +5,12 @@
 
 package org.jhotdraw.draw;
 
-import java.awt.*;
-import java.awt.geom.*;
 import org.jhotdraw.geom.Geom;
+
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A {@link Figure} with a rectangular shape.

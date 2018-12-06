@@ -4,10 +4,12 @@
 
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
+import javax.swing.JPanel;
+import javax.swing.plaf.UIResource;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.event.MouseEvent;
 
 /**
  * PaletteColorChooserPreviewPanel.

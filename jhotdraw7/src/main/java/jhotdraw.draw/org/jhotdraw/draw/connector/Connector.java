@@ -5,11 +5,13 @@
 
 package org.jhotdraw.draw.connector;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.Figure;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.io.*;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 /**
  * A <em>connector</em> knows how to locate the start point or the end point

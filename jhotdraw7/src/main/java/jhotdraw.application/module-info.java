@@ -27,4 +27,7 @@ module jhotdraw.application {
     exports org.jhotdraw.app.action.file;
     exports org.jhotdraw.app.action.view;
     exports org.jhotdraw.xml.css;
+
+    opens org.jhotdraw.app.action.images;
+    opens org.jhotdraw.gui.plaf.palette.images;
 }

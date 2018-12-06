@@ -6,20 +6,25 @@
 
 package org.jhotdraw.samples.teddy;
 
+import org.jhotdraw.app.Application;
+import org.jhotdraw.samples.teddy.regex.MatchType;
+import org.jhotdraw.samples.teddy.regex.Matcher;
+import org.jhotdraw.undo.CompositeEdit;
+import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.prefs.PreferencesUtil;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-
-import org.jhotdraw.app.*;
-import org.jhotdraw.util.*;
-import org.jhotdraw.samples.teddy.regex.*;
-import org.jhotdraw.util.prefs.*;
-import org.jhotdraw.undo.*;
-
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JTextField;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultEditorKit;
+import java.awt.Frame;
 import java.util.ResourceBundle;
-import java.util.prefs.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.border.*;
+import java.util.prefs.Preferences;
 /**
  *
  * @author  werni

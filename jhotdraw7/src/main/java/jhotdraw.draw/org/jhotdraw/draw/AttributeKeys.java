@@ -3,14 +3,26 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
 import org.jhotdraw.draw.decoration.LineDecoration;
 import org.jhotdraw.draw.liner.Liner;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.geom.DoubleStroke;
+import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.util.ResourceBundleUtil;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import org.jhotdraw.geom.*;
+
+import javax.annotation.Nullable;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * Defines a put of well known {@link Figure} attributes.

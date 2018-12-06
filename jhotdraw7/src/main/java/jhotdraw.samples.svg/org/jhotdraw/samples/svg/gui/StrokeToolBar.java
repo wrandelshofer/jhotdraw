@@ -3,28 +3,47 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.gui.JAttributeTextField;
-import org.jhotdraw.draw.gui.JAttributeSlider;
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.event.SelectionComponentRepainter;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.event.FigureAttributeEditorHandler;
 import org.jhotdraw.draw.event.SelectionComponentDisplayer;
+import org.jhotdraw.draw.event.SelectionComponentRepainter;
+import org.jhotdraw.draw.gui.JAttributeSlider;
+import org.jhotdraw.draw.gui.JAttributeTextField;
+import org.jhotdraw.gui.JPopupButton;
+import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
+import org.jhotdraw.gui.plaf.palette.PaletteColorChooserUI;
+import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
+import org.jhotdraw.gui.plaf.palette.PaletteSliderUI;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.text.ColorFormatter;
 import org.jhotdraw.text.JavaNumberFormatter;
-import javax.swing.border.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.gui.plaf.palette.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
-import javax.swing.*;
+import org.jhotdraw.util.Images;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.SliderUI;
 import javax.swing.text.DefaultFormatterFactory;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.text.ColorFormatter;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_DASH_PHASE;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_GRADIENT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_OPACITY;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_WIDTH;
 
 /**
  * StrokeToolBar.
@@ -39,7 +58,7 @@ public class StrokeToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public StrokeToolBar() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         setName(labels.getString("stroke.toolbar"));
         setDisclosureStateCount(3);
     }
@@ -71,7 +90,7 @@ public class StrokeToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
@@ -171,7 +190,7 @@ public class StrokeToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);

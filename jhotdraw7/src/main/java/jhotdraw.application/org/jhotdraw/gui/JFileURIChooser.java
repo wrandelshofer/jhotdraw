@@ -4,10 +4,10 @@
 package org.jhotdraw.gui;
 
 import javax.annotation.Nullable;
-import java.io.File;
-import java.net.URI;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import java.io.File;
+import java.net.URI;
 
 /**
  * JFileURIChooser.

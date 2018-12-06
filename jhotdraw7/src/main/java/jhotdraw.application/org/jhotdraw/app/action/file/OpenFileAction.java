@@ -3,21 +3,38 @@
  */
 package org.jhotdraw.app.action.file;
 
-import org.jhotdraw.util.*;
-import org.jhotdraw.gui.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
+import org.jhotdraw.gui.BackgroundTask;
+import org.jhotdraw.gui.JSheet;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.HeadlessException;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.prefs.Preferences;
 
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an
@@ -62,7 +79,7 @@ public class OpenFileAction extends AbstractApplicationAction {
     /** Creates a new instance. */
     public OpenFileAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -161,7 +178,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                 if (exists) {
                     view.read(uri, chooser);
                 } else {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                    ResourceBundleUtil labels = Labels.getLabels();
                     throw new IOException(labels.getFormatted("file.open.fileDoesNotExist.message", URIUtil.getName(uri)));
                 }
             }
@@ -187,7 +204,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                 view.setEnabled(true);
                 app.setEnabled(true);
                 String message = value.getMessage() != null ? value.getMessage() : value.toString();
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)) + "</b><p>"

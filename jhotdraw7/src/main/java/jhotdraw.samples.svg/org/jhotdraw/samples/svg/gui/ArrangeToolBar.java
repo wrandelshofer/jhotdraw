@@ -3,17 +3,24 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.action.AbstractSelectedAction;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.event.SelectionComponentDisplayer;
-import javax.swing.border.*;
-import org.jhotdraw.util.*;
+import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.util.ResourceBundleUtil;
 
-import java.awt.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.gui.plaf.palette.*;
+import javax.annotation.Nullable;
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 /**
  * ArrangeToolBar.
@@ -28,7 +35,7 @@ public class ArrangeToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public ArrangeToolBar() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
     }
 
@@ -60,7 +67,7 @@ public class ArrangeToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);

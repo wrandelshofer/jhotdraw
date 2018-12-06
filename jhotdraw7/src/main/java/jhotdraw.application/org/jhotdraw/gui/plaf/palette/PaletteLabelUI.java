@@ -3,11 +3,20 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
-import java.beans.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicLabelUI;
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
 
 /**
  * QuaquaLabelUI.

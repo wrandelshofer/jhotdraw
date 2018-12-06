@@ -3,11 +3,20 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
-import java.io.Serializable;
-import javax.swing.*;
-import javax.swing.plaf.*;
+import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenuBar;
+import javax.swing.JRootPane;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.RootPaneUI;
 import javax.swing.plaf.basic.BasicRootPaneUI;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
+import java.awt.Rectangle;
+import java.io.Serializable;
 
 /**
  * PaletteRootPaneUI.

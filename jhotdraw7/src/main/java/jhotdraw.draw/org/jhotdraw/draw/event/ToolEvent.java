@@ -4,10 +4,12 @@
 
 package org.jhotdraw.draw.event;
 
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.tool.Tool;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.util.*;
+
+import java.awt.Rectangle;
+import java.util.EventObject;
 
 /**
  * An event sent to ToolListener's.

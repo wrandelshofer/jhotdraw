@@ -3,15 +3,20 @@
  */
 package org.jhotdraw.draw.tool;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.ImageHolderFigure;
-import java.io.*;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import javax.annotation.Nullable;
 import org.jhotdraw.gui.BackgroundTask;
-import org.jhotdraw.gui.Worker;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * A tool to create new figures that implement the ImageHolderFigure

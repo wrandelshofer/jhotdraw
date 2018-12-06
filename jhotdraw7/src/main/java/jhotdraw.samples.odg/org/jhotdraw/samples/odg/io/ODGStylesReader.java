@@ -3,15 +3,36 @@
  */
 package org.jhotdraw.samples.odg.io;
 
+import net.n3.nanoxml.IXMLElement;
+import net.n3.nanoxml.IXMLParser;
+import net.n3.nanoxml.IXMLReader;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLException;
+import net.n3.nanoxml.XMLParserFactory;
+import org.jhotdraw.draw.AttributeKey;
+
 import javax.annotation.Nullable;
 import java.awt.Color;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
-import net.n3.nanoxml.*;
-import org.jhotdraw.draw.*;
-import static org.jhotdraw.samples.odg.ODGConstants.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
+import java.util.Map;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_COLOR;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_STYLE;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_STYLE;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_WIDTH;
+import static org.jhotdraw.samples.odg.ODGConstants.DRAWING_NAMESPACE;
+import static org.jhotdraw.samples.odg.ODGConstants.FILL_STYLES;
+import static org.jhotdraw.samples.odg.ODGConstants.OFFICE_NAMESPACE;
+import static org.jhotdraw.samples.odg.ODGConstants.STROKE_STYLES;
+import static org.jhotdraw.samples.odg.ODGConstants.STYLE_NAMESPACE;
+import static org.jhotdraw.samples.odg.ODGConstants.SVG_NAMESPACE;
+import static org.jhotdraw.samples.odg.ODGConstants.TEXT_NAMESPACE;
 
 /**
  * ODGStylesReader reads an ODG &lt;document-styles&gt; element,

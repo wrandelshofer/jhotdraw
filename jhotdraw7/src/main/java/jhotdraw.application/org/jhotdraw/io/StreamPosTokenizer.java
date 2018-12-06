@@ -4,7 +4,8 @@
 package org.jhotdraw.io;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.LinkedList;
 
 /**

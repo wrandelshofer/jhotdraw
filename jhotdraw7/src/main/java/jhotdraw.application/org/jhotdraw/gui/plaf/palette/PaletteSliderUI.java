@@ -4,11 +4,20 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.JComponent;
+import javax.swing.JSlider;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicSliderUI;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.LinearGradientPaint;
+import java.awt.MultipleGradientPaint;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.Point2D;
 
 /**
  * PaletteSliderUI.

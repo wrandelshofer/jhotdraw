@@ -3,23 +3,29 @@
  */
 package org.jhotdraw.app.action.file;
 
-import javax.annotation.Nullable;
-import java.awt.Component;
-import java.awt.Window;
-import org.jhotdraw.util.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.gui.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
+import org.jhotdraw.gui.BackgroundTask;
+import org.jhotdraw.gui.JFileURIChooser;
+import org.jhotdraw.gui.JSheet;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.event.SheetEvent;
+import org.jhotdraw.gui.event.SheetListener;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Component;
+import java.awt.Window;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Lets the user save unsaved changes of the active view, then presents
@@ -66,7 +72,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance. */
     public LoadFileAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -141,7 +147,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
             protected void failed(Throwable value) {
                 value.printStackTrace();
                 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.load.couldntLoad.message", URIUtil.getName(uri)) + "</b><p>"

@@ -3,12 +3,15 @@
  */
 package org.jhotdraw.color;
 
+import javax.swing.BoundedRangeModel;
+import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.util.LinkedList;
-import javax.swing.*;
-import javax.swing.event.*;
 
 /**
  * DefaultColorSliderModel.

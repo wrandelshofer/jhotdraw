@@ -4,10 +4,11 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.CompositeFigure;
-import java.awt.geom.*;
-import java.util.*;
+import org.jhotdraw.draw.Figure;
+
+import java.awt.geom.Rectangle2D;
+import java.util.EventObject;
 /**
  * An {@code EventObject} sent to {@link CompositeFigureListener}s.
  *

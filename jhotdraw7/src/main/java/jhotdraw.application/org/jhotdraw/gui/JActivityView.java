@@ -6,14 +6,15 @@
  */
 package org.jhotdraw.gui;
 
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
+import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * A class to view an {@code ActivityModel}.

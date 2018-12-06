@@ -4,7 +4,7 @@
 
 package org.jhotdraw.draw.decoration;
 
-import java.awt.geom.*;
+import java.awt.geom.Path2D;
 
 /**
  * A {@link LineDecoration} which draws a general path.

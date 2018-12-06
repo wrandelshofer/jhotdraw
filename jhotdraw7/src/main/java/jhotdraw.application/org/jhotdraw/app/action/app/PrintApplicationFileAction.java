@@ -3,17 +3,21 @@
  */
 package org.jhotdraw.app.action.app;
 
-import org.jhotdraw.util.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.PrintableView;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.file.PrintFileAction;
 import org.jhotdraw.gui.BackgroundTask;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.Action;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Prints a file for which a print request was sent to the application.
@@ -80,7 +84,7 @@ public class PrintApplicationFileAction extends PrintFileAction {
 
             @Override
             protected void failed(Throwable value) {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 app.dispose(p);
                 JOptionPane.showMessageDialog(
                         null,

@@ -3,14 +3,26 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.tool.DelegationSelectionTool;
-import org.jhotdraw.draw.liner.ElbowLiner;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.geom.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.draw.liner.ElbowLiner;
+import org.jhotdraw.draw.tool.DelegationSelectionTool;
+import org.jhotdraw.geom.Geom;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import java.awt.geom.Point2D;
+
+import static org.jhotdraw.draw.AttributeKeys.STROKE_TYPE;
+import static org.jhotdraw.draw.AttributeKeys.StrokeType;
 
 /**
  * Example showing how to connect two text areas with an elbow connection.

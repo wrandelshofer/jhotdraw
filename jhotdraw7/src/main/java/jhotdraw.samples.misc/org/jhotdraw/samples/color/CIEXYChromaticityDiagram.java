@@ -3,12 +3,13 @@
  */
 package org.jhotdraw.samples.color;
 
+import org.jhotdraw.color.CIEXYChromaticityDiagramImageProducer;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import org.jhotdraw.color.CIEXYChromaticityDiagramImageProducer;
 
 /**
  * CIEXYChromaticityDiagram.

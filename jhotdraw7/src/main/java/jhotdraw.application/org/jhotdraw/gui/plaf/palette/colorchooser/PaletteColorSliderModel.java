@@ -4,11 +4,12 @@
 
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
-import java.awt.color.ColorSpace;
-import javax.swing.BoundedRangeModel;
-import javax.swing.JSlider;
 import org.jhotdraw.color.DefaultColorSliderModel;
 import org.jhotdraw.gui.plaf.palette.PaletteColorSliderUI;
+
+import javax.swing.BoundedRangeModel;
+import javax.swing.JSlider;
+import java.awt.color.ColorSpace;
 
 /**
  * PaletteColorSliderModel.

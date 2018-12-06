@@ -3,19 +3,20 @@
  */
 package org.jhotdraw.draw.action;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.app.Disposable;
+import org.jhotdraw.beans.WeakPropertyChangeListener;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.draw.event.FigureSelectionListener;
-import javax.swing.*;
-import java.beans.*;
-import java.io.Serializable;
-import javax.swing.undo.*;
 
-import org.jhotdraw.app.Disposable;
-import org.jhotdraw.beans.WeakPropertyChangeListener;
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.undo.UndoableEdit;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts

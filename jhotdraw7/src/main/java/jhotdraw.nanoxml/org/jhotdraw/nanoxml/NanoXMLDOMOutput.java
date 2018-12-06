@@ -4,13 +4,20 @@
 
 package org.jhotdraw.nanoxml;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import java.io.*;
-import net.n3.nanoxml.*;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLWriter;
 import org.jhotdraw.app.Disposable;
 import org.jhotdraw.xml.DOMFactory;
 import org.jhotdraw.xml.DOMOutput;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * DOMOutput using Nano XML.

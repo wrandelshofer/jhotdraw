@@ -4,16 +4,24 @@
 
 package org.jhotdraw.draw.text;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.event.FigureListener;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
-import org.jhotdraw.draw.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.draw.event.FigureListener;
+
+import javax.annotation.Nullable;
+import javax.swing.JTextField;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * A <em>floating text field</em> that is used to edit a {@link TextHolderFigure}.

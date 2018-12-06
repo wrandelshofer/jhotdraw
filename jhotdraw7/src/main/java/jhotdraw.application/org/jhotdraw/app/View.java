@@ -4,13 +4,14 @@
 
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
 import org.jhotdraw.gui.URIChooser;
 
-import java.io.*;
-import java.beans.*;
+import javax.annotation.Nullable;
+import javax.swing.ActionMap;
+import javax.swing.JComponent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.net.URI;
-import javax.swing.*;
 
 /**
  * A <em>view</em> paints a document on a {@code JComponent} within an

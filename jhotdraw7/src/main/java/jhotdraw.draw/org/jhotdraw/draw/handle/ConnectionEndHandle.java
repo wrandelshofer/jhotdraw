@@ -4,9 +4,10 @@
 
 package org.jhotdraw.draw.handle;
 
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
+
+import java.awt.geom.Point2D;
 
 /**
  * A {@link Handle} which allows to connect the end of a

@@ -4,8 +4,11 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
 /**
  * PaletteMenuItemUI.

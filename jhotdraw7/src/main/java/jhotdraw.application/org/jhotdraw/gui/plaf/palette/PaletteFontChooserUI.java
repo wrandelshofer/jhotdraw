@@ -3,20 +3,32 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
+import org.jhotdraw.gui.JFontChooser;
+import org.jhotdraw.gui.fontchooser.FontChooserModel;
+import org.jhotdraw.gui.fontchooser.FontCollectionNode;
+import org.jhotdraw.gui.fontchooser.FontFaceNode;
+import org.jhotdraw.gui.fontchooser.FontFamilyNode;
+import org.jhotdraw.gui.plaf.FontChooserUI;
+
 import javax.annotation.Nullable;
-import java.awt.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.tree.*;
-import org.jhotdraw.gui.JFontChooser;
-import org.jhotdraw.gui.fontchooser.*;
-import org.jhotdraw.gui.plaf.FontChooserUI;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * PaletteFontChooserUI.

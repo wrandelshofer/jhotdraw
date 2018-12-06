@@ -4,9 +4,10 @@
 
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.geom.Insets2D;
+
+import javax.annotation.Nullable;
 
 /**
  * A ListFigure consists of a list of Figures and a RectangleFigure.

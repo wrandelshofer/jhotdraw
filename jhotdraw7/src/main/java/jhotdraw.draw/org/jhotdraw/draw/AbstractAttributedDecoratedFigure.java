@@ -4,13 +4,18 @@
 
 package org.jhotdraw.draw;
 
+import org.jhotdraw.geom.Insets2D;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
+import org.jhotdraw.xml.DOMStorable;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.geom.*;
-import java.io.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.xml.*;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+
+import static org.jhotdraw.draw.AttributeKeys.DECORATOR_INSETS;
 
 /**
  * This abstract class can be extended to implement a {@link DecoratedFigure}

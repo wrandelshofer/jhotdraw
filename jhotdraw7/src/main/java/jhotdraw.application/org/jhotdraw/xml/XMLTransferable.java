@@ -4,8 +4,12 @@
 
 package org.jhotdraw.xml;
 
-import java.awt.datatransfer.*;
-import java.io.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 /**
  * XMLTransferable for transfering XML documents over the clipboard and with
  * drag and drop. 

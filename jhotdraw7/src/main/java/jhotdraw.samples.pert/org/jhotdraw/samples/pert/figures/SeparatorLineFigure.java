@@ -4,12 +4,16 @@
 
 package org.jhotdraw.samples.pert.figures;
 
-import java.awt.Graphics2D;
-import java.awt.geom.*;
 import org.jhotdraw.draw.AttributeKeys;
-import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.RectangleFigure;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.geom.Geom;
+
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 /**
  * A horizontal line with a preferred size of 1,1.
  *

@@ -4,8 +4,11 @@
 
 
 package org.jhotdraw.draw.layouter;
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
+
+import org.jhotdraw.draw.CompositeFigure;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A Layouter encapsulates a strategy for laying out the child figures of

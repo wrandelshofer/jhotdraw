@@ -3,17 +3,23 @@
  */
 package org.jhotdraw.draw.action;
 
-import java.awt.Color;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.text.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.event.DrawingAttributeEditorHandler;
 import org.jhotdraw.draw.gui.JAttributeSlider;
-import org.jhotdraw.text.JavaNumberFormatter;
-import org.jhotdraw.util.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.gui.Dialogs;
+import org.jhotdraw.text.JavaNumberFormatter;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.JColorChooser;
+import javax.swing.JFrame;
+import javax.swing.JSlider;
+import javax.swing.UIManager;
+import javax.swing.text.NumberFormatter;
+import java.awt.Color;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_OPACITY;
 
 /**
  * The EditCanvasPanel can be used to edit the attributes of a Drawing.

@@ -3,18 +3,29 @@
  */
 package org.jhotdraw.samples.svg;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.tool.CreationTool;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.ImageHolderFigure;
 import org.jhotdraw.draw.io.InputFormat;
-import org.jhotdraw.draw.*;
-import java.io.*;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.gui.Worker;
 import org.jhotdraw.samples.svg.io.SVGInputFormat;
 import org.jhotdraw.samples.svg.io.SVGZInputFormat;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * A tool to create new figures from an input file. If the file holds a bitmap

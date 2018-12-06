@@ -3,14 +3,14 @@
  */
 package org.jhotdraw.gui;
 
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
-import javax.swing.JColorChooser;
-import javax.swing.JDialog;
 
 /**
  * A utility class for dialogs.

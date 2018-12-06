@@ -3,11 +3,12 @@
  */
 package org.jhotdraw.color;
 
+import javax.swing.AbstractListModel;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import javax.swing.*;
 
 /**
  * DefaultHarmonicColorModel.

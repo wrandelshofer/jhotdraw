@@ -3,25 +3,46 @@
  */
 package org.jhotdraw.samples.svg;
 
-import javax.annotation.Nullable;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import org.jhotdraw.app.action.file.ExportFileAction;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.DefaultApplicationModel;
+import org.jhotdraw.app.DefaultMenuBuilder;
+import org.jhotdraw.app.MenuBuilder;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.edit.ClearSelectionAction;
-import org.jhotdraw.samples.svg.action.*;
-import org.jhotdraw.samples.svg.figures.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import org.jhotdraw.app.*;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.app.action.file.ExportFileAction;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.GridConstrainer;
+import org.jhotdraw.draw.action.AbstractSelectedAction;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.GroupAction;
+import org.jhotdraw.draw.action.SelectSameAction;
+import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.samples.svg.action.CombineAction;
+import org.jhotdraw.samples.svg.action.SplitAction;
+import org.jhotdraw.samples.svg.action.ViewSourceAction;
+import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.JMenu;
+import javax.swing.JToolBar;
+import javax.swing.filechooser.FileFilter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Provides meta-data and factory methods for an application.

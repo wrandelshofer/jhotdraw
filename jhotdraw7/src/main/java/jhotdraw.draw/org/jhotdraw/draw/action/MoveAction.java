@@ -7,11 +7,11 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformEdit;
 import org.jhotdraw.undo.CompositeEdit;
-import java.awt.geom.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.geom.AffineTransform;
 import java.util.HashSet;
 import java.util.ResourceBundle;
-
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * Moves the selected figures by one unit.

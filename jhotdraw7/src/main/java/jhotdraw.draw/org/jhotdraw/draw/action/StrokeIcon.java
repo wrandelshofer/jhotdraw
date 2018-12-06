@@ -4,7 +4,9 @@
 
 package org.jhotdraw.draw.action;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 /**
  * StrokeIcon.

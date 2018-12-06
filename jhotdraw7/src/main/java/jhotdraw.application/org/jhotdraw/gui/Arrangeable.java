@@ -4,7 +4,7 @@
 
 package org.jhotdraw.gui;
 
-import java.beans.*;
+import java.beans.PropertyChangeListener;
 
 /**
  * Arrangeable.

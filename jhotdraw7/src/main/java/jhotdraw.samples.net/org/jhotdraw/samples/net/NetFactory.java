@@ -4,14 +4,18 @@
 
 package org.jhotdraw.samples.net;
 
-import org.jhotdraw.draw.locator.RelativeLocator;
-import org.jhotdraw.draw.connector.LocatorConnector;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.GroupFigure;
+import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.decoration.ArrowTip;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.samples.net.figures.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.xml.*;
+import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.geom.Insets2D;
+import org.jhotdraw.samples.net.figures.NodeFigure;
+import org.jhotdraw.xml.DefaultDOMFactory;
 /**
  * NetFactory.
  * 

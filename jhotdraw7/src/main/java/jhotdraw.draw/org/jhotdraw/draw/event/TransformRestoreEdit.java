@@ -4,10 +4,12 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.*;
-import javax.swing.undo.*;
-import org.jhotdraw.util.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.util.ResourceBundleUtil;
 
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 import java.util.ResourceBundle;
 
 /**

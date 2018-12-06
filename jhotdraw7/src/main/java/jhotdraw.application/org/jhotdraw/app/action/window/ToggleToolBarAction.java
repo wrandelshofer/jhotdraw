@@ -4,10 +4,13 @@
 
 package org.jhotdraw.app.action.window;
 
-import java.awt.event.*;
-import javax.swing.*;
-import java.beans.*;
 import org.jhotdraw.app.action.ActionUtil;
+
+import javax.swing.AbstractAction;
+import javax.swing.JToolBar;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * ToggleToolBarAction.

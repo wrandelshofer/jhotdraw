@@ -4,12 +4,12 @@
 
 package org.jhotdraw.app.action.file;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
+import org.jhotdraw.util.ResourceBundleUtil;
 
-import java.util.ResourceBundle;
+import javax.annotation.Nullable;
 
 /**
  * Presents an {@code URIChooser} and then saves the active view to the
@@ -32,7 +32,7 @@ public class SaveFileAsAction extends SaveFileAction {
     /** Creates a new instance. */
     public SaveFileAsAction(Application app, @Nullable View view) {
         super(app, view, true);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 }

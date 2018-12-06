@@ -1,14 +1,13 @@
 package javax.annotation;
 
+import javax.annotation.meta.TypeQualifierNickname;
+import javax.annotation.meta.TypeQualifierValidator;
+import javax.annotation.meta.When;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import javax.annotation.meta.TypeQualifierNickname;
-import javax.annotation.meta.TypeQualifierValidator;
-import javax.annotation.meta.When;
 
 /**
  * This qualifier is used to denote String values that should be a Regular

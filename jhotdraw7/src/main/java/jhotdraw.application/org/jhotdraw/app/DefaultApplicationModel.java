@@ -3,23 +3,26 @@
  */
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.app.action.file.SaveFileAsAction;
-import org.jhotdraw.app.action.file.SaveFileAction;
-import org.jhotdraw.app.action.file.NewFileAction;
-import org.jhotdraw.app.action.file.OpenFileAction;
-import org.jhotdraw.app.action.file.CloseFileAction;
-import org.jhotdraw.app.action.edit.PasteAction;
-import org.jhotdraw.app.action.edit.RedoAction;
+import org.jhotdraw.app.action.edit.ClearSelectionAction;
+import org.jhotdraw.app.action.edit.CopyAction;
 import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DeleteAction;
-import org.jhotdraw.app.action.edit.CopyAction;
 import org.jhotdraw.app.action.edit.DuplicateAction;
-import org.jhotdraw.app.action.edit.UndoAction;
+import org.jhotdraw.app.action.edit.PasteAction;
+import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
-import java.util.*;
-import javax.swing.*;
-import org.jhotdraw.app.action.edit.ClearSelectionAction;
+import org.jhotdraw.app.action.edit.UndoAction;
+import org.jhotdraw.app.action.file.CloseFileAction;
+import org.jhotdraw.app.action.file.NewFileAction;
+import org.jhotdraw.app.action.file.OpenFileAction;
+import org.jhotdraw.app.action.file.SaveFileAction;
+import org.jhotdraw.app.action.file.SaveFileAsAction;
+
+import javax.annotation.Nullable;
+import javax.swing.ActionMap;
+import javax.swing.JToolBar;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An {@link ApplicationModel} which creates a default set of {@code Action}s

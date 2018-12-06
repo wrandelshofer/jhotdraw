@@ -10,4 +10,6 @@ module jhotdraw.samples.svg {
     requires transitive java.prefs;
     requires transitive nanoxml;
     requires transitive jhotdraw.nanoxml;
+
+    opens org.jhotdraw.samples.svg.action.images;
 }

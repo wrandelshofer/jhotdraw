@@ -4,9 +4,11 @@
 
 package org.jhotdraw.draw.locator;
 
-import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.DecoratedFigure;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 /**
  * A locator that specfies a point that is relative to the bounds
  * of a figures decorator.

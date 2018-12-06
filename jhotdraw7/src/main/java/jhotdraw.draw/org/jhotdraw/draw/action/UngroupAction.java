@@ -3,7 +3,9 @@
  */
 package org.jhotdraw.draw.action;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.util.ResourceBundle;

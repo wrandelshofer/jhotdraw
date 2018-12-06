@@ -3,18 +3,36 @@
  */
 package org.jhotdraw.draw.tool;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.beans.AbstractBean;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingEditorProxy;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.ToolEvent;
 import org.jhotdraw.draw.event.ToolListener;
-import javax.swing.*;
-import org.jhotdraw.beans.AbstractBean;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import javax.swing.event.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.draw.handle.Handle;
+
+import javax.annotation.Nullable;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.UndoableEditListener;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_HEIGHT;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_WIDTH;
 
 /**
  * This abstract class can be extended to implement a {@link Tool}.

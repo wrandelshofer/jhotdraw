@@ -3,11 +3,17 @@
  */
 package org.jhotdraw.draw.layouter;
 
-import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.CompositeFigure;
-import java.awt.geom.*;
-import org.jhotdraw.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.geom.Insets2D;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.Alignment;
+import static org.jhotdraw.draw.AttributeKeys.COMPOSITE_ALIGNMENT;
+import static org.jhotdraw.draw.AttributeKeys.LAYOUT_INSETS;
 
 /**
  * A {@link Layouter} which lays out all children of a {@link CompositeFigure}

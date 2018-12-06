@@ -3,16 +3,43 @@
  */
 package org.jhotdraw.gui;
 
+import org.jhotdraw.gui.event.SheetEvent;
+import org.jhotdraw.gui.event.SheetListener;
+import org.jhotdraw.util.Methods;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.*;
-import javax.swing.plaf.*;
-import org.jhotdraw.gui.event.*;
-import org.jhotdraw.util.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.plaf.OptionPaneUI;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * JSheet is a document modal dialog which is displayed below the title bar of a

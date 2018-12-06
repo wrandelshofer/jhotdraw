@@ -3,6 +3,8 @@
  */
 package org.jhotdraw.color;
 
+import org.jhotdraw.text.ColorToolTipTextFormatter;
+
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
@@ -11,8 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.text.ParseException;
-
-import org.jhotdraw.text.ColorToolTipTextFormatter;
 
 /**
  * A utility class for {@code Color} and {@code ColorSpace} objects.

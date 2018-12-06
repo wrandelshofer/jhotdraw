@@ -3,17 +3,22 @@
  */
 package org.jhotdraw.app.action.edit;
 
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.beans.WeakPropertyChangeListener;
+import org.jhotdraw.gui.EditableComponent;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JComponent;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.TextAction;
+import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
-import javax.swing.JComponent;
-import javax.swing.text.*;
-import org.jhotdraw.util.*;
-import org.jhotdraw.gui.EditableComponent;
-import org.jhotdraw.beans.WeakPropertyChangeListener;
 
 /**
  * Deletes the region at (or after) the caret position.
@@ -91,7 +96,7 @@ public class DeleteAction extends TextAction {
             };
             target.addPropertyChangeListener(new WeakPropertyChangeListener(propertyHandler));
         }
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 

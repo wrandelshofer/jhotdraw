@@ -3,7 +3,11 @@
  */
  package org.jhotdraw.draw;
 
-import java.beans.*;
+import java.beans.BeanDescriptor;
+import java.beans.EventSetDescriptor;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
 
 
 public class DefaultDrawingViewBeanInfo extends SimpleBeanInfo {

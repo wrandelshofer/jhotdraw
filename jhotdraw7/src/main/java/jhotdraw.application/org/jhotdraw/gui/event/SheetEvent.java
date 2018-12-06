@@ -4,11 +4,13 @@
 
 package org.jhotdraw.gui.event;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import javax.swing.*;
-import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.JSheet;
+import org.jhotdraw.gui.URIChooser;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import java.util.EventObject;
 
 /**
  * SheetEvent.

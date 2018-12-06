@@ -5,8 +5,14 @@
 package org.jhotdraw.samples.odg.figures;
 
 import org.jhotdraw.draw.handle.AbstractHandle;
-import java.awt.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
 
 /**
  * A non-interactive {@link org.jhotdraw.draw.handle.Handle} which draws the outline of a

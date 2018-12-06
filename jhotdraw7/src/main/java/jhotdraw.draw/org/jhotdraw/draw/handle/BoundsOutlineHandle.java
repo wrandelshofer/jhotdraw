@@ -3,10 +3,17 @@
  */
 package org.jhotdraw.draw.handle;
 
-import java.awt.*;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.Stroke;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * A non-interactive {@link Handle} which draws the bounds of a {@link Figure} to

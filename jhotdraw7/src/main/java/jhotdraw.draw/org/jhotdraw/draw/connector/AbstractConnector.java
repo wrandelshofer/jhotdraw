@@ -4,15 +4,21 @@
 
 package org.jhotdraw.draw.connector;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import java.io.IOException;
-import java.awt.*;
-import java.awt.geom.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DecoratedFigure;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.Geom;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 import org.jhotdraw.xml.DOMStorable;
+
+import javax.annotation.Nullable;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 /**
  * This abstract class can be extended to implement a {@link Connector}.
  *

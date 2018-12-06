@@ -3,8 +3,9 @@
  */
 package org.jhotdraw.samples.teddy;
 
-import java.util.HashMap;
 import org.jhotdraw.app.Application;
+
+import java.util.HashMap;
 
 /**
  * Main entry point of the Teddy sample application. Creates an

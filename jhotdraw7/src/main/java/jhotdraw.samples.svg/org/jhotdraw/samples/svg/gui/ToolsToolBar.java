@@ -4,23 +4,51 @@
 package org.jhotdraw.samples.svg.gui;
 
 import org.jhotdraw.app.action.edit.DuplicateAction;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.action.AbstractSelectedAction;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.ButtonFactory;
+import org.jhotdraw.draw.action.GroupAction;
+import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.draw.tool.CreationTool;
-import org.jhotdraw.draw.tool.TextCreationTool;
 import org.jhotdraw.draw.tool.TextAreaCreationTool;
-import java.awt.event.MouseEvent;
-import javax.swing.border.*;
-import org.jhotdraw.gui.plaf.palette.*;
-import org.jhotdraw.samples.svg.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
+import org.jhotdraw.draw.tool.TextCreationTool;
+import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.PathTool;
+import org.jhotdraw.samples.svg.SVGCreateFromFileTool;
+import org.jhotdraw.samples.svg.action.CombineAction;
+import org.jhotdraw.samples.svg.action.SplitAction;
+import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
+import org.jhotdraw.samples.svg.figures.SVGEllipseFigure;
+import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
+import org.jhotdraw.samples.svg.figures.SVGImageFigure;
+import org.jhotdraw.samples.svg.figures.SVGPathFigure;
+import org.jhotdraw.samples.svg.figures.SVGRectFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextAreaFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextFigure;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
-import java.util.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.samples.svg.action.*;
-import org.jhotdraw.samples.svg.figures.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import java.awt.event.MouseEvent;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.PATH_CLOSED;
 
 /**
  * DrawToolsPane.
@@ -33,7 +61,7 @@ public class ToolsToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public ToolsToolBar() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         setName(labels.getString("tools.toolbar"));
     }
 
@@ -53,7 +81,7 @@ public class ToolsToolBar extends AbstractToolBar {
                          break;
                      }
 
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                    ResourceBundleUtil labels = Labels.getLabels();
 
                     GridBagLayout layout = new GridBagLayout();
                     p.setLayout(layout);

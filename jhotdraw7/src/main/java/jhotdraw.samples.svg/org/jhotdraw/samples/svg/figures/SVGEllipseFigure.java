@@ -3,18 +3,30 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.TransformHandleKit;
-import org.jhotdraw.draw.handle.ResizeHandleKit;
-import org.jhotdraw.draw.handle.Handle;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.samples.svg.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.ResizeHandleKit;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.geom.GrowStroke;
+import org.jhotdraw.samples.svg.Gradient;
+import org.jhotdraw.samples.svg.SVGAttributeKeys;
+
+import javax.annotation.Nullable;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_COLOR;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_GRADIENT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
 /**
  * SVGEllipse represents a SVG ellipse and a SVG circle element.

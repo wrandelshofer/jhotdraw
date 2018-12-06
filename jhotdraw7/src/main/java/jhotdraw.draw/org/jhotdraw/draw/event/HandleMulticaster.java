@@ -3,11 +3,13 @@
  */
 package org.jhotdraw.draw.event;
 
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.util.*;
+import org.jhotdraw.util.ReversedList;
+
+import java.awt.Point;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * Forwards events to one or many handles.

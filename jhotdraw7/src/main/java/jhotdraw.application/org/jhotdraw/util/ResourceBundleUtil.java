@@ -314,6 +314,10 @@ public class ResourceBundleUtil implements Serializable {
      *          if the property is missing.
      */
     @Nullable
+    public ImageIcon getLargeIconProperty(String key) {
+        return getIconProperty(key,".largeIcon",baseClass);
+    }
+    @Nullable
     public ImageIcon getLargeIconProperty(String key, Class<?> baseClass) {
         return getIconProperty(key,".largeIcon",baseClass);
     }

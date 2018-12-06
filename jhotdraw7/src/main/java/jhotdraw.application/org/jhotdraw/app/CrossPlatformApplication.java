@@ -7,10 +7,11 @@
 
 package org.jhotdraw.app;
 
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * {@code CrossPlatformApplication}.

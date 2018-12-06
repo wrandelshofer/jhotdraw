@@ -3,7 +3,15 @@
  */
 package org.jhotdraw.draw.io;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.gui.datatransfer.AbstractTransferable;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+
+import javax.swing.JComponent;
+import javax.swing.filechooser.FileFilter;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -22,10 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JComponent;
-import javax.swing.filechooser.FileFilter;
-import org.jhotdraw.gui.datatransfer.AbstractTransferable;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 
 /**
  * {@code SerializationInputOutputFormat} uses Java Serialization for reading and

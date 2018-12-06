@@ -4,13 +4,19 @@
 
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.colorchooser.*;
-import javax.swing.plaf.*;
 import org.jhotdraw.gui.plaf.palette.PaletteLookAndFeel;
 import org.jhotdraw.gui.plaf.palette.PalettePanelUI;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.JColorChooser;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.plaf.PanelUI;
+import javax.swing.plaf.UIResource;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * The ColorSlidersChooser contains four individual color slider pages: gray

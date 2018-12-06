@@ -5,8 +5,10 @@
 package org.jhotdraw.draw;
 
 import javax.annotation.Nullable;
-import java.awt.image.*;
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * The interface of a {@link Figure} which has some editable image contents.

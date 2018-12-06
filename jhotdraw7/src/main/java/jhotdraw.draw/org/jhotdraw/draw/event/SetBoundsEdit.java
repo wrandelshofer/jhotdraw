@@ -5,9 +5,13 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.*;
-import javax.swing.undo.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.AbstractFigure;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
+import java.awt.geom.Point2D;
 /**
  * SetBoundsEdit.
  *

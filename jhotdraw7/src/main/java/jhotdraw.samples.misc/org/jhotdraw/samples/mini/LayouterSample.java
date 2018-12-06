@@ -3,10 +3,20 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.tool.DelegationSelectionTool;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.GraphicalCompositeFigure;
+import org.jhotdraw.draw.LineFigure;
+import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.tool.DelegationSelectionTool;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  * Example showing how to layout two editable text figures and a line figure

@@ -3,18 +3,27 @@
  */
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
-import java.awt.*;
-import java.awt.color.ICC_ColorSpace;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.*;
-import javax.swing.colorchooser.*;
-import javax.swing.plaf.*;
 import org.jhotdraw.color.ColorSliderModel;
 import org.jhotdraw.gui.plaf.palette.PaletteLabelUI;
 import org.jhotdraw.gui.plaf.palette.PaletteLookAndFeel;
 import org.jhotdraw.gui.plaf.palette.PalettePanelUI;
 import org.jhotdraw.gui.plaf.palette.PaletteTextFieldUI;
+
+import javax.swing.Icon;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.plaf.LabelUI;
+import javax.swing.plaf.TextUI;
+import javax.swing.plaf.UIResource;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.color.ICC_ColorSpace;
 
 /**
  * PaletteRGBChooser.

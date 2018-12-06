@@ -4,12 +4,15 @@
 
 package org.jhotdraw.samples.svg;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.ResourceBundle;
-
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Paint;
 
 /**
  * SVGAttributeKeys.
@@ -18,7 +21,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
  * @version $Id$
  */
 public class SVGAttributeKeys extends AttributeKeys {
-     private static final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+     private static final ResourceBundleUtil labels = Labels.getLabels();
    
     public enum TextAnchor {
         START, MIDDLE, END

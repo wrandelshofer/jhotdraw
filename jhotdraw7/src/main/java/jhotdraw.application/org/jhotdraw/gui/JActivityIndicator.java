@@ -6,15 +6,16 @@
  */
 package org.jhotdraw.gui;
 
+import org.jhotdraw.gui.event.ActivityManagerEvent;
+import org.jhotdraw.gui.event.ActivityManagerListener;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.DefaultBoundedRangeModel;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javax.swing.DefaultBoundedRangeModel;
-import org.jhotdraw.gui.event.ActivityManagerEvent;
-import org.jhotdraw.gui.event.ActivityManagerListener;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * This indicator displays a progress bar when an {@code ActivityModel} is active.

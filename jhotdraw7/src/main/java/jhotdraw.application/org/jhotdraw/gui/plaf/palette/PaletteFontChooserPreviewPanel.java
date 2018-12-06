@@ -3,8 +3,10 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
 import javax.swing.plaf.LabelUI;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 
 /**
  * PaletteFontChooserPreviewPanel.

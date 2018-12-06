@@ -3,15 +3,27 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.handle.Handle;
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.samples.svg.SVGAttributeKeys;
+
+import java.awt.AlphaComposite;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.samples.svg.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK_TARGET;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
 /**
  * SVGGroupFigure.

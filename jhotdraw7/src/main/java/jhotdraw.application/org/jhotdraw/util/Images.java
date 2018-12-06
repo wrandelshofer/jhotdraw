@@ -36,7 +36,7 @@ public class Images {
     public static Image createImage(Class<?> baseClass, String resourceName) {
         URL resource = baseClass.getResource(resourceName);
         if (resource == null) {
-            throw new InternalError("Ressource \"" + resourceName + "\" not found for class " + baseClass);
+            throw new InternalError("Resource \"" + resourceName + "\" not found for class " + baseClass);
         }
         Image image = Toolkit.getDefaultToolkit().createImage(resource);
         return image;

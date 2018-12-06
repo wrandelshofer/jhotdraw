@@ -3,13 +3,18 @@
  */
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+
+import javax.swing.JColorChooser;
+import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
-import javax.swing.undo.*;
-import javax.swing.*;
-import java.util.*;
-import java.awt.*;
 import javax.swing.event.ChangeListener;
-import org.jhotdraw.draw.*;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoableEdit;
+import java.awt.Color;
 
 /**
  * DrawingColorChooserHandler.

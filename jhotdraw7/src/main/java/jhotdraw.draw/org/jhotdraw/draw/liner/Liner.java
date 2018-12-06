@@ -4,10 +4,11 @@
 
 package org.jhotdraw.draw.liner;
 
-import java.util.*;
-import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.geom.BezierPath;
+
+import java.util.Collection;
 
 /**
  * A <em>liner</em> encapsulates a strategy for laying out the bezier path of

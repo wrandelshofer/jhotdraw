@@ -5,13 +5,16 @@ package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
-import org.jhotdraw.xml.*;
-import java.awt.font.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.undo.*;
-import java.util.*;
-import java.io.*;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
+
+import javax.swing.JPanel;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoableEdit;
+import java.awt.font.FontRenderContext;
+import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * This abstract class can be extended to implement a {@link Drawing}.

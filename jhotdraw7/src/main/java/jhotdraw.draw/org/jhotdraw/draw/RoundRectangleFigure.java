@@ -4,16 +4,21 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.connector.ChopRoundRectangleConnector;
-import org.jhotdraw.draw.handle.RoundRectangleRadiusHandle;
-import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.util.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.RoundRectangleRadiusHandle;
+import org.jhotdraw.geom.Geom;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
+
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * A {@link Figure} with a rounded rectangular shape.

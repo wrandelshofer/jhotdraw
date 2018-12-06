@@ -4,12 +4,13 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.tree.MutableTreeNode;
 import java.awt.Color;
 import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.tree.MutableTreeNode;
-
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * PaletteFontChooserSelectionPanel.

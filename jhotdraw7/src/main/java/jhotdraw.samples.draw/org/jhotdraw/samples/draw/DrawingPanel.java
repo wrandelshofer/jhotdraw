@@ -3,28 +3,58 @@
  */
 package org.jhotdraw.samples.draw;
 
-import org.jhotdraw.draw.tool.CreationTool;
-import org.jhotdraw.draw.tool.BezierTool;
-import org.jhotdraw.draw.tool.TextCreationTool;
-import org.jhotdraw.draw.tool.TextAreaCreationTool;
-import org.jhotdraw.draw.liner.ElbowLiner;
-import org.jhotdraw.draw.liner.CurvedLiner;
-import org.jhotdraw.draw.tool.ConnectionTool;
-import org.jhotdraw.draw.decoration.ArrowTip;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.gui.JPopupButton;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
-
-import java.util.*;
-import javax.swing.*;
 import org.jhotdraw.app.action.edit.CopyAction;
 import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DuplicateAction;
 import org.jhotdraw.app.action.edit.PasteAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.draw.AbstractAttributedFigure;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DiamondFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.EllipseFigure;
+import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.LineFigure;
+import org.jhotdraw.draw.RectangleFigure;
+import org.jhotdraw.draw.RoundRectangleFigure;
+import org.jhotdraw.draw.TextAreaFigure;
+import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.TriangleFigure;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.ButtonFactory;
+import org.jhotdraw.draw.action.GroupAction;
+import org.jhotdraw.draw.action.SelectSameAction;
+import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.draw.action.UngroupAction;
+import org.jhotdraw.draw.action.ZoomAction;
+import org.jhotdraw.draw.decoration.ArrowTip;
+import org.jhotdraw.draw.liner.CurvedLiner;
+import org.jhotdraw.draw.liner.ElbowLiner;
+import org.jhotdraw.draw.tool.BezierTool;
+import org.jhotdraw.draw.tool.ConnectionTool;
+import org.jhotdraw.draw.tool.CreationTool;
+import org.jhotdraw.draw.tool.TextAreaCreationTool;
+import org.jhotdraw.draw.tool.TextCreationTool;
+import org.jhotdraw.gui.JPopupButton;
+import org.jhotdraw.undo.UndoRedoManager;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JToolBar;
+import javax.swing.UIManager;
+import java.util.Collection;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
 
 /**
  * DrawingPanel.

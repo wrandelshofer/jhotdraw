@@ -3,16 +3,26 @@
  */
 package org.jhotdraw.draw.handle;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.liner.Liner;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.liner.Liner;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.InputEvent;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 /**
  * This abstract class can be extended to implement a {@link Handle}

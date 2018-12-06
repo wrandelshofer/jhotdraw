@@ -4,11 +4,19 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.border.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.JTabbedPane;
+import javax.swing.RootPaneContainer;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.PanelUI;
+import javax.swing.plaf.basic.BasicPanelUI;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Window;
 
 /**
  * PalettePanelUI.

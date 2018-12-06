@@ -4,14 +4,24 @@
 package org.jhotdraw.gui.plaf.palette;
 
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Enumeration;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.UIDefaults.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.ActiveValue;
+import javax.swing.UIDefaults.LazyValue;
+import javax.swing.UIDefaults.ProxyLazyValue;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.DimensionUIResource;
+import javax.swing.plaf.InsetsUIResource;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicLookAndFeel;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
+import java.util.ResourceBundle;
 
 /**
  * A LookAndFeel for components in the palette windows of a drawing editor.

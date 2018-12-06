@@ -4,7 +4,7 @@
 
 package org.jhotdraw.draw;
 
-import java.util.*;
+import java.util.Comparator;
 /**
  * A {@code Comparator} used to sort figures by their layer property.
  *

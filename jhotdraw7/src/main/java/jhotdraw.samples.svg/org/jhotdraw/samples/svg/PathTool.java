@@ -3,11 +3,15 @@
  */
 package org.jhotdraw.samples.svg;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.tool.BezierTool;
-import org.jhotdraw.samples.svg.figures.*;
-import org.jhotdraw.draw.*;
-import java.util.*;
+import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
+import org.jhotdraw.samples.svg.figures.SVGPathFigure;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Tool to scribble a SVGPath

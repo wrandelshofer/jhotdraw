@@ -3,14 +3,15 @@
  */
 package org.jhotdraw.draw.event;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.gui.*;
-import java.util.HashSet;
-import java.util.Set;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.gui.AttributeEditor;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * FigureAttributeEditorHandler mediates between an AttributeEditor and the

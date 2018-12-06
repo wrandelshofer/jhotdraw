@@ -3,14 +3,18 @@
  */
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TranslationDirection;
 import org.jhotdraw.draw.event.TransformEdit;
-import org.jhotdraw.draw.*;
 import org.jhotdraw.undo.CompositeEdit;
-import java.awt.geom.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
 import java.util.ResourceBundle;
-
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * Moves the selected figures by one constrained unit.

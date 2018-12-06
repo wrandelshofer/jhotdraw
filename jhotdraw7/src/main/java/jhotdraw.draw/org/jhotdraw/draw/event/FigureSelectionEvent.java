@@ -3,8 +3,10 @@
  */
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.*;
-import java.util.*;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+
+import java.util.Set;
 
 /**
  * An {@code EventObject} sent to {@link FigureSelectionListener}s.

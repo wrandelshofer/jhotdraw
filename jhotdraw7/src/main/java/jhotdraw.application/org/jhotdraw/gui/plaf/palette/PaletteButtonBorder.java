@@ -3,6 +3,11 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
+import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
+import javax.swing.JComponent;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -11,9 +16,6 @@ import java.awt.Insets;
 import java.awt.LinearGradientPaint;
 import java.awt.MultipleGradientPaint;
 import java.awt.geom.Point2D;
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.plaf.UIResource;
 
 /**
  * PaletteButtonBorder.

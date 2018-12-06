@@ -4,11 +4,23 @@
 
 package org.jhotdraw.draw.decoration;
 
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.geom.Geom;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_JOIN;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 
 /**
  * This abstract class can be extended to implement a {@link LineDecoration}.

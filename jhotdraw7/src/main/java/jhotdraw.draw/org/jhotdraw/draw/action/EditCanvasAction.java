@@ -4,15 +4,16 @@
 
 package org.jhotdraw.draw.action;
 
-import java.awt.event.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.swing.JFrame;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
-import javax.swing.*;
-import org.jhotdraw.app.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.util.*;
-import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
  * EditCanvasAction.

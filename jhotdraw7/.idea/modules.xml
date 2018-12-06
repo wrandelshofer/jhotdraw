@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/src/main/java/javax.annotation/javax.annotation.iml" filepath="$PROJECT_DIR$/src/main/java/javax.annotation/javax.annotation.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/javax.annotation/javax.annotation.iml" filepath="$PROJECT_DIR$/src/javax.annotation/javax.annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/javax.annotation/javax.annotation.iml" filepath="$PROJECT_DIR$/javax.annotation/javax.annotation.iml" group="jhotdraw7" />
+      <module fileurl="file://$PROJECT_DIR$/src/javax.annotation/javax.annotation.iml" filepath="$PROJECT_DIR$/src/javax.annotation/javax.annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/jhotdraw.iml" filepath="$PROJECT_DIR$/jhotdraw.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/jhotdraw.application.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.application/jhotdraw.application.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.application/jhotdraw.application.iml" filepath="$PROJECT_DIR$/src/jhotdraw.application/jhotdraw.application.iml" group="jhotdraw7" />

@@ -5,12 +5,19 @@
 
 package org.jhotdraw.draw.handle;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.HandleListener;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+
+import javax.annotation.Nullable;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.KeyListener;
+import java.util.Collection;
 
 /**
  * A <em>handle</em> is used to change one aspect of a {@link Figure} by direct

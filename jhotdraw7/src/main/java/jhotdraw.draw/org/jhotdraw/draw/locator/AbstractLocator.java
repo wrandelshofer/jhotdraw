@@ -4,10 +4,11 @@
 
 package org.jhotdraw.draw.locator;
 
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.xml.DOMStorable;
+
+import java.awt.geom.Point2D;
 import java.io.Serializable;
-import org.jhotdraw.xml.*;
 /**
  * This abstract class can be extended to implement a {@link Locator}.
  *

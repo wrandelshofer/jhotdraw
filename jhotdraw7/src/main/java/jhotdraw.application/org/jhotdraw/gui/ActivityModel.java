@@ -6,8 +6,8 @@
  */
 package org.jhotdraw.gui;
 
+import javax.swing.BoundedRangeModel;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
 
 /**
  * Describes the progress of a activity. An activity is typically

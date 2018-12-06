@@ -3,28 +3,41 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.app.action.edit.PasteAction;
+import org.jhotdraw.app.action.edit.CopyAction;
 import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DeleteAction;
-import org.jhotdraw.app.action.edit.CopyAction;
+import org.jhotdraw.app.action.edit.PasteAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
-import org.jhotdraw.draw.tool.Tool;
+import org.jhotdraw.beans.AbstractBean;
+import org.jhotdraw.draw.action.IncreaseHandleDetailLevelAction;
+import org.jhotdraw.draw.action.MoveAction;
+import org.jhotdraw.draw.action.MoveConstrainedAction;
+import org.jhotdraw.draw.event.ToolAdapter;
 import org.jhotdraw.draw.event.ToolEvent;
+import org.jhotdraw.draw.tool.Tool;
+
+import javax.annotation.Nullable;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
-import org.jhotdraw.beans.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.*;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.draw.event.ToolAdapter;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_COLOR;
 
 /**
  * A default implementation of {@link DrawingEditor}.

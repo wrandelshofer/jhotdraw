@@ -3,8 +3,9 @@
  */
 package org.jhotdraw.gui;
 
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.ScrollPaneLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 
 /**
  * PlacardScrollPaneLayout.

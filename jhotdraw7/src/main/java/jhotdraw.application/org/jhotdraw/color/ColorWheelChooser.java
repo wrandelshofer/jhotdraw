@@ -4,11 +4,14 @@
 
 package org.jhotdraw.color;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.colorchooser.*;
-import javax.swing.event.*;
-import javax.swing.plaf.*;
+import javax.swing.Icon;
+import javax.swing.UIManager;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.plaf.UIResource;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
 /**
  * A HSB color chooser, which displays a hue/saturation color wheel, and a 

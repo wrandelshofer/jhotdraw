@@ -3,7 +3,8 @@
  */
 package org.jhotdraw.color;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.color.ColorSpace;
 
 /**

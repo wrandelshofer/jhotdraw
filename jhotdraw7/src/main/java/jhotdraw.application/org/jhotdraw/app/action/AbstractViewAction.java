@@ -3,12 +3,15 @@
  */
 package org.jhotdraw.app.action;
 
-import javax.annotation.Nullable;
-import java.beans.*;
-import javax.swing.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.beans.WeakPropertyChangeListener;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts

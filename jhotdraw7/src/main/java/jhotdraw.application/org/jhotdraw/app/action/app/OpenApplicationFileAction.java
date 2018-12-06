@@ -3,15 +3,8 @@
  */
 package org.jhotdraw.app.action.app;
 
-import java.awt.Frame;
-import org.jhotdraw.util.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.gui.BackgroundTask;
@@ -19,6 +12,18 @@ import org.jhotdraw.gui.JSheet;
 import org.jhotdraw.gui.event.SheetEvent;
 import org.jhotdraw.gui.event.SheetListener;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.Action;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Opens a file for which an open-request was sent to the application.
@@ -142,7 +147,7 @@ public class OpenApplicationFileAction extends AbstractApplicationAction {
                 if (exists) {
                     view.read(uri, null);
                 } else {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                    ResourceBundleUtil labels = Labels.getLabels();
                     throw new IOException(labels.getFormatted("file.open.fileDoesNotExist.message", URIUtil.getName(uri)));
                 }
             }
@@ -165,7 +170,7 @@ public class OpenApplicationFileAction extends AbstractApplicationAction {
                 value.printStackTrace();
                 String message = value.getMessage() != null ? value.getMessage() : value.toString();
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)) + "</b><p>"

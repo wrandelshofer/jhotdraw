@@ -4,8 +4,10 @@
 package org.jhotdraw.app;
 
 import javax.annotation.Nullable;
-import java.util.*;
-import javax.swing.*;
+import javax.swing.ActionMap;
+import javax.swing.JToolBar;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An {@link ApplicationModel} which neither creates {@code Action}s,

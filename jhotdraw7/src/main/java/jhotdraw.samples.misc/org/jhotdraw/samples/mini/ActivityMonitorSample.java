@@ -6,11 +6,12 @@
  */
 package org.jhotdraw.samples.mini;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.jhotdraw.gui.ActivityModel;
 import org.jhotdraw.gui.DefaultActivityModel;
 import org.jhotdraw.gui.JActivityWindow;
-import org.jhotdraw.gui.ActivityModel;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * This example program shows how to monitor background tasks using  

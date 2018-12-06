@@ -3,17 +3,25 @@
  */
 package org.jhotdraw.samples.odg.figures;
 
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.AbstractHandle;
-import javax.swing.undo.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.util.*;
-import org.jhotdraw.undo.*;
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.undo.CompositeEdit;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ResourceBundle;
 
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
 
 /**
  * A Handle to manipulate the radius of a round lead rectangle.

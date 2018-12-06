@@ -6,14 +6,28 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.connector.ChopTriangleConnector;
-import org.jhotdraw.draw.handle.OrientationHandle;
-import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.OrientationHandle;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.geom.GrowStroke;
+
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static org.jhotdraw.draw.AttributeKeys.ORIENTATION;
+import static org.jhotdraw.draw.AttributeKeys.Orientation;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_JOIN;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_PLACEMENT;
 
 /**
  * Implements a {@link Figure} with a triangular shape.

@@ -4,11 +4,12 @@
 
 package org.jhotdraw.draw.event;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.util.*;
+
+import javax.annotation.Nullable;
+import java.awt.Rectangle;
+import java.util.EventObject;
 /**
  * An {@code EventObject} sent to {@link HandleListener}s.
  *

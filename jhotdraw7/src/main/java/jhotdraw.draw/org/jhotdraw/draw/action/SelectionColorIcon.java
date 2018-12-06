@@ -4,9 +4,15 @@
 
 package org.jhotdraw.draw.action;
 
-import java.awt.*;
-import java.net.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Shape;
+import java.net.URL;
 
 /**
  * SelectionColorIcon draws a shape with the specified color for the selected

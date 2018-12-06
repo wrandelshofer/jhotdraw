@@ -3,13 +3,30 @@
  */
 package org.jhotdraw.gui;
 
-import javax.swing.event.PopupMenuEvent;
 import org.jhotdraw.gui.plaf.palette.PaletteMenuItemUI;
-import java.awt.*;
-import java.beans.*;
-import javax.swing.*;
-import java.awt.event.*;
+
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JToolBar;
+import javax.swing.MenuElement;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import java.awt.AWTEvent;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Rectangle;
+import java.awt.event.AWTEventListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * JPopupButton provides a popup menu.

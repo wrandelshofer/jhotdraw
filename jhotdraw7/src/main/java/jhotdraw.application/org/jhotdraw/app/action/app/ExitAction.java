@@ -3,22 +3,29 @@
  */
 package org.jhotdraw.app.action.app;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.gui.event.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
+import org.jhotdraw.gui.BackgroundTask;
+import org.jhotdraw.gui.JSheet;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.event.SheetEvent;
+import org.jhotdraw.gui.event.SheetListener;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Component;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Exits the application after letting the user review all unsaved views.
@@ -44,7 +51,7 @@ public class ExitAction extends AbstractApplicationAction {
     /** Creates a new instance. */
     public ExitAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -71,7 +78,7 @@ public class ExitAction extends AbstractApplicationAction {
                 return;
             }
 
-            final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+            final ResourceBundleUtil labels = Labels.getLabels();
             switch (unsavedViewsCount) {
                 case 0: {
                     doExit();
@@ -179,7 +186,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewChanges() {
         if (unsavedView.isEnabled()) {
-            final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+            final ResourceBundleUtil labels = Labels.getLabels();
             oldFocusOwner = SwingUtilities.getWindowAncestor(unsavedView.getComponent()).getFocusOwner();
             unsavedView.setEnabled(false);
             URI unsavedURI = unsavedView.getURI();
@@ -277,7 +284,7 @@ public class ExitAction extends AbstractApplicationAction {
 
             @Override
             protected void failed(Throwable error) {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 JSheet.showMessageSheet(v.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.format("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
@@ -314,7 +321,7 @@ public class ExitAction extends AbstractApplicationAction {
 
             @Override
             protected void failed(Throwable error) {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 JSheet.showMessageSheet(v.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.format("file.save.couldntSave.message", uri) + "</b><p>"

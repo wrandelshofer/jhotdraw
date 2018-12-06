@@ -3,19 +3,20 @@
  */
 package org.jhotdraw.samples.svg;
 
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.io.InputFormat;
+import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.gui.BackgroundTask;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.io.InputFormat;
-import org.jhotdraw.draw.io.OutputFormat;
-import org.jhotdraw.gui.BackgroundTask;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 
 /**
  * Example showing how to embed the {@link org.jhotdraw.samples.svg.SVGDrawingPanel} into an application

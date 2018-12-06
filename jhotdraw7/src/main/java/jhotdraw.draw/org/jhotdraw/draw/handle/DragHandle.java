@@ -4,11 +4,16 @@
 
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformEdit;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
+
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.util.LinkedList;
 /**
  * A handle that changes the location of the owning figure, the handle
  * covers all visible points of the figure.

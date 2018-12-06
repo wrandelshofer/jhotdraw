@@ -3,12 +3,6 @@
  */
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import org.jhotdraw.app.action.app.AboutAction;
 import org.jhotdraw.app.action.app.AbstractPreferencesAction;
 import org.jhotdraw.app.action.app.ExitAction;
@@ -34,6 +28,13 @@ import org.jhotdraw.app.action.file.OpenFileAction;
 import org.jhotdraw.app.action.file.PrintFileAction;
 import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
+
+import javax.annotation.Nullable;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.util.List;
 
 /**
  * {@code DefaultMenuBuilder}.

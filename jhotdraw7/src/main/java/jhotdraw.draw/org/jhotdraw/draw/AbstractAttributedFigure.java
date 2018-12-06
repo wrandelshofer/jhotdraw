@@ -3,15 +3,31 @@
  */
 package org.jhotdraw.draw;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import java.io.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.geom.Geom;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 import org.jhotdraw.xml.DOMStorable;
+
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_CAP;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_JOIN;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_SHADOW_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_SHADOW_OFFSET;
 
 /**
  * This abstract class can be extended to implement a {@link Figure} which has

@@ -3,10 +3,19 @@
  */
 package org.jhotdraw.draw.print;
 
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.print.*;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Pageable;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 
 /**
  * {@code DrawingPageable} can be used to print a {@link Drawing} using the

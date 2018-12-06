@@ -3,10 +3,15 @@
  */
 package org.jhotdraw.samples.mini;
 
-import java.awt.*;
-import java.awt.geom.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.AbstractAttributedFigure;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.geom.Geom;
+
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Example showing the minimal amount of code needed to implement a

@@ -5,9 +5,14 @@
 package org.jhotdraw.gui.plaf.palette;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.plaf.ActionMapUIResource;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * QuaquaLazyActionMap.

@@ -5,10 +5,10 @@
 package org.jhotdraw.color;
 
 import javax.annotation.Nullable;
+import javax.swing.ListModel;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.beans.PropertyChangeListener;
-import javax.swing.ListModel;
 
 /**
  * HarmonicColorModel.

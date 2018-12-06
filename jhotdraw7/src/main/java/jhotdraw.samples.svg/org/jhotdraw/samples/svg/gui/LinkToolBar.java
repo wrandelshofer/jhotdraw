@@ -3,25 +3,34 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.gui.JAttributeTextField;
-import org.jhotdraw.draw.gui.JAttributeTextArea;
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.event.FigureAttributeEditorHandler;
 import org.jhotdraw.draw.event.SelectionComponentDisplayer;
-import javax.swing.border.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.util.*;
+import org.jhotdraw.draw.gui.JAttributeTextArea;
+import org.jhotdraw.draw.gui.JAttributeTextField;
+import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
+import org.jhotdraw.gui.plaf.palette.PaletteLabelUI;
+import org.jhotdraw.gui.plaf.palette.PaletteLookAndFeel;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.util.ResourceBundleUtil;
 
-import java.awt.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
+import javax.annotation.Nullable;
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.LabelUI;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.gui.plaf.palette.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK_TARGET;
 
 /**
  * LinkToolBar.
@@ -37,7 +46,7 @@ public class LinkToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public LinkToolBar() {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        labels = Labels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
         setDisclosureStateCount(3);
     }

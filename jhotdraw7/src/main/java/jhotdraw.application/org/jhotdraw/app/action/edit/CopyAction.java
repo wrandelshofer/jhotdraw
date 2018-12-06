@@ -3,13 +3,15 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.gui.datatransfer.ClipboardUtil;
-import org.jhotdraw.util.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import javax.swing.TransferHandler;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
 
 /**
  * Copies the selected region and place its contents into the system clipboard.
@@ -45,7 +47,7 @@ public class CopyAction extends AbstractSelectionAction {
      */
     public CopyAction(@Nullable JComponent target) {
         super(target);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 

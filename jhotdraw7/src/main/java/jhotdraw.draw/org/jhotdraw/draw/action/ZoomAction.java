@@ -4,10 +4,14 @@
 
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+
 import javax.annotation.Nullable;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.SwingUtilities;
 import java.awt.Rectangle;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
 
 /**
  * ZoomAction.

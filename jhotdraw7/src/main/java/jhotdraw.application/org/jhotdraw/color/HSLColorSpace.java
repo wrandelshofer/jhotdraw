@@ -4,7 +4,9 @@
 package org.jhotdraw.color;
 
 import java.awt.color.ColorSpace;
-import static java.lang.Math.*;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * A HSL color space with additive complements in the hue color wheel: red is

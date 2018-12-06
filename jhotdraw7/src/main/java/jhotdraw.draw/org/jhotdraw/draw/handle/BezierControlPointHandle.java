@@ -3,19 +3,30 @@
  */
 package org.jhotdraw.draw.handle;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.BezierNodeEdit;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.util.*;
-import org.jhotdraw.undo.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.util.ResourceBundle;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.undo.CompositeEdit;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-import org.jhotdraw.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Stroke;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Line2D;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * A {@link Handle} which allows to interactively change a control point

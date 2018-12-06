@@ -4,17 +4,31 @@
 
 package org.jhotdraw.samples.odg.figures;
 
-import java.awt.event.*;
-import java.awt.image.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AbstractAttributedFigure;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.samples.odg.ODGAttributeKeys;
+import org.jhotdraw.samples.odg.ODGConstants;
+import org.jhotdraw.util.ResourceBundleUtil;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import org.jhotdraw.samples.odg.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
-import org.jhotdraw.util.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import java.awt.AlphaComposite;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.event.ActionEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_STYLE;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.OPACITY;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_STYLE;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
 /**
  * ODGAttributedFigure.
  *

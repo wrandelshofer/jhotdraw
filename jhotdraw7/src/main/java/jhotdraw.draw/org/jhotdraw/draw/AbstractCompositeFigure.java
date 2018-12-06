@@ -3,27 +3,39 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.layouter.Layouter;
-import org.jhotdraw.draw.event.FigureAdapter;
-import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureListener;
-import java.io.IOException;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.io.Serializable;
-import java.util.*;
-import javax.swing.event.*;
+import org.jhotdraw.draw.event.FigureAdapter;
+import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.TransformHandleKit;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.layouter.Layouter;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.util.ReversedList;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 import org.jhotdraw.xml.DOMStorable;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import javax.annotation.Nullable;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * This abstract class can be extended to implement a {@link CompositeFigure}.

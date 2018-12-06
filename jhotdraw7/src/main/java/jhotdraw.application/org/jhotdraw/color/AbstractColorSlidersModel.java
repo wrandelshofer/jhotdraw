@@ -3,9 +3,11 @@
  */
 package org.jhotdraw.color;
 
-import java.util.*;
-import javax.swing.event.*;
-import org.jhotdraw.beans.*;
+import org.jhotdraw.beans.AbstractBean;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.util.LinkedList;
 
 /**
  * AbstractColorSlidersModel.

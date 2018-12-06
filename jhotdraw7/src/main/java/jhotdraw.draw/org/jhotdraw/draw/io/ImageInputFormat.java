@@ -3,19 +3,27 @@
  */
 package org.jhotdraw.draw.io;
 
-import java.net.URI;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.ImageHolderFigure;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.util.*;
-import javax.imageio.*;
-import javax.swing.*;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.util.Images;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.JComponent;
+import java.awt.Image;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.geom.Point2D;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.LinkedList;
+
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_HEIGHT;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_WIDTH;
 
 /**
  * An input format for importing drawings using one of the image formats 

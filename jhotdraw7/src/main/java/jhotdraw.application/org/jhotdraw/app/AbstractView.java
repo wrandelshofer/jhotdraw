@@ -3,14 +3,16 @@
  */
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
-import java.net.URI;
-import java.util.*;
-import javax.swing.*;
-import java.util.concurrent.*;
-import java.util.prefs.*;
-
 import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import java.net.URI;
+import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.prefs.Preferences;
 
 /**
  * This abstract class can be extended to implement a {@link View}.

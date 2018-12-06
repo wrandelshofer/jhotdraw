@@ -4,7 +4,7 @@
 
 package org.jhotdraw.xml;
 
-import java.io.*;
+import java.io.IOException;
 /**
  * Interface for objects that can be made persistent using 
  * <code>DOMOutput.writeObject</code> and <code>DOMInput.readObject</code>.

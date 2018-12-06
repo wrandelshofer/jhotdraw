@@ -3,13 +3,30 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.io.InputFormat;
-import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.draw.event.CompositeFigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureListener;
-import java.awt.*;
-import java.awt.datatransfer.*;
+import org.jhotdraw.draw.io.InputFormat;
+import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.gui.Worker;
+import org.jhotdraw.gui.datatransfer.CompositeTransferable;
+import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.ReversedList;
+
+import javax.annotation.Nullable;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.TransferHandler;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
 import java.awt.dnd.DragGestureRecognizer;
@@ -19,19 +36,18 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
-import java.awt.event.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.undo.*;
-import org.jhotdraw.gui.Worker;
-import org.jhotdraw.gui.datatransfer.*;
-import org.jhotdraw.util.ResourceBundleUtil;
-import org.jhotdraw.util.ReversedList;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 /**
  * Default TransferHandler for DrawingView objects.

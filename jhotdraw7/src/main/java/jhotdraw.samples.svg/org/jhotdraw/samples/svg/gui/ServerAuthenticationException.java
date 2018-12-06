@@ -4,7 +4,7 @@
 
 package org.jhotdraw.samples.svg.gui;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Thrown to indicate that a request failed because we didn't authenticate

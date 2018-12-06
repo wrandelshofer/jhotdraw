@@ -3,7 +3,11 @@
  */
 package org.jhotdraw.samples.draw;
 
-import java.beans.*;
+import java.beans.BeanDescriptor;
+import java.beans.EventSetDescriptor;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
 
 /**
  * The BeanInfo for {@link DrawingPanel}.

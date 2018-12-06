@@ -4,7 +4,11 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import java.beans.*;
+import java.beans.BeanDescriptor;
+import java.beans.EventSetDescriptor;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
 
 /**
  * BeanInfo for ViewToolBar.

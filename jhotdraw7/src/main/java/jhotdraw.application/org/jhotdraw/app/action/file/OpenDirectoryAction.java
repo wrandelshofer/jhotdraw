@@ -4,11 +4,12 @@
 
 package org.jhotdraw.app.action.file;
 
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.View;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.ResourceBundleUtil;
-
-import java.util.ResourceBundle;
 
 /**
  * Presents an {@code URIChooser} for selecting a directory and loads the
@@ -37,7 +38,7 @@ public class OpenDirectoryAction extends OpenFileAction {
     /** Creates a new instance. */
     public OpenDirectoryAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
     @Override

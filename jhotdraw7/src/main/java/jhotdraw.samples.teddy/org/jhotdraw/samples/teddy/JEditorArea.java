@@ -4,8 +4,12 @@
 
 package org.jhotdraw.samples.teddy;
 
-import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.JEditorPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.StyledEditorKit;
 /**
  * A happy marriage between JTextArea and JEditorPane.
  *

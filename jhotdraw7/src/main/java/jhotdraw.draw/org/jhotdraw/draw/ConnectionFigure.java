@@ -4,11 +4,12 @@
 
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.geom.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.liner.Liner;
+import org.jhotdraw.geom.BezierPath;
+
+import javax.annotation.Nullable;
+import java.awt.geom.Point2D;
 
 /**
  * A <em>connection figure</em> connects two figures with a 

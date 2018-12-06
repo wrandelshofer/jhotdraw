@@ -3,8 +3,11 @@
  */
 package org.jhotdraw.samples.font;
 
-import javax.swing.*;
 import org.jhotdraw.gui.JFontChooser;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 /**
  * FontChooserMain.

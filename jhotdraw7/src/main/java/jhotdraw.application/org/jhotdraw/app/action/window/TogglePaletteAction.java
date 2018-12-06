@@ -4,11 +4,15 @@
 
 package org.jhotdraw.app.action.window;
 
-import java.awt.event.*;
-import javax.swing.*;
-import java.awt.*;
 import org.jhotdraw.app.OSXApplication;
 import org.jhotdraw.app.action.ActionUtil;
+
+import javax.swing.AbstractAction;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 /**
  * TogglePaletteAction.

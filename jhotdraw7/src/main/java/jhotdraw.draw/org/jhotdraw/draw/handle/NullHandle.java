@@ -5,11 +5,14 @@
 
 package org.jhotdraw.draw.handle;
 
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.util.*;
+
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.Collection;
 /**
  * A handle that doesn't change the owned figure. Its only purpose is
  * to show feedback that a figure is selected.

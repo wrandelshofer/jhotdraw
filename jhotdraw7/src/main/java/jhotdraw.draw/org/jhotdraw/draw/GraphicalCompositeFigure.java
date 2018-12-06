@@ -3,22 +3,31 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.MoveHandle;
-import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
-import java.io.IOException;
-import java.awt.*;
-import java.awt.geom.*;
-import java.io.Serializable;
-import java.util.*;
-import javax.swing.event.*;
-
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.MoveHandle;
+import org.jhotdraw.geom.Geom;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
+
+import javax.annotation.Nullable;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_PLACEMENT;
 
 /**
  * The GraphicalCompositeFigure fills in the gap between a CompositeFigure

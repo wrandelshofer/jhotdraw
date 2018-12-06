@@ -4,25 +4,13 @@
 
 package org.jhotdraw.samples.svg.gui;
 
-import java.beans.*;
-import java.util.prefs.*;
-import javax.swing.border.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.samples.svg.*;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.util.ResourceBundleUtil;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import org.jhotdraw.app.action.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.samples.svg.action.*;
-import org.jhotdraw.samples.svg.figures.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import javax.swing.JToolBar;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 /**
  * SummaryToolBar.
  *
@@ -35,7 +23,7 @@ public class SummaryToolBar extends JToolBar {
     
     /** Creates new instance. */
     public SummaryToolBar() {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        labels = Labels.getLabels();
         initComponents();
         
         GridBagLayout layout = new GridBagLayout();

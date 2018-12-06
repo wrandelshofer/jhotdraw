@@ -4,8 +4,12 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.*;
-import javax.swing.undo.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.Figure;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 /**
  * An {@code UndoableEdit} event which can undo a change of a {@link Figure}

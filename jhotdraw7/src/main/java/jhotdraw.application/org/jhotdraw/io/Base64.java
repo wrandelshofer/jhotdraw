@@ -1,6 +1,5 @@
 package org.jhotdraw.io;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**

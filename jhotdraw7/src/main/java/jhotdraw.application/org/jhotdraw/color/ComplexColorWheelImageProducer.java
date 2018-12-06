@@ -3,10 +3,17 @@
  */
 package org.jhotdraw.color;
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.color.ColorSpace;
 import java.awt.geom.Point2D;
-import static java.lang.Math.*;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * Produces the image of a {@link JColorWheel} by interpreting two components of

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.color;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
 
 /**
  * The 1976 CIE L*CHa*b* color space (CIELCH).

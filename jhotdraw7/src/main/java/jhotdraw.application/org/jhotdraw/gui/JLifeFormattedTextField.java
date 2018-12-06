@@ -4,11 +4,21 @@
 package org.jhotdraw.gui;
 
 import javax.annotation.Nullable;
-import java.text.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.JFormattedTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.DefaultFormatter;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.Document;
+import javax.swing.text.InternationalFormatter;
+import javax.swing.text.NumberFormatter;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Date;
 
 /**
  * A JFormattedTextField which updates its value while the user is editing

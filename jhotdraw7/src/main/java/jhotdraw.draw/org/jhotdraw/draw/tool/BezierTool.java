@@ -3,15 +3,31 @@
  */
 package org.jhotdraw.draw.tool;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.Bezier;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import javax.swing.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.util.*;
-import org.jhotdraw.geom.*;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * A {@link Tool} which allows to create a new {@link BezierFigure} by

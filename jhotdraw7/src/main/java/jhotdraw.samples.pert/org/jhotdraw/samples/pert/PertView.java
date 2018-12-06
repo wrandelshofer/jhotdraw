@@ -3,29 +3,40 @@
  */
 package org.jhotdraw.samples.pert;
 
+import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
-import org.jhotdraw.draw.io.OutputFormat;
-import org.jhotdraw.draw.io.InputFormat;
-import org.jhotdraw.draw.io.ImageOutputFormat;
-import org.jhotdraw.draw.print.DrawingPageable;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.io.DOMStorableInputOutputFormat;
-import java.awt.print.Pageable;
-import java.util.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.beans.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.URI;
-import javax.swing.*;
-import javax.swing.border.*;
-import org.jhotdraw.app.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.draw.io.ImageOutputFormat;
+import org.jhotdraw.draw.io.InputFormat;
+import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.draw.print.DrawingPageable;
+import org.jhotdraw.gui.PlacardScrollPaneLayout;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.undo.UndoRedoManager;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.print.Pageable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 /**
  * Provides a view on a Pert drawing.

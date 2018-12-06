@@ -36,7 +36,9 @@
 package net.n3.nanoxml;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Properties;
 
 
 /**

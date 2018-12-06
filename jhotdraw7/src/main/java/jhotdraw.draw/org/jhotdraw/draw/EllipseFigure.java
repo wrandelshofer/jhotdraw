@@ -6,9 +6,12 @@ package org.jhotdraw.draw;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.geom.Geom;
-import java.awt.*;
-import java.awt.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A {@link Figure} with an elliptic shape.

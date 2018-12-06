@@ -4,9 +4,8 @@
 
 package org.jhotdraw.app.action;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.JCheckBoxMenuItem;
 
 /**
  * Provides constants and static operations on <code>Action</code> objects.

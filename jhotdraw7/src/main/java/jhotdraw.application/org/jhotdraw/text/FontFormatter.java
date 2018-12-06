@@ -4,12 +4,12 @@
 package org.jhotdraw.text;
 
 import javax.annotation.Nullable;
-import java.awt.Font;
-import java.text.ParseException;
-import java.util.HashMap;
 import javax.swing.JFormattedTextField.AbstractFormatterFactory;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;
+import java.awt.Font;
+import java.text.ParseException;
+import java.util.HashMap;
 
 /**
  * {@code FontFormatter} is used to format fonts into a textual representation

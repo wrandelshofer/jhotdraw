@@ -4,13 +4,17 @@
 
 package org.jhotdraw.draw.handle;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.geom.Geom;
+
+import javax.annotation.Nullable;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.InputEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 
 /**
  * A {@link Handle} which allows to interactively scale and rotate a BezierFigure.

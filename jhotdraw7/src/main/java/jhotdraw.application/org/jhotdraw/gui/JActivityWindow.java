@@ -6,23 +6,28 @@
  */
 package org.jhotdraw.gui;
 
-import javax.annotation.Nullable;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.lang.reflect.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
-import javax.swing.*;
-import javax.swing.plaf.metal.*;
 import org.jhotdraw.gui.event.ActivityManagerEvent;
 import org.jhotdraw.gui.event.ActivityManagerListener;
 import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 /**
  * The {@code JActivityWindow} displays all progress models registered in the

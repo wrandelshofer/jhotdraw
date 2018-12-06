@@ -5,9 +5,13 @@ package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.connector.ChopDiamondConnector;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.*;
-import java.awt.geom.*;
 import org.jhotdraw.geom.Geom;
+
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A {@link Figure} with a diamond shape.

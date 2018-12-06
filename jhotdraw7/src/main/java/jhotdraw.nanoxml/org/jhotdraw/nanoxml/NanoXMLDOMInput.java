@@ -4,14 +4,26 @@
 
 package org.jhotdraw.nanoxml;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import java.io.*;
-import net.n3.nanoxml.*;
+import net.n3.nanoxml.IXMLElement;
+import net.n3.nanoxml.IXMLParser;
+import net.n3.nanoxml.IXMLReader;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLParserFactory;
 import org.jhotdraw.app.Disposable;
 import org.jhotdraw.xml.DOMFactory;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMStorable;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  * NanoXMLDOMInput.

@@ -3,21 +3,29 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import java.beans.PropertyChangeEvent;
-import javax.swing.border.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.text.DefaultFormatterFactory;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.GridConstrainer;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.gui.JLifeFormattedTextField;
-import org.jhotdraw.gui.plaf.palette.*;
+import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
+import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
+import org.jhotdraw.samples.svg.Labels;
 import org.jhotdraw.text.JavaNumberFormatter;
+import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultFormatterFactory;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * ViewToolBar.
@@ -35,7 +43,7 @@ public class ViewToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public ViewToolBar() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
         setDisclosureStateCount(3);
     }
@@ -64,7 +72,7 @@ public class ViewToolBar extends AbstractToolBar {
                 }
 
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;
@@ -111,7 +119,7 @@ public class ViewToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;

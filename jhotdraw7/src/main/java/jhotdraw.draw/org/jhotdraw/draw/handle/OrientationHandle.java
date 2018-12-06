@@ -4,12 +4,19 @@
 
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TriangleFigure;
 import org.jhotdraw.draw.event.AttributeChangeEdit;
-import java.awt.*;
-import java.awt.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.geom.Geom;
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.ORIENTATION;
 
 /**
  * A {@link Handle} to change the value of the figure attribute

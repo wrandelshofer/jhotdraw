@@ -4,12 +4,13 @@
 
 package org.jhotdraw.samples.svg.gui;
 
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
-import java.awt.event.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.event.*;
-import org.jhotdraw.util.*;
+import javax.swing.Icon;
+import javax.swing.event.EventListenerList;
+import java.awt.event.ActionListener;
 
 /**
  * MessagePanel.
@@ -33,7 +34,7 @@ public class MessagePanel extends javax.swing.JPanel {
     }
     
     public MessagePanel(@Nullable Icon icon, @Nullable String message) {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        labels = Labels.getLabels();
         initComponents();
         setIcon(icon);
         setMessage(message);

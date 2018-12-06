@@ -4,17 +4,57 @@
 package org.jhotdraw.gui.plaf.palette;
 
 import javax.annotation.Nullable;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-
-import java.beans.*;
-
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.BoxLayout;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.JSeparator;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.JWindow;
+import javax.swing.KeyStroke;
+import javax.swing.LookAndFeel;
+import javax.swing.RootPaneContainer;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.MouseInputListener;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.ToolBarUI;
+import javax.swing.plaf.UIResource;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.IllegalComponentStateException;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.Point;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-
-import javax.swing.border.*;
-import javax.swing.plaf.*;
 
 /**
  * ToolBarUI for palette components.

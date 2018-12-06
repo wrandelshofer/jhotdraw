@@ -3,13 +3,19 @@
  */
 package org.jhotdraw.draw.tool;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformEdit;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.util.*;
+
+import javax.annotation.Nullable;
+import java.awt.Container;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.HashSet;
 
 /**
  * {@code DefaultDragTracker} implements interactions with the content area of a

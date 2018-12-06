@@ -4,8 +4,9 @@
 package org.jhotdraw.draw.event;
 
 import org.jhotdraw.draw.BezierFigure;
-import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;

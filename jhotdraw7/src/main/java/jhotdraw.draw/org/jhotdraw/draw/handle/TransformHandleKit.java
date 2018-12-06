@@ -3,17 +3,35 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.locator.RelativeLocator;
-import org.jhotdraw.draw.locator.Locator;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
-import java.util.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
+import org.jhotdraw.draw.locator.Locator;
+import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.util.ResourceBundleUtil;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import static org.jhotdraw.draw.handle.HandleAttributeKeys.*;
+
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_COLOR_1;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_COLOR_1_DISABLED;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_COLOR_1_HOVER;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_COLOR_2;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_COLOR_2_DISABLED;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_COLOR_2_HOVER;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_STROKE_1;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_STROKE_1_DISABLED;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_STROKE_1_HOVER;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_STROKE_2;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_STROKE_2_DISABLED;
+import static org.jhotdraw.draw.handle.HandleAttributeKeys.GROUP_BOUNDS_STROKE_2_HOVER;
 
 /**
  * A set of utility methods to create Handles which transform a Figure by using

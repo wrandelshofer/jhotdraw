@@ -3,13 +3,15 @@
  */
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.util.Images;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ResourceBundle;
 
 /**
  * ColorIcon.
@@ -48,7 +50,7 @@ public class ColorIcon implements javax.swing.Icon {
         this.width = width;
         this.height = height;
         if (noColorImage == null) {
-            noColorImage = Images.toBufferedImage(Images.createImage(ColorIcon.class,"/org/jhotdraw/draw/action/images/attribute.color.noColor.png"));
+            noColorImage = Images.toBufferedImage(Images.createImage(ColorIcon.class,"/org/jhotdraw/gui/plaf/palette/images/attribute.color.noColor.png"));
         }
     }
 

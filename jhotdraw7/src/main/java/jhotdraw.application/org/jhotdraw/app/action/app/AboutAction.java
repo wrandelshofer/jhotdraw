@@ -3,13 +3,19 @@
  */
 package org.jhotdraw.app.action.app;
 
-import java.awt.Component;
-import org.jhotdraw.util.*;
-import java.awt.event.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.MDIApplication;
+import org.jhotdraw.app.OSXApplication;
+import org.jhotdraw.app.SDIApplication;
 import org.jhotdraw.app.action.AbstractApplicationAction;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
 
 /**
  * Displays a dialog showing information about the application.
@@ -34,7 +40,7 @@ public class AboutAction extends AbstractApplicationAction {
     /** Creates a new instance. */
     public AboutAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 

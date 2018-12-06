@@ -4,13 +4,15 @@
 
 package org.jhotdraw.samples.teddy.action;
 
-import org.jhotdraw.app.*;
-import org.jhotdraw.app.action.*;
-import org.jhotdraw.samples.teddy.*;
-import org.jhotdraw.util.*;
-import java.awt.event.*;
-import java.util.ResourceBundle;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.AbstractViewAction;
+import org.jhotdraw.samples.teddy.TeddyView;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.swing.Action;
+import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 /**
  * ToggleLineNumbersAction.

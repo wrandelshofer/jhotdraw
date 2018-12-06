@@ -4,9 +4,14 @@
 
 package org.jhotdraw.draw.action;
 
-import java.awt.*;
-import java.net.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Shape;
+import java.net.URL;
 /**
  * EditorColorIcon draws a shape with the color of the specified default
  * attribute of the DrawingEditor onto the icon.

@@ -3,21 +3,57 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.Handle;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.geom.GrowStroke;
+import org.jhotdraw.geom.Shapes;
+import org.jhotdraw.samples.svg.Gradient;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGAttributeKeys;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.undo.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.samples.svg.*;
-import org.jhotdraw.util.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_COLOR;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.PATH_CLOSED;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_CAP;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_GRADIENT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_JOIN;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.WINDING_RULE;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.WindingRule;
 
 /**
  * SVGPath is a composite Figure which contains one or more
@@ -343,7 +379,7 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
 
     @Override
     public Collection<Action> getActions(Point2D.Double p) {
-        final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        final ResourceBundleUtil labels = Labels.getLabels();
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {

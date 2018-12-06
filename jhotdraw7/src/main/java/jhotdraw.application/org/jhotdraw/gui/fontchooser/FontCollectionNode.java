@@ -4,13 +4,13 @@
 package org.jhotdraw.gui.fontchooser;
 
 import javax.annotation.Nullable;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 /**
  * A FontCollectionNode is a MutableTreeNode which only allows FontFamilyNode

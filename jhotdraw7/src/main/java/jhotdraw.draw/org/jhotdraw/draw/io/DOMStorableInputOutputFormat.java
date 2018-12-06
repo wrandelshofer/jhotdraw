@@ -3,21 +3,31 @@
  */
 package org.jhotdraw.draw.io;
 
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.gui.datatransfer.InputStreamTransferable;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.nanoxml.NanoXMLDOMInput;
+import org.jhotdraw.nanoxml.NanoXMLDOMOutput;
+import org.jhotdraw.xml.DOMFactory;
+
+import javax.swing.JComponent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.JComponent;
-import org.jhotdraw.gui.datatransfer.InputStreamTransferable;
-import org.jhotdraw.nanoxml.NanoXMLDOMInput;
-import org.jhotdraw.nanoxml.NanoXMLDOMOutput;
-import org.jhotdraw.xml.*;
 
 /**
  * An OutputFormat that can write Drawings with DOMStorable Figure's.

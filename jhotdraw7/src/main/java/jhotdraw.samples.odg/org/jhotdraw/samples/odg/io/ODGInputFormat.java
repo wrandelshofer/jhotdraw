@@ -3,24 +3,59 @@
  */
 package org.jhotdraw.samples.odg.io;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import net.n3.nanoxml.IXMLElement;
+import net.n3.nanoxml.IXMLParser;
+import net.n3.nanoxml.IXMLReader;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLException;
+import net.n3.nanoxml.XMLParserFactory;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.io.InputFormat;
-import java.awt.datatransfer.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-import java.util.zip.*;
-import javax.swing.*;
-import net.n3.nanoxml.*;
-import org.jhotdraw.draw.*;
 import org.jhotdraw.geom.BezierPath;
-import org.jhotdraw.io.*;
-import static org.jhotdraw.samples.odg.ODGConstants.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
-import org.jhotdraw.samples.odg.figures.*;
-import org.jhotdraw.samples.odg.geom.*;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import org.jhotdraw.io.StreamPosTokenizer;
+import org.jhotdraw.samples.odg.figures.ODGBezierFigure;
+import org.jhotdraw.samples.odg.figures.ODGEllipseFigure;
+import org.jhotdraw.samples.odg.figures.ODGFigure;
+import org.jhotdraw.samples.odg.figures.ODGGroupFigure;
+import org.jhotdraw.samples.odg.figures.ODGPathFigure;
+import org.jhotdraw.samples.odg.figures.ODGRectFigure;
+import org.jhotdraw.samples.odg.geom.EnhancedPath;
+
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipInputStream;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.NAME;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
+import static org.jhotdraw.samples.odg.ODGConstants.DRAWING_NAMESPACE;
+import static org.jhotdraw.samples.odg.ODGConstants.OFFICE_NAMESPACE;
+import static org.jhotdraw.samples.odg.ODGConstants.SVG_NAMESPACE;
 
 /**
  * ODGInputFormat.

@@ -31,7 +31,10 @@ package net.n3.nanoxml;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Properties;
 
 
 /**

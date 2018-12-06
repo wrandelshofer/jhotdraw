@@ -4,16 +4,29 @@
 
 package org.jhotdraw.samples.svg.figures;
 
-import java.awt.event.*;
-import java.awt.image.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import org.jhotdraw.samples.svg.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
-import org.jhotdraw.util.*;
+import org.jhotdraw.draw.AbstractAttributedFigure;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGAttributeKeys;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import java.awt.AlphaComposite;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.event.ActionEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_WIDTH;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 /**
  * SVGAttributedFigure.
  *
@@ -100,7 +113,7 @@ public abstract class SVGAttributedFigure extends AbstractAttributedFigure {
     @Override public Collection<Action> getActions(Point2D.Double p) {
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+            ResourceBundleUtil labels = Labels.getLabels();
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {
     private static final long serialVersionUID = 1L;
                 @Override

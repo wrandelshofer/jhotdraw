@@ -4,7 +4,6 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import javax.annotation.Nonnull;
 /**
  * PaletteBorders.
  *

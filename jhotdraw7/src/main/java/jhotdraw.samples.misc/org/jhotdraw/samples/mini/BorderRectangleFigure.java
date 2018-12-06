@@ -4,10 +4,13 @@
 
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import org.jhotdraw.draw.RectangleFigure;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  * BorderRectangle2D.DoubleFigure.

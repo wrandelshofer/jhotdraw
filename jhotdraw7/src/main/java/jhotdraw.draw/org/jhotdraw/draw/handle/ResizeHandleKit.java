@@ -3,16 +3,24 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.locator.RelativeLocator;
-import org.jhotdraw.draw.locator.Locator;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
-import java.util.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
+import org.jhotdraw.draw.locator.Locator;
+import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.util.ResourceBundleUtil;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * A set of utility methods to create handles which resize a Figure by

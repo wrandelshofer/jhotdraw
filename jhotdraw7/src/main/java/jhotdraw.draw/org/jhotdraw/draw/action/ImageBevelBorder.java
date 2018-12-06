@@ -4,9 +4,18 @@
 
 package org.jhotdraw.draw.action;
 
-import java.awt.*;
-import javax.swing.border.*;
-import java.awt.image.*;
+import javax.swing.border.Border;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.MediaTracker;
+import java.awt.Rectangle;
+import java.awt.TexturePaint;
+import java.awt.image.BufferedImage;
 
 /**
  * Draws a filled bevel border using an image and insets.

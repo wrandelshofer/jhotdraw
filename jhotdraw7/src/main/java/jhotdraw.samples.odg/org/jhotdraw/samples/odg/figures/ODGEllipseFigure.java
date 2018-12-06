@@ -3,18 +3,29 @@
  */
 package org.jhotdraw.samples.odg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.TransformHandleKit;
-import org.jhotdraw.draw.handle.ResizeHandleKit;
-import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import org.jhotdraw.draw.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.samples.odg.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.ResizeHandleKit;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.samples.odg.Gradient;
+import org.jhotdraw.samples.odg.ODGAttributeKeys;
+
+import javax.annotation.Nullable;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_GRADIENT;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_GRADIENT;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
 
 /**
  * ODGEllipse represents a ODG ellipse and a ODG circle element.

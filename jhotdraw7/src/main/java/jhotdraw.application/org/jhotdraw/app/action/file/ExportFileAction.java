@@ -3,25 +3,33 @@
  */
 package org.jhotdraw.app.action.file;
 
-import javax.annotation.Nullable;
-import java.net.URISyntaxException;
-import java.util.ResourceBundle;
-
-import org.jhotdraw.gui.*;
-import org.jhotdraw.gui.event.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.prefs.Preferences;
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
+import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.gui.JFileURIChooser;
+import org.jhotdraw.gui.JSheet;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.event.SheetEvent;
+import org.jhotdraw.gui.event.SheetListener;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.prefs.Preferences;
 
 /**
  * Presents a file chooser to the user and then exports the contents of the
@@ -66,7 +74,7 @@ public class ExportFileAction extends AbstractViewAction {
 
     public ExportFileAction(Application app, @Nullable View view, boolean proposeFileName) {
         super(app, view);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
         this.proposeFileName = proposeFileName;
     }
@@ -92,7 +100,7 @@ public class ExportFileAction extends AbstractViewAction {
     public void actionPerformed(ActionEvent evt) {
         final View view = getActiveView();
         if (view.isEnabled()) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+            ResourceBundleUtil labels = Labels.getLabels();
 
             oldFocusOwner = SwingUtilities.getWindowAncestor(view.getComponent()).getFocusOwner();
             view.setEnabled(false);

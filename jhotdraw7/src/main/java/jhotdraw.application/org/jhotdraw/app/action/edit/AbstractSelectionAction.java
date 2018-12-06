@@ -3,13 +3,14 @@
  */
 package org.jhotdraw.app.action.edit;
 
+import org.jhotdraw.beans.WeakPropertyChangeListener;
+import org.jhotdraw.gui.EditableComponent;
+
 import javax.annotation.Nullable;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
-import org.jhotdraw.gui.EditableComponent;
-import org.jhotdraw.beans.WeakPropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * {@code AbstractSelectionAction} acts on the selection of a target component.

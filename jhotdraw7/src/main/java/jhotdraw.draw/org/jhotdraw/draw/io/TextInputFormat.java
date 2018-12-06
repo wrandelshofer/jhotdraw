@@ -3,15 +3,25 @@
  */
 package org.jhotdraw.draw.io;
 
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import org.jhotdraw.draw.*;
-import java.awt.datatransfer.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-import javax.swing.*;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+
+import javax.swing.JComponent;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.geom.Point2D;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.LinkedList;
 
 /**
  * An input format for importing text into a drawing.

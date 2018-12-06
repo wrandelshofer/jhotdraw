@@ -4,16 +4,22 @@
  */
 package org.jhotdraw.draw.text;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.event.FigureListener;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
-import java.awt.*;
+import org.jhotdraw.draw.event.FigureListener;
+
+import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
-import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A <em>floating text area</em> that is used to edit a {@link TextHolderFigure}.

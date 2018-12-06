@@ -5,10 +5,12 @@
 
 package org.jhotdraw.draw.decoration;
 
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.io.*;
+import org.jhotdraw.draw.Figure;
+
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 /**
  * A <em>line decoration</em> can be used to draw a decoration at the start or

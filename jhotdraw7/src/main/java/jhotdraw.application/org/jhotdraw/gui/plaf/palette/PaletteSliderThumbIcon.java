@@ -4,9 +4,12 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
-import javax.swing.*;
 import org.jhotdraw.util.Images;
+
+import javax.swing.Icon;
+import javax.swing.JSlider;
+import java.awt.Component;
+import java.awt.Image;
 
 /**
  * An Icon with different visuals reflecting the state of the slider

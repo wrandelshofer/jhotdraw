@@ -3,18 +3,23 @@
  */
 package org.jhotdraw.draw.handle;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.event.TransformRestoreEdit;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformEdit;
-import java.awt.*;
+import org.jhotdraw.draw.event.TransformRestoreEdit;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ResourceBundle;
 
-import org.jhotdraw.geom.*;
-import org.jhotdraw.util.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * This abstract class can be extended to implement a {@link Handle} which

@@ -4,12 +4,16 @@
 
 package org.jhotdraw.draw.io;
 
+import org.jhotdraw.draw.Drawing;
+
 import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import java.awt.datatransfer.*;
-import java.io.*;
+import javax.swing.JComponent;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-import javax.swing.*;
 
 /**
  * An <em>input format</em> implements a strategy for reading a {@link Drawing}

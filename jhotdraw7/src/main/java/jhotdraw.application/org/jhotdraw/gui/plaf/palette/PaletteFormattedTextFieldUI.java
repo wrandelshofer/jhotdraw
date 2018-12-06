@@ -3,13 +3,26 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
-import java.awt.geom.Line2D;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.border.Border;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
-import javax.swing.text.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicFormattedTextFieldUI;
+import javax.swing.text.Element;
+import javax.swing.text.FieldView;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.View;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.Line2D;
 
 /**
  * PaletteFormattedTextFieldUI.

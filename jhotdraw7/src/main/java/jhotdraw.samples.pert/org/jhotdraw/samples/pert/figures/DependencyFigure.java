@@ -3,11 +3,20 @@
  */
 package org.jhotdraw.samples.pert.figures;
 
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
-import java.awt.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.draw.*;
+
+import java.awt.Color;
+
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
+import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
+import static org.jhotdraw.draw.AttributeKeys.START_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 
 /**
  * DependencyFigure.

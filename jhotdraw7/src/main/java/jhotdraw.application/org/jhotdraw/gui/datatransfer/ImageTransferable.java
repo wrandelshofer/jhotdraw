@@ -5,10 +5,15 @@
 package org.jhotdraw.gui.datatransfer;
 
 import org.jhotdraw.util.Images;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.io.*;
+
 import javax.imageio.ImageIO;
+import java.awt.Image;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * A Transferable with an Image as its transfer class.

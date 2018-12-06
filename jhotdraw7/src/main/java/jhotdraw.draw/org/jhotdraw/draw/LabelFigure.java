@@ -4,13 +4,14 @@
 
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.tool.Tool;
-import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.tool.TextEditingTool;
-import java.awt.geom.*;
-import java.util.*;
+import org.jhotdraw.draw.tool.Tool;
+
+import javax.annotation.Nullable;
+import java.awt.geom.Point2D;
+import java.util.Map;
 
 /**
  * A LabelFigure can be used to provide more double clickable area for a

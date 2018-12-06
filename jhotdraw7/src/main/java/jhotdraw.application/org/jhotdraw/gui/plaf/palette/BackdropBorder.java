@@ -4,10 +4,10 @@
 package org.jhotdraw.gui.plaf.palette;
 
 import javax.annotation.Nullable;
+import javax.swing.border.Border;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
-import javax.swing.border.Border;
 
 /**
  * BackdropBorder.

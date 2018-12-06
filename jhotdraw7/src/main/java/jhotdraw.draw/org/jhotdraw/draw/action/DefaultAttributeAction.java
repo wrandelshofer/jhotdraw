@@ -3,14 +3,21 @@
  */
 package org.jhotdraw.draw.action;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
-import org.jhotdraw.undo.*;
-import javax.swing.*;
-import java.beans.*;
-import java.util.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.undo.CompositeEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * DefaultAttributeAction.

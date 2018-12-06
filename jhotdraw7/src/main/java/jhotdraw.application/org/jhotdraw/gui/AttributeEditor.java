@@ -4,8 +4,8 @@
 
 package org.jhotdraw.gui;
 
+import javax.swing.JComponent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
 
 /**
  * Interface for a field or any other kind of editor which can be used to edit

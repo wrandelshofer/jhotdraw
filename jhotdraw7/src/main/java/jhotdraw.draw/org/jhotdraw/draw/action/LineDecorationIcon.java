@@ -4,13 +4,18 @@
 
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.draw.LineFigure;
 import org.jhotdraw.draw.decoration.LineDecoration;
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
 
-import static org.jhotdraw.draw.AttributeKeys.*;
+import javax.swing.Icon;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Point2D;
+
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.START_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
 /**
  * LineDecorationIcon.
  *

@@ -4,11 +4,21 @@
 package org.jhotdraw.color;
 
 import javax.annotation.Nullable;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.color.ColorSpace;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 /**
  * The {@code JColorWheel} displays a wheel made of two components of a

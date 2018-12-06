@@ -5,8 +5,10 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
-import java.util.*;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.util.HashSet;
+import java.util.ResourceBundle;
 
 /**
  * SelectSameAction.

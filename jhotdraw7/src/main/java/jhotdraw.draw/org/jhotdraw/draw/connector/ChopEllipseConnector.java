@@ -4,11 +4,17 @@
 
 package org.jhotdraw.draw.connector;
 
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.Geom;
+
+import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_PLACEMENT;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
+import static org.jhotdraw.draw.AttributeKeys.getStrokeTotalWidth;
 /**
  * A {@link Connector} which locates a connection point at the bounds
  * of any figure which has an elliptic shape, such as {@link org.jhotdraw.draw.EllipseFigure}.

@@ -3,16 +3,30 @@
  */
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.geom.Bezier;
+import org.jhotdraw.geom.BezierPath;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
-import javax.swing.*;
-import org.jhotdraw.geom.*;
 
 /**
  * Demonstration of the curve fitting algorithm of class {@link Bezier}. 

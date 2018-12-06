@@ -3,10 +3,11 @@
  */
 package org.jhotdraw.color;
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.color.ColorSpace;
 import java.awt.geom.Point2D;
-import static java.lang.Math.*;
+
+import static java.lang.Math.sqrt;
 
 /**
  * Produces the image of a {@link JColorWheel} by interpreting two components

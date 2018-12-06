@@ -4,8 +4,12 @@
 package org.jhotdraw.color;
 
 import javax.annotation.Nullable;
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
+import javax.swing.JList;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 
 /**
  * ColorListCellRenderer.

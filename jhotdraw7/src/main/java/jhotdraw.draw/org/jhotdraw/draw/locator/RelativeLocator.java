@@ -4,12 +4,17 @@
 
 package org.jhotdraw.draw.locator;
 
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.DecoratedFigure;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.DECORATOR_INSETS;
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 /**
  * A locator that specifies a point that is relative to the bounds
  * of a figure.

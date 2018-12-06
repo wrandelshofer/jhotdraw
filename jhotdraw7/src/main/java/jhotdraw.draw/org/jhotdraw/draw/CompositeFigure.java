@@ -4,9 +4,9 @@
 
 package org.jhotdraw.draw;
 
-import org.jhotdraw.draw.layouter.Layouter;
 import org.jhotdraw.draw.event.CompositeFigureListener;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.layouter.Layouter;
+import org.jhotdraw.geom.Insets2D;
 
 /**
  * A <em>composite figure</em> is composed of several child {@link Figure}s.

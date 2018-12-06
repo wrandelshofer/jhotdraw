@@ -3,19 +3,36 @@
  */
 package org.jhotdraw.app.action.file;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.print.*;
-import java.util.ResourceBundle;
-import javax.print.attribute.*;
-import javax.print.attribute.standard.*;
-import javax.swing.*;
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.PrintableView;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.util.*;
+import org.jhotdraw.gui.BackgroundTask;
+import org.jhotdraw.gui.JSheet;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.PrinterResolution;
+import javax.swing.Action;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.JobAttributes;
+import java.awt.PageAttributes;
+import java.awt.PrintJob;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Pageable;
+import java.awt.print.Paper;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 
 /**
  * Presents a printer chooser to the user and then prints the
@@ -54,7 +71,7 @@ public class PrintFileAction extends AbstractViewAction {
     /** Creates a new instance. */
     public PrintFileAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -91,7 +108,7 @@ public class PrintFileAction extends AbstractViewAction {
                 } catch (PrinterException e) {
                     String message = (e.getMessage() == null) ? e.toString() : e.getMessage();
                     View view = getActiveView();
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                    ResourceBundleUtil labels = Labels.getLabels();
                     JSheet.showMessageSheet(view.getComponent(),
                             "<html>" + UIManager.getString("OptionPane.css") +
                             "<b>" + labels.getString("couldntPrint") + "</b><br>" +
@@ -123,7 +140,7 @@ public class PrintFileAction extends AbstractViewAction {
                 try {
                     job.print();
                 } catch (PrinterException e) {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                    ResourceBundleUtil labels = Labels.getLabels();
                     JSheet.showMessageSheet(getActiveView().getComponent(),
                             labels.getFormatted("couldntPrint", e));
                 }

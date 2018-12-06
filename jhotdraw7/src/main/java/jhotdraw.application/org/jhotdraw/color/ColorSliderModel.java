@@ -4,11 +4,11 @@
 
 package org.jhotdraw.color;
 
-import java.awt.Color;
-import java.awt.color.ColorSpace;
 import javax.swing.BoundedRangeModel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
+import java.awt.Color;
+import java.awt.color.ColorSpace;
 
 /**
  * ColorSliderModel.

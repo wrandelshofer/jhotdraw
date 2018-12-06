@@ -4,9 +4,23 @@
 package org.jhotdraw.geom;
 
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.geom.*;
-import static java.lang.Math.*;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan2;
+import static java.lang.Math.ceil;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * Some geometric utilities.

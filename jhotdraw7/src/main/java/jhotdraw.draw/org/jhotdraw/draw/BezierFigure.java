@@ -3,25 +3,42 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.connector.ChopBezierConnector;
-import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.BezierNodeHandle;
 import org.jhotdraw.draw.handle.BezierOutlineHandle;
 import org.jhotdraw.draw.handle.BezierScaleHandle;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.undo.*;
-import java.io.*;
 import org.jhotdraw.draw.handle.Handle;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.geom.GrowStroke;
+import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
+
+import javax.annotation.Nullable;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.PATH_CLOSED;
+import static org.jhotdraw.draw.AttributeKeys.START_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.draw.AttributeKeys.UNCLOSED_PATH_FILLED;
+import static org.jhotdraw.draw.AttributeKeys.WINDING_RULE;
 
 /**
  * A {@link Figure} which draws an opened or a closed bezier path.

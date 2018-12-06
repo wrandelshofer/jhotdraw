@@ -3,23 +3,39 @@
  */
 package org.jhotdraw.samples.pert.figures;
 
-import org.jhotdraw.draw.locator.RelativeLocator;
-import org.jhotdraw.draw.handle.MoveHandle;
-import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.GraphicalCompositeFigure;
+import org.jhotdraw.draw.ListFigure;
+import org.jhotdraw.draw.RectangleFigure;
+import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
-import org.jhotdraw.draw.layouter.VerticalLayouter;
-import org.jhotdraw.draw.connector.LocatorConnector;
-import org.jhotdraw.draw.handle.ConnectorHandle;
-import java.io.IOException;
-import java.awt.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import java.util.*;
-import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.util.*;
-import org.jhotdraw.xml.*;
+import org.jhotdraw.draw.handle.ConnectorHandle;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.MoveHandle;
+import org.jhotdraw.draw.layouter.VerticalLayouter;
+import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.geom.Insets2D;
+import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.FONT_BOLD;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
 
 /**
  * TaskFigure.

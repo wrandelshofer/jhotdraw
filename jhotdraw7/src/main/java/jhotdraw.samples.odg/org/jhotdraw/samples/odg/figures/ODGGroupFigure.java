@@ -4,15 +4,25 @@
 
 package org.jhotdraw.samples.odg.figures;
 
-import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.handle.Handle;
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.samples.odg.ODGAttributeKeys;
+
+import java.awt.AlphaComposite;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.samples.odg.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.OPACITY;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
 /**
  * ODGGroupFigure.
  *

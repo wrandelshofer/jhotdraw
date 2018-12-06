@@ -4,8 +4,11 @@
 
 package org.jhotdraw.gui.filechooser;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Filters files by their extensions.

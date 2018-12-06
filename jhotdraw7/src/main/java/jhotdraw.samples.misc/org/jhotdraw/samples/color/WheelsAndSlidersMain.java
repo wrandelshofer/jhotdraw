@@ -3,8 +3,36 @@
  */
 package org.jhotdraw.samples.color;
 
-import org.jhotdraw.color.*;
-import java.awt.*;
+import org.jhotdraw.color.CIELABColorSpace;
+import org.jhotdraw.color.CIELCHabColorSpace;
+import org.jhotdraw.color.CMYKNominalColorSpace;
+import org.jhotdraw.color.ColorSliderModel;
+import org.jhotdraw.color.ColorSliderUI;
+import org.jhotdraw.color.ColorUtil;
+import org.jhotdraw.color.DefaultColorSliderModel;
+import org.jhotdraw.color.HSBColorSpace;
+import org.jhotdraw.color.HSLColorSpace;
+import org.jhotdraw.color.HSLPhysiologicColorSpace;
+import org.jhotdraw.color.HSVColorSpace;
+import org.jhotdraw.color.HSVPhysiologicColorSpace;
+import org.jhotdraw.color.ICCProfileReader;
+import org.jhotdraw.color.JColorWheel;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.color.ICC_Profile;
@@ -12,9 +40,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.util.ArrayList;
 
 /**
  * A demo of color wheels and color sliders using all kinds of color systems.

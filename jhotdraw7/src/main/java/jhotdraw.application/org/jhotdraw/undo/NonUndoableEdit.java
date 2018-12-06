@@ -4,7 +4,7 @@
 
 package org.jhotdraw.undo;
 
-import javax.swing.undo.*;
+import javax.swing.undo.AbstractUndoableEdit;
 /**
  * NonUndoableEdit.
  *

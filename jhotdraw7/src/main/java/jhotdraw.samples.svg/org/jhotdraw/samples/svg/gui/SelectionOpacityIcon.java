@@ -3,10 +3,17 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.net.*;
-import org.jhotdraw.draw.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Shape;
+import java.net.URL;
 
 /**
  * {@code SelectionOpacityIcon} visualizes an opacity attribute of the selected

@@ -4,10 +4,15 @@
 
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.locator.Locator;
-import org.jhotdraw.draw.*;
-import java.awt.*;
+import org.jhotdraw.draw.locator.RelativeLocator;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  * A {@link Handle} which requests to remove its owning figure when clicked.

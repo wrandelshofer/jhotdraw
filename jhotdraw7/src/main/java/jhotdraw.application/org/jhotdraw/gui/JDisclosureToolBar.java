@@ -3,10 +3,20 @@
  */
 package org.jhotdraw.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import org.jhotdraw.gui.plaf.palette.*;
+import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
+import org.jhotdraw.gui.plaf.palette.PaletteToolBarUI;
+
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JToolBar;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * A ToolBar with disclosure functionality.

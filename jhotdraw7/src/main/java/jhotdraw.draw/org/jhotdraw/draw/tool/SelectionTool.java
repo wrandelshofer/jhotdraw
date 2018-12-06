@@ -3,14 +3,20 @@
  */
 package org.jhotdraw.draw.tool;
 
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.event.ToolAdapter;
 import org.jhotdraw.draw.event.ToolEvent;
-import java.awt.*;
-import java.awt.event.*;
+import org.jhotdraw.draw.handle.Handle;
+
+import java.awt.Graphics2D;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
-import org.jhotdraw.draw.event.ToolAdapter;
 
 /**
  * Tool to select and manipulate figures.

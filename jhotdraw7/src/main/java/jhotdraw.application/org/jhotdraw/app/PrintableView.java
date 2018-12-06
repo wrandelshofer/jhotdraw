@@ -4,7 +4,7 @@
 
 package org.jhotdraw.app;
 
-import java.awt.print.*;
+import java.awt.print.Pageable;
 
 /**
  * The interface of a {@link View} which can print its document.

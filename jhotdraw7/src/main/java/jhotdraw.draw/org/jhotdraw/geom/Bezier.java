@@ -3,8 +3,9 @@
  */
 package org.jhotdraw.geom;
 
-import java.awt.geom.*;
-import java.util.*;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Provides algorithms for fitting Bezier curves to a set of digitized points.

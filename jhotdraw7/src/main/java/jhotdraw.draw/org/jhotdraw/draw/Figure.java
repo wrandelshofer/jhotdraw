@@ -3,19 +3,24 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.event.FigureListener;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.tool.Tool;
+import org.jhotdraw.geom.Dimension2DDouble;
+
+import javax.annotation.Nullable;
+import javax.swing.Action;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
-import java.util.*;
-import javax.swing.*;
-import java.io.*;
-import org.jhotdraw.geom.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * A <em>figure</em> is a graphical element of a {@link Drawing}. A figure

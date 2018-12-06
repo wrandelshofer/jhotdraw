@@ -3,25 +3,44 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.TransformHandleKit;
-import org.jhotdraw.draw.handle.ResizeHandleKit;
-import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.event.TransformRestoreEdit;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.handle.BoundsOutlineHandle;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
-import org.jhotdraw.samples.svg.*;
-import org.jhotdraw.util.*;
-import org.jhotdraw.geom.*;
+ import org.jhotdraw.draw.ImageHolderFigure;
+ import org.jhotdraw.draw.event.TransformRestoreEdit;
+ import org.jhotdraw.draw.handle.BoundsOutlineHandle;
+ import org.jhotdraw.draw.handle.Handle;
+ import org.jhotdraw.draw.handle.ResizeHandleKit;
+ import org.jhotdraw.draw.handle.TransformHandleKit;
+ import org.jhotdraw.geom.GrowStroke;
+ import org.jhotdraw.samples.svg.Labels;
+ import org.jhotdraw.samples.svg.SVGAttributeKeys;
+ import org.jhotdraw.util.ResourceBundleUtil;
+
+ import javax.annotation.Nullable;
+ import javax.imageio.ImageIO;
+ import javax.swing.AbstractAction;
+ import javax.swing.Action;
+ import java.awt.AlphaComposite;
+ import java.awt.BasicStroke;
+ import java.awt.Color;
+ import java.awt.Composite;
+ import java.awt.Graphics2D;
+ import java.awt.Shape;
+ import java.awt.event.ActionEvent;
+ import java.awt.geom.AffineTransform;
+ import java.awt.geom.Point2D;
+ import java.awt.geom.Rectangle2D;
+ import java.awt.image.BufferedImage;
+ import java.io.ByteArrayInputStream;
+ import java.io.ByteArrayOutputStream;
+ import java.io.File;
+ import java.io.FileInputStream;
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.util.Collection;
+ import java.util.LinkedList;
+ import java.util.ResourceBundle;
+
+ import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;
+ import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
 /**
  * SVGImage.
@@ -260,7 +279,7 @@ public class SVGImageFigure extends SVGAttributedFigure implements SVGFigure, Im
 
     @Override
     public Collection<Action> getActions(Point2D.Double p) {
-        final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        final ResourceBundleUtil labels = Labels.getLabels();
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {

@@ -3,10 +3,11 @@
  */
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.undo.CompositeEdit;
+
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-import org.jhotdraw.undo.CompositeEdit;
 
 /**
  * A {@link CompositeEdit} which invokes {@code figure.willChange}

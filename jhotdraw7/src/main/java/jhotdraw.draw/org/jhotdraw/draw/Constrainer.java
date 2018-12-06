@@ -3,9 +3,10 @@
  */
 package org.jhotdraw.draw;
 
-import java.awt.*;
-import java.awt.geom.*;
 import javax.swing.event.ChangeListener;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A <em>constrainer</em> constrains editing operations performed by

@@ -6,7 +6,9 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
-import javax.swing.*;
+
+import javax.swing.AbstractButton;
+import javax.swing.Action;
 
 /**
  * Zooms either the current view or all views of a DrawingEditor.

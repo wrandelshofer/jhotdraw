@@ -3,15 +3,30 @@
  */
 package org.jhotdraw.draw.tool;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.connector.Connector;
-import javax.swing.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.util.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * A tool to create a connection between two figures.

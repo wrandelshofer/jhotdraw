@@ -3,17 +3,23 @@
  */
 package org.jhotdraw.draw.handle;
 
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.locator.FontSizeLocator;
 import org.jhotdraw.draw.locator.Locator;
-import org.jhotdraw.draw.*;
-import javax.swing.undo.*;
-import java.awt.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoableEdit;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.geom.*;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.util.ResourceBundle;
 
-import org.jhotdraw.util.ResourceBundleUtil;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * A {@link Handle} which can be used to change the font size of a

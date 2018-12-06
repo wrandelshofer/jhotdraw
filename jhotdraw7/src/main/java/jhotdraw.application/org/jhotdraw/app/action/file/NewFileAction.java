@@ -4,13 +4,13 @@
 
 package org.jhotdraw.app.action.file;
 
-import org.jhotdraw.util.*;
-import java.awt.event.*;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.event.ActionEvent;
 
 /**
  * Creates a new view.
@@ -40,7 +40,7 @@ public class NewFileAction extends AbstractApplicationAction {
     }
     public NewFileAction(Application app, String id) {
         super(app);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, id);
     }
     

@@ -4,12 +4,14 @@
 
 package org.jhotdraw.app.action.edit;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
-import org.jhotdraw.util.*;
+import org.jhotdraw.util.ResourceBundleUtil;
 
-import java.util.ResourceBundle;
+import javax.annotation.Nullable;
 
 /**
  * Presents a find dialog to the user and then highlights the found items
@@ -32,7 +34,7 @@ public abstract class AbstractFindAction extends AbstractViewAction {
     /** Creates a new instance. */
     public AbstractFindAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }    
 }

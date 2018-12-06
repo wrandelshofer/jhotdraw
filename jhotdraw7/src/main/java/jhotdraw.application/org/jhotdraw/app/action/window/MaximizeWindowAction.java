@@ -4,15 +4,18 @@
 
 package org.jhotdraw.app.action.window;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 
 /**
  * Maximizes the window of the active view.
@@ -27,7 +30,7 @@ public class MaximizeWindowAction extends AbstractViewAction {
     /** Creates a new instance. */
     public MaximizeWindowAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
     

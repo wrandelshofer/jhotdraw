@@ -3,26 +3,49 @@
  */
 package org.jhotdraw.samples.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.tool.CreationTool;
-import org.jhotdraw.draw.tool.BezierTool;
-import org.jhotdraw.draw.tool.TextCreationTool;
-import org.jhotdraw.draw.tool.TextAreaCreationTool;
-import org.jhotdraw.draw.tool.ImageTool;
-import org.jhotdraw.draw.liner.ElbowLiner;
-import org.jhotdraw.draw.liner.CurvedLiner;
-import org.jhotdraw.draw.tool.ConnectionTool;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.DefaultApplicationModel;
+import org.jhotdraw.app.View;
+import org.jhotdraw.draw.AbstractAttributedFigure;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DiamondFigure;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.EllipseFigure;
+import org.jhotdraw.draw.ImageFigure;
+import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.LineFigure;
+import org.jhotdraw.draw.RectangleFigure;
+import org.jhotdraw.draw.RoundRectangleFigure;
+import org.jhotdraw.draw.TextAreaFigure;
+import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.TriangleFigure;
+import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.decoration.ArrowTip;
-import org.jhotdraw.gui.URIChooser;
-import org.jhotdraw.util.*;
-import java.util.*;
-import javax.swing.*;
-import org.jhotdraw.app.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.draw.liner.CurvedLiner;
+import org.jhotdraw.draw.liner.ElbowLiner;
+import org.jhotdraw.draw.tool.BezierTool;
+import org.jhotdraw.draw.tool.ConnectionTool;
+import org.jhotdraw.draw.tool.CreationTool;
+import org.jhotdraw.draw.tool.ImageTool;
+import org.jhotdraw.draw.tool.TextAreaCreationTool;
+import org.jhotdraw.draw.tool.TextCreationTool;
 import org.jhotdraw.gui.JFileURIChooser;
+import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.Action;
+import javax.swing.JToolBar;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
 
 /**
  * Provides factory methods for creating views, menu bars and toolbars.

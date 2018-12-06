@@ -3,13 +3,21 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.locator.BezierLabelLocator;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.LabeledLineConnectionFigure;
+import org.jhotdraw.draw.RectangleFigure;
+import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.layouter.LocatorLayouter;
 import org.jhotdraw.draw.liner.ElbowLiner;
-import java.awt.geom.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.locator.BezierLabelLocator;
+import org.jhotdraw.geom.Geom;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import java.awt.geom.Point2D;
 
 /**
  * Example showing how to connect two rectangles with a labeled connection,

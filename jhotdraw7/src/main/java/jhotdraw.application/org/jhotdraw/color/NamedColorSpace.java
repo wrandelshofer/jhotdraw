@@ -3,7 +3,6 @@
  */
 package org.jhotdraw.color;
 
-import javax.annotation.Nonnull;
 /**
  * Interface for {@code ColorSpace} classes which have a name.
  *

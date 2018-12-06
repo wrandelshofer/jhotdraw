@@ -3,12 +3,19 @@
  */
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.EllipseFigure;
+
+import javax.swing.Timer;
 import java.awt.Color;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 
 /**
  * AnimationSample displays a rotating ellipse figure.

@@ -3,11 +3,11 @@
  */
 package org.jhotdraw.gui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextArea;
 import javax.swing.text.Document;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * JLifeFormattedTextArea.

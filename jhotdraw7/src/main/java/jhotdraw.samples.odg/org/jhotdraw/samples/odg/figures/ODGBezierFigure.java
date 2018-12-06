@@ -3,17 +3,26 @@
  */
 package org.jhotdraw.samples.odg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.TransformHandleKit;
-import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.handle.BezierNodeHandle;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.undo.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.geom.BezierPath;
+
+import javax.annotation.Nullable;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.UNCLOSED_PATH_FILLED;
 
 /**
  * ODGBezierFigure is not an actual ODG element, it is used by ODGPathFigure to

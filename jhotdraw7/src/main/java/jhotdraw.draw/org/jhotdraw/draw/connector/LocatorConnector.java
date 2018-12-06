@@ -4,12 +4,15 @@
 
 package org.jhotdraw.draw.connector;
 
-import org.jhotdraw.draw.locator.Locator;
-import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.ConnectionFigure;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.locator.Locator;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
-import org.jhotdraw.xml.*;
 /**
  * A LocatorConnector locates connection points with
  * the help of a Locator. It supports the definition

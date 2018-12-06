@@ -3,12 +3,22 @@
  */
 package org.jhotdraw.color;
 
-import java.awt.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.color.ColorSpace;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.beans.*;
-import javax.swing.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * JHarmonicColorWheel.

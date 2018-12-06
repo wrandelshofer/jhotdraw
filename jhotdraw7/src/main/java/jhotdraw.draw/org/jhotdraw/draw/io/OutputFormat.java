@@ -4,13 +4,16 @@
 
 package org.jhotdraw.draw.io;
 
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+
 import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import java.awt.datatransfer.*;
-import java.io.*;
+import javax.swing.JComponent;
+import java.awt.datatransfer.Transferable;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
-import java.util.*;
-import javax.swing.*;
+import java.util.List;
 
 /**
  * An <em>output format</em> implements a strategy for writing a {@link Drawing}

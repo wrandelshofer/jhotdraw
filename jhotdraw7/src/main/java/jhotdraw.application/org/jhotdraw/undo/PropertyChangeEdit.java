@@ -3,11 +3,11 @@
  */
 package org.jhotdraw.undo;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoableEdit;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 
 /**
  * An {@code UndoableEdit} event which can undo a change of a JavaBeans property.

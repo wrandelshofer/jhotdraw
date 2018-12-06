@@ -3,33 +3,47 @@
  */
 package org.jhotdraw.samples.draw;
 
-import org.jhotdraw.draw.io.TextInputFormat;
-import org.jhotdraw.draw.io.OutputFormat;
-import org.jhotdraw.draw.io.InputFormat;
-import org.jhotdraw.draw.io.ImageOutputFormat;
-import org.jhotdraw.draw.io.ImageInputFormat;
-import org.jhotdraw.draw.print.DrawingPageable;
-import org.jhotdraw.draw.io.DOMStorableInputOutputFormat;
-import java.awt.geom.*;
-import java.awt.print.Pageable;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.beans.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.border.*;
 import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.ImageFigure;
+import org.jhotdraw.draw.QuadTreeDrawing;
+import org.jhotdraw.draw.TextAreaFigure;
+import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.action.ButtonFactory;
+import org.jhotdraw.draw.io.DOMStorableInputOutputFormat;
+import org.jhotdraw.draw.io.ImageInputFormat;
+import org.jhotdraw.draw.io.ImageOutputFormat;
+import org.jhotdraw.draw.io.InputFormat;
+import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.draw.io.TextInputFormat;
+import org.jhotdraw.draw.print.DrawingPageable;
+import org.jhotdraw.gui.PlacardScrollPaneLayout;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.undo.UndoRedoManager;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.geom.Point2D;
+import java.awt.print.Pageable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.util.ResourceBundle;
 
 /**
  * Provides a view on a drawing.
@@ -167,7 +181,7 @@ public class DrawView extends AbstractView {
                         }
                     }
             if (!success) {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 throw new IOException(labels.getFormatted("file.open.unsupportedFileFormat.message", URIUtil.getName(f)));
             }
             SwingUtilities.invokeAndWait(new Runnable() {

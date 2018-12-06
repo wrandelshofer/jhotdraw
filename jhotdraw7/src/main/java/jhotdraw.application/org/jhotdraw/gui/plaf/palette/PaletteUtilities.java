@@ -3,10 +3,15 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
 import javax.swing.JComponent;
-import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 
 /**
  * PaletteUtilities.

@@ -4,14 +4,17 @@
 
 package org.jhotdraw.samples.odg.action;
 
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.AbstractViewAction;
+import org.jhotdraw.app.action.ActionUtil;
+import org.jhotdraw.samples.odg.ODGView;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
-import java.awt.event.*;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
-import javax.swing.*;
-import org.jhotdraw.app.*;
-import org.jhotdraw.app.action.*;
-import org.jhotdraw.samples.odg.*;
-import org.jhotdraw.util.*;
 
 /**
  * TogglePropertiesPanelAction.

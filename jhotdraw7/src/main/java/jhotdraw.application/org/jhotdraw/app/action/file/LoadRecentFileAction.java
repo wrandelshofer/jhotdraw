@@ -3,20 +3,26 @@
  */
 package org.jhotdraw.app.action.file;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.gui.event.*;
-import java.awt.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
+import org.jhotdraw.gui.BackgroundTask;
+import org.jhotdraw.gui.JSheet;
+import org.jhotdraw.gui.event.SheetEvent;
+import org.jhotdraw.gui.event.SheetListener;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Lets the user save unsaved changes of the active view, and then loads
@@ -122,7 +128,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
                 if (exists) {
                     view.read(uri, null);
                 } else {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                    ResourceBundleUtil labels = Labels.getLabels();
                     throw new IOException(labels.getFormatted("file.load.fileDoesNotExist.message", URIUtil.getName(uri)));
                 }
             }
@@ -144,7 +150,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
             @Override
             protected void failed(Throwable error) {
                 error.printStackTrace();
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")

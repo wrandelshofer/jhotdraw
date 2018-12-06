@@ -3,13 +3,23 @@
  */
 package org.jhotdraw.draw.tool;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.*;
-import java.awt.event.*;
-import java.awt.*;
+
+import javax.annotation.Nullable;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Stroke;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * {@code DefaultSelectAreaTracker} implements interactions with the background

@@ -4,10 +4,12 @@
 
 package org.jhotdraw.samples.svg.io;
 
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import java.io.*;
-import java.util.zip.*;
-import org.jhotdraw.draw.*;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * SVGZOutputFormat.

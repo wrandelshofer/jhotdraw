@@ -3,17 +3,19 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.beans.AbstractBean;
 import org.jhotdraw.draw.tool.Tool;
+
+import javax.annotation.Nullable;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import org.jhotdraw.beans.AbstractBean;
 
 /**
  * DrawingEditorProxy. <hr> <b>Design Patterns</b>

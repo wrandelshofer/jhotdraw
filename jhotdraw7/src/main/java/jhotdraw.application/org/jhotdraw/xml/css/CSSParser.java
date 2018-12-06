@@ -7,8 +7,14 @@
 
 package org.jhotdraw.xml.css;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 /**
  * Parsers a Cascading Style Sheet (CSS).
  * <pre>

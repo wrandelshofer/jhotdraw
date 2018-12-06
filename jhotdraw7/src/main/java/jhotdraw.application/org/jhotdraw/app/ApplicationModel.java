@@ -3,10 +3,12 @@
  */
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import javax.swing.*;
 import org.jhotdraw.gui.URIChooser;
+
+import javax.annotation.Nullable;
+import javax.swing.ActionMap;
+import javax.swing.JToolBar;
+import java.util.List;
 
 /**
  * {@code ApplicationModel} provides meta-data for an {@link Application},

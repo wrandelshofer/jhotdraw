@@ -3,10 +3,20 @@
  */
 package org.jhotdraw.draw.action;
 
-import org.jhotdraw.draw.*;
-import java.util.*;
-import javax.swing.undo.*;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 /**
  * GroupAction.

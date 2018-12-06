@@ -4,8 +4,6 @@
 
 package org.jhotdraw.app;
 
-import javax.annotation.Nonnull;
-
 /**
  * Interface for objects which explicitly must be disposed to free resources.
  *

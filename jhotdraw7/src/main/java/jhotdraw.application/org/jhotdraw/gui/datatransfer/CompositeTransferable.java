@@ -4,9 +4,14 @@
 
 package org.jhotdraw.gui.datatransfer;
 
-import java.awt.datatransfer.*;
-import java.util.*;
-import java.io.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * ComoositeTransferable.

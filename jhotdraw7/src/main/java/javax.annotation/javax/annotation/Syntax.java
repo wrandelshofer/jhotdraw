@@ -1,11 +1,10 @@
 package javax.annotation;
 
+import javax.annotation.meta.TypeQualifier;
+import javax.annotation.meta.When;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-import javax.annotation.meta.TypeQualifier;
-import javax.annotation.meta.When;
 
 /**
  * This annotation a value that is of a particular syntax, such as Java syntax

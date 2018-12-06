@@ -3,24 +3,40 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.tool.Tool;
-import org.jhotdraw.draw.tool.TextEditingTool;
-import org.jhotdraw.draw.handle.FontSizeHandle;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.font.*;
-import java.awt.geom.*;
-import java.util.*;
-import java.io.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
+import org.jhotdraw.draw.handle.FontSizeHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.locator.RelativeLocator;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.tool.TextEditingTool;
+import org.jhotdraw.draw.tool.Tool;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.geom.Insets2D;
+import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
+
+import javax.annotation.Nullable;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextAttribute;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.FONT_SIZE;
+import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
+import static org.jhotdraw.draw.AttributeKeys.TEXT;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_COLOR;
 
 /**
  * A {@code TextHolderFigure} which holds a single line of text.

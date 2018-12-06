@@ -3,27 +3,55 @@
  */
 package org.jhotdraw.samples.teddy;
 
-import java.awt.event.*;
-import org.jhotdraw.app.*;
-import org.jhotdraw.samples.teddy.text.*;
-import org.jhotdraw.samples.teddy.regex.*;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.samples.teddy.io.*;
-import java.lang.reflect.*;
-import java.awt.*;
-import java.beans.*;
-import java.util.prefs.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import javax.swing.undo.*;
-import java.io.*;
-import java.net.URI;
+import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.samples.teddy.io.LFWriter;
+import org.jhotdraw.samples.teddy.regex.Matcher;
+import org.jhotdraw.samples.teddy.text.NumberedEditorKit;
+import org.jhotdraw.samples.teddy.text.NumberedViewFactory;
+import org.jhotdraw.undo.UndoRedoManager;
 import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.ProgressMonitorInputStream;
+import javax.swing.Scrollable;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.StyledEditorKit;
+import javax.swing.undo.UndoableEdit;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.util.prefs.Preferences;
 
 /**
  * Provides a view on a text document.

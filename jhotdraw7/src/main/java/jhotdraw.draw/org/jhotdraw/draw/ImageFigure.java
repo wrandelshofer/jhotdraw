@@ -3,21 +3,43 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-import javax.imageio.*;
-import javax.swing.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.geom.Geom;
 import org.jhotdraw.io.Base64;
-import org.jhotdraw.util.*;
-import org.jhotdraw.xml.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
+
+import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
+import javax.swing.Action;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_SHADOW_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_SHADOW_OFFSET;
 
 /**
  * A default implementation of {@link ImageHolderFigure} which can hold a

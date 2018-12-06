@@ -3,18 +3,20 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import java.awt.Graphics2D;
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
-import org.jhotdraw.xml.*;
+import org.jhotdraw.xml.DOMStorable;
 
-import java.awt.font.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.undo.*;
-import javax.swing.event.*;
-import java.io.*;
+import javax.annotation.Nullable;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoableEdit;
+import java.awt.Graphics2D;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A <em>drawing</em> is a container for {@link Figure}s. A drawing can hold

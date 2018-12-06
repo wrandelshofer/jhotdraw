@@ -3,13 +3,16 @@
  */
 package org.jhotdraw.draw.event;
 
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.tool.SelectionTool;
-import java.awt.Dimension;
-import java.beans.*;
-import java.lang.ref.WeakReference;
+
 import javax.annotation.Nullable;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
+import javax.swing.JComponent;
+import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 
 /**
  * Calls setVisible(true/false) on components, which show attributes of the 

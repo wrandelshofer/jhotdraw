@@ -5,7 +5,8 @@
 package org.jhotdraw.geom;
 
 import javax.annotation.Nullable;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 
 /**
  * This class represents the iterator for a BezierPath.

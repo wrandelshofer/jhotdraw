@@ -3,17 +3,24 @@
  */
 package org.jhotdraw.app.action.window;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.util.*;
-import java.beans.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.SwingUtilities;
+import java.awt.Component;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.net.URI;
 
 /**
  * Requests focus for a Frame.
@@ -31,7 +38,7 @@ public class FocusWindowAction extends AbstractAction {
     /** Creates a new instance. */
     public FocusWindowAction(@Nullable View view) {
         this.view = view;
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
         //setEnabled(false);
         setEnabled(view != null);
@@ -75,7 +82,7 @@ public class FocusWindowAction extends AbstractAction {
     }
 
     private String getTitle() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         String title = labels.getString("unnamedFile");
         if (view != null) {
             URI uri = view.getURI();

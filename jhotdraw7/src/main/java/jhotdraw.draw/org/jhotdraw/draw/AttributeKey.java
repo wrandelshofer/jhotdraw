@@ -3,11 +3,15 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.util.Methods;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoableEdit;
 import java.io.Serializable;
-import java.util.*;
-import javax.swing.undo.*;
-import org.jhotdraw.util.*;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * An <em>attribute key</em> provides typesafe access to an attribute of

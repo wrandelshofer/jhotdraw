@@ -3,28 +3,31 @@
  */
 package org.jhotdraw.samples.svg;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.print.DrawingPageable;
-import java.awt.print.Pageable;
-import java.util.HashMap;
-import org.jhotdraw.samples.svg.io.*;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.beans.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import org.jhotdraw.app.*;
-import org.jhotdraw.draw.*;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.samples.svg.io.SVGOutputFormat;
+import org.jhotdraw.undo.UndoRedoManager;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.SwingUtilities;
+import java.awt.print.Pageable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.util.HashMap;
 
 /**
  * Provides a view on a SVG drawing.
@@ -174,7 +177,7 @@ public class SVGView extends AbstractView {
                 }
             }
             if (!success) {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 throw new IOException(labels.getFormatted("file.open.unsupportedFileFormat.message", URIUtil.getName(uri)));
             }
             SwingUtilities.invokeAndWait(new Runnable() {

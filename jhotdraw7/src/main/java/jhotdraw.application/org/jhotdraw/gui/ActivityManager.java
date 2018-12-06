@@ -6,11 +6,12 @@
  */
 package org.jhotdraw.gui;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import javax.swing.SwingUtilities;
 import org.jhotdraw.gui.event.ActivityManagerEvent;
 import org.jhotdraw.gui.event.ActivityManagerListener;
+
+import javax.swing.SwingUtilities;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 /**
  * The activity manager keeps track of all active {@code ActivityModel} objects.

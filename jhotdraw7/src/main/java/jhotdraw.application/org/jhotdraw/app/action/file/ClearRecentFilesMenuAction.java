@@ -4,13 +4,14 @@
 
 package org.jhotdraw.app.action.file;
 
-import org.jhotdraw.util.*;
-import java.awt.event.ActionEvent;
-import java.beans.*;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.action.AbstractApplicationAction;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Clears (empties) the Recent Files sub-menu in the File menu.
@@ -34,7 +35,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     /** Creates a new instance. */
     public ClearRecentFilesMenuAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
         updateEnabled();
     }

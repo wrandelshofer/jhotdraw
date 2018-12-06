@@ -7,8 +7,10 @@
 
 package org.jhotdraw.xml.css;
 
-import java.util.*;
 import org.w3c.dom.Element;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * CSSRule matches on a CSS selector.

@@ -4,8 +4,10 @@
 
 package org.jhotdraw.draw.connector;
 
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TriangleFigure;
+
+import java.awt.geom.Point2D;
 
 /**
  * A {@link Connector} which locates a connection point at the bounds

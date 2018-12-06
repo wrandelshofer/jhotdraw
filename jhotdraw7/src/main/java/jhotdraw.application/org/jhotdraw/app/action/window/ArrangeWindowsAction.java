@@ -4,11 +4,12 @@
 
 package org.jhotdraw.app.action.window;
 
-import org.jhotdraw.util.*;
-import org.jhotdraw.gui.*;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.gui.Arrangeable;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
-import javax.swing.*;
 
 /**
  * Changes the arrangement of an {@link Arrangeable} object.
@@ -34,7 +35,7 @@ public class ArrangeWindowsAction extends AbstractAction {
     public ArrangeWindowsAction(Arrangeable arrangeable, Arrangeable.Arrangement arrangement) {
         this.arrangeable = arrangeable;
         this.arrangement = arrangement;
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         String labelID;
         switch (arrangement) {
             case VERTICAL : labelID = VERTICAL_ID; break;

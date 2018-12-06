@@ -4,10 +4,17 @@
 
 package org.jhotdraw.samples.svg;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import javax.swing.UIManager;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TextAlign;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TextAnchor;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.WindingRule;
 
 /**
  * SVGConstants.

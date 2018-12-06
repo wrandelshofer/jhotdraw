@@ -3,28 +3,64 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.event.FigureSelectionEvent;
-import org.jhotdraw.draw.event.FigureSelectionListener;
-import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.event.HandleListener;
-import org.jhotdraw.draw.event.HandleEvent;
-import org.jhotdraw.draw.event.FigureListener;
+import org.jhotdraw.draw.event.CompositeFigureEvent;
+import org.jhotdraw.draw.event.CompositeFigureListener;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
-import org.jhotdraw.draw.event.CompositeFigureListener;
-import org.jhotdraw.draw.event.CompositeFigureEvent;
-import javax.swing.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import javax.swing.*;
+import org.jhotdraw.draw.event.FigureListener;
+import org.jhotdraw.draw.event.FigureSelectionEvent;
+import org.jhotdraw.draw.event.FigureSelectionListener;
+import org.jhotdraw.draw.event.HandleEvent;
+import org.jhotdraw.draw.event.HandleListener;
+import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.gui.EditableComponent;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.ReversedList;
+
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Paint;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.TexturePaint;
+import java.awt.Transparency;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_OPACITY;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_HEIGHT;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_WIDTH;
 
 /**
  * A default implementation of {@link DrawingView} suited for viewing drawings

@@ -4,12 +4,12 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicListUI;
+import java.awt.Color;
 
 /**
  * PaletteListUI.

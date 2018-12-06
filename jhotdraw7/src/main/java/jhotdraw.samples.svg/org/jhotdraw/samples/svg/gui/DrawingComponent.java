@@ -4,9 +4,10 @@
 
 package org.jhotdraw.samples.svg.gui;
 
-import java.awt.event.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Drawing;
+
+import javax.swing.JComponent;
+import java.awt.event.ActionListener;
 
 /**
  * The DrawingComponent holds the drawing editor used by the DrawingApplet.

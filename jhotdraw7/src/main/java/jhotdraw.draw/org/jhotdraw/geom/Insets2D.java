@@ -4,8 +4,7 @@
 
 package org.jhotdraw.geom;
 
-import java.awt.Insets;
-import java.awt.geom.*;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 /**
  * Insets2D.

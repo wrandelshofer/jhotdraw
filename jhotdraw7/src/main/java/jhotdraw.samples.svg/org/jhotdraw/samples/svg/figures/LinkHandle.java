@@ -4,15 +4,19 @@
 
 package org.jhotdraw.samples.svg.figures;
 
-import org.jhotdraw.draw.handle.HandleAttributeKeys;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.AbstractHandle;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.ResourceBundle;
+import org.jhotdraw.draw.handle.HandleAttributeKeys;
+import org.jhotdraw.samples.svg.Labels;
 
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
-import org.jhotdraw.util.ResourceBundleUtil;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
 /**
  * The LinkHandle indicates when a figure has a link.
@@ -80,7 +84,7 @@ public class LinkHandle extends AbstractHandle {
     @Override public String getToolTipText(Point p) {
         
         return (getOwner().get(LINK)!=null)  ?
-            new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels")).//
+            Labels.getLabels().//
             getString("handle.link.toolTipText") :
             null;
     }

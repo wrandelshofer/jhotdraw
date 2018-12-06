@@ -4,15 +4,29 @@
 
 package org.jhotdraw.samples.svg.io;
 
-import java.awt.Color;
-import java.awt.geom.*;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import javax.swing.text.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.geom.BezierPath;
-import org.jhotdraw.samples.svg.*;
-import org.jhotdraw.samples.svg.figures.*;
+import org.jhotdraw.samples.svg.Gradient;
+import org.jhotdraw.samples.svg.LinearGradient;
+import org.jhotdraw.samples.svg.RadialGradient;
+import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
+import org.jhotdraw.samples.svg.figures.SVGEllipseFigure;
+import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
+import org.jhotdraw.samples.svg.figures.SVGImageFigure;
+import org.jhotdraw.samples.svg.figures.SVGPathFigure;
+import org.jhotdraw.samples.svg.figures.SVGRectFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextAreaFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextFigure;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+import java.awt.Color;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.util.Map;
 
 /**
  * DefaultSVGFigureFactory.

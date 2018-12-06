@@ -3,23 +3,52 @@
  */
 package org.jhotdraw.samples.odg;
 
-import org.jhotdraw.app.action.edit.PasteAction;
+import org.jhotdraw.app.action.edit.CopyAction;
 import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DuplicateAction;
-import org.jhotdraw.app.action.edit.CopyAction;
+import org.jhotdraw.app.action.edit.PasteAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.ButtonFactory;
+import org.jhotdraw.draw.action.GroupAction;
+import org.jhotdraw.draw.action.SelectSameAction;
+import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.draw.action.UngroupAction;
+import org.jhotdraw.draw.action.ZoomAction;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.TextAreaCreationTool;
 import org.jhotdraw.gui.JPopupButton;
-import org.jhotdraw.samples.svg.action.*;
-import org.jhotdraw.samples.svg.figures.*;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.samples.svg.action.CombineAction;
+import org.jhotdraw.samples.svg.action.SplitAction;
+import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
+import org.jhotdraw.samples.svg.figures.SVGEllipseFigure;
+import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
+import org.jhotdraw.samples.svg.figures.SVGPathFigure;
+import org.jhotdraw.samples.svg.figures.SVGRectFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextAreaFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextFigure;
+import org.jhotdraw.undo.UndoRedoManager;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JToolBar;
+import javax.swing.UIManager;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 /**
  * ODGDrawingPanel.

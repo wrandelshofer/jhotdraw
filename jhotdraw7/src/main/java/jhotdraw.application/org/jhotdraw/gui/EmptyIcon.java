@@ -4,9 +4,9 @@
 
 package org.jhotdraw.gui;
 
+import javax.swing.Icon;
 import java.awt.Component;
 import java.awt.Graphics;
-import javax.swing.Icon;
 
 /**
  * EmptyIcon.

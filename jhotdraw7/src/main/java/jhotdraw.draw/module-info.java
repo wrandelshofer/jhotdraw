@@ -20,4 +20,6 @@ module jhotdraw.draw {
     requires java.logging;
     requires transitive jhotdraw.application;
     requires transitive jhotdraw.nanoxml;
+
+    opens org.jhotdraw.draw.action.images;
 }

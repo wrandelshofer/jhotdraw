@@ -3,14 +3,30 @@
  */
 package org.jhotdraw.samples.svg.action;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.action.AbstractSelectedAction;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
+import org.jhotdraw.samples.svg.figures.SVGPathFigure;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
 import java.awt.geom.AffineTransform;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.samples.svg.figures.*;
-import org.jhotdraw.util.*;
-import java.util.*;
-import javax.swing.undo.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
 /**
  * CombinePathsAction.
@@ -32,7 +48,7 @@ public class CombineAction extends AbstractSelectedAction {
     private boolean isCombineAction;
 
     private ResourceBundleUtil labels =
-            new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+            Labels.getLabels();
 
     /** Creates a new instance. */
     public CombineAction(DrawingEditor editor) {
@@ -48,7 +64,7 @@ public class CombineAction extends AbstractSelectedAction {
         this.prototype = prototype;
         this.isCombineAction = isGroupingAction;
 
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        labels = Labels.getLabels();
         labels.configureAction(this, ID);
         updateEnabledState();
     }

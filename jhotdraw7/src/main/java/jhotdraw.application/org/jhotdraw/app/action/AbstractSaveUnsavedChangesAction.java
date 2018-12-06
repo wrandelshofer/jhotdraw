@@ -3,23 +3,29 @@
  */
 package org.jhotdraw.app.action;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.gui.event.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.app.View;
-import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.gui.JFileURIChooser;
+import org.jhotdraw.gui.JSheet;
+import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.event.SheetEvent;
+import org.jhotdraw.gui.event.SheetListener;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Component;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
@@ -63,7 +69,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         }
         final View v=av;
         if (v.isEnabled()) {
-            final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+            final ResourceBundleUtil labels = Labels.getLabels();
             Window wAncestor = SwingUtilities.getWindowAncestor(v.getComponent());
             oldFocusOwner = (wAncestor == null) ? null : wAncestor.getFocusOwner();
             v.setEnabled(false);
@@ -166,7 +172,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
             @Override
             protected void failed(Throwable value) {
                 String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 JSheet.showMessageSheet(getActiveView().getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"

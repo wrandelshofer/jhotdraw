@@ -3,19 +3,35 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.TransformHandleKit;
-import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.handle.BezierNodeHandle;
-import java.awt.BasicStroke;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.undo.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.geom.Geom;
 import org.jhotdraw.util.ResourceBundleUtil;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+
+import javax.annotation.Nullable;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.BasicStroke;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_CAP;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_JOIN;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.UNCLOSED_PATH_FILLED;
 
 /**
  * SVGBezierFigure is not an actual SVG element, it is used by SVGPathFigure to

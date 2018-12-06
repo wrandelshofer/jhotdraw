@@ -3,11 +3,19 @@
  */
 package org.jhotdraw.gui.fontchooser;
 
-import java.awt.*;
-import java.util.*;
-import java.util.ArrayList;
-import javax.swing.tree.*;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.ResourceBundle;
 
 /**
  * DefaultFontChooserModel with a predefined set of font collections.

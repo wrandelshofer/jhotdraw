@@ -3,25 +3,45 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.gui.JAttributeTextField;
-import org.jhotdraw.draw.gui.JAttributeSlider;
+import org.jhotdraw.draw.action.AbstractSelectedAction;
+import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.event.DrawingAttributeEditorHandler;
 import org.jhotdraw.draw.event.DrawingComponentRepainter;
+import org.jhotdraw.draw.gui.JAttributeSlider;
+import org.jhotdraw.draw.gui.JAttributeTextField;
+import org.jhotdraw.gui.JPopupButton;
+import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
+import org.jhotdraw.gui.plaf.palette.PaletteColorChooserUI;
+import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
+import org.jhotdraw.gui.plaf.palette.PaletteLabelUI;
+import org.jhotdraw.gui.plaf.palette.PaletteSliderUI;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.text.ColorFormatter;
 import org.jhotdraw.text.JavaNumberFormatter;
-import javax.swing.border.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
+import org.jhotdraw.util.Images;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.LabelUI;
 import javax.swing.plaf.SliderUI;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.DefaultFormatterFactory;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.gui.plaf.palette.*;
-import org.jhotdraw.text.ColorFormatter;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.CANVAS_FILL_COLOR;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.CANVAS_FILL_OPACITY;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.CANVAS_HEIGHT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.CANVAS_WIDTH;
 
 /**
  * CanvasToolBar.
@@ -34,7 +54,7 @@ public class CanvasToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public CanvasToolBar() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
         setDisclosureStateCount(3);
     }
@@ -54,7 +74,7 @@ public class CanvasToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;
@@ -181,7 +201,7 @@ public class CanvasToolBar extends AbstractToolBar {
 
                 p.removeAll();
                 p.setBorder(new EmptyBorder(5, 5, 5, 8));
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;

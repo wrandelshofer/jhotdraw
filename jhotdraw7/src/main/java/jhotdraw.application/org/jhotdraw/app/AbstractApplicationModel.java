@@ -3,13 +3,15 @@
  */
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.beans.*;
-import java.util.*;
-import java.util.function.Supplier;
-import javax.swing.*;
+import org.jhotdraw.beans.AbstractBean;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JToolBar;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * This abstract class can be extended to implement an {@link ApplicationModel}.

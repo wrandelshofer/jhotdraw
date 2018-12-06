@@ -5,10 +5,12 @@
 
 package org.jhotdraw.draw.handle;
 
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.locator.Locator;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 /**
  * A LocatorHandle implements a Handle by delegating the location requests to
  * a Locator object.

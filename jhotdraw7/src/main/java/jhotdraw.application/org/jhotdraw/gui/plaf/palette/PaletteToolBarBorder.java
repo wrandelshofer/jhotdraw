@@ -3,10 +3,23 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.AbstractBorder;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.LinearGradientPaint;
+import java.awt.MultipleGradientPaint;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 
 /**
  * PaletteToolBarBorder.

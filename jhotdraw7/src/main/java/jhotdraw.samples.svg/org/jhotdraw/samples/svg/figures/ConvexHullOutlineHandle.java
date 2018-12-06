@@ -3,13 +3,20 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.HandleAttributeKeys;
+import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.handle.AbstractHandle;
-import org.jhotdraw.draw.*;
-import java.awt.*;
+import org.jhotdraw.draw.handle.HandleAttributeKeys;
 import org.jhotdraw.geom.ConvexHull;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import javax.annotation.Nullable;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.Stroke;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * Draws the outline of the Figure bounds to make adjustment easier.

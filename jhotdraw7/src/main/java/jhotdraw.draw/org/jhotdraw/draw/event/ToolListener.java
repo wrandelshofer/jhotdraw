@@ -5,7 +5,7 @@
 
 package org.jhotdraw.draw.event;
 
-import java.util.*;
+import java.util.EventListener;
 
 /**
  * Interface implemented by observers of {@link org.jhotdraw.draw.tool.Tool}s.

@@ -4,13 +4,20 @@
 
 package org.jhotdraw.samples.odg;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Paint;
+import java.awt.Stroke;
 import java.util.ResourceBundle;
 
-import org.jhotdraw.draw.*;
-import org.jhotdraw.util.ResourceBundleUtil;
-import static org.jhotdraw.samples.odg.ODGConstants.*;
+import static org.jhotdraw.samples.odg.ODGConstants.FillStyle;
+import static org.jhotdraw.samples.odg.ODGConstants.StrokeStyle;
 
 /**
  * ODGAttributeKeys.

@@ -3,7 +3,9 @@
  */
 package org.jhotdraw.xml;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * {@code DefaultDOMFactory} can be used to serialize DOMStorable objects in a

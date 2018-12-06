@@ -3,28 +3,45 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.tool.TextCreationTool;
-import org.jhotdraw.draw.tool.TextAreaCreationTool;
-import org.jhotdraw.draw.event.SelectionComponentRepainter;
-import org.jhotdraw.draw.event.SelectionComponentDisplayer;
-import javax.swing.border.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.plaf.SliderUI;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.event.FigureAttributeEditorHandler;
+import org.jhotdraw.draw.event.SelectionComponentDisplayer;
+import org.jhotdraw.draw.event.SelectionComponentRepainter;
 import org.jhotdraw.draw.gui.JAttributeSlider;
 import org.jhotdraw.draw.gui.JAttributeTextField;
+import org.jhotdraw.draw.tool.TextAreaCreationTool;
+import org.jhotdraw.draw.tool.TextCreationTool;
 import org.jhotdraw.gui.JFontChooser;
 import org.jhotdraw.gui.JPopupButton;
-import org.jhotdraw.gui.plaf.palette.*;
+import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
+import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
+import org.jhotdraw.gui.plaf.palette.PaletteSliderUI;
+import org.jhotdraw.samples.svg.Labels;
 import org.jhotdraw.text.FontFormatter;
 import org.jhotdraw.text.JavaNumberFormatter;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.SliderUI;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.Collection;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FONT_FACE;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FONT_SIZE;
 
 /**
  * StrokeToolBar.
@@ -39,7 +56,7 @@ public class FontToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public FontToolBar() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         setName(labels.getString("font.toolbar"));
         JFontChooser.loadAllFonts();
         setDisclosureStateCount(3);
@@ -119,7 +136,7 @@ public class FontToolBar extends AbstractToolBar {
                 p3.setOpaque(false);
 
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
@@ -243,7 +260,7 @@ public class FontToolBar extends AbstractToolBar {
                 p3.setOpaque(false);
 
 
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);

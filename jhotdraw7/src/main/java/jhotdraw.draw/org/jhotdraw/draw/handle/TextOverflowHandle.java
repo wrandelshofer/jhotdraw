@@ -4,13 +4,18 @@
 
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ResourceBundle;
 
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.util.ResourceBundleUtil;
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * The TextOverflowHandle indicates when the text does not fit into the

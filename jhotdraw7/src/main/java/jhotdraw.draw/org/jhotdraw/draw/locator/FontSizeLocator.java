@@ -4,10 +4,13 @@
 
 package org.jhotdraw.draw.locator;
 
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TextHolderFigure;
 
-import static org.jhotdraw.draw.AttributeKeys.*;
+import java.awt.geom.Point2D;
+
+import static org.jhotdraw.draw.AttributeKeys.FONT_SIZE;
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * {@code FontSizeLocator} is used by {@link org.jhotdraw.draw.handle.FontSizeHandle} to locate

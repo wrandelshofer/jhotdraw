@@ -3,11 +3,12 @@
  */
 package org.jhotdraw.draw.decoration;
 
-import org.jhotdraw.draw.*;
-import java.awt.geom.Path2D;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 import org.jhotdraw.xml.DOMStorable;
+
+import java.awt.geom.Path2D;
 
 /**
  * A {@link LineDecoration} which draws a perpendicular bar.

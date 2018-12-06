@@ -4,11 +4,15 @@
 
 package org.jhotdraw.samples.svg;
 
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+
+import java.awt.Color;
+import java.awt.LinearGradientPaint;
+import java.awt.Paint;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
-import org.jhotdraw.draw.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
 
 /**
  * Represents an SVG LinearGradient.

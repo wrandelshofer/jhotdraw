@@ -3,12 +3,21 @@
  */
 package org.jhotdraw.draw.action;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.Icon;
+import javax.swing.JColorChooser;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * The DrawingColorChooserAction changes a color attribute of the Drawing object

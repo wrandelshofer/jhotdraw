@@ -4,7 +4,7 @@
 
 package org.jhotdraw.gui.event;
 
-import java.util.*;
+import java.util.EventListener;
 
 /**
  * SheetListener.

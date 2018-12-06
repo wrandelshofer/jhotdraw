@@ -3,13 +3,16 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
 import org.jhotdraw.draw.tool.Tool;
-import java.awt.*;
-import java.beans.*;
-import java.util.*;
+
+import javax.annotation.Nullable;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * A <em>drawing editor</em> coordinates drawing tools and drawing views.

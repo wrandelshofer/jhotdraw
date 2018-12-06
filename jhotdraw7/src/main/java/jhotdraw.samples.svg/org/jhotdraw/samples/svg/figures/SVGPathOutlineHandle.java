@@ -3,11 +3,18 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import org.jhotdraw.draw.handle.HandleAttributeKeys;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.handle.AbstractHandle;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import org.jhotdraw.draw.handle.HandleAttributeKeys;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.Stroke;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
 /**
  * A non-interactive {@link org.jhotdraw.draw.handle.Handle} which draws the

@@ -4,17 +4,24 @@
 
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.geom.Dimension2DDouble;
 import org.jhotdraw.geom.QuadTree;
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.event.*;
-import org.jhotdraw.util.*;
-import java.util.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.util.ReversedList;
+
+import javax.annotation.Nullable;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 /**
  * QuadTreeCompositeFigure.
  * 

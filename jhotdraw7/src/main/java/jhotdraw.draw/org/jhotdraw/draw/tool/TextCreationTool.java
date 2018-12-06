@@ -5,16 +5,26 @@
 
 package org.jhotdraw.draw.tool;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.text.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.text.FloatingTextArea;
 import org.jhotdraw.draw.text.FloatingTextField;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEdit;
-import org.jhotdraw.util.ResourceBundleUtil;
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.Map;
+import java.util.ResourceBundle;
 /**
  * A tool to create figures which implement the {@code TextHolderFigure}
  * interface, such as {@code TextFigure}. The figure to be created is specified

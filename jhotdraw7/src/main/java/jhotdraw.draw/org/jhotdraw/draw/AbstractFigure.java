@@ -3,26 +3,32 @@
  */
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.tool.Tool;
-import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.connector.ChopRectangleConnector;
-import org.jhotdraw.draw.event.SetBoundsEdit;
-import org.jhotdraw.draw.event.FigureListener;
-import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.beans.AbstractBean;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.font.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.undo.*;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.event.FigureListener;
+import org.jhotdraw.draw.event.SetBoundsEdit;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.tool.Tool;
+import org.jhotdraw.geom.Dimension2DDouble;
+
+import javax.annotation.Nullable;
+import javax.swing.Action;
+import javax.swing.event.EventListenerList;
+import javax.swing.undo.UndoableEdit;
+import java.awt.Cursor;
+import java.awt.event.MouseEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * This abstract class can be extended to implement a {@link Figure}.

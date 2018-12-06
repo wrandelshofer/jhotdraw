@@ -3,15 +3,33 @@
  */
 package org.jhotdraw.samples.color;
 
-import org.jhotdraw.color.*;
-import org.jhotdraw.draw.action.ColorIcon;
+import org.jhotdraw.color.ColorListCellRenderer;
+import org.jhotdraw.color.ColorUtil;
+import org.jhotdraw.color.DefaultColorSliderModel;
+import org.jhotdraw.color.HSLColorSpace;
+import org.jhotdraw.color.HSLPhysiologicColorSpace;
+import org.jhotdraw.color.HarmonicColorModel;
+import org.jhotdraw.color.JHarmonicColorWheel;
+import org.jhotdraw.color.SimpleHarmonicRule;
 
-import java.awt.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.color.ColorSpace;
 import java.awt.event.MouseEvent;
-import java.beans.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * JMixer.

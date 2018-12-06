@@ -3,38 +3,85 @@
  */
 package org.jhotdraw.draw.action;
 
-import org.jhotdraw.app.action.edit.PasteAction;
-import org.jhotdraw.app.action.edit.CutAction;
+import org.jhotdraw.app.Disposable;
+import org.jhotdraw.app.action.ActionUtil;
 import org.jhotdraw.app.action.edit.CopyAction;
+import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DuplicateAction;
-import org.jhotdraw.draw.tool.Tool;
-import org.jhotdraw.draw.tool.DelegationSelectionTool;
+import org.jhotdraw.app.action.edit.PasteAction;
+import org.jhotdraw.color.HSBColorSpace;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.decoration.ArrowTip;
+import org.jhotdraw.draw.decoration.LineDecoration;
+import org.jhotdraw.draw.event.SelectionComponentRepainter;
+import org.jhotdraw.draw.event.ToolAdapter;
 import org.jhotdraw.draw.event.ToolEvent;
 import org.jhotdraw.draw.event.ToolListener;
-import org.jhotdraw.draw.decoration.LineDecoration;
-import org.jhotdraw.draw.decoration.ArrowTip;
-import org.jhotdraw.draw.event.SelectionComponentRepainter;
-import org.jhotdraw.gui.JPopupButton;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.color.ColorSpace;
-import java.awt.event.*;
-import java.beans.*;
-import java.text.*;
-import java.util.*;
-import javax.annotation.Nullable;
-import javax.swing.*;
-import javax.swing.plaf.ColorChooserUI;
-import javax.swing.text.*;
-import org.jhotdraw.app.action.*;
-import org.jhotdraw.app.Disposable;
-import org.jhotdraw.color.HSBColorSpace;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.event.ToolAdapter;
+import org.jhotdraw.draw.tool.DelegationSelectionTool;
+import org.jhotdraw.draw.tool.Tool;
+import org.jhotdraw.geom.DoubleStroke;
 import org.jhotdraw.gui.JComponentPopup;
 import org.jhotdraw.gui.JFontChooser;
+import org.jhotdraw.gui.JPopupButton;
+import org.jhotdraw.util.Images;
+import org.jhotdraw.util.Methods;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.plaf.ColorChooserUI;
+import javax.swing.text.StyledEditorKit;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.color.ColorSpace;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.FILL_UNDER_STROKE;
+import static org.jhotdraw.draw.AttributeKeys.FONT_BOLD;
+import static org.jhotdraw.draw.AttributeKeys.FONT_FACE;
+import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
+import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
+import static org.jhotdraw.draw.AttributeKeys.START_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_CAP;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_INNER_WIDTH_FACTOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_JOIN;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_PLACEMENT;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_TYPE;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_COLOR;
 
 /**
  * ButtonFactory. <p> Design pattern:<br> Name: Abstract Factory.<br> Role:
@@ -1212,7 +1259,7 @@ public class ButtonFactory {
         popupButton.setPopupAlpha(1.0f);// must be set after we set the popup menu
         Icon icon = new DrawingColorIcon(editor,
                 attributeKey,
-                labels.getLargeIconProperty(labelKey, ButtonFactory.class).getImage(),
+                labels.getLargeIconProperty(labelKey).getImage(),
                 colorShape);
         popupButton.setIcon(icon);
         popupButton.setDisabledIcon(icon);

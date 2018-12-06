@@ -5,13 +5,16 @@
 
 package org.jhotdraw.draw.connector;
 
-import org.jhotdraw.draw.*;
-import java.io.IOException;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.geom.Geom;
-import java.awt.*;
-import java.awt.geom.*;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.io.IOException;
 
 /**
  * A StickyRectangleConnector locates connection points by

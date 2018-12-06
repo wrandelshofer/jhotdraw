@@ -7,9 +7,12 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformEdit;
 import org.jhotdraw.undo.CompositeEdit;
-import java.awt.geom.*;
-import java.util.*;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.ResourceBundle;
 
 /**
  * Aligns the selected figures.

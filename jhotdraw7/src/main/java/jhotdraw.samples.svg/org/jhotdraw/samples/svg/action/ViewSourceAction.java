@@ -3,24 +3,32 @@
  */
 package org.jhotdraw.samples.svg.action;
 
-import javax.annotation.Nullable;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.*;
-import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
-import javax.swing.event.UndoableEditEvent;
-import org.jhotdraw.app.*;
-import org.jhotdraw.app.action.*;
-import javax.swing.*;
-import javax.swing.event.UndoableEditListener;
+import org.jhotdraw.app.Application;
 import org.jhotdraw.app.Disposable;
+import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.samples.svg.*;
-import org.jhotdraw.samples.svg.io.*;
+import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGView;
+import org.jhotdraw.samples.svg.io.SVGOutputFormat;
 import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JDialog;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.prefs.Preferences;
 
 /**
  * ViewSourceAction.
@@ -40,13 +48,13 @@ public class ViewSourceAction extends AbstractViewAction {
     /** Creates a new instance. */
     public ViewSourceAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         final SVGView v = (SVGView) getActiveView();
         Drawing drawing = v.getDrawing();
         final JDialog dialog;
@@ -92,7 +100,7 @@ public class ViewSourceAction extends AbstractViewAction {
                             updateSource(newDrawing, ta);
                         }
                     } else if (evt.getPropertyName() == View.TITLE_PROPERTY) {
-                        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
+                        ResourceBundleUtil labels = Labels.getLabels();
                         dialog.setTitle(labels.getFormatted("view.viewSource.titleText", v.getTitle()));
                     }
                 }

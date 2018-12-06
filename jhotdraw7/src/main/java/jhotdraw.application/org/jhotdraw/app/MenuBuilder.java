@@ -4,8 +4,8 @@
 package org.jhotdraw.app;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import javax.swing.JMenu;
+import java.util.List;
 
 /**
  * {@code MenuBuilder} is used by {@link Application} to build to build its menu

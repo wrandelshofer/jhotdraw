@@ -4,11 +4,13 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 
 import javax.annotation.Nullable;
-import java.awt.geom.*;
-import java.util.*;
+import java.awt.geom.Rectangle2D;
+import java.util.EventObject;
 
 /**
  * An {@code EventObject} sent to {@link FigureListener}s.

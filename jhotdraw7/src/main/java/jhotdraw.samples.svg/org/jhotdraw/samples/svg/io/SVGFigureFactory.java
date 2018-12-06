@@ -4,15 +4,19 @@
 
 package org.jhotdraw.samples.svg.io;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.samples.svg.Gradient;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.util.*;
-import javax.swing.text.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.samples.svg.*;
+import javax.swing.text.StyledDocument;
+import java.awt.Color;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.util.Map;
 
 /**
  * Creates Figures for SVG elements.

@@ -3,16 +3,27 @@
  */
 package org.jhotdraw.color;
 
+import org.jhotdraw.gui.plaf.palette.PaletteSliderThumbIcon;
 import org.jhotdraw.util.Images;
-import java.awt.*;
-import java.awt.color.ColorSpace;
-import java.awt.event.*;
-import java.beans.*;
-import javax.swing.*;
+
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JSlider;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
-import org.jhotdraw.gui.plaf.palette.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicSliderUI;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.color.ColorSpace;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * A UI delegate for color sliders. The track of the slider visualizes how

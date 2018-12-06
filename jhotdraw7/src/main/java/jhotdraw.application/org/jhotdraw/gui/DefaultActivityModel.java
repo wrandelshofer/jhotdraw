@@ -6,13 +6,14 @@
  */
 package org.jhotdraw.gui;
 
+import org.jhotdraw.beans.WeakPropertyChangeListener;
+
 import javax.annotation.Nullable;
+import javax.swing.DefaultBoundedRangeModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Formatter;
 import java.util.Locale;
-import javax.swing.DefaultBoundedRangeModel;
-import org.jhotdraw.beans.WeakPropertyChangeListener;
 
 /**
  * Default implementation of {@link ActivityModel}.

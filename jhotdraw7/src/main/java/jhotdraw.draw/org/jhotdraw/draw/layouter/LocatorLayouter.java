@@ -4,11 +4,14 @@
 
 package org.jhotdraw.draw.layouter;
 
-import org.jhotdraw.draw.locator.Locator;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.CompositeFigure;
-import org.jhotdraw.geom.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.locator.Locator;
+import org.jhotdraw.geom.Dimension2DDouble;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A layouter which lays out all children of a CompositeFigure according to their

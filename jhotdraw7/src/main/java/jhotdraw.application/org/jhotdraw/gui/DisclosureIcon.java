@@ -4,8 +4,11 @@
 
 package org.jhotdraw.gui;
 
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 
 /**
  * DisclosureIcon.

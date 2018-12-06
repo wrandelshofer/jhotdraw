@@ -3,11 +3,15 @@
  */
 package org.jhotdraw.draw.event;
 
-import javax.annotation.Nullable;
-import java.beans.*;
-import javax.swing.*;
 import org.jhotdraw.app.Disposable;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Calls repaint on components, which show attributes of a drawing object

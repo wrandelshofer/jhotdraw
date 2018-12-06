@@ -4,9 +4,10 @@
 
 package org.jhotdraw.samples.odg;
 
-import java.awt.*;
+import org.jhotdraw.draw.Figure;
+
+import java.awt.Paint;
 import java.awt.geom.AffineTransform;
-import org.jhotdraw.draw.*;
 
 /**
  * Represents an SVG Gradient.

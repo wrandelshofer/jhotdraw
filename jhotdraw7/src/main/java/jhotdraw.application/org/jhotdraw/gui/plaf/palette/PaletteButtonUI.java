@@ -3,10 +3,15 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.InsetsUIResource;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.Graphics;
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
 
 /**
  * ButtonUI for palette components.

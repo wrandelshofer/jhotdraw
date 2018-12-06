@@ -3,8 +3,15 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JTabbedPane;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
+import javax.swing.plaf.metal.MetalTabbedPaneUI;
+import javax.swing.text.View;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -15,14 +22,6 @@ import java.awt.LinearGradientPaint;
 import java.awt.MultipleGradientPaint;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JTabbedPane;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
-import javax.swing.plaf.metal.MetalTabbedPaneUI;
-import javax.swing.text.View;
 
 /**
  * PaletteTabbedPaneUI.

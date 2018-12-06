@@ -3,7 +3,14 @@
  */
 package org.jhotdraw.text;
 
+import org.jhotdraw.color.ColorUtil;
+import org.jhotdraw.color.HSBColorSpace;
+import org.jhotdraw.util.prefs.PreferencesUtil;
+
 import javax.annotation.Nullable;
+import javax.swing.JFormattedTextField.AbstractFormatterFactory;
+import javax.swing.text.DefaultFormatter;
+import javax.swing.text.DefaultFormatterFactory;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.text.DecimalFormat;
@@ -12,12 +19,6 @@ import java.text.ParseException;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JFormattedTextField.AbstractFormatterFactory;
-import javax.swing.text.DefaultFormatter;
-import javax.swing.text.DefaultFormatterFactory;
-import org.jhotdraw.color.ColorUtil;
-import org.jhotdraw.color.HSBColorSpace;
-import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
  * {@code ColorFormatter} is used to format colors into a textual representation

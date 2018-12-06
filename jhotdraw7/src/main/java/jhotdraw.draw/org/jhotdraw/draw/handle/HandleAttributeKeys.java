@@ -3,8 +3,12 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.*;
-import java.awt.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Stroke;
 
 /**
  * Defines a put of well known {@link Handle} attributes.

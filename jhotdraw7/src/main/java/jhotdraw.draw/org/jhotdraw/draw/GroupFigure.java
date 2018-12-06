@@ -4,8 +4,10 @@
 
 package org.jhotdraw.draw;
 
-import java.awt.geom.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.geom.Geom;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A {@link org.jhotdraw.draw.Figure} which groups a collection of figures.

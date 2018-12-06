@@ -3,32 +3,60 @@
  */
 package org.jhotdraw.samples.odg;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.app.action.view.ViewPropertyAction;
-import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
-import org.jhotdraw.app.action.file.ExportFileAction;
-import org.jhotdraw.app.action.edit.PasteAction;
-import org.jhotdraw.app.action.edit.CutAction;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.DefaultApplicationModel;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.edit.CopyAction;
+import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DuplicateAction;
+import org.jhotdraw.app.action.edit.PasteAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
-import org.jhotdraw.draw.tool.CreationTool;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import org.jhotdraw.samples.odg.action.*;
-import org.jhotdraw.samples.odg.figures.*;
-import org.jhotdraw.util.*;
-import java.util.*;
-import javax.swing.*;
-import org.jhotdraw.app.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
+import org.jhotdraw.app.action.file.ExportFileAction;
+import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
+import org.jhotdraw.app.action.view.ViewPropertyAction;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.action.ApplyAttributesAction;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.ButtonFactory;
+import org.jhotdraw.draw.action.GroupAction;
+import org.jhotdraw.draw.action.PickAttributesAction;
+import org.jhotdraw.draw.action.SelectSameAction;
+import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
+import org.jhotdraw.samples.odg.action.CombineAction;
+import org.jhotdraw.samples.odg.action.SplitAction;
+import org.jhotdraw.samples.odg.figures.ODGGroupFigure;
+import org.jhotdraw.samples.odg.figures.ODGPathFigure;
+import org.jhotdraw.samples.odg.figures.ODGRectFigure;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
+import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_COLOR;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_GRADIENT;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_GRADIENT;
 
 /**
  * Provides meta-data and factory methods for an application.

@@ -3,21 +3,57 @@
  */
 package org.jhotdraw.samples.svg.io;
 
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import net.n3.nanoxml.IXMLElement;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLWriter;
+import org.jhotdraw.draw.BezierFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.io.OutputFormat;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.geom.*;
-import java.io.*;
+import org.jhotdraw.geom.GrowStroke;
+import org.jhotdraw.gui.datatransfer.InputStreamTransferable;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
+import org.jhotdraw.samples.svg.figures.SVGEllipseFigure;
+import org.jhotdraw.samples.svg.figures.SVGFigure;
+import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
+import org.jhotdraw.samples.svg.figures.SVGImageFigure;
+import org.jhotdraw.samples.svg.figures.SVGPathFigure;
+import org.jhotdraw.samples.svg.figures.SVGRectFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextAreaFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextFigure;
+import org.jhotdraw.util.ReversedList;
+
+import javax.swing.JComponent;
+import java.awt.BasicStroke;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.URI;
-import javax.swing.*;
-import net.n3.nanoxml.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.gui.datatransfer.*;
-import org.jhotdraw.samples.svg.figures.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
-import org.jhotdraw.util.*;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK_TARGET;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.getPerpendicularHitGrowth;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.getStrokeTotalWidth;
 
 /**
  * ImageMapOutputFormat exports a SVG drawing as an HTML 4.01 <code>MAP</code>

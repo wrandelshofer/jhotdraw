@@ -3,32 +3,38 @@
  */
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
-import java.awt.Container;
-import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.net.URISyntaxException;
-import org.jhotdraw.beans.*;
-import org.jhotdraw.util.*;
-
-import java.util.ResourceBundle;
-import java.util.prefs.*;
-import javax.swing.*;
-import java.net.URI;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import org.jhotdraw.app.action.file.ClearRecentFilesMenuAction;
 import org.jhotdraw.app.action.file.LoadDirectoryAction;
 import org.jhotdraw.app.action.file.LoadFileAction;
 import org.jhotdraw.app.action.file.LoadRecentFileAction;
 import org.jhotdraw.app.action.file.OpenRecentFileAction;
+import org.jhotdraw.beans.AbstractBean;
 import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
+import java.awt.Container;
+import java.awt.Window;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.prefs.Preferences;
 
 /**
  * This abstract class can be extended to implement an {@link Application}.
@@ -375,7 +381,7 @@ public abstract class AbstractApplication extends AbstractBean implements Applic
     }
 
     protected void initLabels() {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        labels = Labels.getLabels();
     }
 
     /**

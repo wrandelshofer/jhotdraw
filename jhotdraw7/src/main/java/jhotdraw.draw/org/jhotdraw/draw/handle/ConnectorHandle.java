@@ -3,15 +3,24 @@
  */
 package org.jhotdraw.draw.handle;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.ConnectionFigure;
-import java.util.*;
-import javax.swing.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.ResourceBundle;
 
 /**
  * A {@link Handle} associated to a {@link Connector} which allows to create a

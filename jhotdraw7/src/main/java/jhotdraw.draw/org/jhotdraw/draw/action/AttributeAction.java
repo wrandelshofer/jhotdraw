@@ -3,13 +3,24 @@
  */
 package org.jhotdraw.draw.action;
 
-import javax.annotation.Nullable;
-import javax.swing.undo.*;
 import org.jhotdraw.app.action.ActionUtil;
-import javax.swing.*;
-import java.util.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoableEdit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * {@code AttributeAction} applies attribute values on the selected figures of

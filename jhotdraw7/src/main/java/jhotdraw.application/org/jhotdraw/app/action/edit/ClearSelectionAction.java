@@ -3,14 +3,15 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.text.*;
-import org.jhotdraw.util.*;
+import org.jhotdraw.app.Labels;
 import org.jhotdraw.gui.EditableComponent;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import javax.swing.text.JTextComponent;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
 
 /**
  * Clears (de-selects) the selected region.
@@ -60,7 +61,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
      */
     public ClearSelectionAction(@Nullable JComponent target) {
         super(target);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 

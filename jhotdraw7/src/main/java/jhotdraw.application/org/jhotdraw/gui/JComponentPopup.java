@@ -3,6 +3,9 @@
  */
 package org.jhotdraw.gui;
 
+import javax.swing.JLayeredPane;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -10,9 +13,6 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.security.AccessControlException;
-import javax.swing.JLayeredPane;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 
 /**
  * This is an extension of the Swing {@code JPopupMenu} which can be used to

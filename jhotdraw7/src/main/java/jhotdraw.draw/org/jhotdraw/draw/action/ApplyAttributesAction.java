@@ -3,12 +3,22 @@
  */
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
-import org.jhotdraw.undo.*;
-import java.util.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.undo.CompositeEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+import static org.jhotdraw.draw.AttributeKeys.TEXT;
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * ApplyAttributesAction.

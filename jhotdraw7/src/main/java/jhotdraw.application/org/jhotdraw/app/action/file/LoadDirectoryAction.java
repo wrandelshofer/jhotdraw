@@ -4,12 +4,13 @@
 
 package org.jhotdraw.app.action.file;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.View;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import java.util.ResourceBundle;
+import javax.annotation.Nullable;
 
 /**
  * Les the user save unsaved changes of the active view, then presents
@@ -34,7 +35,7 @@ public class LoadDirectoryAction extends LoadFileAction {
     /** Creates a new instance. */
     public LoadDirectoryAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
     @Override

@@ -36,7 +36,9 @@ package net.n3.nanoxml;
 
 import java.io.CharArrayWriter;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * XMLElement is an XML element. The standard NanoXML builder generates a tree

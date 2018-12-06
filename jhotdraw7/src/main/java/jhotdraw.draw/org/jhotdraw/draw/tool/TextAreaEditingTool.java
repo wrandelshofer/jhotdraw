@@ -3,18 +3,22 @@
  */
 package org.jhotdraw.draw.tool;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.text.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.text.FloatingTextArea;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.util.ResourceBundle;
+import org.jhotdraw.draw.text.FloatingTextField;
+import org.jhotdraw.geom.Insets2D;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEdit;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.util.ResourceBundleUtil;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
+import java.util.ResourceBundle;
 
 /**
  * A tool to edit existing figures that implement the TextHolderFigure

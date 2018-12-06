@@ -3,19 +3,33 @@
  */
 package org.jhotdraw.draw.io;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.gui.datatransfer.ImageTransferable;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import org.jhotdraw.draw.*;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
+
+import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
+import javax.swing.JComponent;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.datatransfer.Transferable;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
-import javax.imageio.*;
-import javax.swing.*;
-import org.jhotdraw.gui.datatransfer.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_OPACITY;
 
 /**
  * An output format for exporting drawings using one of the image formats

@@ -3,13 +3,13 @@
  */
 package org.jhotdraw.text;
 
+import org.jhotdraw.color.HSBColorSpace;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.text.ParseException;
 import java.util.ResourceBundle;
-
-import org.jhotdraw.color.HSBColorSpace;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * {@code ColorFormatter} is used to format colors into a textual representation

@@ -7,7 +7,8 @@
 
 package org.jhotdraw.samples.teddy.text;
 
-import javax.swing.text.*;
+import javax.swing.text.StyledEditorKit;
+import javax.swing.text.ViewFactory;
 /**
  * NumberedEditorKit.
  * <p>

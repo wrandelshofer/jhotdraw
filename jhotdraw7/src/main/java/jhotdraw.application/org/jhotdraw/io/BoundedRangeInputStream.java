@@ -4,11 +4,14 @@
 //package ch.randelshofer.io;
 package org.jhotdraw.io;
 
-import javax.swing.event.*;
-import javax.swing.BoundedRangeModel;
-import java.io.*;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.swing.BoundedRangeModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 /**
  * This input stream implements the BoundedRangeModel and allows
  * the observation of the input reading process.

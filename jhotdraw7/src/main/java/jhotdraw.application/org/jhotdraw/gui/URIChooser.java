@@ -4,12 +4,12 @@
 package org.jhotdraw.gui;
 
 import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.net.URI;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 
 /**
  *{@code URIChooser} provides a mechanism for the user to choose a URI.

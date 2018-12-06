@@ -3,8 +3,10 @@
  */
 package org.jhotdraw.draw.gui;
 
-import javax.swing.*;
 import org.jhotdraw.gui.AttributeEditor;
+
+import javax.swing.JComponent;
+import javax.swing.JSlider;
 
 /**
  * A JSlider that can be used to edit a double attribute of a Figure.

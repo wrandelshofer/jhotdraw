@@ -4,16 +4,25 @@
 
 package org.jhotdraw.draw.action;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import java.util.*;
-import javax.swing.undo.*;
-import org.jhotdraw.app.action.*;
-import org.jhotdraw.draw.*;
+import org.jhotdraw.app.action.ActionUtil;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.text.JTextComponent;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoableEdit;
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ResourceBundle;
 
 /**
  * AttributeToggler toggles an attribute of the selected figures between two

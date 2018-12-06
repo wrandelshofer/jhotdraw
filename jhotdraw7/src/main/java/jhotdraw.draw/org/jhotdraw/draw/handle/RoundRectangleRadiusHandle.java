@@ -3,16 +3,19 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.RoundRectangleFigure;
 import org.jhotdraw.draw.event.CompositeFigureEdit;
 import org.jhotdraw.geom.Geom;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.geom.*;
-import java.util.ResourceBundle;
-
 import org.jhotdraw.undo.PropertyChangeEdit;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
+import java.util.ResourceBundle;
 
 /**
  * A {@link Handle} to manipulate the corner radius of a

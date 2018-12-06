@@ -3,39 +3,52 @@
  */
 package org.jhotdraw.samples.odg;
 
+import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
-import org.jhotdraw.draw.io.TextInputFormat;
-import org.jhotdraw.draw.io.OutputFormat;
-import org.jhotdraw.draw.io.InputFormat;
-import org.jhotdraw.draw.io.ImageOutputFormat;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.GridConstrainer;
+import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.io.ImageInputFormat;
+import org.jhotdraw.draw.io.ImageOutputFormat;
+import org.jhotdraw.draw.io.InputFormat;
+import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.draw.io.TextInputFormat;
 import org.jhotdraw.draw.print.DrawingPageable;
+import org.jhotdraw.gui.JFileURIChooser;
+import org.jhotdraw.gui.PlacardScrollPaneLayout;
+import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.samples.odg.io.ODGInputFormat;
+import org.jhotdraw.samples.svg.figures.SVGImageFigure;
+import org.jhotdraw.samples.svg.figures.SVGTextFigure;
+import org.jhotdraw.samples.svg.io.ImageMapOutputFormat;
+import org.jhotdraw.samples.svg.io.SVGOutputFormat;
+import org.jhotdraw.samples.svg.io.SVGZOutputFormat;
+import org.jhotdraw.undo.UndoRedoManager;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import java.awt.BorderLayout;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.awt.print.Pageable;
-import java.util.HashMap;
-import java.util.LinkedList;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.samples.odg.io.ODGInputFormat;
-import org.jhotdraw.samples.svg.figures.*;
-import org.jhotdraw.samples.svg.io.*;
-import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.filechooser.FileFilter;
-import org.jhotdraw.app.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
-import org.jhotdraw.gui.JFileURIChooser;
-import org.jhotdraw.gui.URIChooser;
 
 /**
  * Provides a view on a ODG drawing.

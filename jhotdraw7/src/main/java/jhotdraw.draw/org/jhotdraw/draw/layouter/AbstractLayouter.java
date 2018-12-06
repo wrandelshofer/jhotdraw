@@ -4,8 +4,9 @@
 
 package org.jhotdraw.draw.layouter;
 
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.Insets2D;
 
 /**
  * This abstract class can be extended to implement a {@link Layouter}

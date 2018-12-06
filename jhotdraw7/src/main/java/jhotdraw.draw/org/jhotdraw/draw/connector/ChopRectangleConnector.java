@@ -4,10 +4,16 @@
 
 package org.jhotdraw.draw.connector;
 
-import org.jhotdraw.draw.*;
-import java.awt.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.geom.*;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.geom.Geom;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_PLACEMENT;
 /**
  * A {@link Connector} which locates a connection point at the bounds
  * of any figure which has a rectangular shape, such as {@link org.jhotdraw.draw.RectangleFigure}.

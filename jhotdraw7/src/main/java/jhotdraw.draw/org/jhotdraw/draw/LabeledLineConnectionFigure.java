@@ -4,18 +4,25 @@
 
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.layouter.Layouter;
-import org.jhotdraw.draw.event.FigureAdapter;
-import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureListener;
-import org.jhotdraw.util.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.geom.*;
+import org.jhotdraw.draw.event.FigureAdapter;
+import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.layouter.Layouter;
+import org.jhotdraw.util.ReversedList;
+
+import javax.annotation.Nullable;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import javax.swing.event.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * A LineConnection with labels.

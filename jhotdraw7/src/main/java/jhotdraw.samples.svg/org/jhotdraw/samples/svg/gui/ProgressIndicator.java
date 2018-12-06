@@ -4,8 +4,11 @@
 package org.jhotdraw.samples.svg.gui;
 
 import javax.annotation.Nullable;
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.BoundedRangeModel;
+import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.ProgressMonitor;
+import javax.swing.SwingUtilities;
+import java.awt.Font;
 
 /**
  * ProgressIndicator.

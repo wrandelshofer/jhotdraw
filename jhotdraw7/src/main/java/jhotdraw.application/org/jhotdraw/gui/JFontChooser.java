@@ -3,19 +3,36 @@
  */
 package org.jhotdraw.gui;
 
+import org.jhotdraw.gui.fontchooser.DefaultFontChooserModel;
+import org.jhotdraw.gui.fontchooser.FontChooserModel;
+import org.jhotdraw.gui.fontchooser.FontCollectionNode;
+import org.jhotdraw.gui.fontchooser.FontFaceNode;
+import org.jhotdraw.gui.fontchooser.FontFamilyNode;
+import org.jhotdraw.gui.plaf.FontChooserUI;
+import org.jhotdraw.gui.plaf.palette.PaletteFontChooserUI;
+
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.ArrayList;
-import java.util.concurrent.*;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.tree.*;
-import org.jhotdraw.gui.fontchooser.*;
-import org.jhotdraw.gui.plaf.*;
-import org.jhotdraw.gui.plaf.palette.PaletteFontChooserUI;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.AWTEvent;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  * Font chooser dialog.

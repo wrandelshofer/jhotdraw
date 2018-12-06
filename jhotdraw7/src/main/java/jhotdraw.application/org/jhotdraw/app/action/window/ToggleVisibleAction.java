@@ -4,10 +4,14 @@
 
 package org.jhotdraw.app.action.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import org.jhotdraw.app.action.ActionUtil;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  * Toggles the visible state of a Component.

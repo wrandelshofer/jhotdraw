@@ -3,19 +3,24 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import org.jhotdraw.draw.handle.HandleAttributeKeys;
-import org.jhotdraw.draw.handle.AbstractHandle;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.CompositeFigureEdit;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
+import org.jhotdraw.draw.handle.AbstractHandle;
+import org.jhotdraw.draw.handle.HandleAttributeKeys;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.undo.PropertyChangeEdit;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.geom.*;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ResourceBundle;
 
-import org.jhotdraw.undo.PropertyChangeEdit;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
 /**
  * A Handle to manipulate the radius of a round lead rectangle.

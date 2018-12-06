@@ -4,12 +4,19 @@
 
 package org.jhotdraw.app.osx;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import org.jhotdraw.app.OSXApplication;
 import org.jhotdraw.app.View;
+
+import javax.annotation.Nullable;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Hides all registered floating palettes, if none of the registered view

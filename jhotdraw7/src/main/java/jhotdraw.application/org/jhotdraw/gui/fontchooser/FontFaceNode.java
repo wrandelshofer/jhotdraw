@@ -4,11 +4,11 @@
 package org.jhotdraw.gui.fontchooser;
 
 import javax.annotation.Nullable;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.awt.Font;
 import java.util.Collections;
 import java.util.Enumeration;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 /**
  * A FontFaceNode is a MutableTreeNode which does not allow children.

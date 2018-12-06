@@ -3,16 +3,17 @@
  */
 package org.jhotdraw.app;
 
+import org.jhotdraw.gui.URIChooser;
+
 import javax.annotation.Nullable;
+import javax.swing.ActionMap;
+import javax.swing.JMenu;
 import java.awt.Component;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.ActionMap;
-import javax.swing.JMenu;
-import org.jhotdraw.gui.URIChooser;
 
 /**
  * An <em>application</em> handles the lifecycle of {@link View} objects and

@@ -3,17 +3,37 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.tool.DelegationSelectionTool;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.GraphicalCompositeFigure;
+import org.jhotdraw.draw.ImageFigure;
+import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.File;
-import javax.swing.*;
+import org.jhotdraw.draw.tool.DelegationSelectionTool;
+import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.geom.Insets2D;
+
+import javax.swing.Icon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileSystemView;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import static org.jhotdraw.draw.AttributeKeys.Alignment;
+import static org.jhotdraw.draw.AttributeKeys.COMPOSITE_ALIGNMENT;
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.TEXT_ALIGNMENT;
 
 /**
  * Example showing how to lay out composite figures.

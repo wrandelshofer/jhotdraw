@@ -4,10 +4,13 @@
 
 package org.jhotdraw.samples.svg.io;
 
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import java.io.*;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
-import org.jhotdraw.draw.*;
 
 /**
  * SVGZInputFormat supports reading of uncompressed and compressed SVG images.

@@ -4,7 +4,8 @@
 package org.jhotdraw.beans;
 
 import javax.annotation.Nullable;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * This abstract class can be extended to implement a JavaBean. <p> Implements

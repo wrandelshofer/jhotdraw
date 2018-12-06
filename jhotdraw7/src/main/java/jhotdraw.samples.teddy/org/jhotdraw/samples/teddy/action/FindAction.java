@@ -4,11 +4,16 @@
 
 package org.jhotdraw.samples.teddy.action;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.app.*;
-import org.jhotdraw.samples.teddy.*;
-import java.awt.event.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.OSXApplication;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.edit.AbstractFindAction;
+import org.jhotdraw.samples.teddy.FindDialog;
+
+import javax.annotation.Nullable;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 /**
  * AbstractFindAction shows the find dialog.
  *

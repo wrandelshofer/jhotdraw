@@ -3,15 +3,29 @@
  */
 package org.jhotdraw.draw.tool;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.handle.Handle;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
 import org.jhotdraw.app.action.ActionUtil;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.handle.Handle;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * A SelectionTool, which recognizes double clicks and popup menu triggers.

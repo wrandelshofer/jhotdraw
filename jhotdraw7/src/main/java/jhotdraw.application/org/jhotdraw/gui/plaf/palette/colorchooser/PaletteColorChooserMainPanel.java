@@ -4,12 +4,15 @@
 
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.colorchooser.*;
-import javax.swing.plaf.TabbedPaneUI;
 import org.jhotdraw.gui.plaf.palette.PaletteTabbedPaneUI;
+
+import javax.annotation.Nullable;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.plaf.TabbedPaneUI;
+import java.awt.BorderLayout;
 
 /**
  * The main panel of the color chooser UI.

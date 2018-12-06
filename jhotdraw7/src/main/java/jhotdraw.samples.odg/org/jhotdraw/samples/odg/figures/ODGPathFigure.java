@@ -3,23 +3,61 @@
  */
 package org.jhotdraw.samples.odg.figures;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.draw.handle.TransformHandleKit;
-import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.connector.Connector;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.undo.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.samples.odg.*;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.geom.GrowStroke;
+import org.jhotdraw.geom.Shapes;
+import org.jhotdraw.samples.odg.Gradient;
+import org.jhotdraw.samples.odg.ODGAttributeKeys;
 import org.jhotdraw.samples.odg.ODGConstants;
-import org.jhotdraw.util.*;
-import static org.jhotdraw.samples.odg.ODGAttributeKeys.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_GRADIENT;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_STYLE;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.OPACITY;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.PATH_CLOSED;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_CAP;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_GRADIENT;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_JOIN;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.STROKE_STYLE;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.WINDING_RULE;
+import static org.jhotdraw.samples.odg.ODGAttributeKeys.WindingRule;
 
 /**
  * ODGPath is a composite Figure which contains one or more

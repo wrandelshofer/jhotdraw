@@ -4,16 +4,20 @@
 
 package org.jhotdraw.samples.odg;
 
-import org.jhotdraw.draw.gui.JAttributeSlider;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.event.FigureAttributeEditorHandler;
+import org.jhotdraw.draw.gui.JAttributeSlider;
 import org.jhotdraw.text.JavaNumberFormatter;
-import java.awt.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.JSlider;
+import java.awt.Component;
+import java.awt.Font;
 import java.util.ResourceBundle;
-import javax.swing.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.util.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;
 
 /**
  * The ODGPropertiesPanel allows to edit properties (attributes and other things)

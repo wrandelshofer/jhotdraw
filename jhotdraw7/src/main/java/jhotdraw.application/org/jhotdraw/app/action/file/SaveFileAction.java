@@ -3,23 +3,30 @@
  */
 package org.jhotdraw.app.action.file;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.URI;
-import java.util.ResourceBundle;
-
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.ApplicationModel;
+import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
-import org.jhotdraw.util.*;
-import org.jhotdraw.gui.*;
-import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.gui.JFileURIChooser;
-import org.jhotdraw.gui.event.*;
+import org.jhotdraw.gui.JSheet;
+import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.event.SheetEvent;
+import org.jhotdraw.gui.event.SheetListener;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.annotation.Nullable;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI,
@@ -65,7 +72,7 @@ public class SaveFileAction extends AbstractViewAction {
     public SaveFileAction(Application app, @Nullable View view, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -109,7 +116,7 @@ public class SaveFileAction extends AbstractViewAction {
                             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
                                 for (View v : getApplication().getViews()) {
                                     if (v != view && v.getURI() != null && v.getURI().equals(uri)) {
-                                        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                                        ResourceBundleUtil labels = Labels.getLabels();
                                         JSheet.showMessageSheet(view.getComponent(), labels.getFormatted("file.saveAs.couldntSaveIntoOpenFile.message", evt.getFileChooser().getSelectedFile().getName()));
 
                                         view.setEnabled(true);
@@ -158,7 +165,7 @@ public class SaveFileAction extends AbstractViewAction {
             protected void failed(Throwable value) {
                 value.printStackTrace();
                 String message = value.getMessage() != null ? value.getMessage() : value.toString();
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.app.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
                 JSheet.showMessageSheet(getActiveView().getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(file)) + "</b><p>"

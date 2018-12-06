@@ -4,7 +4,10 @@
 package org.jhotdraw.gui.event;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 
 /**
  * The GenericListener creates anonymous listener classes at runtime.

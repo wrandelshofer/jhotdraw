@@ -4,13 +4,15 @@
 
 package org.jhotdraw.app.action.view;
 
-import javax.annotation.Nullable;
-import java.awt.event.*;
-import java.beans.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.app.action.ActionUtil;
+
+import javax.annotation.Nullable;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * ToggleViewPropertyAction.

@@ -6,9 +6,14 @@
 package org.jhotdraw.geom;
 
 import javax.annotation.Nullable;
-import java.awt.geom.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 /**
  * A QuadTree allows to quickly find an object on a two-dimensional space.
  * <p>
