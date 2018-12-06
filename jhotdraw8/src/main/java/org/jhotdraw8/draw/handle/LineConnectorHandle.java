@@ -75,7 +75,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
 
     @Nonnull
     @Override
-    public Region getNode() {
+    public Region getNode(DrawingView view) {
         return targetNode;
     }
 

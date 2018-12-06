@@ -12,6 +12,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -21,6 +22,9 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 
 import javax.annotation.Nonnull;
@@ -28,6 +32,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -46,11 +51,15 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class BezierControlPointEditHandle extends AbstractHandle {
+    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
+    public static final BorderWidths WIDTH_2 = new BorderWidths(2, 2, 2, 2, false, false, false, false);
 
     @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Background REGION_BACKGROUND =
+            new Background(new BackgroundFill(Color.WHITE, null, null));
     @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Border REGION_BORDER = new Border(
+            new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Path REGION_SHAPE_COLINEAR = new Path();
     private static final Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
     private static final Path REGION_SHAPE_EQUIDISTANT = new Path();
@@ -102,11 +111,11 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         node = new Region();
         node.setShape(REGION_SHAPE_CUSP);
         node.setManaged(false);
-        node.setScaleShape(false);
+        node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
@@ -139,7 +148,17 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public Region getNode() {
+    public Region getNode(DrawingView view) {
+        double size=view.getHandleSize();
+        if (node.getWidth()!=size) {
+            node.resize(size,size);
+        }
+        CssColor color=view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke)node.getBorder().getStrokes().get(0);
+        if (!borderStroke.getTopStroke().equals(color.getColor())) {
+            node.setBorder(new Border(new BorderStroke(color.getColor(), BorderStrokeStyle.SOLID, null, null)));
+        }
+
         return node;
     }
 
@@ -238,7 +257,8 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         BezierNode p = getBezierNode();
         Point2D cp = getLocation();
         pickLocation = cp = t == null ? cp : t.transform(cp);
-        node.relocate(cp.getX() - 5, cp.getY() - 5);
+        double size=node.getWidth();
+        node.relocate(cp.getX() - size*0.5, cp.getY() - size*0.5);
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));

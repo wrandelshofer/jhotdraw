@@ -35,7 +35,10 @@ public class BezierNodePathIterator implements PathIterator {
                 this.nodes.add(CLOSE_PATH);
             }
         }
-        if (closed)this.nodes.add(CLOSE_PATH);
+        if (closed && !nodes.isEmpty()){
+            this.nodes.add(nodes.get(0));
+            this.nodes.add(CLOSE_PATH);
+        }
         size = this.nodes.size();
         this.windingRule = windingRule;
         this.affine = affine;

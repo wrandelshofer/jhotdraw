@@ -151,8 +151,9 @@ public interface Handle {
      * {@code updateNode} method.
      *
      * @return the node
+     * @param view
      */
-        Node getNode();
+        Node getNode(DrawingView view);
 
     /**
      * Updates the node.

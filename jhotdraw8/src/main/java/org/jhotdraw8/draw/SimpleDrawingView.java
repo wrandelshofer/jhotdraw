@@ -1090,8 +1090,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             @Override
             protected void interpolate(double frac) {
                 for (Handle h : copiedList) {
-                    h.getNode().setScaleX(1 + frac * amount);
-                    h.getNode().setScaleY(1 + frac * amount);
+                    Node node = h.getNode(SimpleDrawingView.this);
+                    node.setScaleX(1 + frac * amount);
+                    node.setScaleY(1 + frac * amount);
                 }
             }
         };
@@ -1213,7 +1214,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
             //dirtyHandles.addChild(entry.getKey());
             for (Handle handle : entry.getValue()) {
-                Node n = handle.getNode();
+                Node n = handle.getNode(this);
                 handle.updateNode(this);
                 if (visibleRect.intersects(n.getBoundsInParent())) {
                     if (nodeToHandleMap.put(n, handle) == null) {

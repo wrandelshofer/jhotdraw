@@ -59,7 +59,7 @@ public class PathIterablePointsHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public Node getNode() {
+    public Node getNode(DrawingView view) {
         return node;
     }
 

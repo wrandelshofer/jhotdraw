@@ -124,7 +124,7 @@ public class RotateHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public Group getNode() {
+    public Group getNode(DrawingView view) {
         return group;
     }
 

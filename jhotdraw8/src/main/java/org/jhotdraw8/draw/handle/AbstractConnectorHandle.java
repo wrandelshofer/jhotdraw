@@ -82,7 +82,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
 
     @Override
     public Cursor getCursor() {
-        return isConnected && isDragging ? Cursor.NONE : Cursor.MOVE;
+        return isConnected && isDragging ? Cursor.HAND : Cursor.HAND;
     }
 
     public Point2D getLocationInView() {

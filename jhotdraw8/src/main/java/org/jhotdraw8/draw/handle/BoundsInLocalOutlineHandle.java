@@ -54,14 +54,14 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode() {
+    public Node getNode(DrawingView view) {
         return node;
     }
 
     protected void initNode(@Nonnull Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
+        //r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override
@@ -86,6 +86,8 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
         if (t != null && t.isType2D()) {
             t.transform2DPoints(points, 0, points, 0, 4);
         }
+
+        node.setStroke(view.getHandleColor().getColor());
 
         ObservableList<Double> pp = node.getPoints();
         for (int i = 0; i < points.length; i++) {

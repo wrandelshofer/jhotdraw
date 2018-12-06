@@ -10,6 +10,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**

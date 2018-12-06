@@ -68,7 +68,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
     @Nonnull
     @Override
-    public Region getNode() {
+    public Region getNode(DrawingView view) {
         return node;
     }
 

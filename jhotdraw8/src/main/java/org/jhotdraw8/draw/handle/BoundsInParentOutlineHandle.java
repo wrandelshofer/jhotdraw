@@ -54,7 +54,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode() {
+    public Node getNode(DrawingView view) {
         return node;
     }
 

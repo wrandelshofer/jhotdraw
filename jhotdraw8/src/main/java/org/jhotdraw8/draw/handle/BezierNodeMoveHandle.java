@@ -122,7 +122,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public Region getNode() {
+    public Region getNode(DrawingView view) {
         return node;
     }
 

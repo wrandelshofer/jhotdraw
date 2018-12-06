@@ -88,7 +88,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
 
     @Nonnull
     @Override
-    public Group getNode() {
+    public Group getNode(DrawingView view) {
         return groupNode;
     }
 

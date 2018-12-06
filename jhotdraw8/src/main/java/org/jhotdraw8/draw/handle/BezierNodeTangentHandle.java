@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
@@ -36,7 +37,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.DASHED, null, null));
     @Nonnull
     private final Polyline node;
 
@@ -56,8 +57,9 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         this.styleclass = styleclass;
         node = new Polyline();
         node.setManaged(false);
+        //node.getStrokeDashArray().addAll(5.0,6.0);
 
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override
@@ -89,7 +91,9 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public Polyline getNode() {
+    public Polyline getNode(DrawingView view) {
+        CssColor color=view.getHandleColor();
+        node.setStroke(color.getColor());
         return node;
     }
 
@@ -113,7 +117,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         Point2D c1 = Transforms.transform(t, bn.getC1());
         Point2D c2 = Transforms.transform(t, bn.getC2());
 
-        Polyline node = getNode();
+        Polyline node = getNode(view);
         List<Double> points = node.getPoints();
         points.clear();
         {

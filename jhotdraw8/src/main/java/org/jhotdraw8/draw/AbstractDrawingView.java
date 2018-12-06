@@ -9,6 +9,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.Preferences;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -61,7 +63,9 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
 
     private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
     private NonnullProperty<CssColor> handleColor=new NonnullProperty<>(this,HANDLE_COLOR_PROPERTY, CssColor.valueOf("blue"));
-    private IntegerProperty handleSize=new SimpleIntegerProperty(this,HANDLE_SIZE_PROPERTY,11);
+    private IntegerProperty handleSize=new SimpleIntegerProperty(
+            this,HANDLE_SIZE_PROPERTY,
+            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt("handleSize",5));
 
     {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));

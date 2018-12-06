@@ -100,10 +100,10 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         updateMarkerNode(ctx, g, endMarkerNode, end, start, endMarkerStr, getMarkerEndScaleFactor());
 
         Point2D dir = end.subtract(start).normalize();
-        if (startInset != 0 && startMarkerStr != null) {
+        if (startInset != 0 ) {
             start = start.add(dir.multiply(startInset));
         }
-        if (endInset != 0 && endMarkerStr != null) {
+        if (endInset != 0 ) {
             end = end.add(dir.multiply(-endInset));
         }
         lineNode.setStartX(start.getX());

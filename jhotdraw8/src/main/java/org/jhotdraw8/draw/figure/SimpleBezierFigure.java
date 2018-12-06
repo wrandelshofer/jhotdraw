@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
+
 import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -15,12 +16,14 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
 
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
@@ -40,6 +43,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A {@link Figure} which draws a {@link BezierNodePath}.
@@ -60,25 +64,25 @@ public class SimpleBezierFigure extends AbstractLeafFigure
     public final static String TYPE_SELECTOR = "Bezier";
 
     public SimpleBezierFigure() {
-        setStyled(StyleOrigin.USER_AGENT,FILL,null);
+        setStyled(StyleOrigin.USER_AGENT, FILL, null);
     }
 
     @Override
     public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
-        } else if (handleType == HandleType.MOVE) {
-            list.add(new PathIterableOutlineHandle(this, true, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            for (int i = 0, n = get(PATH).size(); i < n; i++) {
-                list.add(new BezierNodeMoveHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_MOVE));
-            }
         } else if (handleType == HandleType.POINT) {
             list.add(new BezierOutlineHandle(this, PATH, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            for (int i = 0, n = get(PATH).size(); i < n; i++) {
+            ImmutableList<BezierNode> nodes = get(PATH);
+            for (int i = 0, n = nodes.size(); i < n; i++) {
                 list.add(new BezierNodeTangentHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE));
                 list.add(new BezierNodeEditHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_POINT));
-                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
-                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                if (nodes.get(i).isC1()) {
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                }
+                if (nodes.get(i).isC2()) {
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                }
             }
         } else {
             super.createHandles(handleType, list);
@@ -144,6 +148,16 @@ public class SimpleBezierFigure extends AbstractLeafFigure
     }
 
     @Override
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        reshapeInLocal(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
+    }
+
+    @Override
+    public void reshapeInLocal(double x, double y, double width, double height) {
+        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
+    }
+
+    @Override
     public void reshapeInLocal(Transform transform) {
         ArrayList<BezierNode> newP = getNonnull(PATH).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
@@ -151,10 +165,10 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         }
         set(PATH, ImmutableList.ofCollection(newP));
     }
-    
+
     @Override
     public void translateInLocal(CssPoint2D t) {
-        Transform transform = new Translate(t.getX().getConvertedValue(),t.getY().getConvertedValue());
+        Transform transform = new Translate(t.getX().getConvertedValue(), t.getY().getConvertedValue());
         reshapeInLocal(transform);
     }
 

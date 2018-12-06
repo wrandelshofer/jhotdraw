@@ -95,7 +95,7 @@ private Point2D origin=new Point2D(0,0);
 
     @Nonnull
     @Override
-    public Region getNode() {
+    public Region getNode(DrawingView view) {
         return node;
     }
 

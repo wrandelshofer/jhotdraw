@@ -59,8 +59,7 @@ public class MoveHandle extends LocatorHandle {
     public static final BorderWidths WIDTH_2 = new BorderWidths(2, 2, 2, 2, false, false, false, false);
     @Nullable
     private static final Border REGION_BORDER = new Border(
-            new BorderStroke(Color.BLUE, INSIDE_STROKE, null, null),
-            new BorderStroke(Color.WHITE, INSIDE_STROKE, null, WIDTH_2)
+            new BorderStroke(Color.BLUE, INSIDE_STROKE, null, null)
     );
     private Set<Figure> groupReshapeableFigures;
     private boolean pressed;
@@ -76,7 +75,7 @@ public class MoveHandle extends LocatorHandle {
 
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
-        node.setScaleShape(false);
+        node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
 
@@ -92,7 +91,19 @@ public class MoveHandle extends LocatorHandle {
 
     @Nonnull
     @Override
-    public Region getNode() {
+    public Region getNode(DrawingView view) {
+        double size=view.getHandleSize();
+        if (node.getWidth()!=size) {
+            node.resize(size,size);
+        }
+        CssColor color=view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke)node.getBorder().getStrokes().get(0);
+        if (borderStroke==null||!borderStroke.getTopStroke().equals(color.getColor())) {
+            node.setBorder(new Border(
+                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
+            ));
+        }
+
         return node;
     }
 
@@ -109,22 +120,8 @@ public class MoveHandle extends LocatorHandle {
         // (The value 5.5 is half of the node size, which is 11,11.
         // 0.5 is subtracted from 5.5 so that the node snaps between pixels
         // so that we get sharp lines.
-        node.relocate(p.getX() - 5, p.getY() - 5);
-
-        CssColor color=view.getHandleColor();
-        BorderStroke borderStroke = node.getBorder().getStrokes().size()<2?null:(BorderStroke)node.getBorder().getStrokes().get(1);
-        if (borderStroke==null||!borderStroke.getTopStroke().equals(color.getColor())) {
-            node.setBorder(new Border(
-                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, new BorderWidths(2, 2, 2, 2, false, false, false, false)),
-                    new BorderStroke(Color.WHITE, INSIDE_STROKE, null, null)
-            ));
-        }
-
-        double size=view.getHandleSize();
-        if (REGION_SHAPE.getWidth()!=size) {
-            REGION_SHAPE.setWidth(size);
-            REGION_SHAPE.setHeight(size);
-        }
+        double size=node.getWidth();
+        node.relocate(p.getX() - size*0.5, p.getY() - size*0.5);
 
 
         // rotates the node:

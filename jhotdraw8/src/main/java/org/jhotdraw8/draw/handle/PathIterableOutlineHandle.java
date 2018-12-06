@@ -57,7 +57,7 @@ public class PathIterableOutlineHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public Node getNode() {
+    public Node getNode(DrawingView view) {
         return node;
     }
 

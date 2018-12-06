@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
@@ -52,7 +53,7 @@ public class BezierOutlineHandle extends AbstractHandle {
         super(figure);
         this.key = key;
         node = new Path();
-        this.styleclass = styleclass;
+        //this.styleclass = styleclass;
         initNode(node);
     }
 
@@ -78,7 +79,9 @@ public class BezierOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode() {
+    public Node getNode(DrawingView view) {
+        CssColor color=view.getHandleColor();
+        node.setStroke(color.getColor());
         return node;
     }
 
@@ -112,7 +115,7 @@ public class BezierOutlineHandle extends AbstractHandle {
     protected void initNode(@Nonnull Path r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

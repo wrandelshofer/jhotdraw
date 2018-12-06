@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -48,7 +49,7 @@ import org.jhotdraw8.geom.Transforms;
 public class BezierNodeEditHandle extends AbstractHandle {
 
     @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
@@ -83,10 +84,10 @@ public class BezierNodeEditHandle extends AbstractHandle {
         node = new Region();
         node.setShape(REGION_SHAPE_LINEAR);
         node.setManaged(false);
-        node.setScaleShape(false);
+        node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
@@ -119,7 +120,19 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public Region getNode() {
+    public Region getNode(DrawingView view) {
+        double size=view.getHandleSize();
+        if (node.getWidth()!=size) {
+            node.resize(size,size);
+        }
+        CssColor color=view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke)node.getBorder().getStrokes().get(0);
+        if (!borderStroke.getTopStroke().equals(color.getColor())) {
+            node.setBorder(new Border(
+                    new BorderStroke(color.getColor(), BorderStrokeStyle.SOLID, null, null)
+            ));
+        }
+
         return node;
     }
 
@@ -206,7 +219,8 @@ public class BezierNodeEditHandle extends AbstractHandle {
         BezierNode p = getBezierNode();
         Point2D c0 = getLocation();
         pickLocation = c0 = t == null ? c0 : t.transform(c0);
-        node.relocate(c0.getX() - 5, c0.getY() - 5);
+        double size=node.getWidth();
+        node.relocate(c0.getX() - size*0.5, c0.getY() - size*0.5);
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));

@@ -140,11 +140,11 @@ public class SimplePolygonFigure extends AbstractLeafFigure
     public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PolygonOutlineHandle(this, POINTS, false,Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
-        } else if (handleType == HandleType.MOVE) {
+        /*} else if (handleType == HandleType.MOVE) {
             list.add(new PolygonOutlineHandle(this, POINTS,false, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             for (int i = 0, n = get(POINTS).size(); i < n; i++) {
                 list.add(new PolyPointMoveHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_MOVE));
-            }
+            }*/
         } else if (handleType == HandleType.POINT) {
             list.add(new PolygonOutlineHandle(this, POINTS, true,Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             for (int i = 0, n = get(POINTS).size(); i < n; i++) {
