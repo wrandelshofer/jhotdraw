@@ -2,28 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Renames Label classes to make them easier distinguishable.">
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Draw.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Net.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/ODG.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Pert.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-jhotdraw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build-jhotdraw.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGPropertiesPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGPropertiesPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw8/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/figure/Drawing.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/figure/Drawing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/AbstractExportOutputFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/AbstractExportOutputFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/BitmapExportOutputFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/BitmapExportOutputFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/InputFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/InputFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/OutputFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/OutputFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/PrinterExportFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/PrinterExportFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/SimpleXmlIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/SimpleXmlIO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/SvgExportOutputFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/SvgExportOutputFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/XmlOutputFormatMixin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/io/XmlOutputFormatMixin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/net/UriUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/net/UriUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/samples/teddy/TeddyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/samples/teddy/TeddyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/xml/XmlUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/xml/XmlUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/css/text/CssStrokeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/css/text/CssStrokeConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/key/StrokeStyleableMapAccessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org/jhotdraw8/draw/key/StrokeStyleableMapAccessor.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/build/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -615,6 +596,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="119" y="23" width="1840" height="1129" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49923897" visible="true" weight="0.2897664" />
       <window_info id="Designer" order="1" />

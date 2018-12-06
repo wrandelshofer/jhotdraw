@@ -157,7 +157,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         while (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_DIMENSION) {
             tt.pushBack();
             list.add(parseSize(DASH_ARRAY, null, tt, idFactory));
-            if (tt.next()!=CssTokenType.TT_COMMA) {
+            if (tt.next() != CssTokenType.TT_COMMA) {
                 tt.pushBack();
             }
         }
@@ -216,20 +216,14 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
 
     @Override
     protected <TT extends CssStroke> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
-        if (value.getPaint()==null) {
-            out.accept(new CssToken(CssTokenType.TT_IDENT,CssTokenType.IDENT_NONE));
+        if (value.getPaint() == null) {
+            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
         }
 
-        boolean needsSpace = false;
         CssSize width = value.getWidth();
-        if (width.getConvertedValue() != 1.0) {
-            out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getValue(), width.getUnits()));
-            needsSpace = true;
-        }
-        if (needsSpace) {
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-        }
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getValue(), width.getUnits()));
+        out.accept(new CssToken(CssTokenType.TT_S, " "));
         new CssPaintableConverter(true).produceTokens(value.getPaint(), idFactory, out);
 
         switch (value.getType()) {

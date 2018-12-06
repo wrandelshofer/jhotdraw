@@ -67,7 +67,7 @@ class CssStrokeConverterTest {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(
                         new CssStroke(CssColor.BLACK),
-                        "black")),
+                        "1 black")),
                 dynamicTest("2", () -> doTest(
                         new CssStroke(new CssSize(2),CssColor.BLACK),
                        "2 black")),

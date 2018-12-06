@@ -125,7 +125,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
     @Override
     public CssStroke put(Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
         CssStroke oldValue = get(a);
-        if (value==null) {
+        if (value == null) {
             widthKey.put(a, CssSize.ONE);
             paintKey.put(a, null);
             dashOffsetKey.put(a, CssSize.ZERO);
@@ -134,7 +134,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
             lineJoinKey.put(a, StrokeLineJoin.MITER);
             lineCapKey.put(a, StrokeLineCap.SQUARE);
             miterLimitKey.put(a, new CssSize(10.0));
-        }else {
+        } else {
             widthKey.put(a, value.getWidth());
             paintKey.put(a, value.getPaint());
             dashOffsetKey.put(a, value.getDashOffset());
