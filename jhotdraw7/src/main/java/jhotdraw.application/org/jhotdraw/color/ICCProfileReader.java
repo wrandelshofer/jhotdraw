@@ -40,13 +40,11 @@ public class ICCProfileReader {
      * be non-negative, the signed encoding allows for implementation
      * optimizations by minimizing the number of fixed formats.
      * <table>
-     * <th><td>Byte Offset</td><td>Content</td><td>Encoding</td></th>
+     * <tr><th>Byte Offset</th><th>Content</th><th>Encoding</th></tr>
      * <tr><td>0-3</td><td>‘XYZ ‘(58595A20h) type descriptor</td><td></td></tr>
      * <tr><td>4-7</td><td>reserved, must be set to 0</td><td></td></tr>
      * <tr><td>8-n</td><td>an array of XYZ numbers</td><td>XYZNumber</td></tr>
      * </table>
-     *
-     * @param data
      */
     public double[] readXYZType() throws IOException {
         int typeDescriptor = in.readInt();
@@ -67,7 +65,7 @@ public class ICCProfileReader {
      * used to encode CIEXYZ tristimulus values where byte usage is assigned as
      * follows:
      * <table>
-     * <th><td>Byte Offset</td><td>Content</td><td>Encoding</td></th>
+     * <tr><th>Byte Offset</th><th>Content</th><th>Encoding</th></tr>
      * <tr><td>0-3</td><td>CIE X</td><td></td>s15Fixed16Number</td></tr>
      * <tr><td>4-7</td><td>CIE Y</td><td></td>s15Fixed16Number</td></tr>
      * <tr><td>8-11</td><td>CIE Z</td><td>s15Fixed16Number</td></tr>
