@@ -3,22 +3,24 @@
  */
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
+import org.jhotdraw.gui.Labels;
+import org.jhotdraw.color.HSBColorSpace;
+import org.jhotdraw.gui.plaf.palette.PaletteListUI;
+import org.jhotdraw.gui.plaf.palette.PaletteLookAndFeel;
+import org.jhotdraw.gui.plaf.palette.PalettePanelUI;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
-import java.awt.Color;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ListModel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.ListUI;
-import org.jhotdraw.color.HSBColorSpace;
-import org.jhotdraw.gui.plaf.palette.PaletteListUI;
-import org.jhotdraw.gui.plaf.palette.PaletteLookAndFeel;
-import org.jhotdraw.gui.plaf.palette.PalettePanelUI;
-import org.jhotdraw.util.ResourceBundleUtil;
+import java.awt.Color;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 /**
  * PaletteSwatchesChooser.
@@ -73,16 +75,16 @@ public class PaletteSwatchesChooser extends AbstractColorChooserPanel {
         // FIXME - Move this into a lazy initializer
         HSBColorSpace hsbCS = HSBColorSpace.getInstance();
         LinkedList<ColorIcon> m = new LinkedList<ColorIcon>();
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
 
-        for (int s = 2; s <= 8; s += 2) {
+        for (int s = 0; s <= 8; s += 2) {
             for (int h = 0; h < 12; h++) {
                 Color c = new Color(hsbCS, new float[]{(h) / 12f, s * 0.1f, 1f}, 1f);
                 m.add(new ColorIcon(c,//
                         labels.getFormatted("ColorChooser.colorSwatch.hsbComponents.toolTipText", h * 360 / 12, s * 10, 100)));
             }
         }
-        for (int b = 10; b >= 2; b -= 2) {
+        for (int b = 10; b >= 0; b -= 2) {
             for (int h = 0; h < 12; h++) {
                 Color c = new Color(hsbCS, new float[]{(h) / 12f, 1f, b * 0.1f}, 1f);
                 m.add(new ColorIcon(new Color(hsbCS, new float[]{(h) / 12f, 1f, b * 0.1f}, 1f),//
