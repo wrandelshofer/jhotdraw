@@ -3,10 +3,10 @@
  */
 package org.jhotdraw8.draw.io;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.nio.file.Path;
 import java.util.Collection;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -39,7 +39,7 @@ public interface XmlOutputFormatMixin extends OutputFormat {
     Document toDocument( Drawing drawing,  Collection<Figure> selection) throws IOException;
 
     @Override
-    default void write(@Nonnull File file, @Nonnull Drawing drawing) throws IOException {
+    default void write(@Nonnull Path file, @Nonnull Drawing drawing) throws IOException {
         Document doc = toDocument(drawing);
         XmlUtil.write(file, doc);
     }

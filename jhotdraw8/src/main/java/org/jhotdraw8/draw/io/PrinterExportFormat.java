@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+
 import static java.lang.Math.abs;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -144,7 +146,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
     }
 
     @Override
-    protected void writePage(File file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(Path file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
@@ -153,7 +155,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         printSlice(page.get(SimplePageFigure.PAPER_SIZE), page, pageBounds, node, pagesDpi * factor);
     }
 
-    protected boolean writeSlice(File file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {
+    protected boolean writeSlice(Path file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {
         printSlice(null, slice, slice.getBoundsInLocal(), node, dpi);
         return false;
     }

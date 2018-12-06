@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -34,8 +36,8 @@ public class UriUtil {
      */
     public static String getName(URI uri) {
         if (uri.getScheme() != null && "file".equals(uri.getScheme())) {
-            File file = new File(clearQuery(uri));
-            return file.getName() + " [" + file.getPath() + "]";
+            Path file = Paths.get(clearQuery(uri));
+            return file.getFileName() + " [" + file.getParent() + "]";
         }
         return uri.toString();
     }

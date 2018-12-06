@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import java.io.File;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.Collections;
 
 import javax.annotation.Nonnull;
@@ -54,7 +55,8 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new File(System.getProperty("user.home")).toURI());
+    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
+            Paths.get(System.getProperty("user.home")).toUri());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
      * stylesheets are used.

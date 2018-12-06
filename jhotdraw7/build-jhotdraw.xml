@@ -110,6 +110,14 @@
         <java module="jhotdraw.samples.pert" modulepath="${dist}" fork="true">
         </java>
     </target>
+    <target name="run-net" depends="init">
+        <java module="jhotdraw.samples.net" modulepath="${dist}" fork="true">
+        </java>
+    </target>
+    <target name="run-odg" depends="init">
+        <java module="jhotdraw.samples.odg" modulepath="${dist}" fork="true">
+        </java>
+    </target>
     <target name="run-draw" depends="init">
         <java module="jhotdraw.samples.draw" modulepath="${dist}" fork="true">
         </java>

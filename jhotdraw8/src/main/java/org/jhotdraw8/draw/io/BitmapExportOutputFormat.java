@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -156,20 +158,20 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     }
 
-    public void write(@Nonnull File file, Drawing drawing) throws IOException {
+    public void write(@Nonnull Path file, Drawing drawing) throws IOException {
         if (isExportDrawing()) {
             OutputFormat.super.write(file, drawing);
         }
         if (isExportSlices()) {
-            writeSlices(file.getParentFile(), drawing);
+            writeSlices(file.getParent(), drawing);
         }
         if (isExportPages()) {
-            String basename = file.getName();
+            String basename = file.getFileName().toString();
             int p = basename.lastIndexOf('.');
             if (p != -1) {
                 basename = basename.substring(0, p);
             }
-            writePages(file.getParentFile(), basename, drawing);
+            writePages(file.getParent(), basename, drawing);
         }
     }
 
@@ -197,20 +199,20 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     }
 
     @Override
-    protected void writePage(@Nonnull File file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(@Nonnull Path file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
         WritableImage image = renderSlice(page, pageBounds, node, pagesDpi * factor);
-        try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+        try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             writeImage(out, image, pagesDpi);
         }
     }
 
-    protected boolean writeSlice(@Nonnull File file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {
+    protected boolean writeSlice(@Nonnull Path file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {
         WritableImage image = renderSlice(slice, slice.getBoundsInLocal(), node, dpi);
-        try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+        try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             writeImage(out, image, dpi);
         }
         return false;

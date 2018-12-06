@@ -48,6 +48,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -158,20 +159,20 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         clipboard.put(SVG_FORMAT, out.toString());
     }
 
-    public void write(@Nonnull File file, @Nonnull Drawing drawing) throws IOException {
+    public void write(@Nonnull Path file, @Nonnull Drawing drawing) throws IOException {
         if (isExportDrawing()) {
             XmlOutputFormatMixin.super.write(file, drawing);
         }
         if (isExportSlices()) {
-            writeSlices(file.getParentFile(), drawing);
+            writeSlices(file.getParent(), drawing);
         }
         if (isExportPages()) {
-            String basename = file.getName();
+            String basename = file.getFileName().toString();
             int p = basename.lastIndexOf('.');
             if (p != -1) {
                 basename = basename.substring(0, p);
             }
-            writePages(file.getParentFile(), basename, drawing);
+            writePages(file.getParent(), basename, drawing);
         }
     }
 
@@ -181,7 +182,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     }
 
     @Override
-    protected void writePage(@Nonnull File file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(@Nonnull Path file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
         markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
@@ -203,7 +204,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     }
 
     @Override
-    protected boolean writeSlice(@Nonnull File file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {
+    protected boolean writeSlice(@Nonnull Path file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {
         markNodesOutsideBoundsWithSkip(node, slice.getBoundsInLocal());
         Transform worldToLocal = slice.getWorldToLocal();
         Point2D sliceOrigin = slice.getSliceOrigin();

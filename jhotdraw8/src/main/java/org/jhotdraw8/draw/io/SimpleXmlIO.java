@@ -12,6 +12,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -223,11 +225,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Nonnull
     @Override
-    public Figure read(@Nonnull File file, Drawing drawing) throws IOException {
+    public Figure read(@Nonnull Path file, Drawing drawing) throws IOException {
         try {
-            URI documentHome = file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI();
+            URI documentHome = file.getParent() == null ? Paths.get(System.getProperty("user.home")).toUri() : file.getParent().toUri();
             final Drawing newDrawing;
-            newDrawing = (Drawing) read(new InputSource(file.toURI().toASCIIString()), drawing, documentHome);
+            newDrawing = (Drawing) read(new InputSource(file.toUri().toASCIIString()), drawing, documentHome);
             return newDrawing;
         } catch (IOException e) {
             throw new IOException("Error reading " + file + ".", e);

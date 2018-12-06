@@ -5,4 +5,7 @@ module jhotdraw.samples.net {
     requires jhotdraw.nanoxml;
     requires javax.annotation;
     requires java.prefs;
+
+    opens org.jhotdraw.samples.net to jhotdraw.application;
+    opens org.jhotdraw.samples.net.images to jhotdraw.application;
 }

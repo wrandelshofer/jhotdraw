@@ -4,6 +4,7 @@
 
 package org.jhotdraw.samples.odg;
 
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.event.FigureAttributeEditorHandler;
@@ -99,7 +100,7 @@ public class ODGPropertiesPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         add(linkField, gridBagConstraints);
 
-        opacityLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/jhotdraw/draw/action/images/attributeOpacity.png"))); // NOI18N
+        opacityLabel.setIcon(new javax.swing.ImageIcon(Drawing.class.getResource("/org/jhotdraw/draw/action/images/attributeOpacity.png"))); // NOI18N
         opacityLabel.setToolTipText(labels.getString("opacity")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);

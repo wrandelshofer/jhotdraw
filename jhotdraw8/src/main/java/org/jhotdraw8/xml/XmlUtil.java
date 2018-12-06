@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.xml.XMLConstants;
@@ -265,6 +266,9 @@ public class XmlUtil {
         }
     }
 
+    public static void validate(@Nonnull Path xmlPath, URI schemaUri) throws IOException {
+        validate(xmlPath.toUri(),schemaUri);
+    }
     public static void validate(@Nonnull URI xmlUri, URI schemaUri) throws IOException {
         try {
             SchemaFactory factory = SchemaFactory
@@ -272,7 +276,7 @@ public class XmlUtil {
             Schema schema
                     = factory.newSchema(schemaUri.toURL());
             Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(new File(xmlUri)));
+            validator.validate(new StreamSource(Paths.get(xmlUri).toFile()));
         } catch (SAXParseException e) {
             throw new IOException("Invalid XML file: " + e.getSystemId() + "\nError in line: " + e.getLineNumber() + ", column: " + e.getColumnNumber() + ".\n" + e.getMessage(), e);
         } catch (SAXException e) {
@@ -291,8 +295,8 @@ public class XmlUtil {
         write(result, doc);
     }
 
-    public static void write(@Nonnull File out, Document doc) throws IOException {
-        StreamResult result = new StreamResult(out);
+    public static void write(@Nonnull Path out, Document doc) throws IOException {
+        StreamResult result = new StreamResult(out.toFile());
         write(result, doc);
     }
 

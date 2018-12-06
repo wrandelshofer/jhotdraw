@@ -14,6 +14,8 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
@@ -106,7 +108,7 @@ public class TeddyController extends AbstractDocumentOrientedActivity implements
     return FXWorker.supply(() -> {
       StringBuilder builder = new StringBuilder();
       char[] cbuf = new char[8192];
-      try (Reader in = new InputStreamReader(new FileInputStream(new File(uri)), StandardCharsets.UTF_8)) {
+      try (Reader in = Files.newBufferedReader(Paths.get(uri), StandardCharsets.UTF_8)) {
         for (int count = in.read(cbuf, 0, cbuf.length); count != -1; count = in.read(cbuf, 0, cbuf.length)) {
           builder.append(cbuf, 0, count);
         }
@@ -126,7 +128,7 @@ public class TeddyController extends AbstractDocumentOrientedActivity implements
   public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
     final String text = textArea.getText();
     return FXWorker.run(() -> {
-      try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {
+      try (Writer out = Files.newBufferedWriter(Paths.get(uri), StandardCharsets.UTF_8)) {
         out.write(text);
       }
     });

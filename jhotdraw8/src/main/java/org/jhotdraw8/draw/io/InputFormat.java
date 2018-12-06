@@ -9,6 +9,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
@@ -44,7 +49,7 @@ public interface InputFormat {
      * @throws java.io.IOException if an IO error occurs
      */ 
     default Figure read(@Nonnull URI uri, Drawing drawing) throws IOException {
-        return read(new File(uri), drawing);
+        return read(Paths.get(uri), drawing);
     }
 
     /**
@@ -59,9 +64,9 @@ public interface InputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */ 
-    default Figure read(@Nonnull File file, Drawing drawing) throws IOException {
-        URI documentHome=file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI();
-        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
+    default Figure read(@Nonnull Path file, Drawing drawing) throws IOException {
+        URI documentHome=file.getParent()==null? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri():file.getParent().toUri();
+        try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(in, drawing,documentHome);
         }
     }

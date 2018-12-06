@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
@@ -39,7 +42,7 @@ public interface OutputFormat {
      * @throws java.io.IOException if an IO error occurs
      */
     default void write(@Nonnull URI uri, Drawing drawing) throws IOException {
-        write(new File(uri), drawing);
+        write(Paths.get(uri), drawing);
     }
 
     /**
@@ -51,8 +54,8 @@ public interface OutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@Nonnull File file, Drawing drawing) throws IOException {
-        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+    default void write(@Nonnull Path file, Drawing drawing) throws IOException {
+        try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             write(out, drawing);
         }
     }

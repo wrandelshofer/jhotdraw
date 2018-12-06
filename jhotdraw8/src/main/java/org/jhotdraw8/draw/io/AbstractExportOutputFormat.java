@@ -24,6 +24,8 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,10 +116,10 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param internalPageNumber the internal page number of the page figure
      * @throws IOException if writing fails
      */
-    protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
+    protected abstract void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
-    protected void writePages(@javax.annotation.Nullable File dir, String basename, @Nonnull Drawing drawing) throws IOException {
-        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
+    protected void writePages(@Nullable Path dir, String basename, @Nonnull Drawing drawing) throws IOException {
+        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Page) {
@@ -141,8 +143,8 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param hints    the hints
      * @throws java.io.IOException in case of failure
      */
-    protected void writePages(@javax.annotation.Nullable File dir, String basename, @Nonnull Drawing drawing, @Nonnull List<Page> pages, @Nonnull Map<Key<?>, Object> hints) throws IOException {
-        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
+    protected void writePages(@Nullable Path dir, String basename, @Nonnull Drawing drawing, @Nonnull List<Page> pages, @Nonnull Map<Key<?>, Object> hints) throws IOException {
+        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
         for (Page page : pages) {
@@ -157,7 +159,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         Group parentOfPageNode = new Group();
         for (Page page : pages) {
             for (int internalPageNumber = 0, n = page.getNumberOfSubPages(); internalPageNumber < n; internalPageNumber++) {
-                File filename = (dir == null) ? null : new File(dir, basename + "_" + (pageNumber + 1) + "." + getExtension());
+                Path filename = (dir == null) ? null : dir.resolve(basename + "_" + (pageNumber + 1) + "." + getExtension());
 
                 hints.put(RenderContext.RENDER_PAGE, page);
                 hints.put(RenderContext.RENDER_NUMBER_OF_PAGES, numberOfPages);
@@ -211,10 +213,10 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @return returns true if the state of the node was destroyed
      * @throws IOException in case of failure
      */
-    protected abstract boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
+    protected abstract boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException;
 
-    protected void writeSlices(@javax.annotation.Nullable File dir, @Nonnull Drawing drawing) throws IOException {
-        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toURI()));
+    protected void writeSlices(@Nullable Path dir, @Nonnull Drawing drawing) throws IOException {
+        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Slice) {
@@ -236,10 +238,9 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param dir
      * @param drawing
      * @param slices
-     * @param hints
      * @throws java.io.IOException
      */
-    private void writeSlices(File dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
+    private void writeSlices(Path dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);
@@ -253,7 +254,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
         Node node = null;
         for (Slice slice : slices) {
-            File filename = new File(dir, idFactory.createId(slice, "Slice") + suffix + "." + getExtension());
+            Path filename = dir.resolve(idFactory.createId(slice, "Slice") + suffix + "." + getExtension());
             if (node == null) {
                 node = toNode(drawing, Collections.singleton(drawing), hints);
             }
