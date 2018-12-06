@@ -13,7 +13,7 @@
         <property name="src" value="src/main/java"/>
         <property name="build" value="build"/>
         <property name="classes" value="${build}/classes"/>
-        <property name="dist" value="dist/JHotDraw ${version}/Samples/JHotDraw"/>
+        <property name="dist" value="dist/JHotDraw ${version}"/>
         <property name="javadoc" value="dist/JHotDraw ${version}/JavaDoc"/>
         <property name="doc" value="dist/JHotDraw ${version}/Documentation"/>
         <property name="docsrc" value="src/documentation"/>
@@ -24,7 +24,7 @@
     <target depends="init" description="Javadoc for my API." name="javadoc">
         <mkdir dir="${javadoc}"/>
         <javadoc destdir="${javadoc}" 
-        footer="&lt;font size=-2>Copyright 1996-2010 (c) by the authors and contributors of the JHotDraw project.&lt;br>MIT License.&lt;/font>"
+        footer="&lt;font size=-2>Copyright 1996-2018 (c) ${author}.&lt;br>${license}.&lt;/font>"
         header="JHotDraw ${version}" 
         windowtitle="JHotDraw ${version}"
         maxmemory="256M"
@@ -57,11 +57,6 @@
          >
             <compilerarg value="-version"/>
             <compilerarg value="-Xlint:all"/>
-            
-            <classpath path="${lib}/quaqua.jar"/>
-            <classpath path="${lib}/java_30.zip"/>
-            <classpath path="${lib}/annotations.jar"/>
-            <classpath path="${lib}/jsr305.jar"/>
             <include name="**/*.java"/>
         </javac>
         <copy todir="${classes}">
@@ -71,15 +66,41 @@
             </fileset>
         </copy>
     </target>
+
+    <macrodef name="modular-jar">
+        <attribute name="module" />
+        <sequential>
+            <mkdir dir="${dist}"/>
+            <jar destfile="${dist}/@{module}.jar"
+                 basedir="${classes}/@{module}"
+            >
+                <manifest>
+                    <attribute name="Copyright" value="${author}"/>
+                    <attribute name="License" value="${license}"/>
+                    <attribute name="Implementation-Title" value="@{module}"/>
+                    <attribute name="Implementation-Version" value="${version}"/>
+                    <attribute name="Implementation-Vendor" value="${author}"/>
+                    <attribute name="Specification-Title" value="@{module}"/>
+                    <attribute name="Specification-Version" value="${version}"/>
+                    <attribute name="Specification-Vendor" value="${author}"/>
+                </manifest>
+            </jar>
+        </sequential>
+    </macrodef>
+
     <target name="jar" depends="init,compile">
-        <mkdir dir="${dist}"/>
-        <jar destfile="${dist}/jhotdraw.jar" basedir="${classes}">
-            <manifest>
-                <attribute name="Built-By" value="${author}"/>
-                <attribute name="Main-Class" value="org.jhotdraw.samples.draw.Main"/>
-                <attribute name="Class-Path" value="quaqua.jar lib/quaqua.jar ../lib/quaqua.jar"/>
-            </manifest>
-        </jar>
+        <modular-jar module="javax.annotation"/>
+        <modular-jar module="jhotdraw.application"/>
+        <modular-jar module="jhotdraw.draw"/>
+        <modular-jar module="jhotdraw.nanoxml"/>
+        <modular-jar module="jhotdraw.samples.draw"/>
+        <modular-jar module="jhotdraw.samples.misc"/>
+        <modular-jar module="jhotdraw.samples.net"/>
+        <modular-jar module="jhotdraw.samples.odg"/>
+        <modular-jar module="jhotdraw.samples.pert"/>
+        <modular-jar module="jhotdraw.samples.svg"/>
+        <modular-jar module="jhotdraw.samples.teddy"/>
+        <modular-jar module="nanoxml"/>
     </target>
     <target name="dist" depends="jar">
     </target>

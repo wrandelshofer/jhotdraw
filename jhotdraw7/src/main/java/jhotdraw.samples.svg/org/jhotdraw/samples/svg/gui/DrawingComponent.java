@@ -1,6 +1,5 @@
 /* @(#)DrawingComponent.java
- * Copyright © 1996-2017 The authors and contributors of JHotDraw.
- * MIT License, CC-by License, or LGPL License.
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw.samples.svg.gui;
