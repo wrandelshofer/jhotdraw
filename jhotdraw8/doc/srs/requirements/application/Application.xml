@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.application.def">
+    <title>Application</title>
+    <para>An application is a program with a graphcal user interface
+        that can be used to perform one or more <xref linkend="ref.activity.def"/>(s).</para>
+    <para>The application provides a set of <xref linkend="ref.actionn.def"/>(s)
+        for the <xref linkend="ref.activity.def"/>.</para>
+</section>

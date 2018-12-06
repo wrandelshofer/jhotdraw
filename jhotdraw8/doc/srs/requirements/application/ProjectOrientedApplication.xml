@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.projectorientedapplication.def">
+    <title>Project-Oriented Application</title>
+    <para>A project-oriented Application is an <xref linkend="ref.application.def"/> which
+        provides access to the <xref linkend="ref.document.def"/>s and <xref linkend="ref.activity.def"/>s
+        of one or more <xref linkend="ref.project.def"/>(s).</para>
+</section>

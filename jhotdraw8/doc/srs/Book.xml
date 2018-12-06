@@ -37,10 +37,10 @@
 <xi:include href="requirements/external/CommunicationsInterfaces.xml"/>
 </section>
 <section><title>Application Framework</title>
-<xi:include href="requirements/app/ApplicationIntroduction.xml"/>
-<xi:include href="requirements/app/Application.xml"/>
-<xi:include href="requirements/app/Project.xml"/>
-<xi:include href="requirements/app/ProjectOrientedApplication.xml"/>
+<xi:include href="requirements/application/ApplicationIntroduction.xml"/>
+<xi:include href="requirements/application/Application.xml"/>
+<xi:include href="requirements/application/Project.xml"/>
+<xi:include href="requirements/application/ProjectOrientedApplication.xml"/>
 </section>
 <section><title>Drawing Editor Framework</title>
 <xi:include href="requirements/draw/DrawingIntroduction.xml"/>

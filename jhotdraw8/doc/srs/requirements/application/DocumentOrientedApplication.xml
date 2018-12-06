@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.documentorientedapplication.def">
+    <title>Document-Oriented Application</title>
+    <para>A document-oriented Application is an <xref linkend="ref.application.def"/> which
+        supports one or more <xref linkend="ref.documentorientedactivity.def"/>s.</para>
+</section>
