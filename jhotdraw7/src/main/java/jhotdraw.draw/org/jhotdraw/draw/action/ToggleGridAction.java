@@ -7,9 +7,8 @@ package org.jhotdraw.draw.action;
 import org.jhotdraw.app.action.ActionUtil;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
-
-import java.util.ResourceBundle;
 
 /**
  * Toggles the grid of the current view.
@@ -26,7 +25,7 @@ public class ToggleGridAction extends AbstractDrawingViewAction {
     public ToggleGridAction(DrawingEditor editor) {
         super(editor);
         ResourceBundleUtil labels =
-                new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                DrawLabels.getLabels();
         labels.configureAction(this, ID);
         updateViewState();
     }

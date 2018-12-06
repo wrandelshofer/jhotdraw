@@ -42,7 +42,7 @@ public class CreationToolSample {
 
             @Override
             public void run() {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 // Create a drawing view with a default drawing, and
                 // input/output formats for basic clipboard support.

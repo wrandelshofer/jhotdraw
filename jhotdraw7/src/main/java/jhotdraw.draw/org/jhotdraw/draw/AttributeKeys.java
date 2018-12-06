@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
@@ -36,7 +35,7 @@ import java.util.Set;
  */
 public class AttributeKeys {
 
-    private static final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+    private static final ResourceBundleUtil labels = DrawLabels.getLabels();
     /**
      * Canvas fill color. The value of this attribute is a Color object.
      * This attribute is used by a Drawing object to specify the fill color

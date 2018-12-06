@@ -23,7 +23,7 @@ private ResourceBundleUtil labels;
     private static final long serialVersionUID = 1L;
     /** Creates new form FontChooserPanel */
     public PaletteFontChooserSelectionPanel() {
-         labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.Labels"));
+         labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels"));
         initComponents();
         collectionList.setModel(new DefaultListModel<>());
         familyList.setModel(new DefaultListModel<>());

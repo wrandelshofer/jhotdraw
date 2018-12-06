@@ -13,7 +13,7 @@ import org.jhotdraw.gui.JPopupButton;
 import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
 import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
 import org.jhotdraw.gui.plaf.palette.PaletteSliderUI;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.text.JavaNumberFormatter;
 import org.jhotdraw.util.Images;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -50,7 +50,7 @@ public class FigureToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public FigureToolBar() {
-        labels = Labels.getLabels();
+        labels = SVGLabels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
         setDisclosureStateCount(3);
     }

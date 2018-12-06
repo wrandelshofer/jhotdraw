@@ -18,7 +18,7 @@ import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.TextAreaCreationTool;
 import org.jhotdraw.draw.tool.TextCreationTool;
 import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.PathTool;
 import org.jhotdraw.samples.svg.SVGCreateFromFileTool;
 import org.jhotdraw.samples.svg.action.CombineAction;
@@ -61,7 +61,7 @@ public class ToolsToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public ToolsToolBar() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         setName(labels.getString("tools.toolbar"));
     }
 
@@ -81,7 +81,7 @@ public class ToolsToolBar extends AbstractToolBar {
                          break;
                      }
 
-                    ResourceBundleUtil labels = Labels.getLabels();
+                    ResourceBundleUtil labels = SVGLabels.getLabels();
 
                     GridBagLayout layout = new GridBagLayout();
                     p.setLayout(layout);

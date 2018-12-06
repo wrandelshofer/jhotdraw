@@ -5,7 +5,7 @@
 package org.jhotdraw.samples.svg.action;
 
 import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.figures.SVGPathFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -19,7 +19,7 @@ public class SplitAction extends CombineAction {
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.splitPath";
     private ResourceBundleUtil labels =
-            Labels.getLabels();
+            SVGLabels.getLabels();
     
     /** Creates a new instance. */
     public SplitAction(DrawingEditor editor) {

@@ -70,7 +70,7 @@ public class JActivityView extends javax.swing.JPanel {
 
     /** Creates a new JActivityView. */
     public JActivityView(@Nullable ActivityModel model) {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.Labels"));
+        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels"));
         initComponents();
         closeButton.setVisible(false);
         setModel(model);

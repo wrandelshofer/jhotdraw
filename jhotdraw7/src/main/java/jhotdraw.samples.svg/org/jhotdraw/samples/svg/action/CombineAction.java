@@ -10,7 +10,7 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.action.AbstractSelectedAction;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
 import org.jhotdraw.samples.svg.figures.SVGPathFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -48,7 +48,7 @@ public class CombineAction extends AbstractSelectedAction {
     private boolean isCombineAction;
 
     private ResourceBundleUtil labels =
-            Labels.getLabels();
+            SVGLabels.getLabels();
 
     /** Creates a new instance. */
     public CombineAction(DrawingEditor editor) {
@@ -64,7 +64,7 @@ public class CombineAction extends AbstractSelectedAction {
         this.prototype = prototype;
         this.isCombineAction = isGroupingAction;
 
-        labels = Labels.getLabels();
+        labels = SVGLabels.getLabels();
         labels.configureAction(this, ID);
         updateEnabledState();
     }

@@ -52,7 +52,7 @@ public class NodeFigure extends TextFigure {
         setDecorator(rf);
         createConnectors();
         set(DECORATOR_INSETS, new Insets2D.Double(6, 10, 6, 10));
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.net.Labels"));
+        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.net.GuiLabels"));
         setText(labels.getString("nodeDefaultName"));
         setAttributeEnabled(DECORATOR_INSETS, false);
     }

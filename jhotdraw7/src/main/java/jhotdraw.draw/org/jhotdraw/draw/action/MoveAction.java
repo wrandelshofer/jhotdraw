@@ -5,13 +5,13 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.TransformEdit;
 import org.jhotdraw.undo.CompositeEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.awt.geom.AffineTransform;
 import java.util.HashSet;
-import java.util.ResourceBundle;
 
 /**
  * Moves the selected figures by one unit.
@@ -58,7 +58,7 @@ public abstract class MoveAction extends AbstractSelectedAction {
 
         public East(DrawingEditor editor) {
             super(editor, 1, 0);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }
@@ -70,7 +70,7 @@ public abstract class MoveAction extends AbstractSelectedAction {
 
         public West(DrawingEditor editor) {
             super(editor, -1, 0);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }
@@ -82,7 +82,7 @@ public abstract class MoveAction extends AbstractSelectedAction {
 
         public North(DrawingEditor editor) {
             super(editor, 0, -1);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }
@@ -94,7 +94,7 @@ public abstract class MoveAction extends AbstractSelectedAction {
 
         public South(DrawingEditor editor) {
             super(editor, 0, 1);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }

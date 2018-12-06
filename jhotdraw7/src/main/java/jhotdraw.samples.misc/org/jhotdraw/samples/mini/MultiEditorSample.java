@@ -39,7 +39,7 @@ public class MultiEditorSample {
 
             @Override
             public void run() {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                ResourceBundleUtil labels = Labels.getLabels();
 
                 // Create four drawing views, each one with its own drawing
                 DrawingView view1 = new DefaultDrawingView();

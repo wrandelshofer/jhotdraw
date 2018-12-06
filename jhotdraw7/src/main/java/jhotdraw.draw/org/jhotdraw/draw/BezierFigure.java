@@ -30,7 +30,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
@@ -667,7 +666,7 @@ public class BezierFigure extends AbstractAttributedFigure {
 
                     @Override
                     public String getPresentationName() {
-                        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                        ResourceBundleUtil labels = DrawLabels.getLabels();
                         return labels.getString("edit.bezierPath.splitSegment.text");
                     }
 

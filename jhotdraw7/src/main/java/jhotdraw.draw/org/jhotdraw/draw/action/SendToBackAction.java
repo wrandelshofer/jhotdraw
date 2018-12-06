@@ -7,6 +7,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -14,7 +15,6 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 /**
  * SendToBackAction.
@@ -31,7 +31,7 @@ public class SendToBackAction extends AbstractSelectedAction {
     public SendToBackAction(DrawingEditor editor) {
         super(editor);
         ResourceBundleUtil labels =
-                new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                DrawLabels.getLabels();
         labels.configureAction(this, ID);
         updateEnabledState();
     }
@@ -47,7 +47,7 @@ public class SendToBackAction extends AbstractSelectedAction {
             @Override
             public String getPresentationName() {
                 ResourceBundleUtil labels =
-                        new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                        DrawLabels.getLabels();
                 return labels.getTextProperty(ID);
             }
 

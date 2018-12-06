@@ -18,7 +18,7 @@ import org.jhotdraw.draw.action.SelectSameAction;
 import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.gui.JPopupButton;
 import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
 import org.jhotdraw.undo.UndoRedoManager;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -52,7 +52,7 @@ public class ActionsToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public ActionsToolBar() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
     }
 
@@ -128,7 +128,7 @@ public class ActionsToolBar extends AbstractToolBar {
 
                 // Preferences prefs = PreferencesUtil.userNodeForPackage(getClass());
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);

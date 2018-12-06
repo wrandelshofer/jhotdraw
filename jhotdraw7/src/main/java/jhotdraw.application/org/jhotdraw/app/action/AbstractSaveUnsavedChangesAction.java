@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.gui.JFileURIChooser;
@@ -69,7 +69,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         }
         final View v=av;
         if (v.isEnabled()) {
-            final ResourceBundleUtil labels = Labels.getLabels();
+            final ResourceBundleUtil labels = ApplicationLabels.getLabels();
             Window wAncestor = SwingUtilities.getWindowAncestor(v.getComponent());
             oldFocusOwner = (wAncestor == null) ? null : wAncestor.getFocusOwner();
             v.setEnabled(false);
@@ -172,7 +172,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
             @Override
             protected void failed(Throwable value) {
                 String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 JSheet.showMessageSheet(getActiveView().getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"

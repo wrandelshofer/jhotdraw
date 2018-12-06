@@ -5,15 +5,14 @@
 package org.jhotdraw.draw.handle;
 
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.TextHolderFigure;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
@@ -86,7 +85,7 @@ public class TextOverflowHandle extends AbstractHandle {
     @Override public String getToolTipText(Point p) {
         
         return (getOwner().isTextOverflow()) ?
-            new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")).//
+            DrawLabels.getLabels().//
             getString("handle.textOverflow.toolTipText") :
             null;
     }

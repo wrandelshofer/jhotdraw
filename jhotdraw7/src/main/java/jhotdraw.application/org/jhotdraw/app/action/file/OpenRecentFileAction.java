@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.gui.BackgroundTask;
@@ -131,7 +131,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                 if (exists) {
                     view.read(uri, null);
                 } else {
-                    ResourceBundleUtil labels = Labels.getLabels();
+                    ResourceBundleUtil labels = ApplicationLabels.getLabels();
                     throw new IOException(labels.getFormatted("file.open.fileDoesNotExist.message", URIUtil.getName(uri)));
                 }
             }
@@ -153,7 +153,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             protected void failed(Throwable value) {
                 value.printStackTrace();
                 String message = value.getMessage() != null ? value.getMessage() : value.toString();
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)) + "</b><p>"

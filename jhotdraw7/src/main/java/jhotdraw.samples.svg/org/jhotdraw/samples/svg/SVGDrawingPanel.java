@@ -106,7 +106,7 @@ public class SVGDrawingPanel extends JPanel implements Disposable {
      * Creates new instance.
      */
     public SVGDrawingPanel() {
-        labels = Labels.getLabels();
+        labels = SVGLabels.getLabels();
 
         try {
             prefs = PreferencesUtil.userNodeForPackage(getClass());

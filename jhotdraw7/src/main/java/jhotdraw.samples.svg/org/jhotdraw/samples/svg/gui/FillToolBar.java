@@ -16,7 +16,7 @@ import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
 import org.jhotdraw.gui.plaf.palette.PaletteColorChooserUI;
 import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
 import org.jhotdraw.gui.plaf.palette.PaletteSliderUI;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.text.ColorFormatter;
 import org.jhotdraw.text.JavaNumberFormatter;
 import org.jhotdraw.util.Images;
@@ -56,7 +56,7 @@ public class FillToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public FillToolBar() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
         setDisclosureStateCount(3);
     }
@@ -88,7 +88,7 @@ public class FillToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;
@@ -156,7 +156,7 @@ public class FillToolBar extends AbstractToolBar {
                 p.setBorder(new EmptyBorder(5, 5, 5, 8));
                 p.removeAll();
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;

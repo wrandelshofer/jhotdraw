@@ -5,7 +5,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -32,7 +32,7 @@ public class SaveFileAsAction extends SaveFileAction {
     /** Creates a new instance. */
     public SaveFileAsAction(Application app, @Nullable View view) {
         super(app, view, true);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 }

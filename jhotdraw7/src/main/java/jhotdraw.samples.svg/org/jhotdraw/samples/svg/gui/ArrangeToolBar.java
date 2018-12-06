@@ -9,7 +9,7 @@ import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.event.SelectionComponentDisplayer;
 import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.annotation.Nullable;
@@ -35,7 +35,7 @@ public class ArrangeToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public ArrangeToolBar() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
     }
 
@@ -67,7 +67,7 @@ public class ArrangeToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);

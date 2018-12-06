@@ -4,7 +4,7 @@
 
 package org.jhotdraw.app.action.window;
 
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.gui.Arrangeable;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -35,7 +35,7 @@ public class ArrangeWindowsAction extends AbstractAction {
     public ArrangeWindowsAction(Arrangeable arrangeable, Arrangeable.Arrangement arrangement) {
         this.arrangeable = arrangeable;
         this.arrangement = arrangement;
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         String labelID;
         switch (arrangement) {
             case VERTICAL : labelID = VERTICAL_ID; break;

@@ -4,7 +4,7 @@
 package org.jhotdraw.samples.draw;
 
 import org.jhotdraw.app.AbstractView;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.draw.DefaultDrawingEditor;
@@ -43,7 +43,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.util.ResourceBundle;
 
 /**
  * Provides a view on a drawing.
@@ -89,7 +88,7 @@ public class DrawView extends AbstractView {
             }
         });
         
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         
         JPanel placardPanel = new JPanel(new BorderLayout());
         javax.swing.AbstractButton pButton;
@@ -181,7 +180,7 @@ public class DrawView extends AbstractView {
                         }
                     }
             if (!success) {
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 throw new IOException(labels.getFormatted("file.open.unsupportedFileFormat.message", URIUtil.getName(f)));
             }
             SwingUtilities.invokeAndWait(new Runnable() {

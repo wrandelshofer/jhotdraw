@@ -5,7 +5,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -40,7 +40,7 @@ public class NewFileAction extends AbstractApplicationAction {
     }
     public NewFileAction(Application app, String id) {
         super(app);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, id);
     }
     

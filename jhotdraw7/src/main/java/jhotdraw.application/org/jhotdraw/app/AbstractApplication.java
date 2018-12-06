@@ -381,7 +381,7 @@ public abstract class AbstractApplication extends AbstractBean implements Applic
     }
 
     protected void initLabels() {
-        labels = Labels.getLabels();
+        labels = ApplicationLabels.getLabels();
     }
 
     /**

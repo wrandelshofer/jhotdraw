@@ -9,6 +9,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.annotation.Nullable;
@@ -23,7 +24,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * A {@link Tool} to create a new figure by drawing its bounds.
@@ -118,7 +118,7 @@ public class CreationTool extends AbstractTool {
         }
         this.prototypeAttributes = attributes;
         if (name == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             name = labels.getString("edit.createFigure.text");
         }
         this.presentationName = name;
@@ -165,7 +165,7 @@ public class CreationTool extends AbstractTool {
         this.prototype = prototype;
         this.prototypeAttributes = attributes;
         if (name == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             name = labels.getString("edit.createFigure.text");
         }
         this.presentationName = name;

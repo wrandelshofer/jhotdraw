@@ -4,6 +4,7 @@
 package org.jhotdraw.draw.handle;
 
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.RoundRectangleFigure;
 import org.jhotdraw.draw.event.CompositeFigureEdit;
 import org.jhotdraw.geom.Geom;
@@ -15,7 +16,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
-import java.util.ResourceBundle;
 
 /**
  * A {@link Handle} to manipulate the corner radius of a
@@ -101,7 +101,7 @@ public class RoundRectangleRadiusHandle extends AbstractHandle {
         Point2D.Double newArc = view.viewToDrawing(viewArc);
 
         ResourceBundleUtil labels =
-                new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                DrawLabels.getLabels();
         CompositeFigureEdit edit = new CompositeFigureEdit(owner, labels.getString("attribute.roundRectRadius"));
         fireUndoableEditHappened(edit);
         fireUndoableEditHappened(new PropertyChangeEdit(owner, RoundRectangleFigure.ARC_WIDTH_PROPERTY, oldArc.x, newArc.x));
@@ -142,7 +142,7 @@ public class RoundRectangleRadiusHandle extends AbstractHandle {
             owner.setArcHeight(newArc.y);
             owner.changed();
             ResourceBundleUtil labels =
-                    new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    DrawLabels.getLabels();
             CompositeFigureEdit edit = new CompositeFigureEdit(owner, labels.getString("attribute.roundRectRadius"));
             fireUndoableEditHappened(edit);
             fireUndoableEditHappened(new PropertyChangeEdit(owner, RoundRectangleFigure.ARC_WIDTH_PROPERTY, oldArc.x, newArc.x));
@@ -153,7 +153,7 @@ public class RoundRectangleRadiusHandle extends AbstractHandle {
 
     @Override
     public String getToolTipText(Point p) {
-        return new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")).//
+        return DrawLabels.getLabels().//
                 getString("handle.roundRectangleRadius.toolTipText");
     }
 }

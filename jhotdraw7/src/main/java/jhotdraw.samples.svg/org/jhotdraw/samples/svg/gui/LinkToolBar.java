@@ -11,7 +11,7 @@ import org.jhotdraw.draw.gui.JAttributeTextField;
 import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
 import org.jhotdraw.gui.plaf.palette.PaletteLabelUI;
 import org.jhotdraw.gui.plaf.palette.PaletteLookAndFeel;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.annotation.Nullable;
@@ -46,7 +46,7 @@ public class LinkToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public LinkToolBar() {
-        labels = Labels.getLabels();
+        labels = SVGLabels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
         setDisclosureStateCount(3);
     }

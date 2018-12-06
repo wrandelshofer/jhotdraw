@@ -177,7 +177,7 @@ public class SVGView extends AbstractView {
                 }
             }
             if (!success) {
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
                 throw new IOException(labels.getFormatted("file.open.unsupportedFileFormat.message", URIUtil.getName(uri)));
             }
             SwingUtilities.invokeAndWait(new Runnable() {

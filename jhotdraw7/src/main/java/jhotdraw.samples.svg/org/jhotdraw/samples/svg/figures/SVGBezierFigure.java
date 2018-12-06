@@ -11,6 +11,7 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.TransformHandleKit;
 import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.geom.Geom;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.annotation.Nullable;
@@ -93,7 +94,7 @@ public class SVGBezierFigure extends BezierFigure {
     private static final long serialVersionUID = 1L;
                     @Override
                     public String getPresentationName() {
-                        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                        ResourceBundleUtil labels = SVGLabels.getLabels();
                         return labels.getString("edit.bezierPath.splitSegment.text");
                     }
 

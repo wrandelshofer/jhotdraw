@@ -9,7 +9,7 @@ import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.gui.JLifeFormattedTextField;
 import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
 import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.text.JavaNumberFormatter;
 import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
@@ -43,7 +43,7 @@ public class ViewToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public ViewToolBar() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         setName(labels.getString(getID() + ".toolbar"));
         setDisclosureStateCount(3);
     }
@@ -72,7 +72,7 @@ public class ViewToolBar extends AbstractToolBar {
                 }
 
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;
@@ -119,7 +119,7 @@ public class ViewToolBar extends AbstractToolBar {
                     break;
                 }
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
                 GridBagConstraints gbc;

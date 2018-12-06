@@ -20,7 +20,7 @@ import org.jhotdraw.gui.JPopupButton;
 import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
 import org.jhotdraw.gui.plaf.palette.PaletteFormattedTextFieldUI;
 import org.jhotdraw.gui.plaf.palette.PaletteSliderUI;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.text.FontFormatter;
 import org.jhotdraw.text.JavaNumberFormatter;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -56,7 +56,7 @@ public class FontToolBar extends AbstractToolBar {
 
     /** Creates new instance. */
     public FontToolBar() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         setName(labels.getString("font.toolbar"));
         JFontChooser.loadAllFonts();
         setDisclosureStateCount(3);
@@ -136,7 +136,7 @@ public class FontToolBar extends AbstractToolBar {
                 p3.setOpaque(false);
 
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
@@ -260,7 +260,7 @@ public class FontToolBar extends AbstractToolBar {
                 p3.setOpaque(false);
 
 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = SVGLabels.getLabels();
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);

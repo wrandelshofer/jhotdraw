@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.PrintableView;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
@@ -71,7 +71,7 @@ public class PrintFileAction extends AbstractViewAction {
     /** Creates a new instance. */
     public PrintFileAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -108,7 +108,7 @@ public class PrintFileAction extends AbstractViewAction {
                 } catch (PrinterException e) {
                     String message = (e.getMessage() == null) ? e.toString() : e.getMessage();
                     View view = getActiveView();
-                    ResourceBundleUtil labels = Labels.getLabels();
+                    ResourceBundleUtil labels = ApplicationLabels.getLabels();
                     JSheet.showMessageSheet(view.getComponent(),
                             "<html>" + UIManager.getString("OptionPane.css") +
                             "<b>" + labels.getString("couldntPrint") + "</b><br>" +
@@ -140,7 +140,7 @@ public class PrintFileAction extends AbstractViewAction {
                 try {
                     job.print();
                 } catch (PrinterException e) {
-                    ResourceBundleUtil labels = Labels.getLabels();
+                    ResourceBundleUtil labels = ApplicationLabels.getLabels();
                     JSheet.showMessageSheet(getActiveView().getComponent(),
                             labels.getFormatted("couldntPrint", e));
                 }

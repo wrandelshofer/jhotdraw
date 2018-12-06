@@ -6,6 +6,7 @@ package org.jhotdraw.draw.handle;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -20,7 +21,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.ResourceBundle;
 
 /**
  * A {@link Handle} associated to a {@link Connector} which allows to create a
@@ -157,7 +157,7 @@ public class ConnectorHandle extends AbstractHandle {
 
                 @Override
                 public String getPresentationName() {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    ResourceBundleUtil labels = DrawLabels.getLabels();
                     return labels.getString("edit.createConnectionFigure.text");
                 }
 

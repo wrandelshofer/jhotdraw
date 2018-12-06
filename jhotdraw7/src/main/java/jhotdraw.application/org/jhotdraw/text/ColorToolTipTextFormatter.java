@@ -4,12 +4,12 @@
 package org.jhotdraw.text;
 
 import org.jhotdraw.color.HSBColorSpace;
+import org.jhotdraw.gui.GuiLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.text.ParseException;
-import java.util.ResourceBundle;
 
 /**
  * {@code ColorFormatter} is used to format colors into a textual representation
@@ -28,7 +28,7 @@ public class ColorToolTipTextFormatter extends ColorFormatter {
     private ResourceBundleUtil labels;
 
     public ColorToolTipTextFormatter() {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        labels = GuiLabels.getLabels();
     }
 
     @Override

@@ -4,6 +4,7 @@
 package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.DrawingAttributeEditorHandler;
 import org.jhotdraw.draw.gui.JAttributeSlider;
 import org.jhotdraw.gui.Dialogs;
@@ -16,7 +17,6 @@ import javax.swing.JSlider;
 import javax.swing.UIManager;
 import javax.swing.text.NumberFormatter;
 import java.awt.Color;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_OPACITY;
@@ -43,7 +43,7 @@ public class EditCanvasPanel extends javax.swing.JPanel {
      * Creates new form.
      */
     public EditCanvasPanel() {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        labels = DrawLabels.getLabels();
         initComponents();
         colorButton.putClientProperty("Quaqua.Button.style", "colorWell");
         opacitySlider = new JAttributeSlider(JSlider.VERTICAL, 0, 100, 100);

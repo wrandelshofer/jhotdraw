@@ -9,6 +9,7 @@ import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.text.FloatingTextArea;
 import org.jhotdraw.draw.text.FloatingTextField;
@@ -24,7 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Map;
-import java.util.ResourceBundle;
+
 /**
  * A tool to create figures which implement the {@code TextHolderFigure}
  * interface, such as {@code TextFigure}. The figure to be created is specified
@@ -154,7 +155,7 @@ public class TextCreationTool extends CreationTool implements ActionListener {
 
                 @Override
                 public String getPresentationName() {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    ResourceBundleUtil labels = DrawLabels.getLabels();
                     return labels.getString("attribute.text.text");
                 }
 

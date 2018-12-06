@@ -54,7 +54,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
@@ -1417,7 +1416,7 @@ public class DefaultDrawingView
             private static final long serialVersionUID = 1L;
             @Override
             public String getPresentationName() {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                ResourceBundleUtil labels = DrawLabels.getLabels();
                 return labels.getString("edit.delete.text");
             }
 
@@ -1475,7 +1474,7 @@ public class DefaultDrawingView
 
             @Override
             public String getPresentationName() {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                ResourceBundleUtil labels = DrawLabels.getLabels();
                 return labels.getString("edit.duplicate.text");
             }
 

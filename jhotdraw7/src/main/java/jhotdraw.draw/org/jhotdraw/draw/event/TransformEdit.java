@@ -6,6 +6,7 @@
 package org.jhotdraw.draw.event;
 
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -16,7 +17,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 /**
  * An {@code UndoableEdit} event which can undo a lossless transform of
@@ -49,7 +49,7 @@ public class TransformEdit extends AbstractUndoableEdit {
     }
     @Override
     public String getPresentationName() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         return labels.getString("edit.transform.text");
     }
     

@@ -68,7 +68,7 @@ public class ODGDrawingPanel extends JPanel {
      * Creates new instance.
      */
     public ODGDrawingPanel() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = Labels.getLabels();
         initComponents();
         undoManager = new UndoRedoManager();
         editor = new DefaultDrawingEditor();
@@ -176,7 +176,7 @@ public class ODGDrawingPanel extends JPanel {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey<?>, Object> attributes;
 
-        ResourceBundleUtil drawLabels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil drawLabels = Labels.getLabels();
 
         ButtonFactory.addSelectionToolTo(tb, editor,
                 ButtonFactory.createDrawingActions(editor),

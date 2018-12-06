@@ -21,7 +21,7 @@ import java.awt.Paint;
  * @version $Id$
  */
 public class SVGAttributeKeys extends AttributeKeys {
-     private static final ResourceBundleUtil labels = Labels.getLabels();
+     private static final ResourceBundleUtil labels = SVGLabels.getLabels();
    
     public enum TextAnchor {
         START, MIDDLE, END

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.gui.datatransfer.ClipboardUtil;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -47,7 +47,7 @@ public class CutAction extends AbstractSelectionAction {
      */
     public CutAction(@Nullable JComponent target) {
         super(target);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 

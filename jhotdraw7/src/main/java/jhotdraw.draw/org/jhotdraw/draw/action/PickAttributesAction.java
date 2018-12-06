@@ -6,6 +6,7 @@ package org.jhotdraw.draw.action;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -13,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import static org.jhotdraw.draw.AttributeKeys.TEXT;
@@ -34,7 +34,7 @@ public class PickAttributesAction extends AbstractSelectedAction {
     /** Creates a new instance. */
     public PickAttributesAction(DrawingEditor editor) {
         super(editor);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         labels.configureAction(this, "edit.pickAttributes");
         updateEnabledState();
     }

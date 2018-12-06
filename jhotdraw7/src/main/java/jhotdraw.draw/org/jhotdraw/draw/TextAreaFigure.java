@@ -10,7 +10,6 @@ import org.jhotdraw.draw.tool.TextAreaEditingTool;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.geom.Dimension2DDouble;
 import org.jhotdraw.geom.Insets2D;
-import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
@@ -32,7 +31,6 @@ import java.text.AttributedString;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.FONT_SIZE;
@@ -85,7 +83,7 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
 
     /** Creates a new instance. */
     public TextAreaFigure() {
-        this(new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")).
+        this(DrawLabels.getLabels().
                 getString("TextFigure.defaultText"));
     }
 

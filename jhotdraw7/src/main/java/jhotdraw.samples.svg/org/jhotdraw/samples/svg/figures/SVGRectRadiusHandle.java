@@ -4,10 +4,12 @@
 package org.jhotdraw.samples.svg.figures;
 
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.CompositeFigureEdit;
 import org.jhotdraw.draw.handle.AbstractHandle;
 import org.jhotdraw.draw.handle.HandleAttributeKeys;
 import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.undo.PropertyChangeEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -18,7 +20,6 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
 
@@ -108,7 +109,7 @@ public class SVGRectRadiusHandle extends AbstractHandle {
         final Dimension2DDouble newValue = new Dimension2DDouble(svgRect.getArcWidth(), svgRect.getArcHeight());
 
         ResourceBundleUtil labels =
-                new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                SVGLabels.getLabels();
         CompositeFigureEdit edit = new CompositeFigureEdit(svgRect, labels.getString("attribute.roundRectRadius"));
         edit.setVerbose(true);
         fireUndoableEditHappened(edit);
@@ -149,7 +150,7 @@ public class SVGRectRadiusHandle extends AbstractHandle {
             owner.setArc(newArc.width, newArc.height);
             owner.changed();
             ResourceBundleUtil labels =
-                    new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    SVGLabels.getLabels();
             CompositeFigureEdit edit = new CompositeFigureEdit(owner, labels.getString("attribute.roundRectRadius"));
             fireUndoableEditHappened(edit);
             fireUndoableEditHappened(new PropertyChangeEdit(owner, SVGRectFigure.ARC_WIDTH_PROPERTY, oldArc.width, newArc.width));
@@ -160,7 +161,7 @@ public class SVGRectRadiusHandle extends AbstractHandle {
 
     @Override
     public String getToolTipText(Point p) {
-        return new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")).//
+        return DrawLabels.getLabels().//
                 getString("handle.roundRectangleRadius.toolTipText");
     }
 }

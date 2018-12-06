@@ -209,9 +209,9 @@ public class PaletteLookAndFeel extends BasicLookAndFeel {
         // Since this does not seem to work in sandboxed environments, we check
         // whether we succeeded and - in case of failure - put the values in
         // by ourselves.
-        table.addResourceBundle("org.jhotdraw.gui.Labels");
+        table.addResourceBundle("org.jhotdraw.gui.GuiLabels");
         if (table.getString("ColorChooser.rgbSliders") == null) {
-            ResourceBundle rb = ResourceBundle.getBundle("org.jhotdraw.gui.Labels");
+            ResourceBundle rb = ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels");
             for (String key : rb.keySet()) {
                 table.put(key, rb.getObject(key));
             }
@@ -296,7 +296,7 @@ public class PaletteLookAndFeel extends BasicLookAndFeel {
             "FormattedTextField.errorIndicatorForeground", new ColorUIResource(0xfe4a41),
             "FormattedTextField.selectionBackground", selectionBackground,
             "FormattedTextField.selectionForeground", selectionForeground,
-            // *** Labels
+            // *** GuiLabels
             "Label.font", dialogPlain12,
             "Label.border", new UIDefaults.ProxyLazyValue(
             "javax.swing.plaf.BorderUIResource$EmptyBorderUIResource",

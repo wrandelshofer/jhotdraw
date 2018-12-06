@@ -14,7 +14,7 @@ import org.jhotdraw.geom.Geom;
 import org.jhotdraw.geom.GrowStroke;
 import org.jhotdraw.geom.Shapes;
 import org.jhotdraw.samples.svg.Gradient;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.SVGAttributeKeys;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -379,7 +379,7 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
 
     @Override
     public Collection<Action> getActions(Point2D.Double p) {
-        final ResourceBundleUtil labels = Labels.getLabels();
+        final ResourceBundleUtil labels = SVGLabels.getLabels();
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {

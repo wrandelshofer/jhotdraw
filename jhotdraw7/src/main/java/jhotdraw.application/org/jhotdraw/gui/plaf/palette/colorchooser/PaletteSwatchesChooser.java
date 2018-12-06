@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
-import org.jhotdraw.gui.Labels;
+import org.jhotdraw.gui.GuiLabels;
 import org.jhotdraw.color.HSBColorSpace;
 import org.jhotdraw.gui.plaf.palette.PaletteListUI;
 import org.jhotdraw.gui.plaf.palette.PaletteLookAndFeel;
@@ -20,7 +20,6 @@ import javax.swing.plaf.ListUI;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 /**
  * PaletteSwatchesChooser.
@@ -75,7 +74,7 @@ public class PaletteSwatchesChooser extends AbstractColorChooserPanel {
         // FIXME - Move this into a lazy initializer
         HSBColorSpace hsbCS = HSBColorSpace.getInstance();
         LinkedList<ColorIcon> m = new LinkedList<ColorIcon>();
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = GuiLabels.getLabels();
 
         for (int s = 0; s <= 8; s += 2) {
             for (int h = 0; h < 12; h++) {

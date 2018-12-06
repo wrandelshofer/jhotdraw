@@ -5,6 +5,7 @@ package org.jhotdraw.draw.handle;
 
 import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.BezierNodeEdit;
 import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.undo.CompositeEdit;
@@ -25,7 +26,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
@@ -243,7 +243,7 @@ public class BezierNodeHandle extends AbstractHandle {
     private static final long serialVersionUID = 1L;
                 @Override
                 public String getPresentationName() {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    ResourceBundleUtil labels = DrawLabels.getLabels();
                     return labels.getString("edit.bezierPath.joinSegments.text");
                 }
 
@@ -303,7 +303,7 @@ public class BezierNodeHandle extends AbstractHandle {
 
     @Override
     public String getToolTipText(Point p) {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         BezierPath.Node node = getBezierNode();
         return (node == null) ? null : labels.getFormatted("handle.bezierNode.toolTipText",
                 labels.getFormatted(
@@ -355,7 +355,7 @@ public class BezierNodeHandle extends AbstractHandle {
     private static final long serialVersionUID = 1L;
                     @Override
                     public String getPresentationName() {
-                        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                        ResourceBundleUtil labels = DrawLabels.getLabels();
                         return labels.getString("edit.bezierPath.joinSegments.text");
                     }
 

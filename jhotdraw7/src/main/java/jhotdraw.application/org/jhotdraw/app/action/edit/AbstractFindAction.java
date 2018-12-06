@@ -6,7 +6,7 @@ package org.jhotdraw.app.action.edit;
 
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.ApplicationModel;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -34,7 +34,7 @@ public abstract class AbstractFindAction extends AbstractViewAction {
     /** Creates a new instance. */
     public AbstractFindAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }    
 }

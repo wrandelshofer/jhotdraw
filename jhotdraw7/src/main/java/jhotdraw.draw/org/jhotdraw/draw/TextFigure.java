@@ -13,7 +13,6 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.geom.Dimension2DDouble;
 import org.jhotdraw.geom.Geom;
 import org.jhotdraw.geom.Insets2D;
-import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
@@ -30,7 +29,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.FONT_SIZE;
@@ -59,7 +57,7 @@ public class TextFigure extends AbstractAttributedDecoratedFigure
 
     /** Creates a new instance. */
     public TextFigure() {
-        this(new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")).
+        this(DrawLabels.getLabels().
                 getString("TextFigure.defaultText"));
 
     }

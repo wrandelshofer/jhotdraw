@@ -5,6 +5,7 @@ package org.jhotdraw.draw.handle;
 
 import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.BezierNodeEdit;
 import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.undo.CompositeEdit;
@@ -24,7 +25,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
@@ -274,7 +274,7 @@ public class BezierControlPointHandle extends AbstractHandle {
 
     @Override
     public String getToolTipText(Point p) {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         BezierPath.Node node = getBezierNode();
         if (node == null) {
             return null;

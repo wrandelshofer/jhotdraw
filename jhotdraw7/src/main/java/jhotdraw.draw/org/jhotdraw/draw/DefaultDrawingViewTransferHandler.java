@@ -47,7 +47,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 /**
  * Default TransferHandler for DrawingView objects.
@@ -140,7 +139,7 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
 
                                             @Override
                                             public String getPresentationName() {
-                                                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                                                ResourceBundleUtil labels = DrawLabels.getLabels();
                                                 return labels.getString("edit.paste.text");
                                             }
 
@@ -199,7 +198,7 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
 
                                             @Override
                                             public String getPresentationName() {
-                                                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                                                ResourceBundleUtil labels = DrawLabels.getLabels();
                                                 return labels.getString("edit.paste.text");
                                             }
 
@@ -276,7 +275,7 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
 
                                         @Override
                                         public String getPresentationName() {
-                                            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                                            ResourceBundleUtil labels = DrawLabels.getLabels();
                                             return labels.getString("edit.paste.text");
                                         }
 
@@ -491,7 +490,7 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
 
                     @Override
                     public String getPresentationName() {
-                        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                        ResourceBundleUtil labels = DrawLabels.getLabels();
                         return labels.getString("edit.delete.text");
                     }
 

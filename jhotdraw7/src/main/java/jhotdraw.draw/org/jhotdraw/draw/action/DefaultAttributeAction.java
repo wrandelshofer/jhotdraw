@@ -6,6 +6,7 @@ package org.jhotdraw.draw.action;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.undo.CompositeEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -17,7 +18,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * DefaultAttributeAction.
@@ -91,7 +91,7 @@ public class DefaultAttributeAction extends AbstractSelectedAction {
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         if (getView() != null && getView().getSelectionCount() > 0) {
             ResourceBundleUtil labels =
-                    new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    DrawLabels.getLabels();
             CompositeEdit edit = new CompositeEdit(labels.getString("drawAttributeChange"));
             fireUndoableEditHappened(edit);
             changeAttribute();

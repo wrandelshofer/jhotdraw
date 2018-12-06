@@ -7,7 +7,7 @@ package org.jhotdraw.samples.svg.figures;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.AbstractHandle;
 import org.jhotdraw.draw.handle.HandleAttributeKeys;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -84,7 +84,7 @@ public class LinkHandle extends AbstractHandle {
     @Override public String getToolTipText(Point p) {
         
         return (getOwner().get(LINK)!=null)  ?
-            Labels.getLabels().//
+            SVGLabels.getLabels().//
             getString("handle.link.toolTipText") :
             null;
     }

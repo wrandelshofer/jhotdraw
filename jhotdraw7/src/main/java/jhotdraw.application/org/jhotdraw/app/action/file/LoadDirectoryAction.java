@@ -5,7 +5,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -35,7 +35,7 @@ public class LoadDirectoryAction extends LoadFileAction {
     /** Creates a new instance. */
     public LoadDirectoryAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
     @Override

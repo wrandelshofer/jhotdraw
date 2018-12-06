@@ -5,6 +5,7 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.TranslationDirection;
 import org.jhotdraw.draw.event.TransformEdit;
 import org.jhotdraw.undo.CompositeEdit;
@@ -14,7 +15,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
-import java.util.ResourceBundle;
 
 /**
  * Moves the selected figures by one constrained unit.
@@ -92,7 +92,7 @@ public abstract class MoveConstrainedAction extends AbstractSelectedAction {
 
         public East(DrawingEditor editor) {
             super(editor, TranslationDirection.EAST);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }
@@ -104,7 +104,7 @@ public abstract class MoveConstrainedAction extends AbstractSelectedAction {
 
         public West(DrawingEditor editor) {
             super(editor, TranslationDirection.WEST);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }
@@ -116,7 +116,7 @@ public abstract class MoveConstrainedAction extends AbstractSelectedAction {
 
         public North(DrawingEditor editor) {
             super(editor, TranslationDirection.NORTH);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }
@@ -128,7 +128,7 @@ public abstract class MoveConstrainedAction extends AbstractSelectedAction {
 
         public South(DrawingEditor editor) {
             super(editor, TranslationDirection.SOUTH);
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             labels.configureAction(this, ID);
         }
     }

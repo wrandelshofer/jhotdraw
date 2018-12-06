@@ -5,10 +5,10 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.util.HashSet;
-import java.util.ResourceBundle;
 
 /**
  * SelectSameAction.
@@ -24,7 +24,7 @@ public class SelectSameAction extends AbstractSelectedAction {
     /** Creates a new instance. */
     public SelectSameAction(DrawingEditor editor) {
         super(editor);
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         labels.configureAction(this, ID);
         updateEnabledState();
     }

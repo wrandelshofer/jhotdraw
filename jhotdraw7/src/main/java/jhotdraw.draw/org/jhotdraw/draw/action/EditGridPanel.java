@@ -5,12 +5,12 @@
 package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.GridConstrainer;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.text.JavaNumberFormatter;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
 
 /**
  * The EditGridPanel can be used to edit the properties of
@@ -28,7 +28,7 @@ public class EditGridPanel extends javax.swing.JPanel {
     
     /** Creates new instance. */
     public EditGridPanel() {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        labels = DrawLabels.getLabels();
         initComponents();
 
         widthField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0, 1000, 1));

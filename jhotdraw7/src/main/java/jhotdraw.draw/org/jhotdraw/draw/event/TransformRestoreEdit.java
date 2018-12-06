@@ -5,12 +5,12 @@
 package org.jhotdraw.draw.event;
 
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-import java.util.ResourceBundle;
 
 /**
  * An {@code UndoableEdit} event which can undo a lossy transform of a single
@@ -40,7 +40,7 @@ public class TransformRestoreEdit extends AbstractUndoableEdit {
 
     @Override
     public String getPresentationName() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         return labels.getString("edit.transform.text");
     }
     

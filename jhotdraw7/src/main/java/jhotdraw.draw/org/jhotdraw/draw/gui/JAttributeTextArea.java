@@ -37,7 +37,7 @@ public class JAttributeTextArea<T> extends JLifeFormattedTextArea implements Att
     @Override
     protected void paintComponent(Graphics g) {
         if (!isFocusOwner() && isMultipleValues) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.Labels"));
+            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels"));
             Color c = getForeground();
             setForeground(new Color(0x0, true));
             super.paintComponent(g);

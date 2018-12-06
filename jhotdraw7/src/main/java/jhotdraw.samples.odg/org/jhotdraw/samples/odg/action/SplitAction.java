@@ -28,7 +28,7 @@ public class SplitAction extends UngroupAction {
 
     public static final String ID = "edit.splitPath";
     private ResourceBundleUtil labels =
-            new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.Labels"));
+            new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.GuiLabels"));
 
     /** Creates a new instance. */
     public SplitAction(DrawingEditor editor) {

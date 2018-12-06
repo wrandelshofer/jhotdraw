@@ -120,7 +120,7 @@ public abstract class ODGAttributedFigure extends AbstractAttributedFigure imple
     @Override public Collection<Action> getActions(Point2D.Double p) {
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.Labels"));
+            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.GuiLabels"));
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {
     private static final long serialVersionUID = 1L;
                 public void actionPerformed(ActionEvent evt) {

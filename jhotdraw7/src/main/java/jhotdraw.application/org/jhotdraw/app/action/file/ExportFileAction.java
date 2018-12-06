@@ -5,7 +5,7 @@ package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.ApplicationModel;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.gui.BackgroundTask;
@@ -74,7 +74,7 @@ public class ExportFileAction extends AbstractViewAction {
 
     public ExportFileAction(Application app, @Nullable View view, boolean proposeFileName) {
         super(app, view);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
         this.proposeFileName = proposeFileName;
     }
@@ -100,7 +100,7 @@ public class ExportFileAction extends AbstractViewAction {
     public void actionPerformed(ActionEvent evt) {
         final View view = getActiveView();
         if (view.isEnabled()) {
-            ResourceBundleUtil labels = Labels.getLabels();
+            ResourceBundleUtil labels = ApplicationLabels.getLabels();
 
             oldFocusOwner = SwingUtilities.getWindowAncestor(view.getComponent()).getFocusOwner();
             view.setEnabled(false);

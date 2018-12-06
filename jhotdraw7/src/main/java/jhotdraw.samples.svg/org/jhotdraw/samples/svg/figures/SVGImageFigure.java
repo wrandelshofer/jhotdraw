@@ -10,7 +10,7 @@ package org.jhotdraw.samples.svg.figures;
  import org.jhotdraw.draw.handle.ResizeHandleKit;
  import org.jhotdraw.draw.handle.TransformHandleKit;
  import org.jhotdraw.geom.GrowStroke;
- import org.jhotdraw.samples.svg.Labels;
+ import org.jhotdraw.samples.svg.SVGLabels;
  import org.jhotdraw.samples.svg.SVGAttributeKeys;
  import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -37,7 +37,6 @@ package org.jhotdraw.samples.svg.figures;
  import java.io.InputStream;
  import java.util.Collection;
  import java.util.LinkedList;
- import java.util.ResourceBundle;
 
  import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;
  import static org.jhotdraw.samples.svg.SVGAttributeKeys.TRANSFORM;
@@ -279,7 +278,7 @@ public class SVGImageFigure extends SVGAttributedFigure implements SVGFigure, Im
 
     @Override
     public Collection<Action> getActions(Point2D.Double p) {
-        final ResourceBundleUtil labels = Labels.getLabels();
+        final ResourceBundleUtil labels = SVGLabels.getLabels();
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {
@@ -479,7 +478,7 @@ public class SVGImageFigure extends SVGAttributedFigure implements SVGFigure, Im
         try {
             loadImage(in);
         } catch (Throwable t) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = SVGLabels.getLabels();
             IOException e = new IOException(labels.getFormatted("file.failedToLoadImage.message", file.getName()));
             e.initCause(t);
             throw e;
@@ -503,7 +502,7 @@ public class SVGImageFigure extends SVGAttributedFigure implements SVGFigure, Im
             img = null;
         }
         if (img == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = SVGLabels.getLabels();
             throw new IOException(labels.getFormatted("file.failedToLoadImage.message", in.toString()));
         }
         imageData = baos.toByteArray();

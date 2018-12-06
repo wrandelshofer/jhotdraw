@@ -4,6 +4,7 @@
 package org.jhotdraw.draw.handle;
 
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
@@ -18,7 +19,6 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
@@ -126,7 +126,7 @@ public class ResizeHandleKit {
 
         @Override
         public String getToolTipText(Point p) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             return labels.getString("handle.resize.toolTipText");
         }
 

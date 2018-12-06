@@ -7,6 +7,7 @@ import org.jhotdraw.app.action.ActionUtil;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.annotation.Nullable;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
@@ -112,7 +112,7 @@ public class AttributeAction extends AbstractSelectedAction {
                     name = (String) getValue(AbstractAction.NAME);
                 }
                 if (name == null) {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    ResourceBundleUtil labels = DrawLabels.getLabels();
                     name = labels.getString("attribute.text");
                 }
                 return name;

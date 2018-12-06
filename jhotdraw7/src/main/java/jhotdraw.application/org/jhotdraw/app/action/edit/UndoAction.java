@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action.edit;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -36,7 +36,7 @@ public class UndoAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "edit.undo";
-    private ResourceBundleUtil labels = Labels.getLabels();
+    private ResourceBundleUtil labels = ApplicationLabels.getLabels();
     private PropertyChangeListener redoActionPropertyListener = new PropertyChangeListener() {
 
         @Override

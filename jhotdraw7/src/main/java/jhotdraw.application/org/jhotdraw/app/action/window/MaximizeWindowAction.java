@@ -5,7 +5,7 @@
 package org.jhotdraw.app.action.window;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -30,7 +30,7 @@ public class MaximizeWindowAction extends AbstractViewAction {
     /** Creates a new instance. */
     public MaximizeWindowAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
     

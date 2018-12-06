@@ -6,13 +6,13 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.app.Application;
 import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 /**
@@ -36,7 +36,7 @@ public class EditCanvasAction extends AbstractDrawingViewAction {
     public EditCanvasAction(Application app, DrawingEditor editor) {
         super(editor);
         this.app = app;
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         labels.configureAction(this, ID);
     }
     
@@ -57,7 +57,7 @@ public class EditCanvasAction extends AbstractDrawingViewAction {
     
     protected JFrame getFrame() {
         if (frame == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             frame = new JFrame();
             frame.setTitle(labels.getString("window.editCanvas.title"));
             frame.setResizable(false);

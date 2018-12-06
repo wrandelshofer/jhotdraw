@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.beans.WeakPropertyChangeListener;
 import org.jhotdraw.gui.EditableComponent;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -96,7 +96,7 @@ public class DeleteAction extends TextAction {
             };
             target.addPropertyChangeListener(new WeakPropertyChangeListener(propertyHandler));
         }
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 

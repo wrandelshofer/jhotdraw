@@ -79,7 +79,7 @@ public class FontChooserHandler extends AbstractSelectedAction
             name = (String) getValue(AbstractAction.NAME);
             }
             if (name == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = GuiLabels.getLabels();
             name = labels.getString("attribute.text");
             }
             return name;*/

@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action.app;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.PrintableView;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.file.PrintFileAction;
@@ -84,7 +84,7 @@ public class PrintApplicationFileAction extends PrintFileAction {
 
             @Override
             protected void failed(Throwable value) {
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 app.dispose(p);
                 JOptionPane.showMessageDialog(
                         null,

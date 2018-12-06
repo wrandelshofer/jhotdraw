@@ -11,7 +11,6 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEdit;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * An <em>attribute key</em> provides typesafe access to an attribute of
@@ -90,7 +89,7 @@ public class AttributeKey<T> implements Serializable {
         this.clazz = clazz;
         this.defaultValue = defaultValue;
         this.isNullValueAllowed = isNullValueAllowed;
-        this.labels = (labels == null) ? new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")) : labels;
+        this.labels = (labels == null) ? DrawLabels.getLabels() : labels;
     }
 
     /**

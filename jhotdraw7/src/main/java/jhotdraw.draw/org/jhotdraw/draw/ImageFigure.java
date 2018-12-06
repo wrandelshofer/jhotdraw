@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
@@ -345,7 +344,7 @@ public class ImageFigure extends AbstractAttributedDecoratedFigure
         try {
             loadImage(in);
         } catch (Throwable t) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             IOException e = new IOException(labels.getFormatted("file.failedToLoadImage.message", file.getName()));
             e.initCause(t);
             throw e;
@@ -364,7 +363,7 @@ public class ImageFigure extends AbstractAttributedDecoratedFigure
         }
         BufferedImage img = ImageIO.read(new ByteArrayInputStream(baos.toByteArray()));
         if (img == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             throw new IOException(labels.getFormatted("file.failedToLoadImage.message", in.toString()));
         }
         imageData = baos.toByteArray();

@@ -5,6 +5,7 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.TransformEdit;
 import org.jhotdraw.undo.CompositeEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -12,7 +13,6 @@ import org.jhotdraw.util.ResourceBundleUtil;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
-import java.util.ResourceBundle;
 
 /**
  * Aligns the selected figures.
@@ -26,7 +26,7 @@ public abstract class AlignAction extends AbstractSelectedAction {
     private static final long serialVersionUID = 1L;
 
     protected ResourceBundleUtil labels =
-            new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            DrawLabels.getLabels();
 
     /**
      * Creates a new instance.

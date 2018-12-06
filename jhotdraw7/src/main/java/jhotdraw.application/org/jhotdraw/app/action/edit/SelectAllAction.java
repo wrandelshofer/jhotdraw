@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.gui.EditableComponent;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -61,7 +61,7 @@ public class SelectAllAction extends AbstractSelectionAction {
      */
     public SelectAllAction(@Nullable JComponent target) {
         super(target);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 

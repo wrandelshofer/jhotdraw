@@ -103,7 +103,7 @@ public class ODGRectRadiusHandle extends AbstractHandle {
 
             @Override
             public String getPresentationName() {
-                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.Labels"));
+                ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.GuiLabels"));
                 return labels.getString("arc");
             }
 
@@ -127,7 +127,7 @@ public class ODGRectRadiusHandle extends AbstractHandle {
 
     @Override
     public String getToolTipText(Point p) {
-        return new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")).//
+        return Labels.getLabels().//
                 getString("handle.roundRectangleRadius.toolTipText");
     }
 }

@@ -3,15 +3,14 @@
  */
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.Images;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ResourceBundle;
 
 /**
  * ColorIcon.
@@ -33,7 +32,7 @@ public class ColorIcon implements javax.swing.Icon {
     }
 
     public ColorIcon(@Nullable Color color) {
-        this(color, (color==null)?  new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels")).getToolTipTextProperty("attribute.color.noColor") :color.getRed() + "," + color.getGreen() + "," + color.getBlue(), 14, 14);
+        this(color, (color==null)?  DrawLabels.getLabels().getToolTipTextProperty("attribute.color.noColor") :color.getRed() + "," + color.getGreen() + "," + color.getBlue(), 14, 14);
     }
 
     public ColorIcon(int rgb, String name) {

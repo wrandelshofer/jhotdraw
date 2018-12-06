@@ -5,7 +5,7 @@ package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.ApplicationModel;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.gui.BackgroundTask;
@@ -72,7 +72,7 @@ public class SaveFileAction extends AbstractViewAction {
     public SaveFileAction(Application app, @Nullable View view, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -116,7 +116,7 @@ public class SaveFileAction extends AbstractViewAction {
                             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
                                 for (View v : getApplication().getViews()) {
                                     if (v != view && v.getURI() != null && v.getURI().equals(uri)) {
-                                        ResourceBundleUtil labels = Labels.getLabels();
+                                        ResourceBundleUtil labels = ApplicationLabels.getLabels();
                                         JSheet.showMessageSheet(view.getComponent(), labels.getFormatted("file.saveAs.couldntSaveIntoOpenFile.message", evt.getFileChooser().getSelectedFile().getName()));
 
                                         view.setEnabled(true);
@@ -165,7 +165,7 @@ public class SaveFileAction extends AbstractViewAction {
             protected void failed(Throwable value) {
                 value.printStackTrace();
                 String message = value.getMessage() != null ? value.getMessage() : value.toString();
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 JSheet.showMessageSheet(getActiveView().getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(file)) + "</b><p>"

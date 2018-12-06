@@ -8,6 +8,7 @@ import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -26,7 +27,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * A tool to create a connection between two figures.
@@ -124,7 +124,7 @@ public class ConnectionTool extends AbstractTool {
         this.prototype = prototype;
         this.prototypeAttributes = attributes;
         if (presentationName == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             presentationName = labels.getString("edit.createConnectionFigure.text");
         }
         this.presentationName = presentationName;
@@ -144,7 +144,7 @@ public class ConnectionTool extends AbstractTool {
         }
         this.prototypeAttributes = attributes;
         if (presentationName == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             presentationName = labels.getString("edit.createConnectionFigure.text");
         }
         this.presentationName = presentationName;

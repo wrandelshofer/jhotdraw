@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.gui.BackgroundTask;
@@ -72,7 +72,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance. */
     public LoadFileAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -147,7 +147,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
             protected void failed(Throwable value) {
                 value.printStackTrace();
                 
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.load.couldntLoad.message", URIUtil.getName(uri)) + "</b><p>"

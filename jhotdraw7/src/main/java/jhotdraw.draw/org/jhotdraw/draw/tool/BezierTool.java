@@ -9,6 +9,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.geom.Bezier;
 import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.geom.Geom;
@@ -27,7 +28,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * A {@link Tool} which allows to create a new {@link BezierFigure} by
@@ -82,7 +82,7 @@ public class BezierTool extends AbstractTool {
         this.prototype = prototype;
         this.attributes = attributes;
         if (name == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             name = labels.getString("edit.createFigure.text");
         }
         this.presentationName = name;

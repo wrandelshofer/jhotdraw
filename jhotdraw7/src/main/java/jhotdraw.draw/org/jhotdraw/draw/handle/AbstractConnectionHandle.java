@@ -7,6 +7,7 @@ import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath;
@@ -22,7 +23,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 /**
  * This abstract class can be extended to implement a {@link Handle}
@@ -299,7 +299,7 @@ public abstract class AbstractConnectionHandle extends AbstractHandle {
     public String getToolTipText(Point p) {
         ConnectionFigure f = getOwner();
         if (f.getLiner() == null && savedLiner == null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+            ResourceBundleUtil labels = DrawLabels.getLabels();
             BezierPath.Node node = getBezierNode();
             return (node == null) ? null : labels.getFormatted("handle.bezierNode.toolTipText",
                     labels.getFormatted(

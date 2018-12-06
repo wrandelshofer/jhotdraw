@@ -8,7 +8,7 @@ import org.jhotdraw.app.Disposable;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.SVGView;
 import org.jhotdraw.samples.svg.io.SVGOutputFormat;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -48,13 +48,13 @@ public class ViewSourceAction extends AbstractViewAction {
     /** Creates a new instance. */
     public ViewSourceAction(Application app, @Nullable View view) {
         super(app, view);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         labels.configureAction(this, ID);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = SVGLabels.getLabels();
         final SVGView v = (SVGView) getActiveView();
         Drawing drawing = v.getDrawing();
         final JDialog dialog;
@@ -100,7 +100,7 @@ public class ViewSourceAction extends AbstractViewAction {
                             updateSource(newDrawing, ta);
                         }
                     } else if (evt.getPropertyName() == View.TITLE_PROPERTY) {
-                        ResourceBundleUtil labels = Labels.getLabels();
+                        ResourceBundleUtil labels = SVGLabels.getLabels();
                         dialog.setTitle(labels.getFormatted("view.viewSource.titleText", v.getTitle()));
                     }
                 }

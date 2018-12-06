@@ -9,6 +9,7 @@ import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.annotation.Nullable;
@@ -22,7 +23,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.ResourceBundle;
 
 /**
  * AttributeToggler toggles an attribute of the selected figures between two
@@ -104,7 +104,7 @@ public class AttributeToggler<T> extends AbstractAction {
                     name = (String) getValue(AbstractAction.NAME);
                 }
                 if (name == null) {
-                    ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                    ResourceBundleUtil labels = DrawLabels.getLabels();
                     name = labels.getString("attribute.text");
                 }
                 return name;

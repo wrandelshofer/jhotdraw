@@ -5,6 +5,7 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -16,7 +17,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * EditorColorChooserAction.
@@ -70,7 +70,7 @@ public class EditorColorChooserAction extends AttributeAction {
         Color initialColor = getInitialColor();
         // FIXME - Reuse colorChooser object instead of calling static method here.
         ResourceBundleUtil labels =
-                new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
+                DrawLabels.getLabels();
         Color chosenColor = JColorChooser.showDialog((Component) e.getSource(), labels.getString("attribute.color.text"), initialColor);
         if (chosenColor != null) {
             HashMap<AttributeKey<?>, Object> attr = new HashMap<AttributeKey<?>, Object>(attributes);

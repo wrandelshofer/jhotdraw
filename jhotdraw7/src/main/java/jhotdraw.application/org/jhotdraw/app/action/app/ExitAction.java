@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action.app;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.gui.BackgroundTask;
@@ -51,7 +51,7 @@ public class ExitAction extends AbstractApplicationAction {
     /** Creates a new instance. */
     public ExitAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 
@@ -78,7 +78,7 @@ public class ExitAction extends AbstractApplicationAction {
                 return;
             }
 
-            final ResourceBundleUtil labels = Labels.getLabels();
+            final ResourceBundleUtil labels = ApplicationLabels.getLabels();
             switch (unsavedViewsCount) {
                 case 0: {
                     doExit();
@@ -186,7 +186,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewChanges() {
         if (unsavedView.isEnabled()) {
-            final ResourceBundleUtil labels = Labels.getLabels();
+            final ResourceBundleUtil labels = ApplicationLabels.getLabels();
             oldFocusOwner = SwingUtilities.getWindowAncestor(unsavedView.getComponent()).getFocusOwner();
             unsavedView.setEnabled(false);
             URI unsavedURI = unsavedView.getURI();
@@ -284,7 +284,7 @@ public class ExitAction extends AbstractApplicationAction {
 
             @Override
             protected void failed(Throwable error) {
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 JSheet.showMessageSheet(v.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.format("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
@@ -321,7 +321,7 @@ public class ExitAction extends AbstractApplicationAction {
 
             @Override
             protected void failed(Throwable error) {
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
                 JSheet.showMessageSheet(v.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.format("file.save.couldntSave.message", uri) + "</b><p>"

@@ -5,7 +5,7 @@ package org.jhotdraw.app.action.app;
 
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.ApplicationModel;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.MDIApplication;
 import org.jhotdraw.app.OSXApplication;
 import org.jhotdraw.app.SDIApplication;
@@ -40,7 +40,7 @@ public class AboutAction extends AbstractApplicationAction {
     /** Creates a new instance. */
     public AboutAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ApplicationLabels.getLabels();
         labels.configureAction(this, ID);
     }
 

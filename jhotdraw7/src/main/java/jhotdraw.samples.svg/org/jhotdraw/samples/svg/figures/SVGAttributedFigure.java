@@ -6,7 +6,7 @@ package org.jhotdraw.samples.svg.figures;
 
 import org.jhotdraw.draw.AbstractAttributedFigure;
 import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.samples.svg.Labels;
+import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.SVGAttributeKeys;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -113,7 +113,7 @@ public abstract class SVGAttributedFigure extends AbstractAttributedFigure {
     @Override public Collection<Action> getActions(Point2D.Double p) {
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
-            ResourceBundleUtil labels = Labels.getLabels();
+            ResourceBundleUtil labels = SVGLabels.getLabels();
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {
     private static final long serialVersionUID = 1L;
                 @Override

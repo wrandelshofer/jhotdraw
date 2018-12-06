@@ -4,7 +4,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.Labels;
+import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.gui.BackgroundTask;
@@ -128,7 +128,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
                 if (exists) {
                     view.read(uri, null);
                 } else {
-                    ResourceBundleUtil labels = Labels.getLabels();
+                    ResourceBundleUtil labels = ApplicationLabels.getLabels();
                     throw new IOException(labels.getFormatted("file.load.fileDoesNotExist.message", URIUtil.getName(uri)));
                 }
             }
@@ -150,7 +150,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
             @Override
             protected void failed(Throwable error) {
                 error.printStackTrace();
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = ApplicationLabels.getLabels();
 
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")

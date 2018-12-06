@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 public class ToggleLineNumbersAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;
     public static final String ID = "view.toggleLineNumbers";
-    private ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.teddy.Labels"));
+    private ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.teddy.GuiLabels"));
     
     /**
      * Creates a new instance.
