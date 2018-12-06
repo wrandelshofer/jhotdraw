@@ -54,7 +54,7 @@ public class NetPanel extends JPanel  {
     
     /** Creates new instance. */
     public NetPanel() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = NetLabels.getLabels();
         initComponents();
         undoManager = new UndoRedoManager();
         editor = new DefaultDrawingEditor();
@@ -184,7 +184,7 @@ public class NetPanel extends JPanel  {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey<?>,Object> attributes;
         
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.net.GuiLabels"));
+        ResourceBundleUtil labels = NetLabels.getLabels();
         
         ButtonFactory.addSelectionToolTo(tb, editor);
         tb.addSeparator();

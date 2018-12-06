@@ -12,6 +12,7 @@ import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DiamondFigure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.EllipseFigure;
 import org.jhotdraw.draw.ImageFigure;
@@ -88,7 +89,7 @@ public class DrawApplicationModel extends DefaultApplicationModel {
      */
     @Override
     public List<JToolBar> createToolBars(Application a, @Nullable View pr) {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         DrawView p = (DrawView) pr;
 
         DrawingEditor editor;
@@ -123,7 +124,7 @@ public class DrawApplicationModel extends DefaultApplicationModel {
 
     public void addDefaultCreationButtonsTo(JToolBar tb, final DrawingEditor editor,
             Collection<Action> drawingActions, Collection<Action> selectionActions) {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = DrawLabels.getLabels();
 
         ButtonFactory.addSelectionToolTo(tb, editor, drawingActions, selectionActions);
         tb.addSeparator();

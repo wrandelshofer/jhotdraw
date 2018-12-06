@@ -3,6 +3,7 @@
  */
 package org.jhotdraw.gui.plaf.palette.colorchooser;
 
+import org.jhotdraw.gui.GuiLabels;
 import org.jhotdraw.util.Images;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -33,7 +34,7 @@ public class ColorIcon implements javax.swing.Icon {
     }
 
     public ColorIcon(@Nullable Color color) {
-        this(color, (color==null)?  new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels")).getToolTipTextProperty("ColorChooser.colorSwatch.noColor") :color.getRed() + "," + color.getGreen() + "," + color.getBlue(), 14, 14);
+        this(color, (color==null)?  GuiLabels.getLabels().getToolTipTextProperty("ColorChooser.colorSwatch.noColor") :color.getRed() + "," + color.getGreen() + "," + color.getBlue(), 14, 14);
     }
 
     public ColorIcon(int rgb, String name) {

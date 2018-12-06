@@ -86,7 +86,7 @@ public class NetApplicationModel extends DefaultApplicationModel {
     @Override
     public ActionMap createActionMap(Application a, @Nullable View v) {
         ActionMap m = super.createActionMap(a, v);
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil drawLabels = NetLabels.getLabels();
         AbstractAction aa;
 
         m.put(ExportFileAction.ID, new ExportFileAction(a, v));
@@ -119,7 +119,7 @@ public class NetApplicationModel extends DefaultApplicationModel {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey<?>, Object> attributes;
 
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.net.GuiLabels"));
+        ResourceBundleUtil labels = NetLabels.getLabels();
 
         ButtonFactory.addSelectionToolTo(tb, editor);
         tb.addSeparator();
@@ -140,7 +140,7 @@ public class NetApplicationModel extends DefaultApplicationModel {
      */
     @Override
     public java.util.List<JToolBar> createToolBars(Application a, @Nullable View pr) {
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil drawLabels = NetLabels.getLabels();
         NetView p = (NetView) pr;
 
         DrawingEditor editor;

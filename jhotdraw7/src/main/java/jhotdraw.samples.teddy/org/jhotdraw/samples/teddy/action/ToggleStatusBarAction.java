@@ -6,6 +6,7 @@ package org.jhotdraw.samples.teddy.action;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
+import org.jhotdraw.samples.teddy.TeddyLabels;
 import org.jhotdraw.samples.teddy.TeddyView;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -24,7 +25,7 @@ public class ToggleStatusBarAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "view.toggleStatusBar";
-    private ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.teddy.GuiLabels"));
+    private ResourceBundleUtil labels = TeddyLabels.getLabels();
 
     /**
      * Creates a new instance.

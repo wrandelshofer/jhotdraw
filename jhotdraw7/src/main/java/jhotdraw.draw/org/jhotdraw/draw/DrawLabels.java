@@ -1,4 +1,4 @@
-/* @(#)GuiLabels.java
+/* @(#)DrawLabels.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw.draw;
@@ -12,7 +12,7 @@ public class DrawLabels {
         // prevent instance creation
     }
     public static ResourceBundleUtil getLabels() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.GuiLabels"));
+        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.draw.Labels"));
         labels.setBaseClass(DrawLabels.class);
         return labels;
     }

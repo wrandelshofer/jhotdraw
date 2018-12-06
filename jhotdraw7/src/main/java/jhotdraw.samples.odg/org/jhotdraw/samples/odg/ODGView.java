@@ -98,7 +98,7 @@ public class ODGView extends AbstractView {
             }
         });
 
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ODGLabels.getLabels();
 
         JPanel placardPanel = new JPanel(new BorderLayout());
         javax.swing.AbstractButton pButton;

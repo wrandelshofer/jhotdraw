@@ -87,7 +87,7 @@ public class NetView extends AbstractView {
             }
         });
 
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = NetLabels.getLabels();
 
         JPanel placardPanel = new JPanel(new BorderLayout());
         javax.swing.AbstractButton pButton;

@@ -6,6 +6,7 @@ package org.jhotdraw.samples.mini;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
@@ -39,7 +40,7 @@ public class MultiEditorSample {
 
             @Override
             public void run() {
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = DrawLabels.getLabels();
 
                 // Create four drawing views, each one with its own drawing
                 DrawingView view1 = new DefaultDrawingView();

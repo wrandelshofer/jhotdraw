@@ -4,6 +4,7 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
+import org.jhotdraw.gui.GuiLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.swing.DefaultListModel;
@@ -23,7 +24,7 @@ private ResourceBundleUtil labels;
     private static final long serialVersionUID = 1L;
     /** Creates new form FontChooserPanel */
     public PaletteFontChooserSelectionPanel() {
-         labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels"));
+         labels = GuiLabels.getLabels();
         initComponents();
         collectionList.setModel(new DefaultListModel<>());
         familyList.setModel(new DefaultListModel<>());

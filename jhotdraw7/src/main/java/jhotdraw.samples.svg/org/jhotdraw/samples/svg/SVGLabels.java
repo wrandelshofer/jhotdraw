@@ -1,4 +1,4 @@
-/* @(#)GuiLabels.java
+/* @(#)SVGLabels.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw.samples.svg;
@@ -12,7 +12,7 @@ public class SVGLabels {
         // prevent instance creation
     }
     public static ResourceBundleUtil getLabels() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.GuiLabels"));
+        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.Labels"));
         labels.setBaseClass(SVGLabels.class);
         return labels;
     }

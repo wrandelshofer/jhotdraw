@@ -14,6 +14,7 @@ import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DiamondFigure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
@@ -72,7 +73,7 @@ public class DrawingPanel extends JPanel {
 
     /** Creates new instance. */
     public DrawingPanel() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = DrawLabels.getLabels();
         initComponents();
         undoManager = new UndoRedoManager();
         editor = new DefaultDrawingEditor();
@@ -210,7 +211,7 @@ public class DrawingPanel extends JPanel {
 
     public void addDefaultCreationButtonsTo(JToolBar tb, final DrawingEditor editor,
             Collection<Action> drawingActions, Collection<Action> selectionActions) {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = DrawLabels.getLabels();
 
         ButtonFactory.addSelectionToolTo(tb, editor, drawingActions, selectionActions);
         tb.addSeparator();

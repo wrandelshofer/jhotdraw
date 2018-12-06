@@ -9,6 +9,7 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.action.UngroupAction;
+import org.jhotdraw.samples.odg.ODGLabels;
 import org.jhotdraw.samples.odg.figures.ODGPathFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -28,7 +29,7 @@ public class SplitAction extends UngroupAction {
 
     public static final String ID = "edit.splitPath";
     private ResourceBundleUtil labels =
-            new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.GuiLabels"));
+            ODGLabels.getLabels();
 
     /** Creates a new instance. */
     public SplitAction(DrawingEditor editor) {

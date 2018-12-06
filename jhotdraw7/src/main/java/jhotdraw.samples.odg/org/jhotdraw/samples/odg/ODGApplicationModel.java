@@ -119,7 +119,7 @@ public class ODGApplicationModel extends DefaultApplicationModel {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey<?>, Object> attributes;
 
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil drawLabels = ODGLabels.getLabels();
 
         ButtonFactory.addSelectionToolTo(tb, editor, createDrawingActions(editor), createSelectionActions(editor));
         tb.addSeparator();
@@ -158,7 +158,7 @@ public class ODGApplicationModel extends DefaultApplicationModel {
     }
 
     private void addColorButtonsTo(JToolBar bar, DrawingEditor editor) {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ODGLabels.getLabels();
         HashMap<AttributeKey<?>, Object> defaultAttributes = new HashMap<>();
         STROKE_GRADIENT.put(defaultAttributes, (Gradient) null);
         bar.add(
@@ -187,7 +187,7 @@ public class ODGApplicationModel extends DefaultApplicationModel {
      */
     @Override
     public java.util.List<JToolBar> createToolBars(Application a, @Nullable View pr) {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ODGLabels.getLabels();
         ODGView p = (ODGView) pr;
 
         DrawingEditor editor;
@@ -224,7 +224,7 @@ public class ODGApplicationModel extends DefaultApplicationModel {
     @Override
     public ActionMap createActionMap(Application a, @Nullable View v) {
         ActionMap m = super.createActionMap(a, v);
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil drawLabels = ODGLabels.getLabels();
         AbstractAction aa;
 
         m.put(ExportFileAction.ID, new ExportFileAction(a, v));

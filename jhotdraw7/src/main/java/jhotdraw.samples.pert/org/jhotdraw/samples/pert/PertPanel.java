@@ -13,6 +13,7 @@ import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
@@ -56,7 +57,7 @@ public class PertPanel extends JPanel  {
     
     /** Creates new instance. */
     public PertPanel() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = PertLabels.getLabels();
         initComponents();
         undoManager = new UndoRedoManager();
         editor = new DefaultDrawingEditor();
@@ -186,8 +187,8 @@ public class PertPanel extends JPanel  {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey<?>,Object> attributes;
         
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.pert.GuiLabels"));
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil labels = PertLabels.getLabels();
+        ResourceBundleUtil drawLabels = DrawLabels.getLabels();
         
         ButtonFactory.addSelectionToolTo(tb, editor);
         tb.addSeparator();

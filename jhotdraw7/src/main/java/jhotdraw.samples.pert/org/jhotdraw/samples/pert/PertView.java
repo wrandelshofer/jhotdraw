@@ -83,7 +83,7 @@ public class PertView extends AbstractView {
             }
         });
 
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = PertLabels.getLabels();
 
         JPanel placardPanel = new JPanel(new BorderLayout());
         javax.swing.AbstractButton pButton;

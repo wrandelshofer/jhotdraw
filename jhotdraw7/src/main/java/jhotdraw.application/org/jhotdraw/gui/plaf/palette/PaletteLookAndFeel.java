@@ -3,6 +3,9 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
+import org.jhotdraw.gui.GuiLabels;
+import org.jhotdraw.util.ResourceBundleUtil;
+
 import javax.annotation.Nullable;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -206,12 +209,8 @@ public class PaletteLookAndFeel extends BasicLookAndFeel {
         super.initComponentDefaults(table);
 
         // Add resource bundle to the table.
-        // Since this does not seem to work in sandboxed environments, we check
-        // whether we succeeded and - in case of failure - put the values in
-        // by ourselves.
-        table.addResourceBundle("org.jhotdraw.gui.GuiLabels");
         if (table.getString("ColorChooser.rgbSliders") == null) {
-            ResourceBundle rb = ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels");
+            ResourceBundle rb = GuiLabels.getLabels().getWrappedBundle();
             for (String key : rb.keySet()) {
                 table.put(key, rb.getObject(key));
             }

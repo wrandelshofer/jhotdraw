@@ -137,7 +137,7 @@ public class JActivityWindow extends javax.swing.JFrame {
     }
 
     public JActivityWindow(ActivityManager pm) {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels"));
+        labels = GuiLabels.getLabels();
         initComponents();
         setFocusable(false); // needed for Mac OS X
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);

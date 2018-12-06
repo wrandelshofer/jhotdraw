@@ -72,7 +72,7 @@ public class JActivityIndicator extends javax.swing.JPanel {
 
     /** Creates new form JActivityIndicator */
     public JActivityIndicator() {
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.GuiLabels"));
+        labels = GuiLabels.getLabels();
         initComponents();
         setActivityManager(ActivityManager.getInstance());
 

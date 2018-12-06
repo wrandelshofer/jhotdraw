@@ -1,118 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Accesses resources via &quot;Label&quot; classes rather than directly instantiating a ResourceBundleUtil.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels.java" afterDir="false" />
+    <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Renames Label classes to make them easier distinguishable.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/undo/UndoLabels.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetLabels.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGLabels.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PerLabels.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/TeddyLabels.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/AbstractApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/AbstractApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/Labels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/ApplicationLabels.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/AbstractSaveUnsavedChangesAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/AbstractSaveUnsavedChangesAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/AboutAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/AboutAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/AbstractPreferencesAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/AbstractPreferencesAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/ExitAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/ExitAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/OpenApplicationFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/OpenApplicationFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/PrintApplicationFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/app/PrintApplicationFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/AbstractFindAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/AbstractFindAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/ClearSelectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/ClearSelectionAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/CopyAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/CopyAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/CutAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/CutAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/DeleteAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/DeleteAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/DuplicateAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/DuplicateAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/PasteAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/PasteAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/RedoAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/RedoAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/SelectAllAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/SelectAllAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/UndoAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/edit/UndoAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/ClearFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/ClearFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/ClearRecentFilesMenuAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/ClearRecentFilesMenuAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/CloseFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/CloseFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/ExportFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/ExportFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/LoadDirectoryAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/LoadDirectoryAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/LoadFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/LoadFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/LoadRecentFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/LoadRecentFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/NewFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/NewFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/OpenDirectoryAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/OpenDirectoryAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/OpenFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/OpenFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/OpenRecentFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/OpenRecentFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/PrintFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/PrintFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/SaveFileAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/SaveFileAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/SaveFileAsAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/file/SaveFileAsAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/ArrangeWindowsAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/ArrangeWindowsAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/FocusWindowAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/FocusWindowAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/MaximizeWindowAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/MaximizeWindowAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/MinimizeWindowAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/action/window/MinimizeWindowAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/ApplicationLabels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/ApplicationLabels.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/GuiLabels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/GuiLabels.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/JActivityIndicator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/JActivityIndicator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/JActivityView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/JActivityView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/JActivityWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/JActivityWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/GuiLabels.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels_de.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels_de.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/fontchooser/DefaultFontChooserModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/fontchooser/DefaultFontChooserModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteFontChooserSelectionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteFontChooserSelectionPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteLookAndFeel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteLookAndFeel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/ColorIcon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/ColorIcon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/PaletteSwatchesChooser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/PaletteSwatchesChooser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/text/ColorToolTipTextFormatter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/text/ColorToolTipTextFormatter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/undo/UndoRedoManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/undo/UndoRedoManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/AttributeKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/AttributeKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/AttributeKeys.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/AttributeKeys.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/BezierFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/BezierFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DefaultDrawingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DefaultDrawingView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DefaultDrawingViewTransferHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DefaultDrawingViewTransferHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/ImageFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/ImageFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/TextAreaFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/TextAreaFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/TextFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/TextFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AlignAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AlignAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ApplyAttributesAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ApplyAttributesAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeToggler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeToggler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/BringToFrontAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/BringToFrontAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DrawLabels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DrawLabels.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ButtonFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ButtonFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ColorIcon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ColorIcon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DefaultAttributeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DefaultAttributeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingAttributeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingAttributeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingColorChooserAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingColorChooserAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingColorChooserHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingColorChooserHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditorColorChooserAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditorColorChooserAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/FontChooserHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/FontChooserHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/GroupAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/GroupAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/IncreaseHandleDetailLevelAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/IncreaseHandleDetailLevelAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveConstrainedAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveConstrainedAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/PickAttributesAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/PickAttributesAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SelectSameAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SelectSameAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SelectionColorChooserHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SelectionColorChooserHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SendToBackAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SendToBackAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ToggleGridAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ToggleGridAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/UngroupAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/UngroupAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/BezierNodeEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/BezierNodeEdit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformEdit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformRestoreEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformRestoreEdit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextArea.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractConnectionHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractConnectionHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractRotateHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractRotateHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierControlPointHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierControlPointHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierNodeHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierNodeHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/ConnectorHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/ConnectorHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/FontSizeHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/FontSizeHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/ResizeHandleKit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/ResizeHandleKit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/RoundRectangleRadiusHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/RoundRectangleRadiusHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/TextOverflowHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/TextOverflowHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/TransformHandleKit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/TransformHandleKit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/BezierTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/BezierTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/ConnectionTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/ConnectionTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/CreationTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/CreationTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaCreationTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaCreationTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaEditingTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaEditingTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextCreationTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextCreationTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextEditingTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextEditingTool.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawApplicationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawingPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawingPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/CreationToolSample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/CreationToolSample.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/DnDMultiEditorSample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/DnDMultiEditorSample.java" afterDir="false" />
@@ -134,34 +44,8 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/figures/ODGRectRadiusHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/figures/ODGRectRadiusHandle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertApplicationModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/figures/TaskFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/figures/TaskFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/Labels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGLabels.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGAttributeKeys.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGAttributeKeys.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGDrawingPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGDrawingPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/action/CombineAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/action/CombineAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/action/SplitAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/action/SplitAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/action/ViewSourceAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/action/ViewSourceAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/LinkHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/LinkHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGAttributedFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGAttributedFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGBezierFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGBezierFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGImageFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGImageFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGPathFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGPathFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGRectRadiusHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGRectRadiusHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ActionsToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ActionsToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/AlignToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/AlignToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ArrangeToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ArrangeToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/CanvasToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/CanvasToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/FigureToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/FigureToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/FillToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/FillToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/FontToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/FontToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/LinkToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/LinkToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/MessagePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/MessagePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/StrokeToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/StrokeToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/SummaryToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/SummaryToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ToolsToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ToolsToolBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ViewToolBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/ViewToolBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGLabels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGLabels.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/FindDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/FindDialog.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineNumbersAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineNumbersAction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineWrapAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineWrapAction.java" afterDir="false" />
@@ -184,91 +68,91 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/RoundRectangleRadiusHandle.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGAttributeKeys.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="104" column="18" lean-forward="true" selection-start-line="104" selection-start-column="18" selection-end-line="104" selection-end-column="18" />
+            <state relative-caret-position="224">
+              <caret line="33" column="75" selection-start-line="33" selection-start-column="75" selection-end-line="33" selection-end-column="75" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/TextOverflowHandle.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteFontChooserSelectionPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="89" column="16" lean-forward="true" selection-start-line="89" selection-start-column="16" selection-end-line="89" selection-end-column="16" />
+            <state relative-caret-position="202">
+              <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/TransformHandleKit.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/ColorIcon.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
-              <caret line="168" column="43" lean-forward="true" selection-start-line="168" selection-start-column="43" selection-end-line="168" selection-end-column="43" />
+            <state relative-caret-position="205">
+              <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/BezierTool.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/fontchooser/DefaultFontChooserModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="85" column="43" selection-start-line="85" selection-start-column="43" selection-end-line="85" selection-end-column="43" />
+            <state relative-caret-position="135">
+              <caret line="66" column="36" selection-start-line="66" selection-start-column="36" selection-end-line="66" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/ConnectionTool.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineNumbersAction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="127" column="43" lean-forward="true" selection-start-line="127" selection-start-column="43" selection-end-line="127" selection-end-column="43" />
+            <state relative-caret-position="375">
+              <caret line="26" column="44" selection-start-line="26" selection-start-column="44" selection-end-line="26" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/CreationTool.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleStatusBarAction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="121" column="42" lean-forward="true" selection-start-line="121" selection-start-column="42" selection-end-line="121" selection-end-column="42" />
+            <state relative-caret-position="209">
+              <caret line="27" column="40" selection-start-line="27" selection-start-column="40" selection-end-line="27" selection-end-column="40" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaCreationTool.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextArea.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="215" column="50" lean-forward="true" selection-start-line="215" selection-start-column="50" selection-end-line="215" selection-end-column="50" />
+            <state relative-caret-position="209">
+              <caret line="40" column="45" selection-start-line="40" selection-start-column="45" selection-end-line="40" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaEditingTool.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextField.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="142" column="51" lean-forward="true" selection-start-line="142" selection-start-column="51" selection-end-line="142" selection-end-column="51" />
+            <state relative-caret-position="209">
+              <caret line="40" column="40" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextCreationTool.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="157" column="51" lean-forward="true" selection-start-line="157" selection-start-column="51" selection-end-line="157" selection-end-column="51" />
+            <state relative-caret-position="209">
+              <caret line="188" column="36" selection-start-line="188" selection-start-column="36" selection-end-line="188" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextEditingTool.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PerLabels.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="115" column="53" selection-start-line="115" selection-start-column="53" selection-end-line="115" selection-end-column="53" />
+            <state relative-caret-position="225">
+              <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -285,7 +169,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>edu.umd.cs.findbugs.annotations</find>
       <find>org.checkerframework.checker.nullness.qual</find>
       <find>NonNull</find>
       <find>setOp</find>
@@ -305,6 +188,17 @@
       <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.draw.Labels&quot;))</find>
       <find>attribute.color</find>
       <find>attribute.color.*Components</find>
+      <find>Labels</find>
+      <find>SVG</find>
+      <find>Undo</find>
+      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.teddy.Labels&quot;))</find>
+      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.teddy.GuiLabels&quot;))</find>
+      <find>GuiLabels</find>
+      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.pert.GuiLabels&quot;))</find>
+      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.odg.GuiLabels&quot;))</find>
+      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.net.GuiLabels&quot;))</find>
+      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.gui.GuiLabels&quot;))</find>
+      <find>GuiLabels&quot;))</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -317,6 +211,15 @@
       <replace>The authors and contributors of JHotDraw. MIT License.</replace>
       <replace>Copyright ©</replace>
       <replace>Labels.getLabels()</replace>
+      <replace>ODG</replace>
+      <replace>Net</replace>
+      <replace>Undo</replace>
+      <replace>Teddy</replace>
+      <replace>TeddyLabels.getLabels()</replace>
+      <replace>PertLabels.getLabels()</replace>
+      <replace>ODGLabels.getLabels()</replace>
+      <replace>NetLabels.getLabels()</replace>
+      <replace>GuiLabels.getLabels()</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/main</dir>
@@ -332,6 +235,7 @@
       <dir>$PROJECT_DIR$</dir>
       <dir>$PROJECT_DIR$/src</dir>
       <dir>$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg</dir>
+      <dir>$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy</dir>
       <dir>$PROJECT_DIR$/src/main/java</dir>
     </dirStrings>
   </component>
@@ -341,42 +245,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/module-info.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/PaletteSwatchesChooser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels_de.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/text/ColorToolTipTextFormatter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridPanel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AlignAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ApplyAttributesAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeToggler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/BringToFrontAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ButtonFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ColorIcon.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DefaultAttributeAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingAttributeAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingColorChooserAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasPanel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditorColorChooserAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/GroupAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/IncreaseHandleDetailLevelAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveConstrainedAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/PickAttributesAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SelectSameAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SendToBackAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ToggleGridAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/UngroupAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/BezierNodeEdit.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformEdit.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformRestoreEdit.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractConnectionHandle.java" />
-        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractRotateHandle.java" />
         <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierControlPointHandle.java" />
         <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierNodeHandle.java" />
         <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/ConnectorHandle.java" />
@@ -392,6 +260,42 @@
         <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaEditingTool.java" />
         <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextCreationTool.java" />
         <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextEditingTool.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGBezierFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGRectRadiusHandle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/Labels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DrawLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/ApplicationLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/GuiLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGView.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGApplicationModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGDrawingPanel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/figures/ODGRectRadiusHandle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetPanel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetApplicationModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetView.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/MultiEditorSample.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/CreationToolSample.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/DnDMultiEditorSample.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawingPanel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawApplicationModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteLookAndFeel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/undo/UndoLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/undo/UndoRedoManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ButtonFactory.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/TeddyLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineWrapAction.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGAttributeKeys.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteFontChooserSelectionPanel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/ColorIcon.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/fontchooser/DefaultFontChooserModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineNumbersAction.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleStatusBarAction.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextArea.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextField.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PerLabels.java" />
       </list>
     </option>
   </component>
@@ -478,6 +382,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jhotdraw.application" type="462c0819:PsiDirectoryNode" />
+              <item name="palette" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw7" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.application" type="462c0819:PsiDirectoryNode" />
               <item name="colorchooser" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -505,6 +418,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jhotdraw.application" type="462c0819:PsiDirectoryNode" />
+              <item name="undo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw7" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.application" type="462c0819:PsiDirectoryNode" />
               <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -522,7 +444,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jhotdraw.draw" type="462c0819:PsiDirectoryNode" />
-              <item name="draw" type="462c0819:PsiDirectoryNode" />
+              <item name="gui" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
@@ -530,8 +452,7 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jhotdraw.draw" type="462c0819:PsiDirectoryNode" />
-              <item name="action" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.samples.pert" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
@@ -539,8 +460,8 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jhotdraw.draw" type="462c0819:PsiDirectoryNode" />
-              <item name="event" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.samples.pert" type="462c0819:PsiDirectoryNode" />
+              <item name="pert" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
@@ -548,17 +469,9 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jhotdraw.draw" type="462c0819:PsiDirectoryNode" />
-              <item name="handle" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw7" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jhotdraw.draw" type="462c0819:PsiDirectoryNode" />
-              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.samples.pert" type="462c0819:PsiDirectoryNode" />
+              <item name="pert" type="462c0819:PsiDirectoryNode" />
+              <item name="PerLabels.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
@@ -575,16 +488,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jhotdraw.samples.svg" type="462c0819:PsiDirectoryNode" />
-              <item name="svg" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw7" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jhotdraw.samples.svg" type="462c0819:PsiDirectoryNode" />
-              <item name="action" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
@@ -603,6 +507,32 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jhotdraw.samples.svg" type="462c0819:PsiDirectoryNode" />
               <item name="gui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw7" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.samples.teddy" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw7" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.samples.teddy" type="462c0819:PsiDirectoryNode" />
+              <item name="teddy" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JHotDraw7" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw7" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw.samples.teddy" type="462c0819:PsiDirectoryNode" />
+              <item name="action" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -718,7 +648,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.SVG">
+  <component name="RunManager" selected="Application.Teddy">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -896,24 +826,30 @@
       <option name="project" value="LOCAL" />
       <updated>1544104743522</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Renames Label classes to make them easier distinguishable.">
+      <created>1544105835869</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1544105835870</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="119" y="23" width="1840" height="1129" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49923897" visible="true" weight="0.2897664" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Debug" order="1" sideWeight="0.4955506" side_tool="true" weight="0.39940828" />
-      <window_info anchor="bottom" id="Messages" order="2" sideWeight="0.7063404" side_tool="true" visible="true" weight="0.39940828" />
+      <window_info anchor="bottom" id="Debug" order="1" sideWeight="0.7074527" side_tool="true" weight="0.33234715" />
+      <window_info anchor="bottom" id="Messages" order="2" sideWeight="0.7074527" side_tool="true" visible="true" weight="0.33234715" />
       <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.7419355" side_tool="true" weight="0.32938856" />
-      <window_info anchor="bottom" id="Find" order="4" sideWeight="0.29365963" weight="0.33234715" />
+      <window_info anchor="bottom" id="Find" order="4" sideWeight="0.2925473" visible="true" weight="0.33234715" />
       <window_info anchor="bottom" id="Structure" order="5" sideWeight="0.25750834" weight="0.32938856" />
-      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.6318131" weight="0.3974359" />
+      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.44215795" weight="0.3974359" />
       <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="9" />
@@ -991,7 +927,8 @@
     <MESSAGE value="Fixes javadoc comments." />
     <MESSAGE value="Adds black and white colors to palette." />
     <MESSAGE value="Accesses resources via &quot;Label&quot; classes rather than directly instantiating a ResourceBundleUtil." />
-    <option name="LAST_COMMIT_MESSAGE" value="Accesses resources via &quot;Label&quot; classes rather than directly instantiating a ResourceBundleUtil." />
+    <MESSAGE value="Renames Label classes to make them easier distinguishable." />
+    <option name="LAST_COMMIT_MESSAGE" value="Renames Label classes to make them easier distinguishable." />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -1053,283 +990,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="115" selection-start-line="14" selection-start-column="115" selection-end-line="14" selection-end-column="115" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels.properties">
-      <provider editor-type-id="ResourceBundle" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="297" column="20" lean-forward="true" selection-start-line="297" selection-start-column="20" selection-end-line="297" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/Labels_de.properties">
-      <provider editor-type-id="ResourceBundle" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="271" selection-start-line="264" selection-end-line="271" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels.properties">
-      <provider editor-type-id="ResourceBundle" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/Labels_de.properties">
-      <provider editor-type-id="ResourceBundle" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/text/ColorToolTipTextFormatter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/module-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="31" column="17" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AlignAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ApplyAttributesAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="38" column="38" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1725">
-          <caret line="115" column="51" lean-forward="true" selection-start-line="115" selection-start-column="51" selection-end-line="115" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/AttributeToggler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="107" column="52" selection-start-line="107" selection-start-column="52" selection-end-line="107" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/BringToFrontAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="50" column="27" lean-forward="true" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ButtonFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="460" column="40" selection-start-line="460" selection-start-column="40" selection-end-line="460" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ColorIcon.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="36" column="39" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DefaultAttributeAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="94" column="21" selection-start-line="94" selection-start-column="21" selection-end-line="94" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingAttributeAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="96" column="51" lean-forward="true" selection-start-line="96" selection-start-column="51" selection-end-line="96" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/DrawingColorChooserAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="67" column="20" selection-start-line="67" selection-start-column="20" selection-end-line="67" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="39" column="39" lean-forward="true" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditCanvasPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="46" column="22" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditGridAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="39" column="38" lean-forward="true" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/EditorColorChooserAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="73" column="19" lean-forward="true" selection-start-line="73" selection-start-column="19" selection-end-line="73" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/GroupAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="91" column="34" selection-start-line="91" selection-start-column="34" selection-end-line="91" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/IncreaseHandleDetailLevelAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="26" column="16" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="61" column="44" lean-forward="true" selection-start-line="61" selection-start-column="44" selection-end-line="61" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/MoveConstrainedAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="95" column="43" lean-forward="true" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/PickAttributesAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="37" column="37" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SelectSameAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/SendToBackAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="34" column="20" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ToggleGridAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="29" column="19" lean-forward="true" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/UngroupAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="29" column="38" selection-start-line="29" selection-start-column="38" selection-end-line="29" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/BezierNodeEdit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformEdit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="52" column="37" lean-forward="true" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/event/TransformRestoreEdit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="43" column="39" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractConnectionHandle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="302" column="41" selection-start-line="302" selection-start-column="41" selection-end-line="302" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/AbstractRotateHandle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="53" column="37" selection-start-line="53" selection-start-column="37" selection-end-line="53" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierControlPointHandle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="277" column="38" selection-start-line="277" selection-start-column="38" selection-end-line="277" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/BezierNodeHandle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="246" column="51" selection-start-line="246" selection-start-column="51" selection-end-line="246" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/ConnectorHandle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="160" column="49" selection-start-line="160" selection-start-column="49" selection-end-line="160" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/FontSizeHandle.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="279">
@@ -1361,56 +1021,325 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/handle/TransformHandleKit.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="379">
-          <caret line="168" column="43" lean-forward="true" selection-start-line="168" selection-start-column="43" selection-end-line="168" selection-end-column="43" />
+          <caret line="167" column="47" selection-start-line="167" selection-start-column="47" selection-end-line="167" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/BezierTool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
-          <caret line="85" column="43" selection-start-line="85" selection-start-column="43" selection-end-line="85" selection-end-column="43" />
+          <caret line="84" column="47" selection-start-line="84" selection-start-column="47" selection-end-line="84" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/ConnectionTool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
-          <caret line="127" column="43" lean-forward="true" selection-start-line="127" selection-start-column="43" selection-end-line="127" selection-end-column="43" />
+          <caret line="126" column="47" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/CreationTool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="392">
-          <caret line="121" column="42" lean-forward="true" selection-start-line="121" selection-start-column="42" selection-end-line="121" selection-end-column="42" />
+          <caret line="120" column="46" selection-start-line="120" selection-start-column="46" selection-end-line="120" selection-end-column="46" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaCreationTool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
-          <caret line="215" column="50" lean-forward="true" selection-start-line="215" selection-start-column="50" selection-end-line="215" selection-end-column="50" />
+          <caret line="214" column="54" selection-start-line="214" selection-start-column="54" selection-end-line="214" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextAreaEditingTool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="422">
-          <caret line="142" column="51" lean-forward="true" selection-start-line="142" selection-start-column="51" selection-end-line="142" selection-end-column="51" />
+          <caret line="141" column="55" selection-start-line="141" selection-start-column="55" selection-end-line="141" selection-end-column="55" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextCreationTool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="157" column="51" lean-forward="true" selection-start-line="157" selection-start-column="51" selection-end-line="157" selection-end-column="51" />
+          <caret line="157" column="55" selection-start-line="157" selection-start-column="55" selection-end-line="157" selection-end-column="55" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/tool/TextEditingTool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
-          <caret line="115" column="53" selection-start-line="115" selection-start-column="53" selection-end-line="115" selection-end-column="53" />
+          <caret line="114" column="57" selection-start-line="114" selection-start-column="57" selection-end-line="114" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGBezierFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="96" column="54" selection-start-line="96" selection-start-column="54" selection-end-line="96" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/figures/SVGRectRadiusHandle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="163" column="15" selection-start-line="163" selection-start-column="15" selection-end-line="163" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/module-info.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/DrawLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="104" selection-start-line="14" selection-start-column="104" selection-end-line="14" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/app/ApplicationLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="102" selection-start-line="14" selection-start-column="102" selection-end-line="14" selection-end-column="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="100" column="39" selection-start-line="100" selection-start-column="39" selection-end-line="100" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGApplicationModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="226" column="43" selection-start-line="226" selection-start-column="43" selection-end-line="226" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGDrawingPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="178" column="43" selection-start-line="178" selection-start-column="43" selection-end-line="178" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/figures/ODGRectRadiusHandle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="130" column="19" selection-start-line="130" selection-start-column="19" selection-end-line="130" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/SVGLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="109" selection-start-line="14" selection-start-column="109" selection-end-line="14" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="56" column="39" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetApplicationModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="142" column="43" selection-start-line="142" selection-start-column="43" selection-end-line="142" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/org/jhotdraw/samples/net/NetView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="89" column="39" selection-start-line="89" selection-start-column="39" selection-end-line="89" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/MultiEditorSample.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="42" column="48" selection-start-line="42" selection-start-column="48" selection-end-line="42" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/CreationToolSample.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="45" column="48" selection-start-line="45" selection-start-column="48" selection-end-line="45" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/org/jhotdraw/samples/mini/DnDMultiEditorSample.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="45" column="48" selection-start-line="45" selection-start-column="48" selection-end-line="45" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawingPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="213" column="40" selection-start-line="213" selection-start-column="40" selection-end-line="213" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/org/jhotdraw/samples/draw/DrawApplicationModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="126" column="40" selection-start-line="126" selection-start-column="40" selection-end-line="126" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteLookAndFeel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="211" selection-start-line="211" selection-end-line="211" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/undo/UndoRedoManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="127" column="46" selection-start-line="127" selection-start-column="40" selection-end-line="127" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg/gui/StrokeToolBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="102" selection-start-line="102" selection-end-line="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/action/ButtonFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="989" column="52" selection-start-line="989" selection-start-column="52" selection-end-line="989" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/undo/UndoLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineWrapAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="27" column="63" selection-start-line="27" selection-start-column="63" selection-end-line="27" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/TeddyLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/GuiLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/org/jhotdraw/samples/odg/ODGAttributeKeys.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="33" column="75" selection-start-line="33" selection-start-column="75" selection-end-line="33" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/PaletteFontChooserSelectionPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/colorchooser/ColorIcon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/fontchooser/DefaultFontChooserModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="66" column="36" selection-start-line="66" selection-start-column="36" selection-end-line="66" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleLineNumbersAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="26" column="44" selection-start-line="26" selection-start-column="44" selection-end-line="26" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/org/jhotdraw/samples/teddy/action/ToggleStatusBarAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="27" column="40" selection-start-line="27" selection-start-column="40" selection-end-line="27" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextArea.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="40" column="45" selection-start-line="40" selection-start-column="45" selection-end-line="40" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/org/jhotdraw/draw/gui/JAttributeTextField.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="40" column="40" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/Labels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PertPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="188" column="36" selection-start-line="188" selection-start-column="36" selection-end-line="188" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/org/jhotdraw/samples/pert/PerLabels.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
         </state>
       </provider>
     </entry>

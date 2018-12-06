@@ -39,7 +39,7 @@ public class FindDialog extends javax.swing.JDialog {
     /** Creates new form FindDialog */
     private FindDialog(@Nullable Frame parent, boolean modal) {
         super(parent, modal);
-        labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.teddy.GuiLabels"));
+        labels = TeddyLabels.getLabels();
         initComponents();
         buttonPanel.setBorder(new EmptyBorder(0,-5,0,-5));
         setAlwaysOnTop(true);

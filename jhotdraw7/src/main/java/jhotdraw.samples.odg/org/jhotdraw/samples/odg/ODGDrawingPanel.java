@@ -68,7 +68,7 @@ public class ODGDrawingPanel extends JPanel {
      * Creates new instance.
      */
     public ODGDrawingPanel() {
-        ResourceBundleUtil labels = Labels.getLabels();
+        ResourceBundleUtil labels = ODGLabels.getLabels();
         initComponents();
         undoManager = new UndoRedoManager();
         editor = new DefaultDrawingEditor();
@@ -176,7 +176,7 @@ public class ODGDrawingPanel extends JPanel {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey<?>, Object> attributes;
 
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil drawLabels = ODGLabels.getLabels();
 
         ButtonFactory.addSelectionToolTo(tb, editor,
                 ButtonFactory.createDrawingActions(editor),

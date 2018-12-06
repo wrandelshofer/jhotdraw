@@ -31,7 +31,7 @@ import static org.jhotdraw.samples.odg.ODGConstants.StrokeStyle;
  * @version $Id$
  */
 public class ODGAttributeKeys extends AttributeKeys {
-     private static final ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.svg.GuiLabels"));
+     private static final ResourceBundleUtil labels = ODGLabels.getLabels();
     
     /** Prevent instance creation */
     private ODGAttributeKeys() {

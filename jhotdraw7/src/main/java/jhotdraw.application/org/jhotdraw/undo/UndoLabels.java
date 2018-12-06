@@ -1,21 +1,20 @@
-/* @(#)GuiLabels.java
+/* @(#)UndoLabels.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw.gui;
-
+package org.jhotdraw.undo;
 
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.util.ResourceBundle;
 
-public class GuiLabels {
-    private GuiLabels() {
+public class UndoLabels {
+    private UndoLabels() {
         // prevent instance creation
     }
 
     public static ResourceBundleUtil getLabels() {
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.gui.Labels"));
-        labels.setBaseClass(GuiLabels.class);
+        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.undo.Labels"));
+        labels.setBaseClass(UndoLabels.class);
         return labels;
     }
 }

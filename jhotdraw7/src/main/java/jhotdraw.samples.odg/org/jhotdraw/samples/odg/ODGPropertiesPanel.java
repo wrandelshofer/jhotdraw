@@ -29,7 +29,7 @@ import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;
 @SuppressWarnings("rawtypes")
 public class ODGPropertiesPanel extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
-    private ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.GuiLabels"));
+    private ResourceBundleUtil labels = ODGLabels.getLabels();
     private DrawingEditor editor;
     private JAttributeSlider opacitySlider;
     private FigureAttributeEditorHandler<Double> opacityFieldHandler;

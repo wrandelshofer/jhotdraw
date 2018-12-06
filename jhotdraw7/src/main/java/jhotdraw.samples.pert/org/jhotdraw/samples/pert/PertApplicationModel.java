@@ -16,6 +16,7 @@ import org.jhotdraw.app.action.view.ViewPropertyAction;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.TextAreaFigure;
@@ -88,7 +89,7 @@ public class PertApplicationModel extends DefaultApplicationModel {
     @Override
     public ActionMap createActionMap(Application a, @Nullable View v) {
         ActionMap m = super.createActionMap(a, v);
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil drawLabels = PertLabels.getLabels();
         AbstractAction aa;
 
         m.put(ExportFileAction.ID, new ExportFileAction(a, v));
@@ -121,8 +122,8 @@ public class PertApplicationModel extends DefaultApplicationModel {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey<?>, Object> attributes;
 
-        ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.pert.GuiLabels"));
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil labels = PertLabels.getLabels();
+        ResourceBundleUtil drawLabels = DrawLabels.getLabels();
 
         ButtonFactory.addSelectionToolTo(tb, editor);
         tb.addSeparator();
@@ -148,7 +149,7 @@ public class PertApplicationModel extends DefaultApplicationModel {
      */
     @Override
     public java.util.List<JToolBar> createToolBars(Application a, @Nullable View pr) {
-        ResourceBundleUtil drawLabels = Labels.getLabels();
+        ResourceBundleUtil drawLabels = DrawLabels.getLabels();
         PertView p = (PertView) pr;
 
         DrawingEditor editor;

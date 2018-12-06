@@ -7,6 +7,7 @@ import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.RectangleFigure;
@@ -42,7 +43,7 @@ public class CreationToolSample {
 
             @Override
             public void run() {
-                ResourceBundleUtil labels = Labels.getLabels();
+                ResourceBundleUtil labels = DrawLabels.getLabels();
 
                 // Create a drawing view with a default drawing, and
                 // input/output formats for basic clipboard support.

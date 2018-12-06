@@ -8,6 +8,7 @@ import org.jhotdraw.draw.AbstractAttributedFigure;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.samples.odg.ODGAttributeKeys;
 import org.jhotdraw.samples.odg.ODGConstants;
+import org.jhotdraw.samples.odg.ODGLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.swing.AbstractAction;
@@ -120,7 +121,7 @@ public abstract class ODGAttributedFigure extends AbstractAttributedFigure imple
     @Override public Collection<Action> getActions(Point2D.Double p) {
         LinkedList<Action> actions = new LinkedList<Action>();
         if (get(TRANSFORM) != null) {
-            ResourceBundleUtil labels = new ResourceBundleUtil(ResourceBundle.getBundle("org.jhotdraw.samples.odg.GuiLabels"));
+            ResourceBundleUtil labels = ODGLabels.getLabels();
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {
     private static final long serialVersionUID = 1L;
                 public void actionPerformed(ActionEvent evt) {
