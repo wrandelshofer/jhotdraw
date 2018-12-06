@@ -59,7 +59,7 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 /**
- * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedActivityViewController} objects and
+ * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedActivity} objects and
  * provides windows to present them on screen.
  * 
  * @author Werner Randelshofer
@@ -79,7 +79,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
-    private final ReadOnlyObjectWrapper<ActivityViewController> activeView = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<Activity> activeView = new ReadOnlyObjectWrapper<>();
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
         Thread t = new Thread(r);
         t.setUncaughtExceptionHandler((Thread t1, Throwable e) -> {
@@ -89,7 +89,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     });
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
-    private final SetProperty<ActivityViewController> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    private final SetProperty<Activity> views = new SimpleSetProperty<>(FXCollections.observableSet());
     @Nonnull
     private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
     private List<Menu> systemMenus;
@@ -97,20 +97,20 @@ public class DocumentOrientedApplication extends AbstractApplication {
     {
         activeView.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                handleViewDeactivated((DocumentOrientedActivityViewController) oldv);
+                handleViewDeactivated((DocumentOrientedActivity) oldv);
             }
             if (newv != null) {
-                handleViewActivated((DocumentOrientedActivityViewController) newv);
+                handleViewActivated((DocumentOrientedActivity) newv);
             }
         });
     }
 
     {
-        views.addListener((SetChangeListener.Change<? extends ActivityViewController> change) -> {
+        views.addListener((SetChangeListener.Change<? extends Activity> change) -> {
             if (change.wasAdded()) {
-                handleViewAdded((DocumentOrientedActivityViewController) change.getElementAdded());
+                handleViewAdded((DocumentOrientedActivity) change.getElementAdded());
             } else {
-                handleViewRemoved((DocumentOrientedActivityViewController) change.getElementRemoved());
+                handleViewRemoved((DocumentOrientedActivity) change.getElementRemoved());
             }
         });
     }
@@ -120,7 +120,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public ReadOnlyObjectProperty<ActivityViewController> activeViewProperty() {
+    public ReadOnlyObjectProperty<Activity> activeViewProperty() {
         return activeView.getReadOnlyProperty();
     }
 
@@ -174,7 +174,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public CompletionStage<ActivityViewController> createView() {
+    public CompletionStage<Activity> createView() {
         return FXWorker.supply(() -> getModel().createView())
                 .handle((v, e) -> {
                     if (e != null) {
@@ -190,22 +190,22 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     private void disambiguateViews() {
-        HashMap<String, ArrayList<ActivityViewController>> titles = new HashMap<>();
-        for (ActivityViewController v : views) {
+        HashMap<String, ArrayList<Activity>> titles = new HashMap<>();
+        for (Activity v : views) {
             String t = v.getTitle();
             titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
         }
-        for (ArrayList<ActivityViewController> list : titles.values()) {
+        for (ArrayList<Activity> list : titles.values()) {
             if (list.size() == 1) {
                 list.get(0).setDisambiguation(0);
             } else {
                 int max = 0;
-                for (ActivityViewController v : list) {
+                for (Activity v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
                 Collections.sort(list, (a, b) -> a.getDisambiguation() - b.getDisambiguation());
                 int prev = 0;
-                for (ActivityViewController v : list) {
+                for (Activity v : list) {
                     int current = v.getDisambiguation();
                     if (current == prev) {
                         v.setDisambiguation(++max);
@@ -255,7 +255,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(@Nonnull DocumentOrientedActivityViewController view) {
+    protected void handleViewActivated(@Nonnull DocumentOrientedActivity view) {
         view.activate();
     }
 
@@ -265,7 +265,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(@Nonnull DocumentOrientedActivityViewController view) {
+    protected void handleViewAdded(@Nonnull DocumentOrientedActivity view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -342,7 +342,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
             Outer:
             for (int retries = views.getSize(); retries > 0; retries--) {
-                for (ActivityViewController v : views) {
+                for (Activity v : views) {
                     if (v != view) {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
@@ -367,7 +367,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(@Nonnull DocumentOrientedActivityViewController view) {
+    protected void handleViewDeactivated(@Nonnull DocumentOrientedActivity view) {
         view.deactivate();
     }
 
@@ -377,7 +377,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(@Nonnull DocumentOrientedActivityViewController view) {
+    protected void handleViewRemoved(@Nonnull DocumentOrientedActivity view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -411,7 +411,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
     @Nonnull
     @Override
-    public SetProperty<ActivityViewController> viewsProperty() {
+    public SetProperty<Activity> viewsProperty() {
         return views;
     }
 
@@ -441,7 +441,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
         final Resources labels = Labels.getLabels();
         createView().whenComplete((pv, ex1) -> {
-            DocumentOrientedActivityViewController v = (DocumentOrientedActivityViewController) pv;
+            DocumentOrientedActivity v = (DocumentOrientedActivity) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -481,7 +481,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                 updateRecentMenuItemsMB(systemMenus);
             }
         } else {
-            for (ActivityViewController v : views()) {
+            for (Activity v : views()) {
                 BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();
                 MenuBar mb = (MenuBar) bp.getTop();
                 if (mb != null) {

@@ -9,12 +9,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
- * on the active {@link ActivityViewController}, or on a specific {@code ActivityViewController}.
+ * on the active {@link Activity}, or on a specific {@code Activity}.
  * <p>
  If the active view or the specified view is disabled, the
  AbstractViewControllerAction is disabled as well.
@@ -22,7 +23,7 @@ import org.jhotdraw8.app.ActivityViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractViewControllerAction<V extends ActivityViewController> extends AbstractApplicationAction {
+public abstract class AbstractViewControllerAction<V extends Activity> extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -31,7 +32,7 @@ public abstract class AbstractViewControllerAction<V extends ActivityViewControl
     private boolean mayCreateView;
     private Class<V> pClass;
     @Nullable
-    private final ChangeListener<ActivityViewController> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeViewProperty().isNull());
         if (newValue != null && (pClass == null || pClass.isAssignableFrom(newValue.getClass()))) {
@@ -43,7 +44,7 @@ public abstract class AbstractViewControllerAction<V extends ActivityViewControl
         }
     };
     @Nullable
-    private final ActivityViewController view;
+    private final Activity view;
 
     /**
      * Creates a new instance which acts on the specified view of the
@@ -69,7 +70,7 @@ public abstract class AbstractViewControllerAction<V extends ActivityViewControl
     @Nullable
     @SuppressWarnings("unchecked")
     public V getActiveView() {
-        ActivityViewController p = (view != null) ? view : app.getActiveView();
+        Activity p = (view != null) ? view : app.getActiveView();
         return p == null || pClass == null || pClass.isAssignableFrom(p.getClass()) ? (V) p : null;
     }
 

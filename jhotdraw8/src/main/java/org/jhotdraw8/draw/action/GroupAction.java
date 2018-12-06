@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -19,7 +21,6 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.collection.Iterators;
-import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * GroupAction.
@@ -57,7 +58,7 @@ public class GroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent e, Activity view) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

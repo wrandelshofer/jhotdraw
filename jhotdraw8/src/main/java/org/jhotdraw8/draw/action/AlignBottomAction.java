@@ -3,7 +3,7 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.app.ActivityViewController;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -31,7 +31,7 @@ public class AlignBottomAction extends AbstractSelectedAction {
         labels.configureAction(this, ID);
     }
     @Override
-    protected void handleActionPerformed(ActionEvent event, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent event, Activity view) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

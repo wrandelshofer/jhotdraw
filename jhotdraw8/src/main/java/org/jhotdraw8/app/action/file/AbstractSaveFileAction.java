@@ -16,9 +16,9 @@ import javafx.stage.Modality;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.app.ActivityViewController;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivityViewController;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.collection.Key;
@@ -35,7 +35,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSaveFileAction extends AbstractViewControllerAction<DocumentOrientedActivityViewController> {
+public abstract class AbstractSaveFileAction extends AbstractViewControllerAction<DocumentOrientedActivity> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -50,7 +50,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(Application app, DocumentOrientedActivityViewController view, String id, boolean saveAs) {
+    public AbstractSaveFileAction(Application app, DocumentOrientedActivity view, String id, boolean saveAs) {
         this(app, view, id, saveAs, Labels.getLabels());
     }
     /**
@@ -62,13 +62,13 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
      * @param saveAs whether to force a file dialog
      * @param resources the resources are used for setting labels and icons for the action
      */
-    public AbstractSaveFileAction(Application app, DocumentOrientedActivityViewController view, String id, boolean saveAs, Resources resources) {
-        super(app, view, DocumentOrientedActivityViewController.class);
+    public AbstractSaveFileAction(Application app, DocumentOrientedActivity view, String id, boolean saveAs, Resources resources) {
+        super(app, view, DocumentOrientedActivity.class);
         this.saveAs = saveAs;
         resources.configureAction(this, id);
     }
 
-    protected URIChooser getChooser(@Nonnull DocumentOrientedActivityViewController view) {
+    protected URIChooser getChooser(@Nonnull DocumentOrientedActivity view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -77,10 +77,10 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         return c;
     }
 
-    protected abstract URIChooser createChooser(DocumentOrientedActivityViewController view);
+    protected abstract URIChooser createChooser(DocumentOrientedActivity view);
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @Nullable DocumentOrientedActivityViewController v) {
+    protected void handleActionPerformed(ActionEvent evt, @Nullable DocumentOrientedActivity v) {
         if (v == null) {
             return;
         }
@@ -89,7 +89,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         saveFileChooseUri(v);
     }
 
-    protected void saveFileChooseUri(@Nonnull final DocumentOrientedActivityViewController v) {
+    protected void saveFileChooseUri(@Nonnull final DocumentOrientedActivity v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -102,8 +102,8 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (ActivityViewController pi : app.views()) {
-                        DocumentOrientedActivityViewController vi = (DocumentOrientedActivityViewController) pi;
+                    for (Activity pi : app.views()) {
+                        DocumentOrientedActivity vi = (DocumentOrientedActivity) pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -128,7 +128,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         }
     }
 
-    protected void saveFileChooseOptions(@Nonnull final DocumentOrientedActivityViewController v, @Nonnull URI uri, DataFormat format) {
+    protected void saveFileChooseOptions(@Nonnull final DocumentOrientedActivity v, @Nonnull URI uri, DataFormat format) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
         if (dialog != null) {
@@ -146,7 +146,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         saveFileToUri(v, uri, format, options);
     }
 
-    protected void saveFileToUri(@Nonnull final DocumentOrientedActivityViewController view, @Nonnull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
+    protected void saveFileToUri(@Nonnull final DocumentOrientedActivity view, @Nonnull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
         view.write(uri, format, options).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(this);
@@ -181,5 +181,5 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         return null;
     }
 
-    protected abstract void handleSucceded(DocumentOrientedActivityViewController v, URI uri, DataFormat format);
+    protected abstract void handleSucceded(DocumentOrientedActivity v, URI uri, DataFormat format);
 }

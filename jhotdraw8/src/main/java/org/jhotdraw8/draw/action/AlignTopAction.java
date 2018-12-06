@@ -4,7 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.event.ActionEvent;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ActivityViewController;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -32,7 +32,7 @@ public class AlignTopAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent event, Activity view) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

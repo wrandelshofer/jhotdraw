@@ -23,13 +23,13 @@ import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.HierarchicalMap;
 
 /**
- * An {@code Application} handles the life-cycle of {@link ActivityViewController} objects and
+ * An {@code Application} handles the life-cycle of {@link Activity} objects and
  * provides windows to present them on screen.
  *
  * @design.pattern Application Framework, KeyAbstraction. The application
  * framework supports the creation of document oriented applications which can
  * support platform-specific guidelines. The application framework consists of
- * the following key abstractions: null {@link Application}, {@link ApplicationModel}, {@link ActivityViewController},
+ * the following key abstractions: null {@link Application}, {@link ApplicationModel}, {@link Activity},
  * {@link Action}.
  *
  * @author Werner Randelshofer
@@ -53,7 +53,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the views
      */
-    public SetProperty<ActivityViewController> viewsProperty();
+    public SetProperty<Activity> viewsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -75,7 +75,7 @@ public interface Application extends Disableable, PropertyBean {
     public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default public ObservableSet<ActivityViewController> views() {
+    default public ObservableSet<Activity> views() {
         return viewsProperty().get();
     }
 
@@ -84,7 +84,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void add(ActivityViewController v) {
+    default public void add(Activity v) {
         viewsProperty().add(v);
     }
 
@@ -93,7 +93,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void remove(ActivityViewController v) {
+    default public void remove(Activity v) {
         viewsProperty().remove(v);
     }
 
@@ -103,11 +103,11 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return The active view.
      */
-    public ReadOnlyObjectProperty<ActivityViewController> activeViewProperty();
+    public ReadOnlyObjectProperty<Activity> activeViewProperty();
 
     // Convenience method
     @Nullable
-    default public ActivityViewController getActiveView() {
+    default public Activity getActiveView() {
         return activeViewProperty().get();
     }
 
@@ -167,7 +167,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return A callback.
      */
-    CompletionStage<ActivityViewController> createView();
+    CompletionStage<Activity> createView();
 
     /**
      * Adds a recent URI.

@@ -10,13 +10,14 @@ import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * SelectSameAction.
@@ -42,7 +43,7 @@ public class SelectSameAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent e, Activity view) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

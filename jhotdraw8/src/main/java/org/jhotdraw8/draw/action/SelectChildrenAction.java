@@ -8,13 +8,14 @@ import java.util.Collection;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * SelectChildrenAction.
@@ -40,7 +41,7 @@ public class SelectChildrenAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent e, Activity view) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

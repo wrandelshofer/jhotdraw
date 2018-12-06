@@ -10,8 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * AbstractFocusOwnerAction.
@@ -26,7 +27,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
     private Node target = null;
 
     @Nullable
-    private final ChangeListener<ActivityViewController> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode() == null) {
             disabled.set(true);

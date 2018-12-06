@@ -9,7 +9,7 @@ import java.util.Set;
 import javafx.event.ActionEvent;
 import javax.annotation.Nonnull;
 
-import org.jhotdraw8.app.ActivityViewController;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -43,7 +43,7 @@ public class RemoveTransformationsAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent e, Activity view) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

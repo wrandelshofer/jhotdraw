@@ -3,10 +3,10 @@
  */
 package org.jhotdraw8.app.action.edit;
 
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
-import org.jhotdraw8.app.ActivityViewController;
 
 /**
  * Presents a find dialog to the user and then highlights the found items in the
@@ -15,7 +15,7 @@ import org.jhotdraw8.app.ActivityViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFindAction<V extends ActivityViewController> extends AbstractViewControllerAction<V> {
+public abstract class AbstractFindAction<V extends Activity> extends AbstractViewControllerAction<V> {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.find";

@@ -13,9 +13,9 @@ import javafx.scene.input.DataFormat;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
-import org.jhotdraw8.app.DocumentOrientedActivityViewController;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -25,7 +25,7 @@ import org.jhotdraw8.app.DocumentOrientedActivityViewController;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedActivityViewController> {
+public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,13 +37,13 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
      * @param app the application
      * @param view the view
      */
-    public RevertFileAction(Application app, DocumentOrientedActivityViewController view) {
-        super(app, view, DocumentOrientedActivityViewController.class);
+    public RevertFileAction(Application app, DocumentOrientedActivity view) {
+        super(app, view, DocumentOrientedActivity.class);
         Labels.getLabels().configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedActivity view) {
         if (isDisabled()) {
             return;
         }
@@ -62,7 +62,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
         }
     }
 
-    private void doIt(DocumentOrientedActivityViewController view, @Nullable URI uri, DataFormat dataFormat) {
+    private void doIt(DocumentOrientedActivity view, @Nullable URI uri, DataFormat dataFormat) {
         view.addDisabler(this);
 
         final BiFunction<DataFormat, Throwable, Void> handler = (actualDataFormat, throwable) -> {

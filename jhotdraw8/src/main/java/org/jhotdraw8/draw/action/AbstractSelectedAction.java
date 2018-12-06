@@ -3,7 +3,7 @@ package org.jhotdraw8.draw.action;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jhotdraw8.app.ActivityViewController;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.EditorView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSelectedAction extends AbstractViewControllerAction<ActivityViewController> {
+public abstract class AbstractSelectedAction extends AbstractViewControllerAction<Activity> {
 
     private DrawingEditor editor;
 
@@ -70,7 +70,7 @@ public abstract class AbstractSelectedAction extends AbstractViewControllerActio
     @Nullable
     protected DrawingView getView() {
         if (editor == null) {
-            ActivityViewController v = getActiveView();
+            Activity v = getActiveView();
             if (v instanceof EditorView) {
                 EditorView ev = (EditorView) v;
                 return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;

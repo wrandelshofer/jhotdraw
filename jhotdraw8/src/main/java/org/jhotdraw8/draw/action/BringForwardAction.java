@@ -4,8 +4,8 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ActivityViewController;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -40,7 +40,7 @@ public class BringForwardAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent e, Activity view) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

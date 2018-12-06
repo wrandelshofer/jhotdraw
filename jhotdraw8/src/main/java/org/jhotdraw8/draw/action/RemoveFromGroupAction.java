@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javax.annotation.Nonnull;
 
-import org.jhotdraw8.app.ActivityViewController;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -44,7 +44,7 @@ public class RemoveFromGroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent e, Activity view) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

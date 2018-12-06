@@ -4,7 +4,7 @@
 package org.jhotdraw8.app.action.edit;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.app.ActivityViewController;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
@@ -16,7 +16,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class UndoAction extends AbstractViewControllerAction<ActivityViewController> {
+public class UndoAction extends AbstractViewControllerAction<Activity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,7 @@ public class UndoAction extends AbstractViewControllerAction<ActivityViewControl
      * @param app the application
      * @param view the view
      */
-    public UndoAction(Application app, ActivityViewController view) {
+    public UndoAction(Application app, Activity view) {
         super(app, view,null);
         labels.configureAction(this, ID);
     }
@@ -58,7 +58,7 @@ public class UndoAction extends AbstractViewControllerAction<ActivityViewControl
     }
 
     @Override
-    protected void updateView(ActivityViewController oldValue, ActivityViewController newValue) {
+    protected void updateView(Activity oldValue, Activity newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //
@@ -73,7 +73,7 @@ public class UndoAction extends AbstractViewControllerAction<ActivityViewControl
      * Installs listeners on the view object.
      * /
     @Override
-    protected void installViewListeners(ActivityViewController p) {
+    protected void installViewListeners(Activity p) {
         super.installViewListeners(p);
         Action undoActionInView = p.getActionMap().get(ID);
         if (undoActionInView != null && undoActionInView != this) {
@@ -85,7 +85,7 @@ public class UndoAction extends AbstractViewControllerAction<ActivityViewControl
      * Installs listeners on the view object.
      * /
     @Override
-    protected void uninstallViewListeners(ActivityViewController p) {
+    protected void uninstallViewListeners(Activity p) {
         super.uninstallViewListeners(p);
         Action undoActionInView = p.getActionMap().get(ID);
         if (undoActionInView != null && undoActionInView != this) {
@@ -107,7 +107,7 @@ public class UndoAction extends AbstractViewControllerAction<ActivityViewControl
     }*/
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, ActivityViewController view) {
+    protected void handleActionPerformed(ActionEvent event, Activity view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
