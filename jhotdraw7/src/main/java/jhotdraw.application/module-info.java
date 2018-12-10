@@ -5,10 +5,19 @@ module jhotdraw.application {
     requires java.logging;
 
     exports org.jhotdraw.app;
+    exports org.jhotdraw.app.action;
+    exports org.jhotdraw.app.action.app;
+    exports org.jhotdraw.app.action.edit;
+    exports org.jhotdraw.app.action.file;
+    exports org.jhotdraw.app.action.view;
+    exports org.jhotdraw.app.action.window;
+    exports org.jhotdraw.app.osx;
     exports org.jhotdraw.beans;
     exports org.jhotdraw.color;
     exports org.jhotdraw.gui;
+    exports org.jhotdraw.gui.datatransfer;
     exports org.jhotdraw.gui.event;
+    exports org.jhotdraw.gui.filechooser;
     exports org.jhotdraw.gui.fontchooser;
     exports org.jhotdraw.gui.plaf;
     exports org.jhotdraw.gui.plaf.palette;
@@ -18,14 +27,8 @@ module jhotdraw.application {
     exports org.jhotdraw.text;
     exports org.jhotdraw.undo;
     exports org.jhotdraw.util;
-    exports org.jhotdraw.xml;
-    exports org.jhotdraw.gui.datatransfer;
-    exports org.jhotdraw.app.action;
     exports org.jhotdraw.util.prefs;
-    exports org.jhotdraw.gui.filechooser;
-    exports org.jhotdraw.app.action.edit;
-    exports org.jhotdraw.app.action.file;
-    exports org.jhotdraw.app.action.view;
+    exports org.jhotdraw.xml;
     exports org.jhotdraw.xml.css;
 
     opens org.jhotdraw.app.action.images;

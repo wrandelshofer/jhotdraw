@@ -63,7 +63,7 @@ import java.util.ResourceBundle;
  * </li>
  * </ul>
  *
- * @author  Werner Randelshofer
+ * @author Werner Randelshofer
  * @version $Id$
  */
 public class ResourceBundleUtil implements Serializable {
@@ -71,13 +71,19 @@ public class ResourceBundleUtil implements Serializable {
 
     private static final HashSet<String> acceleratorKeys = new HashSet<String>(
             Arrays.asList(new String[]{
-                "shift", "control", "ctrl", "meta", "alt", "altGraph"
+                    "shift", "control", "ctrl", "meta", "alt", "altGraph"
             }));
-    /** The wrapped resource bundle. */
+    /**
+     * The wrapped resource bundle.
+     */
     private transient ResourceBundle resource;
-    /** The locale. */
+    /**
+     * The locale.
+     */
     private Locale locale;
-    /** The base class */
+    /**
+     * The base class
+     */
     private Class<?> baseClass = getClass();
     /**
      * The base name of the resource bundle.
@@ -116,6 +122,7 @@ public class ResourceBundleUtil implements Serializable {
         this.baseName = baseName;
         this.resource = ResourceBundle.getBundle(baseName, locale);
     }
+
     /**
      * Creates a new ResouceBundleUtil which wraps
      * the provided resource bundle.
@@ -125,6 +132,7 @@ public class ResourceBundleUtil implements Serializable {
         this.baseName = bundle.getBaseBundleName();
         this.resource = bundle;
     }
+
     /**
      * Creates a new ResouceBundleUtil which wraps
      * the provided resource bundle.
@@ -134,8 +142,10 @@ public class ResourceBundleUtil implements Serializable {
         this.baseName = baseName;
         this.resource = bundle;
     }
+
     /**
      * Returns the wrapped resource bundle.
+     *
      * @return The wrapped resource bundle.
      */
     public ResourceBundle getWrappedBundle() {
@@ -148,7 +158,7 @@ public class ResourceBundleUtil implements Serializable {
      *
      * @param key The key of the property.
      * @return The value of the property. Returns the key
-     *          if the property is missing.
+     * if the property is missing.
      */
     public String getString(String key) {
         try {
@@ -202,7 +212,7 @@ public class ResourceBundleUtil implements Serializable {
                 }
             }
             if (placeholderValue == null) {
-                throw new MissingResourceException("\""+key+"\" not found in "+baseName, baseName, key);
+                throw new MissingResourceException("\"" + key + "\" not found in " + baseName, baseName, key);
             }
 
             // Do post-processing depending on placeholder format 
@@ -252,6 +262,7 @@ public class ResourceBundleUtil implements Serializable {
 
     /**
      * Returns a formatted string using javax.text.MessageFormat.
+     *
      * @param key
      * @param arguments
      * @return formatted String
@@ -262,6 +273,7 @@ public class ResourceBundleUtil implements Serializable {
 
     /**
      * Returns a formatted string using java.util.Formatter().
+     *
      * @param key
      * @param arguments
      * @return formatted String
@@ -277,7 +289,7 @@ public class ResourceBundleUtil implements Serializable {
      *
      * @param key The key of the property.
      * @return The value of the property. Returns -1
-     *          if the property is missing.
+     * if the property is missing.
      */
     public Integer getInteger(String key) {
         try {
@@ -295,32 +307,35 @@ public class ResourceBundleUtil implements Serializable {
      * Get a small image icon from the ResourceBundle for use on a {@code JMenuItem}.
      * <br>Convenience method .
      *
-     * @param key The key of the property. 
-     *        This method appends ".smallIcon" to the key.
+     * @param key The key of the property.
+     *            This method appends ".smallIcon" to the key.
      * @return The value of the property. Returns null
-     *          if the property is missing.
+     * if the property is missing.
      */
     @Nullable
     public ImageIcon getSmallIconProperty(String key, Class<?> baseClass) {
-        return getIconProperty(key,".smallIcon",baseClass);
+        return getIconProperty(key, ".smallIcon", baseClass);
     }
+
     /**
      * Get a large image icon from the ResourceBundle for use on a {@code JButton}.
      * <br>Convenience method .
      *
-     * @param key The key of the property. 
-     *         This method appends ".largeIcon" to the key.
+     * @param key The key of the property.
+     *            This method appends ".largeIcon" to the key.
      * @return The value of the property. Returns null
-     *          if the property is missing.
+     * if the property is missing.
      */
     @Nullable
     public ImageIcon getLargeIconProperty(String key) {
-        return getIconProperty(key,".largeIcon",baseClass);
+        return getIconProperty(key, ".largeIcon", baseClass);
     }
+
     @Nullable
     public ImageIcon getLargeIconProperty(String key, Class<?> baseClass) {
-        return getIconProperty(key,".largeIcon",baseClass);
+        return getIconProperty(key, ".largeIcon", baseClass);
     }
+
     private ImageIcon getIconProperty(String key, String suffix, Class<?> baseClass) {
         try {
             String rsrcName = getStringRecursive(key + suffix);
@@ -331,7 +346,7 @@ public class ResourceBundleUtil implements Serializable {
 
             URL url = baseClass.getResource(rsrcName);
             if (isVerbose && url == null) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "].getIconProperty \"" + key + suffix +"\" resource:" + rsrcName + " not found.");
+                System.err.println("Warning ResourceBundleUtil[" + baseName + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
             }
             return (url == null) ? null : new ImageIcon(url);
         } catch (MissingResourceException e) {
@@ -349,7 +364,7 @@ public class ResourceBundleUtil implements Serializable {
      *
      * @param key The key of the property.
      * @return The first char of the value of the property.
-     *          Returns '\0' if the property is missing.
+     * Returns '\0' if the property is missing.
      */
     public char getMnemonic(String key) {
         String s = getStringRecursive(key);
@@ -362,7 +377,7 @@ public class ResourceBundleUtil implements Serializable {
      *
      * @param key The key of the property. This method appends ".mnemonic" to the key.
      * @return The first char of the value of the property.
-     *          Returns '\0' if the property is missing.
+     * Returns '\0' if the property is missing.
      */
     public char getMnemonicProperty(String key) {
         String s;
@@ -426,7 +441,7 @@ public class ResourceBundleUtil implements Serializable {
      *
      * @param key The key of the property.
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>.
-     *          Returns null if the property is missing.
+     * Returns null if the property is missing.
      */
     @Nullable
     public KeyStroke getKeyStroke(String key) {
@@ -445,7 +460,7 @@ public class ResourceBundleUtil implements Serializable {
      *
      * @param key The key of the property. This method adds ".accelerator" to the key.
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>.
-     *          Returns null if the property is missing.
+     * Returns null if the property is missing.
      */
     @Nullable
     public KeyStroke getAcceleratorProperty(String key) {
@@ -516,7 +531,8 @@ public class ResourceBundleUtil implements Serializable {
         button.setToolTipText(getToolTipTextProperty(argument));
     }
 
-    /** Configures a menu item with a text, an accelerator, a mnemonic and
+    /**
+     * Configures a menu item with a text, an accelerator, a mnemonic and
      * a menu icon.
      */
     public void configureMenu(JMenuItem menu, String argument) {
@@ -551,7 +567,7 @@ public class ResourceBundleUtil implements Serializable {
     /**
      * Puts a property name modifier along with a fallback chain.
      *
-     * @param name The name of the modifier.
+     * @param name          The name of the modifier.
      * @param fallbackChain The fallback chain of the modifier.
      */
     public static void putPropertyNameModifier(String name, String... fallbackChain) {
@@ -565,11 +581,21 @@ public class ResourceBundleUtil implements Serializable {
         propertyNameModifiers.remove(name);
     }
 
-    /** Read object from ObjectInputStream and re-establish ResourceBundle. */
+    /**
+     * Read object from ObjectInputStream and re-establish ResourceBundle.
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         // our "pseudo-constructor"
         in.defaultReadObject();
         // re-establish the "resource" variable
         this.resource = ResourceBundle.getBundle(baseName, locale);
+    }
+
+    public static ResourceBundleUtil getBundle(String baseName) {
+        return new ResourceBundleUtil(ResourceBundle.getBundle(baseName));
+    }
+
+    public static ResourceBundleUtil getBundle(String baseName, Locale locale) {
+        return new ResourceBundleUtil(ResourceBundle.getBundle(baseName, locale));
     }
 }

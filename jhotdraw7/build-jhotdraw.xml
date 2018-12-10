@@ -16,7 +16,7 @@
         <property name="src" value="src/main/java"/>
         <property name="build" value="build"/>
         <property name="classes" value="${build}/classes"/>
-        <property name="dist" value="dist/JHotDraw ${version}"/>
+        <property name="dist" value="dist/jhotdraw-${version}"/>
         <property name="javadoc" value="dist/JHotDraw ${version}/javadoc"/>
         <property name="doc" value="dist/JHotDraw ${version}/documentation"/>
         <property name="docsrc" value="src/documentation"/>
@@ -96,6 +96,10 @@
                 <arg line="-e @{mainclass}"/>
             </exec>
 
+            <jar destfile="${dist}/@{module}-src.jar"
+                 basedir="${src}/@{module}"
+            >
+            </jar>
         </sequential>
     </macrodef>
     <target name="run-teddy" depends="init">
