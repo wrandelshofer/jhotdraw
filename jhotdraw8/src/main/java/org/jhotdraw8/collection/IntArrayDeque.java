@@ -22,12 +22,12 @@ public class IntArrayDeque {
     private int[] elements;
 
     /**
-     * Index of the element at the head of the queue.
+     * Index of the element at the head of the deque.
      */
     private int head;
 
     /**
-     * Index at which the next element would be added to the tail of the queue.
+     * Index at which the next element would be added to the tail of the deque.
      */
     private int tail;
 
@@ -40,7 +40,7 @@ public class IntArrayDeque {
     }
 
     /**
-     * Inserts the specified element at the head of this queue.
+     * Inserts the specified element at the head of this deque.
      *
      * @param e the element to add
      */
@@ -53,7 +53,7 @@ public class IntArrayDeque {
     }
 
     /**
-     * Inserts the specified element at the tail of this queue.
+     * Inserts the specified element at the tail of this deque.
      * @param e the element
      */
     public void addLast(int e) {
@@ -65,7 +65,7 @@ public class IntArrayDeque {
     }
 
     /**
-     * Removes the element at the head of the queue.
+     * Removes the element at the head of the deque.
      *
      * @throws NoSuchElementException {@inheritDoc}
      */

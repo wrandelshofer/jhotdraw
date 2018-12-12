@@ -265,9 +265,9 @@ public class GraphSearch {
             }
         }
 
-        // Step 2: put all vertices with degree zero into queue
-        final int[] queue = new int[n]; // todo queue
-        int first = 0, last = 0; // first and last indices in queue
+        // Step 2: put all vertices with degree zero into deque
+        final int[] queue = new int[n]; // todo deque
+        int first = 0, last = 0; // first and last indices in deque
         for (int i = 0; i < n; i++) {
             if (deg[i] == 0) {
                 queue[last++] = i;

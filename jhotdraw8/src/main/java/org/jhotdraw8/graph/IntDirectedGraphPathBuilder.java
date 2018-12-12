@@ -161,8 +161,8 @@ public class IntDirectedGraphPathBuilder {
     /**
      * Queue with back link store.
      * <p>
-     * The back links are stored in the same data structure as the queue and can
-     * be retrieved by index even after they have been removed from the queue.
+     * The back links are stored in the same data structure as the deque and can
+     * be retrieved by index even after they have been removed from the deque.
      */
     private static class QueueWithBackLinks {
 
@@ -170,11 +170,11 @@ public class IntDirectedGraphPathBuilder {
         final static int Q_PARENT_INDEX = 1;
         final static int Q_VERTEX = 0;
         /**
-         * Index at which the next element will be removed from the queue.
+         * Index at which the next element will be removed from the deque.
          */
         private int first = 0;
         /**
-         * Index at which the next element will be added to the queue.
+         * Index at which the next element will be added to the deque.
          */
         private int last = 0;
 
@@ -186,7 +186,7 @@ public class IntDirectedGraphPathBuilder {
         }
 
         /**
-         * Adds an element to the end of the queue queue.
+         * Adds an element to the end of the deque deque.
          *
          * @param vertex the value of the vertex property of the element
          * @param parentIndex the value of the parent index property of the
@@ -237,7 +237,7 @@ public class IntDirectedGraphPathBuilder {
         }
 
         /**
-         * Tests if the queue is empty.
+         * Tests if the deque is empty.
          *
          * @return true if empty.
          */
@@ -246,10 +246,10 @@ public class IntDirectedGraphPathBuilder {
         }
 
         /**
-         * Removes an element from the beginning of the queue.
+         * Removes an element from the beginning of the deque.
          *
          * @return the index of the removed back link.
-         * @throws NoSuchElementException if the queue is empty
+         * @throws NoSuchElementException if the deque is empty
          */
         public int remove() {
             if (isEmpty()) {

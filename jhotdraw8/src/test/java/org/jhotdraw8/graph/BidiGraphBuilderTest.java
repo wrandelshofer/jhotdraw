@@ -7,6 +7,7 @@ package org.jhotdraw8.graph;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -265,7 +266,9 @@ public class BidiGraphBuilderTest {
         instance.addArrow(c,d, 1.0);
         instance.addArrow(c,e, 1.0);
 
-        assertEquals("aced", instance.breadthFirstSearch(a).collect(Collectors.joining("")));
+        assertEquals("aced",
+                StreamSupport.stream(instance.breadthFirstSearch(a).spliterator(),false)
+                        .collect(Collectors.joining("")));
     }
 
     @Test
@@ -288,6 +291,8 @@ public class BidiGraphBuilderTest {
         instance.addArrow(c,d, 1.0);
         instance.addArrow(c,e, 1.0);
 
-        assertEquals("eacb", instance.breadthFirstSearchBackward(e).collect(Collectors.joining("")));
+        assertEquals("eacb",
+                StreamSupport.stream(instance.breadthFirstSearchBackward(e).spliterator(),false).
+                collect(Collectors.joining("")));
     }
 }

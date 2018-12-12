@@ -548,7 +548,7 @@ public class DirectedGraphPathBuilder<V, A> {
     @Nullable
     private NodeWithCost<V, A> findShortestPath(@Nonnull DirectedGraph<V, A> graph,
                                                 V start, V goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
-        // Size of priority queue and frontierMap is the expected size of the frontier.
+        // Size of priority deque and frontierMap is the expected size of the frontier.
         // We use a size that is smaller than 256 bytes (assuming 12 bytes for object header).
         PriorityQueue<NodeWithCost<V, A>> frontier = new PriorityQueue<>(61);
         Map<V, NodeWithCost<V, A>> frontierMap = new HashMap<>(61);

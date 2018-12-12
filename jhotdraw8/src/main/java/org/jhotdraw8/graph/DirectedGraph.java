@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.collection.SpliteratorIterable;
+
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -257,7 +259,7 @@ public interface DirectedGraph<V, A> {
      * @return true if b is reachable from a.
      */
     default boolean isReachable(V a, V b) {
-        return breadthFirstSearch(a).anyMatch(v -> Objects.equals(v, b));
+        return StreamSupport.stream(breadthFirstSearch(a).spliterator(),false).anyMatch(v -> Objects.equals(v, b));
     }
 
     /**
@@ -271,11 +273,11 @@ public interface DirectedGraph<V, A> {
      * @return true if b is reachable from a.
      */
     default boolean isReachable(V a, V b, Predicate<V> visited) {
-        return breadthFirstSearch(a, visited).anyMatch(v -> Objects.equals(v, b));
+        return StreamSupport.stream(breadthFirstSearch(a, visited).spliterator(),false).anyMatch(v -> Objects.equals(v, b));
     }
 
     /**
-     * Returns an {@link Iterable} which performs a breadth first search
+     * Returns a {@link Iterable} which performs a breadth first search
      * starting at the given vertex.
      *
      * @param start the start vertex
@@ -285,8 +287,22 @@ public interface DirectedGraph<V, A> {
      * @return breadth first search
      */
     @Nonnull
-    default Stream<V> breadthFirstSearch(V start, Predicate<V> visited) {
-        return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getNextVertices, start, visited), false);
+    default Iterable<V> breadthFirstSearch(V start, Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new BreadthFirstSpliterator<>(this::getNextVertices, start, visited));
+    }
+    /**
+     * Returns a {@link Stream} which performs a depth first search
+     * starting at the given vertex.
+     *
+     * @param start the start vertex
+     * @param visited a predicate with side effect. The predicate returns true
+     * if the specified vertex has been visited, and marks the specified vertex
+     * as visited.
+     * @return breadth first search
+     */
+    @Nonnull
+    default Iterable<V> depthFirstSearch(final V start, final Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new DepthFirstSpliterator<>(this::getNextVertices, start, visited));
     }
 
     /**
@@ -297,8 +313,20 @@ public interface DirectedGraph<V, A> {
      * @return breadth first search
      */
     @Nonnull
-    default Stream<V> breadthFirstSearch(V start) {
+    default Iterable<V> breadthFirstSearch(V start) {
         Set<V> visited=new HashSet<>();
         return breadthFirstSearch(start, visited::add);
+    }
+    /**
+     * Returns an {@link Iterable} which performs a breadth first search
+     * starting at the given vertex.
+     *
+     * @param start the start vertex
+     * @return breadth first search
+     */
+    @Nonnull
+    default Iterable<V> depthFirstSearch(V start) {
+        Set<V> visited=new HashSet<>();
+        return depthFirstSearch(start, visited::add);
     }
 }

@@ -8,8 +8,8 @@
     <!-- ignore system classpath to get consistent builds on different platforms -->
     <property name="build.sysclasspath" value="ignore"/>
 
-    <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home"/>
-    <property name="jdk.version" value="11"/>
+    <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home"/>
+    <property name="jdk.version" value="8"/>
 
         <exec executable="git" outputproperty="git.hash.date.author" failifexecutionfails="false" errorproperty="">
             <arg value="log"/>

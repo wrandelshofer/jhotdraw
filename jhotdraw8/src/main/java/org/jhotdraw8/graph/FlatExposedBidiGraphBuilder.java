@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.Enumerator;
+import org.jhotdraw8.collection.SpliteratorIterable;
 
 import java.util.AbstractCollection;
 import java.util.ArrayDeque;
@@ -282,14 +283,15 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
             return end;
         }
     }
+
     private static class PrevNextIterator<V> implements Iterator<V> {
         int index = 0;
         final int count;
         final Object[] next;
 
         PrevNextIterator(int count, Object[] next) {
-            this.count=count;
-            this.next=next;
+            this.count = count;
+            this.next = next;
         }
 
         @Override
@@ -355,10 +357,11 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
         }
 
         Iterator<V> getPrevIterator() {
-            return new PrevNextIterator<>(prevCount,prev);
+            return new PrevNextIterator<>(prevCount, prev);
         }
+
         Iterator<V> getNextIterator() {
-            return new PrevNextIterator<>(nextCount,next);
+            return new PrevNextIterator<>(nextCount, next);
         }
 
         @SuppressWarnings("unchecked")
@@ -427,14 +430,14 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
 
     @Nonnull
     @Override
-    public Stream<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliteratorBackward<>(getVertexDataNonnull(start), visited) , false);
+    public Iterable<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
+        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliteratorBackward<>(getVertexDataNonnull(start), visited));
     }
 
     @Nonnull
     @Override
-    public Stream<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliteratorForward<>(getVertexDataNonnull(start), visited), false);
+    public Iterable<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
+        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliteratorForward<>(getVertexDataNonnull(start), visited));
     }
 
     /**
@@ -453,13 +456,13 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
         /**
          * Creates a new instance.
          *
-         * @param root              the root vertex
-         * @param visited           a predicate with side effect. The predicate returns true
-         *                          if the specified vertex has been visited, and marks the specified vertex
-         *                          as visited.
+         * @param root    the root vertex
+         * @param visited a predicate with side effect. The predicate returns true
+         *                if the specified vertex has been visited, and marks the specified vertex
+         *                as visited.
          */
-         BidiBreadthFirstSpliterator(
-                                           @Nonnull final V root, @Nonnull final Predicate<V> visited) {
+        BidiBreadthFirstSpliterator(
+                @Nonnull final V root, @Nonnull final Predicate<V> visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             Objects.requireNonNull(root, "root");
             Objects.requireNonNull(visited, "vistied");
@@ -485,7 +488,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
             if (current == null) {
                 return false;
             }
-            for (final Iterator<V> i = getNextNodes(current);i.hasNext();) {
+            for (final Iterator<V> i = getNextNodes(current); i.hasNext(); ) {
                 V endData = i.next();
                 if (visited.test(endData)) {
                     queue.add(endData);
@@ -494,15 +497,16 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
             action.accept(current);
             return true;
         }
+
         @Override
         public void accept(V o) {
             current = o;
         }
 
-        abstract Iterator<V>getNextNodes(V v);
+        abstract Iterator<V> getNextNodes(V v);
     }
 
-    static class BidiBreadthFirstSpliteratorForward<V extends Vertex<V,A>, A extends Arrow<V,A>> extends BidiBreadthFirstSpliterator<V> {
+    static class BidiBreadthFirstSpliteratorForward<V extends Vertex<V, A>, A extends Arrow<V, A>> extends BidiBreadthFirstSpliterator<V> {
 
         public BidiBreadthFirstSpliteratorForward(@Nonnull V root, @Nonnull Predicate<V> visited) {
             super(root, visited);
@@ -514,7 +518,8 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
         }
 
     }
-    static class BidiBreadthFirstSpliteratorBackward<V extends Vertex<V,A>, A extends Arrow<V,A>> extends BidiBreadthFirstSpliterator<V> {
+
+    static class BidiBreadthFirstSpliteratorBackward<V extends Vertex<V, A>, A extends Arrow<V, A>> extends BidiBreadthFirstSpliterator<V> {
 
         public BidiBreadthFirstSpliteratorBackward(@Nonnull V root, @Nonnull Predicate<V> visited) {
             super(root, visited);
@@ -532,7 +537,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
             private final Iterator<V> vertexIterator;
             private Iterator<A> nextArrowIterator;
 
-             ArrowIterator() {
+            ArrowIterator() {
                 arrowCount = getArrowCount();
                 vertexIterator = getVertices().iterator();
                 nextArrowIterator = Collections.emptyIterator();

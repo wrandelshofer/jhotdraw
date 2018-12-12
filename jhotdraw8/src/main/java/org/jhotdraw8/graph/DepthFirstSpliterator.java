@@ -25,7 +25,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
     @Nullable
     private final Function<V, Iterable<V>> nextNodesFunction;
     @Nonnull
-    private final Deque<V> stack;
+    private final Deque<V> deque;
     @Nullable
     private final Predicate<V> visited;
 
@@ -60,22 +60,22 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
             throw new IllegalArgumentException("visited==null");
         }
         this.nextNodesFunction = nextNodesFunction;
-        stack = new ArrayDeque<>(16);
+        deque = new ArrayDeque<>(16);
         this.visited = visited;
-        stack.push(root);
+        deque.push(root);
         visited.test(root);
     }
 
 
     @Override
     public boolean tryAdvance(@Nonnull Consumer<? super V> action) {
-        V current = stack.pollFirst();
+        V current = deque.pollLast();
         if (current == null) {
             return false;
         }
         for (V next : nextNodesFunction.apply(current)) {
             if (visited.test(next)) {
-                stack.push(next);
+                deque.addLast(next);
             }
         }
         action.accept(current);

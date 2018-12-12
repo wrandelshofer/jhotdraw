@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.collection.SpliteratorIterable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -10,6 +12,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -309,30 +312,74 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
 
     @Nonnull
     @Override
-    public Stream<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNonnull(start), visited), false);
+    public Iterable<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new BidiBreadthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNonnull(start), visited));
     }
 
     @Nonnull
     @Override
-    public Stream<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
-        return StreamSupport.stream(new BidiBreadthFirstSpliterator(Vertex::getNext, Arrow::getEnd, getVertexDataNonnull(start), visited), false);
+    public Iterable<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new BidiBreadthFirstSpliterator(Vertex::getNext, Arrow::getEnd, getVertexDataNonnull(start), visited));
+    }
+
+    @Nonnull
+    @Override
+    public Iterable<V> depthFirstSearchBackward(final V start, final Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new BidiDepthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNonnull(start), visited));
+    }
+
+    @Nonnull
+    @Override
+    public Iterable<V> depthFirstSearch(final V start, final Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new BidiDepthFirstSpliterator(Vertex::getNext, Arrow::getEnd, getVertexDataNonnull(start), visited));
     }
 
     /**
      * This is a performance-optimized implementation which does not need to call a hash function for
      * every vertex.
      */
-    private  class BidiBreadthFirstSpliterator extends Spliterators.AbstractSpliterator<V> {
+    private abstract class AbstractBidiSpliterator extends Spliterators.AbstractSpliterator<V> {
 
         @Nonnull
-        private final Function<V, Iterable<A>> nextNodesFunction;
+        protected final Function<V, Iterable<A>> nextNodesFunction;
         @Nonnull
-        private final Function<A, V> arrowEndFunction;
+        protected final Function<A, V> arrowEndFunction;
         @Nonnull
-        private final Queue<V> queue;
+        protected final Deque<V> deque;
         @Nonnull
-        private final Predicate<V> visited;
+        protected final Predicate<V> visited;
+
+        /**
+         * Creates a new instance.
+         *
+         * @param nextNodesFunction the nextNodesFunction
+         * @param root              the root vertex
+         * @param visited           a predicate with side effect. The predicate returns true
+         *                          if the specified vertex has been visited, and marks the specified vertex
+         *                          as visited.
+         */
+        public AbstractBidiSpliterator(@Nonnull final Function<V, Iterable<A>> nextNodesFunction,
+                                           @Nonnull final Function<A, V> arrowEndFunction,
+                                           @Nonnull final V root, @Nonnull final Predicate<V> visited) {
+            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+            Objects.requireNonNull(nextNodesFunction, "nextNodesFunction");
+            Objects.requireNonNull(root, "root");
+            Objects.requireNonNull(visited, "vistied");
+            this.nextNodesFunction = nextNodesFunction;
+            this.arrowEndFunction = arrowEndFunction;
+            deque = new ArrayDeque<>(16);
+            this.visited = visited;
+            deque.add(root);
+            visited.test(root);
+        }
+
+
+    }
+    /**
+     * This is a performance-optimized implementation which does not need to call a hash function for
+     * every vertex.
+     */
+    private  class BidiBreadthFirstSpliterator extends AbstractBidiSpliterator {
 
         /**
          * Creates a new instance.
@@ -346,29 +393,58 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
         public BidiBreadthFirstSpliterator(@Nonnull final Function<V, Iterable<A>> nextNodesFunction,
                                            @Nonnull final Function<A, V> arrowEndFunction,
                                            @Nonnull final V root, @Nonnull final Predicate<V> visited) {
-            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-            Objects.requireNonNull(nextNodesFunction, "nextNodesFunction");
-            Objects.requireNonNull(root, "root");
-            Objects.requireNonNull(visited, "vistied");
-            this.nextNodesFunction = nextNodesFunction;
-            this.arrowEndFunction = arrowEndFunction;
-            queue = new ArrayDeque<>(16);
-            this.visited = visited;
-            queue.add(root);
-            visited.test(root);
+            super(nextNodesFunction,arrowEndFunction,root,visited);
         }
 
 
         @Override
         public boolean tryAdvance(@Nonnull final Consumer<? super V> action) {
-            final V current = queue.poll();
+            final V current = deque.pollFirst();
             if (current == null) {
                 return false;
             }
             for (final A next : nextNodesFunction.apply(current)) {
                 final V endData = arrowEndFunction.apply(next);
                 if (visited.test(endData)) {
-                    queue.add(endData);
+                    deque.addLast(endData);
+                }
+            }
+            action.accept(current);
+            return true;
+        }
+    }
+    /**
+     * This is a performance-optimized implementation which does not need to call a hash function for
+     * every vertex.
+     */
+    private  class BidiDepthFirstSpliterator extends AbstractBidiSpliterator {
+
+        /**
+         * Creates a new instance.
+         *
+         * @param nextNodesFunction the nextNodesFunction
+         * @param root              the root vertex
+         * @param visited           a predicate with side effect. The predicate returns true
+         *                          if the specified vertex has been visited, and marks the specified vertex
+         *                          as visited.
+         */
+        public BidiDepthFirstSpliterator(@Nonnull final Function<V, Iterable<A>> nextNodesFunction,
+                                           @Nonnull final Function<A, V> arrowEndFunction,
+                                           @Nonnull final V root, @Nonnull final Predicate<V> visited) {
+            super(nextNodesFunction,arrowEndFunction,root,visited);
+        }
+
+
+        @Override
+        public boolean tryAdvance(@Nonnull final Consumer<? super V> action) {
+            final V current = deque.pollLast();
+            if (current == null) {
+                return false;
+            }
+            for (final A next : nextNodesFunction.apply(current)) {
+                final V endData = arrowEndFunction.apply(next);
+                if (visited.test(endData)) {
+                    deque.addLast(endData);
                 }
             }
             action.accept(current);

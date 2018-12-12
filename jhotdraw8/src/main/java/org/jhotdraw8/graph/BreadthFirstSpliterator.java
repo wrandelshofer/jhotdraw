@@ -23,7 +23,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
     @Nullable
     private final Function<V, Iterable<V>> nextNodesFunction;
     @Nonnull
-    private final Queue<V> queue;
+    private final Deque<V> deque;
     @Nullable
     private final Predicate<V> visited;
 
@@ -52,22 +52,22 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
         Objects.requireNonNull(root,"root");
         Objects.requireNonNull(visited,"vistied");
         this.nextNodesFunction = nextNodesFunction;
-        queue = new ArrayDeque<>(16);
+        deque = new ArrayDeque<>(16);
         this.visited = visited;
-        queue.add(root);
+        deque.add(root);
         visited.test(root);
     }
 
 
     @Override
     public boolean tryAdvance(@Nonnull Consumer<? super V> action) {
-        V current = queue.poll();
+        V current = deque.pollFirst();
         if (current == null) {
             return false;
         }
         for (V next : nextNodesFunction.apply(current)) {
             if (visited.test(next)) {
-                queue.add(next);
+                deque.addLast(next);
             }
         }
         action.accept(current);

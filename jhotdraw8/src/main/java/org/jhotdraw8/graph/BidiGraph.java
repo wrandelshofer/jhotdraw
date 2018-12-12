@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.collection.SpliteratorIterable;
+
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
@@ -44,8 +46,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @return breadth first search
      */
     @Nonnull
-    default Stream<V> breadthFirstSearchBackward(V start, Predicate<V> visited) {
-        return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start, visited), false);
+    default Iterable<V> breadthFirstSearchBackward(V start, Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new BreadthFirstSpliterator<>(this::getPrevVertices, start, visited));
     }
 
     /**
@@ -58,10 +60,39 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A> {
      * @return breadth first search
      */
     @Nonnull
-    default Stream<V> breadthFirstSearchBackward(V start) {
-        return StreamSupport.stream(new BreadthFirstSpliterator<>(this::getPrevVertices, start), false);
+    default Iterable<V> breadthFirstSearchBackward(V start) {
+        return new SpliteratorIterable<>(()->new BreadthFirstSpliterator<>(this::getPrevVertices, start));
+    }
+    /**
+     * Returns an {@link Iterable} which performs a backwards breadth first
+     * search starting at the given vertex.
+     * <p>
+     * The default implementation provided by this interface is not optimized for performance.
+     *
+     * @param start the start vertex
+     * @param visited a predicate with side effect. The predicate returns true
+     * if the specified vertex has been visited, and marks the specified vertex
+     * as visited.
+     * @return breadth first search
+     */
+    @Nonnull
+    default Iterable<V> depthFirstSearchBackward(V start, Predicate<V> visited) {
+        return new SpliteratorIterable<>(()->new DepthFirstSpliterator<>(this::getPrevVertices, start, visited));
     }
 
+    /**
+     * Returns an {@link Iterable} which performs a backwards breadth first
+     * search starting at the given vertex.
+     * <p>
+     * The default implementation provided by this interface is not optimized for performance.
+     *
+     * @param start the start vertex
+     * @return breadth first search
+     */
+    @Nonnull
+    default Iterable<V> depthFirstSearchBackward(V start) {
+        return new SpliteratorIterable<>(()->new DepthFirstSpliterator<>(this::getPrevVertices, start));
+    }
     /**
      * Returns the i-th direct predecessor vertex of v.
      *
