@@ -4,16 +4,20 @@
 package org.jhotdraw8.draw.inspector;
 
 import static java.lang.Math.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.util.StringConverter;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -39,7 +43,7 @@ public class ZoomToolbar extends BorderPane {
             }
             isUpdating--;
         });
-        zoomPower.addListener((o, oldv, newv) -> {      
+        zoomPower.addListener((o, oldv, newv) -> {
             if (isUpdating++ == 0) {
                 zoomFactor.set(pow(2, newv.doubleValue()));
             }
@@ -69,13 +73,10 @@ public class ZoomToolbar extends BorderPane {
         zoomSlider.valueProperty().bindBidirectional(zoomPower);
 
         zoomSlider.setLabelFormatter(new StringConverter<Double>() {
-            private final String[] labels = {"⅛", "¼", "½", "1", "2", "4", "8"};
-
             @Nonnull
             @Override
             public String toString(@Nonnull Double object) {
-                int index = object.intValue() + labels.length / 2;
-                return (index >= 0 && index < labels.length) ? labels[index] : "";
+                return Integer.toString(object.intValue());
             }
 
             @Nonnull
@@ -104,4 +105,17 @@ public class ZoomToolbar extends BorderPane {
     public double getZoomFactor() {
         return zoomFactor.get();
     }
+
+
+    @FXML
+    void zoomMinus(ActionEvent event) {
+        zoomPower.set(zoomPower.get() - 1);
+    }
+
+    @FXML
+    void zoomPlus(ActionEvent event) {
+        zoomPower.set(zoomPower.get() + 1);
+    }
+
+
 }
