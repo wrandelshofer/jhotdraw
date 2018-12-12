@@ -8,11 +8,13 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- *
  * @author wr
  */
 public class NonnullPropertyTest {
@@ -25,19 +27,13 @@ public class NonnullPropertyTest {
         NonnullProperty<String> p1 = new NonnullProperty<>(null, null, "hello");
         ObjectProperty<String> p2 = new SimpleObjectProperty<>(null);
         p1.addListener((o, oldv, newv) -> {
-            assertNotNull(newv);
+            Objects.requireNonNull(newv);
         });
-        try {
-            p1.set(null);
-            fail("NPE not thrown on set");
-        } catch (NullPointerException e) {
 
-        }
-        try {
-            p1.bind(p2);
-            fail("NPE not thrown from bind");
-        } catch (NullPointerException e) {
+        // must not set a null value
+        p1.set(null);
+        String s = p1.get();
+        assert s != null;
 
-        }
     }
 }
