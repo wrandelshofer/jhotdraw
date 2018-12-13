@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.xml;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,6 +12,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.xml.XMLConstants;
@@ -61,7 +61,18 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public class XmlUtil {
 
+    public static final String LOCATION_ATTRIBUTE = "location";
+    public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
     final static String LINE_NUMBER_KEY_NAME = "lineNumber";
+    private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
+    private final static String SEPARATOR = "\0";
+    private final static Properties DEFAULT_PROPERTIES = new Properties();
+
+    static {
+        DEFAULT_PROPERTIES.put(OutputKeys.INDENT,"yes");
+        DEFAULT_PROPERTIES.put(OutputKeys.ENCODING,"UTF-8");
+        DEFAULT_PROPERTIES.put("{http://xml.apache.org/xslt}indent-amount","2");
+}
 
     private XmlUtil() {
     }
@@ -69,7 +80,7 @@ public class XmlUtil {
     /**
      * Creates a namespace aware document.
      *
-     * @param nsURI nullable namespace URI
+     * @param nsURI       nullable namespace URI
      * @param nsQualifier nullable namespace qualifier
      * @param docElemName notnull name of the document element
      * @return a new Document
@@ -123,7 +134,7 @@ public class XmlUtil {
     public static Document read(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-                builderFactory.setNamespaceAware(namespaceAware);
+            builderFactory.setNamespaceAware(namespaceAware);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(inputSource);
             return doc;
@@ -136,12 +147,12 @@ public class XmlUtil {
      * Reads the specified input into a document. Each Node contains a
      * "location" attribute specifying the file, the line number and the column
      * number of the node.
-     *
+     * <p>
      * References:
      * <a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">
      * Stackoverflow</a>.
      *
-     * @param inputSource the input source
+     * @param inputSource    the input source
      * @param namespaceAware whether to be name space aware
      * @return the document
      * @throws java.io.IOException in case of failure
@@ -169,20 +180,114 @@ public class XmlUtil {
             throw new IOException(ex);
         }
     }
-    public static final String LOCATION_ATTRIBUTE = "location";
-    private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
 
-    public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
-    private final static String SEPARATOR = "\0";
+    public static Locator getLocator(Node node) {
+        final NamedNodeMap attributes = node.getAttributes();
+        Node attrNode = attributes == null ? null : attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
+        if (attrNode != null) {
+            String[] parts = attrNode.getNodeValue().split(SEPARATOR);
+            if (parts.length == 4) {
+                return new MyLocator(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), parts[2], parts[3]);
+            }
+        }
+        return null;
+    }
+
+    public static void validate(Document doc, URI schemaUri) throws IOException {
+        XmlUtil.validate(doc, schemaUri.toURL());
+    }
+
+    public static void validate(Document doc, URL schemaUrl) throws IOException {
+        SchemaFactory factory = SchemaFactory
+                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try (InputStream schemaStream = schemaUrl.openStream()) {
+            Schema schema
+                    = factory.newSchema(new StreamSource(schemaStream));
+            Validator validator = schema.newValidator();
+            validator.validate(new DOMSource(doc));
+        } catch (SAXException e) {
+            throw new IOException("The document is invalid.\n" + e.getMessage(), e);
+        }
+    }
+
+    public static void validate(@Nonnull Path xmlPath, URI schemaUri) throws IOException {
+        validate(xmlPath.toUri(), schemaUri);
+    }
+
+    public static void validate(@Nonnull URI xmlUri, URI schemaUri) throws IOException {
+        try {
+            SchemaFactory factory = SchemaFactory
+                    .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema
+                    = factory.newSchema(schemaUri.toURL());
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(Paths.get(xmlUri).toFile()));
+        } catch (SAXParseException e) {
+            throw new IOException("Invalid XML file: " + e.getSystemId() + "\nError in line: " + e.getLineNumber() + ", column: " + e.getColumnNumber() + ".\n" + e.getMessage(), e);
+        } catch (SAXException e) {
+
+            throw new IOException("Invalid XML file: " + xmlUri, e);
+        }
+    }
+
+    public static void write(OutputStream out, Document doc) throws IOException {
+        StreamResult result = new StreamResult(out);
+        write(result, doc);
+    }
+
+    public static void write(Writer out, Document doc) throws IOException {
+        StreamResult result = new StreamResult(out);
+        write(result, doc);
+    }
+
+    public static void write(@Nonnull Path out, Document doc) throws IOException {
+        write(out, doc, DEFAULT_PROPERTIES);
+    }
+
+    public static void write(@Nonnull Path out, Document doc, Properties outputProperties) throws IOException {
+        StreamResult result = new StreamResult(out.toFile());
+        write(result, doc, outputProperties);
+    }
+
+    public static void write(Result result, Document doc) throws IOException {
+        write(result,doc, DEFAULT_PROPERTIES);
+    }
+
+    public static void write(Result result, Document doc, @Nullable Properties outputProperties) throws IOException {
+        try {
+            final TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer t = factory.newTransformer();
+            if (outputProperties!=null)
+            t.setOutputProperties(outputProperties);
+            DOMSource source = new DOMSource(doc);
+            t.transform(source, result);
+        } catch (TransformerException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    /**
+     * Returns a stream which iterates over the subtree starting at the
+     * specified node in preorder sequence.
+     *
+     * @param node a node
+     * @return a stream
+     */
+    public static Stream<Node> preorderStream(Node node) {
+        return StreamSupport.stream(new PreorderSpliterator<>(n -> {
+            final NodeList childNodes = n.getChildNodes();
+            return () -> new ChildIterator<>(childNodes.getLength(), childNodes::item);
+        }, node), false);
+    }
 
     private static class LocationFilter extends XMLFilterImpl {
+
+        @Nullable
+        private Locator locator = null;
 
         LocationFilter(XMLReader xmlReader) {
             super(xmlReader);
         }
-
-        @Nullable
-        private Locator locator = null;
 
         @Override
         public void setDocumentLocator(Locator locator) {
@@ -235,97 +340,6 @@ public class XmlUtil {
             return systemId;
         }
 
-    }
-
-    public static Locator getLocator(Node node) {
-        final NamedNodeMap attributes = node.getAttributes();
-        Node attrNode = attributes == null ? null : attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
-        if (attrNode != null) {
-            String[] parts = attrNode.getNodeValue().split(SEPARATOR);
-            if (parts.length == 4) {
-                return new MyLocator(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), parts[2], parts[3]);
-            }
-        }
-        return null;
-    }
-
-    public static void validate(Document doc, URI schemaUri) throws IOException {
-        XmlUtil.validate(doc, schemaUri.toURL());
-    }
-
-    public static void validate(Document doc, URL schemaUrl) throws IOException {
-        SchemaFactory factory = SchemaFactory
-                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        try ( InputStream schemaStream = schemaUrl.openStream()) {
-            Schema schema
-                    = factory.newSchema(new StreamSource(schemaStream));
-            Validator validator = schema.newValidator();
-            validator.validate(new DOMSource(doc));
-        } catch (SAXException e) {
-            throw new IOException("The document is invalid.\n" + e.getMessage(), e);
-        }
-    }
-
-    public static void validate(@Nonnull Path xmlPath, URI schemaUri) throws IOException {
-        validate(xmlPath.toUri(),schemaUri);
-    }
-    public static void validate(@Nonnull URI xmlUri, URI schemaUri) throws IOException {
-        try {
-            SchemaFactory factory = SchemaFactory
-                    .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema
-                    = factory.newSchema(schemaUri.toURL());
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Paths.get(xmlUri).toFile()));
-        } catch (SAXParseException e) {
-            throw new IOException("Invalid XML file: " + e.getSystemId() + "\nError in line: " + e.getLineNumber() + ", column: " + e.getColumnNumber() + ".\n" + e.getMessage(), e);
-        } catch (SAXException e) {
-
-            throw new IOException("Invalid XML file: " + xmlUri, e);
-        }
-    }
-
-    public static void write(OutputStream out, Document doc) throws IOException {
-        StreamResult result = new StreamResult(out);
-        write(result, doc);
-    }
-
-    public static void write(Writer out, Document doc) throws IOException {
-        StreamResult result = new StreamResult(out);
-        write(result, doc);
-    }
-
-    public static void write(@Nonnull Path out, Document doc) throws IOException {
-        StreamResult result = new StreamResult(out.toFile());
-        write(result, doc);
-    }
-
-    public static void write(Result result, Document doc) throws IOException {
-        try {
-            final TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer t = factory.newTransformer();
-            t.setOutputProperty(OutputKeys.INDENT, "yes");
-            t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            DOMSource source = new DOMSource(doc);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
-    }
-
-    /**
-     * Returns a stream which iterates over the subtree starting at the
-     * specified node in preorder sequence.
-     *
-     * @param node a node
-     * @return a stream
-     */
-    public static Stream<Node> preorderStream(Node node) {
-        return StreamSupport.stream(new PreorderSpliterator<>(n -> {
-            final NodeList childNodes = n.getChildNodes();
-            return () -> new ChildIterator<>(childNodes.getLength(), childNodes::item);
-        }, node), false);
     }
 
 }
