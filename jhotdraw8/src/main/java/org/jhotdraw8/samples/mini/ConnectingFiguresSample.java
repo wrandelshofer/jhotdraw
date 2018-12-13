@@ -20,7 +20,7 @@ public class ConnectingFiguresSample  {
         c.setStartConnection(a, new RectangleConnector()); // 2
         c.setEndConnection(b, new RectangleConnector());
         
-        c.layout(); // 3
+        c.layout(null); // 3
         
         Drawing drawing = new SimpleDrawing(600, 400); // 4
         Layer layer = new SimpleLayer();

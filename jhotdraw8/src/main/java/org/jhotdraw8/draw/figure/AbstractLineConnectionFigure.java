@@ -27,6 +27,7 @@ import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * Base class for line connection figure.
@@ -164,7 +165,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout() {
+    public void layout(RenderContext ctx) {
         Point2D start = getNonnull(START).getConvertedValue();
         Point2D end = getNonnull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);

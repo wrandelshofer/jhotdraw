@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.tree.TreeModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -279,8 +280,9 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * {@code DrawingModelEvent}s.
      *
      * @param f the figure
+     * @param ctx the render context (optional)
      */
-    void layout( Figure f);
+    void layout(Figure f, RenderContext ctx);
 
     /**
      * Invokes the disconnect method of the figure and fires appropriate
@@ -312,8 +314,9 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
     /**
      * Validates the model. This method is invoked by {@code DrawingView} each
      * time before it renders the model.
+     * @param ctx the render context (optional)
      */
-    void validate();
+    void validate(RenderContext ctx);
 
     // ---
     // convenience methods

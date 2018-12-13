@@ -50,7 +50,7 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
         }
         Object obj = idFactory.getObject(str);
         if (obj == null) {
-            throw new ParseException("Could not find an object with this id. id=\""+str+"\".",0);
+            System.err.println("WARNING Could not find an object with this id. id=\""+str+"\".");
         }
 
         @SuppressWarnings("unchecked")

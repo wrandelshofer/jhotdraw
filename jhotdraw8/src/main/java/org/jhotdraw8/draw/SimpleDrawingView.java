@@ -60,6 +60,7 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.tree.TreeModelEvent;
 import org.jhotdraw8.util.ReversedList;
 
@@ -1113,7 +1114,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public void repaint() {
         if (repainter == null) {
             repainter = () -> {
-                getModel().validate();
+                updateRenderContext();
+                getModel().validate(this);
                 repainter = null;
                 updateNodes();
                 validateHandles();
@@ -1288,8 +1290,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         invalidateHandleNodes();
     }
 
-    private void updateNodes() {
+    private void updateRenderContext() {
         set(RenderContext.CLIP_BOUNDS, viewToWorld(getVisibleRect()));
+        DefaultUnitConverter units = new DefaultUnitConverter(90, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
+        set(RenderContext.UNIT_CONVERTER_KEY, units);
+    }
+
+    private void updateNodes() {
         if (!renderIntoImage) {
             // create copies of the lists to allow for concurrent modification
             Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);

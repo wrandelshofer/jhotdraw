@@ -75,6 +75,12 @@ public class CssFont {
                 + (posture==null?"":posture.name())
                 + Double.doubleToRawLongBits(size.getConvertedValue()), str -> new CssFont(family, weight, posture, size));
     }
+    public static CssFont font(String family, FontWeight weight, FontPosture posture, double size) {
+        return cachedFonts.computeIfAbsent(family
+                + (weight==null?"":weight.name())
+                + (posture==null?"":posture.name())
+                + Double.doubleToRawLongBits(size), str -> new CssFont(family, weight, posture, new CssSize(size,null)));
+    }
 
     public static CssFont font(String family, double size) {
         return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(size,null));

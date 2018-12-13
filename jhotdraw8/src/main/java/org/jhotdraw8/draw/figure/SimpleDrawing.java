@@ -115,13 +115,13 @@ public class SimpleDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void stylesheetNotify() {
+    public void stylesheetNotify(RenderContext ctx) {
         if (styleManager != null) {
             styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
             styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
             styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
         }
-        super.stylesheetNotify();
+        super.stylesheetNotify(ctx);
     }
 
     @Override

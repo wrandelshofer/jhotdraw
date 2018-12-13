@@ -152,7 +152,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout() {
+    public void layout(RenderContext ctx) {
         // empty
     }
 

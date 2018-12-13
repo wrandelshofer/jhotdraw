@@ -167,9 +167,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @return the layout bounds of the text
      */
     @Nonnull
-    protected Bounds getTextBounds() {
+    protected Bounds getTextBounds(@Nullable RenderContext ctx) {
         Text  textNode = new Text();
-        updateTextNode(null, textNode);
+        updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
         return b;
     }
@@ -190,7 +190,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
 
     @Override
-    public void layout() {
+    public void layout(RenderContext ctx) {
         Bounds b = getLayoutBounds();
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, b);
     }

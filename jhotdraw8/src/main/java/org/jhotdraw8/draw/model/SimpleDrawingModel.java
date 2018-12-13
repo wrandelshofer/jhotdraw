@@ -30,6 +30,7 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.FigureKey;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
@@ -313,8 +314,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void layout(@Nonnull Figure f) {
-        f.layoutNotify();
+    public void layout(@Nonnull Figure f, RenderContext ctx) {
+        f.layoutNotify(null);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
@@ -325,7 +326,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void updateCss(@Nonnull Figure figure) {
-        figure.stylesheetNotify();
+        figure.stylesheetNotify(null);
     }
 
     private void transitivelyCollectDependentFigures(Collection<Figure> todo, @Nonnull Set<Figure> done) {
@@ -359,7 +360,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void validate() {
+    public void validate(RenderContext ctx) {
         if (!valid) {
             isValidating = true;
 
@@ -390,7 +391,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 DirtyMask dm = entry.getValue();
                 Figure f = entry.getKey();
                 if (dm.intersects(dmStyle) && visited.add(f)) {
-                    f.stylesheetNotify();
+                    f.stylesheetNotify(ctx);
                     markDirty(f, DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
                 }
             }
@@ -482,7 +483,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             if (graphBuilder.getVertexCount() > 0) {
                 for (Figure f : GraphSearch.sortTopologically(graphBuilder)) {
                     if (visited.add(f)) {
-                        f.layoutNotify();
+                        f.layoutNotify(null);
                         markDirty(f, DirtyBits.NODE);
                     }
                 }

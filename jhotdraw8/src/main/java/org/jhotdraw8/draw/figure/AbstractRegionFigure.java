@@ -90,7 +90,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout() {
+    public void layout(RenderContext ctx) {
         layoutPath();
     }
 

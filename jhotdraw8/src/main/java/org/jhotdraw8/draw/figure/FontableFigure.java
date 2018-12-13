@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -24,6 +25,8 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
+import org.jhotdraw8.io.DefaultUnitConverter;
+import org.jhotdraw8.io.UnitConverter;
 
 /**
  * A figure which supports font attributes.
@@ -75,7 +78,15 @@ public interface FontableFigure extends Figure {
      * @param text a text node
      */
     default void applyFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
-        Font font = getStyledNonnull(FONT).getFont();
+        String family = getStyledNonnull(FONT_FAMILY);
+        FontPosture style = getStyledNonnull(FONT_STYLE);
+        FontWeight weight = getStyledNonnull(FONT_WEIGHT);
+        UnitConverter units =ctx==null? DefaultUnitConverter.getInstance(): ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
+        CssSize cssSize = getStyledNonnull(FONT_SIZE);
+        double size = units.convert(cssSize, null);
+        CssFont f = CssFont.font(family, weight, style, size);
+
+        Font font = f.getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }
@@ -114,7 +125,6 @@ public interface FontableFigure extends Figure {
     /**
      * Updates a Laeled node with fontable properties.
      *  @param ctx context
-     * @param figure
      * @param text a text node
      */
     default void applyFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {

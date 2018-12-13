@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.io.File;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -148,7 +147,7 @@ public interface Drawing extends Figure {
      */
     default void layoutAll() {
         for (Figure f : postorderIterable()) {
-            f.layout();
+            f.layout(null);
         }
     }
 }

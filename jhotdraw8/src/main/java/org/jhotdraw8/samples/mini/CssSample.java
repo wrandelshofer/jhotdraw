@@ -90,7 +90,7 @@ public class CssSample extends Application {
         drawing.set(Drawing.USER_AGENT_STYLESHEETS, stylesheets);
         drawing.updateCss();
 
-        drawing.layout();
+        drawing.layout(null);
 
         DrawingView drawingView = new SimpleDrawingView();
 

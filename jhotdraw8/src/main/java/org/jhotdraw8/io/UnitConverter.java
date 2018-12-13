@@ -10,8 +10,21 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 /**
  * UnitConverter.
+ * <p>
+ * References:
+ * <ul>
+ *     <li><a href="https://www.w3.org/TR/css3-values/#absolute-length">
+ *          Absolute lengths: the cm, mm, Q, in, pt, pc, px units</a>></li>
+ *     <li><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">
+ *         Viewport-percentage lengths: the vw, vh, vmin, vmax units</a>></li>
+ *     <li><a href="https://www.w3.org/TR/css3-values/#font-relative-lengths">
+ *         Font-relative lengths: the em, ex, ch, rem units</a>></li>
+ * </ul>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -28,14 +41,34 @@ public interface UnitConverter {
     String PICAS = "pc";
     String PIXELS = "px";
     String POINTS = "pt";
+    String VIEWPORT_WIDTH_PERCENTAGE="vw";
+    String VIEWPORT_HEIGHT_PERCENTAGE="vh";
+    String VIEWPORT_MIN_PERCENTAGE="vmin";
+    String VIEWPORT_MAX_PERCENTAGE="vmax";
 
     /**
      * Gets the resolution in dots per inch.
      *
-     * @return dpi
+     * @return dpi, default value: 96.0.
      */
     default double getDpi() {
         return 96.0;
+    }
+
+    /** Gets the viewport width.
+     *
+     * @return viewport width, default value: 1024.0.
+     */
+    default double getViewportWidth() {
+        return 1024.0;
+    }
+
+    /** Gets the viewport height.
+     *
+     * @return viewport height, default value: 768.0.
+     */
+    default double getViewportHeight() {
+        return 768.0;
     }
 
     /**
@@ -80,6 +113,18 @@ public interface UnitConverter {
                     break;
                 case EX:
                     factor = 1.0 / getFontXHeight();
+                    break;
+                case VIEWPORT_HEIGHT_PERCENTAGE:
+                    factor = 100.0 / getViewportHeight();
+                    break;
+                case VIEWPORT_WIDTH_PERCENTAGE:
+                    factor = 100.0 / getViewportWidth();
+                    break;
+                case VIEWPORT_MIN_PERCENTAGE:
+                    factor = 100.0 / min(getViewportHeight(),getViewportWidth()) ;
+                    break;
+                case VIEWPORT_MAX_PERCENTAGE:
+                    factor = 100.0 / max(getViewportHeight(),getViewportWidth());
                     break;
             }
         }

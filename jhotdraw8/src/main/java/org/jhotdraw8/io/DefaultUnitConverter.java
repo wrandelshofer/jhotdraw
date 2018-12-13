@@ -20,15 +20,22 @@ public class DefaultUnitConverter implements UnitConverter {
         return instance;
     }
 
+    private final double viewportWidth;
+    private final double viewportHeight;
     private final double dpi;
     private final double percentageFactor;
 
     public DefaultUnitConverter(double dpi) {
-        this(dpi,100.0);
+        this(dpi,100.0, 1024, 768);
     }
-    public DefaultUnitConverter(double dpi, double percentageFactor) {
+    public DefaultUnitConverter(double dpi,double percentageFactor) {
+        this(dpi,percentageFactor, 1024, 768);
+    }
+    public DefaultUnitConverter(double dpi, double percentageFactor, double viewportWidth, double viewportHeight) {
         this.dpi = dpi;
         this.percentageFactor=percentageFactor;
+        this.viewportWidth=viewportWidth;
+        this.viewportHeight=viewportHeight;
     }
 
     public DefaultUnitConverter() {
@@ -42,4 +49,13 @@ public class DefaultUnitConverter implements UnitConverter {
         return percentageFactor;
     }
 
+    @Override
+    public double getViewportWidth() {
+        return viewportWidth;
+    }
+
+    @Override
+    public double getViewportHeight() {
+        return viewportHeight;
+    }
 }

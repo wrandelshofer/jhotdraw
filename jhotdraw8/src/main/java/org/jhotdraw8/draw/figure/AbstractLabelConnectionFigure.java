@@ -181,7 +181,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void layout() {
+    public void layout(RenderContext ctx) {
 
         Figure labelTarget = get(LABEL_TARGET);
         final Point2D labeledLoc;
@@ -199,7 +199,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
 
         set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
-        Bounds b = getTextBounds();
+        Bounds b = getTextBounds(ctx);
         double hposTranslate = 0;
         switch (getStyledNonnull(TEXT_HPOS)) {
             case CENTER:

@@ -910,8 +910,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
      * <p>
      * The default implementation is empty.
+     * @param ctx the render context (optional)
      */
-    default void layout() {
+    default void layout(@Nullable RenderContext ctx) {
 
     }
 
@@ -921,9 +922,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * figure needs to be laid out.
      * <p>
      * The default implementation of this method calls {@link #layout}.
+     * @param ctx the render context (optional)
      */
-    default void layoutNotify() {
-        layout();
+    default void layoutNotify(@Nullable RenderContext ctx) {
+        layout(null);
     }
 
     /**
@@ -1120,10 +1122,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method calls {@link #updateCss} and
      * then {@code #layout}.
+     * @param ctx the render context (optional)
      */
-    default void stylesheetNotify() {
+    default void stylesheetNotify(RenderContext ctx) {
         updateCss();
-        layout();
+        layout(ctx);
     }
 
     /**
