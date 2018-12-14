@@ -28,17 +28,17 @@ public class SimpleRegionFigure extends AbstractRegionFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         super.updateNode(ctx, node);
-        applyHideableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
     }
 
     @Override
     protected void updatePathNode(RenderContext ctx, @Nonnull Path path) {
         super.updatePathNode(ctx, path);
-        applyFillableFigureProperties(path);
+        applyFillableFigureProperties(ctx, path);
         applyStrokableFigureProperties(ctx, path);
-        applyCompositableFigureProperties(path);
+        applyCompositableFigureProperties(ctx, path);
         applyTransformableFigureProperties(ctx, path);
     }
 

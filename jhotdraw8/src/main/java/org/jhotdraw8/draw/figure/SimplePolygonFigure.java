@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
@@ -111,12 +112,12 @@ public class SimplePolygonFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Polygon lineNode = (Polygon) node;
-        applyHideableFigureProperties(node);
-        applyFillableFigureProperties(lineNode);
+        applyHideableFigureProperties(ctx, node);
+        applyFillableFigureProperties(ctx, lineNode);
         applyStyleableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
-        applyCompositableFigureProperties(lineNode);
+        applyCompositableFigureProperties(ctx, lineNode);
         final ImmutableList<Point2D> points = getStyled(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {

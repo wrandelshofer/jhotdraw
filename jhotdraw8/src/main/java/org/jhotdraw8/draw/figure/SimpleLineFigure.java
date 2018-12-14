@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -110,11 +111,11 @@ public class SimpleLineFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Line lineNode = (Line) node;
-        applyHideableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
-        applyCompositableFigureProperties(lineNode);
+        applyCompositableFigureProperties(ctx, lineNode);
         Point2D start = getStyledNonnull(START).getConvertedValue();
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());

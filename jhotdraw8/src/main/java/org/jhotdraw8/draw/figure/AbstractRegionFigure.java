@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -108,7 +109,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Path path = (Path) node;
         updatePathNode(ctx, path);
     }

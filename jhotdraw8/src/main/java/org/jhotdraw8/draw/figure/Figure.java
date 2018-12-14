@@ -912,7 +912,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation is empty.
      * @param ctx the render context (optional)
      */
-    default void layout(@Nullable RenderContext ctx) {
+    default void layout(@Nonnull RenderContext ctx) {
 
     }
 
@@ -924,8 +924,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation of this method calls {@link #layout}.
      * @param ctx the render context (optional)
      */
-    default void layoutNotify(@Nullable RenderContext ctx) {
-        layout(null);
+    default void layoutNotify(@Nonnull RenderContext ctx) {
+        layout(ctx);
     }
 
     /**
@@ -1202,10 +1202,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * This figure does not keep track of changes that require node updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage node updates.
      *
-     * @param ctx  the drawing view
+     * @param ctx  the render context
      * @param node the node which was created with {@link #createNode}
      */
-    void updateNode(RenderContext ctx, Node node);
+    void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node);
 
     /**
      * Transforms the specified point from world coordinates into local

@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -67,10 +68,10 @@ public class SimpleGroupFigure extends AbstractCompositeFigure
 
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
-        applyHideableFigureProperties(n);
+        applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
-        applyCompositableFigureProperties(n);
+        applyCompositableFigureProperties(ctx, n);
         
         List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {

@@ -29,6 +29,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
@@ -371,15 +372,15 @@ public class SimplePageFigure extends AbstractCompositeFigure
         Path pageInsetsNode = (Path) groupNode.getProperties().get(PAGE_INSETS_PROPERTY);
         javafx.scene.Group currentPageNode = (javafx.scene.Group) groupNode.getProperties().get(CURRENT_PAGE_PROPERTY);
 
-        applyFillableFigureProperties(pageBoundsNode);
+        applyFillableFigureProperties(ctx, pageBoundsNode);
         applyStrokableFigureProperties(ctx, pageBoundsNode);
 
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
-            applyHideableFigureProperties(node);
+            applyHideableFigureProperties(ctx, node);
             contentBoundsNode.setVisible(true);
             pageBoundsNode.setVisible(true);
         } else if (ctx.get(RenderContext.RENDER_PAGE) == this) {
-            applyHideableFigureProperties(node);
+            applyHideableFigureProperties(ctx, node);
             contentBoundsNode.setVisible(false);
             pageBoundsNode.setVisible(false);
             pageInsetsNode.setVisible(false);

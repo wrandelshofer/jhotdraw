@@ -5,9 +5,12 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * HideableFigure.
@@ -32,9 +35,10 @@ public interface HideableFigure extends Figure {
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
+     * @param ctx
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyHideableFigureProperties(@Nonnull Node node) {
+    default void applyHideableFigureProperties(@Nullable RenderContext ctx, @Nonnull Node node) {
         node.setVisible(getStyled(VISIBLE));
     }
 

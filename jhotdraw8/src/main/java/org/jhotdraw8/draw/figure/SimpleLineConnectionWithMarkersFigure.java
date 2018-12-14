@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -62,8 +64,8 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         super.updateNode(ctx,node);
 
-        applyHideableFigureProperties(node);
-        applyCompositableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
+        applyCompositableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
     }
 

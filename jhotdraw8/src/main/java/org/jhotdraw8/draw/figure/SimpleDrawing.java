@@ -125,7 +125,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext v, Node n) {
+    public void updateNode(@Nonnull RenderContext v, @Nonnull Node n) {
         Group g = (Group) n;
         //applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(v, n);

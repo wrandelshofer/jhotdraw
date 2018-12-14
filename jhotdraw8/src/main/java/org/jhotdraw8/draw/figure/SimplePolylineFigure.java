@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
@@ -139,12 +140,12 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Polyline lineNode = (Polyline) node;
-        applyHideableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, lineNode);
-        applyFillableFigureProperties(lineNode);
+        applyFillableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
-        applyCompositableFigureProperties(lineNode);
+        applyCompositableFigureProperties(ctx, lineNode);
         final ImmutableList<Point2D> points = getStyledNonnull(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {

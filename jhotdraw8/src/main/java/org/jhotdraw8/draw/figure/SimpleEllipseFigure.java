@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -137,11 +138,11 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Ellipse n = (Ellipse) node;
-        applyHideableFigureProperties(n);
+        applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyStrokableFigureProperties(ctx, n);
-        applyFillableFigureProperties(n);
-        applyCompositableFigureProperties(n);
+        applyFillableFigureProperties(ctx, n);
+        applyCompositableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, node);
         n.setCenterX(getStyledNonnull(CENTER_X).getConvertedValue());
         n.setCenterY(getStyledNonnull(CENTER_Y).getConvertedValue());

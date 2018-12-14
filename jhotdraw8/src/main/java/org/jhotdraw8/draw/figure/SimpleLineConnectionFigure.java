@@ -9,6 +9,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
@@ -62,9 +64,9 @@ public class SimpleLineConnectionFigure extends AbstractLineConnectionFigure
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
 
-        applyHideableFigureProperties(lineNode);
+        applyHideableFigureProperties(ctx, lineNode);
         applyStrokableFigureProperties(ctx, lineNode);
-        applyCompositableFigureProperties(node);
+        applyCompositableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
     }
 

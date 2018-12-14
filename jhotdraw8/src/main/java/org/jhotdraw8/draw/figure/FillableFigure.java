@@ -10,12 +10,15 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * Interface figures which render a {@code javafx.scene.shape.Shape} and can be
@@ -44,9 +47,10 @@ public interface FillableFigure extends Figure {
     /**
      * Updates a shape node.
      *
+     * @param ctx
      * @param shape a shape node
      */
-    default void applyFillableFigureProperties(@Nonnull Shape shape) {
+    default void applyFillableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(FILL));
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);

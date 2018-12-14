@@ -83,7 +83,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         javafx.scene.Group g = (javafx.scene.Group) node;
         Line lineNode = (Line) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);

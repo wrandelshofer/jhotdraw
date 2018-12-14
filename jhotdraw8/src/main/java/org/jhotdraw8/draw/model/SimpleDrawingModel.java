@@ -315,7 +315,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void layout(@Nonnull Figure f, RenderContext ctx) {
-        f.layoutNotify(null);
+        f.layoutNotify(ctx);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
@@ -483,7 +483,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             if (graphBuilder.getVertexCount() > 0) {
                 for (Figure f : GraphSearch.sortTopologically(graphBuilder)) {
                     if (visited.add(f)) {
-                        f.layoutNotify(null);
+                        f.layoutNotify(ctx);
                         markDirty(f, DirtyBits.NODE);
                     }
                 }

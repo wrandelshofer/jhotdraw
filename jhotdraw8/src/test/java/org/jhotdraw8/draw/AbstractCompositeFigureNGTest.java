@@ -18,6 +18,9 @@ import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -152,7 +155,7 @@ public class AbstractCompositeFigureNGTest {
         }
 
         @Override
-        public void updateNode(RenderContext renderer, Node node) {
+        public void updateNode(@Nonnull RenderContext renderer, @Nonnull Node node) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         

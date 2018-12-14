@@ -36,9 +36,9 @@ public class SimpleLayer extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Group n = (Group) node;
-        applyHideableFigureProperties(n);
+        applyHideableFigureProperties(ctx, n);
         if (!isVisible()) {
             return;
         }

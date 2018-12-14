@@ -212,7 +212,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Group g = (Group) node;
         Path p = (Path) g.getChildren().get(0);
         Text t = (Text) g.getChildren().get(1);
@@ -222,7 +222,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     protected void updatePathNode(RenderContext ctx, @Nonnull Path node) {
-        applyFillableFigureProperties(node);
+        applyFillableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, node);
 
         String content = getStyled(SHAPE);

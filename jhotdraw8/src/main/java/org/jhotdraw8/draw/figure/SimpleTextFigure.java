@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -12,7 +13,9 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -23,6 +26,7 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.render.DummyRenderContext;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
@@ -62,14 +66,23 @@ public class SimpleTextFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
+        // FIXME the text node should be computed during layout
         if (textNode == null) {
-            textNode = new Text();
+            layout(new DummyRenderContext());
         }
-        updateNode(null, textNode);
 
         Bounds b = textNode.getBoundsInLocal();
         return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
+
+    @Override
+    public void layout(@Nullable RenderContext ctx) {
+        if (textNode == null) {
+            textNode = new Text();
+        }
+            updateNode(ctx, textNode);
+    }
+
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }
@@ -99,12 +112,12 @@ public class SimpleTextFigure extends AbstractLeafFigure
         tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
         tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
-        applyHideableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, tn);
-        applyTextableFigureProperties(tn);
+        applyTextableFigureProperties(ctx, tn);
         applyStrokableFigureProperties(ctx, tn);
-        applyFillableFigureProperties(tn);
-        applyCompositableFigureProperties(tn);
+        applyFillableFigureProperties(ctx, tn);
+        applyCompositableFigureProperties(ctx, tn);
         applyFontableFigureProperties(ctx, tn);
         applyStyleableFigureProperties(ctx, node);
         tn.applyCss();// really??
@@ -121,14 +134,15 @@ public class SimpleTextFigure extends AbstractLeafFigure
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
+
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        Text tn=new Text();
-         tn.setText(get(TEXT));
+        Text tn = new Text();
+        tn.setText(get(TEXT));
         tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
         tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
-        applyTextableFigureProperties(tn);
+        applyTextableFigureProperties(null, tn);
         applyFontableFigureProperties(null, tn);
         applyStyleableFigureProperties(null, tn);
         return Shapes.awtShapeFromFX(tn).getPathIterator(tx);

@@ -27,6 +27,8 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -120,7 +122,7 @@ public class FigureTest {
             return null;
         }
 
-        public void updateNode(RenderContext ctx, Node node) {
+        public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         }
 
         public boolean isAllowsChildren() {

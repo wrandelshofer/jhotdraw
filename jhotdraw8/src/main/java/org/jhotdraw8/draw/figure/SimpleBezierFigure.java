@@ -18,6 +18,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableList;
@@ -176,12 +177,12 @@ public class SimpleBezierFigure extends AbstractLeafFigure
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Path pathNode = (Path) node;
 
-        applyHideableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, pathNode);
-        applyFillableFigureProperties(pathNode);
+        applyFillableFigureProperties(ctx, pathNode);
         applyTransformableFigureProperties(ctx, node);
-        applyCompositableFigureProperties(pathNode);
+        applyCompositableFigureProperties(ctx, pathNode);
         pathNode.setFillRule(getStyled(FILL_RULE));
         final List<PathElement> elements = Shapes.fxPathElementsFromAWT(new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(null));
         /*        if (getStyled(CLOSED)) {

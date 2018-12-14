@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -43,9 +45,9 @@ public class SimpleLabelFigure extends AbstractLabelFigure implements HideableFi
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         super.updateNode(ctx, node);
         applyTransformableFigureProperties(ctx, node);
-        applyCompositableFigureProperties(node);
+        applyCompositableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
-        applyHideableFigureProperties(node);                
+        applyHideableFigureProperties(ctx, node);
     }
 
     @Override

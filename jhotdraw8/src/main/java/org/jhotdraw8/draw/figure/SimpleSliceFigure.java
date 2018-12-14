@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -118,7 +119,7 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Rectangle rectangleNode = (Rectangle) node;
-        applyHideableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
         if (ctx.get(RenderContext.RENDERING_INTENT) != RenderingIntent.EDITOR) {
             rectangleNode.setVisible(false);
         }

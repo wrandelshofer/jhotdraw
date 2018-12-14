@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -108,11 +109,11 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Rectangle rectangleNode = (Rectangle) node;
-        applyHideableFigureProperties(node);
+        applyHideableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, rectangleNode);
-        applyFillableFigureProperties(rectangleNode);
+        applyFillableFigureProperties(ctx, rectangleNode);
         applyStrokableFigureProperties(ctx, rectangleNode);
-        applyCompositableFigureProperties(rectangleNode);
+        applyCompositableFigureProperties(ctx, rectangleNode);
         applyStyleableFigureProperties(ctx, node);
         rectangleNode.setX(getNonnull(X).getConvertedValue());
         rectangleNode.setY(getNonnull(Y).getConvertedValue());

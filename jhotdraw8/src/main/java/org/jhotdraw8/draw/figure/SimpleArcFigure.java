@@ -11,6 +11,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -101,13 +102,13 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokableFigu
     }
 
     @Override
-    public void updateNode(RenderContext ctx, Node node) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Arc n = (Arc) node;
-        applyHideableFigureProperties(n);
+        applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyStrokableFigureProperties(ctx, n);
-        applyFillableFigureProperties(n);
-        applyCompositableFigureProperties(n);
+        applyFillableFigureProperties(ctx, n);
+        applyCompositableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, node);
         n.setCenterX(getStyledNonnull(CENTER_X).getConvertedValue());
         n.setCenterY(getStyledNonnull(CENTER_Y).getConvertedValue());
