@@ -141,7 +141,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         Polyline lineNode = (Polyline) node;
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
-        applyStrokableFigureProperties(lineNode);
+        applyStrokableFigureProperties(ctx, lineNode);
         applyFillableFigureProperties(lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(lineNode);

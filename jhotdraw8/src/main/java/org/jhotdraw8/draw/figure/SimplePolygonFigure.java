@@ -23,7 +23,6 @@ import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
-import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolygonOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
@@ -115,7 +114,7 @@ public class SimplePolygonFigure extends AbstractLeafFigure
         applyHideableFigureProperties(node);
         applyFillableFigureProperties(lineNode);
         applyStyleableFigureProperties(ctx, node);
-        applyStrokableFigureProperties(lineNode);
+        applyStrokableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(lineNode);
         final ImmutableList<Point2D> points = getStyled(POINTS);

@@ -139,7 +139,7 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
         Ellipse n = (Ellipse) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(ctx, n);
-        applyStrokableFigureProperties(n);
+        applyStrokableFigureProperties(ctx, n);
         applyFillableFigureProperties(n);
         applyCompositableFigureProperties(n);
         applyStyleableFigureProperties(ctx, node);

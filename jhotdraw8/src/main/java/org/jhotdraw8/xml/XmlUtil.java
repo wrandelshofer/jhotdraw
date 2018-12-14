@@ -36,6 +36,7 @@ import javax.xml.validation.Validator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.tree.ChildIterator;
 import org.jhotdraw8.tree.PreorderSpliterator;
 import org.w3c.dom.DOMImplementation;
@@ -63,16 +64,15 @@ public class XmlUtil {
 
     public static final String LOCATION_ATTRIBUTE = "location";
     public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
-    final static String LINE_NUMBER_KEY_NAME = "lineNumber";
     private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
     private final static String SEPARATOR = "\0";
     private final static Properties DEFAULT_PROPERTIES = new Properties();
 
     static {
-        DEFAULT_PROPERTIES.put(OutputKeys.INDENT,"yes");
-        DEFAULT_PROPERTIES.put(OutputKeys.ENCODING,"UTF-8");
-        DEFAULT_PROPERTIES.put("{http://xml.apache.org/xslt}indent-amount","2");
-}
+        DEFAULT_PROPERTIES.put(OutputKeys.INDENT, "yes");
+        DEFAULT_PROPERTIES.put(OutputKeys.ENCODING, "UTF-8");
+        DEFAULT_PROPERTIES.put("{http://xml.apache.org/xslt}indent-amount", "2");
+    }
 
     private XmlUtil() {
     }
@@ -250,15 +250,16 @@ public class XmlUtil {
     }
 
     public static void write(Result result, Document doc) throws IOException {
-        write(result,doc, DEFAULT_PROPERTIES);
+        write(result, doc, DEFAULT_PROPERTIES);
     }
 
     public static void write(Result result, Document doc, @Nullable Properties outputProperties) throws IOException {
         try {
             final TransformerFactory factory = TransformerFactory.newInstance();
             Transformer t = factory.newTransformer();
-            if (outputProperties!=null)
-            t.setOutputProperties(outputProperties);
+            if (outputProperties != null) {
+                t.setOutputProperties(outputProperties);
+            }
             DOMSource source = new DOMSource(doc);
             t.transform(source, result);
         } catch (TransformerException ex) {

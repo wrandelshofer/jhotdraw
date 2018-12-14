@@ -111,7 +111,7 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(ctx, rectangleNode);
         applyFillableFigureProperties(rectangleNode);
-        applyStrokableFigureProperties(rectangleNode);
+        applyStrokableFigureProperties(ctx, rectangleNode);
         applyCompositableFigureProperties(rectangleNode);
         applyStyleableFigureProperties(ctx, node);
         rectangleNode.setX(getNonnull(X).getConvertedValue());

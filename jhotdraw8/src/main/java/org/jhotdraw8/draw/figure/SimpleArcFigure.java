@@ -105,7 +105,7 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokableFigu
         Arc n = (Arc) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(ctx, n);
-        applyStrokableFigureProperties(n);
+        applyStrokableFigureProperties(ctx, n);
         applyFillableFigureProperties(n);
         applyCompositableFigureProperties(n);
         applyStyleableFigureProperties(ctx, node);

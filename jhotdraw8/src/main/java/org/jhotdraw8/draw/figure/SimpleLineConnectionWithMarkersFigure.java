@@ -10,9 +10,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -58,7 +55,7 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     @Override
     protected void updateLineNode(RenderContext ctx, @Nonnull Line node) {
         super.updateLineNode(ctx, node); 
-        applyStrokableFigureProperties(node);
+        applyStrokableFigureProperties(ctx, node);
     }
 
     @Override

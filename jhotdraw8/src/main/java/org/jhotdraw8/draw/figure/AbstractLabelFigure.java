@@ -223,7 +223,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     protected void updatePathNode(RenderContext ctx, @Nonnull Path node) {
         applyFillableFigureProperties(node);
-        applyStrokableFigureProperties(node);
+        applyStrokableFigureProperties(ctx, node);
 
         String content = getStyled(SHAPE);
         if (content == null || content.trim().isEmpty()) {

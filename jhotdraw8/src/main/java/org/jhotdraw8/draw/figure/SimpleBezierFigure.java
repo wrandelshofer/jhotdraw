@@ -28,7 +28,6 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeMoveHandle;
 import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
 import org.jhotdraw8.draw.handle.BezierOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
@@ -179,7 +178,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
 
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
-        applyStrokableFigureProperties(pathNode);
+        applyStrokableFigureProperties(ctx, pathNode);
         applyFillableFigureProperties(pathNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(pathNode);

@@ -37,7 +37,7 @@ public class SimpleRegionFigure extends AbstractRegionFigure
     protected void updatePathNode(RenderContext ctx, @Nonnull Path path) {
         super.updatePathNode(ctx, path);
         applyFillableFigureProperties(path);
-        applyStrokableFigureProperties(path);
+        applyStrokableFigureProperties(ctx, path);
         applyCompositableFigureProperties(path);
         applyTransformableFigureProperties(ctx, path);
     }

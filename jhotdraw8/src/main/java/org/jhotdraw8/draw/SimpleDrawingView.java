@@ -906,6 +906,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
         updateLayout();
+        invalidateFigureNodes();
         invalidateHandleNodes();
         if (constrainer.get() != null) {
             constrainer.get().updateNode(SimpleDrawingView.this);
@@ -984,6 +985,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (handles.containsKey(f)) {
             dirtyHandles.add(f);
         }
+    }
+    private void invalidateFigureNodes() {
+        dirtyFigureNodes.addAll(nodeToFigureMap.values());
     }
 
     private void invalidateHandleNodes() {

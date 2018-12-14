@@ -21,8 +21,10 @@ import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.ListStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
+import org.jhotdraw8.draw.render.RenderContext;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -127,7 +129,7 @@ public interface StrokableFigure extends Figure {
     StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style", STROKE_WIDTH,
             STROKE, STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
 
-    default void applyStrokeCapAndJoinProperties(@Nonnull Shape shape) {
+    default void applyStrokeCapAndJoinProperties(RenderContext ctx, @Nonnull Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -143,7 +145,7 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    default void applyStrokeDashProperties(@Nonnull Shape shape) {
+    default void applyStrokeDashProperties(RenderContext ctx, @Nonnull Shape shape) {
         double d = getStyledNonnull(STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -158,7 +160,7 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    default void applyStrokeTypeProperties(@Nonnull Shape shape) {
+    default void applyStrokeTypeProperties(RenderContext ctx, @Nonnull Shape shape) {
         StrokeType st = getStyled(STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -168,39 +170,44 @@ public interface StrokableFigure extends Figure {
     /**
      * Updates a shape node.
      *
+     * @param ctx
      * @param shape a shape node
      */
-    default void applyStrokableFigureProperties(@Nonnull Shape shape) {
+    default void applyStrokableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(STROKE));
-        applyStrokeColorProperties(shape);
+        applyStrokeColorProperties(ctx, shape);
         if (p == null) {
             return;
         }
-        applyStrokeWidthProperties(shape);
-        applyStrokeCapAndJoinProperties(shape);
+        applyStrokeWidthProperties(ctx, shape);
+        applyStrokeCapAndJoinProperties(ctx, shape);
 
-        applyStrokeTypeProperties(shape);
-        applyStrokeDashProperties(shape);
+        applyStrokeTypeProperties(ctx, shape);
+        applyStrokeDashProperties(ctx, shape);
     }
 
-    default void applyStrokeColorProperties(@Nonnull Shape shape) {
+    default void applyStrokeColorProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
 
-    default void applyStrokeWidthProperties(@Nonnull Shape shape) {
-        double d = getStyledNonnull(STROKE_WIDTH).getConvertedValue();
-        if (shape.getStrokeWidth() != d) {
-            shape.setStrokeWidth(d);
+    default void applyStrokeWidthProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
+        CssSize cssSize = getStyledNonnull(STROKE_WIDTH);
+        double width = ctx==null?cssSize.getConvertedValue()
+                :ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize,null);
+        if (shape.getStrokeWidth() != width) {
+            shape.setStrokeWidth(width);
         }
 
     }
 
     @Nonnull
-    default BasicStroke getStyledStroke() {
-        final double width = getStyledNonnull(STROKE_WIDTH).getConvertedValue();
+    default BasicStroke getStyledStroke(@Nullable RenderContext ctx) {
+        CssSize cssSize = getStyledNonnull(STROKE_WIDTH);
+        double width = ctx==null?cssSize.getConvertedValue()
+                :ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize,null);
         final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);
         final int basicCap;
         switch (cap) {

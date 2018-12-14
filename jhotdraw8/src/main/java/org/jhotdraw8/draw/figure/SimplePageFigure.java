@@ -372,7 +372,7 @@ public class SimplePageFigure extends AbstractCompositeFigure
         javafx.scene.Group currentPageNode = (javafx.scene.Group) groupNode.getProperties().get(CURRENT_PAGE_PROPERTY);
 
         applyFillableFigureProperties(pageBoundsNode);
-        applyStrokableFigureProperties(pageBoundsNode);
+        applyStrokableFigureProperties(ctx, pageBoundsNode);
 
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
             applyHideableFigureProperties(node);

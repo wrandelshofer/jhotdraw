@@ -112,7 +112,7 @@ public class SimpleLineFigure extends AbstractLeafFigure
         Line lineNode = (Line) node;
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
-        applyStrokableFigureProperties(lineNode);
+        applyStrokableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(lineNode);
         Point2D start = getStyledNonnull(START).getConvertedValue();
