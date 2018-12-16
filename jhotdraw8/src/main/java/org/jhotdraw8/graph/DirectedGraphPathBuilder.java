@@ -209,7 +209,7 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     private VertexPath<V> doFindIntShortestVertexPath(DirectedGraph<V, A> graph, V start,
-                                                      @Nonnull Predicate<V> goal,
+                                                      @Nonnull V goal,
                                                       @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         @SuppressWarnings("unchecked")
         AttributedIntDirectedGraph<V, A> intGraph = (AttributedIntDirectedGraph<V, A>) graph;
@@ -217,13 +217,13 @@ public class DirectedGraphPathBuilder<V, A> {
         {
             int i = 0;
             for (V v : graph.getVertices()) {
-                if (v == start) {
+                if (start.equals(v)) {
                     startIndex = i;
                     if (goalIndex != -1) {
                         break;
                     }
                 }
-                if (v == goal) {
+                if (goal.equals(v)) {
                     goalIndex = i;
                     if (startIndex != -1) {
                         break;
@@ -771,7 +771,11 @@ public class DirectedGraphPathBuilder<V, A> {
                                                 @Nonnull V start,
                                                 @Nonnull V goal,
                                                 @Nonnull ToDoubleTriFunction<V, V, A> costf) {
-        return findShortestVertexPath(graph, start, goal::equals, costf);
+        if (graph instanceof IntDirectedGraph) {
+            return doFindIntShortestVertexPath(graph, start, goal, costf);
+        } else {
+            return doFindShortestVertexPath(graph, start, goal::equals, costf);
+        }
     }
 
     @Nullable
@@ -779,11 +783,7 @@ public class DirectedGraphPathBuilder<V, A> {
                                                 @Nonnull V start,
                                                 @Nonnull Predicate<V> goal,
                                                 @Nonnull ToDoubleTriFunction<V, V, A> costf) {
-        if (graph instanceof IntDirectedGraph) {
-            return doFindIntShortestVertexPath(graph, start, goal, costf);
-        } else {
-            return doFindShortestVertexPath(graph, start, goal, costf);
-        }
+        return doFindShortestVertexPath(graph, start, goal, costf);
     }
 
     private static class BackLinkWithArrow<VV, EE> {
