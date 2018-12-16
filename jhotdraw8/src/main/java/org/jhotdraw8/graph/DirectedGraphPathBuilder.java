@@ -91,7 +91,7 @@ public class DirectedGraphPathBuilder<V, A> {
             }
         }
         queue.clear();
-        if (current == null || current.vertex != goal) {
+        if (current == null || !goal.test(current.vertex)) {
             return null;
         }
         return current;
@@ -147,11 +147,11 @@ public class DirectedGraphPathBuilder<V, A> {
                 throw new PathBuilderException("Breadh first search stalled at vertex: " + goal
                         + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
             } else {
-                for (BackLinkWithArrow<V, A> b = back; b.vertex != start; b = b.parent) {
+                for (BackLinkWithArrow<V, A> b = back; !b.vertex.equals(start); b = b.parent) {
                     pathElements.add(null);
                 }
                 int index = pathElements.size();
-                for (BackLinkWithArrow<V, A> b = back; b.vertex != start; b = b.parent) {
+                for (BackLinkWithArrow<V, A> b = back; !b.vertex.equals(start); b = b.parent) {
                     pathElements.set(--index, b.vertex);
                 }
             }
