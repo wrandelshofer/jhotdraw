@@ -67,7 +67,8 @@ public class DirectedGraphPathBuilder<V, A> {
      *                as visited.
      * @return a back link on success, null on failure
      */
-    private BackLinkWithArrow<V, A> breadthFirstSearch(@Nonnull DirectedGraph<V, A> graph, V root, V goal, @Nonnull Predicate<V> visited) {
+    private BackLinkWithArrow<V, A> breadthFirstSearch(@Nonnull DirectedGraph<V, A> graph, V root,
+                                                       @Nonnull Predicate<V> goal, @Nonnull Predicate<V> visited) {
         if (queue == null) {
             queue = new ArrayDeque<>(16);
         }
@@ -106,7 +107,8 @@ public class DirectedGraphPathBuilder<V, A> {
      * list is mutable.
      */
     @javax.annotation.Nullable
-    private BackLinkWithArrow<V, A> breadthFirstSearch(@Nonnull DirectedGraph<V, A> graph, V root, V goal) {
+    private BackLinkWithArrow<V, A> breadthFirstSearch(@Nonnull DirectedGraph<V, A> graph, V root,
+                                                       @Nonnull Predicate<V> goal) {
         if (visitedSet == null) {
             visitedSet = new HashSet<>();
         }
@@ -140,7 +142,7 @@ public class DirectedGraphPathBuilder<V, A> {
         pathElements.add(start);
         while (i.hasNext()) {
             V goal = i.next();
-            BackLinkWithArrow<V, A> back = breadthFirstSearch(graph, start, goal);
+            BackLinkWithArrow<V, A> back = breadthFirstSearch(graph, start, goal::equals);
             if (back == null) {
                 throw new PathBuilderException("Breadh first search stalled at vertex: " + goal
                         + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
@@ -206,7 +208,8 @@ public class DirectedGraphPathBuilder<V, A> {
         return node;
     }
 
-    private VertexPath<V> doFindIntShortestVertexPath(DirectedGraph<V, A> graph, V start, V goal,
+    private VertexPath<V> doFindIntShortestVertexPath(DirectedGraph<V, A> graph, V start,
+                                                      @Nonnull Predicate<V> goal,
                                                       @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         @SuppressWarnings("unchecked")
         AttributedIntDirectedGraph<V, A> intGraph = (AttributedIntDirectedGraph<V, A>) graph;
@@ -242,9 +245,11 @@ public class DirectedGraphPathBuilder<V, A> {
 
     @Nullable
     private EdgePath<A> doFindShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
-                                               V start, V goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+                                               V start,
+                                               Predicate<V> goalPredicate,
+                                               @Nonnull ToDoubleTriFunction<V, V, A> costf) {
 
-        NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
+        NodeWithCost<V, A> node = findShortestPath(graph, start, goalPredicate, costf);
         if (node == null) {
             return null;
         }
@@ -258,7 +263,8 @@ public class DirectedGraphPathBuilder<V, A> {
 
     private NodeWithCost<V, A> doFindShortestPath(V start,
                                                   PriorityQueue<NodeWithCost<V, A>> frontier,
-                                                  @Nonnull Map<V, NodeWithCost<V, A>> frontierMap, V goal,
+                                                  @Nonnull Map<V, NodeWithCost<V, A>> frontierMap,
+                                                  @Nonnull Predicate<V> goalPredicate,
                                                   @Nonnull Set<V> explored, @Nonnull DirectedGraph<V, A> graph, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
@@ -269,7 +275,7 @@ public class DirectedGraphPathBuilder<V, A> {
             node = frontier.poll();
             final V vertex = node.vertex;
             frontierMap.remove(vertex);
-            if (vertex == goal) {
+            if (goalPredicate.test(vertex)) {
                 break;
             }
             explored.add(node.getVertex());
@@ -301,9 +307,11 @@ public class DirectedGraphPathBuilder<V, A> {
 
     @Nullable
     private VertexPath<V> doFindShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
-                                                   V start, V goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+                                                   V start,
+                                                   @Nonnull Predicate<V> goalPredicate,
+                                                   @Nonnull ToDoubleTriFunction<V, V, A> costf) {
 
-        NodeWithCost<V, A> node = findShortestPath(graph, start, goal, costf);
+        NodeWithCost<V, A> node = findShortestPath(graph, start, goalPredicate, costf);
         if (node == null) {
             return null;
         }
@@ -333,7 +341,13 @@ public class DirectedGraphPathBuilder<V, A> {
      */
     @Nullable
     public EdgePath<A> findAnyEdgePath(@Nonnull DirectedGraph<V, A> graph,
-                                       V start, V goal) {
+                                       @Nonnull V start, @Nonnull V goal) {
+        return findAnyEdgePath(graph, start, goal::equals);
+    }
+
+    @Nullable
+    public EdgePath<A> findAnyEdgePath(@Nonnull DirectedGraph<V, A> graph,
+                                       @Nonnull V start, @Nonnull Predicate<V> goal) {
         Deque<A> arrows = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = breadthFirstSearch(graph, start, goal);
         if (current == null) {
@@ -364,6 +378,28 @@ public class DirectedGraphPathBuilder<V, A> {
     @Nullable
     public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V, A> graph,
                                            V start, V goal) {
+        return findAnyVertexPath(graph, start, a -> Objects.equals(a, goal));
+    }
+
+    /**
+     * Builds a VertexPath through the graph which goes from the specified start
+     * vertex to the specified goal vertex.
+     * <p>
+     * This method uses a breadth first search and returns the first result that
+     * it finds.
+     * <p>
+     * References:<br>
+     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     * Wikipedia</a>
+     *
+     * @param graph a graph
+     * @param start the start vertex
+     * @param goal  the goal predicate
+     * @return a VertexPath if traversal is possible, null otherwise
+     */
+    @Nullable
+    public VertexPath<V> findAnyVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                           V start, @Nonnull Predicate<V> goal) {
         Deque<V> vertices = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = breadthFirstSearch(graph, start, goal);
         if (current == null) {
@@ -398,7 +434,7 @@ public class DirectedGraphPathBuilder<V, A> {
         pathElements.add(start); // root element
         while (i.hasNext()) {
             V goal = i.next();
-            BackLinkWithArrow<V, A> back = breadthFirstSearch(graph, start, goal);
+            BackLinkWithArrow<V, A> back = breadthFirstSearch(graph, start, goal::equals);
             if (back == null) {
                 return null;
             } else {
@@ -469,8 +505,14 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public EdgePath<A> findShortestEdgePath(DirectedGraph<V, A> graph,
-                                            V start, V goal) {
+    public EdgePath<A> findShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
+                                            @Nonnull V start, @Nonnull V goal) {
+        return findShortestEdgePath(graph, start, goal, costFunction);
+    }
+
+    @Nullable
+    public EdgePath<A> findShortestEdgePath(@Nonnull DirectedGraph<V, A> graph,
+                                            @Nonnull V start, @Nonnull Predicate<V> goal) {
         return findShortestEdgePath(graph, start, goal, costFunction);
     }
 
@@ -492,7 +534,14 @@ public class DirectedGraphPathBuilder<V, A> {
      */
     @Nullable
     public EdgePath<A> findShortestEdgePath(DirectedGraph<V, A> graph,
-                                            V start, V goal, @Nonnull ToDoubleFunction<A> costf) {
+                                            V start, @Nonnull V goal, @Nonnull ToDoubleFunction<A> costf) {
+        return findShortestEdgePath(graph, start, goal::equals, (v1, v2, a) -> costf.applyAsDouble(a));
+
+    }
+
+    @Nullable
+    public EdgePath<A> findShortestEdgePath(DirectedGraph<V, A> graph,
+                                            V start, @Nonnull Predicate<V> goal, @Nonnull ToDoubleFunction<A> costf) {
         return findShortestEdgePath(graph, start, goal, (v1, v2, a) -> costf.applyAsDouble(a));
 
     }
@@ -515,7 +564,9 @@ public class DirectedGraphPathBuilder<V, A> {
      */
     @Nullable
     public EdgePath<A> findShortestEdgePath(DirectedGraph<V, A> graph,
-                                            V start, V goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+                                            V start,
+                                            @Nonnull V goal,
+                                            @Nonnull ToDoubleTriFunction<V, V, A> costf) {
 
         if (graph instanceof IntDirectedGraph) {
             @SuppressWarnings("unchecked")
@@ -524,13 +575,13 @@ public class DirectedGraphPathBuilder<V, A> {
             {
                 int i = 0;
                 for (V v : graph.getVertices()) {
-                    if (v == start) {
+                    if (v.equals(start)) {
                         startIndex = i;
                         if (goalIndex != -1) {
                             break;
                         }
                     }
-                    if (v == goal) {
+                    if (v.equals(goal)) {
                         goalIndex = i;
                         if (startIndex != -1) {
                             break;
@@ -541,25 +592,43 @@ public class DirectedGraphPathBuilder<V, A> {
             }
             return findIntShortestEdgePath(intGraph, startIndex, goalIndex, costf);
         } else {
-            return doFindShortestEdgePath(graph, start, goal, costf);
+            return doFindShortestEdgePath(graph, start, goal::equals, costf);
         }
     }
 
     @Nullable
+    public EdgePath<A> findShortestEdgePath(DirectedGraph<V, A> graph,
+                                            V start,
+                                            @Nonnull Predicate<V> goal,
+                                            @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+        return doFindShortestEdgePath(graph, start, goal, costf);
+    }
+
+    @Nullable
     private NodeWithCost<V, A> findShortestPath(@Nonnull DirectedGraph<V, A> graph,
-                                                V start, V goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+                                                V start,
+                                                @Nonnull Predicate<V> goalPredicate,
+                                                @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         // Size of priority deque and frontierMap is the expected size of the frontier.
         // We use a size that is smaller than 256 bytes (assuming 12 bytes for object header).
         PriorityQueue<NodeWithCost<V, A>> frontier = new PriorityQueue<>(61);
         Map<V, NodeWithCost<V, A>> frontierMap = new HashMap<>(61);
         // Size of explored is the expected number of vertices that we need to explore.
         Set<V> explored = new HashSet<>(61);
-        return doFindShortestPath(start, frontier, frontierMap, goal, explored, graph, costf);
+        return doFindShortestPath(start, frontier, frontierMap, goalPredicate, explored, graph, costf);
     }
 
     @Nullable
-    public VertexPath<V> findShortestVertexPath(DirectedGraph<V, A> graph,
-                                                V start, V goal) {
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull V start,
+                                                @Nonnull V goal) {
+        return findShortestVertexPath(graph, start, goal::equals, costFunction);
+    }
+
+    @Nullable
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull V start,
+                                                @Nonnull Predicate<V> goal) {
         return findShortestVertexPath(graph, start, goal, costFunction);
     }
 
@@ -571,8 +640,8 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(DirectedGraph<V, A> graph,
-                                                Collection<? extends V> waypoints) {
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull Collection<? extends V> waypoints) {
         return findShortestVertexPath(graph, waypoints, costFunction);
     }
 
@@ -581,17 +650,18 @@ public class DirectedGraphPathBuilder<V, A> {
      *
      * @param graph     the graph
      * @param waypoints the waypoints
-     * @param costf the cost function
+     * @param costf     the cost function
      * @return the shortest path
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(DirectedGraph<V, A> graph,
-                                                Collection<? extends V> waypoints, ToDoubleTriFunction<V, V, A> costf) {
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull Collection<? extends V> waypoints,
+                                                @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         List<V> combinedPath = new ArrayList<>();
         V start = null;
         for (V via : waypoints) {
             if (start != null) {
-                VertexPath<V> path = findShortestVertexPath(graph, start, via, costf);
+                VertexPath<V> path = findShortestVertexPath(graph, start, via::equals, costf);
                 if (path == null) {
                     return null;
                 }
@@ -624,7 +694,7 @@ public class DirectedGraphPathBuilder<V, A> {
      *
      * @param graph     the graph
      * @param waypoints the waypoints
-     * @param costf the cost function
+     * @param costf     the cost function
      * @return the shortest path
      */
     @Nullable
@@ -634,7 +704,7 @@ public class DirectedGraphPathBuilder<V, A> {
         V start = null;
         for (V via : waypoints) {
             if (start != null) {
-                EdgePath<A> path = findShortestEdgePath(graph, start, via, costf);
+                EdgePath<A> path = findShortestEdgePath(graph, start, via::equals, costf);
                 if (path == null) {
                     return null;
                 }
@@ -665,8 +735,18 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(DirectedGraph<V, A> graph,
-                                                V start, V goal, @Nonnull ToDoubleFunction<A> costf) {
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull V start,
+                                                @Nonnull V goal,
+                                                @Nonnull ToDoubleFunction<A> costf) {
+        return findShortestVertexPath(graph, start, goal::equals, (v1, v2, a) -> costf.applyAsDouble(a));
+    }
+
+    @Nullable
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull V start,
+                                                @Nonnull Predicate<V> goal,
+                                                @Nonnull ToDoubleFunction<A> costf) {
         return findShortestVertexPath(graph, start, goal, (v1, v2, a) -> costf.applyAsDouble(a));
     }
 
@@ -687,8 +767,18 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(DirectedGraph<V, A> graph,
-                                                V start, V goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull V start,
+                                                @Nonnull V goal,
+                                                @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+        return findShortestVertexPath(graph, start, goal::equals, costf);
+    }
+
+    @Nullable
+    public VertexPath<V> findShortestVertexPath(@Nonnull DirectedGraph<V, A> graph,
+                                                @Nonnull V start,
+                                                @Nonnull Predicate<V> goal,
+                                                @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         if (graph instanceof IntDirectedGraph) {
             return doFindIntShortestVertexPath(graph, start, goal, costf);
         } else {
