@@ -78,7 +78,7 @@ public class DirectedGraphPathBuilder<V, A> {
         BackLinkWithArrow<V, A> current = null;
         while (!queue.isEmpty()) {
             current = queue.remove();
-            if (current.vertex == goal) {
+            if (goal.test(current.vertex)) {
                 break;
             }
             for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
