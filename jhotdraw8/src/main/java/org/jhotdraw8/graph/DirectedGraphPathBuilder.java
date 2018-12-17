@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
@@ -265,7 +267,9 @@ public class DirectedGraphPathBuilder<V, A> {
                                                   PriorityQueue<NodeWithCost<V, A>> frontier,
                                                   @Nonnull Map<V, NodeWithCost<V, A>> frontierMap,
                                                   @Nonnull Predicate<V> goalPredicate,
-                                                  @Nonnull Set<V> explored, @Nonnull DirectedGraph<V, A> graph, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+                                                  @Nonnull Set<V> explored,
+                                                  @Nonnull DirectedGraph<V, A> graph,
+                                                  @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
@@ -931,4 +935,45 @@ public class DirectedGraphPathBuilder<V, A> {
             return hash;
         }
     }
+
+    /**
+     * Finds all vertex paths from start to goal up to the specified maximal length.
+     * @param nextNodesFunction
+     * @param start
+     * @param goal
+     * @param maxLength
+     * @param <T>
+     * @return
+     */
+    public <T> List<VertexPath<V>> findAllVertexPaths(@Nonnull Function<V, Iterable<V>> nextNodesFunction,
+                                                      @Nonnull V start,
+                                                      @Nonnull V goal,
+                                                      int maxLength) {
+        List<List<V>> paths = new ArrayList<>();
+        dfsFindAllPaths(nextNodesFunction, start, goal, Collections.singletonList(start), paths, maxLength);
+        List<VertexPath<V>> vertexPaths = new ArrayList<>(paths.size());
+        for (List<V> list : paths) {
+            vertexPaths.add(new VertexPath<V>(list));
+        }
+        return vertexPaths;
+    }
+
+    private void dfsFindAllPaths(@Nonnull Function<V, Iterable<V>> nextNodesFunction,
+                                 V current, V goal, List<V> path, List<List<V>> paths, int maxDepth) {
+        if (maxDepth <= 0) {
+            return;
+        }
+        if (current.equals(goal)) {
+            paths.add(path);
+            return;
+        }
+
+        for (V v : nextNodesFunction.apply(current)) {
+            List<V> newPath = new ArrayList<>(path.size() + 1);
+            newPath.addAll(path);
+            newPath.add(v);
+            dfsFindAllPaths(nextNodesFunction, v, goal, newPath, paths, maxDepth - 1);
+        }
+    }
+
 }

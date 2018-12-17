@@ -4,9 +4,10 @@
 
 package org.jhotdraw8.graph;
 
-import com.sun.tools.javac.util.List;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.ToDoubleFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -114,12 +115,12 @@ public class DirectedGraphPathBuilderTest {
     }
     public Object[][] shortestEdgeMultiGoalPathProvider() {
         return new Object[][] {
-                {1, List.of(5,6),EdgePath.of(9.0,2.0)},
-                {1,List.of(4,5),EdgePath.of(9.0,11.0)},
-                {2,List.of(3,6),EdgePath.of(10.0)},
-                {1, List.of(6,5),EdgePath.of(9.0,2.0)},
-                {1,List.of(5,4),EdgePath.of(9.0,11.0)},
-                {2,List.of(6,3),EdgePath.of(10.0)}
+                {1, Arrays.asList(5,6),EdgePath.of(9.0,2.0)},
+                {1,Arrays.asList(4,5),EdgePath.of(9.0,11.0)},
+                {2,Arrays.asList(3,6),EdgePath.of(10.0)},
+                {1, Arrays.asList(6,5),EdgePath.of(9.0,2.0)},
+                {1,Arrays.asList(5,4),EdgePath.of(9.0,11.0)},
+                {2,Arrays.asList(6,3),EdgePath.of(10.0)}
         } ;
     }
 
@@ -249,5 +250,43 @@ public class DirectedGraphPathBuilderTest {
         EdgePath<Double> result = instance.findAnyEdgePath(graph, start, goal);
         assertEquals(result, expResult);
     }
+    private DirectedGraph<Integer,Double> createGraph2() {
+        DirectedGraphBuilder<Integer, Double> b = new DirectedGraphBuilder<>();
+        b.addVertex(1);
+        b.addVertex(2);
+        b.addVertex(3);
+        b.addVertex(4);
+        b.addVertex(5);
 
+        b.addArrow(1,2,1.0);
+        b.addArrow(1,3,1.0);
+        b.addArrow(2,3,1.0);
+        b.addArrow(3,4,1.0);
+        b.addArrow(3,5,1.0);
+        b.addArrow(4,5,1.0);
+        return b;
+    }
+
+    @Test
+    public void testFindAllPaths() {
+        DirectedGraph<Integer, Double> graph = createGraph2();
+
+        doTestFindAllPaths(graph,1,5, 5, Arrays.asList(
+                new VertexPath<>(Arrays.asList(1,2,3,4,5)),
+                new VertexPath<>(Arrays.asList(1,2,3,5)),
+                new VertexPath<>(Arrays.asList(1,3,4,5)),
+                new VertexPath<>(Arrays.asList(1,3,5))
+        ));
+        doTestFindAllPaths(graph,1,5, 4, Arrays.asList(
+                new VertexPath<>(Arrays.asList(1,2,3,5)),
+                new VertexPath<>(Arrays.asList(1,3,4,5)),
+                new VertexPath<>(Arrays.asList(1,3,5))
+        ));
+    }
+    public void doTestFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<VertexPath<Integer>> expected) {
+        System.out.println("doTestFindAllPaths start:"+start+", goal:"+goal+", maxDepth:"+maxDepth);
+        DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>();
+        List<VertexPath<Integer>> actual = instance.findAllVertexPaths(graph::getNextVertices, start, goal, maxDepth);
+        assertEquals(expected,actual);
+    }
 }
