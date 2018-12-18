@@ -76,11 +76,11 @@ public class DirectedGraphPathBuilderTest {
     }
 
     @TestFactory
-    public List<DynamicTest> testFindAnyPath_3args() throws Exception {
+    public List<DynamicTest> testFindVertexPath_3args() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindAnyPath_3args(1, 5, VertexPath.of(1, 6, 5))),
-                dynamicTest("2", () -> doFindAnyPath_3args(1, 4, VertexPath.of(1, 2, 4))),
-                dynamicTest("3", () -> doFindAnyPath_3args(2, 6, VertexPath.of(2, 1, 6)))
+                dynamicTest("1", () -> doFindVertexPath_3args(1, 5, VertexPath.of(1, 6, 5))),
+                dynamicTest("2", () -> doFindVertexPath_3args(1, 4, VertexPath.of(1, 2, 4))),
+                dynamicTest("3", () -> doFindVertexPath_3args(2, 6, VertexPath.of(2, 1, 6)))
         );
     }
 
@@ -88,8 +88,8 @@ public class DirectedGraphPathBuilderTest {
     /**
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilder.
      */
-    public void doFindAnyPath_3args(Integer start, Integer goal, VertexPath<Integer> expected) throws Exception {
-        System.out.println("findAnyPath start:" + start + " goal:" + goal + " expResult:" + expected);
+    public void doFindVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expected) throws Exception {
+        System.out.println("doFindVertexPath_3args start:" + start + " goal:" + goal + " expResult:" + expected);
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph::getNextVertices);
         VertexPath<Integer> actual = instance.findVertexPath(start, goal::equals, Integer.MAX_VALUE);
@@ -97,23 +97,24 @@ public class DirectedGraphPathBuilderTest {
     }
 
     @TestFactory
-    public List<DynamicTest> testFindAnyVertexPath_3args() throws Exception {
+    public List<DynamicTest> testFindVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindAnyVertexPath_3args(1, 5, VertexPath.of(1, 6, 5))),
-                dynamicTest("2", () -> doFindAnyVertexPath_3args(1, 4, VertexPath.of(1, 2, 4))),
-                dynamicTest("3", () -> doFindAnyVertexPath_3args(2, 6, VertexPath.of(2, 1, 6)))
+                dynamicTest("1", () -> doFindVertexPathOverWaypoints(Arrays.asList(1, 5), VertexPath.of(1, 6, 5))),
+                dynamicTest("2", () -> doFindVertexPathOverWaypoints(Arrays.asList(1, 4), VertexPath.of(1, 2, 4))),
+                dynamicTest("3", () -> doFindVertexPathOverWaypoints(Arrays.asList(2, 6), VertexPath.of(2, 1, 6))),
+                dynamicTest("4", () -> doFindVertexPathOverWaypoints(Arrays.asList(1,6,5), VertexPath.of(1, 6,5)))
         );
     }
 
     /**
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilder.
      */
-    private void doFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult) throws Exception {
-        System.out.println("findAnyVertexPath start:" + start + " goal:" + goal + " expResult:" + expResult);
+    private void doFindVertexPathOverWaypoints(List<Integer> waypoints, VertexPath<Integer> expResult) throws Exception {
+        System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph::getNextVertices);
-        VertexPath<Integer> result = instance.findVertexPath(start, goal::equals, Integer.MAX_VALUE);
-        assertEquals(result, expResult);
+        VertexPath<Integer> actual = instance.findVertexPathOverWaypoints(waypoints, Integer.MAX_VALUE);
+        assertEquals(expResult,actual);
     }
 
 
@@ -163,7 +164,7 @@ public class DirectedGraphPathBuilderTest {
     }
 
     private void doFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<VertexPath<Integer>> expected) {
-        System.out.println("doTestFindAllPaths start:" + start + ", goal:" + goal + ", maxDepth:" + maxDepth);
+        System.out.println("doFindAllPaths start:" + start + ", goal:" + goal + ", depth:" + maxDepth);
         DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph::getNextVertices);
         List<VertexPath<Integer>> actual = instance.findAllVertexPaths(start,
                 a -> (int) a == goal, maxDepth);

@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,7 +71,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
         if (queue == null) {
             queue = new ArrayDeque<>(16);
         }
-        BackLinkWithArrow<V, A> rootBackLink = new BackLinkWithArrow<>(root, null, null, maxCost);
+        BackLinkWithArrow<V, A> rootBackLink = new BackLinkWithArrow<>(root, null, null, 0.0);
         visited.test(root);
         queue.add(rootBackLink);
         BackLinkWithArrow<V, A> current = null;
@@ -79,13 +80,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
             if (goal.test(current.vertex)) {
                 break;
             }
-            if (current.maxCost > 0) {
+            if (current.cost < maxCost) {
                 for (Map.Entry<V, A> entry : nextNodesFunction.apply(current.vertex)) {
                     V next = entry.getKey();
                     if (visited.test(next)) {
                         A arrow = entry.getValue();
                         BackLinkWithArrow<V, A> backLink = new BackLinkWithArrow<>(next, current, arrow,
-                                current.maxCost - costf.applyAsDouble(current.vertex, next, arrow));
+                                current.cost + costf.applyAsDouble(current.vertex, next, arrow));
                         queue.add(backLink);
                     }
                 }
@@ -226,7 +227,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start
-     * vertex to the specified goal vertex at the lowest maxCost.
+     * vertex to the specified goal vertex at the lowest cost.
      * <p>
      * This method implements the Uniform Cost Search algorithm.
      * <p>
@@ -246,7 +247,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start
-     * vertex to the specified goal vertex at the lowest maxCost.
+     * vertex to the specified goal vertex at the lowest cost.
      * <p>
      * This method implements the Uniform Cost Search algorithm.
      * <p>
@@ -277,7 +278,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start
-     * vertex to the specified goal vertex at the lowest maxCost.
+     * vertex to the specified goal vertex at the lowest cost.
      * <p>
      * This method implements the Uniform Cost Search algorithm.
      * <p>
@@ -296,7 +297,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start
-     * vertex to the specified goal vertex at the lowest maxCost.
+     * vertex to the specified goal vertex at the lowest cost.
      * <p>
      * This method implements the Uniform Cost Search algorithm.
      * <p>
@@ -344,25 +345,29 @@ public class DirectedGraphCostPathBuilder<V, A> {
      */
     @Nullable
     public Map.Entry<VertexPath<V>, Double> findShortestVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints, double maxCost) {
-        List<V> combinedPath = new ArrayList<>();
-        V start = null;
-        double cost = 0.0;
-        for (V via : waypoints) {
-            if (start != null) {
-                Map.Entry<VertexPath<V>, Double> pathWithCost = findShortestVertexPath(start, via::equals, maxCost);
-                if (pathWithCost == null) {
-                    return null;
-                }
-                VertexPath<V> path = (VertexPath<V>) pathWithCost.getKey();
-                cost += pathWithCost.getValue();
-                List<V> vertices = path.getVertices();
-                for (int i = combinedPath.isEmpty() ? 0 : 1, n = vertices.size(); i < n; i++) {
-                    combinedPath.add(vertices.get(i));
+        Iterator<? extends V> i = waypoints.iterator();
+        List<V> pathElements = new ArrayList<>(16);
+        if (!i.hasNext()) {
+            return null;
+        }
+        V start = i.next();
+        pathElements.add(start); // root element
+        double cost=0.0;
+        while (i.hasNext()) {
+            V goal = i.next();
+            BackLinkWithArrow<V,A> back = bfs(start, goal::equals, maxCost);
+            if (back == null) {
+                return null;
+            } else {
+                cost=back.cost;
+                int index = pathElements.size();
+                for (; back.parent != null; back = back.parent) {
+                    pathElements.add(index, back.vertex);
                 }
             }
-            start = via;
+            start = goal;
         }
-        return new AbstractMap.SimpleEntry<>(new VertexPath<V>(combinedPath), cost);
+        return new AbstractMap.SimpleEntry<>(new VertexPath<V>(pathElements), cost);
     }
 
     /**
@@ -396,11 +401,11 @@ public class DirectedGraphCostPathBuilder<V, A> {
 
 
     /**
-     * Enumerates all vertex paths from start to goal up to the specified maximal path maxCost.
+     * Enumerates all vertex paths from start to goal up to the specified maximal path cost.
      *
      * @param start   the start vertex
      * @param goal    the goal predicate
-     * @param maxCost the maximal maxCost of a path
+     * @param maxCost the maximal cost of a path
      * @return the enumerated paths
      */
     public <T> List<VertexPath<V>> findAllVertexPaths(@Nonnull V start,
@@ -427,12 +432,12 @@ public class DirectedGraphCostPathBuilder<V, A> {
             return;
         }
 
-        if (current.maxCost > 0) {
+        if (current.cost > 0) {
             for (Map.Entry<V, A> entry : nextNodesFunction.apply(current.vertex)) {
                 V v = entry.getKey();
                 A a = entry.getValue();
                 BackLinkWithArrow<V, A> newPath = new BackLinkWithArrow<>(v, current, a,
-                        current.maxCost - costf.applyAsDouble(current.vertex, v, a));
+                        current.cost - costf.applyAsDouble(current.vertex, v, a));
                 dfsFindAllPaths(newPath, goal, backlinks);
             }
         }
@@ -443,13 +448,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
         final BackLinkWithArrow<VV, AA> parent;
         final VV vertex;
         final AA arrow;
-        final double maxCost;
+        final double cost;
 
-        public BackLinkWithArrow(VV vertex, BackLinkWithArrow<VV, AA> parent, AA arrow, double maxCost) {
+        public BackLinkWithArrow(VV vertex, BackLinkWithArrow<VV, AA> parent, AA arrow, double cost) {
             this.vertex = vertex;
             this.parent = parent;
             this.arrow = arrow;
-            this.maxCost = maxCost;
+            this.cost = cost;
         }
 
     }

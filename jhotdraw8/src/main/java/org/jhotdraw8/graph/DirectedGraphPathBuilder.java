@@ -67,10 +67,10 @@ public class DirectedGraphPathBuilder<V, A> {
             if (goal.test(current.vertex)) {
                 break;
             }
-            if (current.maxDepth > 0) {
+            if (current.depth > 0) {
                 for (V next : nextNodesFunction.apply(current.vertex)) {
                     if (visited.test(next)) {
-                        BackLink<V> backLink = new BackLink<>(next, current, current.maxDepth - 1);
+                        BackLink<V> backLink = new BackLink<>(next, current, current.depth - 1);
                         queue.add(backLink);
                     }
                 }
@@ -167,10 +167,9 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPathOverWaypoints(
-            @Nonnull Collection<V> waypoints,
-            int maxLength) {
-        Iterator<V> i = waypoints.iterator();
+    public VertexPath<V> findVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints,
+                                                     int maxLength) {
+        Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
             return null;
@@ -184,7 +183,7 @@ public class DirectedGraphPathBuilder<V, A> {
                 return null;
             } else {
                 int index = pathElements.size();
-                for (; back != null; back = back.parent) {
+                for (; back.parent != null; back = back.parent) {
                     pathElements.add(index, back.vertex);
                 }
             }
@@ -205,7 +204,7 @@ public class DirectedGraphPathBuilder<V, A> {
                                                       @Nonnull Predicate<V> goal,
                                                       int maxLength) {
         List<BackLink<V>> backlinks = new ArrayList<>();
-        dfsFindAllPaths(new BackLink<>(start, null, maxLength - 1), goal, backlinks);
+        dfsFindAllPaths(new BackLink<>(start, null, 1), goal, backlinks, maxLength);
         List<VertexPath<V>> vertexPaths = new ArrayList<>(backlinks.size());
         Deque<V> path = new ArrayDeque<>();
         for (BackLink<V> list : backlinks) {
@@ -219,16 +218,16 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     private void dfsFindAllPaths(@Nonnull BackLink<V> current, @Nonnull Predicate<V> goal,
-                                 @Nonnull List<BackLink<V>> backlinks) {
+                                 @Nonnull List<BackLink<V>> backlinks, int maxDepth) {
         if (goal.test(current.vertex)) {
             backlinks.add(current);
             return;
         }
 
-        if (current.maxDepth > 0) {
+        if (current.depth < maxDepth) {
             for (V v : nextNodesFunction.apply(current.vertex)) {
-                BackLink<V> newPath = new BackLink<>(v, current, current.maxDepth - 1);
-                dfsFindAllPaths(newPath, goal, backlinks);
+                BackLink<V> newPath = new BackLink<>(v, current, current.depth + 1);
+                dfsFindAllPaths(newPath, goal, backlinks, maxDepth);
             }
         }
     }
@@ -237,12 +236,12 @@ public class DirectedGraphPathBuilder<V, A> {
 
         final BackLink<VV> parent;
         final VV vertex;
-        final int maxDepth;
+        final int depth;
 
-        public BackLink(VV vertex, BackLink<VV> parent, int maxDepth) {
+        public BackLink(VV vertex, BackLink<VV> parent, int depth) {
             this.vertex = vertex;
             this.parent = parent;
-            this.maxDepth = maxDepth;
+            this.depth = depth;
         }
 
     }

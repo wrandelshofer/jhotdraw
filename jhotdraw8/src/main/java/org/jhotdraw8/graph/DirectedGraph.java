@@ -341,7 +341,7 @@ public interface DirectedGraph<V, A> {
         return new SpliteratorIterable<>(()->new BreadthFirstSpliterator<>(this::getNextVertices, start, visited));
     }
     /**
-     * Returns a {@link Stream} which performs a maxDepth first search
+     * Returns a {@link Stream} which performs a depth first search
      * starting at the given vertex.
      *
      * @param start the start vertex

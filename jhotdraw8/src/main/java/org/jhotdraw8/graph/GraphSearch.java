@@ -94,7 +94,7 @@ public class GraphSearch {
     }
 
     /**
-     * Given a set of vertices and a list of arrows ordered by maxCost, returns
+     * Given a set of vertices and a list of arrows ordered by cost, returns
      * the minimum spanning tree.
      * <p>
      * Uses Kruskal's algorithm.
@@ -102,8 +102,8 @@ public class GraphSearch {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param vertices a directed graph
-     * @param orderedArrows list of arrows sorted by maxCost in ascending order
-     * (lowest maxCost first, highest maxCost last).
+     * @param orderedArrows list of arrows sorted by cost in ascending order
+     * (lowest cost first, highest cost last).
      * @param rejectedArrows optional, all excluded arrows are added to this
      * list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
@@ -118,7 +118,7 @@ public class GraphSearch {
         // Create initial forest
         Map<V, List<V>> forest = createForest(vertices);
 
-        // Process arrows from lowest maxCost to highest maxCost
+        // Process arrows from lowest cost to highest cost
         for (A arrow : orderedArrows) {
             List<V> uset = forest.get(arrow.getStart());
             List<V> vset = forest.get(arrow.getEnd());
@@ -134,7 +134,7 @@ public class GraphSearch {
     }
 
     /**
-     * Given a set of vertices and a list of arrows ordered by maxCost, returns a
+     * Given a set of vertices and a list of arrows ordered by cost, returns a
      * builder with the minimum spanning tree. This is an undirected graph with
      * an arrow in each direction.
      * <p>
@@ -142,8 +142,8 @@ public class GraphSearch {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param vertices the list of vertices
-     * @param orderedArrows list of arrows sorted by maxCost in ascending order
-     * (lowest maxCost first, highest maxCost last)
+     * @param orderedArrows list of arrows sorted by cost in ascending order
+     * (lowest cost first, highest cost last)
      * @param includedArrows optional, all included arrows are added to this
      * list, if it is provided.
      * @param rejectedArrows optional, all excluded arrows are added to this
@@ -287,7 +287,7 @@ public class GraphSearch {
          * Therefore v must be left on the stack if v.low < v.index, whereas v must be removed as the root of a
          * strongly connected component if v.low == v.index.
          * <p>
-         * The value v.low is computed during the maxDepth-first search from v, as this finds the nodes that are reachable from v.
+         * The value v.low is computed during the depth-first search from v, as this finds the nodes that are reachable from v.
          */
         private int low;
 
