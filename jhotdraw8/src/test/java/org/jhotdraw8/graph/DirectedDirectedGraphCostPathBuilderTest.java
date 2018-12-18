@@ -92,7 +92,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
         System.out.println("findShortestVertexPath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
+        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries,costf);
         VertexPath<Integer> result = instance.findShortestVertexPath(start, goal::equals, Double.MAX_VALUE);
         assertEquals( expResult, result);
     }
@@ -116,7 +116,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
         System.out.println("findShortestEdgePathMultiGoal start:"+start+" goal:"+multiGoal+" expResult:"+expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
+        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries,costf);
 
         // Find a path for each individual goal, and remember the shortest path
         EdgePath<Double> individualShortestPath=null;
@@ -156,7 +156,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
         System.out.println("findShortestEdgePath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
+        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries,costf);
         EdgePath<Double> result = instance.findShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
         assertEquals(result, expResult);
     }
@@ -177,7 +177,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
         System.out.println("findAnyVertexPath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer,Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
+        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries,costf);
         VertexPath<Integer> result = instance.findVertexPath(start, goal::equals,Double.POSITIVE_INFINITY);
         assertEquals(result, expResult);
     }
@@ -199,7 +199,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
         System.out.println("findAnyVertexPath start:"+start+" goal:"+goal+" expResult:"+expResult);
         DirectedGraph<Integer,Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
+        DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries,costf);
         EdgePath<Double> result = instance.findEdgePath(start, goal::equals,Double.POSITIVE_INFINITY);
         assertEquals(result, expResult);
     }
@@ -241,7 +241,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
     public void doFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<VertexPath<Integer>> expected) {
         System.out.println("doTestFindAllPaths start:"+start+", goal:"+goal+", maxCost:"+maxCost);
         ToDoubleFunction<Double> costf = arg->arg;
-        DirectedGraphCostPathBuilder<Integer, Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
+        DirectedGraphCostPathBuilder<Integer, Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries,costf);
         List<VertexPath<Integer>> actual = instance.findAllVertexPaths( start, a->a==goal, maxCost);
         assertEquals(expected,actual);
     }

@@ -166,7 +166,7 @@ public interface DirectedGraph<V, A> {
      *  with the arrow pointing to the vertex
      */
     @Nonnull
-    default Collection<Map.Entry<V,A>> getNextVerticesAndArrows(V vertex) {
+    default Collection<Map.Entry<V,A>> getNextEntries(V vertex) {
         class NextVertexAndArrowIterator implements Iterator<Map.Entry<V,A>> {
 
             private int index;
