@@ -83,13 +83,14 @@ public class DirectedGraphPathBuilder<V, A> {
             if (goal.test(current.vertex)) {
                 break;
             }
-            for (int i = 0, n = graph.getNextCount(current.vertex); i < n; i++) {
-                V next = graph.getNext(current.vertex, i);
+            int i=0;
+            for (V next : graph.getNextVertices(current.vertex)) {
                 A arrow = graph.getNextArrow(current.vertex, i);
                 if (visited.test(next)) {
                     BackLinkWithArrow<V, A> backLink = new BackLinkWithArrow<>(next, current, arrow);
                     queue.add(backLink);
                 }
+                i++;
             }
         }
         queue.clear();
@@ -170,7 +171,8 @@ public class DirectedGraphPathBuilder<V, A> {
                                                      int goal,
                                                      @Nonnull BitSet explored,
                                                      @Nonnull AttributedIntDirectedGraph<V, A> graph,
-                                                     @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+                                                     @Nonnull ToDoubleTriFunction<V, V, A> costf,
+                                                     boolean needArrow) {
         IntNodeWithCost<A> node = new IntNodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
@@ -186,7 +188,7 @@ public class DirectedGraphPathBuilder<V, A> {
             explored.set(node.getVertex());
             for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
                 int next = graph.getNext(vertex, i);
-                final A arrow = graph.getArrow(vertex, i);
+                final A arrow = needArrow? graph.getArrow(vertex, i):null;
                 double cost = node.cost + costf.applyAsDouble(graph.getVertex(vertex), graph.getVertex(next), arrow);
 
                 @SuppressWarnings("unchecked")
@@ -263,8 +265,8 @@ public class DirectedGraphPathBuilder<V, A> {
         return new EdgePath<>(arrows);
     }
 
-    private NodeWithCost<V, A> doFindShortestPath(V start,
-                                                  PriorityQueue<NodeWithCost<V, A>> frontier,
+    private NodeWithCost<V, A> doFindShortestPath(@Nonnull V start,
+                                                  @Nonnull PriorityQueue<NodeWithCost<V, A>> frontier,
                                                   @Nonnull Map<V, NodeWithCost<V, A>> frontierMap,
                                                   @Nonnull Predicate<V> goalPredicate,
                                                   @Nonnull Set<V> explored,
@@ -283,8 +285,8 @@ public class DirectedGraphPathBuilder<V, A> {
                 break;
             }
             explored.add(node.getVertex());
-            for (int i = 0, count = graph.getNextCount(vertex); i < count; i++) {
-                V next = graph.getNext(vertex, i);
+            int i=0;
+            for (V next : graph.getNextVertices(vertex)) {
                 final A arrow = graph.getNextArrow(vertex, i);
                 double cost = node.cost + costf.applyAsDouble(vertex, next, arrow);
 
@@ -303,6 +305,7 @@ public class DirectedGraphPathBuilder<V, A> {
                         frontier.add(nwcInFrontier);
                     }
                 }
+                i++;
             }
         }
 
@@ -456,7 +459,7 @@ public class DirectedGraphPathBuilder<V, A> {
     public EdgePath<A> findIntShortestEdgePath(@Nonnull AttributedIntDirectedGraph<V, A> graph,
                                                int start, int goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
 
-        IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
+        IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf,true);
         if (node == null) {
             return null;
         }
@@ -471,7 +474,7 @@ public class DirectedGraphPathBuilder<V, A> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     private IntNodeWithCost<A> findIntShortestPath(AttributedIntDirectedGraph<V, A> graph,
-                                                   int start, int goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+                                                   int start, int goal, @Nonnull ToDoubleTriFunction<V, V, A> costf, boolean needArrow) {
         final int vertexCount = graph.getVertexCount();
         if (vertexCount == 0) {
             return null;
@@ -485,7 +488,7 @@ public class DirectedGraphPathBuilder<V, A> {
             intFrontier = new PriorityQueue<>(16);
         }
 
-        IntNodeWithCost<A> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf);
+        IntNodeWithCost<A> result = doFindIntShortestPath(start, intFrontier, intFrontierMap, goal, intExplored, graph, costf, needArrow);
         intFrontier.clear();
         intExplored.clear();
         Arrays.fill(intFrontierMap, null);// clears array to prevent build-up of garbage
@@ -496,7 +499,7 @@ public class DirectedGraphPathBuilder<V, A> {
     public VertexPath<Integer> findIntShortestVertexPath(@Nonnull AttributedIntDirectedGraph<V, A> graph,
                                                          int start, int goal, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
 
-        IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf);
+        IntNodeWithCost<A> node = findIntShortestPath(graph, start, goal, costf,false);
         if (node == null) {
             return null;
         }
@@ -610,7 +613,7 @@ public class DirectedGraphPathBuilder<V, A> {
 
     @Nullable
     private NodeWithCost<V, A> findShortestPath(@Nonnull DirectedGraph<V, A> graph,
-                                                V start,
+                                                @Nonnull V start,
                                                 @Nonnull Predicate<V> goalPredicate,
                                                 @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         // Size of priority deque and frontierMap is the expected size of the frontier.
@@ -937,42 +940,46 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     /**
-     * Finds all vertex paths from start to goal up to the specified maximal length.
-     * @param nextNodesFunction
-     * @param start
-     * @param goal
-     * @param maxLength
-     * @param <T>
-     * @return
+     * Enumerates all vertex paths from start to goal up to the specified maximal path length.
+     *
+     * @param graph the graph
+     * @param start the start vertex
+     * @param goal  the goal vertex
+     * @param maxLength the maximal length of paths
+     * @return the enumerated paths
      */
-    public <T> List<VertexPath<V>> findAllVertexPaths(@Nonnull Function<V, Iterable<V>> nextNodesFunction,
+    public <T> List<VertexPath<V>> findAllVertexPaths(@Nonnull DirectedGraph<V, A> graph,
                                                       @Nonnull V start,
                                                       @Nonnull V goal,
                                                       int maxLength) {
-        List<List<V>> paths = new ArrayList<>();
-        dfsFindAllPaths(nextNodesFunction, start, goal, Collections.singletonList(start), paths, maxLength);
-        List<VertexPath<V>> vertexPaths = new ArrayList<>(paths.size());
-        for (List<V> list : paths) {
-            vertexPaths.add(new VertexPath<V>(list));
+        List<BackLinkWithArrow<V, A>> backlinks = new ArrayList<>();
+        dfsFindAllPaths(graph, start, goal, new BackLinkWithArrow<>(start, null, null), backlinks, maxLength);
+        List<VertexPath<V>> vertexPaths = new ArrayList<>(backlinks.size());
+        Deque<V> path = new ArrayDeque<>();
+        for (BackLinkWithArrow<V, A> list : backlinks) {
+            path.clear();
+            for (BackLinkWithArrow<V, A> backlink = list; backlink != null; backlink = backlink.parent) {
+                path.addFirst(backlink.vertex);
+            }
+            vertexPaths.add(new VertexPath<V>(path));
         }
         return vertexPaths;
     }
 
-    private void dfsFindAllPaths(@Nonnull Function<V, Iterable<V>> nextNodesFunction,
-                                 V current, V goal, List<V> path, List<List<V>> paths, int maxDepth) {
+    private void dfsFindAllPaths(@Nonnull DirectedGraph<V, A> graph,
+                                 V current, V goal, BackLinkWithArrow<V, A> backlink,
+                                 List<BackLinkWithArrow<V, A>> backlinks, int maxDepth) {
         if (maxDepth <= 0) {
             return;
         }
         if (current.equals(goal)) {
-            paths.add(path);
+            backlinks.add(backlink);
             return;
         }
 
-        for (V v : nextNodesFunction.apply(current)) {
-            List<V> newPath = new ArrayList<>(path.size() + 1);
-            newPath.addAll(path);
-            newPath.add(v);
-            dfsFindAllPaths(nextNodesFunction, v, goal, newPath, paths, maxDepth - 1);
+        for (V v : graph.getNextVertices(current)) {
+            BackLinkWithArrow<V, A> newPath = new BackLinkWithArrow<>(v, backlink, null);
+            dfsFindAllPaths(graph, v, goal, newPath, backlinks, maxDepth - 1);
         }
     }
 

@@ -286,7 +286,7 @@ public class DirectedGraphPathBuilderTest {
     public void doTestFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<VertexPath<Integer>> expected) {
         System.out.println("doTestFindAllPaths start:"+start+", goal:"+goal+", maxDepth:"+maxDepth);
         DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>();
-        List<VertexPath<Integer>> actual = instance.findAllVertexPaths(graph::getNextVertices, start, goal, maxDepth);
+        List<VertexPath<Integer>> actual = instance.findAllVertexPaths(graph, start, goal, maxDepth);
         assertEquals(expected,actual);
     }
 }
