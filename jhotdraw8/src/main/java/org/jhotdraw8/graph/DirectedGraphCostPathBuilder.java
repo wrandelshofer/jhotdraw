@@ -112,7 +112,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
         if (visitedSet == null) {
             visitedSet = new HashSet<>();
         }
-        BackLinkWithArrow<V, A> result = bfs(root, goal, visitedSet::add,maxCost);
+        BackLinkWithArrow<V, A> result = bfs(root, goal, visitedSet::add, maxCost);
         visitedSet.clear();
         return result;
     }
@@ -138,7 +138,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
             }
             explored.add(node.getVertex());
 
-            if (node.cost<maxCost) {
+            if (node.cost < maxCost) {
                 for (Map.Entry<V, A> entry : nextNodesFunction.apply(vertex)) {
                     V next = entry.getKey();
                     A arrow = entry.getValue();
@@ -183,7 +183,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
-    public EdgePath<A> findAnyEdgePath(@Nonnull V start, @Nonnull Predicate<V> goal, double maxCost) {
+    public EdgePath<A> findEdgePath(@Nonnull V start, @Nonnull Predicate<V> goal, double maxCost) {
         Deque<A> arrows = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = bfs(start, goal, maxCost);
         if (current == null) {
@@ -194,6 +194,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
         }
         return new EdgePath<>(arrows);
     }
+
     /**
      * Builds an EdgePath through the graph which goes from the specified start
      * vertex to the specified goal vertex.
@@ -210,7 +211,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findAnyVertexPath(@Nonnull V start, @Nonnull Predicate<V> goal, double maxCost) {
+    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull Predicate<V> goal, double maxCost) {
         Deque<V> vertices = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = bfs(start, goal, maxCost);
         if (current == null) {
@@ -232,13 +233,34 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
      * Wikipedia</a>
      *
-     * @param start         the start vertex
-     * @param goalPredicate the goal predicate
+     * @param start the start vertex
+     * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible
      */
     @Nullable
     public VertexPath<V> findShortestVertexPath(@Nonnull V start,
-                                                 @Nonnull Predicate<V> goalPredicate, double maxCost) {
+                                                @Nonnull V goal) {
+        return findShortestVertexPath(start, goal::equals, Double.POSITIVE_INFINITY);
+    }
+
+    /**
+     * Builds a VertexPath through the graph which goes from the specified start
+     * vertex to the specified goal vertex at the lowest maxCost.
+     * <p>
+     * This method implements the Uniform Cost Search algorithm.
+     * <p>
+     * References:<br>
+     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     * Wikipedia</a>
+     *
+     * @param start         the start vertex
+     * @param goalPredicate the goal predicate
+     * @param maxCost       the maximal path cost
+     * @return a VertexPath if traversal is possible
+     */
+    @Nullable
+    public VertexPath<V> findShortestVertexPath(@Nonnull V start,
+                                                @Nonnull Predicate<V> goalPredicate, double maxCost) {
 
         NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
@@ -262,8 +284,28 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
      * Wikipedia</a>
      *
+     * @param start the start vertex
+     * @param goal  the goal vertex
+     * @return a VertexPath if traversal is possible
+     */
+    @Nullable
+    public EdgePath<A> findShortestEdgePath(@Nonnull V start, @Nonnull V goal) {
+        return findShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
+    }
+
+    /**
+     * Builds a VertexPath through the graph which goes from the specified start
+     * vertex to the specified goal vertex at the lowest maxCost.
+     * <p>
+     * This method implements the Uniform Cost Search algorithm.
+     * <p>
+     * References:<br>
+     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     * Wikipedia</a>
+     *
      * @param start         the start vertex
      * @param goalPredicate the goal predicate
+     * @param maxCost       the maximal cost
      * @return a VertexPath if traversal is possible
      */
     @Nullable
@@ -279,6 +321,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
         }
         return new EdgePath<>(edges);
     }
+
     @Nullable
     private NodeWithCost<V, A> findShortestPath(@Nonnull V start,
                                                 @Nonnull Predicate<V> goalPredicate,
@@ -343,7 +386,6 @@ public class DirectedGraphCostPathBuilder<V, A> {
         }
         return new EdgePath<A>(combinedPath);
     }
-
 
 
     /**

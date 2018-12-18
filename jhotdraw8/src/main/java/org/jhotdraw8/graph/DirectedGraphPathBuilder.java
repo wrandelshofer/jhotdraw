@@ -43,11 +43,11 @@ public class DirectedGraphPathBuilder<V, A> {
     /**
      * Breadth-first-search.
      *
-     * @param root    the starting point of the search
-     * @param goal    the goal of the search
-     * @param visited a predicate with side effect. The predicate returns true
-     *                if the specified vertex has been visited, and marks the specified vertex
-     *                as visited.
+     * @param root      the starting point of the search
+     * @param goal      the goal of the search
+     * @param visited   a predicate with side effect. The predicate returns true
+     *                  if the specified vertex has been visited, and marks the specified vertex
+     *                  as visited.
      * @param maxLength the maximal path length
      * @return a back link on success, null on failure
      */
@@ -58,7 +58,7 @@ public class DirectedGraphPathBuilder<V, A> {
         if (queue == null) {
             queue = new ArrayDeque<>(16);
         }
-        BackLink<V> rootBackLink = new BackLink<>(root, null,maxLength);
+        BackLink<V> rootBackLink = new BackLink<>(root, null, maxLength);
         visited.test(root);
         queue.add(rootBackLink);
         BackLink<V> current = null;
@@ -67,7 +67,7 @@ public class DirectedGraphPathBuilder<V, A> {
             if (goal.test(current.vertex)) {
                 break;
             }
-            if (current.maxDepth >0) {
+            if (current.maxDepth > 0) {
                 for (V next : nextNodesFunction.apply(current.vertex)) {
                     if (visited.test(next)) {
                         BackLink<V> backLink = new BackLink<>(next, current, current.maxDepth - 1);
@@ -87,8 +87,8 @@ public class DirectedGraphPathBuilder<V, A> {
     /**
      * Breadth-first-search.
      *
-     * @param root the starting point of the search
-     * @param goal the goal of the search
+     * @param root      the starting point of the search
+     * @param goal      the goal of the search
      * @param maxLength the maximal path length
      * @return the path elements. Returns an empty list if there is no path. The
      * list is mutable.
@@ -105,7 +105,6 @@ public class DirectedGraphPathBuilder<V, A> {
         return result;
     }
 
-
     /**
      * Builds a VertexPath through the graph which goes from the specified start
      * vertex to the specified goal vertex.
@@ -118,15 +117,34 @@ public class DirectedGraphPathBuilder<V, A> {
      * Wikipedia</a>
      *
      * @param start the start vertex
-     * @param goal  the goal predicate
-     * @param maxLength the maximal path length
+     * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPath(
-            @Nonnull V start, @Nonnull Predicate<V> goal, int maxLength) {
+    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull V goal) {
+        return findVertexPath(start, goal::equals, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Builds a VertexPath through the graph which goes from the specified start
+     * vertex to the specified goal vertex.
+     * <p>
+     * This method uses a breadth first search and returns the first result that
+     * it finds.
+     * <p>
+     * References:<br>
+     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     * Wikipedia</a>
+     *
+     * @param start         the start vertex
+     * @param goalPredicate the goal predicate
+     * @param maxLength     the maximal path length
+     * @return a VertexPath if traversal is possible, null otherwise
+     */
+    @Nullable
+    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, int maxLength) {
         Deque<V> vertices = new ArrayDeque<>();
-        BackLink<V> current = bfs(start, goal, maxLength);
+        BackLink<V> current = bfs(start, goalPredicate, maxLength);
         if (current == null) {
             return null;
         }
@@ -187,7 +205,7 @@ public class DirectedGraphPathBuilder<V, A> {
                                                       @Nonnull Predicate<V> goal,
                                                       int maxLength) {
         List<BackLink<V>> backlinks = new ArrayList<>();
-        dfsFindAllPaths(new BackLink<>(start, null,maxLength-1), goal,  backlinks);
+        dfsFindAllPaths(new BackLink<>(start, null, maxLength - 1), goal, backlinks);
         List<VertexPath<V>> vertexPaths = new ArrayList<>(backlinks.size());
         Deque<V> path = new ArrayDeque<>();
         for (BackLink<V> list : backlinks) {
@@ -200,14 +218,14 @@ public class DirectedGraphPathBuilder<V, A> {
         return vertexPaths;
     }
 
-    private void dfsFindAllPaths( @Nonnull BackLink<V> current,@Nonnull Predicate<V> goal,
+    private void dfsFindAllPaths(@Nonnull BackLink<V> current, @Nonnull Predicate<V> goal,
                                  @Nonnull List<BackLink<V>> backlinks) {
         if (goal.test(current.vertex)) {
             backlinks.add(current);
             return;
         }
 
-        if (current.maxDepth > 0){
+        if (current.maxDepth > 0) {
             for (V v : nextNodesFunction.apply(current.vertex)) {
                 BackLink<V> newPath = new BackLink<>(v, current, current.maxDepth - 1);
                 dfsFindAllPaths(newPath, goal, backlinks);

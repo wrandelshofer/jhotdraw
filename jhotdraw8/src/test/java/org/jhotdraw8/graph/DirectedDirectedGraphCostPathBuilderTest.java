@@ -178,7 +178,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
         DirectedGraph<Integer,Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
         DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
-        VertexPath<Integer> result = instance.findAnyVertexPath(start, goal::equals,Double.POSITIVE_INFINITY);
+        VertexPath<Integer> result = instance.findVertexPath(start, goal::equals,Double.POSITIVE_INFINITY);
         assertEquals(result, expResult);
     }
 
@@ -200,7 +200,7 @@ public class DirectedDirectedGraphCostPathBuilderTest {
         DirectedGraph<Integer,Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg->arg;
         DirectedGraphCostPathBuilder<Integer,Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextVerticesAndArrows,costf);
-        EdgePath<Double> result = instance.findAnyEdgePath(start, goal::equals,Double.POSITIVE_INFINITY);
+        EdgePath<Double> result = instance.findEdgePath(start, goal::equals,Double.POSITIVE_INFINITY);
         assertEquals(result, expResult);
     }
     private DirectedGraph<Integer,Double> createGraph2() {
