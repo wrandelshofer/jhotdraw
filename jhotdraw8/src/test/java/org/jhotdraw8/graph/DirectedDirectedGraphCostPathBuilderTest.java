@@ -81,9 +81,9 @@ public class DirectedDirectedGraphCostPathBuilderTest {
     @TestFactory
     public List<DynamicTest> testFindShortestVertexPath() {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VertexPath.of(1, 3, 6, 5), 1.0)),
-                dynamicTest("1", () -> doFindShortestVertexPath(1, 4, VertexPath.of(1, 3, 4), 1.0)),
-                dynamicTest("1", () -> doFindShortestVertexPath(2, 6, VertexPath.of(2, 3, 6), 1.0))
+                dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VertexPath.of(1, 3, 6, 5), 20.0)),
+                dynamicTest("2", () -> doFindShortestVertexPath(1, 4, VertexPath.of(1, 3, 4), 20.0)),
+                dynamicTest("3", () -> doFindShortestVertexPath(2, 6, VertexPath.of(2, 3, 6), 12.0))
         );
     }
 
@@ -136,13 +136,13 @@ public class DirectedDirectedGraphCostPathBuilderTest {
 
         // Find shortest path to any of the goals
         Map.Entry<EdgePath<Double>, Double> actualShortestPath = instance.findShortestEdgePath(start, multiGoal::contains, Double.POSITIVE_INFINITY);
-        double actualLength = actualShortestPath.getKey().getEdges().stream().mapToDouble(Double::doubleValue).sum();
+        double actualLength = actualShortestPath.getValue();
 
         System.out.println("  individual shortest path: " + individualShortestPath);
         System.out.println("  actual shortest path: " + actualShortestPath);
 
         assertEquals(individualShortestLength, actualLength);
-        assertEquals(expResult, actualShortestPath);
+        assertEquals(expResult, actualShortestPath.getKey());
     }
 
     @TestFactory
