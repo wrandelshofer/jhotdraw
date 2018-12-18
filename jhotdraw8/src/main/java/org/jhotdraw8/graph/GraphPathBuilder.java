@@ -123,7 +123,7 @@ public class GraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findAnyVertexPath(
+    public VertexPath<V> findVertexPath(
             @Nonnull V start, @Nonnull Predicate<V> goal, int maxLength) {
         Deque<V> vertices = new ArrayDeque<>();
         BackLink<V> current = bfs(start, goal, maxLength);
@@ -149,7 +149,7 @@ public class GraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findAnyVertexPathOverWaypoints(
+    public VertexPath<V> findVertexPathOverWaypoints(
             @Nonnull Collection<V> waypoints,
             int maxLength) {
         Iterator<V> i = waypoints.iterator();

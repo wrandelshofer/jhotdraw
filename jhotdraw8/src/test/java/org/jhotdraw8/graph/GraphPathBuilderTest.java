@@ -92,7 +92,7 @@ public class GraphPathBuilderTest {
         System.out.println("findAnyPath start:" + start + " goal:" + goal + " expResult:" + expected);
         DirectedGraph<Integer, Double> graph = createGraph();
         GraphPathBuilder<Integer, Double> instance = new GraphPathBuilder<>(graph::getNextVertices);
-        VertexPath<Integer> actual = instance.findAnyVertexPath(start, goal::equals, Integer.MAX_VALUE);
+        VertexPath<Integer> actual = instance.findVertexPath(start, goal::equals, Integer.MAX_VALUE);
         assertEquals(expected, actual);
     }
 
@@ -112,7 +112,7 @@ public class GraphPathBuilderTest {
         System.out.println("findAnyVertexPath start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         GraphPathBuilder<Integer, Double> instance = new GraphPathBuilder<>(graph::getNextVertices);
-        VertexPath<Integer> result = instance.findAnyVertexPath(start, goal::equals, Integer.MAX_VALUE);
+        VertexPath<Integer> result = instance.findVertexPath(start, goal::equals, Integer.MAX_VALUE);
         assertEquals(result, expResult);
     }
 
