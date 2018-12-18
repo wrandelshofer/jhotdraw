@@ -1,4 +1,4 @@
-/* @(#)IntDirectedGraphPathBuilderTest.java
+/* @(#)IntGraphPathBuilderTest.java
  * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * IntDirectedGraphPathBuilderTest.
+ * IntGraphPathBuilderTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphPathBuilderTest {
+public class IntGraphPathBuilderTest {
 
-    public IntDirectedGraphPathBuilderTest() {
+    public IntGraphPathBuilderTest() {
     }
 
     private IntDirectedGraph createGraph() {

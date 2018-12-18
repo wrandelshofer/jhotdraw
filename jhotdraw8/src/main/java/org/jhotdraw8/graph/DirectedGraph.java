@@ -6,12 +6,14 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.collection.SpliteratorIterable;
 
 import java.util.AbstractCollection;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -157,6 +159,54 @@ public interface DirectedGraph<V, A> {
     }
 
     /**
+     * Returns the direct successor vertices of the specified vertex.
+     *
+     * @param vertex a vertex
+     * @return a collection view on the direct successor vertices of vertex
+     *  with the arrow pointing to the vertex
+     */
+    @Nonnull
+    default Collection<Map.Entry<V,A>> getNextVerticesAndArrows(V vertex) {
+        class NextVertexAndArrowIterator implements Iterator<Map.Entry<V,A>> {
+
+            private int index;
+            private final V vertex;
+            private final int nextCount;
+
+            public NextVertexAndArrowIterator(V vertex) {
+                this.vertex = vertex;
+                this.nextCount = getNextCount(vertex);
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index < nextCount;
+            }
+
+            @Override
+            public Map.Entry<V,A> next() {
+                int i=index++;
+                return new AbstractMap.SimpleEntry<>(
+                        getNext(vertex, i),
+                        getNextArrow(vertex,i)
+                );
+            }
+
+        }
+        return new AbstractCollection<Map.Entry<V,A>>() {
+            @Nonnull
+            @Override
+            public Iterator<Map.Entry<V,A>> iterator() {
+                return new NextVertexAndArrowIterator(vertex);
+            }
+
+            @Override
+            public int size() {
+                return getNextCount(vertex);
+            }
+        };
+    }
+    /**
      * Returns the direct successor arrows of the specified vertex.
      *
      * @param vertex a vertex
@@ -291,7 +341,7 @@ public interface DirectedGraph<V, A> {
         return new SpliteratorIterable<>(()->new BreadthFirstSpliterator<>(this::getNextVertices, start, visited));
     }
     /**
-     * Returns a {@link Stream} which performs a depth first search
+     * Returns a {@link Stream} which performs a maxDepth first search
      * starting at the given vertex.
      *
      * @param start the start vertex

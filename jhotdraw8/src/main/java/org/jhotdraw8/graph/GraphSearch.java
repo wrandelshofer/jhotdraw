@@ -25,7 +25,7 @@ import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.IteratorEnumerator;
 
 /**
- * Provides algorithms for directed graphs.
+ * Provides search algorithms for directed graphs.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -94,59 +94,7 @@ public class GraphSearch {
     }
 
     /**
-     * Given an int directed graph, returns all disjoint sets of vertices.
-     * <p>
-     * Uses Kruskal's algorithm.
-     *
-     * @param <A> the arrow type
-     * @param g a directed graph
-     * @return the disjoint sets.
-     */
-    @Nonnull
-    public static <A> List<Set<Integer>> findDisjointSets(AttributedIntDirectedGraph<?, A> g) {
-        // Create initial forest.
-        final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
-        for (int v = 0, n = g.getVertexCount(); v < n; v++) {
-            final IntArrayList initialSet = new IntArrayList(1);
-            initialSet.add(v);
-            sets.add(initialSet);
-        }
-        // Merge sets.
-        for (int u = 0, n = g.getVertexCount(); u < n; u++) {
-            for (int v = 0, m = g.getNextCount(u); v < m; v++) {
-                final IntArrayList uset = sets.get(u);
-                final IntArrayList vset = sets.get(v);
-                if (uset != vset) {
-                    if (uset.size() < vset.size()) {
-                        for (int i = 0, usize = uset.size(); i < usize; i++) {
-                            int uu = uset.get(i);
-                            sets.set(uu, vset);
-                        }
-                        vset.addAll(uset);
-                    } else {
-                        for (int i = 0, vsize = vset.size(); i < vsize; i++) {
-                            int vv = vset.get(i);
-                            sets.set(vv, uset);
-                        }
-                        uset.addAll(vset);
-                    }
-                }
-            }
-        }
-        // Create final forest.
-        final Map<IntArrayList, Object> setMap = new HashMap<>();
-        final List<Set<Integer>> disjointSets = new ArrayList<>();
-        for (IntArrayList set : sets) {
-            if (!setMap.containsKey(set)) {
-                setMap.put(set, set);
-                disjointSets.add(set.addAllInto(new LinkedHashSet<>()));
-            }
-        }
-        return disjointSets;
-    }
-
-    /**
-     * Given a set of vertices and a list of arrows ordered by cost, returns
+     * Given a set of vertices and a list of arrows ordered by maxCost, returns
      * the minimum spanning tree.
      * <p>
      * Uses Kruskal's algorithm.
@@ -154,8 +102,8 @@ public class GraphSearch {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param vertices a directed graph
-     * @param orderedArrows list of arrows sorted by cost in ascending order
-     * (lowest cost first, highest cost last).
+     * @param orderedArrows list of arrows sorted by maxCost in ascending order
+     * (lowest maxCost first, highest maxCost last).
      * @param rejectedArrows optional, all excluded arrows are added to this
      * list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
@@ -170,7 +118,7 @@ public class GraphSearch {
         // Create initial forest
         Map<V, List<V>> forest = createForest(vertices);
 
-        // Process arrows from lowest cost to highest cost
+        // Process arrows from lowest maxCost to highest maxCost
         for (A arrow : orderedArrows) {
             List<V> uset = forest.get(arrow.getStart());
             List<V> vset = forest.get(arrow.getEnd());
@@ -186,7 +134,7 @@ public class GraphSearch {
     }
 
     /**
-     * Given a set of vertices and a list of arrows ordered by cost, returns a
+     * Given a set of vertices and a list of arrows ordered by maxCost, returns a
      * builder with the minimum spanning tree. This is an undirected graph with
      * an arrow in each direction.
      * <p>
@@ -194,8 +142,8 @@ public class GraphSearch {
      * @param <V> the vertex type
      * @param <A> the arrow type
      * @param vertices the list of vertices
-     * @param orderedArrows list of arrows sorted by cost in ascending order
-     * (lowest cost first, highest cost last)
+     * @param orderedArrows list of arrows sorted by maxCost in ascending order
+     * (lowest maxCost first, highest maxCost last)
      * @param includedArrows optional, all included arrows are added to this
      * list, if it is provided.
      * @param rejectedArrows optional, all excluded arrows are added to this
@@ -339,7 +287,7 @@ public class GraphSearch {
          * Therefore v must be left on the stack if v.low < v.index, whereas v must be removed as the root of a
          * strongly connected component if v.low == v.index.
          * <p>
-         * The value v.low is computed during the depth-first search from v, as this finds the nodes that are reachable from v.
+         * The value v.low is computed during the maxDepth-first search from v, as this finds the nodes that are reachable from v.
          */
         private int low;
 

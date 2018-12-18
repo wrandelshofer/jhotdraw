@@ -22,6 +22,10 @@ import org.jhotdraw8.collection.IntArrayList;
  */
 public class IntDirectedGraphPathBuilder {
 
+    public IntDirectedGraphPathBuilder() {
+
+    }
+
     /**
      * Builds a VertexPath through the graph which goes from the specified start
      * vertex to the specified goal vertex.
