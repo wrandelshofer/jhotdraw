@@ -1,4 +1,4 @@
-/* @(#)GraphPathBuilderWithCost.java
+/* @(#)DirectedGraphCostPathBuilder.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -24,14 +24,14 @@ import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
 /**
- * GraphPathBuilderWithCost.
+ * DirectedGraphCostPathBuilder.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GraphPathBuilderWithCost<V, A> {
+public class DirectedGraphCostPathBuilder<V, A> {
     @Nonnull
     private final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction;
     @Nonnull
@@ -39,14 +39,14 @@ public class GraphPathBuilderWithCost<V, A> {
     private Queue<BackLinkWithArrow<V, A>> queue;
     private Set<V> visitedSet;
 
-    public GraphPathBuilderWithCost(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
-                                    @Nonnull final ToDoubleFunction<A> costf) {
+    public DirectedGraphCostPathBuilder(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
+                                        @Nonnull final ToDoubleFunction<A> costf) {
         this.nextNodesFunction = nextNodesFunction;
         this.costf = (v1, v2, a) -> costf.applyAsDouble(a);
     }
 
-    public GraphPathBuilderWithCost(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
-                                    @Nonnull final ToDoubleTriFunction<V, V, A> costf) {
+    public DirectedGraphCostPathBuilder(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
+                                        @Nonnull final ToDoubleTriFunction<V, V, A> costf) {
         this.nextNodesFunction = nextNodesFunction;
         this.costf = costf;
     }

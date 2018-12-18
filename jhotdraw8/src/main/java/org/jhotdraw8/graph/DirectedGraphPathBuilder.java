@@ -1,4 +1,4 @@
-/* @(#)GraphPathBuilder.java
+/* @(#)DirectedGraphPathBuilder.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -18,14 +18,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * GraphPathBuilder.
+ * DirectedGraphPathBuilder.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GraphPathBuilder<V, A> {
+public class DirectedGraphPathBuilder<V, A> {
     @Nonnull
     private final Function<V, Iterable<V>> nextNodesFunction;
     private Queue<BackLink<V>> queue;
@@ -36,7 +36,7 @@ public class GraphPathBuilder<V, A> {
      *
      * @param nextNodesFunction Accessor function to next nodes in graph.
      */
-    public GraphPathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {
+    public DirectedGraphPathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {
         this.nextNodesFunction = nextNodesFunction;
     }
 

@@ -1,4 +1,4 @@
-/* @(#)GraphPathBuilderTest.java
+/* @(#)DirectedGraphPathBuilderTest.java
  * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -15,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * GraphPathBuilderTest.
+ * DirectedGraphPathBuilderTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GraphPathBuilderTest {
+public class DirectedGraphPathBuilderTest {
 
-    public GraphPathBuilderTest() {
+    public DirectedGraphPathBuilderTest() {
     }
 
     private DirectedGraph<Integer, Double> createGraph() {
@@ -86,12 +86,12 @@ public class GraphPathBuilderTest {
 
 
     /**
-     * Test of findAnyVertexPath method, of class GraphPathBuilder.
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilder.
      */
     public void doFindAnyPath_3args(Integer start, Integer goal, VertexPath<Integer> expected) throws Exception {
         System.out.println("findAnyPath start:" + start + " goal:" + goal + " expResult:" + expected);
         DirectedGraph<Integer, Double> graph = createGraph();
-        GraphPathBuilder<Integer, Double> instance = new GraphPathBuilder<>(graph::getNextVertices);
+        DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph::getNextVertices);
         VertexPath<Integer> actual = instance.findVertexPath(start, goal::equals, Integer.MAX_VALUE);
         assertEquals(expected, actual);
     }
@@ -106,12 +106,12 @@ public class GraphPathBuilderTest {
     }
 
     /**
-     * Test of findAnyVertexPath method, of class GraphPathBuilder.
+     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilder.
      */
     private void doFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult) throws Exception {
         System.out.println("findAnyVertexPath start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
-        GraphPathBuilder<Integer, Double> instance = new GraphPathBuilder<>(graph::getNextVertices);
+        DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph::getNextVertices);
         VertexPath<Integer> result = instance.findVertexPath(start, goal::equals, Integer.MAX_VALUE);
         assertEquals(result, expResult);
     }
@@ -164,7 +164,7 @@ public class GraphPathBuilderTest {
 
     private void doFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<VertexPath<Integer>> expected) {
         System.out.println("doTestFindAllPaths start:" + start + ", goal:" + goal + ", maxDepth:" + maxDepth);
-        GraphPathBuilder<Integer, Double> instance = new GraphPathBuilder<>(graph::getNextVertices);
+        DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph::getNextVertices);
         List<VertexPath<Integer>> actual = instance.findAllVertexPaths(start,
                 a -> (int) a == goal, maxDepth);
         assertEquals(expected, actual);
