@@ -7,6 +7,7 @@ import org.jhotdraw8.util.ToDoubleTriFunction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -238,8 +239,8 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(@Nonnull V start,
-                                                @Nonnull V goal) {
+    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(@Nonnull V start,
+                                                                   @Nonnull V goal) {
         return findShortestVertexPath(start, goal::equals, Double.POSITIVE_INFINITY);
     }
 
@@ -259,8 +260,8 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPath(@Nonnull V start,
-                                                @Nonnull Predicate<V> goalPredicate, double maxCost) {
+    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(@Nonnull V start,
+                                                                   @Nonnull Predicate<V> goalPredicate, double maxCost) {
 
         NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
@@ -271,7 +272,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
         for (NodeWithCost<V, A> parent = node; parent != null; parent = parent.parent) {
             vertices.addFirst(parent.vertex);
         }
-        return new VertexPath<>(vertices);
+        return new AbstractMap.SimpleEntry<>(new VertexPath<>(vertices), node.cost);
     }
 
     /**
@@ -289,7 +290,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public EdgePath<A> findShortestEdgePath(@Nonnull V start, @Nonnull V goal) {
+    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(@Nonnull V start, @Nonnull V goal) {
         return findShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
     }
 
@@ -309,7 +310,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public EdgePath<A> findShortestEdgePath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, double maxCost) {
+    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, double maxCost) {
         NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
@@ -319,7 +320,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
         for (NodeWithCost<V, A> parent = node; parent.arrow != null; parent = parent.parent) {
             edges.addFirst(parent.arrow);
         }
-        return new EdgePath<>(edges);
+        return new AbstractMap.SimpleEntry<>(new EdgePath<>(edges), node.cost);
     }
 
     @Nullable
@@ -342,15 +343,18 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public VertexPath<V> findShortestVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<VertexPath<V>, Double> findShortestVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints, double maxCost) {
         List<V> combinedPath = new ArrayList<>();
         V start = null;
+        double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                VertexPath<V> path = findShortestVertexPath(start, via::equals, maxCost);
-                if (path == null) {
+                Map.Entry<VertexPath<V>, Double> pathWithCost = findShortestVertexPath(start, via::equals, maxCost);
+                if (pathWithCost == null) {
                     return null;
                 }
+                VertexPath<V> path = (VertexPath<V>) pathWithCost.getKey();
+                cost += pathWithCost.getValue();
                 List<V> vertices = path.getVertices();
                 for (int i = combinedPath.isEmpty() ? 0 : 1, n = vertices.size(); i < n; i++) {
                     combinedPath.add(vertices.get(i));
@@ -358,7 +362,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
             }
             start = via;
         }
-        return new VertexPath<V>(combinedPath);
+        return new AbstractMap.SimpleEntry<>(new VertexPath<V>(combinedPath), cost);
     }
 
     /**
@@ -368,15 +372,18 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public EdgePath<A> findShortestEdgePathOverWayponits(Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<EdgePath<A>, Double> findShortestEdgePathOverWayponits(Collection<? extends V> waypoints, double maxCost) {
         List<A> combinedPath = new ArrayList<>();
         V start = null;
+        double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                EdgePath<A> path = findShortestEdgePath(start, via::equals, maxCost);
-                if (path == null) {
+                Map.Entry<EdgePath<A>, Double> pathWithCost = findShortestEdgePath(start, via::equals, maxCost);
+                if (pathWithCost == null) {
                     return null;
                 }
+                EdgePath<A> path = (EdgePath<A>) pathWithCost.getKey();
+                cost += pathWithCost.getValue();
                 List<A> edges = path.getEdges();
                 for (int i = combinedPath.isEmpty() ? 0 : 1, n = edges.size(); i < n; i++) {
                     combinedPath.add(edges.get(i));
@@ -384,7 +391,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
             }
             start = via;
         }
-        return new EdgePath<A>(combinedPath);
+        return new AbstractMap.SimpleEntry<>(new EdgePath<A>(combinedPath), cost);
     }
 
 
