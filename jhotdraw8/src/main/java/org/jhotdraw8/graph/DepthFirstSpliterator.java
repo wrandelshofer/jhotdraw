@@ -17,36 +17,36 @@ import java.util.function.Predicate;
 /**
  * DepthFirstSpliterator.
  *
- * @author Werner Randelshofer
  * @param <V> the vertex type
+ * @author Werner Randelshofer
  */
 public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
-    @Nullable
+    @Nonnull
     private final Function<V, Iterable<V>> nextNodesFunction;
     @Nonnull
     private final Deque<V> deque;
-    @Nullable
+    @Nonnull
     private final Predicate<V> visited;
 
     /**
      * Creates a new instance.
      *
      * @param nextNodesFuncction the nextNodesFunction
-     * @param root the root vertex
+     * @param root               the root vertex
      */
     public DepthFirstSpliterator(Function<V, Iterable<V>> nextNodesFuncction, V root) {
-        this(nextNodesFuncction,root,new HashSet<>()::add);
+        this(nextNodesFuncction, root, new HashSet<>()::add);
     }
 
     /**
      * Creates a new instance.
      *
      * @param nextNodesFunction the nextNodesFunction
-     * @param root the root vertex
-     * @param visited a predicate with side effect. The predicate returns true
-     * if the specified vertex has been visited, and marks the specified vertex
-     * as visited.
+     * @param root              the root vertex
+     * @param visited           a predicate with side effect. The predicate returns true
+     *                          if the specified vertex has been visited, and marks the specified vertex
+     *                          as visited.
      */
     public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextNodesFunction, @Nullable V root, @Nullable Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);

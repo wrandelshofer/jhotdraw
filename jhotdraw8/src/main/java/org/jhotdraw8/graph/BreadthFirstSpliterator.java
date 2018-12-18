@@ -20,11 +20,11 @@ import java.util.function.Predicate;
  */
 public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
-    @Nullable
+    @Nonnull
     private final Function<V, Iterable<V>> nextNodesFunction;
     @Nonnull
     private final Deque<V> deque;
-    @Nullable
+    @Nonnull
     private final Predicate<V> visited;
 
     /**
