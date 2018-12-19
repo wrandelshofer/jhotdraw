@@ -11,6 +11,7 @@ import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.UnitConverter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -277,7 +278,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         }
 
         CssSize miterLimit = value.getMiterLimit();
-        if (miterLimit.getUnits() != null || miterLimit.getConvertedValue() != 4.0) {
+        if (!miterLimit.getUnits().equals(UnitConverter.DEFAULT) || miterLimit.getConvertedValue() != 4.0) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, MITER_LIMIT));
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, miterLimit.getValue(), miterLimit.getUnits()));
@@ -285,7 +286,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         }
 
         CssSize dashOffset = value.getDashOffset();
-        if (dashOffset.getUnits() != null || dashOffset.getConvertedValue() != 0.0) {
+        if (!dashOffset.getUnits().equals(UnitConverter.DEFAULT) || dashOffset.getConvertedValue() != 0.0) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASH_OFFSET));
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, dashOffset.getValue(), dashOffset.getUnits()));

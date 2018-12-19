@@ -11,6 +11,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -25,15 +26,17 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.ListStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.io.DefaultUnitConverter;
+import org.jhotdraw8.io.UnitConverter;
 
 /**
  * {@code TextStrokeableFigure} allows to change the stroke ofCollection the
  * text.
  *
- * @design.pattern Figure Mixin, Traits.
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern Figure Mixin, Traits.
  */
 public interface TextStrokeableFigure extends Figure {
 
@@ -114,7 +117,7 @@ public interface TextStrokeableFigure extends Figure {
      * Stroke Properties</a>
      */
     ListStyleableFigureKey<CssSize> TEXT_STROKE_DASH_ARRAY = new ListStyleableFigureKey<>("text-stroke-dasharray",
-            DirtyMask.of(DirtyBits.NODE),CssSize.class,new CssSizeConverter(false), ImmutableList.emptyList());
+            DirtyMask.of(DirtyBits.NODE), CssSize.class, new CssSizeConverter(false), ImmutableList.emptyList());
 
     /**
      * Combined map accessor for all stroke style properties.
@@ -125,11 +128,14 @@ public interface TextStrokeableFigure extends Figure {
     /**
      * Updates a shape node.
      *
+     * @param ctx
      * @param shape a shape node
      */
-    default void applyTextStrokeableFigureProperties(@Nonnull Shape shape) {
+    default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
         Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE));
-        double strokeWidth = getStyled(TEXT_STROKE_WIDTH).getConvertedValue();
+        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
+
+        double strokeWidth = units.convert(getStyledNonnull(TEXT_STROKE_WIDTH), UnitConverter.DEFAULT);
         if (!Objects.equals(shape.getStroke(), paint)) {
             shape.setStroke(paint);
         }
@@ -147,7 +153,7 @@ public interface TextStrokeableFigure extends Figure {
         if (shape.getStrokeLineJoin() != slj) {
             shape.setStrokeLineJoin(slj);
         }
-        double d = getStyled(TEXT_STROKE_MITER_LIMIT).getConvertedValue();
+        double d = units.convert(getStyledNonnull(TEXT_STROKE_MITER_LIMIT), UnitConverter.DEFAULT);
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
@@ -170,7 +176,9 @@ public interface TextStrokeableFigure extends Figure {
             shape.getStrokeDashArray().clear();
         } else {
             ArrayList<Double> list = new ArrayList<>(dashArray.size());
-            for (CssSize sz : dashArray) list.add(sz.getConvertedValue());
+            for (CssSize sz : dashArray) {
+                list.add(sz.getConvertedValue());
+            }
             shape.getStrokeDashArray().setAll(list);
         }
     }

@@ -31,10 +31,9 @@ import org.jhotdraw8.io.UnitConverter;
 /**
  * A figure which supports font attributes.
  *
- * @design.pattern Figure Mixin, Traits.
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern Figure Mixin, Traits.
  */
 public interface FontableFigure extends Figure {
 
@@ -58,11 +57,11 @@ public interface FontableFigure extends Figure {
     /**
      * The text alignment. Default value: {@code left}
      */
-    public static EnumStyleableFigureKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableFigureKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false,TextAlignment.LEFT);
-       /**
+    public static EnumStyleableFigureKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableFigureKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, TextAlignment.LEFT);
+    /**
      * The vertical position of the text. Default value: {@code baseline}
      */
-    public static EnumStyleableFigureKey<VPos> TEXT_VPOS = new EnumStyleableFigureKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false,VPos.BASELINE);
+    public static EnumStyleableFigureKey<VPos> TEXT_VPOS = new EnumStyleableFigureKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, VPos.BASELINE);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
@@ -74,14 +73,15 @@ public interface FontableFigure extends Figure {
 
     /**
      * Updates a text node with fontable properties.
-     * @param ctx RenderContext, can be null
+     *
+     * @param ctx  RenderContext, can be null
      * @param text a text node
      */
     default void applyFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
         String family = getStyledNonnull(FONT_FAMILY);
         FontPosture style = getStyledNonnull(FONT_STYLE);
         FontWeight weight = getStyledNonnull(FONT_WEIGHT);
-        UnitConverter units =ctx==null? DefaultUnitConverter.getInstance(): ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
+        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
         CssSize cssSize = getStyledNonnull(FONT_SIZE);
         double size = units.convert(cssSize, UnitConverter.DEFAULT);
         CssFont f = CssFont.font(family, weight, style, size);
@@ -124,11 +124,12 @@ public interface FontableFigure extends Figure {
 
     /**
      * Updates a Laeled node with fontable properties.
-     *  @param ctx context
+     *
+     * @param ctx  context
      * @param text a text node
      */
     default void applyFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
-        Font font =getStyledNonnull(FONT).getFont();
+        Font font = getStyledNonnull(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }
