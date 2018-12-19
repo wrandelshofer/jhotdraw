@@ -56,6 +56,7 @@ public class TabbedAccordionDock extends Control implements Dock {
 
         accordion.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-padding:0;");
         titlePane.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-padding:0;");
+        accordion.setMinWidth(100.0);
 
         getItems().addListener(new ListChangeListener<DockItem>() {
             @Override
