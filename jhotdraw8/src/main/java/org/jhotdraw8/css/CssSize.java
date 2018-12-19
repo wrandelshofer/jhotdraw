@@ -69,7 +69,7 @@ public class CssSize {
     }
 
     public double getConvertedValue() {
-        return DefaultUnitConverter.getInstance().convert(this, null);
+        return DefaultUnitConverter.getInstance().convert(this, UnitConverter.DEFAULT);
     }
 
     @Nonnull

@@ -83,7 +83,7 @@ public interface FontableFigure extends Figure {
         FontWeight weight = getStyledNonnull(FONT_WEIGHT);
         UnitConverter units =ctx==null? DefaultUnitConverter.getInstance(): ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
         CssSize cssSize = getStyledNonnull(FONT_SIZE);
-        double size = units.convert(cssSize, null);
+        double size = units.convert(cssSize, UnitConverter.DEFAULT);
         CssFont f = CssFont.font(family, weight, style, size);
 
         Font font = f.getFont();

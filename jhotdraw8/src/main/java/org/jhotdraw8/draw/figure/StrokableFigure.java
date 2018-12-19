@@ -22,6 +22,7 @@ import org.jhotdraw8.draw.key.ListStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.io.UnitConverter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -196,7 +197,7 @@ public interface StrokableFigure extends Figure {
     default void applyStrokeWidthProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
         CssSize cssSize = getStyledNonnull(STROKE_WIDTH);
         double width = ctx==null?cssSize.getConvertedValue()
-                :ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize,null);
+                :ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
         if (shape.getStrokeWidth() != width) {
             shape.setStrokeWidth(width);
         }
@@ -207,7 +208,7 @@ public interface StrokableFigure extends Figure {
     default BasicStroke getStyledStroke(@Nullable RenderContext ctx) {
         CssSize cssSize = getStyledNonnull(STROKE_WIDTH);
         double width = ctx==null?cssSize.getConvertedValue()
-                :ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize,null);
+                :ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize,UnitConverter.DEFAULT);
         final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);
         final int basicCap;
         switch (cap) {

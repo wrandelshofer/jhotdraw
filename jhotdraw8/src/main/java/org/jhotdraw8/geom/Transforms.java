@@ -24,6 +24,7 @@ import javafx.scene.transform.Affine;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.io.DefaultUnitConverter;
+import org.jhotdraw8.io.UnitConverter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -283,10 +284,10 @@ public class Transforms {
         Bounds tb = transform.transform(b.getConvertedBoundsValue());
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         return new CssRectangle2D(
-                c.convertSize(tb.getMinX(),null,b.getMinX().getUnits()),
-                c.convertSize(tb.getMinY(),null,b.getMinY().getUnits()),
-                c.convertSize(tb.getWidth(),null,b.getWidth().getUnits()),
-                c.convertSize(tb.getHeight(),null,b.getHeight().getUnits())
+                c.convertSize(tb.getMinX(), UnitConverter.DEFAULT,b.getMinX().getUnits()),
+                c.convertSize(tb.getMinY(),UnitConverter.DEFAULT,b.getMinY().getUnits()),
+                c.convertSize(tb.getWidth(),UnitConverter.DEFAULT,b.getWidth().getUnits()),
+                c.convertSize(tb.getHeight(),UnitConverter.DEFAULT,b.getHeight().getUnits())
                 );
     }
 
