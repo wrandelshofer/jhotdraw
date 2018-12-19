@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.inspector;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
 
+import javax.annotation.Nullable;
+
 /**
  * AbstractDrawingInspector.
  *
@@ -33,7 +35,7 @@ public abstract class AbstractDrawingViewInspector implements Inspector {
      * @param oldValue the old drawing view
      * @param newValue the new drawing view
      */
-    protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+    protected void onDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
     }
 }
