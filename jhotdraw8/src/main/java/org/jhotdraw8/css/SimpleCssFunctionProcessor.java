@@ -363,7 +363,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         if (tt.next() == CssTokenType.TT_DIMENSION) {
             return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
         } else if (tt.current() == CssTokenType.TT_NUMBER) {
-            return new CssSize(tt.currentNumber().doubleValue(), null);
+            return new CssSize(tt.currentNumber().doubleValue());
         }
         throw new ParseException("dimension expected, got: \"" + attrValue + "\"", pos);
     }
@@ -491,11 +491,11 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     protected CssSize parseCalcValue(T element, CssTokenizer tt) throws IOException, ParseException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumber().doubleValue(), null);
+                return new CssSize(tt.currentNumberNonnull().doubleValue());
             case CssTokenType.TT_PERCENTAGE:
-                return new CssSize(tt.currentNumber().doubleValue(), "%");
+                return new CssSize(tt.currentNumberNonnull().doubleValue(), "%");
             case CssTokenType.TT_DIMENSION:
-                return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
+                return new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentStringNonnull());
             case '(':
                 CssSize dim = parseCalcSum(element, tt);
                 tt.requireNextToken(')', "calc-value: right bracket ')' expected.");
@@ -511,7 +511,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 CssToken token = list.get(0);
                 switch (token.getType()) {
                     case CssTokenType.TT_NUMBER:
-                        return new CssSize(token.getNumericValue().doubleValue(), null);
+                        return new CssSize(token.getNumericValue().doubleValue());
                     case CssTokenType.TT_PERCENTAGE:
                         return new CssSize(token.getNumericValue().doubleValue(), "%");
                     case CssTokenType.TT_DIMENSION:

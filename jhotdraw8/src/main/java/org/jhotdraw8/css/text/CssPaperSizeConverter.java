@@ -121,7 +121,7 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
     @Nullable
     @Override
     public CssPoint2D getDefaultValue() {
-        return new CssPoint2D(new CssSize(0, null), new CssSize(0, null));
+        return new CssPoint2D(new CssSize(0), new CssSize(0));
     }
 
     @Nonnull

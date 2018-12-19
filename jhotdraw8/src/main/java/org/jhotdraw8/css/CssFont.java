@@ -79,11 +79,11 @@ public class CssFont {
         return cachedFonts.computeIfAbsent(family
                 + (weight==null?"":weight.name())
                 + (posture==null?"":posture.name())
-                + Double.doubleToRawLongBits(size), str -> new CssFont(family, weight, posture, new CssSize(size,null)));
+                + Double.doubleToRawLongBits(size), str -> new CssFont(family, weight, posture, new CssSize(size)));
     }
 
     public static CssFont font(String family, double size) {
-        return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(size,null));
+        return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(size));
     }
 
     @Override

@@ -43,7 +43,7 @@ public interface FontableFigure extends Figure {
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
     public static StringOrIdentStyleableFigureKey FONT_FAMILY = new StringOrIdentStyleableFigureKey("fontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    public static CssSizeStyleableFigureKey FONT_SIZE = new CssSizeStyleableFigureKey("fontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0,null));
+    public static CssSizeStyleableFigureKey FONT_SIZE = new CssSizeStyleableFigureKey("fontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
     public static EnumStyleableFigureKey<FontPosture> FONT_STYLE = new EnumStyleableFigureKey<>("fontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, FontPosture.REGULAR);
     public static EnumStyleableFigureKey<FontWeight> FONT_WEIGHT = new EnumStyleableFigureKey<>("fontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, FontWeight.NORMAL);
     public static FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);

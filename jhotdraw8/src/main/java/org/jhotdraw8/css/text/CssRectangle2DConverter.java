@@ -55,17 +55,17 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
     private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumber().doubleValue(),null);
+                return new CssSize(tt.currentNumberNonnull().doubleValue());
             case CssTokenType.TT_DIMENSION:
-                return new CssSize(tt.currentNumber().doubleValue(),tt.currentString());
+                return new CssSize(tt.currentNumberNonnull().doubleValue(),tt.currentStringNonnull());
                 case CssTokenType.TT_IDENT:
                     switch (tt.currentStringNonnull()) {
                         case "INF":
-                            return new CssSize(Double.POSITIVE_INFINITY,null);
+                            return new CssSize(Double.POSITIVE_INFINITY);
                         case "-INF":
-                            return new CssSize(Double.NEGATIVE_INFINITY,null);
+                            return new CssSize(Double.NEGATIVE_INFINITY);
                         case "NaN":
-                            return new CssSize(Double.NaN,null);
+                            return new CssSize(Double.NaN);
                         default:
                             throw new ParseException(" ⟨CssRectangle2D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
                     }

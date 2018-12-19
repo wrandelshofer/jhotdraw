@@ -9,6 +9,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.UnitConverter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,9 +54,10 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
     private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumber().doubleValue(),null);
+                return new CssSize(tt.currentNumberNonnull().doubleValue());
             case CssTokenType.TT_DIMENSION:
-                return new CssSize(tt.currentNumber().doubleValue(),tt.currentString());
+                String s = tt.currentStringNonnull();
+                return new CssSize(tt.currentNumberNonnull().doubleValue(), s ==null? UnitConverter.DEFAULT: s);
             default:
                 throw new ParseException(" ⟨CssPoint3D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
         }

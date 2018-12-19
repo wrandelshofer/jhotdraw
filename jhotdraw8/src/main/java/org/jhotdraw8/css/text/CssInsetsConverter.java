@@ -37,7 +37,7 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
-                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(), null));
+                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue()));
                     break;
                 case CssTokenType.TT_DIMENSION:
                     list.add(new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentString()));

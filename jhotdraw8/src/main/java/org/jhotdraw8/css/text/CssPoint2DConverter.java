@@ -51,17 +51,17 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
     private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumber().doubleValue(),null);
+                return new CssSize(tt.currentNumber().doubleValue());
             case CssTokenType.TT_DIMENSION:
                 return new CssSize(tt.currentNumber().doubleValue(),tt.currentString());
             case CssTokenType.TT_IDENT:
                 switch (tt.currentStringNonnull()) {
                     case "NaN":
-                        return new CssSize(Double.NaN,null);
+                        return new CssSize(Double.NaN);
                     case "INF":
-                        return new CssSize(Double.POSITIVE_INFINITY,null);
+                        return new CssSize(Double.POSITIVE_INFINITY);
                     case "-INF":
-                        return new CssSize(Double.NEGATIVE_INFINITY,null);
+                        return new CssSize(Double.NEGATIVE_INFINITY);
                     default:
                         throw new ParseException(" ⟨CssPoint2D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
                 }

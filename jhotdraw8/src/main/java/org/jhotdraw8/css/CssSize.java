@@ -9,9 +9,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jhotdraw8.io.DefaultUnitConverter;
+import org.jhotdraw8.io.UnitConverter;
 
 /**
  * Represents a size specified in a particular unit.
+ * <p>
+ * Unlike {@code javafx.css.Size} this class supports an open ended
+ * set of units.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -19,18 +23,19 @@ import org.jhotdraw8.io.DefaultUnitConverter;
 public class CssSize {
 
     @Nullable
-    public final static CssSize ZERO = new CssSize(0, null);
-    public static final CssSize ONE = new CssSize(1, null);
+    public final static CssSize ZERO = new CssSize(0);
+    public static final CssSize ONE = new CssSize(1);
+    @Nonnull
     private final String units;
     private final double value;
 
     public CssSize(double value) {
-        this(value, null);
+        this(value, UnitConverter.DEFAULT);
     }
 
-    public CssSize(double value, String units) {
+    public CssSize(double value, @Nonnull String units) {
         this.value = value;
-        this.units = units == null || units.isEmpty() ? null : units;
+        this.units = units;
     }
 
     public static CssSize max(CssSize a, CssSize b) {
@@ -67,6 +72,7 @@ public class CssSize {
         return DefaultUnitConverter.getInstance().convert(this, null);
     }
 
+    @Nonnull
     public String getUnits() {
         return units;
     }
@@ -86,7 +92,7 @@ public class CssSize {
     @Nonnull
     @Override
     public String toString() {
-        return "CssSize{" + value + (units == null ? null : "\"" + units + "\"") + '}';
+        return "CssSize{" + value + "\"" + units + "\"" + '}';
     }
 
     public CssSize subtract(CssSize that) {
