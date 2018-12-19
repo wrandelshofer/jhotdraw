@@ -186,10 +186,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Margin around the drawing.
      */
     private final ObjectProperty<Insets> margin = new NonnullProperty<>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
-    /**
-     * The number of nodes that are maximally updated per frame.
-     */
-    private int maxUpdate = 100;
+
     private final InvalidationListener modelInvalidationListener = o -> repaint();
 
     private SimpleDrawingViewNode node;
