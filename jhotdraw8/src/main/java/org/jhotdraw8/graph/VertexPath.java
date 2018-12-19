@@ -64,6 +64,10 @@ public class VertexPath<V> {
         return hash;
     }
 
+    public int size() {
+        return vertices.size();
+    }
+
     @Nonnull
     @Override
     public String toString() {
