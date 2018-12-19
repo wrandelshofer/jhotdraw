@@ -86,8 +86,8 @@ public class CssInsets {
     public Insets getConvertedValue(double width, double height) {
         final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
         final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);
-        return new Insets(heightConverter.convert(top, UnitConverter.DEFAULT), widthConverter.convert(right, null),
-                heightConverter.convert(bottom, UnitConverter.DEFAULT), widthConverter.convert(left, null));
+        return new Insets(heightConverter.convert(top, UnitConverter.DEFAULT), widthConverter.convert(right, UnitConverter.DEFAULT),
+                heightConverter.convert(bottom, UnitConverter.DEFAULT), widthConverter.convert(left, UnitConverter.DEFAULT));
     }
 
     @Nonnull
