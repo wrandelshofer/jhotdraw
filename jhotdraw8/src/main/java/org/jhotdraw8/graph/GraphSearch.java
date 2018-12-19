@@ -4,6 +4,7 @@
 package org.jhotdraw8.graph;
 
 import static java.lang.Math.min;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.IteratorEnumerator;
@@ -36,7 +38,7 @@ public class GraphSearch {
     private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> graph) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(graph.getVertexCount());
-        for (V v:graph.getVertices()) {
+        for (V v : graph.getVertices()) {
             List<V> initialSet = new ArrayList<>(1);
             initialSet.add(v);
             forest.put(v, initialSet);
@@ -61,8 +63,8 @@ public class GraphSearch {
      * <p>
      * Uses Kruskal's algorithm.
      *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
+     * @param <V>   the vertex type
+     * @param <A>   the arrow type
      * @param graph a directed graph
      * @return the disjoint sets.
      */
@@ -71,7 +73,7 @@ public class GraphSearch {
         // Create initial forest
         Map<V, List<V>> forest = createForest(graph);
         // Merge sets.
-        for (V u:graph.getVertices()) {
+        for (V u : graph.getVertices()) {
             for (int j = 0, m = graph.getNextCount(u); j < m; j++) {
                 V v = graph.getNext(u, j);
                 List<V> uset = forest.get(u);
@@ -99,13 +101,13 @@ public class GraphSearch {
      * <p>
      * Uses Kruskal's algorithm.
      *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param vertices a directed graph
-     * @param orderedArrows list of arrows sorted by cost in ascending order
-     * (lowest cost first, highest cost last).
+     * @param <V>            the vertex type
+     * @param <A>            the arrow type
+     * @param vertices       a directed graph
+     * @param orderedArrows  list of arrows sorted by cost in ascending order
+     *                       (lowest cost first, highest cost last).
      * @param rejectedArrows optional, all excluded arrows are added to this
-     * list, if it is provided.
+     *                       list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
     @Nonnull
@@ -139,15 +141,15 @@ public class GraphSearch {
      * an arrow in each direction.
      * <p>
      *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param vertices the list of vertices
-     * @param orderedArrows list of arrows sorted by cost in ascending order
-     * (lowest cost first, highest cost last)
+     * @param <V>            the vertex type
+     * @param <A>            the arrow type
+     * @param vertices       the list of vertices
+     * @param orderedArrows  list of arrows sorted by cost in ascending order
+     *                       (lowest cost first, highest cost last)
      * @param includedArrows optional, all included arrows are added to this
-     * list, if it is provided.
+     *                       list, if it is provided.
      * @param rejectedArrows optional, all excluded arrows are added to this
-     * list, if it is provided.
+     *                       list, if it is provided.
      * @return the graph builder
      */
     @Nonnull
@@ -172,7 +174,7 @@ public class GraphSearch {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param m the graph
+     * @param m   the graph
      * @return the sorted list of vertices
      */
     @Nonnull
@@ -195,7 +197,7 @@ public class GraphSearch {
     /**
      * Sorts the specified directed graph topologically.
      *
-     * @param <A> the arrow type
+     * @param <A>   the arrow type
      * @param model the graph
      * @return the sorted list of vertices
      */
@@ -275,6 +277,7 @@ public class GraphSearch {
             }
         }
     }
+
     /**
      * Holds bookkeeping data for a node v from the graph.
      */
@@ -297,16 +300,21 @@ public class GraphSearch {
     /**
      * Returns all stronlgy connected components in the specified graph.
      *
-     * @param <V>
-     * @param maxIterations
-     * @param vertices
-     * @param nextNodeFunction
      * @return set of strongly connected components (sets of vertices).
      */
-    public static <V> List<List<V>> searchStronglyConnectedComponents(
-            final int maxIterations,
-            final Collection<? extends V> vertices,
-            final Function<V, Iterable<? extends V>> nextNodeFunction
+    public static <V, A> List<List<V>> findStronglyConnectedComponents(
+            final DirectedGraph<V, A> graph) {
+        return findStronglyConnectedComponents(graph::getNextVertices, graph.getVertices());
+    }
+
+    /**
+     * Returns all stronlgy connected components in the specified graph.
+     *
+     * @return set of strongly connected components (sets of vertices).
+     */
+    public static <V> List<List<V>> findStronglyConnectedComponents(
+            final Function<V, Iterable<? extends V>> nextNodeFunction,
+            final Collection<? extends V> vertices
     ) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from
@@ -322,13 +330,8 @@ public class GraphSearch {
         Deque<Enumerator<V>> enumeratorStack = new ArrayDeque<>();
         Enumerator<V> enumerator = new IteratorEnumerator<>(vertices.iterator());
 
-        int count = 0;
         STRONGCONNECT:
         while (true) {
-            if (count++ > maxIterations) {
-                throw new IllegalArgumentException("too many iterations");
-            }
-
             if (enumerator.moveNext()) {
                 V v = enumerator.current();
                 NodeData vdata = nodeMap.get(v);
@@ -377,6 +380,7 @@ public class GraphSearch {
         }
         return sccs;
     }
+
     /**
      * Prevents instance creation.
      */

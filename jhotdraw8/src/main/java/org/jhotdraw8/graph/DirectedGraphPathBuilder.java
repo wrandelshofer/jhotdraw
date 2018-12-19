@@ -34,6 +34,14 @@ public class DirectedGraphPathBuilder<V, A> {
     /**
      * Creates a new instance.
      *
+     * @param graph a graph
+     */
+    public DirectedGraphPathBuilder(@Nonnull DirectedGraph<V,A> graph) {
+        this.nextNodesFunction = graph::getNextVertices;
+    }
+    /**
+     * Creates a new instance.
+     *
      * @param nextNodesFunction Accessor function to next nodes in graph.
      */
     public DirectedGraphPathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {

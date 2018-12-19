@@ -41,10 +41,18 @@ public class DirectedGraphCostPathBuilder<V, A> {
     private Queue<BackLinkWithArrow<V, A>> queue;
     private Set<V> visitedSet;
 
+    public DirectedGraphCostPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
+                                        @Nonnull final ToDoubleFunction<A> costf) {
+        this(graph::getNextEntries,costf);
+    }
+
+    public DirectedGraphCostPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
+                                        @Nonnull final ToDoubleTriFunction<V, V, A> costf) {
+        this(graph::getNextEntries,costf);
+    }
     public DirectedGraphCostPathBuilder(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
                                         @Nonnull final ToDoubleFunction<A> costf) {
-        this.nextNodesFunction = nextNodesFunction;
-        this.costf = (v1, v2, a) -> costf.applyAsDouble(a);
+        this(nextNodesFunction,(v1, v2, a) -> costf.applyAsDouble(a));
     }
 
     public DirectedGraphCostPathBuilder(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
