@@ -241,7 +241,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
             javafx.geometry.Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
 
             final Bounds srcBounds = shapeBounds == null || Geom.isEmpty(shapeBounds) ? Geom.getBounds(path) : Geom.getBounds(shapeBounds);
-            Insets shapeSlice = getStyled(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
+            Insets shapeSlice = getStyledNonnull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
             final NineRegionsScalingBuilder nineRegionsScalingBuilder = new NineRegionsScalingBuilder(builder2, srcBounds, shapeSlice, b);
 
             Shapes.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
