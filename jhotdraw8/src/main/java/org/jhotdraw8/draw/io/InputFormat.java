@@ -4,12 +4,9 @@
 package org.jhotdraw8.draw.io;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,6 +15,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -44,12 +42,13 @@ public interface InputFormat {
      * figure are coerced so that they do not clash with ids in the drawing.
      * Also all URIs in the figure are made relative to DOCUMENT_HOME of the
      * drawing.
+     * @param workState the work state
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
      */ 
-    default Figure read(@Nonnull URI uri, Drawing drawing) throws IOException {
-        return read(Paths.get(uri), drawing);
+    default Figure read(@Nonnull URI uri, @Nullable Drawing drawing, @Nonnull WorkState workState) throws IOException {
+        return read(Paths.get(uri), drawing, workState);
     }
 
     /**
@@ -60,14 +59,15 @@ public interface InputFormat {
      * figure are coerced so that they do not clash with ids in the drawing.
      * Also all URIs in the figure are made relative to DOCUMENT_HOME of the
      * drawing.
+     * @param workState
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
      */ 
-    default Figure read(@Nonnull Path file, Drawing drawing) throws IOException {
+    default Figure read(@Nonnull Path file,@Nullable Drawing drawing,  @Nonnull WorkState workState) throws IOException {
         URI documentHome=file.getParent()==null? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri():file.getParent().toUri();
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
-            return read(in, drawing,documentHome);
+            return read(in, drawing,documentHome, workState);
         }
     }
 
@@ -79,10 +79,11 @@ public interface InputFormat {
      * @param drawing If you provide a non-null value, the contents of the file
      * is added to the drawing. Otherwise a new drawing is created.
      * @param documentHome the URI used to resolve external references from the document
+     * @param workState
      * @return the drawing
      *
      * @throws java.io.IOException if an IO error occurs
      */ 
-    public Figure read( InputStream in,  Drawing drawing, URI documentHome) throws IOException;
+    public Figure read(@Nonnull InputStream in, Drawing drawing, URI documentHome, @Nonnull WorkState workState) throws IOException;
 
 }

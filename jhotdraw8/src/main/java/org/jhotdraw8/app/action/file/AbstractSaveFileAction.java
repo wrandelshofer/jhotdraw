@@ -23,6 +23,7 @@ import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -85,11 +86,12 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
             return;
         }
         oldFocusOwner = v.getNode().getScene().getFocusOwner();
-        v.addDisabler(this);
-        saveFileChooseUri(v);
+        WorkState workState=new WorkState(getLabel());
+        v.addDisabler(workState);
+        saveFileChooseUri(v, workState);
     }
 
-    protected void saveFileChooseUri(@Nonnull final DocumentOrientedActivity v) {
+    protected void saveFileChooseUri(@Nonnull final DocumentOrientedActivity v, WorkState workState) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -116,19 +118,19 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
                 break;
             }
             if (uri != null) {
-                saveFileChooseOptions(v, uri, chsr.getDataFormat());
+                saveFileChooseOptions(v, uri, chsr.getDataFormat(), workState);
             } else {
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
             }
             if (oldFocusOwner != null) {
                 oldFocusOwner.requestFocus();
             }
         } else {
-            saveFileChooseOptions(v, v.getURI(), v.getDataFormat());
+            saveFileChooseOptions(v, v.getURI(), v.getDataFormat(), workState);
         }
     }
 
-    protected void saveFileChooseOptions(@Nonnull final DocumentOrientedActivity v, @Nonnull URI uri, DataFormat format) {
+    protected void saveFileChooseOptions(@Nonnull final DocumentOrientedActivity v, @Nonnull URI uri, DataFormat format, WorkState workState) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
         if (dialog != null) {
@@ -139,17 +141,17 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
             if (result.isPresent()) {
                 options = result.get();
             } else {
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
                 return;
             }
         }
-        saveFileToUri(v, uri, format, options);
+        saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(@Nonnull final DocumentOrientedActivity view, @Nonnull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
-        view.write(uri, format, options).handle((result, exception) -> {
+    protected void saveFileToUri(@Nonnull final DocumentOrientedActivity view, @Nonnull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+        view.write(uri, format, options, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
-                view.removeDisabler(this);
+                view.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
@@ -161,13 +163,13 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));
                 alert.showAndWait();
-                view.removeDisabler(this);
+                view.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
             } else {
                 handleSucceded(view, uri, format);
-                view.removeDisabler(this);
+                view.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }

@@ -3,12 +3,7 @@
  */
 package org.jhotdraw8.samples.teddy;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
@@ -35,6 +30,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.concurrent.WorkState;
 
 /**
  * TeddyController.
@@ -104,7 +100,7 @@ public class TeddyController extends AbstractDocumentOrientedActivity implements
   }
 
   @Override
-  public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
+  public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append, WorkState workState) {
     return FXWorker.supply(() -> {
       StringBuilder builder = new StringBuilder();
       char[] cbuf = new char[8192];
@@ -125,7 +121,7 @@ public class TeddyController extends AbstractDocumentOrientedActivity implements
   }
 
   @Override
-  public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
+  public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
     final String text = textArea.getText();
     return FXWorker.run(() -> {
       try (Writer out = Files.newBufferedWriter(Paths.get(uri), StandardCharsets.UTF_8)) {

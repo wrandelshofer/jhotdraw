@@ -23,6 +23,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -265,7 +266,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFile(@Nonnull final URI uri, final DataFormat format) {
         final DocumentOrientedActivity v = unsavedView;
-        v.write(uri, format,null).handle((result, exception) -> {
+        v.write(uri, format,null, new WorkState()).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -295,7 +296,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format) {
         final DocumentOrientedActivity v = unsavedView;
-        v.write(uri, format,null).handle((result, exception) -> {
+        v.write(uri, format,null, new WorkState()).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {

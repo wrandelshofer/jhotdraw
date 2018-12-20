@@ -13,6 +13,7 @@ import javafx.scene.input.DataFormat;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 
 /**
@@ -44,7 +45,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     }
 
     @Override
-    public void write(@Nonnull OutputStream out, Drawing drawing) throws IOException {
+    public void write(@Nonnull OutputStream out, Drawing drawing, WorkState workState) throws IOException {
         try (XMLEncoder o = new XMLEncoder(out)) {
            /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
             o.setPersistenceDelegate(Figure.class, delegate);

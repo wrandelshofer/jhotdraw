@@ -12,6 +12,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
 
 /**
  * A {@code DocumentOrientedViewModel} is a specialization of {@link Activity} for document
@@ -74,9 +75,10 @@ public interface DocumentOrientedActivity extends Activity {
      * should be used
      * @param options read options
      * @param append whether to append to the current document or to replace it.
+     * @param workState
      * @return Returns a CompletionStage with the data format that was actually used to load the file.
      */
-    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append);
+    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append, WorkState workState);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -89,10 +91,11 @@ public interface DocumentOrientedActivity extends Activity {
      * @param format the desired data format, null means default data format
      * should be used
      * @param options write options
+     * @param workState
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<? super Key<?>, Object> options);
+    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<? super Key<?>, Object> options, WorkState workState);
 
     /**
      * Clears the view.

@@ -15,6 +15,7 @@ import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -112,12 +113,13 @@ public class OpenFileAction extends AbstractApplicationAction {
     protected void openViewFromURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, @Nonnull final URIChooser chooser) {
         final Application app = getApplication();
         app.removeDisabler(this);
-        v.addDisabler(this);
+        WorkState workState = new WorkState(getLabel());
+        v.addDisabler(workState);
         final DataFormat chosenFormat = chooser.getDataFormat();
         v.setDataFormat(chosenFormat);
 
         // Open the file
-        v.read(uri, chooser == null ? null : chosenFormat, null, false).whenComplete((actualFormat, exception) -> {
+        v.read(uri, chooser == null ? null : chosenFormat, null, false, workState).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
             } else if (exception != null) {
@@ -128,7 +130,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
                 alert.showAndWait();
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
             } else {
 
                 String mimeType = (actualFormat == null) ? null
@@ -138,7 +140,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
                 getApplication().addRecentURI(uri,actualFormat);
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
             }
         });
     }

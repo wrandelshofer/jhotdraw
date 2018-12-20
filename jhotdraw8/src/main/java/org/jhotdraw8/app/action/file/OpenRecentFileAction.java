@@ -15,6 +15,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 
@@ -116,13 +117,14 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
     protected void openViewFromURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, DataFormat format) {
         final Application app = getApplication();
-        v.addDisabler(this);
+            WorkState workState = new WorkState(getLabel());
+        v.addDisabler(workState);
 
         // Open the file
         try {
-            v.read(uri, format, null, false).whenComplete((actualFormat, exception) -> {
+            v.read(uri, format, null, false, workState).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
-                    v.removeDisabler(this);
+                    v.removeDisabler(workState);
                 } else if (exception != null) {
                     handleException(v, exception);
                 } else {
@@ -130,7 +132,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     v.setDataFormat(actualFormat);
                     v.clearModified();
                     v.setTitle(UriUtil.getName(uri));
-                    v.removeDisabler(this);
+                    v.removeDisabler(workState);
                 }
             });
         } catch (Throwable t) {

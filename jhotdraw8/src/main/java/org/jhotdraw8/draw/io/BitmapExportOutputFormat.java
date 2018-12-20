@@ -5,8 +5,6 @@ package org.jhotdraw8.draw.io;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -40,6 +38,7 @@ import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -151,16 +150,16 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     }
 
     @Override
-    public void write(@Nonnull OutputStream out, @Nonnull Drawing drawing) throws IOException {
+    public void write(@Nonnull OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
         WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), drawingDpi);
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
         writeImage(out, writableImage, drawingDpi);
 
     }
 
-    public void write(@Nonnull Path file, Drawing drawing) throws IOException {
+    public void write(@Nonnull Path file, Drawing drawing, WorkState workState) throws IOException {
         if (isExportDrawing()) {
-            OutputFormat.super.write(file, drawing);
+            OutputFormat.super.write(file, drawing, workState);
         }
         if (isExportSlices()) {
             writeSlices(file.getParent(), drawing);

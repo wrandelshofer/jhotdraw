@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -14,7 +11,6 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,6 +35,7 @@ import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -225,7 +222,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Nonnull
     @Override
-    public Figure read(@Nonnull Path file, Drawing drawing) throws IOException {
+    public Figure read(@Nonnull Path file, Drawing drawing, WorkState workState) throws IOException {
         try {
             URI documentHome = file.getParent() == null ? Paths.get(System.getProperty("user.home")).toUri() : file.getParent().toUri();
             final Drawing newDrawing;
@@ -237,7 +234,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     @javax.annotation.Nullable
-    public Figure read(InputStream in, Drawing drawing, URI documentHome) throws IOException {
+    public Figure read(InputStream in, Drawing drawing, URI documentHome, WorkState workState) throws IOException {
         Document doc = XmlUtil.readWithLocations(new InputSource(in), isNamespaceAware());
         return read(doc, drawing, documentHome);
     }

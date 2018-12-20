@@ -4,6 +4,7 @@
 package org.jhotdraw8.app;
 
 import javax.annotation.Nonnull;
+
 import org.jhotdraw8.collection.HierarchicalMap;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -46,7 +47,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     protected abstract void initActionMap(HierarchicalMap<String, Action> actionMap);
 
-    protected abstract void initView() ;
+    protected abstract void initView();
 
     @Nonnull
     @Override
@@ -85,9 +86,10 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     @Override
     public void start() {
     }
+
     public void init() {
         initView();
         initActionMap(actionMap);
-                getNode().disableProperty().bind(disabledProperty());
+        getNode().disableProperty().bind(disabledProperty());
     }
 }

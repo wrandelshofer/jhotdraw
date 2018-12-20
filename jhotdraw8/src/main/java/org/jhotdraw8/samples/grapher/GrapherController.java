@@ -38,6 +38,7 @@ import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -403,12 +404,12 @@ public class GrapherController extends AbstractDocumentOrientedActivity implemen
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
+    public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append, WorkState workState) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
             SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
-            SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
+            SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             return drawing;
         }).thenApply(drawing->{drawingView.setDrawing(drawing);return format;});
@@ -426,25 +427,25 @@ public class GrapherController extends AbstractDocumentOrientedActivity implemen
     }
 
     @Override
-    public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
+    public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (SvgExporter.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.setOptions(options);
-                io.write(uri, drawing);
+                io.write(uri, drawing, workState);
             } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".png")) {
                 BitmapExportOutputFormat io = new BitmapExportOutputFormat();
                 io.setOptions(options);
-                io.write(uri, drawing);
+                io.write(uri, drawing, workState);
             } else if (XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT.equals(format) || uri.getPath().endsWith(".ser.xml")) {
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
-                io.write(uri, drawing);
+                io.write(uri, drawing, workState);
             } else {
                 FigureFactory factory = new DefaultFigureFactory();
                 IdFactory idFactory = new SimpleFigureIdFactory();
                 SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
-                io.write(uri, drawing);
+                io.write(uri, drawing, workState);
             }
         }).handle((voidvalue, ex) -> {
             if (ex != null) {

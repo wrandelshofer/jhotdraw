@@ -16,6 +16,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.concurrent.WorkState;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -63,7 +64,8 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
     }
 
     private void doIt(DocumentOrientedActivity view, @Nullable URI uri, DataFormat dataFormat) {
-        view.addDisabler(this);
+            WorkState workState = new WorkState(getLabel());
+        view.addDisabler(workState);
 
         final BiFunction<DataFormat, Throwable, Void> handler = (actualDataFormat, throwable) -> {
             if (throwable != null) {
@@ -73,14 +75,14 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
                 throwable.printStackTrace();
             }
             view.clearModified();
-            view.removeDisabler(this);
+            view.removeDisabler(workState);
             return null;
         };
 
         if (uri == null) {
             view.clear().handle((ignored,throwable)->handler.apply(null, throwable));
         } else {
-            view.read(uri, dataFormat, null, false).handle(handler);
+            view.read(uri, dataFormat, null, false, workState).handle(handler);
         }
     }
 

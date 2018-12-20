@@ -12,6 +12,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
@@ -45,7 +46,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Path;
@@ -159,9 +159,9 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         clipboard.put(SVG_FORMAT, out.toString());
     }
 
-    public void write(@Nonnull Path file, @Nonnull Drawing drawing) throws IOException {
+    public void write(@Nonnull Path file, @Nonnull Drawing drawing, WorkState workState) throws IOException {
         if (isExportDrawing()) {
-            XmlOutputFormatMixin.super.write(file, drawing);
+            XmlOutputFormatMixin.super.write(file, drawing, workState);
         }
         if (isExportSlices()) {
             writeSlices(file.getParent(), drawing);

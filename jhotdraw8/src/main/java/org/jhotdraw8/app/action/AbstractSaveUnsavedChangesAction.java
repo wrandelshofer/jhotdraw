@@ -25,6 +25,7 @@ import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -87,7 +88,8 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
             final Resources labels = Labels.getLabels();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
-            v.addDisabler(this);
+            WorkState workState=new WorkState(getLabel());
+            v.addDisabler(workState);
             if (v.isModified()) {
                 URI unsavedURI = v.getURI();
                 ButtonType[] options = { //
@@ -109,7 +111,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                         switch (result.getButtonData()) {
                         default:
                         case CANCEL_CLOSE:
-                            v.removeDisabler(this);
+                            v.removeDisabler(workState);
                             if (oldFocusOwner != null) {
                                 oldFocusOwner.requestFocus();
                             }
@@ -117,7 +119,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                         case NO:
                             doIt(v).whenComplete((r, e) -> {
                                 // FIXME check success
-                                v.removeDisabler(this);
+                                v.removeDisabler(workState);
                                 if (oldFocusOwner != null) {
                                     oldFocusOwner.requestFocus();
                                 }
@@ -128,7 +130,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                             // saveView may start a worker thread
                             // and thus will enable the view at
                             // a later point in time.
-                            saveView(v);
+                            saveView(v, workState);
                             break;
                         }
                     }
@@ -170,7 +172,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
         return chsr;
     }
 
-    protected void saveView(@Nonnull final DocumentOrientedActivity v) {
+    protected void saveView(@Nonnull final DocumentOrientedActivity v, WorkState workState) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -197,21 +199,21 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                 break;
             }
             if (uri != null) {
-                saveViewToURI(v, uri, chooser, chooser.getDataFormat());
+                saveViewToURI(v, uri, chooser, chooser.getDataFormat(), workState);
             }
-            v.removeDisabler(this);
+            v.removeDisabler(workState);
             if (oldFocusOwner != null) {
                 oldFocusOwner.requestFocus();
             }
         } else {
-            saveViewToURI(v, v.getURI(), null, v.getDataFormat());
+            saveViewToURI(v, v.getURI(), null, v.getDataFormat(), workState);
         }
     }
 
-    protected void saveViewToURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat) {
-        v.write(uri, chooser == null ? null : dataFormat, null).handle((result, exception) -> {
+    protected void saveViewToURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
+        v.write(uri, chooser == null ? null : dataFormat, null, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
@@ -222,7 +224,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));
                 alert.showAndWait();
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }

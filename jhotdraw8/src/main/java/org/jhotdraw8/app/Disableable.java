@@ -32,14 +32,14 @@ public interface Disableable {
      *
      * @return the disabled property.
      */
-        ReadOnlyBooleanProperty disabledProperty();
+    ReadOnlyBooleanProperty disabledProperty();
 
     /**
      * The set of disablers.
      *
      * @return The disablers.
      */
-        ObservableSet<Object> disablers();
+    ObservableSet<Object> disablers();
 
     // Convenience method
     default boolean isDisabled() {
@@ -51,7 +51,7 @@ public interface Disableable {
      *
      * @param disabler a new disabler
      */
-    default void addDisabler( Object disabler) {
+    default void addDisabler(Object disabler) {
         disablers().add(disabler);
     }
 
@@ -60,7 +60,7 @@ public interface Disableable {
      *
      * @param disabler an object which does not disable anymore
      */
-    default void removeDisabler( Object disabler) {
+    default void removeDisabler(Object disabler) {
         disablers().remove(disabler);
     }
 }

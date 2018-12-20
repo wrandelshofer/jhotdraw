@@ -4,8 +4,6 @@
 package org.jhotdraw8.draw.io;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -16,6 +14,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 
 /**
@@ -39,10 +38,11 @@ public interface OutputFormat {
      * @param uri The uri.
      * @param drawing The drawing.
      *
+     * @param workState
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@Nonnull URI uri, Drawing drawing) throws IOException {
-        write(Paths.get(uri), drawing);
+    default void write(@Nonnull URI uri, Drawing drawing, WorkState workState) throws IOException {
+        write(Paths.get(uri), drawing, workState);
     }
 
     /**
@@ -52,11 +52,12 @@ public interface OutputFormat {
      * @param file the file
      * @param drawing the drawing
      *
+     * @param workState
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@Nonnull Path file, Drawing drawing) throws IOException {
+    default void write(@Nonnull Path file, Drawing drawing, WorkState workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
-            write(out, drawing);
+            write(out, drawing, workState);
         }
     }
 
@@ -66,8 +67,9 @@ public interface OutputFormat {
      * @param out The output stream.
      * @param drawing The drawing.
      *
+     * @param workState
      * @throws java.io.IOException if an IO error occurs
      */
-    void write( OutputStream out,  Drawing drawing) throws IOException;
+    void write(OutputStream out, Drawing drawing, WorkState workState) throws IOException;
     
 }

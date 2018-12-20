@@ -15,6 +15,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.xml.XmlUtil;
@@ -39,13 +41,13 @@ public interface XmlOutputFormatMixin extends OutputFormat {
     Document toDocument( Drawing drawing,  Collection<Figure> selection) throws IOException;
 
     @Override
-    default void write(@Nonnull Path file, @Nonnull Drawing drawing) throws IOException {
+    default void write(@Nonnull Path file, @Nonnull Drawing drawing, WorkState workState) throws IOException {
         Document doc = toDocument(drawing);
         XmlUtil.write(file, doc);
     }
 
     @Override
-    default void write(OutputStream out, @Nonnull Drawing drawing) throws IOException {
+    default void write(OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
         write(out, drawing, drawing.getChildren());
     }
 
