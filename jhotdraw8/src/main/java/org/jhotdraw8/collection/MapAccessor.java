@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -110,4 +111,5 @@ public interface MapAccessor<T> extends Serializable {
      * @return true if transient
      */
     boolean isTransient();
+
 }

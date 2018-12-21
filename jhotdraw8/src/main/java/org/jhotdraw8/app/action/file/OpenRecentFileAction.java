@@ -112,7 +112,6 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         // Note: we must invoke clear() or read() on the view, before we start using it.
         v.clear();
         alert.showAndWait();
-        v.removeDisabler(this);
     }
 
     protected void openViewFromURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, DataFormat format) {
@@ -126,6 +125,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(workState);
                 } else if (exception != null) {
+                    v.removeDisabler(workState);
                     handleException(v, exception);
                 } else {
                     v.setURI(uri);
@@ -136,6 +136,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                 }
             });
         } catch (Throwable t) {
+            v.removeDisabler(workState);
             handleException(v, t);
         }
     }

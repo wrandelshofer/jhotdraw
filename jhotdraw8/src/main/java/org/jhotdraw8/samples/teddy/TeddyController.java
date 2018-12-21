@@ -95,7 +95,7 @@ public class TeddyController extends AbstractDocumentOrientedActivity implements
 
   @Nonnull
   @Override
-  public CompletionStage<Void> print(PrinterJob job) {
+  public CompletionStage<Void> print(PrinterJob job, WorkState workState) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

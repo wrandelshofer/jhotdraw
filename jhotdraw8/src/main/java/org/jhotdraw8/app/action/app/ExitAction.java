@@ -57,7 +57,9 @@ public class ExitAction extends AbstractApplicationAction {
 
     @Override
     protected void handleActionPerformed(ActionEvent event, @Nonnull Application app) {
-        app.addDisabler(this);
+
+        WorkState workState=new WorkState(getLabel());
+        app.addDisabler(workState);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
         DocumentOrientedActivity documentToBeReviewed = null;
@@ -77,18 +79,18 @@ public class ExitAction extends AbstractApplicationAction {
         }
         if (unsavedViewsCount > 0 && documentToBeReviewed == null) {
             // Silently abort, if no view can be reviewed.
-            app.removeDisabler(this);
+            app.removeDisabler(workState);
             return;
         }
 
         final Resources labels = Labels.getLabels();
         switch (unsavedViewsCount) {
             case 0: {
-                doExit();
+                doExit(workState);
                 break;
             }
             case 1: {
-                reviewNext();
+                reviewNext(workState);
                 break;
             }
             default: {
@@ -106,18 +108,18 @@ public class ExitAction extends AbstractApplicationAction {
                     switch (result.get().getButtonData()) {
                         default:
                         case CANCEL_CLOSE:
-                            app.removeDisabler(this);
+                            app.removeDisabler(workState);
                             break;
                         case NO:
                             app.exit();
                             break;
                         case YES:
                             unsavedView = documentToBeReviewed;
-                            reviewChanges();
+                            reviewChanges(workState);
                             break;
                     }
                 } else {
-                    app.removeDisabler(this);
+                    app.removeDisabler(workState);
                 }
             }
         }
@@ -132,7 +134,7 @@ public class ExitAction extends AbstractApplicationAction {
         return chsr;
     }
 
-    protected void saveChanges() {
+    protected void saveChanges(WorkState workState) {
         DocumentOrientedActivity v = unsavedView;
         Resources labels=Labels.getLabels();
         if (v.getURI() == null) {
@@ -161,26 +163,26 @@ public class ExitAction extends AbstractApplicationAction {
             }
 
             if (uri == null) {
-                unsavedView.removeDisabler(this);
+                unsavedView.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
-                getApplication().removeDisabler(this);
+                getApplication().removeDisabler(workState);
             } else {
 
-                saveToFile(uri, chooser.getDataFormat());
+                saveToFile(uri, chooser.getDataFormat(), workState);
 
             }
         } else {
-            saveToFile(v.getURI(), null);
+            saveToFile(v.getURI(), null, workState);
         }
     }
 
-    protected void reviewChanges() {
+    protected void reviewChanges(WorkState workState) {
         if (!unsavedView.isDisabled()) {
             final Resources labels = Labels.getLabels();
             oldFocusOwner = unsavedView.getNode().getScene().getFocusOwner();
-            unsavedView.removeDisabler(this);
+            unsavedView.removeDisabler(workState);
             URI unsavedURI = unsavedView.getURI();
             ButtonType[] options = {
                 new ButtonType(labels.getString("application.exit.saveOption.text"), ButtonData.YES),//
@@ -200,48 +202,48 @@ public class ExitAction extends AbstractApplicationAction {
                 switch (result.get().getButtonData()) {
                     default:
                     case CANCEL_CLOSE:
-                        unsavedView.removeDisabler(this);
-                        getApplication().removeDisabler(this);
+                        unsavedView.removeDisabler(workState);
+                        getApplication().removeDisabler(workState);
                         break;
                     case NO:
                         getApplication().remove(unsavedView);
-                        unsavedView.removeDisabler(this);
-                        reviewNext();
+                        unsavedView.removeDisabler(workState);
+                        reviewNext(workState);
                         break;
                     case YES:
-                        saveChangesAndReviewNext();
+                        saveChangesAndReviewNext(workState);
                         break;
                 }
             } else {
-                unsavedView.removeDisabler(this);
-                getApplication().removeDisabler(this);
+                unsavedView.removeDisabler(workState);
+                getApplication().removeDisabler(workState);
             }
         } else {
-            getApplication().removeDisabler(this);
+            getApplication().removeDisabler(workState);
         }
     }
 
-    protected void saveChangesAndReviewNext() {
+    protected void saveChangesAndReviewNext(WorkState workState) {
         final DocumentOrientedActivity v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = chooser.showDialog(unsavedView.getNode());
             if (uri != null) {
-                saveToFileAndReviewNext(uri, chooser.getDataFormat());
+                saveToFileAndReviewNext(uri, chooser.getDataFormat(), workState);
 
             } else {
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
-                getApplication().removeDisabler(this);
+                getApplication().removeDisabler(workState);
             }
         } else {
-            saveToFileAndReviewNext(v.getURI(), v.getDataFormat());
+            saveToFileAndReviewNext(v.getURI(), v.getDataFormat(), workState);
         }
     }
 
-    protected void reviewNext() {
+    protected void reviewNext(WorkState workState) {
         int unsavedViewsCount = 0;
         DocumentOrientedActivity documentToBeReviewed = null;
         for (Activity pr : getApplication().views()) {
@@ -254,17 +256,17 @@ public class ExitAction extends AbstractApplicationAction {
             }
         }
         if (unsavedViewsCount == 0) {
-            doExit();
+            doExit(workState);
         } else if (documentToBeReviewed != null) {
             unsavedView = documentToBeReviewed;
-            reviewChanges();
+            reviewChanges(workState);
         } else {
-            getApplication().removeDisabler(this);
+            getApplication().removeDisabler(workState);
             //System.out.println("exit silently aborted");
         }
     }
 
-    protected void saveToFile(@Nonnull final URI uri, final DataFormat format) {
+    protected void saveToFile(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
         final DocumentOrientedActivity v = unsavedView;
         v.write(uri, format,null, new WorkState()).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
@@ -281,7 +283,7 @@ public class ExitAction extends AbstractApplicationAction {
                         + ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
@@ -294,11 +296,11 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format) {
+    protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
         final DocumentOrientedActivity v = unsavedView;
         v.write(uri, format,null, new WorkState()).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
@@ -311,20 +313,20 @@ public class ExitAction extends AbstractApplicationAction {
                         + ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
             } else {
                 v.setURI(uri);
                 v.clearModified();
-                reviewNext();
+                reviewNext(workState);
             }
             return null;
         });
     }
 
-    protected void doExit() {
+    protected void doExit(WorkState workState) {
         for (Activity pr : new ArrayList<>(app.views())) {
             DocumentOrientedActivity p=(DocumentOrientedActivity)pr;
             if (!p.isDisabled() && !p.isModified()) {
@@ -334,7 +336,7 @@ public class ExitAction extends AbstractApplicationAction {
         if (app.views().isEmpty()) {
             app.exit();
         } else {
-            app.removeDisabler(this);
+            app.removeDisabler(workState);
         }
     }
 }

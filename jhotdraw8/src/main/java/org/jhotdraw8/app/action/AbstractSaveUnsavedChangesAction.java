@@ -147,7 +147,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
 
                 doIt(v).thenRun(() -> {
                     // FIXME check success
-                    v.removeDisabler(this);
+                    v.removeDisabler(workState);
                     if (oldFocusOwner != null) {
                         oldFocusOwner.requestFocus();
                     }

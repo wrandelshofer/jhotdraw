@@ -10,6 +10,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
@@ -110,11 +112,12 @@ public interface DocumentOrientedActivity extends Activity {
      * Prints the current document.
      *
      * @param job the printer job
+     * @param workState the work state
      * @return Returns a CompletionStage which is completed when the print
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    CompletionStage<Void> print(PrinterJob job);
+    CompletionStage<Void> print(@Nonnull PrinterJob job, @Nonnull WorkState workState);
 
     default boolean isEmpty() {
         return !isModified() && getURI() == null;

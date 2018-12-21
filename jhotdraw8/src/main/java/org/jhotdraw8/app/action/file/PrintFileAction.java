@@ -13,6 +13,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.concurrent.WorkState;
 
 /**
  * Presents a printer chooser to the user and then prints the
@@ -52,15 +53,16 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentOrient
 
     @Override
     protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedActivity view) {
-        view.addDisabler(this);
+        WorkState workState = new WorkState();
+        view.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(view.getNode().getScene().getWindow())) {
-            view.print(job).thenRun(() -> view.removeDisabler(this));
+            view.print(job, workState).thenRun(() -> view.removeDisabler(workState));
         } else {
             Alert alert = new Alert(AlertType.INFORMATION, "Sorry, no printer found");
                 alert.getDialogPane().setMaxWidth(640.0);
             alert.show();
-            view.removeDisabler(this);
+            view.removeDisabler(workState);
         }
     }
 }

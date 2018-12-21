@@ -57,7 +57,8 @@ public class OpenFileAction extends AbstractApplicationAction {
     @Override
     protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
         {
-            app.addDisabler(this);
+            WorkState workState = new WorkState(getLabel());
+            app.addDisabler(workState);
             // Search for an empty view
             DocumentOrientedActivity emptyView;
             if (reuseEmptyViews) {
@@ -72,14 +73,14 @@ public class OpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createView().thenAccept(v -> doIt((DocumentOrientedActivity) v, true));
+                app.createView().thenAccept(v -> doIt((DocumentOrientedActivity) v, true, workState));
             } else {
-                doIt(emptyView, false);
+                doIt(emptyView, false, workState);
             }
         }
     }
 
-    public void doIt(@Nonnull DocumentOrientedActivity view, boolean disposeView) {
+    public void doIt(@Nonnull DocumentOrientedActivity view, boolean disposeView, WorkState workState) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -93,7 +94,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                         if (disposeView) {
                             app.remove(view);
                         }
-                        app.removeDisabler(this);
+                        app.removeDisabler(workState);
                         v.getNode().getScene().getWindow().requestFocus();
                         v.getNode().requestFocus();
                         return;
@@ -101,19 +102,18 @@ public class OpenFileAction extends AbstractApplicationAction {
                 }
             }
 
-            openViewFromURI(view, uri, chooser);
+            openViewFromURI(view, uri, chooser, workState);
         } else {
             if (disposeView) {
                 app.remove(view);
             }
-            app.removeDisabler(this);
+            app.removeDisabler(workState);
         }
     }
 
-    protected void openViewFromURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, @Nonnull final URIChooser chooser) {
+    protected void openViewFromURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, @Nonnull final URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
-        app.removeDisabler(this);
-        WorkState workState = new WorkState(getLabel());
+        app.removeDisabler(workState);
         v.addDisabler(workState);
         final DataFormat chosenFormat = chooser.getDataFormat();
         v.setDataFormat(chosenFormat);
@@ -121,7 +121,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         // Open the file
         v.read(uri, chooser == null ? null : chosenFormat, null, false, workState).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
-                v.removeDisabler(this);
+                v.removeDisabler(workState);
             } else if (exception != null) {
                 Throwable value = exception;
                 value.printStackTrace();

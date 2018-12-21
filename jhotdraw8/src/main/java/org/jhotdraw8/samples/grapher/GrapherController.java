@@ -390,7 +390,7 @@ public class GrapherController extends AbstractDocumentOrientedActivity implemen
     }
 
     @Override
-    public CompletionStage<Void> print(@Nonnull PrinterJob job) {
+    public CompletionStage<Void> print(@Nonnull PrinterJob job, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
