@@ -1,4 +1,4 @@
-/* @(#)EnumStyleableFigureKey.java
+/* @(#)NullableEnumStyleableFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.styleable;
@@ -12,7 +12,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssEnumConverter;
 
 /**
- * EnumStyleableFigureKey.
+ * NullableEnumStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$

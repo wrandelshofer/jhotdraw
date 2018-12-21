@@ -112,7 +112,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
     }
 
     @Override
-    public CssStroke get(Map<? super Key<?>, Object> a) {
+    public CssStroke get(@Nonnull Map<? super Key<?>, Object> a) {
         return new CssStroke(
                 widthKey.get(a), paintKey.get(a),
                 typeKey.get(a), lineCapKey.get(a), lineJoinKey.get(a),
@@ -123,7 +123,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
     }
 
     @Override
-    public CssStroke put(Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
+    public CssStroke put(@Nonnull Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
         CssStroke oldValue = get(a);
         if (value == null) {
             widthKey.put(a, CssSize.ONE);
@@ -148,7 +148,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
     }
 
     @Override
-    public CssStroke remove(Map<? super Key<?>, Object> a) {
+    public CssStroke remove(@Nonnull Map<? super Key<?>, Object> a) {
         CssStroke oldValue = get(a);
         widthKey.remove(a);
         paintKey.remove(a);

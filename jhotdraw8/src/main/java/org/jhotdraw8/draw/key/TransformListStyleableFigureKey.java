@@ -10,6 +10,7 @@ import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -25,7 +26,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<Transform>> implements WriteableStyleableMapAccessor<ImmutableList<Transform>> {
+public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<Transform>>
+        implements WriteableStyleableMapAccessor<ImmutableList<Transform>>, NonnullMapAccessor<ImmutableList<Transform>> {
 
     private final static long serialVersionUID = 1L;
 
@@ -34,13 +36,13 @@ public class TransformListStyleableFigureKey extends AbstractStyleableFigureKey<
     private Converter<ImmutableList<Transform>> converter;
 
     /**
-     * Creates a new instance with the specified name and with null as the
+     * Creates a new instance with the specified name and with an empty list as the
      * default value.
      *
      * @param name The name of the key.
      */
     public TransformListStyleableFigureKey(String name) {
-        this(name, null);
+        this(name, ImmutableList.emptyList());
     }
 
     /**

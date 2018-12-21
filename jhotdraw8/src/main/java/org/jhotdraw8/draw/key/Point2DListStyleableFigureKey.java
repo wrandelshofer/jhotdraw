@@ -11,6 +11,7 @@ import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -25,7 +26,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<Point2D>> implements WriteableStyleableMapAccessor<ImmutableList<Point2D>> {
+public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<Point2D>>
+        implements WriteableStyleableMapAccessor<ImmutableList<Point2D>>, NonnullMapAccessor<ImmutableList<Point2D>> {
 
     private final static long serialVersionUID = 1L;
 
@@ -40,7 +42,7 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
      * @param name The name of the key.
      */
     public Point2DListStyleableFigureKey(String name) {
-        this(name, null);
+        this(name, ImmutableList.emptyList());
     }
 
     /**

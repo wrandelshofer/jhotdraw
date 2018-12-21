@@ -66,7 +66,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAcc
     }
     @Nonnull
     @Override
-    public CssPoint2D get(Map<? super Key<?>, Object> a) {
+    public CssPoint2D get(@Nonnull Map<? super Key<?>, Object> a) {
       return new CssPoint2D(xKey.get(a), yKey.get(a));
     }
 
@@ -91,7 +91,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAcc
 
     @Nonnull
     @Override
-    public CssPoint2D put(Map<? super Key<?>, Object> a, @Nonnull CssPoint2D value) {
+    public CssPoint2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull CssPoint2D value) {
         CssPoint2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
@@ -100,7 +100,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAcc
 
     @Nonnull
     @Override
-    public CssPoint2D remove(Map<? super Key<?>, Object> a) {
+    public CssPoint2D remove(@Nonnull Map<? super Key<?>, Object> a) {
         CssPoint2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

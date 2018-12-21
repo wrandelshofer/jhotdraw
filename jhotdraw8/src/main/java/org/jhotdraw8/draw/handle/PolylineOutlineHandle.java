@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimplePolylineFigure;
@@ -36,16 +37,16 @@ import org.jhotdraw8.geom.Transforms;
 public class PolylineOutlineHandle extends AbstractHandle {
 
     private boolean editable;
-    private final MapAccessor<ImmutableList<Point2D>> key;
+    private final NonnullMapAccessor<ImmutableList<Point2D>> key;
 
     private Polyline node;
     private String styleclass;
 
-    public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> key) {
+    public PolylineOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key) {
         this(figure, key, true, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
-    public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> key, boolean editable, String styleclass) {
+    public PolylineOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key, boolean editable, String styleclass) {
         super(figure);
         this.key = key;
         node = new Polyline();

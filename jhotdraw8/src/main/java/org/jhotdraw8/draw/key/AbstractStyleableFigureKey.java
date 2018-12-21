@@ -1,4 +1,4 @@
-/* @(#)SimpleFigureKey.java
+/* @(#)NullableObjectFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
 
 /**
- * SimpleFigureKey.
+ * NullableObjectFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$

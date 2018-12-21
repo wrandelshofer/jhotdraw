@@ -18,6 +18,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -56,15 +57,16 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     private final Region targetNode;
     @Nonnull
     private final Line lineNode;
-    protected final MapAccessor<CssPoint2D> originKey;
-    public LabelConnectorHandle(ConnectingFigure figure,  MapAccessor<CssPoint2D> originKey,MapAccessor<CssPoint2D> pointKey,
+    protected final NonnullMapAccessor<CssPoint2D> originKey;
+    public LabelConnectorHandle(ConnectingFigure figure,  NonnullMapAccessor<CssPoint2D> originKey,NonnullMapAccessor<CssPoint2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,originKey, pointKey,
                 connectorKey, targetKey);
     }
 
-    public LabelConnectorHandle(ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected,MapAccessor<CssPoint2D> originKey, MapAccessor<CssPoint2D> pointKey,
-            MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
+    public LabelConnectorHandle(ConnectingFigure figure, String styleclassDisconnected,
+                                String styleclassConnected, NonnullMapAccessor<CssPoint2D> originKey, NonnullMapAccessor<CssPoint2D> pointKey,
+                                MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure, styleclassDisconnected, styleclassConnected, pointKey,
                 connectorKey, targetKey);
         
@@ -104,7 +106,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         targetNode.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
         targetNode.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
-        targetNode.setRotate(f.getStyled(ROTATE));
+        targetNode.setRotate(f.getStyledNonnull(ROTATE));
         targetNode.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         if (isConnected) {

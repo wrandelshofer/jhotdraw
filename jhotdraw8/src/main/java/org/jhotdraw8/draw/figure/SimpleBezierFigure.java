@@ -109,7 +109,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
-        for (BezierNode p : get(PATH)) {
+        for (BezierNode p : getNonnull(PATH)) {
             minX = Math.min(minX, p.getMinX());
             minY = Math.min(minY, p.getMinY());
             maxX = Math.max(maxX, p.getMaxX());
@@ -128,7 +128,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        return new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
+        return new BezierNodePath(getStyledNonnull(PATH), getStyledNonnull(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
     @Nonnull

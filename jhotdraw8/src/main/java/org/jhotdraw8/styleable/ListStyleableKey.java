@@ -6,6 +6,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ListKey;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssConverter;
@@ -16,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
-public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleableMapAccessor<ImmutableList<T>> {
+public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleableMapAccessor<ImmutableList<T>>, NonnullMapAccessor<ImmutableList<T>> {
     private final static long serialVersionUID=0L;
     @Nonnull
     private final Converter<ImmutableList<T>> converter;

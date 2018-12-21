@@ -10,7 +10,7 @@ import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import org.jhotdraw8.draw.figure.FillableFigure;
-import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class AbstractStyleablePropertyBeanNGTest {
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         AbstractStyleablePropertyBean instance = new AbstractStyleablePropertyBeanImpl();
-        final PaintableStyleableFigureKey key = FillableFigure.FILL;
+        final NullablePaintableStyleableFigureKey key = FillableFigure.FILL;
         
         
        assertNotNull(key.getDefaultValue(),"need a key with a non-null default value for this test");

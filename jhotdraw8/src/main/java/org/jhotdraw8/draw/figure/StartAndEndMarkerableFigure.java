@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.figure;
 import javax.annotation.Nullable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableDoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableSvgPathStyleableFigureKey;
 
 /**
  * A figure which supports start and end markers.
@@ -17,10 +17,10 @@ import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
  */
 public interface StartAndEndMarkerableFigure extends Figure {
 
-    SvgPathStyleableFigureKey MARKER_START_SHAPE = new SvgPathStyleableFigureKey("marker-start-shape", DirtyMask.of(DirtyBits.NODE), null);
-    SvgPathStyleableFigureKey MARKER_END_SHAPE = new SvgPathStyleableFigureKey("marker-end-shape", DirtyMask.of(DirtyBits.NODE), null);
-    DoubleStyleableFigureKey MARKER_START_SCALE_FACTOR = new DoubleStyleableFigureKey("marker-start-scale-factor", DirtyMask.of(DirtyBits.NODE), 1.0);
-    DoubleStyleableFigureKey MARKER_END_SCALE_FACTOR = new DoubleStyleableFigureKey("marker-end-scale-factor", DirtyMask.of(DirtyBits.NODE), 1.0);
+    NullableSvgPathStyleableFigureKey MARKER_START_SHAPE = new NullableSvgPathStyleableFigureKey("marker-start-shape", DirtyMask.of(DirtyBits.NODE), null);
+    NullableSvgPathStyleableFigureKey MARKER_END_SHAPE = new NullableSvgPathStyleableFigureKey("marker-end-shape", DirtyMask.of(DirtyBits.NODE), null);
+    NullableDoubleStyleableFigureKey MARKER_START_SCALE_FACTOR = new NullableDoubleStyleableFigureKey("marker-start-scale-factor", DirtyMask.of(DirtyBits.NODE), 1.0);
+    NullableDoubleStyleableFigureKey MARKER_END_SCALE_FACTOR = new NullableDoubleStyleableFigureKey("marker-end-scale-factor", DirtyMask.of(DirtyBits.NODE), 1.0);
 
     @Nullable
     default String getMarkerStartShape() {

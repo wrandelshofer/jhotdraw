@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.ImmutableList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ObservableWordListFigureKey extends SimpleFigureKey<ImmutableList<String>> {
+public class ObservableWordListFigureKey extends ObjectFigureKey<ImmutableList<String>> {
 
     private final static long serialVersionUID = 1L;
 

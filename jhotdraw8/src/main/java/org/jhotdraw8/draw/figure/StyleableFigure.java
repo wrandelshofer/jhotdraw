@@ -11,12 +11,13 @@ import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.key.ObjectFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.ObservableWordListFigureKey;
-import org.jhotdraw8.draw.key.SimpleFigureKey;
 import org.jhotdraw8.draw.key.StringReadableStyleableFigureKey;
 
 /**
@@ -52,7 +53,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nonnull
-    SimpleFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ImmutableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableSet.emptySet());
+    ObjectFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new ObjectFigureKey<>("pseudoClassStates", ImmutableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableSet.emptySet());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.
@@ -60,7 +61,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nonnull
-    SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
+    NullableObjectFigureKey<String> STYLE = new NullableObjectFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
 
     /**
      * Updates a figure node with all style and effect properties defined in

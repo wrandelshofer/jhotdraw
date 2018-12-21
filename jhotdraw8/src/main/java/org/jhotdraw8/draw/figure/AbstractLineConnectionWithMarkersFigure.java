@@ -92,8 +92,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         Point2D start = getNonnull(START).getConvertedValue();
         Point2D end = getNonnull(END).getConvertedValue();
 
-        final double startInset = getStrokeCutStart();
-        final double endInset = getStrokeCutEnd();
+        final double startInset = getStrokeCutStart(ctx);
+        final double endInset = getStrokeCutEnd(ctx);
         final String startMarkerStr = getMarkerStartShape();
         updateMarkerNode(ctx, g, startMarkerNode, start, end, startMarkerStr, getMarkerStartScaleFactor());
         final String endMarkerStr = getMarkerEndShape();
@@ -142,9 +142,9 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
                 getNonnull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
-    public abstract double getStrokeCutStart();
+    public abstract double getStrokeCutStart(RenderContext ctx);
 
-    public abstract double getStrokeCutEnd();
+    public abstract double getStrokeCutEnd(RenderContext ctx);
 
     public abstract String getMarkerStartShape();
 

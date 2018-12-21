@@ -27,6 +27,7 @@ import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.figure.SimpleLineFigure;
 import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleTextFigure;
+import org.jhotdraw8.draw.render.DummyRenderContext;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
 
@@ -90,7 +91,8 @@ public class CssSample extends Application {
         drawing.set(Drawing.USER_AGENT_STYLESHEETS, stylesheets);
         drawing.updateCss();
 
-        drawing.layout(null);
+        DummyRenderContext ctx = new DummyRenderContext();
+        drawing.layout(ctx);
 
         DrawingView drawingView = new SimpleDrawingView();
 

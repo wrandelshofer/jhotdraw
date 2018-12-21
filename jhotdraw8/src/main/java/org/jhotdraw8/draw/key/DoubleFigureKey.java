@@ -9,20 +9,15 @@ package org.jhotdraw8.draw.key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DoubleFigureKey extends SimpleFigureKey<Double> {
+public class DoubleFigureKey extends ObjectFigureKey<Double> {
 
     private final static long serialVersionUID = 1L;
 
     public DoubleFigureKey(String key, DirtyMask dirtyMask) {
-        super(key, Double.class, dirtyMask);
+        this(key, dirtyMask,0.0);
     }
 
     public DoubleFigureKey(String key, DirtyMask dirtyMask, Double defaultValue) {
         super(key, Double.class, dirtyMask, defaultValue);
     }
-
-    public DoubleFigureKey(String name, boolean isNullable, DirtyMask dirtyMask, Double defaultValue) {
-        super(name, Double.class, isNullable, dirtyMask, defaultValue);
-    }
-
 }

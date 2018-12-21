@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.ListStyleableFigureKey;
-import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.io.DefaultUnitConverter;
@@ -58,7 +58,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("text-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineCap.BUTT);
+    EnumStyleableFigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("text-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE),  StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -68,7 +68,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("text-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false, StrokeLineJoin.MITER);
+    EnumStyleableFigureKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("text-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE),  StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
      * value: {@code 4.0}.
@@ -88,14 +88,13 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    @Nullable
-    PaintableStyleableFigureKey TEXT_STROKE = new PaintableStyleableFigureKey("text-stroke", null);
+    NullablePaintableStyleableFigureKey TEXT_STROKE = new NullablePaintableStyleableFigureKey("text-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.OUTSIDE}.
      */
-    EnumStyleableFigureKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableFigureKey<>("text-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false, StrokeType.OUTSIDE);
+    EnumStyleableFigureKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableFigureKey<>("text-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.OUTSIDE);
     /**
      * Defines the width of the outline of the figure.
      * <p>

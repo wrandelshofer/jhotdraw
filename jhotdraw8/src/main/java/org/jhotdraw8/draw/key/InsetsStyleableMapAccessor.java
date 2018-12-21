@@ -90,7 +90,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
 
     @Nonnull
     @Override
-    public Insets get(Map<? super Key<?>, Object> a) {
+    public Insets get(@Nonnull Map<? super Key<?>, Object> a) {
         final Double top = topKey.get(a);
         final Double right = rightKey.get(a);
         final Double bottom = bottomKey.get(a);
@@ -105,7 +105,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
 
     @Nonnull
     @Override
-    public Insets put(Map<? super Key<?>, Object> a, @Nonnull Insets value) {
+    public Insets put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Insets value) {
         Insets oldValue = get(a);
         topKey.put(a, value.getTop());
         rightKey.put(a, value.getRight());
@@ -116,7 +116,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
 
     @Nonnull
     @Override
-    public Insets remove(Map<? super Key<?>, Object> a) {
+    public Insets remove(@Nonnull Map<? super Key<?>, Object> a) {
         Insets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);

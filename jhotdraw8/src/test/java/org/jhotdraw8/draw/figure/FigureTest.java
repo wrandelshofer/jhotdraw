@@ -208,22 +208,22 @@ public class FigureTest {
         }
 
         @Override
-        public <T> T getStyled(MapAccessor<T> key) {
+        public <T> T getStyled(@Nonnull MapAccessor<T> key) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, T value) {
+        public <T> T setStyled(@Nonnull StyleOrigin origin, @Nonnull MapAccessor<T> key, T value) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public <T> T remove(StyleOrigin origin, MapAccessor<T> key) {
+        public <T> T remove(@Nonnull StyleOrigin origin, @Nonnull MapAccessor<T> key) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void removeAll(StyleOrigin origin) {
+        public void removeAll(@Nonnull StyleOrigin origin) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

@@ -44,4 +44,10 @@ public interface NonnullMapAccessor<T> extends MapAccessor<T> {
         return t;
     }
 
+    @Nonnull
+    default T getDefaultValueNonnull() {
+        T v = getDefaultValue();
+        if (v==null)throw new NullPointerException();
+        return v;
+    }
 }

@@ -22,7 +22,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.ListStyleableFigureKey;
-import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 
@@ -58,7 +58,7 @@ public interface SecondStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineCap> SECOND_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("second-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE),false, StrokeLineCap.BUTT);
+    EnumStyleableFigureKey<StrokeLineCap> SECOND_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("second-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -68,7 +68,7 @@ public interface SecondStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineJoin> SECOND_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("second-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false,StrokeLineJoin.MITER);
+    EnumStyleableFigureKey<StrokeLineJoin> SECOND_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("second-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. 
      * <p>
@@ -90,13 +90,13 @@ public interface SecondStrokableFigure extends Figure {
      * Stroke Properties</a>
      */
     @Nullable
-    PaintableStyleableFigureKey SECOND_STROKE = new PaintableStyleableFigureKey("second-stroke", null);
+    NullablePaintableStyleableFigureKey SECOND_STROKE = new NullablePaintableStyleableFigureKey("second-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    EnumStyleableFigureKey<StrokeType> SECOND_STROKE_TYPE = new EnumStyleableFigureKey<>("second-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false,StrokeType.CENTERED);
+    EnumStyleableFigureKey<StrokeType> SECOND_STROKE_TYPE = new EnumStyleableFigureKey<>("second-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -118,8 +118,8 @@ public interface SecondStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      * /
-     * public static CssSizeStyleableFigureKey STROKE_OPACITY = new
-     * CssSizeStyleableFigureKey("stroke-opacity", DirtyMask.of(DirtyBits.NODE),
+     * public static NullableCssSizeStyleableFigureKey STROKE_OPACITY = new
+     * NullableCssSizeStyleableFigureKey("stroke-opacity", DirtyMask.of(DirtyBits.NODE),
      * 1.0);
      */
     /**

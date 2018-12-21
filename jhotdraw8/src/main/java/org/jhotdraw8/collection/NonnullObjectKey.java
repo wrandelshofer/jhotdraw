@@ -3,11 +3,11 @@
  */
 package org.jhotdraw8.collection;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
 
 /**
  * A <em>name</em> which provides typesafe access to a map entry.
@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ObjectKey<T> implements Key<T> {
+public class NonnullObjectKey<T> implements NonnullKey<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,13 +43,13 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Holds the default value.
      */
-    @javax.annotation.Nullable
+    @Nonnull
     private final T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    @javax.annotation.Nullable
+    @Nullable
     private final Class<?> clazz;
     /**
      * The type token is not sufficient, if the type is parameterized. We allow
@@ -58,47 +58,18 @@ public class ObjectKey<T> implements Key<T> {
     @Nonnull
     private final List<Class<?>> typeParameters;
 
-    /**
-     * Whether the value may be set to null.
-     */
-    private final boolean isNullable;
     private final boolean isTransient;
 
     /**
      * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
-     *
-     * @param name The name of the key.
-     * @param clazz The type of the value.
-     */
-    public ObjectKey( String name,  Class<T> clazz) {
-        this(name, clazz, null, null);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
      * @param name The name of the key.
      * @param clazz The type of the value.
      * @param defaultValue The default value.
      */
-    public ObjectKey( String name,  Class<T> clazz,  T defaultValue) {
+    public NonnullObjectKey(String name, Class<T> clazz, T defaultValue) {
         this(name, clazz, null, defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param name The name of the key.
-     * @param clazz The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     * type parameters are given. Otherwise specify them in arrow brackets.
-     * @param defaultValue The default value.
-     */
-    public ObjectKey( String name,  Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
-        this(name, clazz, typeParameters, true, defaultValue);
     }
 
     /**
@@ -109,27 +80,25 @@ public class ObjectKey<T> implements Key<T> {
      * @param clazz The type of the value.
      * @param typeParameters The type parameters of the class. Specify null if
      * no type parameters are given. Otherwise specify them in arrow brackets.
-     * @param isNullable Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public ObjectKey(@Nonnull String name, @Nonnull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T defaultValue) {
-        this(name,clazz,typeParameters,isNullable,defaultValue==null,defaultValue);
+    public NonnullObjectKey(String name, Class<?> clazz, @Nullable Class<?>[] typeParameters,@Nonnull T defaultValue) {
+        this(name,clazz,typeParameters,false,defaultValue);
     }
-    public ObjectKey(@Nullable String name, @Nonnull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
+    public NonnullObjectKey(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isTransient, @Nonnull T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
         if (clazz == null) {
             throw new IllegalArgumentException("clazz is null");
         }
-        if (!isNullable && defaultValue == null) {
+        if (defaultValue == null) {
             throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
         }
 
         this.name = name;
         this.clazz = clazz;
         this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
-        this.isNullable = isNullable;
         this.isTransient=isTransient;
         this.defaultValue = defaultValue;
     }
@@ -185,7 +154,7 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return the default value.
      */
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public T getDefaultValue() {
         return defaultValue;
@@ -193,7 +162,7 @@ public class ObjectKey<T> implements Key<T> {
 
     @Override
     public boolean isNullable() {
-        return isNullable;
+        return false;
     }
 
     public boolean isTransient() {

@@ -18,6 +18,7 @@ import javafx.collections.ObservableMap;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 
 /**
  * Interface for beans which support an open number of getProperties in a
@@ -101,7 +102,7 @@ public interface PropertyBean {
      * @return the value
      */
     @Nonnull
-    default <T> T getNonnull(@Nonnull MapAccessor<T> key) {
+    default <T> T getNonnull(@Nonnull NonnullMapAccessor<T> key) {
         T value = key.get(getProperties());
         if (value == null)throw new NullPointerException();
         return value;

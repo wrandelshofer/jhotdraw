@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.render;
 
 import javafx.geometry.Bounds;
 import javax.annotation.Nullable;
+
+import org.jhotdraw8.collection.NonnullObjectKey;
 import org.jhotdraw8.draw.figure.Figure;
 import javafx.scene.Node;
 import org.jhotdraw8.beans.PropertyBean;
@@ -57,7 +59,7 @@ public interface RenderContext extends PropertyBean {
     Key<Integer> RENDER_NUMBER_OF_PAGES = new ObjectKey<>("renderNumberOfPages", Integer.class, 1);
     Key<Integer> RENDER_PAGE_INTERNAL_NUMBER = new ObjectKey<>("renderPageInternalNumber", Integer.class, 0);
     Key<Instant> RENDER_TIMESTAMP = new ObjectKey<>("renderTimestamp", Instant.class, Instant.now());
-    Key<UnitConverter> UNIT_CONVERTER_KEY=new ObjectKey<>("unitConverter",UnitConverter.class,new DefaultUnitConverter());
+    NonnullObjectKey<UnitConverter> UNIT_CONVERTER_KEY=new NonnullObjectKey<>("unitConverter",UnitConverter.class,new DefaultUnitConverter());
     // ---
     // behavior
     // ---

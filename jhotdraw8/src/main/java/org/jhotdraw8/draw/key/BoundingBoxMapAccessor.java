@@ -48,13 +48,13 @@ public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBo
 
     @Nonnull
     @Override
-    public BoundingBox get(Map<? super Key<?>, Object> a) {
+    public BoundingBox get(@Nonnull Map<? super Key<?>, Object> a) {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
     @Nonnull
     @Override
-    public BoundingBox put(Map<? super Key<?>, Object> a, @Nonnull BoundingBox value) {
+    public BoundingBox put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull BoundingBox value) {
         BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
@@ -65,7 +65,7 @@ public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBo
 
     @Nonnull
     @Override
-    public BoundingBox remove(Map<? super Key<?>, Object> a) {
+    public BoundingBox remove(@Nonnull Map<? super Key<?>, Object> a) {
         BoundingBox oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

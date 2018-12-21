@@ -29,7 +29,6 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
@@ -111,14 +110,14 @@ public class SimplePageFigure extends AbstractCompositeFigure
     private double computeContentAreaFactor() {
         double contentWidth = getNonnull(WIDTH).getConvertedValue();
         double contentHeight = getNonnull(HEIGHT).getConvertedValue();
-        Insets insets = getStyled(PAGE_INSETS).getConvertedValue();
-        CssPoint2D overlap = getStyled(PAGE_OVERLAP);
+        Insets insets = getStyledNonnull(PAGE_INSETS).getConvertedValue();
+        CssPoint2D overlap = getStyledNonnull(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
-        int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
-        double innerPageW = (get(PAPER_WIDTH).getConvertedValue() - insets.getLeft() - insets.getRight());
-        double innerPageH = (get(PAPER_HEIGHT).getConvertedValue() - insets.getTop() - insets.getBottom());
+        int numPagesX = Math.max(1, getStyledNonnull(NUM_PAGES_X).intValue());
+        int numPagesY = Math.max(1, getStyledNonnull(NUM_PAGES_Y).intValue());
+        double innerPageW = (getStyledNonnull(PAPER_WIDTH).getConvertedValue() - insets.getLeft() - insets.getRight());
+        double innerPageH = (getStyledNonnull(PAPER_HEIGHT).getConvertedValue() - insets.getTop() - insets.getBottom());
         double totalInnerPageWidth = innerPageW * numPagesX - overX * max(0, numPagesX - 1);
         double totalInnerPageHeight = innerPageH * numPagesY - overY * max(0, numPagesY - 1);
         double contentRatio = contentWidth / contentHeight;
@@ -190,8 +189,8 @@ public class SimplePageFigure extends AbstractCompositeFigure
     @Override
     public Bounds getPageBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
-        Insets insets = getStyled(PAGE_INSETS).getConvertedValue();
-        CssPoint2D overlap = getStyled(PAGE_OVERLAP);
+        Insets insets = getStyledNonnull(PAGE_INSETS).getConvertedValue();
+        CssPoint2D overlap = getStyledNonnull(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
@@ -199,8 +198,8 @@ public class SimplePageFigure extends AbstractCompositeFigure
         double pageX = getNonnull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
         double pageY = getNonnull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
         ;
-        double pageW = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
-        double pageH = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
+        double pageW = getStyledNonnull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
+        double pageH = getStyledNonnull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverX = (overX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
         double pageOverY = (overY + insets.getTop() + insets.getBottom()) * contentAreaFactor;
         int px = internalPageNumber % numPagesX;
@@ -212,8 +211,8 @@ public class SimplePageFigure extends AbstractCompositeFigure
 
     private Bounds getContentBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
-        Insets insets = getStyled(PAGE_INSETS).getConvertedValue();
-        CssPoint2D overlap = getStyled(PAGE_OVERLAP);
+        Insets insets = getStyledNonnull(PAGE_INSETS).getConvertedValue();
+        CssPoint2D overlap = getStyledNonnull(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());

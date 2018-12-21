@@ -8,6 +8,7 @@ import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
 import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.figure.SimpleLayer;
+import org.jhotdraw8.draw.render.DummyRenderContext;
 
 public class ConnectingFiguresSample  {
 
@@ -19,8 +20,9 @@ public class ConnectingFiguresSample  {
         
         c.setStartConnection(a, new RectangleConnector()); // 2
         c.setEndConnection(b, new RectangleConnector());
-        
-        c.layout(null); // 3
+
+        DummyRenderContext ctx = new DummyRenderContext();
+        c.layout(ctx); // 3
         
         Drawing drawing = new SimpleDrawing(600, 400); // 4
         Layer layer = new SimpleLayer();

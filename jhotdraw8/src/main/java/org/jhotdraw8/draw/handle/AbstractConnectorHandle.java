@@ -10,7 +10,10 @@ import javafx.scene.input.MouseEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -44,19 +47,20 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     private boolean isConnected;
     private boolean isDragging;
     protected Point2D pickLocation;
-    protected final MapAccessor<CssPoint2D> pointKey;
+    protected final NonnullMapAccessor<CssPoint2D> pointKey;
     protected final String styleclassConnected;
     protected final String styleclassDisconnected;
     protected final MapAccessor<Figure> targetKey;
     private boolean editable=true;
 
-    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, MapAccessor<CssPoint2D> pointKey,
+    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, NonnullMapAccessor<CssPoint2D> pointKey,
                                    MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
                 connectorKey, targetKey);
     }
 
-    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<CssPoint2D> pointKey,
+    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected,
+                                   NonnullMapAccessor<CssPoint2D> pointKey,
                                    MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure);
         this.pointKey = pointKey;

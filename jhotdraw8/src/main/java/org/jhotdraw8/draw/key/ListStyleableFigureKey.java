@@ -7,6 +7,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -25,7 +26,8 @@ import java.util.function.Function;
  * @version $Id$
  */
 public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<ImmutableList<T>>
-        implements WriteableStyleableMapAccessor<ImmutableList<T>> {
+        implements WriteableStyleableMapAccessor<ImmutableList<T>>,
+        NonnullMapAccessor<ImmutableList<T>> {
 
     private final static long serialVersionUID = 1L;
 
@@ -34,13 +36,13 @@ public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<Immuta
     private Converter<ImmutableList<T>> converter;
 
     /**
-     * Creates a new instance with the specified name and with null as the
+     * Creates a new instance with the specified name and with an empty list as the
      * default value.
      *
      * @param name The name of the key.
      */
-    public ListStyleableFigureKey(String name, Class<T> clazz, CssConverter<T> converter) {
-        this(name, clazz, converter,null);
+    public ListStyleableFigureKey(@Nonnull String name, @Nonnull Class<T> clazz, @Nonnull CssConverter<T> converter) {
+        this(name, clazz, converter,ImmutableList.emptyList());
     }
 
     /**
@@ -49,7 +51,7 @@ public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<Immuta
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public ListStyleableFigureKey(String name,Class<T> clazz,CssConverter<T> converter, ImmutableList<T> defaultValue) {
+    public ListStyleableFigureKey(@Nonnull String name,@Nonnull Class<T> clazz,@Nonnull CssConverter<T> converter, @Nonnull ImmutableList<T> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), clazz,converter, defaultValue);
     }
 
@@ -60,7 +62,7 @@ public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<Immuta
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public ListStyleableFigureKey(String name, DirtyMask mask,Class<T> clazz,CssConverter<T> converter, ImmutableList<T> defaultValue) {
+    public ListStyleableFigureKey(@Nonnull String name, @Nonnull DirtyMask mask,@Nonnull Class<T> clazz,@Nonnull CssConverter<T> converter, @Nonnull ImmutableList<T> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{clazz}, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {

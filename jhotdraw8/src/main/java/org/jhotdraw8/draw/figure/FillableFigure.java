@@ -15,9 +15,9 @@ import javax.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableEnumStyleableFigureKey;
 import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -36,13 +36,13 @@ public interface FillableFigure extends Figure {
      * <p>
      * Default value: {@code Color.WHITE}.
      */
-    public static PaintableStyleableFigureKey FILL = new PaintableStyleableFigureKey("fill", new CssColor("white", Color.WHITE));
+    public static NullablePaintableStyleableFigureKey FILL = new NullablePaintableStyleableFigureKey("fill", new CssColor("white", Color.WHITE));
     /**
      * Defines the fill-rule used for filling the interior of the figure..
      * <p>
      * Default value: {@code StrokeType.NON_ZERO}.
      */
-    public static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fill-rule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false,FillRule.NON_ZERO);
+    public static NullableEnumStyleableFigureKey<FillRule> FILL_RULE = new NullableEnumStyleableFigureKey<>("fill-rule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false,FillRule.NON_ZERO);
 
     /**
      * Updates a shape node.

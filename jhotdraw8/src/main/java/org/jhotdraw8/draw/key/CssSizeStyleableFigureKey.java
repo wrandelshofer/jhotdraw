@@ -3,20 +3,21 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javax.annotation.Nonnull;
-
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+
+import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
  * CssSizeStyleableFigureKey.
@@ -24,7 +25,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> implements WriteableStyleableMapAccessor<CssSize> {
+public class CssSizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSize> implements WriteableStyleableMapAccessor<CssSize>,
+        NonnullMapAccessor<CssSize> {
 
     final static long serialVersionUID = 1L;
 
@@ -32,15 +34,6 @@ public class CssSizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSiz
     @Nonnull
     private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
 
-    /**
-     * Creates a new instance with the specified name and with null as the
-     * default value.
-     *
-     * @param name The name of the key.
-     */
-    public CssSizeStyleableFigureKey(String name) {
-        this(name, null);
-    }
 
     /**
      * Creates a new instance with the specified name and default value.
@@ -48,7 +41,7 @@ public class CssSizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSiz
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public CssSizeStyleableFigureKey(String name, CssSize defaultValue) {
+    public CssSizeStyleableFigureKey(String name, @Nonnull CssSize defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -59,7 +52,7 @@ public class CssSizeStyleableFigureKey extends AbstractStyleableFigureKey<CssSiz
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public CssSizeStyleableFigureKey(String name, DirtyMask mask, CssSize defaultValue) {
+    public CssSizeStyleableFigureKey(String name, DirtyMask mask, @Nonnull CssSize defaultValue) {
         super(name, CssSize.class, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<CssSize>> function = s -> {

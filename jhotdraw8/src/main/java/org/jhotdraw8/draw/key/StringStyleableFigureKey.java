@@ -9,6 +9,8 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
+
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -22,7 +24,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String> implements WriteableStyleableMapAccessor<String> {
+public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String>
+        implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
     @Nonnull

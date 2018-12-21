@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.locator;
 import javafx.geometry.Point2D;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -19,9 +20,9 @@ import org.jhotdraw8.draw.figure.Figure;
 public class PointLocator extends AbstractLocator {
 
     private static final long serialVersionUID = 1L;
-    private MapAccessor<CssPoint2D> key;
+    private NonnullMapAccessor<CssPoint2D> key;
 
-    public PointLocator(MapAccessor<CssPoint2D> key) {
+    public PointLocator(NonnullMapAccessor<CssPoint2D> key) {
         this.key = key;
     }
 

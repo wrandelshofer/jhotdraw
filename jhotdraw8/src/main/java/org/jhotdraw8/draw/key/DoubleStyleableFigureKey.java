@@ -3,19 +3,20 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javax.annotation.Nonnull;
-
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
-import org.jhotdraw8.text.StyleConverterAdapter;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.StyleConverterAdapter;
+
+import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
  * DoubleStyleableFigureKey.
@@ -23,7 +24,10 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double> implements WriteableStyleableMapAccessor<Double> {
+public class DoubleStyleableFigureKey
+        extends AbstractStyleableFigureKey<Double>
+        implements WriteableStyleableMapAccessor<Double>,
+        NonnullMapAccessor<Double> {
     final static long serialVersionUID = 1L;
     @Nonnull
     private final CssMetaData<? extends Styleable, Double> cssMetaData;
@@ -31,13 +35,13 @@ public class DoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double>
     private final Converter<Double> converter ;
 
     /**
-     * Creates a new instance with the specified name and with null as the
+     * Creates a new instance with the specified name and with 0.0 as the
      * default value.
      *
      * @param name The name of the key.
      */
     public DoubleStyleableFigureKey(String name) {
-        this(name, null);
+        this(name, 0.0);
     }
 
     /**

@@ -1,45 +1,43 @@
-/* @(#)StringStyleableFigureKey.java
+/* @(#)NullableDoubleStyleableFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.css.text.CssStringOrIdentConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
- * This key has a string value which can be given as a CSS ident-token or
- * as a CSS string-token.
+ * NullableDoubleStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringOrIdentStyleableFigureKey extends AbstractStyleableFigureKey<String>
-        implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {
-
+public class NullableDoubleStyleableFigureKey extends AbstractStyleableFigureKey<Double> implements WriteableStyleableMapAccessor<Double> {
     final static long serialVersionUID = 1L;
     @Nonnull
-    private final CssMetaData<? extends Styleable, String> cssMetaData;
+    private final CssMetaData<? extends Styleable, Double> cssMetaData;
+
+    private final Converter<Double> converter ;
 
     /**
-     * Creates a new instance with the specified name and with an empty String
-     * as the default value.
+     * Creates a new instance with the specified name and with null as the
+     * default value.
      *
      * @param name The name of the key.
      */
-    public StringOrIdentStyleableFigureKey(String name) {
-        this(name, "");
+    public NullableDoubleStyleableFigureKey(String name) {
+        this(name, null);
     }
 
     /**
@@ -48,7 +46,7 @@ public class StringOrIdentStyleableFigureKey extends AbstractStyleableFigureKey<
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public StringOrIdentStyleableFigureKey(String name, String defaultValue) {
+    public NullableDoubleStyleableFigureKey(String name, Double defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -59,37 +57,38 @@ public class StringOrIdentStyleableFigureKey extends AbstractStyleableFigureKey<
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public StringOrIdentStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
-        super(name, String.class, false, mask, defaultValue);
+    public NullableDoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue) {
+        this(name,mask,defaultValue,new CssDoubleConverter(true));
+    }
+    public NullableDoubleStyleableFigureKey(String name, Double defaultValue, CssConverter<Double> converter) {
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue,converter);
+    }
+    public NullableDoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue, CssConverter<Double> converter) {
+        super(name, Double.class, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<String>> function = s -> {
+        Function<Styleable, StyleableProperty<Double>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, String> converter
-                = new StyleConverterAdapter<>(getConverter());
-        CssMetaData<Styleable, String> md
+        this.converter = converter;
+        CssMetaData<Styleable, Double> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                new StyleConverterAdapter<>(converter), defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Nonnull
     @Override
-    public CssMetaData<? extends Styleable, String> getCssMetaData() {
+    public CssMetaData<? extends Styleable, Double> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private Converter<String> converter;
-
+    @Nonnull
     @Override
-    public Converter<String> getConverter() {
-        if (converter == null) {
-            converter = new CssStringOrIdentConverter();
-        }
+    public Converter<Double> getConverter() {
         return converter;
     }
 }

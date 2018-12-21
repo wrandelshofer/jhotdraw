@@ -1,31 +1,33 @@
-/* @(#)CssPoint2DStyleableFigureKey.java
+/* @(#)NullableCssPoint2DStyleableFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javax.annotation.Nonnull;
-
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssPoint2DConverter;
-import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.StyleConverterAdapter;
+
+import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
- * CssPoint2DStyleableFigureKey.
+ * NullableCssPoint2DStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssPoint2DStyleableFigureKey extends AbstractStyleableFigureKey<CssPoint2D> implements WriteableStyleableMapAccessor<CssPoint2D> {
+public class CssPoint2DStyleableFigureKey extends AbstractStyleableFigureKey<CssPoint2D>
+        implements WriteableStyleableMapAccessor<CssPoint2D>, NonnullMapAccessor<CssPoint2D> {
 
     private final static long serialVersionUID = 1L;
     private final Converter<CssPoint2D> converter;
@@ -34,13 +36,13 @@ public class CssPoint2DStyleableFigureKey extends AbstractStyleableFigureKey<Css
     private final CssMetaData<?, CssPoint2D> cssMetaData;
 
     /**
-     * Creates a new instance with the specified name and with null as the
+     * Creates a new instance with the specified name and with 0,0 as the
      * default value.
      *
      * @param name The name of the key.
      */
-    public CssPoint2DStyleableFigureKey(String name) {
-        this(name, null);
+    public CssPoint2DStyleableFigureKey(@Nonnull String name) {
+        this(name, CssPoint2D.ZERO);
     }
 
     /**
@@ -49,7 +51,7 @@ public class CssPoint2DStyleableFigureKey extends AbstractStyleableFigureKey<Css
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public CssPoint2DStyleableFigureKey(String name, CssPoint2D defaultValue) {
+    public CssPoint2DStyleableFigureKey(@Nonnull String name, @Nonnull CssPoint2D defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -62,7 +64,7 @@ public class CssPoint2DStyleableFigureKey extends AbstractStyleableFigureKey<Css
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public CssPoint2DStyleableFigureKey(String key, DirtyMask mask, CssPoint2D defaultValue) {
+    public CssPoint2DStyleableFigureKey(@Nonnull String key, @Nonnull DirtyMask mask, @Nonnull CssPoint2D defaultValue) {
         this(key,mask,defaultValue,new CssPoint2DConverter(false));
     }
     public CssPoint2DStyleableFigureKey(String key, DirtyMask mask, CssPoint2D defaultValue, CssConverter<CssPoint2D> converter) {

@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 public class StringStyleableKey extends StringKey implements WriteableStyleableMapAccessor<String> {
     private final static long serialVersionUID=0L;
-
+    private final String cssName;
     private final CssMetaData<? extends Styleable, String> cssMetaData;
     private final CssStringConverter converter=new CssStringConverter();
 
@@ -34,6 +34,7 @@ public class StringStyleableKey extends StringKey implements WriteableStyleableM
         final StyleConverter<String, String> styleConverter
                 = new StyleConverterAdapter<>(this.converter);
         cssMetaData = new SimpleCssMetaData<>(key, function, styleConverter, defaultValue, false);
+        cssName=ReadableStyleableMapAccessor.toCssName(getName());
     }
 
     @Nullable
@@ -50,6 +51,6 @@ public class StringStyleableKey extends StringKey implements WriteableStyleableM
     @Nonnull
     @Override
     public String getCssName() {
-        return getName();
+        return cssName;
     }
 }

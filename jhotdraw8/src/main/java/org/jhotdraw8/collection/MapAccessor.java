@@ -48,7 +48,7 @@ public interface MapAccessor<T> extends Serializable {
      * @return The value of the attribute.
      */
     @Nullable
-    T get( Map<? super Key<?>, Object> a);
+    T get(@Nonnull Map<? super Key<?>, Object> a);
 
     /**
      * Puts the value of the attribute denoted by this accessor from a Map.
@@ -58,7 +58,7 @@ public interface MapAccessor<T> extends Serializable {
      * @return The old value.
      */
     @Nullable
-    T put( Map<? super Key<?>, Object> a, @Nullable T value);
+    T put(@Nonnull Map<? super Key<?>, Object> a, @Nullable T value);
 
     /**
      * Removes the value of the attribute denoted by this accessor from a Map.
@@ -67,7 +67,7 @@ public interface MapAccessor<T> extends Serializable {
      * @return The old value.
      */
     @Nullable
-    T remove( Map<? super Key<?>, Object> a);
+    T remove(@Nonnull Map<? super Key<?>, Object> a);
 
     /**
      * Returns the value type.
@@ -91,11 +91,7 @@ public interface MapAccessor<T> extends Serializable {
     @Nullable
     T getDefaultValue();
 
-    default T getDefaultValueNonnull() {
-        T v = getDefaultValue();
-        if (v==null)throw new NullPointerException();
-        return v;
-    }
+
 
     /**
      * Returns a string representation of the value type and its type

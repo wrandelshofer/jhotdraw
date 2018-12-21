@@ -89,13 +89,13 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     @Nonnull
     @Override
-    public Point2D get(Map<? super Key<?>, Object> a) {
+    public Point2D get(@Nonnull Map<? super Key<?>, Object> a) {
         return new Point2D(xKey.get(a), yKey.get(a));
     }
 
     @Nonnull
     @Override
-    public Point2D put(Map<? super Key<?>, Object> a, @Nonnull Point2D value) {
+    public Point2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Point2D value) {
         Point2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
@@ -104,7 +104,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     @Nonnull
     @Override
-    public Point2D remove(Map<? super Key<?>, Object> a) {
+    public Point2D remove(@Nonnull Map<? super Key<?>, Object> a) {
         Point2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

@@ -11,6 +11,7 @@ import javafx.css.StyleableProperty;
 import javax.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -25,7 +26,10 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BezierNodeListStyleableFigureKey extends AbstractStyleableFigureKey<ImmutableList<BezierNode>> implements WriteableStyleableMapAccessor<ImmutableList<BezierNode>> {
+public class BezierNodeListStyleableFigureKey
+        extends AbstractStyleableFigureKey<ImmutableList<BezierNode>>
+        implements WriteableStyleableMapAccessor<ImmutableList<BezierNode>>,
+        NonnullMapAccessor<ImmutableList<BezierNode>> {
 
     private final static long serialVersionUID = 1L;
 

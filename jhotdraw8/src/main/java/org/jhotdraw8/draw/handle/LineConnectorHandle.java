@@ -16,6 +16,7 @@ import javafx.scene.transform.Transform;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -51,14 +52,14 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
     @Nonnull
     private final Region targetNode;
 
-    public LineConnectorHandle(ConnectingFigure figure, MapAccessor<CssPoint2D> pointKey,
-            MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
+    public LineConnectorHandle(@Nonnull ConnectingFigure figure,@Nonnull  NonnullMapAccessor<CssPoint2D> pointKey,
+                               @Nonnull  MapAccessor<Connector> connectorKey,@Nonnull  MapAccessor<Figure> targetKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
                 connectorKey, targetKey);
     }
 
-    public LineConnectorHandle(ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<CssPoint2D> pointKey,
-            MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
+    public LineConnectorHandle(@Nonnull ConnectingFigure figure, @Nonnull String styleclassDisconnected, @Nonnull String styleclassConnected,@Nonnull  NonnullMapAccessor<CssPoint2D> pointKey,
+                               @Nonnull  MapAccessor<Connector> connectorKey,@Nonnull  MapAccessor<Figure> targetKey) {
         super(figure, styleclassDisconnected, styleclassConnected, pointKey,
                 connectorKey, targetKey);
         targetNode = new Region();
@@ -86,7 +87,9 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonnull(pointKey).getConvertedValue();
         pickLocation = p =  t.transform(p);
-        boolean isConnected = f.get(connectorKey) != null && f.get(targetKey) != null;
+        Connector connector = f.get(connectorKey);
+        Figure target = f.get(targetKey);
+        boolean isConnected = connector != null && target != null;
         targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         targetNode.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
         targetNode.relocate(p.getX() - 5, p.getY() - 5);
@@ -94,8 +97,8 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         targetNode.setRotate(f.getStyledNonnull(ROTATE));
         targetNode.setRotationAxis(f.getStyledNonnull(ROTATION_AXIS));
 
-        if (isConnected) {
-            connectorLocation = view.worldToView(f.getNonnull(connectorKey).getPositionInWorld(owner, f.getNonnull(targetKey)));
+        if (connector!=null&&target!=null) {
+            connectorLocation = view.worldToView(connector.getPositionInWorld(owner, target));
             targetNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
         } else {
             connectorLocation = null;

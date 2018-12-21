@@ -113,7 +113,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T>
     }
 
     @Override
-    public boolean containsKey(Map<Key<?>, Object> map) {
+    public boolean containsKey(@Nonnull Map<Key<?>, Object> map) {
         return CompositeMapAccessor.super.containsKey(map);
     }
 

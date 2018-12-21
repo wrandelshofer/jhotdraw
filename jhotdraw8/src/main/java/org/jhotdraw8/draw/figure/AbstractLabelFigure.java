@@ -26,8 +26,8 @@ import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableSvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
@@ -81,7 +81,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      */
     public final static CssInsetsStyleableMapAccessor SHAPE_SLICE = new CssInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
     /**
-     * This property specifies the bounds of a {@link#SHAPE} property. If the
+     * This property specifies the bounds of a {@link #SHAPE} property. If the
      * bounds are null or empty, then the bounds of the shape are used.
      */
     public final static DoubleStyleableFigureKey SHAPE_BOUNDS_X = new DoubleStyleableFigureKey("shapeBoundsX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
@@ -93,7 +93,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * Defines the border image as an SVG path.
      */
     @Nonnull
-    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
+    public final static NullableSvgPathStyleableFigureKey SHAPE = new NullableSvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
     @Nonnull

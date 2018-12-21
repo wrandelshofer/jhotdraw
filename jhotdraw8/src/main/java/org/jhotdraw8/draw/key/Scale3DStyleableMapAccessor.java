@@ -13,6 +13,7 @@ import javafx.geometry.Point3D;
 import javax.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -25,7 +26,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Point3D> {
+public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Point3D>
+implements NonnullMapAccessor<Point3D> {
 
     private final static long serialVersionUID = 1L;
 
@@ -96,13 +98,13 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     @Nonnull
     @Override
-    public Point3D get(Map<? super Key<?>, Object> a) {
+    public Point3D get(@Nonnull Map<? super Key<?>, Object> a) {
         return new Point3D(xKey.get(a), yKey.get(a), zKey.get(a));
     }
 
     @Nonnull
     @Override
-    public Point3D put(Map<? super Key<?>, Object> a, @Nonnull Point3D value) {
+    public Point3D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Point3D value) {
         Point3D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
@@ -112,7 +114,7 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     @Nonnull
     @Override
-    public Point3D remove(Map<? super Key<?>, Object> a) {
+    public Point3D remove(@Nonnull Map<? super Key<?>, Object> a) {
         Point3D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

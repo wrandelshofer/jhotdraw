@@ -11,17 +11,16 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 
 /**
  * Renders a {@code javafx.scene.shape.Arc}.
@@ -42,7 +41,7 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokableFigu
     public final static CssSizeStyleableFigureKey RADIUS_Y = new CssSizeStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
     public final static DoubleStyleableFigureKey START_ANGLE = new DoubleStyleableFigureKey("startAngle", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey ARC_LENGTH = new DoubleStyleableFigureKey("arcLength", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 360.0);
-    public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<>("arcType", ArcType.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, ArcType.ROUND);
+    public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<>("arcType", ArcType.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), ArcType.ROUND);
     public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
     public final static CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 

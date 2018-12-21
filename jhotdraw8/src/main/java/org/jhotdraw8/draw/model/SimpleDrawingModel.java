@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -245,8 +246,15 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T set(@Nonnull Figure figure, MapAccessor<T> key, T newValue) {
+    @Nonnull
+    public <T> T setNonnull(@Nonnull Figure figure, @Nonnull NonnullMapAccessor<T> key, @Nonnull T newValue) {
+        T v = set(figure,key,newValue);
+        if (v==null)throw new NullPointerException("return value is null");
+        return v;
+    }
+
+    @Override
+    public <T> T set(@Nonnull Figure figure, @Nonnull MapAccessor<T> key, @Nullable T newValue) {
         if (key instanceof Key<?>) {
             T oldValue = figure.set(key, newValue);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue

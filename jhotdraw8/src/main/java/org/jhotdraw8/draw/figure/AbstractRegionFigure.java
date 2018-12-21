@@ -3,34 +3,28 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
-import java.io.IOException;
-
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableSvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.Shapes;
+
+import javax.annotation.Nonnull;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.io.IOException;
 
 /**
  * Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.
@@ -45,7 +39,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Nonnull
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     @Nonnull
-    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "0,0 1,0 1,1 0,1z");
+    public final static NullableSvgPathStyleableFigureKey SHAPE = new NullableSvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),null);
     @Nonnull
     public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
     @Nonnull

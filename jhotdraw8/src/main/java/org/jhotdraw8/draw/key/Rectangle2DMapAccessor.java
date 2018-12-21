@@ -51,13 +51,13 @@ public class Rectangle2DMapAccessor extends AbstractFigureMapAccessor<Rectangle2
 
     @Nonnull
     @Override
-    public Rectangle2D get(Map<? super Key<?>, Object> a) {
+    public Rectangle2D get(@Nonnull Map<? super Key<?>, Object> a) {
         return new Rectangle2D(xKey.get(a), yKey.get(a), max(0.0,widthKey.get(a)), max(0.0,heightKey.get(a)));
     }
 
     @Nonnull
     @Override
-    public Rectangle2D put(Map<? super Key<?>, Object> a, @Nonnull Rectangle2D value) {
+    public Rectangle2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Rectangle2D value) {
         Rectangle2D oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
@@ -68,7 +68,7 @@ public class Rectangle2DMapAccessor extends AbstractFigureMapAccessor<Rectangle2
 
     @Nonnull
     @Override
-    public Rectangle2D remove(Map<? super Key<?>, Object> a) {
+    public Rectangle2D remove(@Nonnull Map<? super Key<?>, Object> a) {
         Rectangle2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

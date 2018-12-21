@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.model;
 
 import javax.annotation.Nonnull;
 
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -212,7 +213,20 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the old value
      */
     @Nullable
-    <T> T set( Figure figure,  MapAccessor<T> key, @Nullable T newValue);
+    <T> T set(@Nonnull Figure figure,  MapAccessor<T> key, @Nullable T newValue);
+
+    /**
+     * Sets the specified property on the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
+     *
+     * @param <T> the value type
+     * @param figure the figure
+     * @param key the key
+     * @param newValue the new value
+     * @return the old value
+     */
+    @Nonnull
+    <T> T setNonnull(@Nonnull Figure figure, @Nonnull NonnullMapAccessor<T> key, @Nonnull T newValue);
 
     /**
      * Gets the specified property from the figure.
@@ -235,7 +249,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the value
      */
     @Nonnull
-    default <T> T getNonnull(@Nonnull Figure figure, @Nonnull MapAccessor<T> key) {
+    default <T> T getNonnull(@Nonnull Figure figure, @Nonnull NonnullMapAccessor<T> key) {
         return figure.getNonnull(key);
     }
 

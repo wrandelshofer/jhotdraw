@@ -1,4 +1,4 @@
-/* @(#)DoubleStyleableFigureKey.java
+/* @(#)BooleanStyleableFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -13,12 +14,14 @@ import org.jhotdraw8.css.text.CssBooleanConverter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
- * DoubleStyleableFigureKey.
+ * BooleanStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BooleanStyleableFigureKey extends AbstractStyleableFigureKey<Boolean> implements WriteableStyleableMapAccessor<Boolean> {
+public class BooleanStyleableFigureKey extends AbstractStyleableFigureKey<Boolean>
+        implements WriteableStyleableMapAccessor<Boolean>,
+        NonnullMapAccessor<Boolean> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Boolean> cssMetaData;

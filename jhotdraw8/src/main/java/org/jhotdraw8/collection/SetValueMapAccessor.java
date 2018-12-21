@@ -42,7 +42,7 @@ private final static long serialVersionUID=1L;
     }
 
     @Override
-    public Boolean get(Map<? super Key<?>, Object> a) {
+    public Boolean get(@Nonnull Map<? super Key<?>, Object> a) {
         return setAccessor.get(a).contains(value);
     }
 
@@ -85,7 +85,7 @@ private final static long serialVersionUID=1L;
     }
 
     @Override
-    public Boolean put(Map<? super Key<?>, Object> a, @Nullable Boolean value) {
+    public Boolean put(@Nonnull Map<? super Key<?>, Object> a, @Nullable Boolean value) {
         ImmutableSet<E> set = setAccessor.get(a);
         assert set != null;
         boolean oldValue = set.contains(this.value);
@@ -99,7 +99,7 @@ private final static long serialVersionUID=1L;
     }
 
     @Override
-    public Boolean remove(Map<? super Key<?>, Object> a) {
+    public Boolean remove(@Nonnull Map<? super Key<?>, Object> a) {
         return put(a, false);
     }
 

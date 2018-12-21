@@ -104,7 +104,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @param value The new value.
      * @return The old value.
      */
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     default T put(@Nonnull Map<? super Key<?>, Object> a, @Nullable T value) {
         T oldValue;

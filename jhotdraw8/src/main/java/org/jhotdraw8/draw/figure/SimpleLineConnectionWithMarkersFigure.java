@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -96,12 +95,12 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     }
 
     @Override
-    public double getStrokeCutEnd() {
+    public double getStrokeCutEnd(RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutEnd(); 
     }
 
     @Override
-    public double getStrokeCutStart() {
+    public double getStrokeCutStart(RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutStart(); 
     }
 }

@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.handle.Handle;
@@ -68,12 +69,12 @@ public class SimplePolylineFigure extends AbstractLeafFigure
             list.add(new PolylineOutlineHandle(this, POINTS,false, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
             list.add(new PolylineOutlineHandle(this, POINTS, false,Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            for (int i = 0, n = get(POINTS).size(); i < n; i++) {
+            for (int i = 0, n = getNonnull(POINTS).size(); i < n; i++) {
                 list.add(new PolyPointMoveHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_MOVE));
             }
         } else if (handleType == HandleType.POINT) {
             list.add(new PolylineOutlineHandle(this, POINTS, true,Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            for (int i = 0, n = get(POINTS).size(); i < n; i++) {
+            for (int i = 0, n = getNonnull(POINTS).size(); i < n; i++) {
                 list.add(new PolyPointEditHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_POINT));
             }
         } else {
@@ -95,7 +96,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
-        for (Point2D p : get(POINTS)) {
+        for (Point2D p : getNonnull(POINTS)) {
             minX = Math.min(minX, p.getX());
             minY = Math.min(minY, p.getY());
             maxX = Math.max(maxX, p.getX());
@@ -157,7 +158,7 @@ public class SimplePolylineFigure extends AbstractLeafFigure
     }
 
     @Nonnull
-    public static double[] toPointArray(Figure f, MapAccessor<ImmutableList<Point2D>> key) {
+    public static double[] toPointArray(@Nonnull Figure f, @Nonnull NonnullMapAccessor<ImmutableList<Point2D>> key) {
         ImmutableList<Point2D> points = f.getNonnull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {

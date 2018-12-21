@@ -11,15 +11,17 @@ import javax.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableCssColorStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.SimpleFigureKey;
+import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+
 import java.util.List;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.key.CssColorStyleableFigureKey;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -54,7 +56,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
+    public final static Key<URI> DOCUMENT_HOME = new NullableObjectFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
             Paths.get(System.getProperty("user.home")).toUri());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
@@ -69,7 +71,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new NullableObjectFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -81,14 +83,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new NullableObjectFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<String>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    public final static Key<List<String>> INLINE_STYLESHEETS = new NullableObjectFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Defines the canvas width.
      * <p>
@@ -121,7 +123,7 @@ public interface Drawing extends Figure {
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    public final static CssColorStyleableFigureKey BACKGROUND = new CssColorStyleableFigureKey("background", new CssColor("white", Color.WHITE));
+    public final static NullableCssColorStyleableFigureKey BACKGROUND = new NullableCssColorStyleableFigureKey("background", new CssColor("white", Color.WHITE));
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
@@ -144,10 +146,11 @@ public interface Drawing extends Figure {
     
     /**
      * Performs one layout pass over the entire drawing.
+     * @param ctx
      */
-    default void layoutAll() {
+    default void layoutAll(RenderContext ctx) {
         for (Figure f : postorderIterable()) {
-            f.layout(null);
+            f.layout(ctx);
         }
     }
 }

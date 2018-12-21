@@ -31,12 +31,13 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LabelConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.SimpleFigureKey;
+import org.jhotdraw8.draw.key.NullableEnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableObjectFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -54,18 +55,18 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The horizontal position of the text. Default value: {@code baseline}
      */
-    public final static EnumStyleableFigureKey<HPos> TEXT_HPOS = new EnumStyleableFigureKey<>("textHPos", HPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, HPos.LEFT);
+    public final static EnumStyleableFigureKey<HPos> TEXT_HPOS = new EnumStyleableFigureKey<>("textHPos", HPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), HPos.LEFT);
 
     /**
      * The label target.
      */
     @Nonnull
-    public final static SimpleFigureKey<Figure> LABEL_TARGET = new SimpleFigureKey<>("labelTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
+    public final static NullableObjectFigureKey<Figure> LABEL_TARGET = new NullableObjectFigureKey<>("labelTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The connector.
      */
     @Nonnull
-    public final static SimpleFigureKey<Connector> LABEL_CONNECTOR = new SimpleFigureKey<>("labelConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
+    public final static NullableObjectFigureKey<Connector> LABEL_CONNECTOR = new NullableObjectFigureKey<>("labelConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     public final static CssSizeStyleableFigureKey LABELED_LOCATION_X = new CssSizeStyleableFigureKey("labeledLocationX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
     public final static CssSizeStyleableFigureKey LABELED_LOCATION_Y = new CssSizeStyleableFigureKey("labeledLocationY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
     public final static CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
@@ -86,7 +87,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * Whether the label should be rotated with the target.
      */
-    public final static EnumStyleableFigureKey<LabelAutorotate> LABEL_AUTOROTATE = new EnumStyleableFigureKey<>("labelAutorotate", LabelAutorotate.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), false, LabelAutorotate.OFF);
+    public final static EnumStyleableFigureKey<LabelAutorotate> LABEL_AUTOROTATE = new EnumStyleableFigureKey<>("labelAutorotate", LabelAutorotate.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), LabelAutorotate.OFF);
     /**
      * The position relative to the parent (respectively the offset).
      */

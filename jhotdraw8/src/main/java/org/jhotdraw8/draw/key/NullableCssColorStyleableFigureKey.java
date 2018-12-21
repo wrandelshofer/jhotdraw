@@ -1,4 +1,4 @@
-/* @(#)CssColorStyleableFigureKey.java
+/* @(#)NullableCssColorStyleableFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -18,12 +18,13 @@ import javax.annotation.Nonnull;
 import java.util.function.Function;
 
 /**
- * CssColorStyleableFigureKey.
+ * NullableCssColorStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssColor> implements WriteableStyleableMapAccessor<CssColor> {
+public class NullableCssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssColor>
+        implements WriteableStyleableMapAccessor<CssColor> {
 
     private final static long serialVersionUID = 1L;
 
@@ -37,7 +38,7 @@ public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssCo
      *
      * @param name The name of the key.
      */
-    public CssColorStyleableFigureKey(String name) {
+    public NullableCssColorStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -47,7 +48,7 @@ public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssCo
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public CssColorStyleableFigureKey(String name, CssColor defaultValue) {
+    public NullableCssColorStyleableFigureKey(String name, CssColor defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -60,7 +61,7 @@ public class CssColorStyleableFigureKey extends AbstractStyleableFigureKey<CssCo
      * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public CssColorStyleableFigureKey(String key, DirtyMask mask, CssColor defaultValue) {
+    public NullableCssColorStyleableFigureKey(String key, DirtyMask mask, CssColor defaultValue) {
         super(key, CssColor.class, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<CssColor>> function = s -> {

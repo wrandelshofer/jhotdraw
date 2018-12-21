@@ -3,23 +3,25 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.Map;
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssInsetsConverter;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * InsetsStyleableMapAccessor.
@@ -27,32 +29,34 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssInsets> {
+public class CssInsetsStyleableMapAccessor
+        extends AbstractStyleableFigureMapAccessor<CssInsets>
+        implements NonnullMapAccessor<CssInsets> {
 
     private final static long serialVersionUID = 1L;
 
     @Nonnull
     private final CssMetaData<?, CssInsets> cssMetaData;
     @Nonnull
-    private final MapAccessor<CssSize> topKey;
+    private final NonnullMapAccessor<CssSize> topKey;
     @Nonnull
-    private final MapAccessor<CssSize> rightKey;
+    private final NonnullMapAccessor<CssSize> rightKey;
     @Nonnull
-    private final MapAccessor<CssSize> bottomKey;
+    private final NonnullMapAccessor<CssSize> bottomKey;
     @Nonnull
-    private final MapAccessor<CssSize> leftKey;
+    private final NonnullMapAccessor<CssSize> leftKey;
 
     /**
      * Creates a new instance with the specified name.
      *
-     * @param name the name of the accessor
-     * @param topKey the insets top key
-     * @param rightKey the insets right key
+     * @param name      the name of the accessor
+     * @param topKey    the insets top key
+     * @param rightKey  the insets right key
      * @param bottomKey the insets bottom key
-     * @param leftKey the insets left key
+     * @param leftKey   the insets left key
      */
-    public CssInsetsStyleableMapAccessor(String name, MapAccessor<CssSize> topKey, MapAccessor<CssSize> rightKey, MapAccessor<CssSize> bottomKey, MapAccessor<CssSize> leftKey) {
-        super(name, CssInsets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
+    public CssInsetsStyleableMapAccessor(String name, NonnullMapAccessor<CssSize> topKey, NonnullMapAccessor<CssSize> rightKey, NonnullMapAccessor<CssSize> bottomKey, NonnullMapAccessor<CssSize> leftKey) {
+        super(name, CssInsets.class, new NonnullMapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssInsets>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -64,7 +68,7 @@ public class CssInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAcc
                 = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, CssInsets> md
                 = new SimpleCssMetaData<>(property, function,
-                        cnvrtr, getDefaultValue(), inherits);
+                cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.topKey = topKey;
@@ -80,7 +84,7 @@ public class CssInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAcc
 
     }
 
-    private final Converter<CssInsets> converter= new CssInsetsConverter(false);
+    private final Converter<CssInsets> converter = new CssInsetsConverter(false);
 
     @Override
     public Converter<CssInsets> getConverter() {
@@ -89,7 +93,7 @@ public class CssInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAcc
 
     @Nullable
     @Override
-    public CssInsets get(Map<? super Key<?>, Object> a) {
+    public CssInsets get(@Nonnull Map<? super Key<?>, Object> a) {
         final CssSize top = topKey.get(a);
         final CssSize right = rightKey.get(a);
         final CssSize bottom = bottomKey.get(a);
@@ -107,7 +111,7 @@ public class CssInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAcc
 
     @Nullable
     @Override
-    public CssInsets put(Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
+    public CssInsets put(@Nonnull Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
         CssInsets oldValue = get(a);
         if (value == null) {
             topKey.put(a, null);
@@ -125,7 +129,7 @@ public class CssInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAcc
 
     @Nullable
     @Override
-    public CssInsets remove(Map<? super Key<?>, Object> a) {
+    public CssInsets remove(@Nonnull Map<? super Key<?>, Object> a) {
         CssInsets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);

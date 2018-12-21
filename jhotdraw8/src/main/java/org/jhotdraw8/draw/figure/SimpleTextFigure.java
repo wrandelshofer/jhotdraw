@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -13,10 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -29,6 +22,11 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.DummyRenderContext;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 
 /**
  * {@code SimpleTextFigure} is a {@code FontableFigure} which supports stroking and
@@ -137,15 +135,10 @@ public class SimpleTextFigure extends AbstractLeafFigure
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        Text tn = new Text();
-        tn.setText(get(TEXT));
-        tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
-        tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
-        tn.setBoundsType(TextBoundsType.VISUAL);
-        applyTextableFigureProperties(null, tn);
-        applyFontableFigureProperties(null, tn);
-        applyStyleableFigureProperties(null, tn);
-        return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
+        if (textNode==null) {
+            layout(new DummyRenderContext());
+        }
+        return Shapes.awtShapeFromFX(textNode).getPathIterator(tx);
     }
 
 }

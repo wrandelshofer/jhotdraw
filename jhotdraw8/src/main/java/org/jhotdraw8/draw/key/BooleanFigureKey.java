@@ -1,15 +1,15 @@
-/* @(#)DoubleStyleableFigureKey.java
+/* @(#)NullableDoubleStyleableFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 
 /**
- * DoubleStyleableFigureKey.
+ * NullableDoubleStyleableFigureKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BooleanFigureKey extends SimpleFigureKey<Boolean> {
+public class BooleanFigureKey extends NullableObjectFigureKey<Boolean> {
 
     final static long serialVersionUID = 1L;
   

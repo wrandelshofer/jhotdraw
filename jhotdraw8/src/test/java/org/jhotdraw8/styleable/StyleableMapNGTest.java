@@ -7,7 +7,7 @@ package org.jhotdraw8.styleable;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.FillableFigure;
-import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ public class StyleableMapNGTest {
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         StyleableMap<Key<?>, Object> instance = new SimpleStyleableMap<>();
-        final PaintableStyleableFigureKey key = FillableFigure.FILL;
+        final NullablePaintableStyleableFigureKey key = FillableFigure.FILL;
 
         assertNotNull(key.getDefaultValue(), "need a key with a non-null default value for this test");
         assertFalse(instance.containsKey(key), "value has not been set, map must not contain key");

@@ -3,14 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jhotdraw8.css.CssFont;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import javafx.geometry.VPos;
 import javafx.scene.control.Labeled;
 import javafx.scene.text.Font;
@@ -19,14 +11,22 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.css.CssFont;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A figure which supports font attributes.
@@ -41,35 +41,35 @@ public interface FontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    public static StringOrIdentStyleableFigureKey FONT_FAMILY = new StringOrIdentStyleableFigureKey("fontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    public static CssSizeStyleableFigureKey FONT_SIZE = new CssSizeStyleableFigureKey("fontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    public static EnumStyleableFigureKey<FontPosture> FONT_STYLE = new EnumStyleableFigureKey<>("fontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, FontPosture.REGULAR);
-    public static EnumStyleableFigureKey<FontWeight> FONT_WEIGHT = new EnumStyleableFigureKey<>("fontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, FontWeight.NORMAL);
-    public static FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);
+    StringOrIdentStyleableFigureKey FONT_FAMILY = new StringOrIdentStyleableFigureKey("fontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
+    CssSizeStyleableFigureKey FONT_SIZE = new CssSizeStyleableFigureKey("fontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
+    EnumStyleableFigureKey<FontPosture> FONT_STYLE = new EnumStyleableFigureKey<>("fontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),  FontPosture.REGULAR);
+    EnumStyleableFigureKey<FontWeight> FONT_WEIGHT = new EnumStyleableFigureKey<>("fontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),  FontWeight.NORMAL);
+    FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);
     /**
      * The line spacing. Default value: {@code 0.0}
      */
-    public static DoubleStyleableFigureKey LINE_SPACING = new DoubleStyleableFigureKey("lineSpacing", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    DoubleStyleableFigureKey LINE_SPACING = new DoubleStyleableFigureKey("lineSpacing", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Whether to strike through the text. Default value: {@code false}
      */
-    public static BooleanStyleableFigureKey STRIKETHROUGH = new BooleanStyleableFigureKey("strikethrough", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableFigureKey STRIKETHROUGH = new BooleanStyleableFigureKey("strikethrough", DirtyMask.of(DirtyBits.NODE), false);
     /**
      * The text alignment. Default value: {@code left}
      */
-    public static EnumStyleableFigureKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableFigureKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, TextAlignment.LEFT);
+    EnumStyleableFigureKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableFigureKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),  TextAlignment.LEFT);
     /**
      * The vertical position of the text. Default value: {@code baseline}
      */
-    public static EnumStyleableFigureKey<VPos> TEXT_VPOS = new EnumStyleableFigureKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, VPos.BASELINE);
+    EnumStyleableFigureKey<VPos> TEXT_VPOS = new EnumStyleableFigureKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),  VPos.BASELINE);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    public static BooleanStyleableFigureKey UNDERLINE = new BooleanStyleableFigureKey("underline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableFigureKey UNDERLINE = new BooleanStyleableFigureKey("underline", DirtyMask.of(DirtyBits.NODE), false);
     /**
      * Text wrapping width. Default value: {@code 0.0} (no wrapping).
      */
-    public static DoubleStyleableFigureKey WRAPPING_WIDTH = new DoubleStyleableFigureKey("wrappingWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    DoubleStyleableFigureKey WRAPPING_WIDTH = new DoubleStyleableFigureKey("wrappingWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
 
     /**
      * Updates a text node with fontable properties.

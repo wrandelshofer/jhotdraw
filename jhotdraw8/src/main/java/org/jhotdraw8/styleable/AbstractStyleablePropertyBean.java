@@ -94,7 +94,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     }
 
     @Override
-    public <T> boolean containsKey(StyleOrigin origin, @Nonnull MapAccessor<T> key) {
+    public <T> boolean containsKey(@Nonnull StyleOrigin origin, @Nonnull MapAccessor<T> key) {
         return key.containsKey(getStyleableMap().getMap(origin));
     }
 
@@ -102,7 +102,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * Sets the style value.
      */
     @Override
-    public <T> T setStyled(StyleOrigin origin, @Nonnull MapAccessor<T> key, T newValue) {
+    public <T> T setStyled(@Nonnull StyleOrigin origin, @Nonnull MapAccessor<T> key, T newValue) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
         T ret = key.put(map.getMap(origin), newValue);
@@ -110,14 +110,14 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     }
 
     @Override
-    public <T> T remove(StyleOrigin origin, @Nonnull MapAccessor<T> key) {
+    public <T> T remove(@Nonnull StyleOrigin origin, @Nonnull MapAccessor<T> key) {
         @SuppressWarnings("unchecked")
         T ret = key.remove(getStyleableMap().getMap(origin));
         return ret;
     }
 
     @Override
-    public void removeAll(StyleOrigin origin) {
+    public void removeAll(@Nonnull StyleOrigin origin) {
         getStyleableMap().removeAll(origin);
     }
 

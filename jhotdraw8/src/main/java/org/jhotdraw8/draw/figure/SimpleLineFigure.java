@@ -3,20 +3,11 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import java.util.List;
-
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -32,6 +23,11 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
+
+import javax.annotation.Nonnull;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+import java.util.List;
 
 /**
  * A figure which draws a straight line from a start point to an end point.

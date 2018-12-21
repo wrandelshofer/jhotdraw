@@ -5,7 +5,7 @@
 package org.jhotdraw8.beans;
 
 import org.jhotdraw8.draw.figure.FillableFigure;
-import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +31,7 @@ public class SimplePropertyBeanTest {
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         SimplePropertyBean instance = new SimplePropertyBean();
-        final PaintableStyleableFigureKey key = FillableFigure.FILL;
+        final NullablePaintableStyleableFigureKey key = FillableFigure.FILL;
         
         
        assertNotNull(key.getDefaultValue(),
