@@ -9,8 +9,8 @@ import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.util.function.Function;
 
 public class ObjectStyleableKey<T> extends ObjectKey<T> implements  WriteableStyleableMapAccessor<T>  {

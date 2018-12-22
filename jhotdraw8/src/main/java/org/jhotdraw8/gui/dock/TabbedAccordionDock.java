@@ -6,7 +6,7 @@ package org.jhotdraw8.gui.dock;
 import static java.lang.Double.max;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.gui.CustomSkin;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;

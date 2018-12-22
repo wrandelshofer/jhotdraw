@@ -11,8 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * FileURIChooser.

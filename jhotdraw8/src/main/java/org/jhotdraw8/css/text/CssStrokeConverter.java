@@ -13,8 +13,8 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.UnitConverter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;

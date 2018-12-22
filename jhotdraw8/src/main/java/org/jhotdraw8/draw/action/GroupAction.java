@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;

@@ -3,10 +3,9 @@
  */
 package org.jhotdraw8.net;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;

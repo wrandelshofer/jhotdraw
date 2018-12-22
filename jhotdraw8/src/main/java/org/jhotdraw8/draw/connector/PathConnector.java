@@ -5,8 +5,8 @@ package org.jhotdraw8.draw.connector;
 
 import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;

@@ -25,8 +25,8 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * A figure which supports font attributes.

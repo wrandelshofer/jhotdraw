@@ -6,7 +6,7 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.text.ParseException;
 import javafx.util.StringConverter;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * Allows to use a {@code Converter} with the

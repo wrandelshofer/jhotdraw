@@ -10,8 +10,8 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**
@@ -40,7 +40,7 @@ public class IntDirectedGraphPathBuilder {
      * @throws org.jhotdraw8.graph.PathBuilderException if traversal is not
      * possible
      */
-    @javax.annotation.Nullable
+    @Nullable
     public VertexPath<Integer> buildAnyVertexPath(@Nonnull IntDirectedGraph graph,
                                                   int start, int goal) throws PathBuilderException {
         VertexPath<Integer> pathElements = IntDirectedGraphPathBuilder.this.findAnyVertexPath(graph, start, goal);

@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.collection.Key;
 

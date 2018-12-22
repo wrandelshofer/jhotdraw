@@ -6,7 +6,7 @@ package org.jhotdraw8.gui;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import javafx.application.Platform;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * PlatformUtil.

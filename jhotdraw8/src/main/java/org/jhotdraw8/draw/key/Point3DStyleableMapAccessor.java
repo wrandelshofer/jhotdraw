@@ -11,7 +11,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point3D;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;

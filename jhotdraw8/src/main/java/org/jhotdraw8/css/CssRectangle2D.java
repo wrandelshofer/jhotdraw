@@ -7,7 +7,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import java.util.Objects;
 
 /**

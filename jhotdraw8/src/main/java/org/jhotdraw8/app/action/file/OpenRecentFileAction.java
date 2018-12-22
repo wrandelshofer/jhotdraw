@@ -9,7 +9,7 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;

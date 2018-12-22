@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.IntArrayList;
 
 /**

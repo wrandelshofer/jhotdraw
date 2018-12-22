@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

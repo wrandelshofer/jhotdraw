@@ -23,7 +23,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * TransformFlattener.

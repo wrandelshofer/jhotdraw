@@ -3,13 +3,11 @@
  */
 package org.jhotdraw8.collection;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * An immutable observable list.

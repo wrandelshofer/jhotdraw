@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.model;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -17,7 +17,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;

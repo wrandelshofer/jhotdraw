@@ -5,8 +5,8 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.xml.text.XmlWordConverter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;

@@ -5,7 +5,7 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.Figure;
 

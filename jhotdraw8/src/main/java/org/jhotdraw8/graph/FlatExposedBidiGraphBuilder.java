@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.SpliteratorIterable;
@@ -22,8 +22,6 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Provides an API for building a {@code BidiGraph}.
@@ -549,7 +547,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
             }
 
             @Override
-            @javax.annotation.Nullable
+            @Nullable
             public A next() {
                 while (!nextArrowIterator.hasNext()) {
                     V v = vertexIterator.next();

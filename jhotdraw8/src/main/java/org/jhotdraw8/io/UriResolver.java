@@ -5,7 +5,7 @@ package org.jhotdraw8.io;
 
 import java.net.URI;
 import java.util.function.Function;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Takes an URI and resolves it against the specified internal URI, then

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.styleable;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;

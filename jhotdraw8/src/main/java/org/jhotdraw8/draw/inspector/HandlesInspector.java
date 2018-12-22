@@ -10,19 +10,14 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.NumberStringConverter;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.binding.CustomBinding;
@@ -32,7 +27,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.StringConverterAdapter;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 public class HandlesInspector extends AbstractDrawingViewInspector {
 

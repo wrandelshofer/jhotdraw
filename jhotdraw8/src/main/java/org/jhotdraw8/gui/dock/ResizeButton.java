@@ -13,7 +13,7 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * ResizeButton.

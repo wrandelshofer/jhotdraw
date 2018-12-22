@@ -6,11 +6,10 @@ package org.jhotdraw8.app.action.edit;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.Labels;
-import org.jhotdraw8.util.Resources;
 
 /**
  * Pastes the contents of the system clipboard at the caret position.

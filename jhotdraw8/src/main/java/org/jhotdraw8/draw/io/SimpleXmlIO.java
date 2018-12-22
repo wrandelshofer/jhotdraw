@@ -29,8 +29,8 @@ import javafx.css.StyleOrigin;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
@@ -110,7 +110,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      */
     public final static NullableObjectFigureKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectFigureKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-    @javax.annotation.Nullable
+    @Nullable
     protected List<String> comments;
     protected FigureFactory figureFactory;
     @Nonnull
@@ -118,7 +118,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    @javax.annotation.Nullable
+    @Nullable
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
     private boolean doAddNotifyAndUpdateCss = true;
 
@@ -148,8 +148,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    @javax.annotation.Nullable
-    public Figure fromDocument(@Nonnull Document doc, @javax.annotation.Nullable Drawing oldDrawing, URI documentHome) throws IOException {
+    @Nullable
+    public Figure fromDocument(@Nonnull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
         setUriResolver(new UriResolver(documentHome, documentHome));
         idFactory.reset();
         if (oldDrawing != null) {
@@ -201,7 +201,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         this.namespaceURI = namespaceURI;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
@@ -233,31 +233,31 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Figure read(InputStream in, Drawing drawing, URI documentHome, WorkState workState) throws IOException {
         Document doc = XmlUtil.readWithLocations(new InputSource(in), isNamespaceAware());
         return read(doc, drawing, documentHome);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Figure read(InputSource in, Drawing drawing, URI documentHome) throws IOException {
         Document doc = XmlUtil.readWithLocations(in, isNamespaceAware());
         return read(doc, drawing, documentHome);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Figure read(@Nonnull Document in, Drawing drawing, URI documentHome) throws IOException {
         return fromDocument(in, drawing, documentHome);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     protected Figure read(@Nonnull String string, Drawing drawing, URI documentHome) throws IOException {
         try (StringReader in = new StringReader(string)) {
             return read(in, drawing, documentHome);
         }
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     protected Figure read(Reader in, Drawing drawing, URI documentHome) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing, documentHome);
@@ -265,7 +265,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Nonnull
     @Override
-    public Set<Figure> read(@Nonnull Clipboard clipboard, @Nonnull DrawingModel model, @Nonnull Drawing drawing, @javax.annotation.Nullable Layer layer) throws IOException {
+    public Set<Figure> read(@Nonnull Clipboard clipboard, @Nonnull DrawingModel model, @Nonnull Drawing drawing, @Nullable Layer layer) throws IOException {
         setUriResolver(new UriResolver(null, drawing.get(Drawing.DOCUMENT_HOME)));
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
@@ -308,7 +308,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @return the figure
      * @throws IOException in case of failure
      */
-    @javax.annotation.Nullable
+    @Nullable
     protected Figure readDrawingOrClipping(@Nonnull Element drawingElement, Drawing oldDrawing) throws IOException {
 
         figureToElementMap.clear();
@@ -372,7 +372,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @return a figure
      * @throws IOException in case of failure
      */
-    @javax.annotation.Nullable
+    @Nullable
     protected Figure readDrawingOrClippingFromDocument(@Nonnull Document doc, Drawing oldDrawing, URI documentHome) throws IOException {
 
         figureToElementMap.clear();
@@ -551,7 +551,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @return the created figure
      * @throws java.io.IOException in case of failure
      */
-    @javax.annotation.Nullable
+    @Nullable
     protected Figure readNode(Node node) throws IOException {
         if (node instanceof Element) {
             Element elem = (Element) node;
@@ -587,7 +587,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @return a figure
      * @throws java.io.IOException in case of failure
      */
-    @javax.annotation.Nullable
+    @Nullable
     protected Figure readNodesRecursively(@Nonnull Node node) throws IOException {
         switch (node.getNodeType()) {
             case Node.ELEMENT_NODE:

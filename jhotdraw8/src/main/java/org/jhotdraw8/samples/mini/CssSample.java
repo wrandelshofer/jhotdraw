@@ -9,7 +9,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.Drawing;

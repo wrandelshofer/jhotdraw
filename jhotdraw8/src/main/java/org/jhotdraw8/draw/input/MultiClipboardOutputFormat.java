@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 import javafx.scene.input.DataFormat;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 

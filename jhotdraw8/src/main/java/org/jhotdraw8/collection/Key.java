@@ -13,8 +13,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableMap;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * An <em>name</em> which provides typesafe access to a map entry.

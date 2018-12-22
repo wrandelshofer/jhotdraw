@@ -6,8 +6,8 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.io.IdFactory;
 

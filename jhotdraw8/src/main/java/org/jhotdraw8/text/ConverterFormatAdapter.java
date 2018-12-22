@@ -8,8 +8,8 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
 /**

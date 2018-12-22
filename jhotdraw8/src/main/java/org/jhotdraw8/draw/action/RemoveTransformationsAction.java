@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Set;
 import javafx.event.ActionEvent;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;

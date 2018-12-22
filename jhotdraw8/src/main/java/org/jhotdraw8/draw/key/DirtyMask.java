@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * Represents a bitmask of {@code DirtyBits}.

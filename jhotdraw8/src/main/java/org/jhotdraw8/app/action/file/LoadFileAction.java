@@ -5,7 +5,7 @@ package org.jhotdraw8.app.action.file;
 
 import java.util.concurrent.CompletionStage;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;

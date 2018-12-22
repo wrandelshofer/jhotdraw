@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.tool;
 import java.net.URI;
 import java.util.function.Supplier;
 import javafx.stage.FileChooser;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;

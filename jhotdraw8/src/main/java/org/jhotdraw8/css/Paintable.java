@@ -4,7 +4,7 @@
 package org.jhotdraw8.css;
 
 import javafx.scene.paint.Paint;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Paintable.

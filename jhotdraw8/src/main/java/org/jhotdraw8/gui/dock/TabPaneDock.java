@@ -5,7 +5,7 @@ package org.jhotdraw8.gui.dock;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.gui.CustomSkin;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

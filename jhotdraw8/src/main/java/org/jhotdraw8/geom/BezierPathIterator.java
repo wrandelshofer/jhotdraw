@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.geom;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import java.awt.geom.*;
 

@@ -10,8 +10,8 @@ import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * {@code StyleablePropertyBean} provides styleable properties.

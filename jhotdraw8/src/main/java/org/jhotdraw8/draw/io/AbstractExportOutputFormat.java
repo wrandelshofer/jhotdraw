@@ -19,13 +19,11 @@ import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.File;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +55,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     protected abstract String getExtension();
 
 
-    @javax.annotation.Nullable
+    @Nullable
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     @Override
@@ -74,7 +72,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Function<URI, URI> getUriResolver() {
         return uriResolver;
     }

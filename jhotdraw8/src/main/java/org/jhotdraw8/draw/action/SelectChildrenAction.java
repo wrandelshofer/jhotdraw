@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javafx.event.ActionEvent;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;

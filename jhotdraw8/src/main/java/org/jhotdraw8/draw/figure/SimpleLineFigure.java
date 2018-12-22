@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.List;

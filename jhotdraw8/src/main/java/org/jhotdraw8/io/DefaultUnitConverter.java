@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.io;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * DefaultUnitConverter.

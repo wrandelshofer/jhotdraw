@@ -11,8 +11,7 @@ import javafx.scene.control.TextArea;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.gui.PlatformUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

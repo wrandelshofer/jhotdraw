@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssSize;
@@ -18,8 +18,6 @@ import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableDoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
@@ -28,7 +26,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.ObjectFigureKey;
@@ -170,7 +168,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     default Transform getInverseTransform() {
         ImmutableList<Transform> list = getStyled(TRANSFORMS);
         Transform t;
@@ -189,13 +187,13 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return t;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     default Transform getLocalToParent() {
         return getLocalToParent(true);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     default Transform getLocalToParent(boolean styled) {
         Transform l2p = CACHE && styled ? getCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
         if (l2p == null) {
@@ -456,7 +454,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void transformInParent(@javax.annotation.Nullable Transform t) {
+    default void transformInParent(@Nullable Transform t) {
         if (t == null || t.isIdentity()) {
             return;
         }

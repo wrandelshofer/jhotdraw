@@ -6,7 +6,7 @@ package org.jhotdraw8.gui;
 import java.util.List;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * URIExtensionFilter.

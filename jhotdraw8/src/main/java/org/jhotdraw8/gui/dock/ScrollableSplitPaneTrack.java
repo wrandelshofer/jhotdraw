@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.gui.dock;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

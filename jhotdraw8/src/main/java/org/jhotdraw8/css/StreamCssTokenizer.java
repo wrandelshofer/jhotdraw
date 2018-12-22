@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.CharSequenceReader;
 

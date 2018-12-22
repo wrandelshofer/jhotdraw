@@ -5,8 +5,8 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Represents a node of a bezier path. A node has up to three control points:

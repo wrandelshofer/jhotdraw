@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.tree;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
 
 /**

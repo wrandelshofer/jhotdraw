@@ -29,7 +29,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
 import org.jhotdraw8.app.DocumentOrientedActivity;

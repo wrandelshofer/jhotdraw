@@ -8,7 +8,7 @@ import java.util.List;
 
 import javafx.util.Builder;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.collection.ImmutableList;
 

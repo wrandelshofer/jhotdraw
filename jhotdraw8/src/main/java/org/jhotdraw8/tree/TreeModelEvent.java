@@ -4,7 +4,7 @@
 
 package org.jhotdraw8.tree;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.event.Event;
 

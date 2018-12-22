@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.tool;
 
 import java.util.Collection;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
 

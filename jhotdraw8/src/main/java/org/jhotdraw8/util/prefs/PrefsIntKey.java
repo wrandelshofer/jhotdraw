@@ -5,7 +5,7 @@ package org.jhotdraw8.util.prefs;
 
 import java.util.prefs.Preferences;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.geom.Geom;
 
 /**

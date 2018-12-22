@@ -23,8 +23,8 @@ import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
 import javafx.css.StyleOrigin;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;

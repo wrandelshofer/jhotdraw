@@ -6,7 +6,7 @@ package org.jhotdraw8.gui.dock;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * A Track provides horizontal or vertical space for {@link Dock}s and other

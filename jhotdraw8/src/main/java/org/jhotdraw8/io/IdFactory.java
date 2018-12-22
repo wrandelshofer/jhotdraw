@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.io;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * IdFactory.

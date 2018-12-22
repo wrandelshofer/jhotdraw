@@ -7,8 +7,8 @@ import java.io.File;
 import java.net.URI;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * FileURIChooser.

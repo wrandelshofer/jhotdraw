@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import static org.jhotdraw8.css.CssTokenType.TT_AT_KEYWORD;
 import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;
@@ -48,7 +48,7 @@ public interface CssTokenizer {
      * The returned value can be used for String comparisons of the value.
      * @return the current value
      */
-    @javax.annotation.Nullable
+    @Nullable
     default String currentValue() {
         switch (current()) {
             case TT_AT_KEYWORD:

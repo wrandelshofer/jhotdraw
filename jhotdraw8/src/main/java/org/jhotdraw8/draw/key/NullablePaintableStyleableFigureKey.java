@@ -7,7 +7,7 @@ import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.styleable.StyleablePropertyBean;

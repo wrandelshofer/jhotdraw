@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;

@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Window;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * {@code URIChooser} provides a mechanism for the user to choose an URI.

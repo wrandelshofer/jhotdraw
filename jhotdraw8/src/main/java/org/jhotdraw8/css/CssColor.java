@@ -5,8 +5,8 @@ package org.jhotdraw8.css;
 
 import java.util.Objects;
 import javafx.scene.paint.Color;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.text.CssConverterFactory;
 import org.jhotdraw8.text.PatternConverter;
 
@@ -82,7 +82,7 @@ public class CssColor implements Paintable {
     }
 
     @Override
-    public boolean equals(@javax.annotation.Nullable Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

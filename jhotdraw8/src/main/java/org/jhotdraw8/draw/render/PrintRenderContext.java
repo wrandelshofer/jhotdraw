@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.render;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.draw.figure.Figure;

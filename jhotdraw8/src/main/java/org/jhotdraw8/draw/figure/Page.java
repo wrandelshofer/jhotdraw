@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,8 +11,6 @@ import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-
-import javax.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.io.DefaultUnitConverter;

@@ -8,8 +8,8 @@ import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 public class SimpleRegionFigure extends AbstractRegionFigure
         implements FillableFigure, StrokableFigure, CompositableFigure,

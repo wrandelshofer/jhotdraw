@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.model;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.tree.AbstractTreeModel;
 import java.util.concurrent.CopyOnWriteArrayList;
 

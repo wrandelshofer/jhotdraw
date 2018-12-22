@@ -4,7 +4,7 @@
 
 package org.jhotdraw8.util.prefs;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;

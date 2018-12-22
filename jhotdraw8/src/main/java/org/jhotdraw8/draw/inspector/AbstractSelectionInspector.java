@@ -8,8 +8,8 @@ import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;

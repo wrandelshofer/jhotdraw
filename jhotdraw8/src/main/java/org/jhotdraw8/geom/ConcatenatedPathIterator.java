@@ -8,8 +8,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import javafx.scene.shape.FillRule;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Concatenates multiple path iterators.

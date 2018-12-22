@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**

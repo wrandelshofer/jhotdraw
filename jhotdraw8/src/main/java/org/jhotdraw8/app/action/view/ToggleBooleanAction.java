@@ -5,7 +5,7 @@ package org.jhotdraw8.app.action.view;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;

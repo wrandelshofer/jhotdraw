@@ -1,7 +1,5 @@
 package org.jhotdraw8.css;
 
-import javax.annotation.Nonnull;
-
 /**
  * Defines CSS 3 token types.
  * <p>

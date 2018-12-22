@@ -9,7 +9,6 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.NonnullMapAccessor;
-import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssInsetsConverter;
@@ -18,8 +17,8 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Function;
 

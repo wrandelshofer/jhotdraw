@@ -4,7 +4,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * MarginPathBuilder.

@@ -5,7 +5,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.collection.IntArrayList;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

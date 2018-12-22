@@ -6,7 +6,7 @@ package org.jhotdraw8.geom;
 import java.util.stream.Collector;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * A state object for finding the combined bounds of a stream of Bounds objects.

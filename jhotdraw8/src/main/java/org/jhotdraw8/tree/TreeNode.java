@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.graph.BreadthFirstSpliterator;
 import org.jhotdraw8.collection.SpliteratorIterable;
 

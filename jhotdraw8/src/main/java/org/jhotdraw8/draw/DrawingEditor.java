@@ -7,7 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.draw.tool.Tool;
 

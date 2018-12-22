@@ -7,7 +7,7 @@ import static java.lang.Double.max;
 import java.util.Map;
 
 import javafx.geometry.Rectangle2D;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 

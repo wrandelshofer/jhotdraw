@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -22,7 +21,7 @@ import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;

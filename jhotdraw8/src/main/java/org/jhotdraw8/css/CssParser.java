@@ -14,7 +14,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.ast.AbstractAttributeSelector;
 import org.jhotdraw8.css.ast.AdjacentSiblingCombinator;
 import org.jhotdraw8.css.ast.AndCombinator;

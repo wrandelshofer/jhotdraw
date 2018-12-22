@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.xml.text;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.jhotdraw8.css.text.CssFontConverter;
 
 /**

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.ObservableMixin;
 import org.jhotdraw8.event.Listener;
 
@@ -44,7 +44,7 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @return the root
      */
-    @javax.annotation.Nullable
+    @Nullable
     ObjectProperty<N> rootProperty();
 
     /**

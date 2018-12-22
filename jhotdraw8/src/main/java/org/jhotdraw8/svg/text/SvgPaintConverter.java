@@ -11,8 +11,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.text.CssPaintConverter;
 import org.jhotdraw8.io.IdFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * SvgPaintConverter.

@@ -4,7 +4,7 @@
 
 package org.jhotdraw8.graph;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

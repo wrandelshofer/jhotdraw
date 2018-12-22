@@ -8,7 +8,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * PathBuilder.

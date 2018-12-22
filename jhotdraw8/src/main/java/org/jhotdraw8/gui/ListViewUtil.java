@@ -18,8 +18,8 @@ import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 import org.jhotdraw8.draw.inspector.LayerCell;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -176,7 +176,7 @@ public class ListViewUtil {
 
         };
 
-        @javax.annotation.Nullable
+        @Nullable
         EventHandler<? super DragEvent> listDragHandler_DELETE_ME = new EventHandler<DragEvent>() {
 
             @Override

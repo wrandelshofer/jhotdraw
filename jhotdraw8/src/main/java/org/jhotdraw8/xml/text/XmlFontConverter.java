@@ -9,8 +9,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.StreamCssTokenizer;

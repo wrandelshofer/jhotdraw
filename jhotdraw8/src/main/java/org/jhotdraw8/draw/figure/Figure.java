@@ -27,8 +27,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.Key;
@@ -262,7 +262,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param selection a set of figures
      * @return bounds
      */
-    @javax.annotation.Nullable
+    @Nullable
     public static Bounds visualBounds(Collection<Figure> selection) {
         Bounds b = null;
 

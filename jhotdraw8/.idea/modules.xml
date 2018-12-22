@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/jhotdraw8.iml" filepath="$PROJECT_DIR$/.idea/jhotdraw8.iml" />
-      <module fileurl="file://$PROJECT_DIR$//jsr305.iml" filepath="$PROJECT_DIR$//jsr305.iml" />
     </modules>
   </component>
 </project>

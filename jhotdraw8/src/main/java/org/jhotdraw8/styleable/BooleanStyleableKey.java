@@ -4,7 +4,7 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.StyleablePropertyFactory;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.text.CssBooleanConverter;
 
 /**

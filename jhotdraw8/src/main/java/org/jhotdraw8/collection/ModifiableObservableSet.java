@@ -14,8 +14,8 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * This ObservableSet implementation provides overridable fire methods, saving one

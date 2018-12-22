@@ -6,8 +6,8 @@ package org.jhotdraw8.tree;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.TreeItem;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.event.Listener;
 

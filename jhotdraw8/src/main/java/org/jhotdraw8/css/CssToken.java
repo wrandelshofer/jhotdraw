@@ -6,8 +6,8 @@ package org.jhotdraw8.css;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;

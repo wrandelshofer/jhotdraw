@@ -16,8 +16,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.SharedKeysMap;
@@ -116,7 +116,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         return list;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     final public Drawing getDrawing() {
         return drawing;
@@ -201,11 +201,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      * @return true if {@code newParent} is an acceptable parent
      */
     @Override
-    public boolean isSuitableParent(@javax.annotation.Nullable Figure newParent) {
+    public boolean isSuitableParent(@Nullable Figure newParent) {
         return newParent != null && !(newParent instanceof Drawing);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public ObjectProperty<Figure> parentProperty() {
         return parent;
@@ -239,7 +239,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public <T> T setCachedValue(@Nonnull Key<T> key, @javax.annotation.Nullable T value) {
+    public <T> T setCachedValue(@Nonnull Key<T> key, @Nullable T value) {
         if (cachedValues == null) {
             cachedValues = new SharedKeysMap<>(cachedValuesKeyMap);
         }

@@ -5,7 +5,7 @@ package org.jhotdraw8.gui;
 
 import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * A custom skin without behavior.

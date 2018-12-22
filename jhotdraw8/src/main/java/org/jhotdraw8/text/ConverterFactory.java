@@ -4,7 +4,7 @@
 package org.jhotdraw8.text;
 
 import java.util.function.BiFunction;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Creates a {@code Converter} given a type and style.

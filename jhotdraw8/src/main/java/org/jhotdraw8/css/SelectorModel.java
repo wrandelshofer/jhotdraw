@@ -10,8 +10,8 @@ import java.util.Set;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.collection.ReadOnlyList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match

@@ -6,8 +6,8 @@ package org.jhotdraw8.collection;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * A <em>name</em> which provides typesafe access to a map entry.
@@ -43,13 +43,13 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Holds the default value.
      */
-    @javax.annotation.Nullable
+    @Nullable
     private final T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    @javax.annotation.Nullable
+    @Nullable
     private final Class<?> clazz;
     /**
      * The type token is not sufficient, if the type is parameterized. We allow
@@ -185,7 +185,7 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return the default value.
      */
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public T getDefaultValue() {
         return defaultValue;

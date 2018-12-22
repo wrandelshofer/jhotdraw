@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;

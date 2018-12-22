@@ -23,8 +23,8 @@ import org.jhotdraw8.draw.render.DummyRenderContext;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 

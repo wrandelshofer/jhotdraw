@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.inspector;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * AbstractDrawingInspector.

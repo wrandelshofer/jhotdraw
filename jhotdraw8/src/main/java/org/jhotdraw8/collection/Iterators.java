@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.collection;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;

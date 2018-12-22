@@ -5,8 +5,8 @@ package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import javafx.scene.Node;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * FontIconDecoder decodes a property value if it starts with the specified

@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.gui.dock;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.gui.CustomSkin;
 import org.jhotdraw8.gui.RectangleTransition;
 import java.util.function.Supplier;

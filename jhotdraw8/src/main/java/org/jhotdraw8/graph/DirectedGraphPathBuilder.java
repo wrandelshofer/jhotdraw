@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,7 +101,7 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return the path elements. Returns an empty list if there is no path. The
      * list is mutable.
      */
-    @javax.annotation.Nullable
+    @Nullable
     private BackLink<V> bfs(@Nonnull V root,
                             @Nonnull Predicate<V> goal,
                             int maxLength) {

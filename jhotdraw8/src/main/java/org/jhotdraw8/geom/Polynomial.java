@@ -15,8 +15,8 @@ import static java.lang.Math.*;
 import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 import javafx.geometry.Point2D;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * Polynomial encapsulates root finding functions needed by curve intersection

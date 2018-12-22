@@ -6,7 +6,7 @@ package org.jhotdraw8.gui.fontchooser;
 import java.util.Iterator;
 import java.util.prefs.Preferences;
 import javafx.collections.ObservableList;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * PreferencesFontChooserModelFactory.

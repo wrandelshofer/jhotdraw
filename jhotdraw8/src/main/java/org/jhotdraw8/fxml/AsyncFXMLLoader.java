@@ -10,7 +10,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 
 import javafx.fxml.FXMLLoader;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.concurrent.FXWorker;
 
 /**

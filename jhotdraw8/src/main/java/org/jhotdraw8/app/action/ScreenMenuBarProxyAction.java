@@ -5,7 +5,7 @@ package org.jhotdraw8.app.action;
 
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 
 /**

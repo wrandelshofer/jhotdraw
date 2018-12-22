@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.text;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.text.CollationKey;
 import java.text.Collator;

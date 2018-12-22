@@ -7,8 +7,8 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.ConverterFactory;
 import org.jhotdraw8.text.DefaultConverter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * XmlConverterFactory.

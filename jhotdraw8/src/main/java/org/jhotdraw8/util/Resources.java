@@ -23,11 +23,11 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.action.Action;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a
@@ -362,7 +362,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
-    @javax.annotation.Nullable
+    @Nullable
     public KeyCombination getAcceleratorProperty(String key) {
         return getKeyCombination(key + ".accelerator");
     }
@@ -442,7 +442,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
-    @javax.annotation.Nullable
+    @Nullable
     public KeyCombination getKeyCombination(@Nonnull String key) {
         KeyCombination ks = null;
         String s = getString(key);
@@ -471,7 +471,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    @javax.annotation.Nullable
+    @Nullable
     public Node getLargeIconProperty(String key, @Nonnull Class<?> baseClass) {
         return getIconProperty(key, ".largeIcon", baseClass);
     }
@@ -498,7 +498,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The first char of the value of the property. Returns '\0' if the
      * property is missing.
      */
-    @javax.annotation.Nullable
+    @Nullable
     public KeyCombination getMnemonicProperty(String key) {
         String s;
         try {
@@ -524,7 +524,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    @javax.annotation.Nullable
+    @Nullable
     public Node getSmallIconProperty(String key, @Nonnull Class<?> baseClass) {
         return getIconProperty(key, ".smallIcon", baseClass);
     }
@@ -537,7 +537,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
-    @javax.annotation.Nullable
+    @Nullable
     public String getTextProperty(String key) {
         try {
             String value = getString(key + ".text");
@@ -560,7 +560,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * the key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
-    @javax.annotation.Nullable
+    @Nullable
     public String getToolTipTextProperty(String key) {
         try {
             String value = getString(key + ".toolTipText");
@@ -583,7 +583,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return resource;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     protected Object handleGetObject(String key) {
         Object obj = handleGetObjectRecursively(key);
@@ -598,7 +598,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
         return obj;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     protected Object handleGetObjectRecursively(@Nonnull String key) {
         Object obj = null;
         try {
@@ -680,8 +680,8 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * @param s The KeyStroke String
      * @return The KeyCombination String
      */
-    @javax.annotation.Nullable
-    protected String translateKeyStrokeToKeyCombination(@javax.annotation.Nullable String s) {
+    @Nullable
+    protected String translateKeyStrokeToKeyCombination(@Nullable String s) {
         if (s != null) {
             s = s.replace("ctrl ", "Ctrl+");
             s = s.replace("meta ", "Meta+");

@@ -17,8 +17,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableList;

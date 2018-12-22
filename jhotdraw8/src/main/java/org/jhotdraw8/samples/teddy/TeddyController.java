@@ -22,7 +22,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
 import org.jhotdraw8.app.DocumentOrientedActivity;

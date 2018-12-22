@@ -4,7 +4,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * AbstractPathBuilder.

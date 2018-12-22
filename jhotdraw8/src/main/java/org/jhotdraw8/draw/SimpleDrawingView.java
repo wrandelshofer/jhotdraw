@@ -64,8 +64,8 @@ import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.tree.TreeModelEvent;
 import org.jhotdraw8.util.ReversedList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -6,8 +6,8 @@ package org.jhotdraw8.collection;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * A type safe accessor for maps.
@@ -38,7 +38,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return name string.
      */
-    @javax.annotation.Nullable
+    @Nullable
     String getName();
 
     /**

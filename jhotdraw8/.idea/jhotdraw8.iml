@@ -13,7 +13,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.openjfx:javafx-controls:11" level="project" />
-    <orderEntry type="module" module-name="jsr305" />
     <orderEntry type="library" name="org.junit.jupiter:junit-jupiter-api:5.3.1" level="project" />
   </component>
 </module>

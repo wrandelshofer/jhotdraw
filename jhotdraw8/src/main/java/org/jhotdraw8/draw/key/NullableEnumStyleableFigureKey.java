@@ -5,7 +5,7 @@ package org.jhotdraw8.draw.key;
 
 import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;

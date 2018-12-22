@@ -1,6 +1,6 @@
 package org.jhotdraw8.samples.mini;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Layer;

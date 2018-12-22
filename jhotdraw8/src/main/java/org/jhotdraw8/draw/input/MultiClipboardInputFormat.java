@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import javafx.scene.input.Clipboard;
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;

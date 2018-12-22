@@ -7,7 +7,7 @@ import java.net.URI;
 import java.text.ParseException;
 import java.util.List;
 import javafx.css.StyleOrigin;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 

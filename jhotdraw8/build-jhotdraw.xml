@@ -48,7 +48,6 @@
     <property name="lib.test" value="${lib}/test"/>
     <property name="src" value="src"/>
     <property name="doc" location="doc"/>
-    <property name="build.jsr305.classes" value="${build}/jsr305/classes"/>
     <property name="build.main.classes" value="${build}/jhotdraw8/classes"/>
     <property name="build.doc.classes" value="${build}/doc/classes"/>
     <property name="build.doc.doc" value="${build}/doc/doc"/>
@@ -62,8 +61,6 @@
     <property name="build.main.jars" value="${build}/jars"/>
     <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
 
-    <property name="src.jsr305" value="jsr305/src"/>
-    <property name="src.jsr305.java" value="jsr305/src/main/java"/>
     <property name="src.main.java" value="${src}/main/java"/>
     <property name="src.doc.java" value="${src}/doc/java"/>
     <property name="src.test.java" value="${src}/test/java"/>
@@ -112,36 +109,6 @@
     </javac>
   </target>
 
-
-
-    <target name="do-compile.jsr305" depends="init">
-        <mkdir dir="${build.jsr305.classes}"/>
-        <javac executable="${jdk}/bin/javac" fork="yes"
-               source="${jdk.version}" target="${jdk.version}"
-               encoding="UTF-8" destdir="${build.jsr305.classes}"
-               debug="true"
-               verbose="false"
-        >
-            <compilerarg value="-Xlint"/>
-            <src path="${src.jsr305.java}"/>
-            <modulepath>
-                <fileset dir="${lib.compile}/modulepath" includes="**/*.jar" />
-            </modulepath>
-            <classpath>
-                <fileset dir="${lib.compile}/classpath" includes="**/*.jar" />
-            </classpath>
-            <compilerarg value="-version"/>
-        </javac>
-        <copy todir="${build.jsr305.classes}">
-            <fileset dir="jsr305/src/main/java">
-                <exclude name="**/.*"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.png"/>
-                <include name="**/*.fxml"/>
-                <include name="**/*.css"/>
-            </fileset>
-        </copy>
-    </target>
     <target name="do-compile.main" depends="init">
         <mkdir dir="${build.main.classes}"/>
         <javac executable="${jdk}/bin/javac" fork="yes"
@@ -154,7 +121,6 @@
             <src path="${src.main.java}"/>
             <modulepath>
                 <fileset dir="${lib.compile}/modulepath" includes="**/*.jar" />
-                <dirset dir="${build.jsr305.classes}"/>
             </modulepath>
             <classpath>
                 <fileset dir="${lib.compile}/classpath" includes="**/*.jar" />
@@ -817,60 +783,6 @@
             <arg value="--module-version=${manifest.implementation-version}"/>
         </exec>
     </target>
-    <target name="do-jar.jsr305" depends="init">
-        <pathconvert property="manifest.class-path" pathsep=" " >
-            <map from="${basedir}/${lib.runtime}/" to=""/>
-            <fileset dir="${basedir}/${lib.runtime}">
-                <exclude name=".*" />
-                <include name="*.jar" />
-            </fileset>
-        </pathconvert>
-
-        <jar destfile="${build.main.jars}/jsr305.jar">
-            <!-- The attributes are structured into section has described here:
-            https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Main_Attributes
-            https://docs.oracle.com/javase/8/docs/technotes/guides/deploy/manifest.html
-            -->
-            <manifest>
-                <!--
-                  ~ Main Attributes
-                -->
-                <!-- general main attributes -->
-                <attribute name="Manifest-Version" value="1.0"/>
-                <attribute name="Created-By" value="${manifest.implementation-vendor}"/>
-                <attribute name="Signature-Version" value="1.0"/>
-                <attribute name="Class-Path" value="${manifest.class-path}"/>
-
-                <!-- attribute defined for stand-alone applications -->
-                <!--attribute name="Main-Class" value="${manifest.main-class}"/-->
-
-                <!-- attribute defined for extension identification -->
-                <!-- attribute name="Extension-Name" value="..."/-->
-
-                <!-- attributes defined for extension and package versioning and sealing information -->
-                <attribute name="Implementation-Title" value="${manifest.application-name}"/>
-                <attribute name="Implementation-Version" value="${manifest.implementation-version}"/>
-                <attribute name="Implementation-Vendor" value="${manifest.implementation-vendor}"/>
-                <attribute name="Specification-Title" value="${manifest.application-name}"/>
-                <attribute name="Specification-Version" value="${manifest.implementation-version}"/>
-                <attribute name="Specification-Vendor" value="${manifest.implementation-vendor}"/>
-                <attribute name="Sealed" value="false"/>
-
-                <!-- attributes for security -->
-                <attribute name="Permissions" value="all-permissions"/>
-                <attribute name="Codebase" value="*"/>
-                <attribute name="Application-Name" value="${manifest.application-name}"/>
-                <attribute name="Application-Library-Allowable-Codebase" value="*"/>
-                <attribute name="Caller-Allowable-Codebase" value="*"/>
-                <attribute name="Entry-Point" value="${manifest.main-class}"/>
-                <attribute name="Trusted-Only" value="false"/>
-                <attribute name="Trusted-Library" value="false"/>
-            </manifest>
-            <fileset dir="${build.jsr305.classes}">
-                <exclude name=".*"/>
-            </fileset>
-        </jar>
-    </target>
 
     <target name="do-dist" depends="init">
         <mkdir dir="${dist}"/>
@@ -909,10 +821,10 @@
 
     <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
     </target>
-    <target name="compile" depends="clean,do-compile.jsr305,do-compile.main"
+    <target name="compile" depends="clean,do-compile.main"
             description="compiles the java sources and copies resource files">
     </target>
-    <target name="jar" depends="compile,do-jar.main,do-jar.jsr305" description="bundles the class files into a jar file">
+    <target name="jar" depends="compile,do-jar.main" description="bundles the class files into a jar file">
     </target>
     <target name="javadoc" depends="clean,compile,do-docbook.compile,do-javadoc" description="generates api documentation">
     </target>

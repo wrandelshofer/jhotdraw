@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.control.Labeled;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;

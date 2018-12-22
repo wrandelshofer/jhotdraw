@@ -7,7 +7,7 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import java.util.List;
 

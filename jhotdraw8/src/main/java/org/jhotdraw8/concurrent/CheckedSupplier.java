@@ -3,8 +3,8 @@
  */
 package org.jhotdraw8.concurrent;
 
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * A Supplier which can throw a checked exception.

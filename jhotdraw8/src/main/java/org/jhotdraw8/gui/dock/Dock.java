@@ -4,7 +4,7 @@
 package org.jhotdraw8.gui.dock;
 
 import javafx.beans.property.ObjectProperty;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;

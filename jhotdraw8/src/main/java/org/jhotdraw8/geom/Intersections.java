@@ -23,7 +23,7 @@ import javafx.geometry.Point2D;
 import static org.jhotdraw8.geom.Geom.lerp;
 import static org.jhotdraw8.geom.Geom.pointOnLine;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.geom.Intersection.Status;
 
 /**

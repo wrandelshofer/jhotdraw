@@ -4,7 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * Defines a <i>clipping</i> of a {@link Drawing}.

@@ -8,7 +8,7 @@ import java.text.ParseException;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.scene.text.Font;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * Allows to use a {@code Converter} with the {@code javafx.css.StyleConverter}

@@ -19,11 +19,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.IteratorEnumerator;
 
 /**

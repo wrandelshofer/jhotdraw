@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;

@@ -8,8 +8,8 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 import javafx.css.PseudoClass;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;

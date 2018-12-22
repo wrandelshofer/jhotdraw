@@ -7,7 +7,7 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;

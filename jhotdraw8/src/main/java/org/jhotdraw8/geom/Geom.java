@@ -15,8 +15,8 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
 /**
@@ -1142,11 +1142,11 @@ public class Geom {
         return d;
     }
 
-    public static String toString(@javax.annotation.Nullable Bounds b) {
+    public static String toString(@Nullable Bounds b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
-    public static String toString(@javax.annotation.Nullable Rectangle2D b) {
+    public static String toString(@Nullable Rectangle2D b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
@@ -1222,8 +1222,8 @@ public class Geom {
      * @param rightLineTo if not null, accepts the curve from t to x2,y2
      */
     public static void splitLine(double x0, double y0, double x1, double y1, double t,
-                                 @javax.annotation.Nullable Double2Consumer leftLineTo,
-                                 @javax.annotation.Nullable Double2Consumer rightLineTo) {
+                                 @Nullable Double2Consumer leftLineTo,
+                                 @Nullable Double2Consumer rightLineTo) {
         final double x12 = (x1 - x0) * t + x0;
         final double y12 = (y1 - y0) * t + y0;
 

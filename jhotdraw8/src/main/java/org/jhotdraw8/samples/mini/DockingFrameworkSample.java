@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.gui.dock.Dock;
 import org.jhotdraw8.gui.dock.DockItem;
 import org.jhotdraw8.gui.dock.DockRoot;

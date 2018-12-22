@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph;
 
 
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import java.util.Objects;
 
 /**

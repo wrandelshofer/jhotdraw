@@ -4,7 +4,7 @@
 package org.jhotdraw8.app.action.file;
 
 import javafx.event.ActionEvent;
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.app.Labels;

@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
-import javax.annotation.Nullable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentOrientedActivity;
 import org.jhotdraw8.gui.URIChooser;

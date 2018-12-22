@@ -4,7 +4,7 @@
 
 package org.jhotdraw8.collection;
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 import java.util.Iterator;
 import java.util.Spliterator;

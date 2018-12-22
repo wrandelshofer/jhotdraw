@@ -4,7 +4,7 @@
 package org.jhotdraw8.util;
 
 
-import javax.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * Decodes a resource value.
