@@ -13,6 +13,7 @@ import org.jhotdraw8.io.UnitConverter;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
@@ -41,12 +42,12 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
     @Nonnull
     @Override
     public CssPoint3D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        final CssSize x, y,z;
-        x = parseDimension(tt,"x");
+        final CssSize x, y, z;
+        x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        y = parseDimension(tt,"y");
+        y = parseDimension(tt, "y");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        z = parseDimension(tt,"z");
+        z = parseDimension(tt, "z");
 
         return new CssPoint3D(x, y, z);
     }
@@ -57,9 +58,9 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
                 return new CssSize(tt.currentNumberNonnull().doubleValue());
             case CssTokenType.TT_DIMENSION:
                 String s = tt.currentStringNonnull();
-                return new CssSize(tt.currentNumberNonnull().doubleValue(), s ==null? UnitConverter.DEFAULT: s);
+                return new CssSize(tt.currentNumberNonnull().doubleValue(), s == null ? UnitConverter.DEFAULT : s);
             default:
-                throw new ParseException(" ⟨CssPoint3D⟩: ⟨"+variable+"⟩ expected.",tt.getStartPosition());
+                throw new ParseException(" ⟨CssPoint3D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
         }
     }
 
