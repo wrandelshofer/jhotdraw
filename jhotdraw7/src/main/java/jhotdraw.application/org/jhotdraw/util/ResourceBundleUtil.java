@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.util;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.Icon;

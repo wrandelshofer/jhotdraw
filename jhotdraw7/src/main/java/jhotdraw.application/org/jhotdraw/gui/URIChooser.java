@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.gui;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import java.awt.Component;

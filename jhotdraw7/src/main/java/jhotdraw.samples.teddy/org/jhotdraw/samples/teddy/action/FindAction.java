@@ -10,7 +10,7 @@ import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.edit.AbstractFindAction;
 import org.jhotdraw.samples.teddy.FindDialog;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

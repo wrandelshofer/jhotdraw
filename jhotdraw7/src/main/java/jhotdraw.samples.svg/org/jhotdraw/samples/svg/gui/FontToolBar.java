@@ -25,7 +25,7 @@ import org.jhotdraw.text.FontFormatter;
 import org.jhotdraw.text.JavaNumberFormatter;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;

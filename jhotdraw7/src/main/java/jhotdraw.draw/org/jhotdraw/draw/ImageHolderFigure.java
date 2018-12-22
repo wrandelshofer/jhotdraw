@@ -4,7 +4,7 @@
 
 package org.jhotdraw.draw;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

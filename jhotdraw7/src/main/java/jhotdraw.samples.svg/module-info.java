@@ -6,7 +6,6 @@ module jhotdraw.samples.svg {
     requires transitive java.desktop;
     requires transitive jhotdraw.draw;
     requires transitive jhotdraw.application;
-    requires transitive javax.annotation;
     requires transitive java.prefs;
     requires transitive nanoxml;
     requires transitive jhotdraw.nanoxml;

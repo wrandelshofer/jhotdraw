@@ -8,7 +8,7 @@ import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.geom.Point2D;
 
 /**

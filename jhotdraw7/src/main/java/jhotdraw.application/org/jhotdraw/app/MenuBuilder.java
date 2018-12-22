@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.app;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JMenu;
 import java.util.List;
 

@@ -9,7 +9,7 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.geom.Dimension2DDouble;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Action;
 import java.awt.Cursor;
 import java.awt.Graphics2D;

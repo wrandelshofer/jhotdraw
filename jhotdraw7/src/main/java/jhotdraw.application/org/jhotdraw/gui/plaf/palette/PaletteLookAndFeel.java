@@ -4,9 +4,8 @@
 package org.jhotdraw.gui.plaf.palette;
 
 import org.jhotdraw.gui.GuiLabels;
-import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.UIDefaults;

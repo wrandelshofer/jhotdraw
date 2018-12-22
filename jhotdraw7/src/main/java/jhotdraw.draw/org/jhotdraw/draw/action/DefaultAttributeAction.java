@@ -11,7 +11,7 @@ import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.undo.CompositeEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import java.beans.PropertyChangeEvent;

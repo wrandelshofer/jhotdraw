@@ -9,7 +9,7 @@ import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.tool.TextEditingTool;
 import org.jhotdraw.draw.tool.Tool;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.geom.Point2D;
 import java.util.Map;
 

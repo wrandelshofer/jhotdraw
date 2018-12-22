@@ -15,7 +15,7 @@ import org.jhotdraw.geom.GrowStroke;
 import org.jhotdraw.samples.odg.Gradient;
 import org.jhotdraw.samples.odg.ODGAttributeKeys;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Shape;

@@ -11,7 +11,7 @@ import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 
 /**
  * Clears (empties) the contents of the active view.

@@ -12,7 +12,7 @@
  */
 package org.jhotdraw.net;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

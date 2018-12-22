@@ -18,7 +18,7 @@ import org.jhotdraw.gui.Worker;
 import org.jhotdraw.samples.svg.io.SVGInputFormat;
 import org.jhotdraw.samples.svg.io.SVGZInputFormat;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.awt.FileDialog;

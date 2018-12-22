@@ -15,7 +15,7 @@ import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.geom.Dimension2DDouble;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Action;
 import javax.swing.event.EventListenerList;
 import javax.swing.undo.UndoableEdit;

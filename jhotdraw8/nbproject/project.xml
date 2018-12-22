@@ -14,19 +14,11 @@
         </buildExtensions>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>jhotdraw8</name>
-            <explicit-platform explicit-source-supported="true"/>
             <source-roots>
-                <root id="src.java6.dir"/>
                 <root id="src.java.dir"/>
-                <root id="src.java2.dir"/>
-                <root id="src.java3.dir"/>
-                <root id="src.java4.dir"/>
-                <root id="src.java5.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.java.dir"/>
-                <root id="test.editorold.dir"/>
-                <root id="test.ferro.dir"/>
             </test-roots>
         </data>
     </configuration>

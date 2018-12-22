@@ -11,7 +11,7 @@ import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 
 /**
  * Presents a find dialog to the user and then highlights the found items

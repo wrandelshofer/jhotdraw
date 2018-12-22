@@ -12,7 +12,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.imageio.ImageIO;
 import javax.swing.Action;
 import java.awt.BasicStroke;

@@ -10,7 +10,7 @@ import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import java.awt.Frame;

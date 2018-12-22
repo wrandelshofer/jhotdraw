@@ -7,7 +7,7 @@ package org.jhotdraw.gui.plaf.palette;
 import org.jhotdraw.gui.plaf.palette.colorchooser.PaletteColorChooserMainPanel;
 import org.jhotdraw.gui.plaf.palette.colorchooser.PaletteColorChooserPreviewPanel;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;

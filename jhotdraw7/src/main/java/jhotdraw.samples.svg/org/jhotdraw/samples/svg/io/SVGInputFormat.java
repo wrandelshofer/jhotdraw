@@ -26,7 +26,7 @@ import org.jhotdraw.text.FontFormatter;
 import org.jhotdraw.util.LocaleUtil;
 import org.jhotdraw.xml.css.CSSParser;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;

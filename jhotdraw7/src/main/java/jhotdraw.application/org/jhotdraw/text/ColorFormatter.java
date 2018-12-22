@@ -7,7 +7,7 @@ import org.jhotdraw.color.ColorUtil;
 import org.jhotdraw.color.HSBColorSpace;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JFormattedTextField.AbstractFormatterFactory;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;

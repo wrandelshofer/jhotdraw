@@ -23,7 +23,7 @@ import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
 import org.jhotdraw.undo.UndoRedoManager;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JButton;

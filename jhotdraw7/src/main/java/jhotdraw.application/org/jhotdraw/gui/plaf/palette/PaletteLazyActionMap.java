@@ -4,7 +4,7 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;

@@ -13,7 +13,7 @@ import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;

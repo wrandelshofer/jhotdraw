@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.geom;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.BasicStroke;
 import java.awt.Shape;
 import java.awt.Stroke;

@@ -4,7 +4,7 @@
 
 package org.jhotdraw.color;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.ListModel;
 import java.awt.Color;
 import java.awt.color.ColorSpace;

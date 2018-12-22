@@ -6,7 +6,7 @@ package org.jhotdraw.samples.mini;
 import org.jhotdraw.geom.Bezier;
 import org.jhotdraw.geom.BezierPath;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;

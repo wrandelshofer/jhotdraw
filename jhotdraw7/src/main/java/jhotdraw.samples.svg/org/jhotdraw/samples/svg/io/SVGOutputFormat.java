@@ -26,7 +26,7 @@ import org.jhotdraw.samples.svg.figures.SVGRectFigure;
 import org.jhotdraw.samples.svg.figures.SVGTextAreaFigure;
 import org.jhotdraw.samples.svg.figures.SVGTextFigure;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;

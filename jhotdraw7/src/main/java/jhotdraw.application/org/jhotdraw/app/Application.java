@@ -5,7 +5,7 @@ package org.jhotdraw.app;
 
 import org.jhotdraw.gui.URIChooser;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.ActionMap;
 import javax.swing.JMenu;
 import java.awt.Component;

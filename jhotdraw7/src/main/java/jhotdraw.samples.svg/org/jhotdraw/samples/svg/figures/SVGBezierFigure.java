@@ -14,7 +14,7 @@ import org.jhotdraw.geom.Geom;
 import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -26,7 +26,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_CAP;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.STROKE_JOIN;

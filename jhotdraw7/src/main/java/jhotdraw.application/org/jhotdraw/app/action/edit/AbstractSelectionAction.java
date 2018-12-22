@@ -6,7 +6,7 @@ package org.jhotdraw.app.action.edit;
 import org.jhotdraw.beans.WeakPropertyChangeListener;
 import org.jhotdraw.gui.EditableComponent;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import java.beans.PropertyChangeEvent;

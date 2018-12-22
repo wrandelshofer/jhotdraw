@@ -10,7 +10,7 @@ import org.jhotdraw.app.Disposable;
 import org.jhotdraw.xml.DOMFactory;
 import org.jhotdraw.xml.DOMOutput;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

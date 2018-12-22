@@ -7,7 +7,7 @@ import org.jhotdraw.gui.event.SheetEvent;
 import org.jhotdraw.gui.event.SheetListener;
 import org.jhotdraw.util.Methods;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;

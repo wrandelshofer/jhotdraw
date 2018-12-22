@@ -12,7 +12,7 @@ import org.jhotdraw.gui.BackgroundTask;
 import org.jhotdraw.gui.JSheet;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrinterResolution;

@@ -8,7 +8,7 @@ import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.gui.EditableComponent;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;

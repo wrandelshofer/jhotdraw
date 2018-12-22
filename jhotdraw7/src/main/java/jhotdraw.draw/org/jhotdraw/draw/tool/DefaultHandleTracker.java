@@ -12,7 +12,7 @@ import org.jhotdraw.draw.event.HandleListener;
 import org.jhotdraw.draw.event.HandleMulticaster;
 import org.jhotdraw.draw.handle.Handle;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Graphics2D;

@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.gui.event;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

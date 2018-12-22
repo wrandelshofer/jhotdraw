@@ -7,7 +7,7 @@ package org.jhotdraw.gui.event;
 import org.jhotdraw.gui.JSheet;
 import org.jhotdraw.gui.URIChooser;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.EventObject;

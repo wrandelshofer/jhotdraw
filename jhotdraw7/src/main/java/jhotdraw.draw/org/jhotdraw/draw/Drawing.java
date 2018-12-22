@@ -7,7 +7,7 @@ import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.xml.DOMStorable;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoableEdit;
 import java.awt.Graphics2D;

@@ -18,7 +18,7 @@ import org.jhotdraw.samples.svg.io.SVGOutputFormat;
 import org.jhotdraw.undo.UndoRedoManager;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.SwingUtilities;
 import java.awt.print.Pageable;
 import java.beans.PropertyChangeEvent;

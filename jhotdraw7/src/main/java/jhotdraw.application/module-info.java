@@ -1,6 +1,5 @@
 module jhotdraw.application {
     requires transitive java.desktop;
-    requires transitive javax.annotation;
     requires transitive java.prefs;
     requires java.logging;
 
@@ -33,4 +32,5 @@ module jhotdraw.application {
 
     opens org.jhotdraw.app.action.images;
     opens org.jhotdraw.gui.plaf.palette.images;
+    exports org.jhotdraw.annotation;
 }

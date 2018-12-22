@@ -6,7 +6,7 @@ package org.jhotdraw.draw.action;
 import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.Images;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;

@@ -7,7 +7,7 @@ package org.jhotdraw.samples.svg.gui;
 import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Icon;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionListener;

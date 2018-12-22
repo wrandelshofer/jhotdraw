@@ -15,7 +15,6 @@ module jhotdraw.draw {
     exports org.jhotdraw.draw.gui;
 
     requires transitive java.desktop;
-    requires transitive javax.annotation;
     requires transitive java.prefs;
     requires java.logging;
     requires transitive jhotdraw.application;

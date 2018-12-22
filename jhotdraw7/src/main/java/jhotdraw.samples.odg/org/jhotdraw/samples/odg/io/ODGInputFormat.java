@@ -25,7 +25,7 @@ import org.jhotdraw.samples.odg.figures.ODGPathFigure;
 import org.jhotdraw.samples.odg.figures.ODGRectFigure;
 import org.jhotdraw.samples.odg.geom.EnhancedPath;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

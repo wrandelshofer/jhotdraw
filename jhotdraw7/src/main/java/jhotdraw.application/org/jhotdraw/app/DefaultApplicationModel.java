@@ -18,7 +18,7 @@ import org.jhotdraw.app.action.file.OpenFileAction;
 import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.ActionMap;
 import javax.swing.JToolBar;
 import java.util.Collections;

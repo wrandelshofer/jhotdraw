@@ -13,7 +13,7 @@ import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;

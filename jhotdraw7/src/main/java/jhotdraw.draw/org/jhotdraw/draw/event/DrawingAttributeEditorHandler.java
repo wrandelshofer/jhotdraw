@@ -9,7 +9,7 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.gui.AttributeEditor;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 

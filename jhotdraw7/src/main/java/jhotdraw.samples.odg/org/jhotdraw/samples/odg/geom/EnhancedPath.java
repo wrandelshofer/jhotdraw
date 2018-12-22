@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.samples.odg.geom;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;

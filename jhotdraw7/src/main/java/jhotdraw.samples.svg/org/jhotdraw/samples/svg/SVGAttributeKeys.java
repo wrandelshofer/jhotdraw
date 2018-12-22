@@ -9,7 +9,7 @@ import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;

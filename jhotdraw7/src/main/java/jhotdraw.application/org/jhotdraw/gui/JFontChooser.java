@@ -11,7 +11,7 @@ import org.jhotdraw.gui.fontchooser.FontFamilyNode;
 import org.jhotdraw.gui.plaf.FontChooserUI;
 import org.jhotdraw.gui.plaf.palette.PaletteFontChooserUI;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.UIDefaults;

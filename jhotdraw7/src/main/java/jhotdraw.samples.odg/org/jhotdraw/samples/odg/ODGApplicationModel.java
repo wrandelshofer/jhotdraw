@@ -39,7 +39,7 @@ import org.jhotdraw.samples.odg.figures.ODGPathFigure;
 import org.jhotdraw.samples.odg.figures.ODGRectFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -51,7 +51,6 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_COLOR;
 import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_GRADIENT;

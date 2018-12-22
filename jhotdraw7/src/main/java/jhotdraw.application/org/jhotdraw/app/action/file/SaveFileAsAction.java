@@ -9,7 +9,7 @@ import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 
 /**
  * Presents an {@code URIChooser} and then saves the active view to the

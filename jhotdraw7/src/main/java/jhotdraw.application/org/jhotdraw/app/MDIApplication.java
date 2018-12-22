@@ -42,7 +42,7 @@ import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.ReversedList;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JCheckBoxMenuItem;

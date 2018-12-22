@@ -11,7 +11,7 @@ import org.jhotdraw.draw.tool.BezierTool;
 import org.jhotdraw.samples.svg.figures.SVGBezierFigure;
 import org.jhotdraw.samples.svg.figures.SVGPathFigure;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.util.Map;
 /**
  * Tool to scribble a ODGPath

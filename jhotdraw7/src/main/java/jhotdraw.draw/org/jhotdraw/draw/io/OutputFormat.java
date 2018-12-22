@@ -7,7 +7,7 @@ package org.jhotdraw.draw.io;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import java.awt.datatransfer.Transferable;
 import java.io.IOException;

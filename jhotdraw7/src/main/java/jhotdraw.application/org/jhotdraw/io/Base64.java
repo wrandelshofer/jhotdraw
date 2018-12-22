@@ -1,6 +1,6 @@
 package org.jhotdraw.io;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 
 /**
  * Encodes and decodes to and from Base64 notation.

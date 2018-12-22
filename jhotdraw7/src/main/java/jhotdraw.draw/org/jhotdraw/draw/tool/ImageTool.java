@@ -9,7 +9,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.ImageHolderFigure;
 import org.jhotdraw.gui.BackgroundTask;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.awt.FileDialog;

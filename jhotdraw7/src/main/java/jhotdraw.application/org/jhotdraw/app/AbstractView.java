@@ -5,7 +5,7 @@ package org.jhotdraw.app;
 
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.net.URI;

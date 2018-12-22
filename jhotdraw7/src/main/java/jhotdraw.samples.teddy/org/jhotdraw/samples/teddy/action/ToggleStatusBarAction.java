@@ -10,10 +10,9 @@ import org.jhotdraw.samples.teddy.TeddyLabels;
 import org.jhotdraw.samples.teddy.TeddyView;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.Action;
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 /**
  * ToggleStatusBarAction.

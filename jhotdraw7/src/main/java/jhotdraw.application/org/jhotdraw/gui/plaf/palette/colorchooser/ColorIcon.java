@@ -5,14 +5,12 @@ package org.jhotdraw.gui.plaf.palette.colorchooser;
 
 import org.jhotdraw.gui.GuiLabels;
 import org.jhotdraw.util.Images;
-import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ResourceBundle;
 
 /**
  * ColorIcon.

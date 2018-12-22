@@ -9,12 +9,11 @@ import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Stroke;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.samples.odg.ODGConstants.FillStyle;
 import static org.jhotdraw.samples.odg.ODGConstants.StrokeStyle;

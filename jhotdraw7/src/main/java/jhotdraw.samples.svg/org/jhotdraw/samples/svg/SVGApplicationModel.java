@@ -32,7 +32,7 @@ import org.jhotdraw.samples.svg.action.SplitAction;
 import org.jhotdraw.samples.svg.action.ViewSourceAction;
 import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JMenu;

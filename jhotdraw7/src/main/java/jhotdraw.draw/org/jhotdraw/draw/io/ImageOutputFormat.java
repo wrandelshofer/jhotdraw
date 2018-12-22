@@ -8,7 +8,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.gui.datatransfer.ImageTransferable;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import java.awt.AlphaComposite;

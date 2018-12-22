@@ -8,7 +8,7 @@ import org.jhotdraw.draw.handle.AbstractHandle;
 import org.jhotdraw.draw.handle.HandleAttributeKeys;
 import org.jhotdraw.geom.ConvexHull;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;

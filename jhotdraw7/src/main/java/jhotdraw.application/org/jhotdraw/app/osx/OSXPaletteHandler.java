@@ -7,7 +7,7 @@ package org.jhotdraw.app.osx;
 import org.jhotdraw.app.OSXApplication;
 import org.jhotdraw.app.View;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

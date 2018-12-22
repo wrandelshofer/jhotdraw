@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;

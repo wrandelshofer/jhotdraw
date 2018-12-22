@@ -3,7 +3,6 @@ module jhotdraw.samples.pert {
     requires java.desktop;
     requires jhotdraw.draw;
     requires java.prefs;
-    requires javax.annotation;
     requires jhotdraw.nanoxml;
 
     opens org.jhotdraw.samples.pert to jhotdraw.application;

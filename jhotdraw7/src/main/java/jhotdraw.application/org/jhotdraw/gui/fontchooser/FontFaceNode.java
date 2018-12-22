@@ -3,7 +3,7 @@
  */
 package org.jhotdraw.gui.fontchooser;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.awt.Font;

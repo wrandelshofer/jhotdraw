@@ -11,7 +11,7 @@ import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.event.HandleEvent;
 import org.jhotdraw.draw.event.HandleListener;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.event.EventListenerList;
 import javax.swing.undo.UndoableEdit;
 import java.awt.BasicStroke;

@@ -8,7 +8,7 @@ package org.jhotdraw.gui;
 
 import org.jhotdraw.beans.WeakPropertyChangeListener;
 
-import javax.annotation.Nullable;
+import org.jhotdraw.annotation.Nullable;
 import javax.swing.DefaultBoundedRangeModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
