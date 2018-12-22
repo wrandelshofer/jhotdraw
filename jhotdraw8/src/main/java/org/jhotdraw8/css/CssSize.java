@@ -35,7 +35,7 @@ public class CssSize {
 
     public CssSize(double value, @Nullable String units) {
         this.value = value;
-        this.units = units==null?UnitConverter.DEFAULT:units;
+        this.units = units == null ? UnitConverter.DEFAULT : units;
     }
 
     public static CssSize max(CssSize a, CssSize b) {
