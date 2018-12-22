@@ -59,7 +59,7 @@ public class DimensionConverterTest {
         CssSizeConverter instance = new CssSizeConverter(true);
         CssSize actualSize = instance.fromString(buf,idFactory);
         UnitConverter c=new DefaultUnitConverter(90);
-        Double actual =actualSize==null?null: c.convert(actualSize,null);
+        Double actual =actualSize==null?null: c.convert(actualSize,UnitConverter.DEFAULT);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         if (expected == null || Double.isNaN(expected)) {

@@ -1,9 +1,9 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.io.DefaultUnitConverter;
+import org.jhotdraw8.io.UnitConverter;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -182,9 +182,9 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         List<CssToken> attrFallback = new ArrayList<>();
         if (tt.next() == CssTokenType.TT_PERCENT_DELIM) {
             if (tt.next() == CssTokenType.TT_IDENT) {
-                typeOrUnit = "%" + tt.currentString();
+                typeOrUnit = UnitConverter.PERCENTAGE + tt.currentString();
             } else {
-                typeOrUnit = "%";
+                typeOrUnit = UnitConverter.PERCENTAGE;
                 tt.pushBack();
             }
         } else if (tt.current() == CssTokenType.TT_IDENT) {
@@ -432,7 +432,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
             switch (tt.next()) {
                 case '+': {
                     CssSize dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits() == null || dim2.getUnits() == null) {
+                    if (dim2.getUnits().equals(UnitConverter.DEFAULT)
+                            || dim.getUnits().equals(dim2.getUnits())) {
                         dim = new CssSize(dim.getValue() + dim2.getValue(), dim.getUnits());
                     } else {
                         dim = new CssSize(dim.getValue() + c.convert(dim2, dim.getUnits()), dim.getUnits());
@@ -441,7 +442,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 }
                 case '-': {
                     CssSize dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits() == null || dim2.getUnits() == null) {
+                    if (dim2.getUnits().equals(UnitConverter.DEFAULT)
+                            || dim.getUnits().equals(dim2.getUnits())) {
                         dim = new CssSize(dim.getValue() - dim2.getValue(), dim.getUnits());
                     } else {
                         dim = new CssSize(dim.getValue() - c.convert(dim2, dim.getUnits()), dim.getUnits());
@@ -464,19 +466,21 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
             switch (tt.next()) {
                 case '*': {
                     CssSize dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits() == null || dim2.getUnits() == null) {
-                        dim = new CssSize(dim.getValue() * dim2.getValue(), dim.getUnits());
-                    } else {
-                        dim = new CssSize(dim.getValue() * c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    if (dim2.getUnits().equals(UnitConverter.DEFAULT)
+                            || dim.getUnits().equals(dim2.getUnits())) {
+                        dim = new CssSize(dim.getValue() * dim2.getValue(),  dim.getUnits());
+                    }else {
+                        dim = c.convertSize(new CssSize(dim.getConvertedValue() * dim2.getConvertedValue(), UnitConverter.DEFAULT), dim.getUnits());
                     }
                     break;
                 }
                 case '/': {
                     CssSize dim2 = parseCalcProduct(element, tt);
-                    if (dim.getUnits() == null || dim2.getUnits() == null) {
-                        dim = new CssSize(dim.getValue() / dim2.getValue(), dim.getUnits());
-                    } else {
-                        dim = new CssSize(dim.getValue() / c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    if (dim2.getUnits().equals(UnitConverter.DEFAULT)
+                    || dim.getUnits().equals(dim2.getUnits())) {
+                        dim = new CssSize(dim.getValue() / dim2.getValue(),  dim.getUnits());
+                    }else {
+                        dim = c.convertSize(new CssSize(dim.getConvertedValue() / dim2.getConvertedValue(), UnitConverter.DEFAULT), dim.getUnits());
                     }
                     break;
                 }
