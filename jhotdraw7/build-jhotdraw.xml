@@ -55,8 +55,6 @@
                 includeantruntime="${javac.includeantruntime}"
                 source="${javac.source}"
                 target="${javac.target}"
-                bootclasspath="${javac.bootclasspath}"
-                classpath="${javac.classpath}"
          >
             <compilerarg value="-version"/>
             <compilerarg value="-Xlint:all"/>
@@ -64,8 +62,8 @@
         </javac>
         <copy todir="${classes}">
             <fileset dir="${src}">
-                <include name="**/*.properties"/>
-                <include name="**/*.png"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/.*"/>
             </fileset>
         </copy>
     </target>
@@ -103,45 +101,44 @@
         </sequential>
     </macrodef>
     <target name="run-teddy" depends="init">
-        <java module="jhotdraw.samples.teddy" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.teddy" modulepath="${dist}" fork="true">
         </java>
     </target>
     <target name="run-svg" depends="init">
-        <java module="jhotdraw.samples.svg" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.svg" modulepath="${dist}" fork="true">
         </java>
     </target>
     <target name="run-pert" depends="init">
-        <java module="jhotdraw.samples.pert" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.pert" modulepath="${dist}" fork="true">
         </java>
     </target>
     <target name="run-net" depends="init">
-        <java module="jhotdraw.samples.net" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.net" modulepath="${dist}" fork="true">
         </java>
     </target>
     <target name="run-odg" depends="init">
-        <java module="jhotdraw.samples.odg" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.odg" modulepath="${dist}" fork="true">
         </java>
     </target>
     <target name="run-draw" depends="init">
-        <java module="jhotdraw.samples.draw" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.draw" modulepath="${dist}" fork="true">
         </java>
     </target>
 
     <target name="jar" depends="init,compile,do-jar">
     </target>
     <target name="do-jar" depends="init">
-        <modular-jar module="javax.annotation"/>
-        <modular-jar module="jhotdraw.application"/>
-        <modular-jar module="jhotdraw.draw"/>
-        <modular-jar module="jhotdraw.nanoxml"/>
-        <modular-jar module="jhotdraw.samples.draw" mainclass="org.jhotdraw.samples.draw.Main"/>
-        <modular-jar module="jhotdraw.samples.misc"/>
-        <modular-jar module="jhotdraw.samples.net" mainclass="org.jhotdraw.samples.net.Main"/>
-        <modular-jar module="jhotdraw.samples.odg" mainclass="org.jhotdraw.samples.odg.Main"/>
-        <modular-jar module="jhotdraw.samples.pert" mainclass="org.jhotdraw.samples.pert.Main"/>
-        <modular-jar module="jhotdraw.samples.svg" mainclass="org.jhotdraw.samples.svg.Main"/>
-        <modular-jar module="jhotdraw.samples.teddy" mainclass="org.jhotdraw.samples.teddy.Main"/>
-        <modular-jar module="nanoxml"/>
+        <modular-jar module="org.jhotdraw7.application"/>
+        <modular-jar module="org.jhotdraw7.draw"/>
+        <modular-jar module="org.jhotdraw7.nanoxml"/>
+        <modular-jar module="org.jhotdraw7.samples.draw" mainclass="org.jhotdraw.samples.draw.Main"/>
+        <modular-jar module="org.jhotdraw7.samples.misc"/>
+        <modular-jar module="org.jhotdraw7.samples.net" mainclass="org.jhotdraw.samples.net.Main"/>
+        <modular-jar module="org.jhotdraw7.samples.odg" mainclass="org.jhotdraw.samples.odg.Main"/>
+        <modular-jar module="org.jhotdraw7.samples.pert" mainclass="org.jhotdraw.samples.pert.Main"/>
+        <modular-jar module="org.jhotdraw7.samples.svg" mainclass="org.jhotdraw.samples.svg.Main"/>
+        <modular-jar module="org.jhotdraw7.samples.teddy" mainclass="org.jhotdraw.samples.teddy.Main"/>
+        <modular-jar module="net.n3.nanoxml"/>
     </target>
     <target name="dist" depends="jar">
     </target>
