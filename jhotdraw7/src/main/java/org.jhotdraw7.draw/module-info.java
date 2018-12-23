@@ -1,4 +1,4 @@
-module jhotdraw.draw {
+module org.jhotdraw7.draw {
     exports org.jhotdraw.draw;
     exports org.jhotdraw.geom;
     exports org.jhotdraw.draw.io;
@@ -17,8 +17,8 @@ module jhotdraw.draw {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires java.logging;
-    requires transitive jhotdraw.application;
-    requires transitive jhotdraw.nanoxml;
+    requires transitive org.jhotdraw7.application;
+    requires transitive org.jhotdraw7.nanoxml;
 
     opens org.jhotdraw.draw.action.images;
 }

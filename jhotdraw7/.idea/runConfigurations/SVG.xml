@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SVG" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.jhotdraw.samples.svg.Main" />
-    <module name="jhotdraw.samples.svg" />
+    <module name="org.jhotdraw7.samples.svg" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.jhotdraw.samples.teddy.*" />

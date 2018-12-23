@@ -5,29 +5,29 @@
       <module fileurl="file://$PROJECT_DIR$/javax.annotation/javax.annotation.iml" filepath="$PROJECT_DIR$/javax.annotation/javax.annotation.iml" group="jhotdraw7" />
       <module fileurl="file://$PROJECT_DIR$/src/javax.annotation/javax.annotation.iml" filepath="$PROJECT_DIR$/src/javax.annotation/javax.annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/jhotdraw.iml" filepath="$PROJECT_DIR$/jhotdraw.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.application/jhotdraw.application.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.application/jhotdraw.application.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.application/jhotdraw.application.iml" filepath="$PROJECT_DIR$/src/jhotdraw.application/jhotdraw.application.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.draw/jhotdraw.draw.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.draw/jhotdraw.draw.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.draw/jhotdraw.draw.iml" filepath="$PROJECT_DIR$/src/jhotdraw.draw/jhotdraw.draw.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.nanoxml/jhotdraw.nanoxml.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.nanoxml/jhotdraw.nanoxml.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.nanoxml/jhotdraw.nanoxml.iml" filepath="$PROJECT_DIR$/src/jhotdraw.nanoxml/jhotdraw.nanoxml.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/jhotdraw.samples.draw.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.draw/jhotdraw.samples.draw.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.samples.draw/jhotdraw.samples.draw.iml" filepath="$PROJECT_DIR$/src/jhotdraw.samples.draw/jhotdraw.samples.draw.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/jhotdraw.samples.misc.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.misc/jhotdraw.samples.misc.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.samples.misc/jhotdraw.samples.misc.iml" filepath="$PROJECT_DIR$/src/jhotdraw.samples.misc/jhotdraw.samples.misc.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/jhotdraw.samples.net.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.net/jhotdraw.samples.net.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.samples.net/jhotdraw.samples.net.iml" filepath="$PROJECT_DIR$/src/jhotdraw.samples.net/jhotdraw.samples.net.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/jhotdraw.samples.odg.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.odg/jhotdraw.samples.odg.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.samples.odg/jhotdraw.samples.odg.iml" filepath="$PROJECT_DIR$/src/jhotdraw.samples.odg/jhotdraw.samples.odg.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/jhotdraw.samples.pert.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.pert/jhotdraw.samples.pert.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.samples.pert/jhotdraw.samples.pert.iml" filepath="$PROJECT_DIR$/src/jhotdraw.samples.pert/jhotdraw.samples.pert.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/jhotdraw.samples.svg.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/jhotdraw.samples.svg.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.samples.svg/jhotdraw.samples.svg.iml" filepath="$PROJECT_DIR$/src/jhotdraw.samples.svg/jhotdraw.samples.svg.iml" group="jhotdraw7" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/jhotdraw.samples.teddy.iml" filepath="$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy/jhotdraw.samples.teddy.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/jhotdraw.samples.teddy/jhotdraw.samples.teddy.iml" filepath="$PROJECT_DIR$/src/jhotdraw.samples.teddy/jhotdraw.samples.teddy.iml" group="jhotdraw7" />
       <module fileurl="file://$PROJECT_DIR$//jhotdraw7.iml" filepath="$PROJECT_DIR$//jhotdraw7.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/java/nanoxml/nanoxml.iml" filepath="$PROJECT_DIR$/src/main/java/nanoxml/nanoxml.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/nanoxml/nanoxml.iml" filepath="$PROJECT_DIR$/src/nanoxml/nanoxml.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/net.n3.nanoxml/net.n3.nanoxml.iml" filepath="$PROJECT_DIR$/src/main/java/net.n3.nanoxml/net.n3.nanoxml.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org.jhotdraw7.application.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org.jhotdraw7.application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org.jhotdraw7.draw.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org.jhotdraw7.draw.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.nanoxml/org.jhotdraw7.nanoxml.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.nanoxml/org.jhotdraw7.nanoxml.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/org.jhotdraw7.samples.draw.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/org.jhotdraw7.samples.draw.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.misc/org.jhotdraw7.samples.misc.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.misc/org.jhotdraw7.samples.misc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.net/org.jhotdraw7.samples.net.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.net/org.jhotdraw7.samples.net.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.odg/org.jhotdraw7.samples.odg.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.odg/org.jhotdraw7.samples.odg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.pert/org.jhotdraw7.samples.pert.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.pert/org.jhotdraw7.samples.pert.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org.jhotdraw7.samples.svg.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org.jhotdraw7.samples.svg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.teddy/org.jhotdraw7.samples.teddy.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.teddy/org.jhotdraw7.samples.teddy.iml" />
     </modules>
   </component>
 </project>

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Pert" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.jhotdraw.samples.pert.Main" />
-    <module name="jhotdraw.samples.pert" />
+    <module name="org.jhotdraw7.samples.pert" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.jhotdraw.samples.teddy.*" />

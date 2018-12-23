@@ -1,4 +1,4 @@
-module jhotdraw.application {
+module org.jhotdraw7.application {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires java.logging;
