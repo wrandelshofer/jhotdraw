@@ -73,7 +73,7 @@
         <attribute name="mainclass" default="" />
         <sequential>
             <mkdir dir="${dist}"/>
-            <jar destfile="${dist}/@{module}.jar"
+            <jar destfile="${dist}/modules/@{module}.jar"
                  basedir="${classes}/@{module}"
             >
 
@@ -89,39 +89,39 @@
                 </manifest>
             </jar>
             <exec executable="jar" unless:blank="@{mainclass}">
-                <arg line="-f &quot;${dist}/@{module}.jar&quot;"/>
+                <arg line="-f &quot;${dist}/modules/@{module}.jar&quot;"/>
                 <arg line="-u"/>
                 <arg line="-e @{mainclass}"/>
             </exec>
 
-            <jar destfile="${dist}/@{module}-src.jar"
+            <jar destfile="${dist}/sources/@{module}-src.jar"
                  basedir="${src}/@{module}"
             >
             </jar>
         </sequential>
     </macrodef>
     <target name="run-teddy" depends="init">
-        <java module="org.jhotdraw7.samples.teddy" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.teddy" modulepath="${dist}/modules" fork="true">
         </java>
     </target>
     <target name="run-svg" depends="init">
-        <java module="org.jhotdraw7.samples.svg" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.svg" modulepath="${dist}/modules" fork="true">
         </java>
     </target>
     <target name="run-pert" depends="init">
-        <java module="org.jhotdraw7.samples.pert" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.pert" modulepath="${dist}/modules" fork="true">
         </java>
     </target>
     <target name="run-net" depends="init">
-        <java module="org.jhotdraw7.samples.net" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.net" modulepath="${dist}/modules" fork="true">
         </java>
     </target>
     <target name="run-odg" depends="init">
-        <java module="org.jhotdraw7.samples.odg" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.odg" modulepath="${dist}/modules" fork="true">
         </java>
     </target>
     <target name="run-draw" depends="init">
-        <java module="org.jhotdraw7.samples.draw" modulepath="${dist}" fork="true">
+        <java module="org.jhotdraw7.samples.draw" modulepath="${dist}/modules" fork="true">
         </java>
     </target>
 
@@ -141,6 +141,11 @@
         <modular-jar module="net.n3.nanoxml"/>
     </target>
     <target name="dist" depends="jar">
+        <copy todir="${dist}">
+            <fileset dir=".">
+                <include name="*.md"/>
+            </fileset>
+        </copy>
     </target>
     <target name="documentation" depends="init">
         <delete dir="${doc}"/>
