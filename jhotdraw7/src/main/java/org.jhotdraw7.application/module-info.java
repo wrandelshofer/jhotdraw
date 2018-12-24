@@ -4,6 +4,7 @@ module org.jhotdraw7.application {
     requires java.logging;
 
     exports org.jhotdraw.app;
+    opens org.jhotdraw.app;
     exports org.jhotdraw.app.action;
     exports org.jhotdraw.app.action.app;
     exports org.jhotdraw.app.action.edit;
@@ -25,6 +26,7 @@ module org.jhotdraw7.application {
     exports org.jhotdraw.net;
     exports org.jhotdraw.text;
     exports org.jhotdraw.undo;
+    opens org.jhotdraw.undo;
     exports org.jhotdraw.util;
     exports org.jhotdraw.util.prefs;
     exports org.jhotdraw.xml;
