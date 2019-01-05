@@ -86,7 +86,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout(RenderContext ctx) {
+    public void layout(@Nonnull RenderContext ctx) {
         layoutPath();
     }
 

@@ -190,7 +190,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
 
     @Override
-    public void layout(RenderContext ctx) {
+    public void layout(@Nonnull RenderContext ctx) {
         Bounds b = getLayoutBounds();
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, b);
     }

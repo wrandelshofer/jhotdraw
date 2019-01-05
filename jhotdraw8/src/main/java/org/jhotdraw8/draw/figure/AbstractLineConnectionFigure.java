@@ -168,7 +168,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout(RenderContext ctx) {
+    public void layout(@Nonnull RenderContext ctx) {
         Point2D start = getNonnull(START).getConvertedValue();
         Point2D end = getNonnull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);

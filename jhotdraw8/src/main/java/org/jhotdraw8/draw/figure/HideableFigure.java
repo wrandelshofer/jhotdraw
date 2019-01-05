@@ -25,7 +25,7 @@ public interface HideableFigure extends Figure {
     /**
      * Defines the visibility of the figure. Default value: {@code true}.
      */
-    public static BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
+    BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
 
     /**
      * Updates a figure node with all style and effect properties defined in
@@ -35,11 +35,11 @@ public interface HideableFigure extends Figure {
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
-     * @param ctx
+     * @param ctx the render context
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyHideableFigureProperties(@Nullable RenderContext ctx, @Nonnull Node node) {
-        node.setVisible(getStyled(VISIBLE));
+        node.setVisible(getStyledNonnull(VISIBLE));
     }
 
 }

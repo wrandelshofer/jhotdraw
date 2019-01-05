@@ -522,7 +522,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         points[7] = b.getMaxY();
 
         Transform t = getLocalToParent();
-        t.transform2DPoints(points, 0, points, 0, 4);
+        if (t != null) {
+            t.transform2DPoints(points, 0, points, 0, 4);
+        }
 
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -887,7 +889,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     default boolean isShowing() {
         Figure node = this;
         while (node != null) {
-            if (!node.getStyled(HideableFigure.VISIBLE)) {
+            if (!node.getStyledNonnull(HideableFigure.VISIBLE)) {
                 return false;
             }
             node = node.getParent();
@@ -902,7 +904,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default boolean isVisible() {
         Figure node = this;
-        return node.getStyled(HideableFigure.VISIBLE);
+        return node.getStyledNonnull(HideableFigure.VISIBLE);
     }
 
     /**
@@ -913,6 +915,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
      * <p>
      * The default implementation is empty.
+     *
      * @param ctx the render context (optional)
      */
     default void layout(@Nonnull RenderContext ctx) {
@@ -925,6 +928,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * figure needs to be laid out.
      * <p>
      * The default implementation of this method calls {@link #layout}.
+     *
      * @param ctx the render context (optional)
      */
     default void layoutNotify(@Nonnull RenderContext ctx) {
@@ -1071,7 +1075,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param width  desired width in parent coordinates, may be negative
      * @param height desired height in parent coordinates, may be negative
      */
-    default void reshapeInLocal(@Nonnull CssSize x,@Nonnull  CssSize y,@Nonnull  CssSize width,@Nonnull  CssSize height) {
+    default void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
         Transform tx = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
         reshapeInLocal(tx);
     }
@@ -1125,9 +1129,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method calls {@link #updateCss} and
      * then {@code #layout}.
+     *
      * @param ctx the render context (optional)
      */
-    default void stylesheetNotify(RenderContext ctx) {
+    default void stylesheetNotify(@Nonnull RenderContext ctx) {
         updateCss();
         layout(ctx);
     }

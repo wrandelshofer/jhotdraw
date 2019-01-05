@@ -74,7 +74,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout(@Nullable RenderContext ctx) {
+    public void layout(@Nonnull RenderContext ctx) {
         if (textNode == null) {
             textNode = new Text();
         }

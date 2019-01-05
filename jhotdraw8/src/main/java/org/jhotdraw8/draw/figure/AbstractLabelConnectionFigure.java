@@ -183,7 +183,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void layout(RenderContext ctx) {
+    public void layout(@Nonnull RenderContext ctx) {
 
         Figure labelTarget = get(LABEL_TARGET);
         final Point2D labeledLoc;

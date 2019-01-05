@@ -334,7 +334,7 @@ public class SimplePageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void layout(RenderContext ctx) {
+    public void layout(@Nonnull RenderContext ctx) {
         int currentPage = 0;
         ImmutableList<Transform> transforms = ImmutableList.of(getPageTransform(currentPage));
 
