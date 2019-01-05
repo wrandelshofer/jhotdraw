@@ -26,9 +26,11 @@ public class ConnectingFiguresSample  {
         
         Drawing drawing = new SimpleDrawing(600, 400); // 4
         Layer layer = new SimpleLayer();
-        drawing.getChildren().addAll(layer);
-        layer.getChildren().addAll(a, b, c);
-        
+        drawing.getChildren().add(layer);
+        layer.getChildren().add(a);
+        layer.getChildren().add(b);
+        layer.getChildren().add(c);
+
         return drawing;
     }
 }
