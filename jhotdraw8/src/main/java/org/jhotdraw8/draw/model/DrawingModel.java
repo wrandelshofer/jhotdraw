@@ -169,7 +169,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param index the index.
      * @return the child
      */ 
-    default Figure getChildAt(@Nonnull Figure parent, int index) {
+    default Figure getChild(@Nonnull Figure parent, int index) {
         return getChildren(parent).get(index);
     }
 
