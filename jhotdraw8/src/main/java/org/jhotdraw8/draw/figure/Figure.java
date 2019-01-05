@@ -20,6 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -31,8 +32,10 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.annotation.Nonnull;
 
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -598,7 +601,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of dependent figures
      */
-    Collection<Figure> getLayoutObservers();
+    ObservableSet<Figure> getLayoutObservers();
 
     /**
      * Returns the ancestor Drawing.
@@ -706,8 +709,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of layout subjects
      */
-    default Collection<Figure> getLayoutSubjects() {
-        return Collections.emptySet();
+    default ReadOnlySet<Figure> getLayoutSubjects() {
+        return ImmutableSet.emptySet();
     }
 
     /**

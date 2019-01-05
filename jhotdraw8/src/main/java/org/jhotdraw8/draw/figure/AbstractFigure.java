@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import org.jhotdraw8.annotation.Nullable;
@@ -38,7 +40,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     private static Map<Key<?>, Integer> cachedValuesKeyMap = new HashMap<>();
 
     private transient Map<Key<?>, Object> cachedValues;
-    private ObservableList<Figure> dependentFigures;
+    private ObservableSet<Figure> dependentFigures;
     @Nullable
     private Drawing drawing;
     @Nullable
@@ -123,9 +125,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public final Collection<Figure> getLayoutObservers() {
+    public final ObservableSet<Figure> getLayoutObservers() {
         if (dependentFigures == null) {
-            dependentFigures = FXCollections.observableArrayList();
+            dependentFigures = FXCollections.observableSet(new LinkedHashSet<>());
         }
         return dependentFigures;
     }

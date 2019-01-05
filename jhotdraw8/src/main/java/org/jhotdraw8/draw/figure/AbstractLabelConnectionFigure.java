@@ -20,7 +20,9 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -156,9 +158,9 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      */
     @Nonnull
     @Override
-    public Set<Figure> getLayoutSubjects() {
+    public ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? Collections.emptySet() : Collections.singleton(labelTarget);
+        return labelTarget == null ? ImmutableSet.emptySet() : ImmutableSet.of(labelTarget);
     }
 
     public boolean isConnected() {

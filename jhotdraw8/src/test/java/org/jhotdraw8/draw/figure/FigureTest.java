@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -162,7 +163,7 @@ public class FigureTest {
             return null;
         }
 
-        public Set<Figure> getLayoutObservers() {
+        public ObservableSet<Figure> getLayoutObservers() {
             return null;
         }
 

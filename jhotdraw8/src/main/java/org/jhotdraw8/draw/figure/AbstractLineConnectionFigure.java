@@ -14,7 +14,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlySet;
+import org.jhotdraw8.collection.ReadOnlySetWrapper;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -129,11 +132,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      */
     @Nonnull
     @Override
-    public Set<Figure> getLayoutSubjects() {
+    public ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
-            return Collections.emptySet();
+            return ImmutableSet.emptySet();
         }
         Set<Figure> ctf = new HashSet<>();
         if (startTarget != null) {
@@ -142,7 +145,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         if (endTarget != null) {
             ctf.add(endTarget);
         }
-        return ctf;
+        return new ReadOnlySetWrapper<>(ctf);
     }
 
     public boolean isConnected() {
