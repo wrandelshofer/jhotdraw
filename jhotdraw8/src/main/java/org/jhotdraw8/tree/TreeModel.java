@@ -6,6 +6,7 @@ package org.jhotdraw8.tree;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import org.jhotdraw8.annotation.Nullable;
@@ -15,9 +16,9 @@ import org.jhotdraw8.event.Listener;
 /**
  * TreeModel.
  *
+ * @param <N> the node type
  * @author Werner Randelshofer
  * @version $Id$
- * @param <N> the node type
  */
 public interface TreeModel<N> extends ObservableMixin {
     /**
@@ -52,7 +53,7 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @param l the listener
      */
-    default void addTreeModelListener( Listener<TreeModelEvent<N>> l) {
+    default void addTreeModelListener(Listener<TreeModelEvent<N>> l) {
         getTreeModelListeners().add(l);
     }
 
@@ -61,7 +62,7 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @param l the listener
      */
-    default void removeTreeModelListener( Listener<TreeModelEvent<N>> l) {
+    default void removeTreeModelListener(Listener<TreeModelEvent<N>> l) {
         getTreeModelListeners().remove(l);
     }
 
@@ -69,7 +70,7 @@ public interface TreeModel<N> extends ObservableMixin {
      * Gets the root of the tree.
      *
      * @return the drawing
-     */ 
+     */
     default N getRoot() {
         return rootProperty().get();
     }
@@ -80,7 +81,7 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @param root the new root
      */
-    default void setRoot( N root) {
+    default void setRoot(N root) {
         rootProperty().set(root);
     }
 
@@ -89,8 +90,8 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @param node the node.
      * @return the getChildren.
-     */ 
-    List<N> getChildren( N node);
+     */
+    List<N> getChildren(N node);
 
     /**
      * Gets the child count of the specified figure.
@@ -98,16 +99,16 @@ public interface TreeModel<N> extends ObservableMixin {
      * @param node the parent.
      * @return the number of getChildren
      */
-    int getChildCount( N node);
+    int getChildCount(N node);
 
     /**
      * Gets the child at the given index from the parent.
      *
      * @param parent the parent.
-     * @param index the index.
+     * @param index  the index.
      * @return the child
-     */ 
-    N getChildAt( N parent, int index);
+     */
+    N getChild(N parent, int index);
 
     /**
      * Removes the specified child from its parent and fires appropriate
@@ -115,26 +116,26 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @param child the child
      */
-    void removeFromParent( N child);
+    void removeFromParent(N child);
 
     /**
      * Adds the specified child to a parent and fires appropriate
      * {@code TreeModelEvent<E>}s.
      *
-     * @param child the new child
+     * @param child  the new child
      * @param parent the parent.
-     * @param index the index
+     * @param index  the index
      */
-    void insertChildAt( N child,  N parent, int index);
+    void insertChildAt(N child, N parent, int index);
 
     /**
      * Adds the specified child to a parent and fires appropriate
      * {@code TreeModelEvent<E>}s.
      *
-     * @param child the new child
+     * @param child  the new child
      * @param parent the parent.
      */
-    default void addChildTo( N child,  N parent) {
+    default void addChildTo(N child, N parent) {
         insertChildAt(child, parent, getChildCount(parent));
     }
 
@@ -143,25 +144,26 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @param event the event
      */
-    default void fireTreeModelEvent( TreeModelEvent<N> event) {
-       for (Listener<TreeModelEvent<N>> l : getTreeModelListeners()) {
-           l.handle(event);
-       }
+    default void fireTreeModelEvent(TreeModelEvent<N> event) {
+        for (Listener<TreeModelEvent<N>> l : getTreeModelListeners()) {
+            l.handle(event);
+        }
     }
 
     // ---
     // convenience methods
     // ---
+
     /**
      * Fires "node invalidated" event for the specified node.
      *
      * @param node the node
      */
-    default void fireNodeInvalidated( N node) {
+    default void fireNodeInvalidated(N node) {
         fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, node));
     }
-    
-    default boolean isLeaf( N node) {
+
+    default boolean isLeaf(N node) {
         return false;
-    } 
+    }
 }
