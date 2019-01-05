@@ -21,6 +21,7 @@ import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 
 import org.jhotdraw8.annotation.Nonnull;
+
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -39,7 +40,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Nonnull
     public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
     @Nonnull
-    public final static NullableSvgPathStyleableFigureKey SHAPE = new NullableSvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),null);
+    public final static NullableSvgPathStyleableFigureKey SHAPE = new NullableSvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "M 0,0 h 1 v -1 h -1 Z");
     @Nonnull
     public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
     @Nonnull
@@ -115,7 +116,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         pathElements.reset();
 
         String pathstr = getStyled(SHAPE);
-        if (pathstr==null||pathstr.isEmpty()) {
+        if (pathstr == null || pathstr.isEmpty()) {
             return;
         }
 
@@ -129,24 +130,24 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
             try {
                 Shapes.buildFromSvgString(awtPathBuilder, pathstr);
                 java.awt.geom.Rectangle2D bounds2D = awtPathBuilder.build().getBounds2D();
-                double pathRatio = bounds2D.getHeight()/bounds2D.getWidth();
-                double regionRatio = height/width;
-                if (pathRatio<regionRatio) {
+                double pathRatio = bounds2D.getHeight() / bounds2D.getWidth();
+                double regionRatio = height / width;
+                if (pathRatio < regionRatio) {
                     b = new BoundingBox(
                             x,
                             y,
                             width,
                             pathRatio * width);
-                }else{
+                } else {
                     b = new BoundingBox(
                             x,
                             y,
-                            height/pathRatio,
+                            height / pathRatio,
                             height);
                 }
                 pathElements.reset();
             } catch (IOException e) {
-                System.err.println("Illegal SVG path:: "+pathstr);
+                System.err.println("Illegal SVG path:: " + pathstr);
                 return;
             }
         } else {
