@@ -30,13 +30,15 @@ public class ObservableListWrapper<E> extends ListWrapper<E> implements Observab
         // empty
     }
 
+    @SafeVarargs
     @Override
-    public boolean addAll(E... elements) {
+    public final boolean addAll(E... elements) {
         throw new UnsupportedOperationException();
     }
 
+    @SafeVarargs
     @Override
-    public boolean setAll(E... elements) {
+    public final boolean setAll(E... elements) {
         throw new UnsupportedOperationException();
     }
 
@@ -45,13 +47,15 @@ public class ObservableListWrapper<E> extends ListWrapper<E> implements Observab
         throw new UnsupportedOperationException();
     }
 
+    @SafeVarargs
     @Override
-    public boolean removeAll(E... elements) {
+    public final boolean removeAll(E... elements) {
         throw new UnsupportedOperationException();
     }
 
+    @SafeVarargs
     @Override
-    public boolean retainAll(E... elements) {
+    public final boolean retainAll(E... elements) {
         throw new UnsupportedOperationException();
     }
 
