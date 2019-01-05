@@ -20,16 +20,25 @@ public abstract class AbstractDrawingInspector implements Inspector {
 
     @Nullable
     protected DrawingView drawingView;
+    @Nullable
+    protected DrawingModel drawingModel;
+    @Nullable
+    protected Drawing drawing;
 
     private final ChangeListener<Drawing> drawingListener = (ObservableValue<? extends Drawing> o, Drawing oldValue, Drawing newValue) -> {
         onDrawingChanged(oldValue, newValue);
+    };
+    private final ChangeListener<DrawingModel> modelListener = (ObservableValue<? extends DrawingModel> o, DrawingModel oldValue, DrawingModel newValue) -> {
+        onDrawingModelChanged(oldValue, newValue);
     };
 
     @Override
     public void setDrawingView(@Nullable DrawingView newValue) {
         DrawingView oldValue = drawingView;
-        Drawing oldDrawing = null;
+        Drawing oldDrawing = drawing;
+        DrawingModel oldModel=drawingModel;
         if (oldValue != null) {
+            oldValue.modelProperty().removeListener(modelListener);
             oldValue.drawingProperty().removeListener(drawingListener);
             oldDrawing = oldValue.getDrawing();
         }
@@ -37,9 +46,12 @@ public abstract class AbstractDrawingInspector implements Inspector {
         Drawing newDrawing = null;
         if (newValue != null) {
             newValue.drawingProperty().addListener(drawingListener);
+            newValue.modelProperty().addListener(modelListener);
             newDrawing = newValue.getDrawing();
+            drawingModel=newValue.getModel();
         }
         onDrawingViewChanged(oldValue, newValue);
+        onDrawingModelChanged(oldModel, drawingModel);
         onDrawingChanged(oldDrawing, newDrawing);
     }
 
@@ -68,4 +80,15 @@ public abstract class AbstractDrawingInspector implements Inspector {
      * @param newValue the new drawing
      */
     protected abstract void onDrawingChanged(Drawing oldValue, Drawing newValue);
+
+    /**
+     * Can be overriden by subclasses.
+     * This implementation is empty.
+     *
+     * @param oldValue the old drawing model
+     * @param newValue the new drawing model
+     */
+    protected void onDrawingModelChanged(DrawingModel oldValue, DrawingModel newValue) {
+
+    }
 }

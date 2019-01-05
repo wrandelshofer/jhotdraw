@@ -36,12 +36,16 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelEvent;
+import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.tree.TreeModelEvent;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -87,11 +91,36 @@ public class LayersInspector extends AbstractDrawingInspector {
         }
     };
     @Nullable
-    private InvalidationListener listInvalidationListener = new InvalidationListener() {
+    private Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
         @Override
-        public void invalidated(Observable observable) {
+        public void handle(TreeModelEvent<Figure> event) {
+            boolean fire = false;
+            Figure root = event.getSource().getRoot();
+            switch (event.getEventType()) {
+
+                case ROOT_CHANGED:
+                    fire = true;
+                    break;
+                case SUBTREE_NODES_CHANGED:
+                    if (event.getNode() == root) {
+                        fire = true;
+                    }
+                    break;
+                case NODE_ADDED_TO_PARENT:
+                case NODE_REMOVED_FROM_PARENT:
+                    if (event.getParent() == root) {
+                        fire = true;
+                    }
+                    break;
+                case NODE_ADDED_TO_TREE:
+                case NODE_REMOVED_FROM_TREE:
+                case NODE_CHANGED:
+                    break;
+            }
+
+            // FIXME why do we call fireNodeInvalidated? The model should do this for us???
             // FIXME must perform change via the model so that undo/redo will work
-            if (drawingView != null) {
+            if (fire && drawingView != null) {
                 drawingView.getModel().fireNodeInvalidated(drawingView.getDrawing());
             }
         }
@@ -257,14 +286,19 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void onDrawingChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
+        // empty
+    }
+
+    @Override
+    protected void onDrawingModelChanged(@Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
-            oldValue.getChildren().removeListener(listInvalidationListener);
+            oldValue.removeTreeModelListener(listInvalidationListener);
         }
         if (newValue != null) {
-            layers = new ReversedList<>(newValue.getChildren());
+            layers = new ReversedList<>(newValue.getRoot().getChildren());
             listView.setItems(layers);
-            newValue.getChildren().addListener(listInvalidationListener);
+            newValue.addTreeModelListener(listInvalidationListener);
         }
     }
 
