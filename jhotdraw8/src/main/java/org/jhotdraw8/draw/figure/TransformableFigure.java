@@ -125,13 +125,13 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * {@code ROTATE}, {@code ROTATION_AXIS}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
-     *  @param ctx
+     *  @param ctx the render context
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyTransformableFigureProperties(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
-        if (t.isIdentity()) {
+        if (t==null||t.isIdentity()) {
             if (!transforms.isEmpty()) {
                 transforms.clear();
             }
@@ -170,7 +170,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     @Nullable
     default Transform getInverseTransform() {
-        ImmutableList<Transform> list = getStyled(TRANSFORMS);
+        ImmutableList<Transform> list = getStyledNonnull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave null
@@ -200,11 +200,11 @@ public interface TransformableFigure extends TransformCacheableFigure {
             Point2D center = getCenterInLocal();
 
             ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
-            double sx = styled ? getStyled(SCALE_X) : get(SCALE_X);
-            double sy = styled ? getStyled(SCALE_Y) : get(SCALE_Y);
-            double r = styled ? getStyled(ROTATE) : get(ROTATE);
-            double tx = styled ? getStyled(TRANSLATE_X) : get(TRANSLATE_X);
-            double ty = styled ? getStyled(TRANSLATE_Y) : get(TRANSLATE_Y);
+            double sx = styled ? getStyledNonnull(SCALE_X) : getNonnull(SCALE_X);
+            double sy = styled ? getStyledNonnull(SCALE_Y) : getNonnull(SCALE_Y);
+            double r = styled ? getStyledNonnull(ROTATE) : getNonnull(ROTATE);
+            double tx = styled ? getStyledNonnull(TRANSLATE_X) : getNonnull(TRANSLATE_X);
+            double ty = styled ? getStyledNonnull(TRANSLATE_Y) : getNonnull(TRANSLATE_Y);
 
             if (tx != 0.0 || ty != 0.0) {
                 Translate tt = new Translate(tx, ty);
@@ -283,11 +283,11 @@ public interface TransformableFigure extends TransformCacheableFigure {
             Point2D center = getCenterInLocal();
 
             ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
-            double sx = styled ? getStyled(SCALE_X) : get(SCALE_X);
-            double sy = styled ? getStyled(SCALE_Y) : get(SCALE_Y);
-            double r = styled ? getStyled(ROTATE) : get(ROTATE);
-            double tx = styled ? getStyled(TRANSLATE_X) : get(TRANSLATE_X);
-            double ty = styled ? getStyled(TRANSLATE_Y) : get(TRANSLATE_Y);
+            double sx = styled ? getStyledNonnull(SCALE_X) : getNonnull(SCALE_X);
+            double sy = styled ? getStyledNonnull(SCALE_Y) : getNonnull(SCALE_Y);
+            double r = styled ? getStyledNonnull(ROTATE) : getNonnull(ROTATE);
+            double tx = styled ? getStyledNonnull(TRANSLATE_X) : getNonnull(TRANSLATE_X);
+            double ty = styled ? getStyledNonnull(TRANSLATE_Y) : getNonnull(TRANSLATE_Y);
 
             if (t != null && !t.isEmpty()) {
                 p2l = getInverseTransform();
@@ -317,7 +317,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     @Nullable
     default Transform getTransform() {
-        ImmutableList<Transform> list = getStyled(TRANSFORMS);
+        ImmutableList<Transform> list = getStyledNonnull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave empty
@@ -331,7 +331,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     /**
-     * Convenience method for setting a new value for the {@link#TRANSFORMS}
+     * Convenience method for setting a new value for the {@link #TRANSFORMS}
      * property.
      *
      * @param transforms new value
@@ -345,16 +345,16 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     default boolean hasCenterTransforms() {
-        double sx = getStyled(SCALE_X);
-        double sy = getStyled(SCALE_Y);
-        double r = getStyled(ROTATE);
-        double tx = getStyled(TRANSLATE_X);
-        double ty = getStyled(TRANSLATE_Y);
+        double sx = getStyledNonnull(SCALE_X);
+        double sy = getStyledNonnull(SCALE_Y);
+        double r = getStyledNonnull(ROTATE);
+        double tx = getStyledNonnull(TRANSLATE_X);
+        double ty = getStyledNonnull(TRANSLATE_Y);
         return sx != 1 || sy != 1 || r != 0 || tx != 0 || ty != 0;
     }
 
     default boolean hasTransforms() {
-        return !get(TRANSFORMS).isEmpty();
+        return !getNonnull(TRANSFORMS).isEmpty();
     }
 
     @Override
@@ -425,12 +425,12 @@ public interface TransformableFigure extends TransformCacheableFigure {
                     Point2D p = getParentToLocal().deltaTransform(translate.getTx(), translate.getTy());
                     reshapeInLocal(new Translate(p.getX(), p.getY()));
                 } else {
-                    set(TRANSLATE_X, get(TRANSLATE_X) + translate.getTx());
-                    set(TRANSLATE_Y, get(TRANSLATE_Y) + translate.getTy());
+                    set(TRANSLATE_X, getNonnull(TRANSLATE_X) + translate.getTx());
+                    set(TRANSLATE_Y, getNonnull(TRANSLATE_Y) + translate.getTy());
                 }
             } else {
                 flattenTransforms();
-                ImmutableList<Transform> transforms = get(TRANSFORMS);
+                ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);
                 if (transforms.isEmpty()) {
                     set(TRANSFORMS, ImmutableList.of(transform));
                 } else {
@@ -445,7 +445,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     @Override
     default void transformInLocal( Transform t) {
         flattenTransforms();
-        ImmutableList<Transform> transforms = get(TRANSFORMS);
+        ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);
         if (transforms.isEmpty()) {
             set(TRANSFORMS, ImmutableList.of(t));
         } else {
@@ -460,12 +460,11 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
         if (t instanceof Translate) {
             Translate tr = (Translate) t;
-            set(TRANSLATE_X, get(TRANSLATE_X) + tr.getTx());
-            set(TRANSLATE_Y, get(TRANSLATE_Y) + tr.getTy());
-            return;
+            set(TRANSLATE_X, getNonnull(TRANSLATE_X) + tr.getTx());
+            set(TRANSLATE_Y, getNonnull(TRANSLATE_Y) + tr.getTy());
         } else {
             flattenTransforms();
-            ImmutableList<Transform> transforms = get(TRANSFORMS);
+            ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, ImmutableList.of(t));
             } else {
