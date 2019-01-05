@@ -399,7 +399,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure a figure
      * @param transform the desired transformation
      */
-    public void transformInParent( Figure figure,  Transform transform);
+    void transformInParent(Figure figure, Transform transform);
 
     /**
      * Invokes "transformInLocal" on the specified figure.
@@ -407,7 +407,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure a figure
      * @param transform the desired transformation
      */
-    public void transformInLocal( Figure figure,  Transform transform);
+    void transformInLocal(Figure figure, Transform transform);
 
     /**
      * Removes the specified key from the figure.
@@ -417,6 +417,5 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param remove a key
      * @return the old value 
      */
-    @Nullable
-    public <T> T remove( Figure f,  Key<T> remove);
+    @Nullable <T> T remove(Figure f, Key<T> remove);
 }
