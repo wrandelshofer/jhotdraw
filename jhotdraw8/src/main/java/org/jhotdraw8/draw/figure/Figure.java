@@ -143,7 +143,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * XXX mapping of css attribute names to keys should be done elsewhere!
      */
-    public final static String JHOTDRAW_CSS_PREFIX = "";
+    String JHOTDRAW_CSS_PREFIX = "";
     // ----
     // key declarations
     // ----
@@ -154,7 +154,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * The name of the parent property.
      */
-    public final static String PARENT_PROPERTY = "parent";
+    String PARENT_PROPERTY = "parent";
 
     /**
      * Computes the union of the bounds of the provided figures in world
@@ -163,7 +163,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param selection a set of figures
      * @return bounds
      */
-    public static Bounds bounds(Collection<? extends Figure> selection) {
+    static Bounds bounds(Collection<? extends Figure> selection) {
         double minx = Double.POSITIVE_INFINITY;
         double miny = Double.POSITIVE_INFINITY;
         double maxx = Double.NEGATIVE_INFINITY;
@@ -194,9 +194,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * FIXME should be private!
      */
-    static Map<Class<?>, Set<MapAccessor<?>>> declaredAndInheritedKeys = new HashMap<>();
+    Map<Class<?>, Set<MapAccessor<?>>> declaredAndInheritedKeys = new HashMap<>();
 
-    public static void getDeclaredMapAccessors(Class<?> clazz, @Nonnull Collection<MapAccessor<?>> keys) {
+    static void getDeclaredMapAccessors(Class<?> clazz, @Nonnull Collection<MapAccessor<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (MapAccessor.class.isAssignableFrom(f.getType())) {
@@ -209,7 +209,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
     }
 
-    public static void getDeclaredKeys(Class<?> clazz, @Nonnull Collection<Key<?>> keys) {
+    static void getDeclaredKeys(Class<?> clazz, @Nonnull Collection<Key<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
@@ -229,7 +229,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param clazz A figure class.
      * @return an unmodifiable set of the keys
      */
-    public static Set<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
+    static Set<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
         Set<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
         if (keys == null) {
             keys = new HashSet<>();
@@ -263,7 +263,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return bounds
      */
     @Nullable
-    public static Bounds visualBounds(Collection<Figure> selection) {
+    static Bounds visualBounds(Collection<Figure> selection) {
         Bounds b = null;
 
         for (Figure f : selection) {
@@ -861,7 +861,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param newParent The new parent figure.
      * @return true if {@code newParent} is an acceptable parent
      */
-    public boolean isSuitableParent(Figure newParent);
+    boolean isSuitableParent(Figure newParent);
 
     /**
      * Returns true if the specified key is supported by this figure.
