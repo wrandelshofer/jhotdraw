@@ -21,7 +21,7 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
 
     @Nonnull
     @Override
-    public E getChildAt(E parent, int index) {
+    public E getChild(E parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

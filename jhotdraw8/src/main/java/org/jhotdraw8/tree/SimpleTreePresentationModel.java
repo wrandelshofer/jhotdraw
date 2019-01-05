@@ -100,7 +100,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         items.put(f, item);
         int childIndex = 0;
         for (int i = 0, n = m.getChildCount(f); i < n; i++) {
-            N child = m.getChildAt(f, i);
+            N child = m.getChild(f, i);
             handleNodeAddedToTree(child, f, childIndex);
             handleNodeAdded(child, f, childIndex);
             childIndex++;
@@ -137,7 +137,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         int childIndex = 0;
         if (drawing != null) {
             for (int i = 0, n = m.getChildCount(drawing); i < n; i++) {
-                N child = m.getChildAt(drawing, i);
+                N child = m.getChild(drawing, i);
                 handleNodeAddedToTree(child, drawing, childIndex);
                 handleNodeAdded(child, drawing, childIndex);
                 childIndex++;
