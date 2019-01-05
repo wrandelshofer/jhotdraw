@@ -30,27 +30,27 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         /**
          * A subtree of figures  has been added to a parent.
          * <p>
- The subtree of figures is already part of the root, and has just been removed from another parent.
+         * The subtree of figures is already part of the root, and has just been removed from another parent.
          */
         NODE_ADDED_TO_PARENT,
         /**
          * A subtree of figures has been removed from its parent.
          * <p>
- The subtree of figures is still part of the root, and is about to be added to another parent.
+         * The subtree of figures is still part of the root, and is about to be added to another parent.
          */
         NODE_REMOVED_FROM_PARENT,
         /**
          * A subtree of figures has been added to the root.
          * <p>
- The subtree of figures has become part of the root.
- This event is fired, before NODE_ADDED_TO_PARENT is fired.
+         * The subtree of figures has become part of the root.
+         * This event is fired, before NODE_ADDED_TO_PARENT is fired.
          */
         NODE_ADDED_TO_TREE,
         /**
          * A subtree of figures has been removed from the root.
          * <p>
- The subtree of figures is no longer part of the root.
- This event is fired, after NODE_REMOVED_FROM_PARENT is fired.
+         * The subtree of figures is no longer part of the root.
+         * This event is fired, after NODE_REMOVED_FROM_PARENT is fired.
          */
         NODE_REMOVED_FROM_TREE,
         /**
@@ -59,6 +59,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         NODE_CHANGED,
 
     }
+
     private final E node;
 
     private final E parent;
@@ -79,7 +80,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         return new TreeModelEvent<>(source, EventType.SUBTREE_NODES_CHANGED, subtreeRot, null, null, -1);
     }
 
-    public static<E>  TreeModelEvent<E> nodeAddedToParent(TreeModel<E> source, E child, E parent, int index) {
+    public static <E> TreeModelEvent<E> nodeAddedToParent(TreeModel<E> source, E child, E parent, int index) {
         return new TreeModelEvent<>(source, EventType.NODE_ADDED_TO_PARENT, child, parent, null, index);
     }
 
@@ -161,8 +162,8 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     @Override
     public String toString() {
         return "TreeModelEvent{"
-                +"node="+node
-                + ", parent=" + parent 
+                + "node=" + node
+                + ", parent=" + parent
                 + ", index=" + index + ", eventType="
                 + eventType + ", source=" + source + '}';
     }
