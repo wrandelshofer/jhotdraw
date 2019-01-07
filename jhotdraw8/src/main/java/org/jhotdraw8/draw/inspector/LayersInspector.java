@@ -9,6 +9,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -287,7 +288,13 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     @Override
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
-        // empty
+        if (oldValue != null) {
+            listView.setItems(FXCollections.observableArrayList());
+        }
+        if (newValue != null) {
+            layers = new ReversedList<>(newValue.getRoot().getChildren());
+            listView.setItems(layers);
+        }
     }
 
     @Override
@@ -296,8 +303,6 @@ public class LayersInspector extends AbstractDrawingInspector {
             oldValue.removeTreeModelListener(listInvalidationListener);
         }
         if (newValue != null) {
-            layers = new ReversedList<>(newValue.getRoot().getChildren());
-            listView.setItems(layers);
             newValue.addTreeModelListener(listInvalidationListener);
         }
     }
