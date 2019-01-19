@@ -162,6 +162,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             listView.getItems().clear();
         }
         if (newValue != null) {
+            // FIXME should listen to property changes of the Drawing object
             List<URI> stylesheets = newValue.get(Drawing.AUTHOR_STYLESHEETS);
             if (stylesheets == null) {
                 listView.getItems().clear();
