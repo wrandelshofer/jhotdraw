@@ -88,8 +88,6 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
             }
         });
 
-        Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
-
         handleColorPicker.setValue(handleColorProperty.getValue().getColor());
         CustomBinding.bindBidirectionalAndConvert(//
                 handleColorPicker.valueProperty(),//
@@ -118,13 +116,13 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     @Override
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         if (oldValue!=null) {
-            oldValue.handleColorProperty().unbind();
-            oldValue.handleSizeProperty().unbind();
+            handleColorProperty.unbindBidirectional(oldValue.handleColorProperty());
+            handleSizeProperty.unbindBidirectional(oldValue.handleSizeProperty());
         }
         try {
         if (newValue != null) {
-            newValue.handleColorProperty().bind(handleColorProperty);
-            newValue.handleSizeProperty().bind(handleSizeProperty);
+            handleColorProperty.bindBidirectional(newValue.handleColorProperty());
+            handleSizeProperty.bindBidirectional(newValue.handleSizeProperty());
         }} catch (Throwable t) {
             t.printStackTrace();
         }
