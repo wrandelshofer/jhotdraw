@@ -440,21 +440,19 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * Fires a property change event.
-     *
      * @param <T>      the value type
      * @param source   the event source
-     * @param type     the event type
      * @param key      the property key
      * @param oldValue the old property value
      * @param newValue the new property value
      */
-    default <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    default <T> void firePropertyChangeEvent(Figure source, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (hasPropertyChangeListeners()) {
-            firePropertyChangeEvent(new FigurePropertyChangeEvent(source, type, key, oldValue, newValue));
+            firePropertyChangeEvent(new FigurePropertyChangeEvent(source, key, oldValue, newValue));
         } else {
             Figure parent = getParent();
             if (parent != null) {
-                parent.firePropertyChangeEvent(source, type, key, oldValue, newValue);
+                parent.firePropertyChangeEvent(source, key, oldValue, newValue);
             }
         }
     }

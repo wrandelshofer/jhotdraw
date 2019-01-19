@@ -5,7 +5,9 @@ package org.jhotdraw8.draw.figure;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+
 import java.util.ArrayList;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -19,10 +21,9 @@ import org.jhotdraw8.css.CssRectangle2D;
 /**
  * This base class can be used to implement figures which support child figures.
  *
- * @design.pattern Figure Composite, Composite.
- *
  * @author Werner Randelshofer
  * @version $Id$
+ * @design.pattern Figure Composite, Composite.
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
 
@@ -66,6 +67,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
 
     }
+
     /**
      * The name of the children property.
      */
@@ -137,10 +139,12 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
+
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }
+
     @Nonnull
     @Override
     public Bounds getBoundsInParent() {
@@ -164,22 +168,18 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     @Override
     public void firePropertyChangeEvent(@Nonnull FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();
-        if (source != null && source.getParent() == this) {
-            if (children.hasChangeListeners()) {
-                children.fireItemUpdated(children.indexOf(source));
-            }
+        if (source.getParent() == this) {
+            children.fireItemUpdated(children.indexOf(source));
         }
         super.firePropertyChangeEvent(event); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public <T> void firePropertyChangeEvent(@Nullable Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
+    public <T> void firePropertyChangeEvent(@Nullable Figure source, Key<T> key, T oldValue, T newValue) {
         if (children.hasChangeListeners()) {
-            if (source != null && source.getParent() == this) {
-                children.fireItemUpdated(children.indexOf(source));
-            }
+            children.fireItemUpdated(children.indexOf(source));
         }
-        super.firePropertyChangeEvent(source, type, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
+        super.firePropertyChangeEvent(source, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**

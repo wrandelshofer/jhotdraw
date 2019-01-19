@@ -4,7 +4,6 @@
 package org.jhotdraw8.draw.figure;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -259,4 +257,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         invalidateTransforms();
     }
 
+    @Override
+    protected <T> void changed(Key<T> key, T oldValue, T newValue) {
+        firePropertyChangeEvent(this, key,oldValue,newValue);
+    }
 }

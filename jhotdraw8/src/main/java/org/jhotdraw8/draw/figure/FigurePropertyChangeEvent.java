@@ -19,18 +19,11 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
     private final Object oldValue;
     private final Object newValue;
 
-    public enum EventType {
-        WILL_CHANGE,
-        CHANGED
-    }
-    private final EventType type;
-
-    public <T> FigurePropertyChangeEvent(Figure source, EventType type, Key<T> key, T oldValue, T newValue) {
+    public <T> FigurePropertyChangeEvent(Figure source, Key<T> key, T oldValue, T newValue) {
         super(source);
         this.key = key;
         this.oldValue = oldValue;
         this.newValue = newValue;
-        this.type = type;
     }
 
     public Key<?> getKey() {
@@ -47,7 +40,4 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
         return newValue;
     }
 
-    public EventType getType() {
-        return type;
-    }
 }
