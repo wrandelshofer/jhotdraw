@@ -35,65 +35,63 @@ public interface ApplicationModel {
         return FXWorker.supply(this::createView);
     }
 
-    public Activity createView();
-    // URI choosers
+    Activity createView();
 
     /**
      * Creates an open chooser.
      *
      * @return chooser
      */
-    public URIChooser createOpenChooser();
+    URIChooser createOpenChooser();
 
     /**
      * Creates a save chooser.
      *
      * @return chooser
      */
-    public URIChooser createSaveChooser();
+    URIChooser createSaveChooser();
 
     /**
      * Creates an export chooser.
      *
      * @return chooser
      */
-    public URIChooser createExportChooser();
+    URIChooser createExportChooser();
 
     /**
      * Creates an import chooser.
      *
      * @return chooser
      */
-    public URIChooser createImportChooser();
+    URIChooser createImportChooser();
 
-    // Copyright information
     /**
      * Returns the name of the application.
      *
      * @return name
      */
-    public String getName();
+    String getName();
 
     /**
      * Returns the version of the application.
      *
      * @return version
      */
-    public String getVersion();
+    String getVersion();
 
     /**
      * Returns the copyright of the application.
      *
      * @return copyright
      */
-    public String getCopyright();
+    String getCopyright();
 
     /**
      * Returns true if the same URI can be opened more than once.
      *
      * @return whether multiple views per URI are allowed
      */
-    public boolean isAllowMultipleViewsPerURI();
+    boolean isAllowMultipleViewsPerURI();
 
     /**
      * Creates a menu bar. This method is invoked by {@code Application} when it
