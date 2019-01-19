@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
+
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -46,21 +47,22 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
     /**
      * Creates a new instance.
      *
-     * @param app the application
-     * @param view the view
-     * @param id the id
+     * @param app    the application
+     * @param view   the view
+     * @param id     the id
      * @param saveAs whether to force a file dialog
      */
     public AbstractSaveFileAction(Application app, DocumentOrientedActivity view, String id, boolean saveAs) {
         this(app, view, id, saveAs, Labels.getLabels());
     }
+
     /**
      * Creates a new instance.
      *
-     * @param app the application
-     * @param view the view
-     * @param id the id
-     * @param saveAs whether to force a file dialog
+     * @param app       the application
+     * @param view      the view
+     * @param id        the id
+     * @param saveAs    whether to force a file dialog
      * @param resources the resources are used for setting labels and icons for the action
      */
     public AbstractSaveFileAction(Application app, DocumentOrientedActivity view, String id, boolean saveAs, Resources resources) {
@@ -86,7 +88,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
             return;
         }
         oldFocusOwner = v.getNode().getScene().getFocusOwner();
-        WorkState workState=new WorkState(getLabel());
+        WorkState workState = new WorkState(getLabel());
         v.addDisabler(workState);
         saveFileChooseUri(v, workState);
     }
@@ -136,7 +138,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         if (dialog != null) {
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(v.getNode().getScene().getWindow());
-            Optional< Map<? super Key<?>, Object>> result = dialog.showAndWait();
+            Optional<Map<? super Key<?>, Object>> result = dialog.showAndWait();
 
             if (result.isPresent()) {
                 options = result.get();
