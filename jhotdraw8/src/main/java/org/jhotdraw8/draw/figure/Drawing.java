@@ -56,7 +56,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<URI> DOCUMENT_HOME = new NullableObjectFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
+    Key<URI> DOCUMENT_HOME = new NullableObjectFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
             Paths.get(System.getProperty("user.home")).toUri());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
@@ -71,7 +71,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new NullableObjectFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<List<URI>> AUTHOR_STYLESHEETS = new NullableObjectFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -83,14 +83,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new NullableObjectFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<List<URI>> USER_AGENT_STYLESHEETS = new NullableObjectFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<String>> INLINE_STYLESHEETS = new NullableObjectFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<List<String>> INLINE_STYLESHEETS = new NullableObjectFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Defines the canvas width.
      * <p>
@@ -102,7 +102,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static CssSizeStyleableFigureKey WIDTH = new CssSizeStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE), new CssSize(640.0));
+    CssSizeStyleableFigureKey WIDTH = new CssSizeStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE), new CssSize(640.0));
     /**
      * Defines the canvas height.
      * <p>
@@ -111,7 +111,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static CssSizeStyleableFigureKey HEIGHT = new CssSizeStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE), new CssSize(480.0));
+    CssSizeStyleableFigureKey HEIGHT = new CssSizeStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE), new CssSize(480.0));
     /**
      * Defines the canvas color.
      * <p>
@@ -123,12 +123,12 @@ public interface Drawing extends Figure {
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    public final static NullableCssColorStyleableFigureKey BACKGROUND = new NullableCssColorStyleableFigureKey("background", new CssColor("white", Color.WHITE));
+    NullableCssColorStyleableFigureKey BACKGROUND = new NullableCssColorStyleableFigureKey("background", new CssColor("white", Color.WHITE));
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Drawing";
+    String TYPE_SELECTOR = "Drawing";
 
     @Nonnull
     @Override
