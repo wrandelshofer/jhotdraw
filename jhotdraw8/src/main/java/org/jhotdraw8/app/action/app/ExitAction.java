@@ -5,6 +5,7 @@ package org.jhotdraw8.app.action.app;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
@@ -268,7 +269,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFile(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
         final DocumentOrientedActivity v = unsavedView;
-        v.write(uri, format,null, new WorkState()).handle((result, exception) -> {
+        v.write(uri, format,Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -298,7 +299,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
         final DocumentOrientedActivity v = unsavedView;
-        v.write(uri, format,null, new WorkState()).handle((result, exception) -> {
+        v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {

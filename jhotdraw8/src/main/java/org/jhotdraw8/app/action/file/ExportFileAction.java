@@ -28,7 +28,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     public static final String ID = "file.export";
     private static final long serialVersionUID = 1L;
 
-    private final Function<DataFormat,Dialog<Map<? super Key<?>, Object>>> optionsDialogFactory;
+    private final Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialogFactory;
 
     /**
      * Creates a new instance.
@@ -42,7 +42,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     /**
      * Creates a new instance.
      *
-     * @param app the application
+     * @param app  the application
      * @param view the view
      */
     public ExportFileAction(Application app, DocumentOrientedActivity view) {
@@ -52,19 +52,19 @@ public class ExportFileAction extends AbstractSaveFileAction {
     /**
      * Creates a new instance.
      *
-     * @param app the application, nonnull
+     * @param app           the application, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(Application app,  Function<DataFormat,Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(Application app, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
         this(app, null, ID, optionsDialog);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param app the application, nonnull
-     * @param view the view, nullable
-     * @param id the id, nonnull
+     * @param app           the application, nonnull
+     * @param view          the view, nullable
+     * @param id            the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
     public ExportFileAction(Application app, DocumentOrientedActivity view, String id, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
@@ -77,14 +77,15 @@ public class ExportFileAction extends AbstractSaveFileAction {
         // XXX should be supplied to the action?
         return app.getModel().createExportChooser();
     }
-@Nullable
-@Override
+
+    @Nullable
+    @Override
     protected Dialog<Map<? super Key<?>, Object>> createOptionsDialog(DataFormat format) {
-        return optionsDialogFactory==null?null:optionsDialogFactory.apply(format);
+        return optionsDialogFactory == null ? null : optionsDialogFactory.apply(format);
     }
 
     @Override
-    protected void handleSucceded(DocumentOrientedActivity v, URI uri, DataFormat format) {
+    protected void handleSucceeded(DocumentOrientedActivity v, URI uri, DataFormat format) {
         // empty
     }
 }

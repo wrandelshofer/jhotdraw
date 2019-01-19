@@ -4,8 +4,10 @@
 package org.jhotdraw8.app.action;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletionStage;
+
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -63,7 +65,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
     /**
      * Creates a new instance.
      *
-     * @param app the application
+     * @param app  the application
      * @param view the view
      */
     public AbstractSaveUnsavedChangesAction(@Nonnull Application app, DocumentOrientedActivity view) {
@@ -88,14 +90,14 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
             final Resources labels = Labels.getLabels();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
-            WorkState workState=new WorkState(getLabel());
+            WorkState workState = new WorkState(getLabel());
             v.addDisabler(workState);
             if (v.isModified()) {
                 URI unsavedURI = v.getURI();
                 ButtonType[] options = { //
-                    new ButtonType(labels.getString("file.saveBefore.saveOption.text"), ButtonBar.ButtonData.YES),//
-                    new ButtonType(labels.getString("file.saveBefore.cancelOption.text"), ButtonBar.ButtonData.CANCEL_CLOSE), //
-                    new ButtonType(labels.getString("file.saveBefore.dontSaveOption.text"), ButtonBar.ButtonData.NO)//
+                        new ButtonType(labels.getString("file.saveBefore.saveOption.text"), ButtonBar.ButtonData.YES),//
+                        new ButtonType(labels.getString("file.saveBefore.cancelOption.text"), ButtonBar.ButtonData.CANCEL_CLOSE), //
+                        new ButtonType(labels.getString("file.saveBefore.dontSaveOption.text"), ButtonBar.ButtonData.NO)//
                 };
 
                 final Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -109,29 +111,29 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                     ButtonType result = alert.getResult();
                     if (result != null) {
                         switch (result.getButtonData()) {
-                        default:
-                        case CANCEL_CLOSE:
-                            v.removeDisabler(workState);
-                            if (oldFocusOwner != null) {
-                                oldFocusOwner.requestFocus();
-                            }
-                            break;
-                        case NO:
-                            doIt(v).whenComplete((r, e) -> {
-                                // FIXME check success
+                            default:
+                            case CANCEL_CLOSE:
                                 v.removeDisabler(workState);
                                 if (oldFocusOwner != null) {
                                     oldFocusOwner.requestFocus();
                                 }
-                            });
-                            break;
-                        case YES:
-                            // this is a little bit quirky.
-                            // saveView may start a worker thread
-                            // and thus will enable the view at
-                            // a later point in time.
-                            saveView(v, workState);
-                            break;
+                                break;
+                            case NO:
+                                doIt(v).whenComplete((r, e) -> {
+                                    // FIXME check success
+                                    v.removeDisabler(workState);
+                                    if (oldFocusOwner != null) {
+                                        oldFocusOwner.requestFocus();
+                                    }
+                                });
+                                break;
+                            case YES:
+                                // this is a little bit quirky.
+                                // saveView may start a worker thread
+                                // and thus will enable the view at
+                                // a later point in time.
+                                saveView(v, workState);
+                                break;
                         }
                     }
                 });
@@ -211,7 +213,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
     }
 
     protected void saveViewToURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
-        v.write(uri, chooser == null ? null : dataFormat, null, workState).handle((result, exception) -> {
+        v.write(uri, chooser == null ? null : dataFormat, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
@@ -232,7 +234,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                 v.setURI(uri);
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
-                app.addRecentURI( uri,dataFormat);
+                app.addRecentURI(uri, dataFormat);
                 doIt(v);
             }
             return null;
