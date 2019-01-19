@@ -76,11 +76,11 @@ public interface DocumentOrientedActivity extends Activity {
      * @param format the desired data format, null means default data format
      * should be used
      * @param options read options
-     * @param append whether to append to the current document or to replace it.
-     * @param workState
+     * @param insert whether to insert into the current document or to replace it.
+     * @param workState the work state can be used by this method to report about its progress
      * @return Returns a CompletionStage with the data format that was actually used to load the file.
      */
-    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean append, WorkState workState);
+    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean insert, WorkState workState);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -93,7 +93,7 @@ public interface DocumentOrientedActivity extends Activity {
      * @param format the desired data format, null means default data format
      * should be used
      * @param options write options
-     * @param workState
+     * @param workState the work state can be used by this method to report about its progress
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
