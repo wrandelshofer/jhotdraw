@@ -42,12 +42,6 @@ import org.jhotdraw8.concurrent.WorkState;
 public class TeddyActivityController extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, Initializable {
 
     @FXML
-    private URL location;
-
-    private Node node;
-    @FXML
-    private ResourceBundle resources;
-    @FXML
     private TextArea textArea;
 
     @Nonnull
@@ -64,7 +58,7 @@ public class TeddyActivityController extends AbstractDocumentOrientedActivity im
 
     @Override
     public Node getNode() {
-        return node;
+        return textArea;
     }
 
     @Override
@@ -74,14 +68,7 @@ public class TeddyActivityController extends AbstractDocumentOrientedActivity im
 
     @Override
     public void initView() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setController(this);
 
-        try {
-            node = loader.load(getClass().getResourceAsStream("TeddyActivity.fxml"));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
     }
 
     /**
@@ -104,7 +91,7 @@ public class TeddyActivityController extends AbstractDocumentOrientedActivity im
         return FXWorker.supply(() -> {
             StringBuilder builder = new StringBuilder();
             char[] cbuf = new char[8192];
-            try (Reader in = Files.newBufferedReader(Paths.get(uri), StandardCharsets.UTF_8)) {
+            try (Reader in = Files.newBufferedReader(Paths.get(uri))) {
                 for (int count = in.read(cbuf, 0, cbuf.length); count != -1; count = in.read(cbuf, 0, cbuf.length)) {
                     builder.append(cbuf, 0, count);
                 }
@@ -112,7 +99,7 @@ public class TeddyActivityController extends AbstractDocumentOrientedActivity im
             return builder.toString();
         }).thenApply(value -> {
             if (insert) {
-                textArea.appendText(value);
+                textArea.insertText(textArea.getCaretPosition(), value);
             } else {
                 textArea.setText(value);
             }
@@ -124,7 +111,7 @@ public class TeddyActivityController extends AbstractDocumentOrientedActivity im
     public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         final String text = textArea.getText();
         return FXWorker.run(() -> {
-            try (Writer out = Files.newBufferedWriter(Paths.get(uri), StandardCharsets.UTF_8)) {
+            try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {
                 out.write(text);
             }
         });

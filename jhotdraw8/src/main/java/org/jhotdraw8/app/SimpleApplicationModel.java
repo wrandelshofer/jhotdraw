@@ -5,13 +5,16 @@ package org.jhotdraw8.app;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
+
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
@@ -50,34 +53,62 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private Supplier<DocumentOrientedActivity> viewFactory;
-    private URL menuFxml;
+    private Supplier<DocumentOrientedActivity> activityFactory;
+    private Supplier<MenuBar> menuFactory;
 
     public SimpleApplicationModel() {
 
     }
 
     public SimpleApplicationModel(
-            Supplier<DocumentOrientedActivity> viewFactory,
+            Supplier<DocumentOrientedActivity> activityFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
             String fileExtension) {
-        this(null, viewFactory, menuFxml, fileDescription, format, fileExtension);
+        this(null, activityFactory, menuFxml, fileDescription, format, fileExtension);
     }
 
     public SimpleApplicationModel(String name,
-            Supplier<DocumentOrientedActivity> viewFactory,
-            URL menuFxml,
-            String fileDescription,
-            DataFormat format,
-            String fileExtension) {
+                                  URL activityFxml,
+                                  URL menuFxml,
+                                  String fileDescription,
+                                  DataFormat format,
+                                  String fileExtension) {
         this.name = name;
-        this.menuFxml = menuFxml;
+        this.menuFactory = () -> SimpleApplicationModel.createMenuBar(menuFxml, this.getResources());
         URIExtensionFilter fef = new URIExtensionFilter(fileDescription, format, fileExtension);
-        openExtensionFilters.add(fef);
-        saveExtensionFilters.add(fef);
-        this.viewFactory = viewFactory;
+        this.openExtensionFilters.add(fef);
+        this.saveExtensionFilters.add(fef);
+        this.activityFactory =  ()-> SimpleApplicationModel.createActivity(activityFxml, this.getResources());
+    }
+
+    public SimpleApplicationModel(String name,
+                                  Supplier<DocumentOrientedActivity> activityFactory,
+                                  URL menuFxml,
+                                  String fileDescription,
+                                  DataFormat format,
+                                  String fileExtension) {
+        this.name = name;
+        this.menuFactory = () -> SimpleApplicationModel.createMenuBar(menuFxml, this.getResources());
+        URIExtensionFilter fef = new URIExtensionFilter(fileDescription, format, fileExtension);
+        this.openExtensionFilters.add(fef);
+        this.saveExtensionFilters.add(fef);
+        this.activityFactory = activityFactory;
+    }
+
+    public SimpleApplicationModel(String name,
+                                  Supplier<DocumentOrientedActivity> activityFactory,
+                                  Supplier<MenuBar> menuFactory,
+                                  String fileDescription,
+                                  DataFormat format,
+                                  String fileExtension) {
+        this.name = name;
+        this.menuFactory = menuFactory;
+        URIExtensionFilter fef = new URIExtensionFilter(fileDescription, format, fileExtension);
+        this.openExtensionFilters.add(fef);
+        this.saveExtensionFilters.add(fef);
+        this.activityFactory = activityFactory;
     }
 
     @Override
@@ -85,20 +116,24 @@ public class SimpleApplicationModel implements ApplicationModel {
         return Preferences.userNodeForPackage(getClass());
     }
 
-    public Supplier<DocumentOrientedActivity> getViewFactory() {
-        return viewFactory;
+    public Supplier<DocumentOrientedActivity> getActivityFactory() {
+        return activityFactory;
     }
 
-    public void setViewFactory(Supplier<DocumentOrientedActivity> factory) {
-        this.viewFactory = factory;
+    public void setActivityFactory(Supplier<DocumentOrientedActivity> factory) {
+        this.activityFactory = factory;
     }
 
-    public URL getMenuFxml() {
-        return menuFxml;
+    public Supplier<MenuBar> getMenuFactory() {
+        return menuFactory;
     }
 
-    public void setMenuFxml(URL menuFxml) {
-        this.menuFxml = menuFxml;
+    public void setMenuFactory(Supplier<MenuBar> factory) {
+        this.menuFactory = factory;
+    }
+
+    public void setMenuFxml(URL fxml) {
+        this.menuFactory = () -> SimpleApplicationModel.createMenuBar(fxml, getResources());
     }
 
     @Nonnull
@@ -123,7 +158,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public DocumentOrientedActivity createActivity() {
-        return viewFactory.get();
+        return activityFactory.get();
     }
 
     @Nonnull
@@ -189,13 +224,25 @@ public class SimpleApplicationModel implements ApplicationModel {
     @Nullable
     @Override
     public MenuBar createMenuBar() {
-        if (menuFxml == null) {
-            return null;
-        }
+        return menuFactory == null ? null : menuFactory.get();
+    }
+
+    private static MenuBar createMenuBar(URL fxml, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setResources(getResources());
-        try (InputStream in = menuFxml.openStream()) {
+        loader.setResources(resources);
+        try (InputStream in = fxml.openStream()) {
             return loader.load(in);
+        } catch (IOException ex) {
+            throw new InternalError(ex);
+        }
+    }
+
+    private static DocumentOrientedActivity createActivity(URL fxml, ResourceBundle resources) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setResources(resources);
+        try (InputStream in = fxml.openStream()) {
+            Node node = loader.load(in);
+            return loader.getController();
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -211,7 +258,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         map.put(AboutAction.ID, new AboutAction(app));
         map.put(ExitAction.ID, new ExitAction(app));
         map.put(NewFileAction.ID, new NewFileAction(app));
-        map.put(RevertFileAction.ID, new RevertFileAction(app,null));
+        map.put(RevertFileAction.ID, new RevertFileAction(app, null));
         map.put(OpenFileAction.ID, new OpenFileAction(app));
         map.put(SaveFileAction.ID, new SaveFileAction(app));
         map.put(SaveFileAsAction.ID, new SaveFileAsAction(app));
