@@ -3,14 +3,6 @@
  */
 package org.jhotdraw8.draw;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.prefs.Preferences;
-
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -22,10 +14,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.beans.SimplePropertyBean;
 import org.jhotdraw8.css.CssColor;
@@ -35,9 +25,17 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.tool.Tool;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.prefs.Preferences;
 
 /**
  * AbstractDrawingView.
