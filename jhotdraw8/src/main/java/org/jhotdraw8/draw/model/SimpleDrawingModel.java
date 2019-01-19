@@ -149,8 +149,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @SuppressWarnings("unchecked")
     private void handlePropertyChanged(FigurePropertyChangeEvent event) {
-        if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED
-                && !Objects.equals(event.getOldValue(), event.getNewValue())) {
+        if (!Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     (Key<Object>) event.getKey(), event.getOldValue(),
                     event.getNewValue()));
