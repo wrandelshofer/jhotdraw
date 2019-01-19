@@ -22,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 
@@ -59,10 +60,23 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
     private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
 
     private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
-    private NonnullProperty<CssColor> handleColor=new NonnullProperty<>(this,HANDLE_COLOR_PROPERTY, CssColor.valueOf("blue"));
+    private NonnullProperty<CssColor> handleColor=new NonnullProperty<CssColor>(this,HANDLE_COLOR_PROPERTY,
+            CssColor.valueOf(Preferences.userNodeForPackage(AbstractDrawingView.class).get("handleColor","blue"))) {
+        @Override
+        public void set(CssColor newValue) {
+            super.set(newValue);
+            Preferences.userNodeForPackage(AbstractDrawingView.class).put("handleColor",newValue.getName());
+        }
+    };
     private IntegerProperty handleSize=new SimpleIntegerProperty(
             this,HANDLE_SIZE_PROPERTY,
-            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt("handleSize",5));
+            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt("handleSize",5)) {
+        @Override
+        public void set(int newValue) {
+            super.set(newValue);
+            Preferences.userNodeForPackage(AbstractDrawingView.class).putInt("handleSize",newValue);
+        }
+    };
 
     {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
