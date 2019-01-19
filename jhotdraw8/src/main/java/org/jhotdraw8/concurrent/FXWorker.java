@@ -27,7 +27,7 @@ public class FXWorker {
      */
     @Nonnull
     public static CompletableFuture<Void> run(@Nonnull CheckedRunnable runnable) {
-        return run(r->new Thread(r).start(), runnable);
+        return run(r -> new Thread(r).start(), runnable);
     }
 
     /**
@@ -57,7 +57,7 @@ public class FXWorker {
      * Calls the supplier on a thread of the common fork join pool. The completion stage is
      * completed on the FX Application Thread.
      *
-     * @param <T> the value type
+     * @param <T>      the value type
      * @param supplier the supplier
      * @return the CompletableFuture
      */
@@ -70,7 +70,7 @@ public class FXWorker {
      * Calls the supplier on the executor thread. The completion stage is
      * completed on the FX Application Thread.
      *
-     * @param <T> the value type
+     * @param <T>      the value type
      * @param supplier the supplier
      * @param executor the executor
      * @return the CompletableFuture
@@ -81,13 +81,7 @@ public class FXWorker {
         executor.execute(() -> {
             try {
                 T result = supplier.supply();
-                Platform.runLater(() -> {
-                    try {
-                        f.complete(result);
-                    } catch (Throwable e) {
-                        f.completeExceptionally(e);
-                    }
-                });
+                Platform.runLater(() -> f.complete(result));
             } catch (Throwable e) {
                 Platform.runLater(() -> f.completeExceptionally(e));
             }
