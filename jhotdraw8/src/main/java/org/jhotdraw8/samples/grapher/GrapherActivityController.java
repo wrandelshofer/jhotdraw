@@ -1,4 +1,4 @@
-/* @(#)GrapherController.java
+/* @(#)GrapherActivityController.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.samples.grapher;
@@ -129,12 +129,12 @@ import org.jhotdraw8.draw.action.SendBackwardAction;
 import org.jhotdraw8.draw.action.BringForwardAction;
 
 /**
- * GrapherController.
+ * GrapherActivityController.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherController extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, EditorView {
+public class GrapherActivityController extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
@@ -296,7 +296,7 @@ public class GrapherController extends AbstractDocumentOrientedActivity implemen
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("Grapher.fxml"));
+            node = loader.load(getClass().getResourceAsStream("GrapherActivity.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -390,7 +390,7 @@ public class GrapherController extends AbstractDocumentOrientedActivity implemen
     }
 
     @Override
-    public CompletionStage<Void> print(@Nonnull PrinterJob job, WorkState workState) {
+    public CompletionStage<Void> print(@Nonnull PrinterJob job, @Nonnull WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
@@ -404,7 +404,7 @@ public class GrapherController extends AbstractDocumentOrientedActivity implemen
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append, WorkState workState) {
+    public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
@@ -422,7 +422,7 @@ public class GrapherController extends AbstractDocumentOrientedActivity implemen
                 GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
         );
 
-        Preferences prefs = Preferences.userNodeForPackage(GrapherController.class);
+        Preferences prefs = Preferences.userNodeForPackage(GrapherActivityController.class);
 //        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 

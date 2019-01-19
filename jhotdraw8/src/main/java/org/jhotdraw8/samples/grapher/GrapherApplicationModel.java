@@ -37,7 +37,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     }
 
     public GrapherApplicationModel() {
-        super("Grapher", GrapherController::new,
+        super("Grapher", GrapherActivityController::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "Grapher Files", GRAPHER_FORMAT, "*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
