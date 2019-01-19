@@ -122,7 +122,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public DocumentOrientedActivity createView() {
+    public DocumentOrientedActivity createActivity() {
         return viewFactory.get();
     }
 

@@ -175,7 +175,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
     @Override
     public CompletionStage<Activity> createView() {
-        return FXWorker.supply(() -> getModel().createView())
+        return FXWorker.supply(() -> getModel().createActivity())
                 .handle((v, e) -> {
                     if (e != null) {
                         e.printStackTrace();

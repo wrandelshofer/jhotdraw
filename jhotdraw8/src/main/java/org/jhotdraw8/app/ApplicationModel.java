@@ -31,11 +31,11 @@ public interface ApplicationModel {
      *
      * @return a new instance
      */
-    default CompletionStage<Activity> createViewAsync() {
-        return FXWorker.supply(this::createView);
+    default CompletionStage<Activity> createActivityAsync() {
+        return FXWorker.supply(this::createActivity);
     }
 
-    Activity createView();
+    Activity createActivity();
 
     /**
      * Creates an open chooser.
