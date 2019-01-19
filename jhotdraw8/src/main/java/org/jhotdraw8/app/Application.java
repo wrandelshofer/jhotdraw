@@ -37,23 +37,23 @@ import org.jhotdraw8.collection.HierarchicalMap;
  */
 public interface Application extends Disableable, PropertyBean {
 
-    public static final String RECENT_URIS_PROPERTY = "recentUris";
-    public static final String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
-    public static final String MODEL_PROPERTY = "model";
+    String RECENT_URIS_PROPERTY = "recentUris";
+    String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
+    String MODEL_PROPERTY = "model";
 
     /**
      * The application model.
      *
      * @return the model
      */
-    public ObjectProperty<ApplicationModel> modelProperty();
+    ObjectProperty<ApplicationModel> modelProperty();
 
     /**
      * The set of views contains all open views..
      *
      * @return the views
      */
-    public SetProperty<Activity> viewsProperty();
+    SetProperty<Activity> viewsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -63,7 +63,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the recent Uris
      */
-    public ReadOnlySetProperty<Map.Entry<URI,DataFormat>> recentUrisProperty();
+    ReadOnlySetProperty<Map.Entry<URI,DataFormat>> recentUrisProperty();
 
     /**
      * The maximal number of recent URIs. Specifies how many items of
@@ -72,10 +72,10 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the number of recent Uris
      */
-    public IntegerProperty maxNumberOfRecentUrisProperty();
+    IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default public ObservableSet<Activity> views() {
+    default ObservableSet<Activity> views() {
         return viewsProperty().get();
     }
 
@@ -84,7 +84,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void add(Activity v) {
+    default void add(Activity v) {
         viewsProperty().add(v);
     }
 
@@ -93,7 +93,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void remove(Activity v) {
+    default void remove(Activity v) {
         viewsProperty().remove(v);
     }
 
@@ -103,11 +103,11 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return The active view.
      */
-    public ReadOnlyObjectProperty<Activity> activeViewProperty();
+    ReadOnlyObjectProperty<Activity> activeViewProperty();
 
     // Convenience method
     @Nullable
-    default public Activity getActiveView() {
+    default Activity getActiveView() {
         return activeViewProperty().get();
     }
 
@@ -116,14 +116,14 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the action map
      */
-    public HierarchicalMap<String, Action> getActionMap();
+    HierarchicalMap<String, Action> getActionMap();
 
     /**
      * Executes a worker on the thread pool of the application.
      *
      * @param r the runnable
      */
-    public void execute(Runnable r);
+    void execute(Runnable r);
 
     /**
      * Returns the application model.
@@ -146,7 +146,7 @@ public interface Application extends Disableable, PropertyBean {
     /**
      * Exits the application.
      */
-    public void exit();
+    void exit();
 
     /**
      * Returns the application node.
@@ -154,7 +154,7 @@ public interface Application extends Disableable, PropertyBean {
      * @return the node
      */
     @Nullable
-    default public Node getNode() {
+    default Node getNode() {
         return null;
     }
 
@@ -178,8 +178,9 @@ public interface Application extends Disableable, PropertyBean {
     default void addRecentURI(URI uri, DataFormat dataFormat) {
         // ensures that the last used uri lands at the end of the LinkedHashSet.
         Set<Map.Entry<URI,DataFormat>> recents = recentUrisProperty().get();
-        recents.remove(uri);
-        recents.add(new AbstractMap.SimpleEntry<>(uri,dataFormat));
+        AbstractMap.SimpleEntry<URI, DataFormat> entry = new AbstractMap.SimpleEntry<>(uri, dataFormat);
+        recents.remove(entry);
+        recents.add(entry);
         if (recents.size() > getMaxNumberOfRecentUris()) {
             Iterator<Map.Entry<URI,DataFormat>> i = recents.iterator();
             i.next();
