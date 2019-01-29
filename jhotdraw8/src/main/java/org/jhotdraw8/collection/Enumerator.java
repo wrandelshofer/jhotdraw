@@ -3,8 +3,14 @@
  */
 package org.jhotdraw8.collection;
 
+import java.util.Iterator;
+
 /**
- * Provides a C#-style Enumerator API.
+ * An object for enumerating elements of a collection.
+ * <p>
+ * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
+ * {@link Iterator}, and avoids the inherent race involved in having separate methods for
+ * {@code hasNext()} and {@code next()}.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
@@ -23,11 +29,11 @@ public interface Enumerator<E> {
      * <p>
      * Current is undefined under any of the following conditions:
      * <ul>
-     * <li> The enumerator is positioned before the first element in the collection,
-     * immediately after the enumerator is created moveNext must be called to advance
+     * <li> The enumerator is positioned before the first element in the collection.
+     * Immediately after the enumerator is created {@link #moveNext} must be called to advance
      * the enumerator to the first element of the collection before reading the value of Current.</li>
      *
-     * <li>The last call to MoveNext returned false, which indicates the end
+     * <li>The last call to {@link #moveNext} returned false, which indicates the end
      * of the collection.</li>
      *
      * <li>The enumerator is invalidated due to changes made in the collection,

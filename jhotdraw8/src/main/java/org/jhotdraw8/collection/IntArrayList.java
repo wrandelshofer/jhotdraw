@@ -7,10 +7,15 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 
 import static java.lang.Integer.max;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
 
 /**
@@ -19,7 +24,7 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntArrayList {
+public class IntArrayList implements Iterable<Integer> {
 
     private int[] items;
     /**
@@ -52,7 +57,7 @@ public class IntArrayList {
         this.items = new int[size];
 
         int count = 0;
-        for (Iterator<Integer> iter = collection.iterator(); iter.hasNext();) {
+        for (Iterator<Integer> iter = collection.iterator(); iter.hasNext(); ) {
             Integer value = iter.next();
             items[count++] = value;
         }
@@ -76,7 +81,7 @@ public class IntArrayList {
     /**
      * Inserts a new item at the specified index into this list.
      *
-     * @param index the index
+     * @param index   the index
      * @param newItem the new item
      */
     public void add(int index, int newItem) {
@@ -123,7 +128,7 @@ public class IntArrayList {
     /**
      * Copies the contents of this list into the provided array.
      *
-     * @param a an array
+     * @param a      an array
      * @param offset the offset into the array
      */
     public void copyInto(@Nonnull int[] a, int offset) {
@@ -267,7 +272,7 @@ public class IntArrayList {
     /**
      * Replaces the item at the specified index.
      *
-     * @param index an index
+     * @param index   an index
      * @param newItem the new item
      * @return the old item
      */
@@ -286,6 +291,44 @@ public class IntArrayList {
     public int size() {
         return size;
     }
+
+    /**
+     * Returns an iterator for this list.
+     *
+     * @return an iterator over the elements of this list
+     */
+    @Nonnull
+    public PrimitiveIterator.OfInt iterator() {
+        return new PrimitiveIterator.OfInt() {
+            private int index = 0;
+            private int size = IntArrayList.this.size;
+            private int[] items = IntArrayList.this.items;
+
+            @Override
+            public int nextInt() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return items[index++];
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index < size;
+            }
+        };
+    }
+
+    /**
+     * Returns a spliterator for this list.
+     *
+     * @return a spliterator over the elements of this list
+     */
+    @Nonnull
+    public Spliterator.OfInt spliterator() {
+        return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+    }
+
 
     /**
      * Returns a stream for processing the items of this list.
@@ -319,18 +362,18 @@ public class IntArrayList {
      * Creates a new instance with the specified items.
      *
      * @param items the items (the newly created instance references the
-     * provided array)
+     *              provided array)
      * @return the new instance
      */
     public static IntArrayList of(@Nonnull int... items) {
         return new IntArrayList(items);
     }
-    
+
     /**
      * Sorts the items in ascending order.
      */
     public void sort() {
-        Arrays.sort(items,0,size);
+        Arrays.sort(items, 0, size);
     }
 
 }

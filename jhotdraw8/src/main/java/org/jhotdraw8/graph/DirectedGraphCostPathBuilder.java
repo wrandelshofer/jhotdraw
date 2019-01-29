@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.util.ToDoubleTriFunction;
 
 import org.jhotdraw8.annotation.Nonnull;
@@ -397,7 +398,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
                 }
                 EdgePath<A> path = (EdgePath<A>) pathWithCost.getKey();
                 cost += pathWithCost.getValue();
-                List<A> edges = path.getEdges();
+                ImmutableList<A> edges = path.getEdges();
                 for (int i = combinedPath.isEmpty() ? 0 : 1, n = edges.size(); i < n; i++) {
                     combinedPath.add(edges.get(i));
                 }

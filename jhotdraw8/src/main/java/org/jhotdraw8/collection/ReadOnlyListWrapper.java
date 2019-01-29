@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterator;
 
 /**
  * Wraps a {@link List} in the {@link ReadOnlyList} API.
@@ -55,6 +56,13 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
                 throw new UnsupportedOperationException();
             }
         };
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nonnull
+    @Override
+    public Spliterator<E> spliterator() {
+        return (Spliterator<E>) backingList.spliterator();
     }
 
     @Override

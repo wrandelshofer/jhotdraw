@@ -5,6 +5,8 @@ package org.jhotdraw8.collection;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.annotation.Nonnull;
@@ -42,7 +44,6 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
     ImmutableArrayList(boolean privateMethod, Object[] array) {
         this.array = array;
     }
-
 
 
     public void copyInto(@Nonnull Object[] out, int offset) {
@@ -83,4 +84,10 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
         }
         return a;
     }
+
+
+    public Spliterator spliterator() {
+        return Spliterators.spliterator(array, 0, array.length, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+    }
+
 }

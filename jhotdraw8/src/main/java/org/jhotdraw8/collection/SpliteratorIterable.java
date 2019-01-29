@@ -40,7 +40,4 @@ public class SpliteratorIterable<T> implements Iterable<T> {
     public Spliterator<T> spliterator() {
         return factory.get();
     }
-    
-
-
 }

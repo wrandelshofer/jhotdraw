@@ -5,6 +5,9 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,14 +27,14 @@ import java.util.Objects;
 public class VertexPath<V> {
 
     @Nonnull
-    private final List<V> vertices;
+    private final ImmutableList<V> vertices;
 
     public VertexPath(@Nonnull Collection<V> elements) {
-        this.vertices = Collections.unmodifiableList(new ArrayList<>(elements));
+        this.vertices = ImmutableList.ofCollection(elements);
     }
     @SafeVarargs
     public VertexPath(@Nonnull V... elements) {
-        this.vertices = Collections.unmodifiableList(Arrays.asList(elements));
+        this.vertices = ImmutableList.of(elements);
     }
 
     @Override
@@ -53,7 +56,7 @@ public class VertexPath<V> {
     }
 
     @Nonnull
-    public List<V> getVertices() {
+    public ImmutableList<V> getVertices() {
         return vertices;
     }
 
@@ -84,7 +87,7 @@ public class VertexPath<V> {
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <VV> VertexPath<VV> of(VV... vertices) {
-        return new VertexPath<>(Arrays.asList(vertices));
+        return new VertexPath<>(vertices);
     }
 
 }

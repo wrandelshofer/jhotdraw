@@ -72,12 +72,14 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
     default Stream<E> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
+
     default void copyInto(Object[] out, int offset) {
         int i = offset;
         for (E e : this) {
             out[i++] = e;
         }
     }
+
     boolean contains(Object e);
 
     /**
@@ -87,9 +89,11 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @return true if this collection contains all of c
      */
     default boolean containsAll(Iterable<?> c) {
-        for (Object e : c)
-            if (!contains(e))
+        for (Object e : c) {
+            if (!contains(e)) {
                 return false;
+            }
+        }
         return true;
     }
 

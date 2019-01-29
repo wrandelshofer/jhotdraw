@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Spliterator;
 
 /**
  * Provides a read-only API for a list collection.
@@ -31,7 +32,18 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
     @Nonnull
     @Override
     default Iterator<E> iterator() {
-        return new ReadableListIterator<>(this);
+        return new ReadOnlyListIterator<>(this);
+    }
+
+    /**
+     * Returns a spliterator over elements of type {@code E}.
+     *
+     * @return an iterator.
+     */
+    @Nonnull
+    @Override
+    default Spliterator<E> spliterator() {
+        return new ReadOnlyListIterator<>(this);
     }
 
     /**
@@ -41,7 +53,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      */
     @Nonnull
     default ListIterator<E> listIterator() {
-        return new ReadableListIterator<>(this);
+        return new ReadOnlyListIterator<>(this);
     }
 
     /**
