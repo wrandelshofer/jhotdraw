@@ -23,6 +23,7 @@
     </target>
     <target name="clean" depends="init">
         <delete dir="${classes}" />
+        <delete dir="${dist}" />
     </target>
     <target depends="init" description="Javadoc for my API." name="javadoc">
         <mkdir dir="${javadoc}"/>
@@ -140,13 +141,49 @@
         <modular-jar module="org.jhotdraw7.samples.teddy" mainclass="org.jhotdraw.samples.teddy.Main"/>
         <modular-jar module="net.n3.nanoxml"/>
     </target>
-    <target name="dist" depends="jar">
-        <copy todir="${dist}">
-            <fileset dir=".">
-                <include name="*.md"/>
-            </fileset>
-        </copy>
+
+    <macrodef name="modular-bundle">
+    <attribute name="module" />
+        <attribute name="title" />
+    <attribute name="mainclass" default="" />
+        <sequential>
+        <mkdir dir="${dist}/bundles"/>
+        <exec executable="${jpackager}">
+            <env key="JAVA_HOME" path="${jdk}"/>
+            <arg value="create-installer"/>
+            <arg value="--output"/>
+            <arg path="${dist}/bundles"/>
+            <arg value="--name"/>
+            <arg value="@{title}"/>
+            <arg value="--module-path"/>
+            <arg path="${dist}/modules"/>
+            <arg value="--identifier"/>
+            <arg value="@{module}"/>
+            <arg value="--module"/>
+            <arg value="@{module}"/>
+            <arg value="--mac-bundle-name"/>
+            <arg value="@{title}"/>
+            <arg value="--version"/>
+            <arg value="${version}"/>
+        </exec>
+        </sequential>
+    </macrodef>
+
+
+    <target name="do-bundle" depends="init">
+        <modular-bundle module="org.jhotdraw7.samples.draw" title="JHotDraw Draw"/>
+        <modular-bundle module="org.jhotdraw7.samples.net" title="JHotDraw Net"/>
+        <modular-bundle module="org.jhotdraw7.samples.pert" title="JHotDraw Pert"/>
+        <modular-bundle module="org.jhotdraw7.samples.svg" title="JHotDraw SVG"/>
+        <modular-bundle module="org.jhotdraw7.samples.teddy" title="JHotDraw Teddy"/>
     </target>
+
+    <target name="bundle" depends="do-bundle,jar">
+    </target>
+
+    <target name="dist" depends="bundle">
+    </target>
+
     <target name="documentation" depends="init">
         <delete dir="${doc}"/>
         <mkdir dir="${doc}"/>
