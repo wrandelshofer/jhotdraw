@@ -19,12 +19,12 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.RelativeLocator;
-import org.jhotdraw8.draw.render.DummyRenderContext;
+import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
+
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
@@ -66,7 +66,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
     public Bounds getBoundsInLocal() {
         // FIXME the text node should be computed during layout
         if (textNode == null) {
-            layout(new DummyRenderContext());
+            layout(new SimpleRenderContext());
         }
 
         Bounds b = textNode.getBoundsInLocal();
@@ -136,7 +136,7 @@ public class SimpleTextFigure extends AbstractLeafFigure
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         if (textNode==null) {
-            layout(new DummyRenderContext());
+            layout(new SimpleRenderContext());
         }
         return Shapes.awtShapeFromFX(textNode).getPathIterator(tx);
     }

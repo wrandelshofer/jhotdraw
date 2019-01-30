@@ -1,4 +1,4 @@
-/* @(#)DummyRenderContext.java
+/* @(#)SimpleRenderContext.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.render;
@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DummyRenderContext implements RenderContext {
+public class SimpleRenderContext implements RenderContext {
     private Map<Figure, Node> nodeMap = new HashMap<>();
     private ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 

@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.styleable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ import org.jhotdraw8.collection.MapAccessor;
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
     // FIXME should be one instance per class. The instance should be unmodifiable.
-    private final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new HashMap<>();
+    private final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = Collections.synchronizedMap(new HashMap<>());
 
     /**
      * Holds the properties.
@@ -33,7 +34,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     // protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
     //protected final StyleableMap<Key<?>, Object> properties = new OldStyleableMap<Key<?>, Object>() {
     protected final StyleableMap<Key<?>, Object> properties = new SimpleStyleableMap<Key<?>, Object>(
-            keyMaps.computeIfAbsent(getClass(), k -> new HashMap<>())
+            keyMaps.computeIfAbsent(getClass(), k -> Collections.synchronizedMap(new HashMap<>()))
     ) {
 
         @Override
