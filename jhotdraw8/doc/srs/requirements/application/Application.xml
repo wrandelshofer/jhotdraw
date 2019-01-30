@@ -3,6 +3,6 @@
     <title>Application</title>
     <para>An application is a program with a graphcal user interface
         that can be used to perform one or more <xref linkend="ref.activity.def"/>(s).</para>
-    <para>The application provides a set of <xref linkend="ref.actionn.def"/>(s)
+    <para>The application provides a set of <xref linkend="ref.action.def"/>(s)
         for the <xref linkend="ref.activity.def"/>.</para>
 </section>

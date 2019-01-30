@@ -73,7 +73,7 @@
     -->
 
     <rewriteURI
-        uriStartString="file:///src/"
+        uriIdStartString="file:///src/"
         rewritePrefix="/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/" />
     
      <!--

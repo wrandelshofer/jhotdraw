@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/5.0b5/dtd/docbook.dtd" [
-<!ENTITY code3 "file:///Users/wr/Documents/STI/Projekte/STI-ARL-Editor/07_NetBeans/git/jhotdraw/jhotdraw8/src/main/java/org/jhotdraw8/samples/mini/ConnectingFiguresSample.java" >
-]>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
-         xml:id="eg.lineConnectionFigures">
-    <title>Connecting two figures with a line</title>
-    
-    <para>A LineConnectionFigure can be used to connect two figures with a line.
-        The line will stick to the two figures when the user moves or resizes the connected figures.</para>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://docbook.org/ns/docbook http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbook.xsd"
+>
 
-    <para>The listing <xref  linkend="listing.ConnectingFiguresSample"/>  shows how to correctly set up a line connection figure.</para>
+  <title>Connecting two figures with a line</title>
 
-    <example xml:id="listing.ConnectingFiguresSample">
-        <title>ConnectingFiguresSample</title>
-        <programlisting language="java" linenumbering="numbered" startinglinenumber="1"><xi:include  href="&code3;"  parse="text"  /></programlisting>
-    </example>
-    
-    <para>The example program performs the following steps:</para>
-    <orderedlist>
-  <listitem >
-    <para>Create two rectangle figures and a line connection figure.</para>
-  </listitem>
-  <listitem>
-    <para>Connect the line connection figure to the rectangle figures using chop rectangle connectors. 
-         The connectors implement the strategy for computing the connection locations.
-          Instead of specifying the connectors by ourselves, we could request them
-         from the rectangle figures. Depending on the coordinates and connection figure that we
-        provide, we may get a different kind of connector or none at all.</para>
-        <programlisting language="java">c.setStartConnection(a, a.findConnector(110,90, c));
-c.setEndConnection(b, b.findConnector(310,240, c));  </programlisting>
-  </listitem>
-  <listitem >
-    <para>Layout the line connection figure, so that it computes its start and end locations.
-         
-         The layout of the line connection figure depends on the layout of the rectangle figures.
-         Each time you change the layout of one of the rectangle figures, you have to call
-         layout on the connection figure. Figures do not automatically update their layout
-         due to performance reasons. A DrawingModel can be used to automate this.</para>
-  </listitem>
-  <listitem  >
-    <para>Create a drawing and add a layer to it.
-        Then add the figures to the layer.</para>
-  </listitem>
-</orderedlist>
+  <para>A LineConnectionFigure can be used to connect two figures with a line.
+    The line will stick to the two figures when the user moves or resizes the connected figures.
+  </para>
+
+  <para>The listing
+    <xref linkend="listing.ConnectingFiguresSample"/>
+    shows how to correctly set up a line connection figure.
+  </para>
+
+  <example xml:id="listing.ConnectingFiguresSample">
+    <title>ConnectingFiguresSample</title>
+    <programlisting language="java" linenumbering="numbered" startinglinenumber="1"
+    ><xi:include href="../../../src/main/java/org/jhotdraw8/samples/mini/ConnectingFiguresSample.java" parse="text"/>
+    </programlisting>
+  </example>
+
+  <para>The example program performs the following steps:</para>
+  <orderedlist>
+    <listitem>
+      <para>Create two rectangle figures and a line connection figure.</para>
+    </listitem>
+    <listitem>
+      <para>Connect the line connection figure to the rectangle figures using chop rectangle connectors.
+        The connectors implement the strategy for computing the connection locations.
+        Instead of specifying the connectors by ourselves, we could request them
+        from the rectangle figures. Depending on the coordinates and connection figure that we
+        provide, we may get a different kind of connector or none at all.
+      </para>
+      <programlisting language="java">c.setStartConnection(a, a.findConnector(110,90, c));
+        c.setEndConnection(b, b.findConnector(310,240, c));
+      </programlisting>
+    </listitem>
+    <listitem>
+      <para>Layout the line connection figure, so that it computes its start and end locations.
+
+        The layout of the line connection figure depends on the layout of the rectangle figures.
+        Each time you change the layout of one of the rectangle figures, you have to call
+        layout on the connection figure. Figures do not automatically update their layout
+        due to performance reasons. A DrawingModel can be used to automate this.
+      </para>
+    </listitem>
+    <listitem>
+      <para>Create a drawing and add a layer to it.
+        Then add the figures to the layer.
+      </para>
+    </listitem>
+  </orderedlist>
 
 </section>

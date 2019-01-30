@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" 
-      xmlns:xi="http://www.w3.org/2001/XInclude">
-    
-    <title>The Hello World Book</title>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://docbook.org/ns/docbook http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbook.xsd"
+>
 
-    <xi:include href="Hello.xml"/>
-    <xi:include href="Installation.xml"/>
-    
+  <info>
+    <title>The Hello World Book</title>
+  </info>
+  <xi:include href="Hello.xml"/>
+  <xi:include href="Installation.xml"/>
 </book>
