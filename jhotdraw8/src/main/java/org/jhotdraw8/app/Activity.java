@@ -65,48 +65,48 @@ public interface Activity extends Disableable, PropertyBean {
     /**
      * Activates the view.
      */
-    public void activate();
+    void activate();
 
     /**
      * The application property is maintained by the application.
      *
      * @return the property
      */
-    public ObjectProperty<Application> applicationProperty();
+    ObjectProperty<Application> applicationProperty();
 
     /**
      * Deactivates the view.
      */
-    public void deactivate();
+    void deactivate();
 
-    public IntegerProperty disambiguationProperty();
+    IntegerProperty disambiguationProperty();
 
     /**
      * Disposes of the view.
      */
-    public void dispose();
+    void dispose();
 
     /**
      * The action map of the view.
      *
      * @return the action map
      */
-    public HierarchicalMap<String, Action> getActionMap();
+    HierarchicalMap<String, Action> getActionMap();
 
     @Nullable
-    default public Application getApplication() {
+    default Application getApplication() {
         return applicationProperty().get();
     }
 
-    default public void setApplication(@Nullable Application newValue) {
+    default void setApplication(@Nullable Application newValue) {
         applicationProperty().set(newValue);
     }
 
-    default public int getDisambiguation() {
+    default int getDisambiguation() {
         return disambiguationProperty().get();
     }
 
-    default public void setDisambiguation(int newValue) {
+    default void setDisambiguation(int newValue) {
         disambiguationProperty().set(newValue);
     }
 
@@ -115,15 +115,15 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return The node.
      */
-    public Node getNode();
+    Node getNode();
 
     // convenience method
     @Nullable
-    default public String getTitle() {
+    default String getTitle() {
         return titleProperty().get();
     }
 
-    default public void setTitle(@Nullable String newValue) {
+    default void setTitle(@Nullable String newValue) {
         titleProperty().set(newValue);
     }
 
@@ -131,23 +131,23 @@ public interface Activity extends Disableable, PropertyBean {
      * Initializes the view. This method must be called before the view can be
      * used.
      */
-    public void init();
+    void init();
 
     /**
      * Starts the view.
      */
-    public void start();
+    void start();
 
     /**
      * Stops the view.
      */
-    public void stop();
+    void stop();
 
     /**
      * Provides a title for the view
      *
      * @return The title property.
      */
-    public StringProperty titleProperty();
+    StringProperty titleProperty();
 
 }
