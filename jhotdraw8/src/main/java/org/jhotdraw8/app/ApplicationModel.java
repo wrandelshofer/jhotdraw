@@ -23,6 +23,10 @@ import org.jhotdraw8.gui.URIChooser;
  */
 public interface ApplicationModel {
 
+    default CompletionStage<Activity> createActivityAsync() {
+        return FXWorker.supply(this::createActivity);
+    }
+
     /**
      * Instantiates a view. But does not initialize it.
      *
@@ -31,10 +35,6 @@ public interface ApplicationModel {
      *
      * @return a new instance
      */
-    default CompletionStage<Activity> createActivityAsync() {
-        return FXWorker.supply(this::createActivity);
-    }
-
     Activity createActivity();
 
     /**
