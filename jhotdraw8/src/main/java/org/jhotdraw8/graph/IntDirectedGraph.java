@@ -47,7 +47,7 @@ public interface IntDirectedGraph {
      * Returns the k-th next vertex of v.
      *
      * @param vids a vertex index
-     * @param k the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
+     * @param k    the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
      * @return the index of the k-th next vertex of v.
      */
     int getNext(int vids, int k);
@@ -119,39 +119,42 @@ public interface IntDirectedGraph {
         }
         return false;
     }
-    
-        /**
+
+    /**
      * Returns the direct successor vertices of the specified vertex.
      *
      * @param vidx a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
     default Spliterator.OfInt getNextVertices(int vidx) {
-        class MySpliterator extends AbstractIntSpliterator{
+        class MySpliterator extends AbstractIntSpliterator {
             int index;
             int limit;
-           public MySpliterator (int vidx, int lo, int hi) {
-               super(hi,ORDERED|NONNULL|SIZED|SUBSIZED);
-               limit=hi;
-               index=lo;
-           }
+
+            public MySpliterator(int vidx, int lo, int hi) {
+                super(hi, ORDERED | NONNULL | SIZED | SUBSIZED);
+                limit = hi;
+                index = lo;
+            }
+
             @Override
             public boolean tryAdvance(@Nonnull IntConsumer action) {
-                if (index<limit) {
-                    action.accept(getNext(vidx,index++));
+                if (index < limit) {
+                    action.accept(getNext(vidx, index++));
                     return true;
                 }
                 return false;
             }
-        @Nullable
-        public MySpliterator trySplit() {
-            int hi = limit, lo = index, mid = (lo + hi) >>> 1;
-            return (lo >= mid) ? null : // divide range in half unless too small
-                new MySpliterator(vidx, lo, index = mid);
+
+            @Nullable
+            public MySpliterator trySplit() {
+                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
+                return (lo >= mid) ? null : // divide range in half unless too small
+                        new MySpliterator(vidx, lo, index = mid);
+            }
+
         }
-            
-        }
-        return new MySpliterator(vidx,0,getNextCount(vidx));
+        return new MySpliterator(vidx, 0, getNextCount(vidx));
     }
 
 }

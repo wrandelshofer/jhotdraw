@@ -3,11 +3,16 @@
  */
 package org.jhotdraw8.graph;
 
-import static java.lang.Math.min;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Enumerator;
+import org.jhotdraw8.collection.IteratorEnumerator;
+import org.jhotdraw8.util.ToDoubleTriFunction;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,12 +23,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.IteratorEnumerator;
+import static java.lang.Math.min;
 
 /**
  * Provides search algorithms for directed graphs.
@@ -32,18 +34,6 @@ import org.jhotdraw8.collection.IteratorEnumerator;
  * @version $Id$
  */
 public class GraphSearch {
-
-    @Nonnull
-    private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> graph) {
-        // Create initial forest.
-        Map<V, List<V>> forest = new LinkedHashMap<>(graph.getVertexCount());
-        for (V v : graph.getVertices()) {
-            List<V> initialSet = new ArrayList<>(1);
-            initialSet.add(v);
-            forest.put(v, initialSet);
-        }
-        return forest;
-    }
 
     @Nonnull
     private static <V> Map<V, List<V>> createForest(Collection<V> vertices) {
@@ -69,12 +59,27 @@ public class GraphSearch {
      */
     @Nonnull
     public static <V, A> List<Set<V>> findDisjointSets(@Nonnull DirectedGraph<V, A> graph) {
+        return findDisjointSets(graph.getVertices(), graph::getNextVertices);
+    }
+
+    /**
+     * Given a directed graph, returns all disjoint sets of vertices.
+     * <p>
+     * Uses Kruskal's algorithm.
+     *
+     * @param <V>             the vertex type
+     * @param <A>             the arrow type
+     * @param vertices        the vertices of the directed graph
+     * @param getNextVertices a function that returns the next vertices given a vertex
+     * @return the disjoint sets.
+     */
+    @Nonnull
+    public static <V, A> List<Set<V>> findDisjointSets(@Nonnull Collection<V> vertices, @Nonnull Function<V, Iterable<V>> getNextVertices) {
         // Create initial forest
-        Map<V, List<V>> forest = createForest(graph);
+        Map<V, List<V>> forest = createForest(vertices);
         // Merge sets.
-        for (V u : graph.getVertices()) {
-            for (int j = 0, m = graph.getNextCount(u); j < m; j++) {
-                V v = graph.getNext(u, j);
+        for (V u : vertices) {
+            for (V v : getNextVertices.apply(u)) {
                 List<V> uset = forest.get(u);
                 List<V> vset = forest.get(v);
                 if (uset != vset) {
@@ -94,6 +99,73 @@ public class GraphSearch {
         return disjointSets;
     }
 
+    private static class Edge<VV, AA> extends UnorderedPair<VV> {
+        private final AA arrow;
+        private final double cost;
+
+        public Edge(VV a, VV b, AA arrow, double cost) {
+            super(a, b);
+            this.arrow = arrow;
+            this.cost = cost;
+        }
+    }
+
+    /**
+     * Given an undirected graph and a cost function, returns a builder
+     * with the minimum spanning tree.
+     * <p>
+     *
+     * @param <V>   the vertex type
+     * @param <A>   the arrow type
+     * @param graph the graph. This must be an undirected graph
+     *              represented as a directed graph with two identical arrows for each edge.
+     * @return the graph builder
+     */
+    @Nonnull
+    public static <V, A> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull DirectedGraph<V, A> graph, ToDoubleFunction<A> costf) {
+        return findMinimumSpanningTreeGraph(graph, (u, v, a) -> costf.applyAsDouble(a));
+
+    }
+
+    /**
+     * Given an undirected graph and a cost function, returns a builder
+     * with the minimum spanning tree.
+     * <p>
+     *
+     * @param <V>   the vertex type
+     * @param <A>   the arrow type
+     * @param graph the graph. This must be an undirected graph
+     *              represented as a directed graph with two identical arrows for each edge.
+     * @return the graph builder
+     */
+    @Nonnull
+    public static <V, A> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull DirectedGraph<V, A> graph, ToDoubleTriFunction<V, V, A> costf) {
+        Collection<V> vertices = graph.getVertices();
+        Set<V> done = new HashSet<>();
+        List<Edge<V, A>> edges = new ArrayList<>();
+        for (V start : vertices) {
+            done.add(start);
+            for (Map.Entry<V, A> entry : graph.getNextEntries(start)) {
+                V end = entry.getKey();
+                A arrow = entry.getValue();
+                if (!done.contains(end)) {
+                    edges.add(new Edge<>(start, end, arrow, costf.applyAsDouble(start, end, arrow)));
+                }
+            }
+        }
+        edges.sort(Comparator.comparingDouble(a -> a.cost));
+        List<Edge<V, A>> mst = findMinimumSpanningTree(vertices, edges, null);
+        DirectedGraphBuilder<V, A> builder = new DirectedGraphBuilder<>(vertices.size(), mst.size() * 2);
+        for (V v : vertices) {
+            builder.addVertex(v);
+        }
+        for (Edge<V, A> e : mst) {
+            builder.addArrow(e.getStart(), e.getEnd(), e.arrow);
+            builder.addArrow(e.getEnd(), e.getStart(), e.arrow);
+        }
+        return builder;
+    }
+
     /**
      * Given a set of vertices and a list of arrows ordered by cost, returns
      * the minimum spanning tree.
@@ -101,71 +173,37 @@ public class GraphSearch {
      * Uses Kruskal's algorithm.
      *
      * @param <V>            the vertex type
-     * @param <A>            the arrow type
+     * @param <P>            the arrow type
      * @param vertices       a directed graph
-     * @param orderedArrows  list of arrows sorted by cost in ascending order
+     * @param orderedEdges  list of edges sorted by cost in ascending order
      *                       (lowest cost first, highest cost last).
-     * @param rejectedArrows optional, all excluded arrows are added to this
+     * @param rejectedEdges optional, all excluded edges are added to this
      *                       list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
     @Nonnull
-    public static <V, A extends Pair<V>> List<A> findMinimumSpanningTree(@Nonnull Collection<V> vertices, List<A> orderedArrows, @Nullable List<A> rejectedArrows) {
-        List<A> minimumSpanningTree = new ArrayList<>(orderedArrows.size());
-        if (rejectedArrows == null) {
-            rejectedArrows = new ArrayList<>(orderedArrows.size());
+    public static <V, P extends Pair<V>> List<P> findMinimumSpanningTree(@Nonnull Collection<V> vertices, List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
+        List<P> minimumSpanningTree = new ArrayList<>(orderedEdges.size());
+        if (rejectedEdges == null) {
+            rejectedEdges = new ArrayList<>(orderedEdges.size());
         }
 
         // Create initial forest
         Map<V, List<V>> forest = createForest(vertices);
 
         // Process arrows from lowest cost to highest cost
-        for (A arrow : orderedArrows) {
+        for (P arrow : orderedEdges) {
             List<V> uset = forest.get(arrow.getStart());
             List<V> vset = forest.get(arrow.getEnd());
             if (uset != vset) {
                 union(uset, vset, forest);
                 minimumSpanningTree.add(arrow);
             } else {
-                rejectedArrows.add(arrow);
+                rejectedEdges.add(arrow);
             }
         }
 
         return minimumSpanningTree;
-    }
-
-    /**
-     * Given a set of vertices and a list of arrows ordered by cost, returns a
-     * builder with the minimum spanning tree. This is an undirected graph with
-     * an arrow in each direction.
-     * <p>
-     *
-     * @param <V>            the vertex type
-     * @param <A>            the arrow type
-     * @param vertices       the list of vertices
-     * @param orderedArrows  list of arrows sorted by cost in ascending order
-     *                       (lowest cost first, highest cost last)
-     * @param includedArrows optional, all included arrows are added to this
-     *                       list, if it is provided.
-     * @param rejectedArrows optional, all excluded arrows are added to this
-     *                       list, if it is provided.
-     * @return the graph builder
-     */
-    @Nonnull
-    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull Collection<V> vertices, @Nonnull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
-        List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
-        if (includedArrows != null) {
-            includedArrows.addAll(includedArrowList);
-        }
-        DirectedGraphBuilder<V, A> builder = new DirectedGraphBuilder<>();
-        for (V v : vertices) {
-            builder.addVertex(v);
-        }
-        for (A e : includedArrowList) {
-            builder.addArrow(e.getStart(), e.getEnd(), e);
-            builder.addArrow(e.getEnd(), e.getStart(), e);
-        }
-        return builder;
     }
 
     /**
@@ -196,12 +234,11 @@ public class GraphSearch {
     /**
      * Sorts the specified directed graph topologically.
      *
-     * @param <A>   the arrow type
      * @param model the graph
      * @return the sorted list of vertices
      */
     @Nonnull
-    public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?, A> model) {
+    public static int[] sortTopologicallyInt(IntDirectedGraph model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex

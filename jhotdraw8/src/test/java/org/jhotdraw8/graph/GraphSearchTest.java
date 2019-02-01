@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class GraphSearchTest {
@@ -46,6 +46,57 @@ class GraphSearchTest {
         return builder;
     }
 
+    private DirectedGraph<String, Integer> createNonMSTGraph() {
+        // Graph with more edges than the minimal spanning tree:
+        // A--1--B     C
+        // |   / |   / |
+        // 5  3  2  4  5
+        // |/    |/    |
+        // D--4--E--7--F
+
+        DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
+        builder.addVertex("A");
+        builder.addVertex("B");
+        builder.addVertex("C");
+        builder.addVertex("D");
+        builder.addVertex("E");
+        builder.addVertex("F");
+
+        builder.addBidiArrow("A", "B", 1);
+        builder.addBidiArrow("A", "D", 5);
+        builder.addBidiArrow("B", "D", 3);
+        builder.addBidiArrow("B", "E", 2);
+        builder.addBidiArrow("C", "E", 4);
+        builder.addBidiArrow("C", "F", 5);
+        builder.addBidiArrow("D", "E", 4);
+        builder.addBidiArrow("E", "F", 7);
+        return builder;
+    }
+
+    private DirectedGraph<String, Integer> createMSTGraph() {
+        // Graph with only the edges for minimal spanning tree:
+        // A--1--B     C
+        //     / |   / |
+        //    3  2  4  5
+        //  /    |/    |
+        // D     E     F
+
+        DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
+        builder.addVertex("A");
+        builder.addVertex("B");
+        builder.addVertex("C");
+        builder.addVertex("D");
+        builder.addVertex("E");
+        builder.addVertex("F");
+
+        builder.addBidiArrow("A", "B", 1);
+        builder.addBidiArrow("B", "E", 2);
+        builder.addBidiArrow("B", "D", 3);
+        builder.addBidiArrow("C", "E", 4);
+        builder.addBidiArrow("C", "F", 5);
+        return builder;
+    }
+
     @TestFactory
     public List<DynamicTest> testFindDisjointSets() {
         return Arrays.asList(
@@ -66,9 +117,18 @@ class GraphSearchTest {
         assertEquals(expectedSetCount, actualSets.size());
     }
 
+
     @Test
     void findMinimumSpanningTree() {
+        DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
+        DirectedGraph<String, Integer> expectedMst = createMSTGraph();
+        DirectedGraphBuilder<String, Integer> actualMst = GraphSearch.findMinimumSpanningTreeGraph(nonMst, Integer::doubleValue);
+        System.out.println(DumpGraphs.dumpAsAdjacencyList(nonMst));
+        System.out.println(DumpGraphs.dumpAsAdjacencyList(expectedMst));
+        System.out.println(DumpGraphs.dumpAsAdjacencyList(actualMst));
+        assertEquals(DumpGraphs.dumpAsAdjacencyList(expectedMst), DumpGraphs.dumpAsAdjacencyList(actualMst));
     }
+
 
     @Test
     void findMinimumSpanningTreeGraph() {

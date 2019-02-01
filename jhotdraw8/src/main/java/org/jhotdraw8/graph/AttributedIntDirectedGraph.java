@@ -3,6 +3,14 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.Nonnull;
+
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * This interface provides read-only indexed access to a directed graph {@code G = (V, A) } with
  * vertex and arrow attributes of the generic types {@code V} and {@code A}.
@@ -21,31 +29,39 @@ package org.jhotdraw8.graph;
  *
  * @author wr
  */
-public interface AttributedIntDirectedGraph<V,A> extends IntDirectedGraph {
-      /**
+public interface AttributedIntDirectedGraph<V, A> extends IntDirectedGraph {
+    /**
      * Returns the specified arrow.
      *
      * @param index index of arrow
      * @return arrow
      */
-        A getArrow(int index);
+    A getArrow(int index);
 
-      /**
+    /**
      * Returns the specified vertex.
      *
      * @param index index of vertex
      * @return vertex
      */
-        V getVertex(int index);
-        
+    V getVertex(int index);
+
+    /**
+     * Returns the index of the vertex.
+     *
+     * @param vertex a vertex
+     * @return index of vertex
+     */
+    int getVertexIndex(V vertex);
+
     /**
      * Returns the specified successor (next) arrow of the specified vertex.
      *
      * @param vertex a vertex
-     * @param index index of next arrow
+     * @param index  index of next arrow
      * @return the specified arrow
      */
-        A getArrow(int vertex, int index);
+    A getNextArrow(int vertex, int index);
 
         /*
     /**
@@ -60,5 +76,53 @@ public interface AttributedIntDirectedGraph<V,A> extends IntDirectedGraph {
         return index == -1 ? null : getArrow(a, index);
     }*/
 
+    /**
+     * Returns the direct successor vertices of the specified vertex.
+     *
+     * @param vertexIndex a vertex
+     * @return a collection view on the direct successor vertices of vertex
+     * with the arrow pointing to the vertex
+     */
+    @Nonnull
+    default Collection<Map.Entry<Integer, A>> getNextIntEntries(int vertexIndex) {
+        class NextVertexAndArrowIterator implements Iterator<Map.Entry<Integer, A>> {
+
+            private int index;
+            private final int vertex;
+            private final int nextCount;
+
+            public NextVertexAndArrowIterator(int vertex) {
+                this.vertex = vertex;
+                this.nextCount = getNextCount(vertex);
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index < nextCount;
+            }
+
+            @Override
+            public Map.Entry<Integer, A> next() {
+                int i = index++;
+                return new AbstractMap.SimpleEntry<>(
+                        getNext(vertex, i),
+                        getNextArrow(vertex, i)
+                );
+            }
+
+        }
+        return new AbstractCollection<Map.Entry<Integer, A>>() {
+            @Nonnull
+            @Override
+            public Iterator<Map.Entry<Integer, A>> iterator() {
+                return new NextVertexAndArrowIterator(vertexIndex);
+            }
+
+            @Override
+            public int size() {
+                return getNextCount(vertexIndex);
+            }
+        };
+    }
 
 }

@@ -210,7 +210,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      */
     @Nonnull
     public ImmutableDirectedGraph<V, A> build() {
-        final ImmutableDirectedGraph<V, A> graph = new ImmutableDirectedGraph<>(this);
+        final ImmutableDirectedGraph<V, A> graph = new ImmutableDirectedGraph<>((AttributedIntDirectedGraph<V, A>) this);
         return graph;
     }
 
@@ -246,7 +246,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return vertices.get(vi);
     }
 
-    protected int getVertexIndex(V v) {
+    @Override
+    public int getVertexIndex(V v) {
         Integer index = vertexMap.get(v);
         return (int) index;
     }
@@ -258,7 +259,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
 
     @Override
     @SuppressWarnings("unchecked")
-    public A getArrow(int vi, int i) {
+    public A getNextArrow(int vi, int i) {
         int arrowId = getNextArrowIndex(vi, i);
         return arrows.get(arrowId);
     }
