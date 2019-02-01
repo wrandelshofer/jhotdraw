@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* @(#)AbstractCompositeFigureTest.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw;
 
@@ -29,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author werni
  */
-public class AbstractCompositeFigureNGTest {
+public class AbstractCompositeFigureTest {
     
     @Test
     public void testInvariantsAfterInstantiation() {

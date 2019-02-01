@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -35,7 +36,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
     @Nonnull
-    private static Map<Key<?>, Integer> cachedValuesKeyMap = new HashMap<>();
+    private static Map<Key<?>, Integer> cachedValuesKeyMap = Collections.synchronizedMap(new HashMap<>());
 
     private transient Map<Key<?>, Object> cachedValues;
     private ObservableSet<Figure> dependentFigures;

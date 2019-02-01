@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.Tag;
 import com.sun.source.doctree.DocTree;
 import jdk.javadoc.doclet.Taglet;
 

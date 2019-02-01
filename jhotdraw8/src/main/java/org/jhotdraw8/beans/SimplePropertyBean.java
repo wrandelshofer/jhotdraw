@@ -11,8 +11,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 
 /**
- * SimplePropertyBean is a simple implementation of the {@code PropertyBean}
- * interface.
+ * A simple implementation of the {@link PropertyBean} interface.
  *
  * @author Werner Randelshofer
  * @version $Id$

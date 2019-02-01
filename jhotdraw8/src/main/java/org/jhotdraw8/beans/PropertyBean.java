@@ -21,27 +21,25 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 
 /**
- * Interface for beans which support an open number of getProperties in a
+ * Interface for beans which support an open number of properties in a
  * property map.
  * <p>
- * A property is accessed using a type safe {@link Key}.
+ * A property can be accessed using a {@link Key}. The type parameter
+ * of the key is used to ensure that property accesses are type safe.
  * </p>
  * <p>
  * To implement this interface, you need to implement method
- * {@code valuesProperty()} as shown below.
+ * {@link #getProperties()} as shown below.
  * </p>
  *
  * <pre><code>
  * public class MyBean implements PropertyBean {
- *     protected final ReadOnlyMapProperty{@literal <Key<?>, Object>} properties//
- *            = new ReadOnlyMapWrapper{@literal <Key<?>, Object>}(//
- *                    this, PROPERTIES_PROPERTY, //
- *                    FXCollections.observableHashMap()).getReadOnlyProperty();
+ *      protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
  *
  *     {@literal @}Override
- *     public final MapProperty{@literal <Key<?>, Object>} propertiesProperty() {
- *        return getProperties;
- *    }
+ *     public ObservableMap{@literal <Key<?>, Object>} getProperties() {
+ *        return properties;
+ *      }
  * }
  * </code></pre>
  *

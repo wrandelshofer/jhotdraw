@@ -8,12 +8,14 @@ import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -22,11 +24,11 @@ import org.jhotdraw8.annotation.Nullable;
 
 /**
  * An observable map which stores its values in an array, and which can share
- * its keys with other SharedKeysMaps.
+ * its keys with other {@code SharedKeysMap} instances.
  *
- * @author Werner Randelshofer
  * @param <K> key type
  * @param <V> value type
+ * @author Werner Randelshofer
  */
 public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
@@ -40,19 +42,22 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private final ArrayList<Object> values;
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with a synchronized hash map for its
+     * keys.
      */
     public SharedKeysMap() {
-        this(new HashMap<>());
+        this(Collections.synchronizedMap(new HashMap<>()));
     }
 
     /**
      * Creates a new instance.
      *
+     * @param keyMap the key map. This map must be synchronized if key map
+     *               is shared between instances of SharedKeysMap on different threads.
      * @param keyMap a map which maps from keys to indices. The indices must be
-     * in the range {@code [0,keyMap.size()-1]}. This map will add new keys to
-     * the keyMap if necessary, and assign {@code keyMap.size()} to each new
-     * key. Keys may be added to this map, but may never be removed.
+     *               in the range {@code [0,keyMap.size()-1]}. This map will add new keys to
+     *               the keyMap if necessary, and assign {@code keyMap.size()} to each new
+     *               key. Keys may be added to this map, but may never be removed.
      */
     public SharedKeysMap(Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
@@ -75,6 +80,10 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         changeListenerList.add(observer);
     }
 
+    private boolean hasObservers() {
+        return changeListenerList != null || invalidationListenerList != null;
+    }
+
     protected void callObservers(MapChangeListener.Change<K, V> change) {
         if (changeListenerList != null) {
             for (MapChangeListener<? super K, ? super V> l : changeListenerList) {
@@ -90,7 +99,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
     public void clear() {
         values.clear();
-        size=0;
+        size = 0;
     }
 
     @Override
@@ -113,20 +122,8 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return false;
     }
 
-    private void createListenerLists() {
-        if (invalidationListenerList == null) {
-            invalidationListenerList = new CopyOnWriteArrayList<>();
-        }
-        if (changeListenerList == null) {
-            changeListenerList = new CopyOnWriteArrayList<>();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     private int ensureCapacity(K key) {
-        final int indexIfAbsent = keyMap.size();
-        Integer indexIfPresent = keyMap.putIfAbsent(key, indexIfAbsent);
-        int index = indexIfPresent == null ? indexIfAbsent : indexIfPresent;
+        Integer index = keyMap.computeIfAbsent(key, k -> keyMap.size());
         for (int i = values.size(), n = (1 + index); i < n; i++) {
             values.add(null);
         }
@@ -213,11 +210,12 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         } else {
             values.set(index, null);
             size--;
-             V returnValue = (V)(oldValue==NULL_VALUE?null:oldValue);
-            @SuppressWarnings("unchecked")
-            ChangeEvent change = new ChangeEvent(key, returnValue, null, false, true);
-            callObservers(change);
-
+            V returnValue = (V) (oldValue == NULL_VALUE ? null : oldValue);
+            if (hasObservers()) {
+                @SuppressWarnings("unchecked")
+                ChangeEvent change = new ChangeEvent(key, returnValue, null, false, true);
+                callObservers(change);
+            }
             return returnValue;
         }
 
@@ -233,7 +231,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         values.set(index, newValue);
 
         V returnValue = oldValue == NULL_VALUE ? null : oldValue;
-        if (!Objects.equals(oldValue, newValue)) {
+        if (hasObservers() && (oldValue == null || !Objects.equals(oldValue, newValue))) {
             ChangeEvent change = new ChangeEvent(key, returnValue, newValue, true, oldValue != null);
             callObservers(change);
         }
