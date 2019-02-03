@@ -3,21 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -27,11 +12,9 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
-
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -56,6 +39,21 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -372,8 +370,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             if (this instanceof TransformableFigure) {
                 TransformableFigure tf = (TransformableFigure) this;
                 list.add(new RotateHandle(tf));
-                TransformHandleKit.addCornerTransformHandles(tf, list);
-                TransformHandleKit.addEdgeTransformHandles(tf, list);
+                TransformHandleKit.addTransformHandles(tf, list);
             }
         }
     }

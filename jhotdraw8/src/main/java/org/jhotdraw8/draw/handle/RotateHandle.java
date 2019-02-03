@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.HashSet;
-import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -17,21 +15,30 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
 
 /**
  * A Handle to rotate a TransformableFigure around the center of its bounds in
@@ -41,6 +48,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class RotateHandle extends AbstractHandle {
+    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
     private static final Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
@@ -81,29 +89,29 @@ public class RotateHandle extends AbstractHandle {
         pickNode = new Region();
         pickNode.setShape(PICK_NODE_SHAPE);
         pickNode.setManaged(false);
-        pickNode.setScaleShape(false);
+        pickNode.setScaleShape(true);
         pickNode.setCenterShape(true);
         pickNode.resize(11, 11); // size must be odd
         pickNode.getStyleClass().clear();
-        pickNode.getStyleClass().add(handleStyleclass);
+        // pickNode.getStyleClass().add(handleStyleclass);
         pickNode.setBorder(HANDLE_REGION_BORDER);
         pickNode.setBackground(HANDLE_REGION_BACKGROUND);
 
         pivotNode = new Region();
         pivotNode.setShape(PIVOT_NODE_SHAPE);
         pivotNode.setManaged(false);
-        pivotNode.setScaleShape(false);
+        pivotNode.setScaleShape(true);
         pivotNode.setCenterShape(true);
         pivotNode.resize(11, 11); // size must be odd
         pivotNode.getStyleClass().clear();
-        pivotNode.getStyleClass().add(pivotStyleclass);
+        // pivotNode.getStyleClass().add(pivotStyleclass);
         pivotNode.setBorder(PIVOT_REGION_BORDER);
         pivotNode.setBackground(PIVOT_REGION_BACKGROUND);
         pivotNode.setVisible(false);
 
         line = new Line();
         line.getStyleClass().clear();
-        line.getStyleClass().add(lineStyleclass);
+        //line.getStyleClass().add(lineStyleclass);
         group.getChildren().addAll(line, pickNode, pivotNode);
     }
 
@@ -125,6 +133,21 @@ public class RotateHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Group getNode(DrawingView view) {
+        double size = view.getHandleSize();
+        lineLength = size * 1.5;
+        if (pickNode.getWidth() != size) {
+            pickNode.resize(size, size);
+        }
+        Paint color = Paintable.getPaint(view.getHandleColor());
+        line.setStroke(color);
+        BorderStroke borderStroke = (BorderStroke) pickNode.getBorder().getStrokes().get(0);
+        if (borderStroke == null || !borderStroke.getTopStroke().equals(color)) {
+            Border border = new Border(
+                    new BorderStroke(color, INSIDE_STROKE, null, null)
+            );
+            pickNode.setBorder(border);
+            pivotNode.setBorder(border);
+        }
         return group;
     }
 
@@ -245,10 +268,11 @@ public class RotateHandle extends AbstractHandle {
 
         Point2D centerInView = t.transform(centerInLocal);
         Point2D vector = new Point2D(p.getX() - centerInView.getX(), p.getY() - centerInView.getY());
+        double size = pickNode.getWidth();
         vector = vector.normalize();
         pickLocation = new Point2D(p.getX() + vector.getX() * lineLength, p.getY() + vector.getY() * lineLength);
-        pickNode.relocate(pickLocation.getX() - 5, pickLocation.getY() - 5);
-        pivotNode.relocate(centerInView.getX() - 5, centerInView.getY() - 5);
+        pickNode.relocate(pickLocation.getX() - size * 0.5, pickLocation.getY() - size * 0.5);
+        pivotNode.relocate(centerInView.getX() - size * 0.5, centerInView.getY() - size * 0.5);
         line.setStartX(pickLocation.getX());
         line.setStartY(pickLocation.getY());
         line.setEndX(p.getX());

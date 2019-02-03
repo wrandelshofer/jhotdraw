@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -23,21 +20,21 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 /**
  * Handle for moving (translating) a figure.
@@ -113,18 +110,13 @@ public class MoveHandle extends LocatorHandle {
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
-        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         pickLocation = p = t.transform(p);
 
-        // The node is centered around the location. 
-        // (The value 5.5 is half of the node size, which is 11,11.
-        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
-        // so that we get sharp lines.
+        // Place the center of the node at the location.
         double size=node.getWidth();
         node.relocate(p.getX() - size*0.5, p.getY() - size*0.5);
 
-
-        // rotates the node:
+        // Rotate the node.
         node.setRotate(f.getStyledNonnull(ROTATE));
         node.setRotationAxis(f.getStyledNonnull(ROTATION_AXIS));
     }

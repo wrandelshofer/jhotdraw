@@ -14,9 +14,10 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.SimplePolylineFigure;
@@ -67,6 +68,8 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(DrawingView view) {
+        CssColor color = view.getHandleColor();
+        node.setStroke(Paintable.getPaint(color));
         return node;
     }
 
@@ -106,7 +109,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     protected void initNode(@Nonnull Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

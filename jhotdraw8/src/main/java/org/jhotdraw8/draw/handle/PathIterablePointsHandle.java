@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -13,11 +11,16 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.geom.FXPathPointsBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Draws points of the path of a {@link PathIterableFigure}.
@@ -60,13 +63,15 @@ public class PathIterablePointsHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Node getNode(DrawingView view) {
+        CssColor color = view.getHandleColor();
+        node.setStroke(Paintable.getPaint(color));
         return node;
     }
 
     protected void initNode(@Nonnull Path r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

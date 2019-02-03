@@ -15,15 +15,20 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.geom.Transforms;
+
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 /**
  * Handle for showing that a figure is selected.
@@ -32,6 +37,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class SelectionHandle extends LocatorHandle {
+    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     private Point2D pickLocation;
     @Nonnull
@@ -55,11 +61,11 @@ public class SelectionHandle extends LocatorHandle {
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
-        node.setScaleShape(false);
+        node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
@@ -72,6 +78,17 @@ public class SelectionHandle extends LocatorHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
+        double size = view.getHandleSize();
+        if (node.getWidth() != size) {
+            node.resize(size, size);
+        }
+        CssColor color = view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke) node.getBorder().getStrokes().get(0);
+        if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
+            node.setBorder(new Border(
+                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
+            ));
+        }
         return node;
     }
 
@@ -84,11 +101,9 @@ public class SelectionHandle extends LocatorHandle {
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         pickLocation= p = t == null ? p : t.transform(p);
 
-        // The node is centered around the location. 
-        // (The value 5.5 is half of the node size, which is 11,11.
-        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
-        // so that we get sharp lines. 
-        node.relocate(p.getX() - 5, p.getY() - 5);
+        // Place the center of the node at the location.
+        double size = node.getWidth();
+        node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
 
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));

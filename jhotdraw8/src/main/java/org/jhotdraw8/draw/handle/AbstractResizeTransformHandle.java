@@ -8,24 +8,27 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-
 import org.jhotdraw8.annotation.Nonnull;
-
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.DefaultUnitConverter;
+
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 /**
  * AbstractResizeTransformHandle.
@@ -34,6 +37,7 @@ import org.jhotdraw8.io.DefaultUnitConverter;
  * @version $Id$
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
+    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nonnull
     private final Region node;
@@ -53,11 +57,11 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         node = new Region();
         node.setShape(shape);
         node.setManaged(false);
-        node.setScaleShape(false);
+        node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(border);
         node.setBackground(bg);
     }
@@ -69,6 +73,17 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
+        double size = view.getHandleSize();
+        if (node.getWidth() != size) {
+            node.resize(size, size);
+        }
+        CssColor color = view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke) node.getBorder().getStrokes().get(0);
+        if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
+            node.setBorder(new Border(
+                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
+            ));
+        }
         return node;
     }
 
@@ -143,9 +158,12 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
         pickLocation = p = t == null ? p : t.transform(p);
-        node.relocate(p.getX() - 5, p.getY() - 5);
-        // rotates the node:
-        // f.applyTransformableFigureProperties(node);
+
+        // Place the center of the node at the location.
+        double size = node.getWidth();
+        node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
+
+        // Rotate the node.
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }

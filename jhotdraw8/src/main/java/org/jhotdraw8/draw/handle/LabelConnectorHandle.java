@@ -14,19 +14,24 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Transforms;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Handle for the start or end point of a connection figure.
@@ -42,6 +47,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class LabelConnectorHandle extends AbstractConnectorHandle {
+    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
@@ -75,7 +81,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         targetNode = new Region();
         targetNode.setShape(REGION_SHAPE);
         targetNode.setManaged(false);
-        targetNode.setScaleShape(false);
+        targetNode.setScaleShape(true);
         targetNode.setCenterShape(true);
         targetNode.resize(10, 10);
         targetNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
@@ -91,6 +97,17 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     @Nonnull
     @Override
     public Group getNode(DrawingView view) {
+        double size = view.getHandleSize();
+        if (targetNode.getWidth() != size) {
+            targetNode.resize(size, size);
+        }
+        CssColor color = view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke) targetNode.getBorder().getStrokes().get(0);
+        if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
+            targetNode.setBorder(new Border(
+                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
+            ));
+        }
         return groupNode;
     }
 
@@ -104,14 +121,15 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         boolean isConnected = f.get(connectorKey) != null && f.get(targetKey) != null;
         targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         targetNode.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
-        targetNode.relocate(p.getX() - 5, p.getY() - 5);
+        double size = targetNode.getWidth();
+        targetNode.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
         // rotates the node:
         targetNode.setRotate(f.getStyledNonnull(ROTATE));
         targetNode.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         if (isConnected) {
             connectorLocation = view.worldToView(f.get(connectorKey).getPositionInWorld(owner, f.get(targetKey)));
-            targetNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
+            targetNode.relocate(connectorLocation.getX() - size * 0.5, connectorLocation.getY() - size * 0.5);
             Point2D origin=t.transform(f.getNonnull(originKey).getConvertedValue());
             lineNode.setStartX(origin.getX());
             lineNode.setStartY(origin.getY());

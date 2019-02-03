@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -13,11 +11,16 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Draws an outline of the path of a {@link PathIterableFigure}.
@@ -33,7 +36,7 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     private final boolean selectable;
 
     public PathIterableOutlineHandle(PathIterableFigure figure, boolean selectable) {
-        this(figure,selectable, STYLECLASS_HANDLE_MOVE_OUTLINE);
+        this(figure, selectable, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
     public PathIterableOutlineHandle(PathIterableFigure figure, boolean selectable, String styleclass) {
@@ -41,12 +44,12 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         node = new Path();
         this.styleclass = styleclass;
         initNode(node);
-        this.selectable=selectable;
+        this.selectable = selectable;
     }
 
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
-        return node.contains(x,y);
+        return node.contains(x, y);
     }
 
     @Nullable
@@ -58,13 +61,15 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Node getNode(DrawingView view) {
+        CssColor color = view.getHandleColor();
+        node.setStroke(Paintable.getPaint(color));
         return node;
     }
 
     protected void initNode(@Nonnull Path r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

@@ -13,12 +13,15 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
+import org.jhotdraw8.geom.Transforms;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -59,13 +62,15 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(DrawingView view) {
+        CssColor color = view.getHandleColor();
+        node.setStroke(Paintable.getPaint(color));
         return node;
     }
 
     protected void initNode(@Nonnull Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
+        //r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

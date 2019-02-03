@@ -10,9 +10,9 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.shape.Shape;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -20,8 +20,6 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -172,20 +170,25 @@ public class ResizeHandleKit {
         return new WestHandle(owner, styleclass);
     }
 
-    protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);
-    protected static final Shape EAST_SHAPE = new Rectangle(5, 9);
-    protected static final Shape WEST_SHAPE = new Rectangle(5, 9);
-    protected static final Shape SOUTH_SHAPE = new Rectangle(9, 5);
+    protected static final SVGPath NORTH_SHAPE = new SVGPath();
+    protected static final SVGPath EAST_SHAPE = new SVGPath();
+    protected static final SVGPath WEST_SHAPE = new SVGPath();
+    protected static final SVGPath SOUTH_SHAPE = new SVGPath();
     protected static final SVGPath NORTH_EAST_SHAPE = new SVGPath();
     protected static final SVGPath NORTH_WEST_SHAPE = new SVGPath();
     protected static final SVGPath SOUTH_EAST_SHAPE = new SVGPath();
     protected static final SVGPath SOUTH_WEST_SHAPE = new SVGPath();
 
     static {
-        NORTH_EAST_SHAPE.setContent("M -5.5,-2.5 L 2.5,-2.5 2.5,5.5 -2.5,5.5 -2.5,2.5 -5.5,2.5 Z M 5.5,-5.5");
-        NORTH_WEST_SHAPE.setContent("M -2.5,-2.5 L 5.5,-2.5 5.5,2.5 2.5,2.5 2.5,5.5 -2.5,5.5 Z M-5.5,-5.5");
-        SOUTH_EAST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,2.5 -5.5,2.5 -5.5,-2.5 -2.5,-2.5 Z M 5.5,5.5");
-        SOUTH_WEST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,-2.5 5.5,-2.5 5.5,2.5 -2.5,2.5 Z M -5.5,5.5");
+        final String square = "M 0,0 9,0 9,9 0,9 Z ";
+        NORTH_EAST_SHAPE.setContent(square + "M 0,4.5 4.5,4.5 4.5,9");
+        NORTH_WEST_SHAPE.setContent(square + "M 9,4.5 4.5,4.5 4.5,9");
+        SOUTH_EAST_SHAPE.setContent(square + "M 0,4.5 4.5,4.5 4.5,0");
+        SOUTH_WEST_SHAPE.setContent(square + "M 9,4.5 4.5,4.5 4.5,0");
+        SOUTH_SHAPE.setContent(square + "M 0,4.5 9,4.5");
+        NORTH_SHAPE.setContent(square + "M 0,4.5 9,4.5");
+        EAST_SHAPE.setContent(square + "M 4.5,0 4.5,9");
+        WEST_SHAPE.setContent(square + "M 4.5,0 4.5,9");
     }
 
     @Nullable

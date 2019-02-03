@@ -15,22 +15,23 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Handle for the point of a figure which is relative to the top left corner of the figure.
@@ -39,6 +40,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class RelativePointHandle extends AbstractHandle {
+    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
@@ -73,11 +75,11 @@ public class RelativePointHandle extends AbstractHandle {
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
-        node.setScaleShape(false);
+        node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
@@ -100,6 +102,17 @@ public class RelativePointHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
+        double size = view.getHandleSize();
+        if (node.getWidth() != size) {
+            node.resize(size, size);
+        }
+        CssColor color = view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke) node.getBorder().getStrokes().get(0);
+        if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
+            node.setBorder(new Border(
+                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
+            ));
+        }
         return node;
     }
 
@@ -137,7 +150,8 @@ public class RelativePointHandle extends AbstractHandle {
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.get(pointKey).getConvertedValue().add(bounds.getMinX(), bounds.getMinY());
         pickLocation = p = t == null ? p : t.transform(p);
-        node.relocate(pickLocation.getX() - 5, pickLocation.getY() - 5);
+        double size = node.getWidth();
+        node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));

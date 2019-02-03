@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.HashSet;
-import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -17,20 +15,27 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 /**
  * Handle for moving (translating) a figure.
@@ -39,6 +44,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class PolyPointMoveHandle extends AbstractHandle {
+    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
@@ -99,6 +105,17 @@ public class PolyPointMoveHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
+        double size = view.getHandleSize();
+        if (node.getWidth() != size) {
+            node.resize(size, size);
+        }
+        CssColor color = view.getHandleColor();
+        BorderStroke borderStroke = (BorderStroke) node.getBorder().getStrokes().get(0);
+        if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
+            node.setBorder(new Border(
+                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
+            ));
+        }
         return node;
     }
 
@@ -171,10 +188,8 @@ public class PolyPointMoveHandle extends AbstractHandle {
         pickLocation = p = t == null ? p : t.transform(p);
 
         // The node is centered around the location.
-        // (The value 5.5 is half ofCollection the node size, which is 11,11.
-        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
-        // so that we get sharp lines.
-        node.relocate(p.getX() - 5, p.getY() - 5);
+        double size = node.getWidth();
+        node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
 
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
