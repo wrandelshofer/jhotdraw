@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
-<title>Definitions</title>
-<para>The following terms are used in this book:</para>
-
- <glossary><title>List of terms:</title>
-   <glossentry xml:id="glossterm.application">
-     <glossterm>Application</glossterm>
-     <glossdef xml:id="glossdef.application">
-       <para>An application is a computer program with a graphical user interface that can be used to perform
-         one or more activities.
-       </para>
-        </glossdef>
-    </glossentry>
-      <glossentry>
-      <glossterm>Project</glossterm>
-        <glossdef>
-        <para>A project is an item of work.</para>
-        <para>The item of work can be data. that the user creates, edits or views, or it can be a task that the user performs.</para>
-        </glossdef>
-    </glossentry>
-      <glossentry>
-      <glossterm>Document-Oriented Application</glossterm>
-        <glossdef>
-        <para>An application which supports projects which have a document as its work item. Such as text documents and drawing documents.</para>
-        </glossdef>
-    </glossentry>
-      <glossentry>
-      <glossterm>Drawing</glossterm>
-        <glossdef>
-        <para>A drawing is a set of graphical elements painted on a canvas.</para>
-        </glossdef>
-    </glossentry>
-      <glossentry>
-      <glossterm>Figure</glossterm>
-        <glossdef>
-        <para>A figure is a graphical element of a drawing.</para>
-        <para>Depending on the use case, a figure may represent a graphical primitive, such as a line
-            or a rectangle, or it may represent a concept, for example a person in an organization diagram. 
+  <title>Definitions</title>
+  <glossary>
+    <title>List of terms:</title>
+    <glossentry xml:id="glossterm.application">
+      <glossterm>Application</glossterm>
+      <glossdef xml:id="glossdef.application">
+        <para>An application is a computer program with a graphical user interface that can be used to perform
+          one or more activities.
         </para>
-        </glossdef>
+      </glossdef>
     </glossentry>
-   </glossary>
+    <glossentry>
+      <glossterm>Activity</glossterm>
+      <glossdef>
+        <para>An activity is a set of actions that relate to the same topic.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>Action</glossterm>
+      <glossdef>
+        <para>An action is a command that can be invoked by the user.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>document-based Application</glossterm>
+      <glossdef>
+        <para>An application that supports document-based activities.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>document-based Activity</glossterm>
+      <glossdef>
+        <para>An activity with actions that relate to a persistent document of some kind
+          (such as a text document or a drawing document).</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>Drawing</glossterm>
+      <glossdef>
+        <para>A drawing is a set of figures presented on a canvas.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>Figure</glossterm>
+      <glossdef>
+        <para>A figure is a visual representation of some kind
+          (such as a line, rectangle or something more complex).
+        </para>
+      </glossdef>
+    </glossentry>
+  </glossary>
 </section>

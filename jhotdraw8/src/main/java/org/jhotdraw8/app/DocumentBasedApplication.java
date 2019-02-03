@@ -1,4 +1,4 @@
-/* @(#)DocumentOrientedApplication.java
+/* @(#)DocumentBasedApplication.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -60,13 +60,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedActivity} objects and
+ * An {@link DocumentBasedApplication} handles the life-cycle of {@link DocumentBasedActivity} objects and
  * provides windows to present them on screen.
  * 
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DocumentOrientedApplication extends AbstractApplication {
+public class DocumentBasedApplication extends AbstractApplication {
 
     @Nullable
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
@@ -98,10 +98,10 @@ public class DocumentOrientedApplication extends AbstractApplication {
     {
         activeView.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                handleViewDeactivated((DocumentOrientedActivity) oldv);
+                handleViewDeactivated((DocumentBasedActivity) oldv);
             }
             if (newv != null) {
-                handleViewActivated((DocumentOrientedActivity) newv);
+                handleViewActivated((DocumentBasedActivity) newv);
             }
         });
     }
@@ -109,14 +109,14 @@ public class DocumentOrientedApplication extends AbstractApplication {
     {
         views.addListener((SetChangeListener.Change<? extends Activity> change) -> {
             if (change.wasAdded()) {
-                handleViewAdded((DocumentOrientedActivity) change.getElementAdded());
+                handleViewAdded((DocumentBasedActivity) change.getElementAdded());
             } else {
-                handleViewRemoved((DocumentOrientedActivity) change.getElementRemoved());
+                handleViewRemoved((DocumentBasedActivity) change.getElementRemoved());
             }
         });
     }
 
-    public DocumentOrientedApplication() {
+    public DocumentBasedApplication() {
         recentUrisProperty().get().addListener(this::updateRecentMenuItemsInAllMenuBars);
     }
 
@@ -256,7 +256,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(@Nonnull DocumentOrientedActivity view) {
+    protected void handleViewActivated(@Nonnull DocumentBasedActivity view) {
 
     }
 
@@ -266,7 +266,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(@Nonnull DocumentOrientedActivity view) {
+    protected void handleViewAdded(@Nonnull DocumentBasedActivity view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -274,10 +274,10 @@ public class DocumentOrientedApplication extends AbstractApplication {
         }
 
         view.getActionMap().setParent(getActionMap());
-        view.setApplication(DocumentOrientedApplication.this);
+        view.setApplication(DocumentBasedApplication.this);
         view.setTitle(getLabels().getString("unnamedFile"));
         HierarchicalMap<String, Action> map = view.getActionMap();
-        map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, view));
+        map.put(CloseFileAction.ID, new CloseFileAction(DocumentBasedApplication.this, view));
 
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
@@ -368,7 +368,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(@Nonnull DocumentOrientedActivity view) {
+    protected void handleViewDeactivated(@Nonnull DocumentBasedActivity view) {
 
     }
 
@@ -378,7 +378,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(@Nonnull DocumentOrientedActivity view) {
+    protected void handleViewRemoved(@Nonnull DocumentBasedActivity view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -442,7 +442,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
         final Resources labels = Labels.getLabels();
         createView().whenComplete((pv, ex1) -> {
-            DocumentOrientedActivity v = (DocumentOrientedActivity) pv;
+            DocumentBasedActivity v = (DocumentBasedActivity) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 final Alert alert = new Alert(Alert.AlertType.ERROR,

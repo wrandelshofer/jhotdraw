@@ -3,12 +3,10 @@
  */
 package org.jhotdraw8.samples.teddy;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -17,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
@@ -25,8 +22,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 
-import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.AbstractDocumentBasedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
@@ -39,7 +36,7 @@ import org.jhotdraw8.concurrent.WorkState;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyActivityController extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, Initializable {
+public class TeddyActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, Initializable {
 
     @FXML
     private TextArea textArea;

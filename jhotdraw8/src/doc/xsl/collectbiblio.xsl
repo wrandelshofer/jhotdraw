@@ -11,7 +11,6 @@
 <xsl:template match="/">
 <section>
 <title>References</title>
-<para>The following sources are referenced in this book:</para>
 <bibliography>
 <xsl:apply-templates/>
 </bibliography>

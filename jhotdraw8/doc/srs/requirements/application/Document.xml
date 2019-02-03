@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.document.def">
-    <title>Document</title>
-    <para>A document is a container for data.</para>
-    <para>A <xref linkend="ref.document.def"/> can be accessed from a persistent storage.</para>
-    <para>The location of the persistent storage is identified with a URI.</para>
-</section>

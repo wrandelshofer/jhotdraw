@@ -10,14 +10,14 @@ import javafx.scene.control.Alert.AlertType;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.concurrent.WorkState;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link DocumentOrientedActivity}.
+ * {@link DocumentBasedActivity}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
@@ -25,7 +25,7 @@ import org.jhotdraw8.concurrent.WorkState;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractViewControllerAction<DocumentOrientedActivity> {
+public class PrintFileAction extends AbstractViewControllerAction<DocumentBasedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,13 +46,13 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentOrient
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction( Application app, @Nullable DocumentOrientedActivity view) {
-        super(app, view, DocumentOrientedActivity.class);
+    public PrintFileAction( Application app, @Nullable DocumentBasedActivity view) {
+        super(app, view, DocumentBasedActivity.class);
         Labels.getLabels().configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedActivity view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity view) {
         WorkState workState = new WorkState();
         view.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();

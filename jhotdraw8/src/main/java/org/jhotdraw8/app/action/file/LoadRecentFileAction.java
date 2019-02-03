@@ -8,7 +8,7 @@ import java.util.concurrent.CompletionStage;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.UriUtil;
@@ -58,7 +58,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view
      * @param uri the uri of the recent file
      */
-    public LoadRecentFileAction(Application app, DocumentOrientedActivity view, @Nonnull URI uri) {
+    public LoadRecentFileAction(Application app, DocumentBasedActivity view, @Nonnull URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);
@@ -173,7 +173,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
 
     @Nonnull
     @Override
-    public CompletionStage<Void> doIt(final DocumentOrientedActivity view) {
+    public CompletionStage<Void> doIt(final DocumentBasedActivity view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

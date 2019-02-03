@@ -14,37 +14,40 @@
 </info>
 <chapter><title>Introduction</title>
 <xi:include href="introduction/Purpose.xml"/>
-<xi:include href="../general/introduction/Scope.xml"/>
+  <!--
+<xi:include href="../general/introduction/Overview.xml"/>
+-->
 <xi:include href="../general/introduction/Definitions.xml"/>
-<!--<xi:include href="introduction/Overview.xml"/>-->
-<xi:include href="../general/introduction/MajorVersions.xml"/>
 <xi:include href="../general/introduction/License.xml"/>
 <xi:include href="../general/introduction/Resources.xml"/>
-<xi:include href="../general/introduction/References.xml"/>
+<xi:include href="introduction/References.xml"/>
 </chapter>
 <chapter><title>Overall description</title>
 <xi:include href="overalldescription/ProductPerspective.xml"/>
+  <!--
 <xi:include href="overalldescription/ProductFunctions.xml"/>
 <xi:include href="overalldescription/UserCharacteristics.xml"/>
 <xi:include href="overalldescription/Constraints.xml"/>
 <xi:include href="overalldescription/AssumptionsAndDependencies.xml"/>
+-->
 </chapter>
 <chapter><title>Specific requirements</title>
+  <!--
 <section><title>External Interface Requirements</title>
 <xi:include href="requirements/external/UserInterfaces.xml"/>
 <xi:include href="requirements/external/HardwareInterfaces.xml"/>
 <xi:include href="requirements/external/SoftwareInterfaces.xml"/>
 <xi:include href="requirements/external/CommunicationsInterfaces.xml"/>
 </section>
+-->
 <section><title>Application Framework</title>
-<xi:include href="requirements/application/ApplicationIntroduction.xml"/>
-<xi:include href="requirements/application/Application.xml"/>
-<xi:include href="requirements/application/Project.xml"/>
-<xi:include href="requirements/application/ProjectOrientedApplication.xml"/>
+<xi:include href="requirements/application/ApplicationFramework.xml"/>
+  <xi:include href="requirements/application/SupportedUserInterfaceGuidelines.xml"/>
+  <xi:include href="requirements/application/SupportedMacOSMenuBarItems.xml"/>
+  <xi:include href="requirements/application/SupportedWindowsMenuBarItems.xml"/>
 </section>
 <section><title>Drawing Editor Framework</title>
-<xi:include href="requirements/draw/DrawingIntroduction.xml"/>
-<xi:include href="requirements/draw/FigureTreeStructure.xml"/>
+<xi:include href="requirements/draw/DrawingEditorFramework.xml"/>
 </section>
 
 <!--

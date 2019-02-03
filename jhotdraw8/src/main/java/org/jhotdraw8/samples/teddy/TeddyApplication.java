@@ -3,7 +3,7 @@
  */
 package org.jhotdraw8.samples.teddy;
 
-import org.jhotdraw8.app.DocumentOrientedApplication;
+import org.jhotdraw8.app.DocumentBasedApplication;
 import org.jhotdraw8.app.SimpleApplicationModel;
 
 /**
@@ -12,14 +12,14 @@ import org.jhotdraw8.app.SimpleApplicationModel;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyApplication extends DocumentOrientedApplication {
+public class TeddyApplication extends DocumentBasedApplication {
 
     public TeddyApplication() {
         super();
         setModel(new SimpleApplicationModel(
                 "Teddy",
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
-                DocumentOrientedApplication.class.getResource("DocumentOrientedMenu.fxml"),
+                DocumentBasedApplication.class.getResource("DocumentOrientedMenu.fxml"),
                 "Text Files", null, "*.txt"));
     }
 

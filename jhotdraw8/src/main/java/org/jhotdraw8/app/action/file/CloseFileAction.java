@@ -9,7 +9,7 @@ import java.util.concurrent.CompletionStage;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 
@@ -31,7 +31,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app the application
      * @param view the view
      */
-    public CloseFileAction(Application app, DocumentOrientedActivity view) {
+    public CloseFileAction(Application app, DocumentBasedActivity view) {
         super(app, view);
         Labels.getLabels().configureAction(this, ID);
     }
@@ -42,7 +42,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 
     @Nonnull
     @Override
-    protected CompletionStage<Void> doIt(@Nullable DocumentOrientedActivity view) {
+    protected CompletionStage<Void> doIt(@Nullable DocumentBasedActivity view) {
         if (view != null) {
             app.remove(view);
         }

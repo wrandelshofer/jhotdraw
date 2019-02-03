@@ -13,7 +13,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.concurrent.WorkState;
@@ -26,7 +26,7 @@ import org.jhotdraw8.concurrent.WorkState;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertFileAction extends AbstractViewControllerAction<DocumentOrientedActivity> {
+public class RevertFileAction extends AbstractViewControllerAction<DocumentBasedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,13 +38,13 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
      * @param app the application
      * @param view the view
      */
-    public RevertFileAction(Application app, DocumentOrientedActivity view) {
-        super(app, view, DocumentOrientedActivity.class);
+    public RevertFileAction(Application app, DocumentBasedActivity view) {
+        super(app, view, DocumentBasedActivity.class);
         Labels.getLabels().configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentOrientedActivity view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity view) {
         if (isDisabled()) {
             return;
         }
@@ -63,7 +63,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentOrien
         }
     }
 
-    private void doIt(DocumentOrientedActivity view, @Nullable URI uri, DataFormat dataFormat) {
+    private void doIt(DocumentBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
             WorkState workState = new WorkState(getLabel());
         view.addDisabler(workState);
 

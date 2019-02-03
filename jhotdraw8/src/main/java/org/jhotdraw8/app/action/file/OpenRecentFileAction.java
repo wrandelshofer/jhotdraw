@@ -11,7 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
@@ -74,9 +74,9 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
         {
             // Search for an empty view
-            DocumentOrientedActivity emptyView;
+            DocumentBasedActivity emptyView;
             if (reuseEmptyViews) {
-                emptyView = (DocumentOrientedActivity) app.getActiveView();//FIXME class cast exception
+                emptyView = (DocumentBasedActivity) app.getActiveView();//FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -89,7 +89,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             if (emptyView == null) {
                 app.createView().thenAccept(v -> {
                     app.add(v);
-                    doIt((DocumentOrientedActivity) v, true);
+                    doIt((DocumentBasedActivity) v, true);
                 });
             } else {
                 doIt(emptyView, false);
@@ -97,11 +97,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(@Nonnull DocumentOrientedActivity view, boolean disposeView) {
+    public void doIt(@Nonnull DocumentBasedActivity view, boolean disposeView) {
         openViewFromURI(view, uri, format);
     }
 
-    private void handleException(final DocumentOrientedActivity v, Throwable exception) throws MissingResourceException {
+    private void handleException(final DocumentBasedActivity v, Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         Resources labels = Labels.getLabels();
@@ -114,7 +114,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         alert.showAndWait();
     }
 
-    protected void openViewFromURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, DataFormat format) {
+    protected void openViewFromURI(@Nonnull final DocumentBasedActivity v, @Nonnull final URI uri, DataFormat format) {
         final Application app = getApplication();
             WorkState workState = new WorkState(getLabel());
         v.addDisabler(workState);

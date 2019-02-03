@@ -1,4 +1,4 @@
-/* @(#)AbstractDocumentOrientedActivity.java
+/* @(#)AbstractDocumentBasedActivity.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -12,13 +12,13 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 
 /**
- * AbstractDocumentOrientedActivity.
+ * AbstractDocumentBasedActivity.
  *
  * @author Werner Randelshofer
  * @version $Id$
  $$
  */
-public abstract class AbstractDocumentOrientedActivity extends AbstractActivity implements DocumentOrientedActivity {
+public abstract class AbstractDocumentBasedActivity extends AbstractActivity implements DocumentBasedActivity {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty() {
         @Override

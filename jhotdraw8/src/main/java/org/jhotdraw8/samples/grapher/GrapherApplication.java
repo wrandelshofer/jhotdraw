@@ -3,10 +3,7 @@
  */
 package org.jhotdraw8.samples.grapher;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jhotdraw8.app.DocumentOrientedApplication;
+import org.jhotdraw8.app.DocumentBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.RevertFileAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -18,7 +15,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherApplication extends DocumentOrientedApplication {
+public class GrapherApplication extends DocumentBasedApplication {
 
     public GrapherApplication() {
         super();

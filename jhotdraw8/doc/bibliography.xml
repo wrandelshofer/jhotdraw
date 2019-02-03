@@ -15,10 +15,10 @@ xmlns:xlink="http://www.w3.org/1999/xlink">
 <biblioentry xml:id="bib.ahig">
   <abbrev>MacHIGuidelines</abbrev>
   <authorgroup><author><orgname>Apple, Inc.</orgname></author></authorgroup>
-  <copyright><year>2016</year><holder>Apple, Inc.</holder></copyright>
-  <title>Mac OS X Human Interface Guidelines</title>
+  <copyright><year>2019</year><holder>Apple, Inc.</holder></copyright>
+  <title>macOS Human Interface Guidelines</title>
   <releaseinfo>
-    <link xlink:href="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/OSXHIGuidelines/"/>
+    <link xlink:href="https://developer.apple.com/design/human-interface-guidelines/"/>
   </releaseinfo>
 </biblioentry>
 
@@ -28,7 +28,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink">
   <copyright><year>2016</year><holder>Microsoft, Inc.</holder></copyright>
   <title>Windows User Experience Interaction Guidelines</title>
   <releaseinfo>
-    <link xlink:href="http://msdn.microsoft.com/en-us/library/aa511258.aspx"/>
+    <link xlink:href="https://docs.microsoft.com/de-de/windows/desktop/uxguide/"/>
   </releaseinfo>
 </biblioentry>
 

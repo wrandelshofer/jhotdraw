@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
 /**
- * A {@code DocumentOrientedViewModel} is a specialization of {@link Activity} for document
+ * A {@link DocumentBasedActivity} is a specialization of {@link Activity} for document
  * oriented applications.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DocumentOrientedActivity extends Activity {
+public interface DocumentBasedActivity extends Activity {
     String MODIFIED_PROPERTY = "modified";
     String URI_PROPERTY = "uri";
     String DATA_FORMAT_PROPERTY = "dataFormat";

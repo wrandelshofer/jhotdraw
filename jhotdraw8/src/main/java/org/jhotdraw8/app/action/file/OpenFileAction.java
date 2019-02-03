@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
@@ -45,7 +45,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         Labels.getLabels().configureAction(this, ID);
     }
 
-    protected URIChooser getChooser(DocumentOrientedActivity view) {
+    protected URIChooser getChooser(DocumentBasedActivity view) {
         URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createOpenChooser();
@@ -60,9 +60,9 @@ public class OpenFileAction extends AbstractApplicationAction {
             WorkState workState = new WorkState(getLabel());
             app.addDisabler(workState);
             // Search for an empty view
-            DocumentOrientedActivity emptyView;
+            DocumentBasedActivity emptyView;
             if (reuseEmptyViews) {
-                emptyView = (DocumentOrientedActivity) app.getActiveView(); // FIXME class cast exception
+                emptyView = (DocumentBasedActivity) app.getActiveView(); // FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -73,14 +73,14 @@ public class OpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createView().thenAccept(v -> doIt((DocumentOrientedActivity) v, true, workState));
+                app.createView().thenAccept(v -> doIt((DocumentBasedActivity) v, true, workState));
             } else {
                 doIt(emptyView, false, workState);
             }
         }
     }
 
-    public void doIt(@Nonnull DocumentOrientedActivity view, boolean disposeView, WorkState workState) {
+    public void doIt(@Nonnull DocumentBasedActivity view, boolean disposeView, WorkState workState) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -89,7 +89,7 @@ public class OpenFileAction extends AbstractApplicationAction {
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
                 for (Activity vp : getApplication().views()) {
-                    DocumentOrientedActivity v = (DocumentOrientedActivity) vp;
+                    DocumentBasedActivity v = (DocumentBasedActivity) vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -111,7 +111,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(@Nonnull final DocumentOrientedActivity v, @Nonnull final URI uri, @Nonnull final URIChooser chooser, WorkState workState) {
+    protected void openViewFromURI(@Nonnull final DocumentBasedActivity v, @Nonnull final URI uri, @Nonnull final URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
         app.removeDisabler(workState);
         v.addDisabler(workState);

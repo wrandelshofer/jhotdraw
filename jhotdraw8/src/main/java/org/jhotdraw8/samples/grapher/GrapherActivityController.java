@@ -31,8 +31,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.Nonnull;
 
-import org.jhotdraw8.app.AbstractDocumentOrientedActivity;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.AbstractDocumentBasedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -134,7 +134,7 @@ import org.jhotdraw8.draw.action.BringForwardAction;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherActivityController extends AbstractDocumentOrientedActivity implements DocumentOrientedActivity, EditorView {
+public class GrapherActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";

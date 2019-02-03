@@ -20,7 +20,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentOrientedActivity;
+import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
@@ -44,7 +44,7 @@ public class ExitAction extends AbstractApplicationAction {
     public static final String ID = "application.exit";
     private Node oldFocusOwner;
     @Nullable
-    private DocumentOrientedActivity unsavedView;
+    private DocumentBasedActivity unsavedView;
 
     /**
      * Creates a new instance.
@@ -63,10 +63,10 @@ public class ExitAction extends AbstractApplicationAction {
         app.addDisabler(workState);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
-        DocumentOrientedActivity documentToBeReviewed = null;
+        DocumentBasedActivity documentToBeReviewed = null;
         URI unsavedURI = null;
         for (Activity pr : app.views()) {
-            DocumentOrientedActivity p =(DocumentOrientedActivity)pr;
+            DocumentBasedActivity p =(DocumentBasedActivity)pr;
             if (p.isDisabled()) {
                 disabledViewsCount++;
             }
@@ -126,7 +126,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected URIChooser getChooser(@Nonnull DocumentOrientedActivity view) {
+    protected URIChooser getChooser(@Nonnull DocumentBasedActivity view) {
         URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -136,7 +136,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChanges(WorkState workState) {
-        DocumentOrientedActivity v = unsavedView;
+        DocumentBasedActivity v = unsavedView;
         Resources labels=Labels.getLabels();
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
@@ -150,7 +150,7 @@ public class ExitAction extends AbstractApplicationAction {
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (Activity p : app.views()) {
-                        DocumentOrientedActivity vi = (DocumentOrientedActivity)p;
+                        DocumentBasedActivity vi = (DocumentBasedActivity)p;
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, labels.getString("application.exit.canNotSaveToOpenFile"));
@@ -225,7 +225,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChangesAndReviewNext(WorkState workState) {
-        final DocumentOrientedActivity v = unsavedView;
+        final DocumentBasedActivity v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = chooser.showDialog(unsavedView.getNode());
@@ -246,9 +246,9 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewNext(WorkState workState) {
         int unsavedViewsCount = 0;
-        DocumentOrientedActivity documentToBeReviewed = null;
+        DocumentBasedActivity documentToBeReviewed = null;
         for (Activity pr : getApplication().views()) {
-            DocumentOrientedActivity p=(DocumentOrientedActivity)pr;
+            DocumentBasedActivity p=(DocumentBasedActivity)pr;
             if (p.isModified()) {
                 if (!p.isDisabled()) {
                     documentToBeReviewed = p;
@@ -268,7 +268,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFile(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
-        final DocumentOrientedActivity v = unsavedView;
+        final DocumentBasedActivity v = unsavedView;
         v.write(uri, format,Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -298,7 +298,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
-        final DocumentOrientedActivity v = unsavedView;
+        final DocumentBasedActivity v = unsavedView;
         v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
@@ -329,7 +329,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void doExit(WorkState workState) {
         for (Activity pr : new ArrayList<>(app.views())) {
-            DocumentOrientedActivity p=(DocumentOrientedActivity)pr;
+            DocumentBasedActivity p=(DocumentBasedActivity)pr;
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);
             }
