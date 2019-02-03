@@ -3,15 +3,14 @@
  */
 package org.jhotdraw8.css;
 
+import javafx.css.StyleOrigin;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ReadOnlyList;
+
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
-
-import javafx.css.StyleOrigin;
-import org.jhotdraw8.collection.ReadOnlyList;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 
 /**
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match
@@ -68,6 +67,7 @@ public interface SelectorModel<T> {
      * the attribute value ends with the specified substring.
      *
      * @param element       An element of the document
+     * @param namespace    The attribute namespace
      * @param attributeName an attribute name
      * @param substring     the substring
      * @return true if the element has an attribute with the specified name and
@@ -83,6 +83,7 @@ public interface SelectorModel<T> {
      * value.
      *
      * @param element        An element of the document
+     * @param namespace    The attribute namespace
      * @param attributeName  an attribute name
      * @param attributeValue the attribute value
      * @return true if the element has an attribute with the specified name and
@@ -98,6 +99,7 @@ public interface SelectorModel<T> {
      * the attribute value starts with the specified substring.
      *
      * @param element       An element of the document
+     * @param namespace    The attribute namespace
      * @param attributeName an attribute name
      * @param substring     the substring
      * @return true if the element has an attribute with the specified name and
@@ -112,6 +114,7 @@ public interface SelectorModel<T> {
      * Returns the attribute value with the given name from the USER style origin.
      *
      * @param element The element
+     * @param namespace    The attribute namespace
      * @param name    The attribute name
      * @return The attribute value. Returns "initial" if the element does not have an
      * attribute with this name.

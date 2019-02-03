@@ -3,12 +3,13 @@
  */
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 
 import static org.jhotdraw8.css.CssTokenType.TT_AT_KEYWORD;
 import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;
@@ -147,9 +148,18 @@ public interface CssTokenizer {
     int getNextPosition();
 
 
-    /** Gets the next token skipping whitespaces and comments. */
+    /**
+     * Gets the next token skipping whitespaces and comments.
+     *
+     * @return the next non-whitespace token
+     * @throws IOException on io exception
+     */
     int next() throws IOException;
-    /** Gets the next token without skipping whitespaces and comments. */
+
+    /** Gets the next token without skipping whitespaces and comments.
+     * @return the next token
+     * @throws IOException on io exception
+     */
     int nextNoSkip() throws IOException;
 
     default void skipIfPresent(int ttype) throws IOException {

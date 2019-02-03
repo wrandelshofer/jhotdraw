@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
@@ -16,7 +17,6 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
-import org.jhotdraw8.annotation.Nonnull;
 import java.util.function.Function;
 
 /**
@@ -40,6 +40,8 @@ public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<Immuta
      * default value.
      *
      * @param name The name of the key.
+     * @param clazz the class of the type
+     * @param converter String converter for a list element
      */
     public ListStyleableFigureKey(@Nonnull String name, @Nonnull Class<T> clazz, @Nonnull CssConverter<T> converter) {
         this(name, clazz, converter,ImmutableList.emptyList());
@@ -49,6 +51,8 @@ public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<Immuta
      * Creates a new instance with the specified name and default value.
      *
      * @param name The name of the key.
+     * @param clazz the class of the type
+     * @param converter String converter for a list element
      * @param defaultValue The default value.
      */
     public ListStyleableFigureKey(@Nonnull String name,@Nonnull Class<T> clazz,@Nonnull CssConverter<T> converter, @Nonnull ImmutableList<T> defaultValue) {
@@ -61,6 +65,8 @@ public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<Immuta
      * @param name The name of the key.
      * @param mask The dirty mask.
      * @param defaultValue The default value.
+     * @param clazz the class of the type
+     * @param converter String converter for a list element
      */
     public ListStyleableFigureKey(@Nonnull String name, @Nonnull DirtyMask mask,@Nonnull Class<T> clazz,@Nonnull CssConverter<T> converter, @Nonnull ImmutableList<T> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{clazz}, mask, defaultValue);

@@ -1,7 +1,6 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadOnlyList;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -31,7 +30,6 @@ import java.util.regex.Pattern;
  * <li>CSS Custom Properties for Cascading Variables Module Level 1.  Using Cascading Variables: the var() notation.
  * <a href="https://www.w3.org/TR/css-variables-1/#using-variables">w3.org</a></li>
  * </ul>
- * </p>
  *
  * @param <T> the element type
  */

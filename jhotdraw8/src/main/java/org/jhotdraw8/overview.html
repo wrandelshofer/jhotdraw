@@ -1,53 +1,56 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <!--
      * @(#)overview.html
      * Copyright © The authors and contributors of JHotDraw. MIT License.
     -->
-  </head>
-  <body>
+    <meta charset="UTF-8">
+</head>
+<body>
 
-    <p>JHotDraw 8 is a framework for structured drawing editors. 
-      It can be used to create many different editors from a simple doodle
-      program up to full fledged diagram editors and vector animation tools.</p>
+<p>JHotDraw 8 is a framework for structured drawing editors.
+    It can be used to create many different editors from a simple doodle
+    program up to full fledged diagram editors and vector animation tools.</p>
 
-    <p>JHotDraw 8 differs significantly from JHotDraw 7 in the following aspects:</p>
-    <ul>
-      <li>JHotDraw 8 is based on JavaFX whereas JHotDraw 7 is based on Swing.</li>
-      <li>In JHotDraw 8 the Figure objects are passive and need to be explicitly updated to get
+<p>JHotDraw 8 differs significantly from JHotDraw 7 in the following aspects:</p>
+<ul>
+    <li>JHotDraw 8 is based on JavaFX whereas JHotDraw 7 is based on Swing.</li>
+    <li>In JHotDraw 8 the Figure objects are passive and need to be explicitly updated to get
         into a consistent state. In JHotDraw 7 the Figure objects actively maintain a
         consistent state. This passive designs allows to greatly improve
-        the performance of the drawing editor.</li>
-      <li>In JHotDraw 8 a Drawing has layers and supports styling with CSS.
-        These features are not supported in JHotDraw 7.</li>
-    </ul>
+        the performance of the drawing editor.
+    </li>
+    <li>In JHotDraw 8 a Drawing has layers and supports styling with CSS.
+        These features are not supported in JHotDraw 7.
+    </li>
+</ul>
 
 
-    <p>JHotDraw consists of the following parts:</p>
+<p>JHotDraw consists of the following parts:</p>
 
-    <p><em>Drawing Framework</em><br/>
-      This framework provides the building blocks for the creation
-      of vector drawing editors. It is located in the
-      {@link org.jhotdraw.draw} package and its sub-packages.
-    </p>
-    <p>
-      <em>Application Framework</em><br/>
-      This framework supports the creation of document
-      oriented applications which want to support platform-specific guidelines
-      of the operating system on which they are being executed. It is located in the
-      {@link org.jhotdraw.app} package and its sub-packages.
-    </p>
-    <p>
-      <em>Sample Applications and Applets</em><br/>
-      The samples are located in sub-packages of the
-      {@code org.jhotdraw.samples} package.
-    </p>
-    <p>
-      <em>Supporting classes</em><br/>
-      The supporting classes are located in the remaining packages.
-    </p>
+<p><em>Drawing Framework</em><br>
+    This framework provides the building blocks for the creation
+    of vector drawing editors. It is located in the
+    {@code org.jhotdraw.draw} package and its sub-packages.
+</p>
+<p>
+    <em>Application Framework</em><br>
+    This framework supports the creation of document
+    oriented applications which want to support platform-specific guidelines
+    of the operating system on which they are being executed. It is located in the
+    {@code org.jhotdraw.app} package and its sub-packages.
+</p>
+<p>
+    <em>Sample Applications and Applets</em><br>
+    The samples are located in sub-packages of the
+    {@code org.jhotdraw.samples} package.
+</p>
+<p>
+    <em>Supporting classes</em><br>
+    The supporting classes are located in the remaining packages.
+</p>
 
-    @design.overview
-  </body>
+@design.overview
+</body>
 </html>

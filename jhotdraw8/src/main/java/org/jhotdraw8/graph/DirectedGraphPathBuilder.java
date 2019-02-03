@@ -5,6 +5,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -208,9 +209,9 @@ public class DirectedGraphPathBuilder<V, A> {
      * @param maxLength the maximal length of a path
      * @return the enumerated paths
      */
-    public <T> List<VertexPath<V>> findAllVertexPaths(@Nonnull V start,
-                                                      @Nonnull Predicate<V> goal,
-                                                      int maxLength) {
+    public List<VertexPath<V>> findAllVertexPaths(@Nonnull V start,
+                                                  @Nonnull Predicate<V> goal,
+                                                  int maxLength) {
         List<BackLink<V>> backlinks = new ArrayList<>();
         dfsFindAllPaths(new BackLink<>(start, null, 1), goal, backlinks, maxLength);
         List<VertexPath<V>> vertexPaths = new ArrayList<>(backlinks.size());

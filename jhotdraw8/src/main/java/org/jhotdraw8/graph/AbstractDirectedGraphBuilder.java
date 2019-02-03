@@ -7,6 +7,43 @@ import java.util.Arrays;
 
 /**
  * AbstractDirectedGraphBuilder.
+ * <p>
+ * <b>Implementation:</b>
+ * <p>
+ * Example graph:
+ * <pre>
+ *     0 ──→ 1 ──→ 2
+ *     │     │
+ *     ↓     ↓
+ *     3 ←── 4
+ * </pre>
+ * If the graph is inserted in the following sequence
+ * into the builder:
+ * <pre>
+ *     buildAddVertex();
+ *     buildAddVertex();
+ *     buildAddVertex();
+ *     buildAddVertex();
+ *     buildAddVertex();
+ *     buildAddVertex();
+ *     build.addArrow(0, 1);
+ *     build.addArrow(0, 3);
+ *     build.addArrow(1, 2);
+ *     build.addArrow(1, 4);
+ *     build.addArrow(4, 3);
+ * </pre>
+ * Then the internal representation is as follows:
+ * <pre>
+ *     vertexCount: 5
+ *
+ *  vertex#    lastArrow             arrow#    arrowHeads
+ *           pointer,count                    vertex, next
+ *    0     [  1  ][  2  ] ─────┐       0    [  1  ][ -1  ] ←┐
+ *    1     [  2  ][  2  ] ───┐ └─────→ 1    [  3  ][  0  ] ─┘
+ *    2     [  0  ][  0  ] X  │         2    [  2  ][ -1  ] ←┐
+ *    3     [  0  ][  0  ] X  └───────→ 3    [  4  ][  2  ] ─┘
+ *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][ -1  ] X
+ * </pre>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -37,7 +74,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * Table of last arrows.
      * <p>
      * {@code lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_POINTER_FIELD} contains
-     * the index of the last arrow of the i-th vertex.
+     * the index of the last arrow of the i-th vertex in table {@link #nextArrowHeads}.
      * <p>
      * {@code lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_COUNT_FIELD} contains
      * the number of arrows of the i-th vertex.
@@ -87,6 +124,8 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      *
      * @param a vertex a
      * @param b vertex b
+     * @param lastArrow the array of last arrows
+     * @param arrowHeads the array of arrow heads
      */
     protected void doAddArrow(int a, int b, int[] arrowHeads, int[] lastArrow) {
         int arrowCountOfA = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
@@ -148,22 +187,25 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
     }
 
     /**
-     * Removes the i-th arrow of vertex vi.
+     * Removes the i-th arrow of vertex v.
      *
-     * @param a a vertex
-     * @param i the i-th arrow of vertex vi
+     * @param vidx the index of the vertex v
+     * @param i the i-th arrow of vertex v
+     * @param lastArrow the array of last arrows
+     * @param arrowHeads the array of arrow heads
+     * @param arrowCount the number of arrows
      */
-    protected void buildRemoveArrow(int a, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
-        if (a < 0 || a >= getVertexCount()) {
+    protected void buildRemoveArrow(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
+        if (vidx < 0 || vidx >= getVertexCount()) {
             throw new IllegalArgumentException("a:" + i);
         }
-        if (i < 0 || i >= getNextCount(a)) {
+        if (i < 0 || i >= getNextCount(vidx)) {
             throw new IllegalArgumentException("i:" + i);
         }
 
         // find the arrowId and the previous arrowId
         int prevArrowId = SENTINEL;
-        int arrowId = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
+        int arrowId = lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
         for (int j = i - 1; j >= 0; j--) {
             prevArrowId = arrowId;
             arrowId = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
@@ -171,13 +213,13 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
         if (prevArrowId == SENTINEL) {
             // if there is no previous arrowId => make the point from lastArrow point to the arrow after arrowId.
-            lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         } else {
             // if there is a previous arrowId => make the pointer from prevArrowId point to the arrow after arrowId.
             arrowHeads[prevArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
         }
         // Decrease number of arrows for vertex vi
-        lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD]--;
+        lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD]--;
 
         // Decrease total number of arrows
         arrowCount--;

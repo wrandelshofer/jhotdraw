@@ -3,13 +3,13 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Spliterator;
 import java.util.Spliterators;
-
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
 
 /**
  * An immutable observable list.
@@ -86,7 +86,7 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
     }
 
 
-    public Spliterator spliterator() {
+    public Spliterator<E> spliterator() {
         return Spliterators.spliterator(array, 0, array.length, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 

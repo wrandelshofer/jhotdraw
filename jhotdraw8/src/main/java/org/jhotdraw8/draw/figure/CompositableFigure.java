@@ -7,11 +7,10 @@ import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.css.text.CssPercentageConverter;
 import org.jhotdraw8.draw.key.BlendModeStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableDoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EffectStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableDoubleStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -59,7 +58,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
-     * @param ctx
+     * @param ctx the render context
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyCompositableFigureProperties(RenderContext ctx, @Nonnull Node node) {

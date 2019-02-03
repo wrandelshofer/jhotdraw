@@ -11,20 +11,23 @@
  */
 package org.jhotdraw8.geom;
 
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.geom.Intersection.Status;
+
 import java.awt.geom.PathIterator;
-import static java.lang.Math.*;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static org.jhotdraw8.geom.Geom.lerp;
 import static org.jhotdraw8.geom.Geom.pointOnLine;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.geom.Intersection.Status;
 
 /**
  * Provides a collection of intersection tests.
@@ -2363,7 +2366,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * Computes the intersection between a line and a point with tolerance
      * radius r.
      * <p>
-     * The intersection will contain the parameters 't' of the line in range
+     * The returned intersection contain the parameters 't' of the line in range
      * [0,1].
      * <p>
      * The intersection will have one of the following status:
@@ -2386,7 +2389,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * : distance to point equation with fx, fy coefficients inserted</li>
      * <li>{@literal Δx²·Δy²·t² }<br>
      * {@literal + 2·(Δx·(x0 - cx)+Δy·(y0 - cy))·t }<br>
-     * {@literal- 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  = 0 }<br>
+     * {@literal - 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  = 0 }<br>
      * : fx, fy coefficients expanded and equation reordered</li>
      * <li>{@literal a·t² + b·t + c = 0, 0 ≤ t ≤ 1 }<br>
      * : final quadratic polynomial

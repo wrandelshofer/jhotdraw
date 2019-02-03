@@ -3,22 +3,21 @@
  */
 package org.jhotdraw8.beans;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.MapEntryProperty;
+import org.jhotdraw8.collection.NonnullMapAccessor;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonnullMapAccessor;
 
 /**
  * Interface for beans which support an open number of properties in a
@@ -32,7 +31,7 @@ import org.jhotdraw8.collection.NonnullMapAccessor;
  * {@link #getProperties()} as shown below.
  * </p>
  *
- * <pre><code>
+ * <pre><code>{@literal
  * public class MyBean implements PropertyBean {
  *      protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
  *
@@ -41,7 +40,7 @@ import org.jhotdraw8.collection.NonnullMapAccessor;
  *        return properties;
  *      }
  * }
- * </code></pre>
+ * }</code></pre>
  *
  * @author Werner Randelshofer
  * @version $Id$

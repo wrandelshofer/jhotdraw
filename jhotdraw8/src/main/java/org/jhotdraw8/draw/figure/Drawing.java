@@ -3,25 +3,23 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.scene.paint.Color;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.NullableCssColorStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.render.RenderContext;
+
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
-
-import org.jhotdraw8.annotation.Nonnull;
-
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableCssColorStyleableFigureKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
-
 import java.util.List;
-import javafx.scene.paint.Color;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.StylesheetsManager;
-import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -146,7 +144,7 @@ public interface Drawing extends Figure {
     
     /**
      * Performs one layout pass over the entire drawing.
-     * @param ctx
+     * @param ctx the render context
      */
     default void layoutAll(RenderContext ctx) {
         for (Figure f : postorderIterable()) {

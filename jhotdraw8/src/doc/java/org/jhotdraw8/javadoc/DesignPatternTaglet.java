@@ -4,16 +4,13 @@
  */
 package org.jhotdraw8.javadoc;
 
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.Doc;
-import com.sun.javadoc.SeeTag;
-import com.sun.javadoc.SourcePosition;
-import com.sun.javadoc.Tag;
-import com.sun.javadoc.Type;
-import com.sun.tools.doclets.Taglet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.sun.source.doctree.DocTree;
+import jdk.javadoc.doclet.Taglet;
+
+import javax.lang.model.element.Element;
+import java.util.List;
+import java.util.Set;
 
 /**
  * DesignPatternTaglet processes the {@literal @design.pattern} tag.
@@ -24,7 +21,7 @@ import java.util.Map;
  * all other participating types.
  * <p>
  * This tag can only be used in the Javadoc comment of a type declaration.
- * The tag consists of a header and an optional description. 
+ * The tag consists of a header and an optional description.
  * <p>
  * The header specifies the following properties:
  * <dl>
@@ -37,7 +34,7 @@ import java.util.Map;
  * This taglet prints the name of a design pattern, the role of the type in
  * the design pattern, and the description. If no description is supplied,
  * then the description of the {@code instantiatingType} type is copied.
- * 
+ *
  * <p>
  * EBNF syntax of the tag:
  * <pre>
@@ -51,102 +48,120 @@ import java.util.Map;
  * description = (TextTag | SeeTag) , { TextTag | SeeTag };
  * </pre>
  *
- *
  * @author Werner Randelshofer
  * @version $Id$
  */
-@SuppressWarnings("deprecation")
 public class DesignPatternTaglet implements Taglet {
-
-    public static final String NAME = "design.pattern";
-    private static final String HEADER = "Design Patterns:";
-
-    private HashMap<String, ArrayList<Tag>> descriptions = new HashMap<>();
-
-    /**
-     * Return the name of this custom tag.
-     * @return the name
-     */
     @Override
-    public String getName() {
-        return NAME;
+    public Set<Location> getAllowedLocations() {
+        return Set.of(Location.TYPE);
     }
 
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inField() {
-        return false;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inConstructor() {
-        return false;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inMethod() {
-        return false;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inOverview() {
-        return false;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
-    @Override
-    public boolean inPackage() {
-        return false;
-    }
-
-    /**
-     * Will return true.
-     *
-     * @return true
-     */
-    @Override
-    public boolean inType() {
-        return true;
-    }
-
-    /**
-     * Will return false.
-     *
-     * @return false
-     */
     @Override
     public boolean isInlineTag() {
         return false;
     }
 
-    /**
+    @Override
+    public String getName() {
+        return "design.pattern";
+    }
+
+    @Override
+    public String toString(List<? extends DocTree> tags, Element element) {
+        return "todo";
+    }
+/*
+    public static final String NAME = "design.pattern";
+    private static final String HEADER = "Design Patterns:";
+
+    private HashMap<String, ArrayList<Tag>> descriptions = new HashMap<>();
+
+    *//**
+     * Return the name of this custom tag.
+     *
+     * @return the name
+     *//*
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
+    *//**
+     * Will return false.
+     *
+     * @return false
+     *//*
+    @Override
+    public boolean inField() {
+        return false;
+    }
+
+    *//**
+     * Will return false.
+     *
+     * @return false
+     *//*
+    @Override
+    public boolean inConstructor() {
+        return false;
+    }
+
+    *//**
+     * Will return false.
+     *
+     * @return false
+     *//*
+    @Override
+    public boolean inMethod() {
+        return false;
+    }
+
+    *//**
+     * Will return false.
+     *
+     * @return false
+     *//*
+    @Override
+    public boolean inOverview() {
+        return false;
+    }
+
+    *//**
+     * Will return false.
+     *
+     * @return false
+     *//*
+    @Override
+    public boolean inPackage() {
+        return false;
+    }
+
+    *//**
+     * Will return true.
+     *
+     * @return true
+     *//*
+    @Override
+    public boolean inType() {
+        return true;
+    }
+
+    *//**
+     * Will return false.
+     *
+     * @return false
+     *//*
+    @Override
+    public boolean isInlineTag() {
+        return false;
+    }
+
+    *//**
      * Register this Taglet.
      *
      * @param tagletMap the map to register this tag to.
-     */
+     *//*
     public static void register(Map<String, Taglet> tagletMap) {
         DesignPatternTaglet tag = new DesignPatternTaglet();
         Taglet t = tagletMap.get(tag.getName());
@@ -156,26 +171,26 @@ public class DesignPatternTaglet implements Taglet {
         tagletMap.put(tag.getName(), tag);
     }
 
-    /**
+    *//**
      * Given the <code>Tag</code> representation of this custom tag, return its
      * string representation.
      *
      * @param tag the <code>Tag</code> representation of this custom tag.
      * @return the String representation
-     */
+     *//*
     @Override
     public String toString(Tag tag) {
         return toString(new Tag[]{tag});
     }
 
-    /**
+    *//**
      * Given an array of <code>Tag</code>s representing this custom tag, return
      * its string representation.
      *
      * @param tags the array of <code>Tag</code>s representing of this custom
-     * tag.
+     *             tag.
      * @return the String representation
-     */
+     *//*
     @Override
     public String toString(Tag[] tags) {
         if (tags.length == 0) {
@@ -232,7 +247,7 @@ public class DesignPatternTaglet implements Taglet {
                         break;
                 }
             }
-            /*
+            *//*
             String[] textParts = splitText(tags[i]);
             result.append("<b>Design Pattern:</b> ").append(textParts[0]);
             if (textParts[1].length() > 0) {
@@ -265,7 +280,7 @@ public class DesignPatternTaglet implements Taglet {
                 }
 
                 result.append("<br>").append(description);
-            }*/
+            }*//*
 
             result.append("</p>");
         }
@@ -275,7 +290,9 @@ public class DesignPatternTaglet implements Taglet {
     }
 
     static class DesignPatternHeaderTag extends CompositeTag {
-        /** The qualified name of the instantiating type. */
+        *//**
+     * The qualified name of the instantiating type.
+     *//*
         private String instantiatingType;
         private String patternName;
         private String patternRole;
@@ -291,7 +308,7 @@ public class DesignPatternTaglet implements Taglet {
         public String kind() {
             return NAME;
         }
-        
+
         public String unqualifiedInstantiatingType() {
             return toUnqualifiedName(instantiatingType);
         }
@@ -310,15 +327,15 @@ public class DesignPatternTaglet implements Taglet {
 
     }
 
-    /**
+    *//**
      * Tries to return a qualified name. Returns the unqualified name,
      * if it can not be looked up.
-     * 
-     * @param tag A tag which is used for lookup.
+     *
+     * @param tag  A tag which is used for lookup.
      * @param name A name which can be qualified or unqualified.
      * @return the qualified name if lookup was successful, otherwise returns
      * the unqualified nam.
-     */
+     *//*
     public static String toQualifiedName(Tag tag, String name) {
         if (name.indexOf('.') != -1) {
             return name;
@@ -327,15 +344,18 @@ public class DesignPatternTaglet implements Taglet {
         Doc doc = tag.holder();
         if (doc instanceof ClassDoc) {
             ClassDoc cd = (ClassDoc) doc;
-            ClassDoc nameClass=cd.findClass(name);
-            if (nameClass!=null) return nameClass.qualifiedName();
-            
+            ClassDoc nameClass = cd.findClass(name);
+            if (nameClass != null) {
+                return nameClass.qualifiedName();
+            }
+
         }
         return name;
     }
-   public static String toUnqualifiedName(String name) {
-        return name.substring(name.lastIndexOf('.')+1);
-                
+
+    public static String toUnqualifiedName(String name) {
+        return name.substring(name.lastIndexOf('.') + 1);
+
     }
 
     private Tag[] lookupDescription(Tag[] tags) {
@@ -404,7 +424,7 @@ public class DesignPatternTaglet implements Taglet {
         return tags;
     }
 
-    /**
+    *//**
      * Parses the inline tags of a {@literal @design.pattern} Tag.
      * <p>
      * If parsing was successful, then the first tag in the returned array is a
@@ -412,10 +432,10 @@ public class DesignPatternTaglet implements Taglet {
      * design pattern.
      * <p>
      * If parsing was unsuccessful, then the unparsed inline tags are returned.
-     * 
+     *
      * @param tag A design pattern tag
      * @return The parsed inline tags
-     */
+     *//*
     public static Tag[] parseInlineTags(Tag tag) {
         Tag[] inline = tag.inlineTags();
         if (inline.length == 0 || "@see".equals(inline[0].kind())) {
@@ -434,9 +454,9 @@ public class DesignPatternTaglet implements Taglet {
 
         if (p0 != -1 && p1 != -1 && p2 != -1) {
             instantiatingType = toQualifiedName(tag, text.substring(0, p0).trim());
-            patternName =cleanupWhitespace( text.substring(p0 + 1, p1));
+            patternName = cleanupWhitespace(text.substring(p0 + 1, p1));
             patternRole = cleanupWhitespace(text.substring(p1 + 1, p2));
-            description =cleanupWhitespace( text.substring(p2 + 1));
+            description = cleanupWhitespace(text.substring(p2 + 1));
         } else {
             System.err.println(tag.position() + ": warning: DesignPatternTaglet illegal @" + NAME + " tag. Expected \"@" + NAME + " className patternName, roleName. description.\"");
             description = text;
@@ -454,8 +474,8 @@ public class DesignPatternTaglet implements Taglet {
 
         return parsed.toArray(new Tag[parsed.size()]);
     }
-    
+
     private static String cleanupWhitespace(String str) {
-return str.replaceAll("\\s+"," ").trim();
-        }
+        return str.replaceAll("\\s+", " ").trim();
+    }*/
 }

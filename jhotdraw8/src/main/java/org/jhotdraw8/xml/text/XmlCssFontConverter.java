@@ -19,7 +19,6 @@ import org.jhotdraw8.css.text.CssFontConverter;
  * FontSize := Size;
  * FontFamily := Word|Quoted;
  * </pre>
- * </p>
  *
  * @author Werner Randelshofer
  * @version $Id$

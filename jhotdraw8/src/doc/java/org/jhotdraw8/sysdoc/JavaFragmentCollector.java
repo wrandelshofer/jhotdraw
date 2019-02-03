@@ -12,6 +12,7 @@ import com.sun.javadoc.FieldDoc;
 import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
  * @author Werner Randelshofer
  * @version $Id$
  */
-@SuppressWarnings("deprecation")
 public class JavaFragmentCollector {
 
     private final List<Path> srcdirs;

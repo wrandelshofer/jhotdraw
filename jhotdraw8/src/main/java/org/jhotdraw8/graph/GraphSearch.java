@@ -119,6 +119,7 @@ public class GraphSearch {
      * @param <A>   the arrow type
      * @param graph the graph. This must be an undirected graph
      *              represented as a directed graph with two identical arrows for each edge.
+     * @param costf the cost function
      * @return the graph builder
      */
     @Nonnull
@@ -136,6 +137,7 @@ public class GraphSearch {
      * @param <A>   the arrow type
      * @param graph the graph. This must be an undirected graph
      *              represented as a directed graph with two identical arrows for each edge.
+     * @param costf the cost function
      * @return the graph builder
      */
     @Nonnull
@@ -336,6 +338,9 @@ public class GraphSearch {
     /**
      * Returns all stronlgy connected components in the specified graph.
      *
+     * @param graph the graph
+     * @param <V> the vertex type
+     * @param <A> the arrow type
      * @return set of strongly connected components (sets of vertices).
      */
     public static <V, A> List<List<V>> findStronglyConnectedComponents(
@@ -344,8 +349,11 @@ public class GraphSearch {
     }
 
     /**
-     * Returns all stronlgy connected components in the specified graph.
+     * Returns all strongly connected components in the specified graph.
      *
+     * @param nextNodeFunction returns the next nodes of a given node
+     * @param vertices the vertices of the graph
+     * @param <V> the vertex type
      * @return set of strongly connected components (sets of vertices).
      */
     public static <V> List<List<V>> findStronglyConnectedComponents(

@@ -3,6 +3,12 @@
  */
 package org.jhotdraw8.collection;
 
+import javafx.beans.InvalidationListener;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -15,12 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import javafx.beans.InvalidationListener;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 
 /**
  * An observable map which stores its values in an array, and which can share
@@ -52,12 +52,12 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     /**
      * Creates a new instance.
      *
-     * @param keyMap the key map. This map must be synchronized if key map
-     *               is shared between instances of SharedKeysMap on different threads.
      * @param keyMap a map which maps from keys to indices. The indices must be
      *               in the range {@code [0,keyMap.size()-1]}. This map will add new keys to
      *               the keyMap if necessary, and assign {@code keyMap.size()} to each new
      *               key. Keys may be added to this map, but may never be removed.
+     *               This map must be synchronized if key map
+     *               is shared between instances of SharedKeysMap on different threads.
      */
     public SharedKeysMap(Map<K, Integer> keyMap) {
         this.keyMap = keyMap;

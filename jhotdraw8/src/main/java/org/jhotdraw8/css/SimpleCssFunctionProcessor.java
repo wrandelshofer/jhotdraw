@@ -22,8 +22,6 @@ import java.util.function.Consumer;
  * <dt>var()</dt><dd>Cascading variable. Substitutes the value of a property from the value of another property.</dd>
  * </dl>
  * <p>
- *
- * <p>
  * References:
  * <ul>
  * <li>CSS Values and Units Module, Functional Notations.
@@ -31,7 +29,6 @@ import java.util.function.Consumer;
  * <li>CSS Custom Properties for Cascading Variables Module Level 1.  Using Cascading Variables: the var() notation.
  * <a href="https://www.w3.org/TR/css-variables-1/#using-variables">w3.org</a></li>
  * </ul>
- * </p>
  *
  * @param <T> the element type
  */

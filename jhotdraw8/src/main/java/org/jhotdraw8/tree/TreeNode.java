@@ -3,15 +3,15 @@
  */
 package org.jhotdraw8.tree;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.SpliteratorIterable;
+import org.jhotdraw8.graph.BreadthFirstSpliterator;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.graph.BreadthFirstSpliterator;
-import org.jhotdraw8.collection.SpliteratorIterable;
 
 /**
  * Represents a node of a tree structure.
@@ -65,7 +65,7 @@ public interface TreeNode<T extends TreeNode<T>> {
                 () -> {
                     @SuppressWarnings("unchecked")
                     T t = (T) this;
-                    return new BreadthFirstSpliterator<>(TreeNode::getChildren, t, n -> true);
+                    return new BreadthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
                 });
     }
 
@@ -219,7 +219,7 @@ public interface TreeNode<T extends TreeNode<T>> {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
-                    return new PostorderSpliterator<>(TreeNode::getChildren, t);
+                    return new PostorderSpliterator<>(TreeNode<T>::getChildren, t);
                 }
         );
     }
@@ -248,7 +248,7 @@ public interface TreeNode<T extends TreeNode<T>> {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
-                    return new PreorderSpliterator<>(TreeNode::getChildren, t);
+                    return new PreorderSpliterator<>(TreeNode<T>::getChildren, t);
                 }
         );
     }

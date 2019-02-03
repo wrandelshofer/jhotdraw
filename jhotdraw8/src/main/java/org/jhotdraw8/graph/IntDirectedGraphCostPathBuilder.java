@@ -195,6 +195,7 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
      *
      * @param start the start vertex
      * @param goal  the goal predicate
+     * @param maxCost the search aborts if there is no shorter path than maxCost
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
@@ -223,6 +224,7 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
      *
      * @param start the start vertex
      * @param goal  the goal predicate
+     * @param maxCost the search aborts if there is no shorter path than maxCost
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
@@ -268,6 +270,7 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
      * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
      * Wikipedia</a>
      *
+     * @param graph the graph
      * @param start the start vertex
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible
@@ -396,6 +399,7 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
      * Finds the shortest path via the specified waypoints.
      *
      * @param waypoints the waypoints
+     * @param maxCost the search aborts if there is no shorter path than maxCost
      * @return the shortest path
      */
     @Nullable
@@ -425,6 +429,7 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
      * Finds the shortest path via the specified waypoints.
      *
      * @param waypoints the waypoints
+     * @param maxCost the search aborts if there is no shorter path than maxCost
      * @return the shortest path
      */
     @Nullable
@@ -459,9 +464,9 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
      * @param maxCost the maximal cost of a path
      * @return the enumerated paths
      */
-    public <T> List<VertexPath<Integer>> findAllVertexPaths(int start,
-                                                            @Nonnull IntPredicate goal,
-                                                            double maxCost) {
+    public List<VertexPath<Integer>> findAllVertexPaths(int start,
+                                                        @Nonnull IntPredicate goal,
+                                                        double maxCost) {
         List<BackLinkWithArrow<V, A>> backlinks = new ArrayList<>();
         dfsFindAllPaths(new BackLinkWithArrow<>(start, null, null, maxCost), goal, backlinks);
         List<VertexPath<Integer>> vertexPaths = new ArrayList<>(backlinks.size());

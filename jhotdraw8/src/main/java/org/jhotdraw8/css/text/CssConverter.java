@@ -3,14 +3,14 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
@@ -32,7 +32,10 @@ public interface CssConverter<T> extends Converter<T> {
      * to the next token past the value.
      *
      * @param tt tokenizer positioned on the token
+     * @param idFactory the id factory
      * @return the parsed value
+     * @throws ParseException on parse exception
+     * @throws IOException on io exception
      */
     @Nullable
     T parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
@@ -42,7 +45,10 @@ public interface CssConverter<T> extends Converter<T> {
      * to the next token past the value.
      *
      * @param tt tokenizer positioned on the token
+     * @param idFactory the id factory
      * @return the parsed value
+     * @throws ParseException on parse exception
+     * @throws IOException on io exception
      */
     @Nonnull
     default T parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
@@ -54,7 +60,11 @@ public interface CssConverter<T> extends Converter<T> {
     }
 
     /**
-     * Produces tokens.
+     * Produces tokens for the specified value.
+     * @param <TT> the value type
+     * @param value the value
+     * @param idFactory the id factory
+     * @param out the consumer for the tokens
      */
     <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out);
 
@@ -68,7 +78,7 @@ public interface CssConverter<T> extends Converter<T> {
      * Converts the value to String.
      *
      * @param value the value
-     * @param <TT>  the type
+     * @param <TT>  the value type
      * @return a String
      */
     default <TT extends T> String toString(@Nullable TT value) {
@@ -80,7 +90,7 @@ public interface CssConverter<T> extends Converter<T> {
      *
      * @param value     the value
      * @param idFactory the id factory
-     * @param <TT>      the type
+     * @param <TT>      the value type
      * @return a String
      */
     default <TT extends T> String toString(@Nullable TT value, @Nullable IdFactory idFactory) {

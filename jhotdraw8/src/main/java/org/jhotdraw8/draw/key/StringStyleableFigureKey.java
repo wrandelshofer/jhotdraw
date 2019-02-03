@@ -3,20 +3,20 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.collection.NonnullMapAccessor;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssStringConverter;
-import org.jhotdraw8.text.StyleConverterAdapter;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.StyleConverterAdapter;
+
+import java.util.function.Function;
 
 /**
  * StringStyleableFigureKey.
@@ -73,6 +73,7 @@ public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String>
      *
      * @param name The name of the key.
      * @param mask The dirty mask.
+     * @param nullable Whether the value may be set to null
      * @param defaultValue The default value.
      * @param helpText the help text
      */

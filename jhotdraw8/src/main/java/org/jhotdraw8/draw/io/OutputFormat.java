@@ -3,6 +3,12 @@
  */
 package org.jhotdraw8.draw.io;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.draw.figure.Drawing;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,11 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.concurrent.WorkState;
-import org.jhotdraw8.draw.figure.Drawing;
 
 /**
  * OutputFormat.
@@ -33,12 +34,11 @@ public interface OutputFormat {
     public void setOptions(@Nullable Map<? super Key<?>, Object> options);
 
     /**
-     * Writes a Drawing into an URI.
+     * Writes a Drawing into the resource identified by the given URI.
      *
-     * @param uri The uri.
+     * @param uri The resource identifier
      * @param drawing The drawing.
-     *
-     * @param workState
+     * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
     default void write(@Nonnull URI uri, Drawing drawing, WorkState workState) throws IOException {
@@ -52,7 +52,7 @@ public interface OutputFormat {
      * @param file the file
      * @param drawing the drawing
      *
-     * @param workState
+     * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
     default void write(@Nonnull Path file, Drawing drawing, WorkState workState) throws IOException {
@@ -66,8 +66,7 @@ public interface OutputFormat {
      *
      * @param out The output stream.
      * @param drawing The drawing.
-     *
-     * @param workState
+     * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
     void write(OutputStream out, Drawing drawing, WorkState workState) throws IOException;

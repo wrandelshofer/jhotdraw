@@ -29,7 +29,7 @@ public interface Enumerator<E> {
      * <p>
      * Current is undefined under any of the following conditions:
      * <ul>
-     * <li> The enumerator is positioned before the first element in the collection.
+     * <li>The enumerator is positioned before the first element in the collection.
      * Immediately after the enumerator is created {@link #moveNext} must be called to advance
      * the enumerator to the first element of the collection before reading the value of Current.</li>
      *
@@ -43,7 +43,6 @@ public interface Enumerator<E> {
      * sets Current to the next element.
      *
      * @return current
-     * @throws IllegalStateException
      */
     E current();
 }

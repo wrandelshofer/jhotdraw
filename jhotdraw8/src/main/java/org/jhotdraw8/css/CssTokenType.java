@@ -8,7 +8,6 @@ package org.jhotdraw8.css;
  * <li><a href="https://www.w3.org/TR/css-syntax-3/#tokenization">
  * CSS Syntax Module Level 3, Tokenization</a></li>
  * </ul>
- * </p>
  */
 public class CssTokenType {
 
@@ -48,7 +47,7 @@ public class CssTokenType {
     /**
      * Defines a CDC-token.
      * <pre>
-     *  CDC-token = "-->";
+     *  CDC-token ={@literal "-->"};
      * </pre>
      */
     public final static int TT_CDC = -15;
@@ -56,7 +55,7 @@ public class CssTokenType {
     /**
      * Defines a CDO-token.
      * <pre>
-     *  CDO-token = "<!--";
+     *  CDO-token ={@literal "<!--"};
      * </pre>
      */
     public final static int TT_CDO = -14;

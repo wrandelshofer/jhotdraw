@@ -154,6 +154,8 @@ public interface Activity extends Disableable, PropertyBean {
      * The title of the activity.
      * <p>
      * FIXME should be read-only because it is managed by the activity itself
+     *
+     * @return the titel property
      */
     StringProperty titleProperty();
 

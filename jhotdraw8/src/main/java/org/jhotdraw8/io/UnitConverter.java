@@ -3,12 +3,11 @@
  */
 package org.jhotdraw8.io;
 
-import java.util.Objects;
-
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
+
+import java.util.Objects;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -19,11 +18,11 @@ import static java.lang.Math.min;
  * References:
  * <ul>
  * <li><a href="https://www.w3.org/TR/css3-values/#absolute-length">
- * Absolute lengths: the cm, mm, Q, in, pt, pc, px units</a>></li>
+ * Absolute lengths: the cm, mm, Q, in, pt, pc, px units</a></li>
  * <li><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">
- * Viewport-percentage lengths: the vw, vh, vmin, vmax units</a>></li>
+ * Viewport-percentage lengths: the vw, vh, vmin, vmax units</a></li>
  * <li><a href="https://www.w3.org/TR/css3-values/#font-relative-lengths">
- * Font-relative lengths: the em, ex, ch, rem units</a>></li>
+ * Font-relative lengths: the em, ex, ch, rem units</a></li>
  * </ul>
  *
  * @author Werner Randelshofer

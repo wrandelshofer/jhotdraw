@@ -12,7 +12,6 @@ import java.nio.file.Path;
  * @author Werner Randelshofer
  * @version $Id$
  */
-@SuppressWarnings("deprecation")
 public class Fragment {
 
     private final Path file;

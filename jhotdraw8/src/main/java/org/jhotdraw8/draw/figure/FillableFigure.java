@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.Objects;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.FillRule;
@@ -11,14 +10,15 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableEnumStyleableFigureKey;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
+
+import java.util.Objects;
 
 /**
  * Interface figures which render a {@code javafx.scene.shape.Shape} and can be
@@ -47,7 +47,7 @@ public interface FillableFigure extends Figure {
     /**
      * Updates a shape node.
      *
-     * @param ctx
+     * @param ctx the render context
      * @param shape a shape node
      */
     default void applyFillableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {

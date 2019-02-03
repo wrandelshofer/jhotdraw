@@ -7,6 +7,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -17,7 +18,6 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
-import org.jhotdraw8.annotation.Nonnull;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -58,6 +58,7 @@ public class CssPoint2DStyleableMapAccessor
      * @param name the name of the accessor
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
+     * @param converter String converter for the point
      */
     public CssPoint2DStyleableMapAccessor(String name, NonnullMapAccessor<CssSize> xKey, NonnullMapAccessor<CssSize> yKey, Converter<CssPoint2D> converter) {
         super(name, CssPoint2D.class, new NonnullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));

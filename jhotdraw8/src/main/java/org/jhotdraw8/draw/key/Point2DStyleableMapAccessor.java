@@ -7,6 +7,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.text.Point2DConverter;
@@ -15,7 +16,6 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
-import org.jhotdraw8.annotation.Nonnull;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -53,6 +53,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
      * @param name the name of the accessor
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
+     * @param converter String converter for the point
      */
     public Point2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, Converter<Point2D> converter) {
         super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValue(), yKey.getDefaultValue()));

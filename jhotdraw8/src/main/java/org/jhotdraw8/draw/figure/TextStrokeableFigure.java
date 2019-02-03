@@ -3,32 +3,30 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.ListStyleableFigureKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * {@code TextStrokeableFigure} allows to change the stroke ofCollection the
@@ -127,7 +125,7 @@ public interface TextStrokeableFigure extends Figure {
     /**
      * Updates a shape node.
      *
-     * @param ctx
+     * @param ctx the render context
      * @param shape a shape node
      */
     default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {

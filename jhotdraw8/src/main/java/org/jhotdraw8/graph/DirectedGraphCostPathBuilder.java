@@ -190,6 +190,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      *
      * @param start the start vertex
      * @param goal  the goal predicate
+     * @param maxCost the maximal cost of a path
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
@@ -218,6 +219,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      *
      * @param start the start vertex
      * @param goal  the goal predicate
+     * @param maxCost the maximal cost of a path
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
@@ -353,6 +355,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * Finds the shortest path via the specified waypoints.
      *
      * @param waypoints the waypoints
+     * @param maxCost the maximal cost of a path
      * @return the shortest path
      */
     @Nullable
@@ -382,6 +385,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * Finds the shortest path via the specified waypoints.
      *
      * @param waypoints the waypoints
+     * @param maxCost the maximal cost of a path between two waypoints
      * @return the shortest path
      */
     @Nullable
@@ -416,9 +420,9 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @param maxCost the maximal cost of a path
      * @return the enumerated paths
      */
-    public <T> List<VertexPath<V>> findAllVertexPaths(@Nonnull V start,
-                                                      @Nonnull Predicate<V> goal,
-                                                      double maxCost) {
+    public List<VertexPath<V>> findAllVertexPaths(@Nonnull V start,
+                                                  @Nonnull Predicate<V> goal,
+                                                  double maxCost) {
         List<BackLinkWithArrow<V, A>> backlinks = new ArrayList<>();
         dfsFindAllPaths(new BackLinkWithArrow<>(start, null, null, maxCost), goal, backlinks);
         List<VertexPath<V>> vertexPaths = new ArrayList<>(backlinks.size());

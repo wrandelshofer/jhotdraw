@@ -9,6 +9,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
@@ -24,8 +26,6 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.io.UnitConverter;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import java.awt.BasicStroke;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -169,7 +169,7 @@ public interface StrokableFigure extends Figure {
     /**
      * Updates a shape node.
      *
-     * @param ctx
+     * @param ctx the render context
      * @param shape a shape node
      */
     default void applyStrokableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {

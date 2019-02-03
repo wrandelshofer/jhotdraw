@@ -4,21 +4,12 @@
  */
 package org.jhotdraw8.javadoc;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.RootDoc;
-import com.sun.javadoc.Tag;
 import com.sun.source.doctree.DocTree;
 import jdk.javadoc.doclet.Taglet;
 
 import javax.lang.model.element.Element;
+import java.util.List;
+import java.util.Set;
 
 /**
  * DesignOverviewTaglet processes the {@literal @design.overview} tag.
@@ -38,17 +29,35 @@ import javax.lang.model.element.Element;
  * @author Werner Randelshofer
  * @version $Id$
  */
-@SuppressWarnings("deprecation")
 public class DesignOverviewTaglet implements Taglet {
+    @Override
+    public Set<Location> getAllowedLocations() {
+        return Set.of(Location.PACKAGE);
+    }
 
-    private static final String NAME = "design.overview";
+    @Override
+    public boolean isInlineTag() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "design.overview";
+    }
+
+    @Override
+    public String toString(List<? extends DocTree> tags, Element element) {
+        return "todo";
+    }
+
+/*    private static final String NAME = "design.overview";
     private static final String HEADER = "Design Patterns";
 
     private HashMap<String, ArrayList<Tag>> descriptions = new HashMap<>();
 
-    /**
+    *//**
      * Return the name of this custom tag.
-     */
+     *//*
     @Override
     public String getName() {
         return NAME;
@@ -67,21 +76,21 @@ public class DesignOverviewTaglet implements Taglet {
         );
     }
 
-    /**
+    *//**
      * Will return false.
      *
      * @return false
-     */
+     *//*
     @Override
     public boolean isInlineTag() {
         return false;
     }
 
-    /**
+    *//**
      * Register this Taglet.
      *
      * @param tagletMap the map to register this tag to.
-     */
+     *//*
     public static void register(Map<String, Taglet> tagletMap) {
         DesignOverviewTaglet tag = new DesignOverviewTaglet();
         Taglet t = tagletMap.get(tag.getName());
@@ -231,5 +240,5 @@ public class DesignOverviewTaglet implements Taglet {
 
         public DesignPatternSummary() {
         }
-    }
+    }*/
 }

@@ -3,13 +3,13 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.io.IdFactory;
+
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
-
-import org.jhotdraw8.io.IdFactory;
 
 /**
  * Converts a data value of type {@code T} from or to a String representation.
@@ -145,6 +145,7 @@ public interface Converter<T> {
      * <p>
      * This method does not change the state of the converter.
      *
+     * @param <TT> the value type
      * @param out       The appendable
      * @param idFactory The factory for creating object ids. Nullable for some
      *                  converters.
@@ -162,6 +163,7 @@ public interface Converter<T> {
      * <p>
      * This method does not change the state of the converter.
      *
+     * @param <TT> the value type
      * @param out   The appendable
      * @param value The value. Nullable.
      * @throws java.io.IOException thrown by Appendable
@@ -178,10 +180,10 @@ public interface Converter<T> {
      * Note: this is a convenience method. Implementing classes rarely need to
      * overwrite this method.
      *
+     * @param <TT> the value type
      * @param value The value. Nullable.
      * @return The String.
      */
-
     default <TT extends T> String toString(@Nullable TT value) {
         StringBuilder out = new StringBuilder();
         try {

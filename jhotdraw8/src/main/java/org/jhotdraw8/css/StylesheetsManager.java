@@ -3,13 +3,14 @@
  */
 package org.jhotdraw8.css;
 
-import java.net.URI;
-import java.text.ParseException;
-import java.util.List;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
+
+import java.net.URI;
+import java.text.ParseException;
+import java.util.List;
 
 /**
  * StylesheetsManager.
@@ -95,7 +96,8 @@ public interface StylesheetsManager<E> {
      * values
      * @param s the stylesheet
      * @param element the element
-     * @param suppressParseException
+     * @param suppressParseException if parse exceptions should be suppressed
+     * @throws ParseException on parse exception
      * @return true if an element was selected
      */
     boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element, boolean suppressParseException) throws ParseException;
@@ -119,6 +121,10 @@ public interface StylesheetsManager<E> {
         return false;
     }
 
-    /** Returns a localized help text. */
+    /**
+     * Returns a localized help text.
+     *
+     * @return the help text
+     */
     String getHelpText();
 }

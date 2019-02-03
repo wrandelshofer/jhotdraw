@@ -118,6 +118,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * Returns the bounds of the text node for layout calculations. These bounds
      * only includes the text - without padding.
      *
+     * @param ctx the render context
      * @return the layout bounds of the text
      */
     @Nonnull

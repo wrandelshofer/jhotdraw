@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -40,6 +39,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
     /**
      * Converts the collection to an array.
      *
+     * @param <T> the element type
      * @param a a template array
      * @return an array
      */

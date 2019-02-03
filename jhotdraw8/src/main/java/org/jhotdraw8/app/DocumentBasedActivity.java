@@ -38,6 +38,8 @@ public interface DocumentBasedActivity extends Activity {
      * The property is only set to false by calling {@link #clearModified()}.
      * This is typically done by an {@code Action} invoked by the user,
      * or by an automatic save function managed by the {@code Application}.
+     *
+     * @return the modified property
      */
     ReadOnlyBooleanProperty modifiedProperty();
 
@@ -47,7 +49,6 @@ public interface DocumentBasedActivity extends Activity {
 
     /**
      * Clears the modified property.
-     * <p>
      *
      * @see #modifiedProperty()
      */
@@ -103,10 +104,10 @@ public interface DocumentBasedActivity extends Activity {
      * See {@link Disableable}.
      * <p>
      * Usage:
-     * <pre></code>
+     * <pre><code>
      * WorkState ws = new WorkState("read");
      * activity.addDisablers(ws);
-     * activity.read(uri, format, options, insert, workState).handle((fmt,ex)->{
+     * activity.read(uri, format, options, insert, workState).handle((fmt,ex)-&gt;{
      *    ...
      *    activity.removeDisablers(ws);
      * });

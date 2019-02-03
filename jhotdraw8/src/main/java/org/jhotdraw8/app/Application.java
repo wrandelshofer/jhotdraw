@@ -3,12 +3,6 @@
  */
 package org.jhotdraw8.app;
 
-import java.net.URI;
-import java.util.AbstractMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CompletionStage;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -22,14 +16,21 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.HierarchicalMap;
 
+import java.net.URI;
+import java.util.AbstractMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletionStage;
+
 /**
  * An {@code Application} handles the life-cycle of {@link Activity} objects and
  * provides windows to present them on screen.
  *
  * @design.pattern Application Framework, KeyAbstraction. The application
- * framework supports the creation of document oriented applications which can
+ * framework supports the creation of document-based applications which can
  * support platform-specific guidelines. The application framework consists of
- * the following key abstractions: null {@link Application}, {@link ApplicationModel}, {@link Activity},
+ * the following key abstractions: {@link Application}, {@link ApplicationModel}, {@link Activity},
  * {@link Action}.
  *
  * @author Werner Randelshofer

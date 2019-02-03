@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.Map;
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
@@ -14,11 +12,14 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonnullMapAccessor;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssScale3DConverter;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
+
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Scale3DStyleableMapAccessor.
@@ -58,6 +59,7 @@ implements NonnullMapAccessor<Point3D> {
          * @param xKey the key for the x coordinate of the point
          * @param yKey the key for the y coordinate of the point
          * @param zKey the key for the u coordinate of the point
+         * @param converter String converter for the scale factor with 3 coordinates (x-factor, y-factor, z-factor).
          */
     public Scale3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey,Converter<Point3D> converter) {
         super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));

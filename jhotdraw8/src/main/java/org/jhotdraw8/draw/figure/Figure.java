@@ -1067,7 +1067,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *   reshapeInLocal(tx);
      * }
      * </code></pre>
-     * </p>
      *
      * @param x      desired x-position in parent coordinates
      * @param y      desired y-position in parent coordinates

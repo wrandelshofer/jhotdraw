@@ -3,6 +3,13 @@
  */
 package org.jhotdraw8.draw.io;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,12 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.concurrent.WorkState;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * InputFormat.
@@ -42,7 +43,7 @@ public interface InputFormat {
      * figure are coerced so that they do not clash with ids in the drawing.
      * Also all URIs in the figure are made relative to DOCUMENT_HOME of the
      * drawing.
-     * @param workState the work state
+     * @param workState for progress monitoring and cancelling the operation
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
@@ -59,7 +60,7 @@ public interface InputFormat {
      * figure are coerced so that they do not clash with ids in the drawing.
      * Also all URIs in the figure are made relative to DOCUMENT_HOME of the
      * drawing.
-     * @param workState
+     * @param workState for progress monitoring and cancelling the operation
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
@@ -79,7 +80,7 @@ public interface InputFormat {
      * @param drawing If you provide a non-null value, the contents of the file
      * is added to the drawing. Otherwise a new drawing is created.
      * @param documentHome the URI used to resolve external references from the document
-     * @param workState
+     * @param workState for progress monitoring and cancelling the operation
      * @return the drawing
      *
      * @throws java.io.IOException if an IO error occurs
