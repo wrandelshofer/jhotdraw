@@ -10,7 +10,10 @@
         <surname>Randelshofer</surname>
     </personname>
 </author>
-<copyright><year>2017</year><holder>The authors and contributors of JHotDraw</holder></copyright>
+  <copyright>
+    <year>2019</year>
+    <holder>The authors and contributors of JHotDraw</holder>
+  </copyright>
 </info>
 <chapter><title>Introduction</title>
 <xi:include href="introduction/Purpose.xml"/>
