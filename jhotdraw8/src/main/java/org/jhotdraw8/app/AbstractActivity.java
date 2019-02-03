@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.app;
 
-import org.jhotdraw8.annotation.Nonnull;
-
-import org.jhotdraw8.collection.HierarchicalMap;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -14,7 +11,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -26,12 +25,12 @@ import org.jhotdraw8.collection.Key;
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
     @Nonnull
-    protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
+    protected ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
     protected final ObservableMap<Key<?>, Object> properties//
             = FXCollections.observableHashMap();
-    protected final StringProperty title = new SimpleStringProperty();
-    private final IntegerProperty disambiguation = new SimpleIntegerProperty();
+    protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY);
+    private final IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
 
     @Nonnull
     @Override
@@ -68,19 +67,11 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     }
 
     @Override
-    public void dispose() {
+    public void destroy() {
     }
 
     @Override
     public void stop() {
-    }
-
-    @Override
-    public void deactivate() {
-    }
-
-    @Override
-    public void activate() {
     }
 
     @Override

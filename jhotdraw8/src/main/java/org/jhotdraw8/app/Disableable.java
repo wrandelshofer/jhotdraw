@@ -5,16 +5,24 @@ package org.jhotdraw8.app;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableSet;
+import javafx.concurrent.Worker;
+import org.jhotdraw8.app.action.Action;
 
 /**
- * A disableable object is disabled when it has one or more disablers.
+ * This interface is used to coordinate user interactions with an object.
  * <p>
- * Disablers can be added directly to this object. A disableable object may
- * support additional disablers.
+ * The user is not allowed to invoke an {@link Action} on a disabled object.
  * <p>
- * A disabled object is not allowed to process user input. If the disabled
- * object is a user interface component, then it must ignore all mouse events,
- * key events, and any other user input events.
+ * If the disabled object is a user interface component, then it should
+ * visualize that actions may not be invoked. For example by disabling
+ * buttons.
+ * <p>
+ * The object can be disabled by adding {@link Worker}s to its "disabler"
+ * set. Additionally the object can disable itself, when its internal
+ * state does not permit the invocation of actions.
+ * <p>
+ * The object is enabled when its "disabler" set is empty and
+ * its internal state permits the invocation of actions.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -27,8 +35,11 @@ public interface Disableable {
     String DISABLED_PROPERTY = "disabled";
 
     /**
-     * Indicates whether or not this object is disabled. This is true when the
-     * disabler set is not empty.
+     * Indicates whether or not this object is disabled.
+     * <p>
+     * The object is disabled when its "disabler" set is not empty
+     * <b>or</b> its internal state does not permit the invocation of
+     * actions.
      *
      * @return the disabled property.
      */
@@ -48,6 +59,8 @@ public interface Disableable {
 
     /**
      * Adds a disabler.
+     * <p>
+     * FIXME disabler type should be restricted to {@link Worker}.
      *
      * @param disabler a new disabler
      */

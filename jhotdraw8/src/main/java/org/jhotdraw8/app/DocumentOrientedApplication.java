@@ -3,19 +3,6 @@
  */
 package org.jhotdraw8.app;
 
-import java.net.URI;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -57,6 +44,20 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
+
+import java.net.URI;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * An {@code DocumentOrientedApplication} handles the life-cycle of {@link DocumentOrientedActivity} objects and
@@ -256,7 +257,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @param view the view
      */
     protected void handleViewActivated(@Nonnull DocumentOrientedActivity view) {
-        view.activate();
+
     }
 
     /**
@@ -368,7 +369,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @param view the view
      */
     protected void handleViewDeactivated(@Nonnull DocumentOrientedActivity view) {
-        view.deactivate();
+
     }
 
     /**
@@ -385,7 +386,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
             stage.focusedProperty().removeListener(focusListener);
         }
         stage.close();
-        view.dispose();
+        view.destroy();
         view.setApplication(null);
         view.getActionMap().setParent(null);
 

@@ -37,13 +37,11 @@ public class AbstractDisableable implements Disableable {
      */
     protected final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
 
-    ;
-
     {
-   disabled.bind(Bindings.isNotEmpty(disablers));
-  }
+        disabled.bind(Bindings.isNotEmpty(disablers));
+    }
 
-  @Override
+    @Override
     public ReadOnlyBooleanProperty disabledProperty() {
         return disabled.getReadOnlyProperty();
     }

@@ -50,7 +50,7 @@
   <property name="doc" location="doc"/>
   <property name="build.main.classes" value="${build}/jhotdraw8/classes"/>
   <property name="build.doc.classes" value="${build}/doc/classes"/>
-  <property name="build.doc.doc" value="builddoc"/>
+  <property name="builddoc" value="builddoc"/>
   <property name="build.doc.tools" value="${build}/doc/tools"/>
   <property name="lib.doc.docbook" value="${build.doc.tools}/docbook-5.0b5"/>
   <property name="lib.doc.xalan" value="${build.doc.tools}/xalan-j_2_7_2"/>
@@ -150,7 +150,7 @@
     </copy>
   </target>
   <target name="do-docbook.copy" depends="init">
-    <copy todir="${build.doc.doc}">
+    <copy todir="${builddoc}">
       <fileset dir="${doc}"/>
     </copy>
     <copy todir="${lib.doc.docbook-xsl}">
@@ -167,13 +167,13 @@
   <target name="do-docbook.asciidoctor" depends="init,do-docbook.copy">
     <!--
         <pathconvert property="asciidocfiles" pathsep=" ">
-            <map from="${basedir}${file.separator}${build.doc.doc}${file.separator}" to=""/>
-            <fileset dir="${build.doc.doc}">
+            <map from="${basedir}${file.separator}${builddoc}${file.separator}" to=""/>
+            <fileset dir="${builddoc}">
                 <include name="**/*.txt"/>
             </fileset>
         </pathconvert>
         <echo message="asciidocfiles: ${asciidocfiles}"/>
-    <exec executable="/usr/local/bin/asciidoctor" dir="${build.doc.doc}">
+    <exec executable="/usr/local/bin/asciidoctor" dir="${builddoc}">
       <arg line="-b docbook5"/>
       <arg line="- -doctype article"/>
       <arg line="${asciidocfiles}"/>
@@ -192,7 +192,7 @@
                 <env key="XML_DEBUG_CATALOG" value="1"/>
 
                 <arg value="- -output"/>
-                <arg value="${build.doc.doc}/handbook/general/introduction/crossreference.xml"/>
+                <arg value="${builddoc}/handbook/general/introduction/crossreference.xml"/>
                 <arg value="- -param"/>
                 <arg value="writing.mode"/>
                 <arg value="lr"/>
@@ -200,7 +200,7 @@
                 <arg value="${src.doc.xsl}/crossreference.xsl"/>
                 <srcfile/>
 
-                <fileset dir="${build.doc.doc}">
+                <fileset dir="${builddoc}">
                     <include name="**/Book.xml"/>
                 </fileset>
             </apply>
@@ -211,7 +211,7 @@
       <env key="XML_DEBUG_CATALOG" value="1"/>
 
       <arg value="--output"/>
-      <arg value="${build.doc.doc}/handbook/general/introduction/crossreference.xml"/>
+      <arg value="${builddoc}/handbook/general/introduction/crossreference.xml"/>
       <arg value="--param"/>
       <arg value="writing.mode"/>
       <arg value="lr"/>
@@ -223,7 +223,7 @@
       <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
       <env key="XML_DEBUG_CATALOG" value="1"/>
       <arg value="--output"/>
-      <arg value="${build.doc.doc}/handbook/general/introduction/References.xml"/>
+      <arg value="${builddoc}/handbook/general/introduction/References.xml"/>
       <arg value="--param"/>
       <arg value="writing.mode"/>
       <arg value="lr"/>
@@ -235,7 +235,7 @@
       <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
       <env key="XML_DEBUG_CATALOG" value="1"/>
       <arg value="--output"/>
-      <arg value="${build.doc.doc}/srs/general/introduction/References.xml"/>
+      <arg value="${builddoc}/srs/general/introduction/References.xml"/>
       <arg value="--param"/>
       <arg value="writing.mode"/>
       <arg value="lr"/>
@@ -249,15 +249,15 @@
     <pathconvert property="docbookfiles" pathsep=" ">
       <map from="${basedir}${file.separator}" to=""/>
 
-      <!--            <fileset dir="${build.doc.doc}/handbook">
+      <!--            <fileset dir="${builddoc}/handbook">
                       <include name="*.xml"/>
                       <exclude name="catalog.xml"/>
                   </fileset>
-                  <fileset dir="${build.doc.doc}/srs">
+                  <fileset dir="${builddoc}/srs">
                       <include name="*.xml"/>
                       <exclude name="catalog.xml"/>
                   </fileset>  -->
-      <fileset dir="${build.doc.doc}">
+      <fileset dir="${builddoc}">
         <include name="**/Book.xml"/>
       </fileset>
     </pathconvert>
@@ -276,7 +276,7 @@
   </target>
   <target name="do-docbook.transform-hello.xsltproc" depends="init" description="uses unix xsltproc command">
     <apply executable="xsltproc" dir="." force="true">
-      <env key="XML_CATALOG_FILES" value="${basedir}/${build.doc.doc}/catalog.xml"/>
+      <env key="XML_CATALOG_FILES" value="${basedir}/${builddoc}/catalog.xml"/>
       <env key="XML_DEBUG_CATALOG" value="1"/>
       <arg value="--output"/>
       <targetfile/>
@@ -290,12 +290,12 @@
       <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
       <srcfile/>
 
-      <fileset dir="${build.doc.doc}" includes="*.xml"/>
+      <fileset dir="${builddoc}" includes="*.xml"/>
       <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.html}/*/index.html"/>
     </apply>
 
     <apply executable="xsltproc" dir="." force="true">
-      <env key="XML_CATALOG_FILES" value="${basedir}/${build.doc.doc}/catalog.xml"/>
+      <env key="XML_CATALOG_FILES" value="${basedir}/${builddoc}/catalog.xml"/>
       <env key="XML_DEBUG_CATALOG" value="1"/>
 
       <arg value="--output"/>
@@ -345,7 +345,7 @@
       <!--<arg value="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"/>-->
       <srcfile/>
 
-      <fileset dir="${build.doc.doc}">
+      <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
         <include name="srs/JHotDraw8SRS.xml"/>
       </fileset>
@@ -370,7 +370,7 @@
       <arg value="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
       <srcfile/>
 
-      <fileset dir="${build.doc.doc}">
+      <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
         <include name="srs/JHotDraw8SRS.xml"/>
       </fileset>
@@ -404,7 +404,7 @@
       <arg value="${lib.doc.docbook-xsl}/fo/docbook.xsl"/>
       <srcfile/>
 
-      <fileset dir="${build.doc.doc}">
+      <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
         <include name="srs/JHotDraw8SRS.xml"/>
       </fileset>
@@ -429,7 +429,7 @@
       <arg value="${lib.doc.docbook-xsl}/epub3/chunk.xsl"/>
       <srcfile/>
 
-      <fileset dir="${build.doc.doc}">
+      <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
         <include name="srs/JHotDraw8SRS.xml"/>
       </fileset>
@@ -487,7 +487,8 @@
       </classpath>
     </java>
   </target>
-  <macrodef name="call-saxon">
+  <macrodef name="call-saxon-9he">
+    <!-- calls Saxon 9 HE from docbook tools -->
     <attribute name="srcfile"/>
     <attribute name="srcdir"/>
     <attribute name="destdir"/>
@@ -516,7 +517,7 @@
           <fileset dir="${lib.doc.xalan}">
             <include name="**/*.jar"/>
           </fileset>
-          <dirset dir="${build.doc.doc}/config">
+          <dirset dir="${builddoc}/config">
             <!-- includes the file CatalogManager.properties in the classpath -->
           </dirset>
         </classpath>
@@ -530,33 +531,115 @@
       </copy>
     </sequential>
   </macrodef>
+  <macrodef name="call-saxon">
+    <!-- calls Saxon 9 HE from docbook tools -->
+    <attribute name="srcfile"/>
+    <attribute name="srcdir"/>
+    <attribute name="destdir"/>
+    <attribute name="imgdestdir" default="@{destdir}"/>
+    <attribute name="destfile"/>
+    <attribute name="style"/>
+    <sequential>
+      <mkdir dir="@{destdir}"/>
+      <java classname="com.icl.saxon.StyleSheet" dir="@{destdir}" fork="true">
+        <jvmarg value="-Dxslthl.config=file://${basedir}/${lib.doc.docbook-xsl}/highlighting/xslthl-config.xml"/>
+        <jvmarg value="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+        <jvmarg value="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+        <jvmarg value="-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
+        <jvmarg value="-Dxml.catalog.files=${basedir}/${doc}/config/catalog.xml"/>
+        <arg line="-x org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+        <arg line="-y org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+        <arg line="-r org.apache.xml.resolver.tools.CatalogResolver"/>
+        <arg value="-o"/>
+        <arg file="@{destfile}"/>
+        <arg file="@{srcfile}"/>
+        <arg file="@{style}"/>
+        <classpath>
+          <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+            <include name="**/saxon*.jar"/>
+          </fileset>
+          <fileset dir="${lib.doc.xalan}">
+            <include name="**/xalan.jar"/>
+            <include name="**/xslthl-2.1.3.jar"/>
+          </fileset>
+          <fileset dir="${lib.doc}/xerces-2.12.0-patched">
+            <include name="**/*.jar"/>
+          </fileset>
+          <dirset dir="${builddoc}/config">
+            <!-- includes the file CatalogManager.properties in the classpath -->
+          </dirset>
+        </classpath>
+      </java>
+
+      <copy toDir="@{imgdestdir}" flatten="true">
+        <fileset dir="@{srcdir}">
+          <include name="**/*.svg"/>
+          <include name="**/*.png"/>
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
+  <macrodef name="call-saxon-9.9.1.1he">
+    <!-- calls Saxon HE 9.1.1.1 (does not work because chunking not supported) -->
+    <attribute name="srcfile"/>
+    <attribute name="srcdir"/>
+    <attribute name="destdir"/>
+    <attribute name="imgdestdir" default="@{destdir}"/>
+    <attribute name="destfile"/>
+    <attribute name="style"/>
+    <sequential>
+      <mkdir dir="@{destdir}"/>
+      <java classname="net.sf.saxon.Transform" dir="@{destdir}" fork="true">
+        <arg value="-xi:on"/>
+        <arg prefix="-xsl:" file="@{style}"/>
+        <arg prefix="-catalog:" file="@{srcdir}/../config/catalog.xml"/>
+        <arg prefix="-s:" file="@{srcfile}"/>
+        <arg prefix="-o:" file="@{destfile}"/>
+        <classpath>
+          <fileset dir="${lib.doc}/xerces-2.12.0-patched">
+            <include name="**/*.jar"/>
+          </fileset>
+          <fileset dir="${lib.doc}/SaxonHE9-9-1-1J">
+            <include name="**/*.jar"/>
+          </fileset>
+        </classpath>
+      </java>
+
+      <copy toDir="@{imgdestdir}" flatten="true">
+        <fileset dir="@{srcdir}">
+          <include name="**/*.svg"/>
+          <include name="**/*.png"/>
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
   <target name="do-docbook.transform.saxon.chunk" depends="init,do-docbook.crossreference" description="uses saxon">
     <call-saxon destdir="${build.doc}/chunk/handbook"
-                srcfile="${build.doc.doc}/handbook/Book.xml"
-                srcdir="${build.doc.doc}/handbook"
+                srcfile="${builddoc}/handbook/Book.xml"
+                srcdir="${builddoc}/handbook"
                 destfile="${build.doc}/chunk/handbook/JHotDraw8Handbook.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
     />
 
     <call-saxon destdir="${build.doc}/chunk/srs"
-                srcfile="${build.doc.doc}/srs/Book.xml"
-                srcdir="${build.doc.doc}/srs"
+                srcfile="${builddoc}/srs/Book.xml"
+                srcdir="${builddoc}/srs"
                 destfile="${build.doc}/chunk/srs/JHotDraw8SRS.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
     />
   </target>
   <target name="do-docbook.transform.saxon.epub3" depends="init,do-docbook.crossreference" description="uses saxon">
     <call-saxon destdir="${build.doc}/epub3/handbook"
-                srcfile="${build.doc.doc}/handbook/Book.xml"
-                srcdir="${build.doc.doc}/handbook"
+                srcfile="${builddoc}/handbook/Book.xml"
+                srcdir="${builddoc}/handbook"
                 destfile="${build.doc.html}/epub3/JHotDraw8Handbook.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
                 imgdestdir="${build.doc}/epub3/handbook/OEBPS"
     />
 
     <call-saxon destdir="${build.doc}/epub3/srs"
-                srcfile="${build.doc.doc}/srs/Book.xml"
-                srcdir="${build.doc.doc}/srs"
+                srcfile="${builddoc}/srs/Book.xml"
+                srcdir="${builddoc}/srs"
                 destfile="${build.doc.html}/epub3/srs/JHotDraw8SRS.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
                 imgdestdir="${build.doc}/epub3/srs/OEBPS"
@@ -579,15 +662,15 @@
   </target>
   <target name="do-docbook.transform.saxon.xhtml5" depends="init,do-docbook.crossreference" description="uses saxon">
     <call-saxon destdir="${build.doc}/html5/handbook"
-                srcfile="${build.doc.doc}/handbook/Book.xml"
-                srcdir="${build.doc.doc}/handbook"
+                srcfile="${builddoc}/handbook/Book.xml"
+                srcdir="${builddoc}/handbook"
                 destfile="${build.doc}/html5/handbook/JHotDraw8Handbook.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"
     />
 
     <call-saxon destdir="${build.doc}/html5/srs"
-                srcfile="${build.doc.doc}/srs/JHotDraw8SRS.xml"
-                srcdir="${build.doc.doc}/srs"
+                srcfile="${builddoc}/srs/JHotDraw8SRS.xml"
+                srcdir="${builddoc}/srs"
                 destfile="${build.doc}/html5/srs/JHotDraw8SRS.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"
     />
@@ -608,7 +691,7 @@
       <arg value="-URIRESOLVER"/>
       <arg value="org.apache.xml.resolver.tools.CatalogResolver"/>
       <arg value="-in"/>
-      <arg file="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"/>
+      <arg file="${builddoc}/handbook/Book.xml"/>
       <arg value="-xsl"/>
       <arg file="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
       <arg line="-param highlight.source 1"/>
