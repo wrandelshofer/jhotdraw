@@ -3,17 +3,6 @@
  */
 package org.jhotdraw8.draw.model;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.BiFunction;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
@@ -31,12 +20,24 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.FigureKey;
-import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
 import org.jhotdraw8.tree.TreeModelEvent;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * A DrawingModel for drawings which contains {@code TransformableFigure}s and
@@ -258,7 +259,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (key instanceof Key<?>) {
             T oldValue = figure.set(key, newValue);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
-            handlePropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+            @SuppressWarnings("unchecked")
+            Key<Object> keyObject = (Key<Object>) key;
+            handlePropertyChanged(figure, keyObject, oldValue, newValue);
             return oldValue;
         } else {
             mapProxy.setFigure(figure);

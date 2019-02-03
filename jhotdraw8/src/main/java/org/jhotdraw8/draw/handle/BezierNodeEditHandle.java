@@ -24,21 +24,19 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
+
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 /**
  * Handle for the point ofCollection a figure.
@@ -126,7 +124,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
             node.resize(size,size);
         }
         CssColor color=view.getHandleColor();
-        BorderStroke borderStroke = (BorderStroke)node.getBorder().getStrokes().get(0);
+        BorderStroke borderStroke = node.getBorder().getStrokes().get(0);
         if (!borderStroke.getTopStroke().equals(color.getColor())) {
             node.setBorder(new Border(
                     new BorderStroke(color.getColor(), BorderStrokeStyle.SOLID, null, null)

@@ -102,7 +102,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
             targetNode.resize(size, size);
         }
         CssColor color = view.getHandleColor();
-        BorderStroke borderStroke = (BorderStroke) targetNode.getBorder().getStrokes().get(0);
+        BorderStroke borderStroke = targetNode.getBorder().getStrokes().get(0);
         if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
             targetNode.setBorder(new Border(
                     new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)

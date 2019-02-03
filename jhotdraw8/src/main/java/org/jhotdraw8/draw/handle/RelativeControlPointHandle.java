@@ -107,7 +107,7 @@ private Point2D origin=new Point2D(0,0);
             node.resize(size, size);
         }
         CssColor color = view.getHandleColor();
-        BorderStroke borderStroke = (BorderStroke) node.getBorder().getStrokes().get(0);
+        BorderStroke borderStroke = node.getBorder().getStrokes().get(0);
         if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
             node.setBorder(new Border(
                     new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)

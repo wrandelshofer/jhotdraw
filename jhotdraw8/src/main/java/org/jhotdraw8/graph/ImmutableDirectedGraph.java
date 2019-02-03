@@ -59,21 +59,24 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         final int vertexCapacity = graph.getVertexCount();
 
         this.arrowHeads = new int[arrowCapacity];
-        //noinspection unchecked
-        this.arrows = (A[]) new Object[arrowCapacity];
+
+        @SuppressWarnings("unchecked")
+        A[] uncheckedArrows = (A[]) new Object[arrowCapacity];
+        this.arrows = uncheckedArrows;
         this.vertices = new int[vertexCapacity];
-        //noinspection unchecked
-        this.vertexObjects = (V[]) new Object[vertexCapacity];
+        @SuppressWarnings("unchecked")
+        V[] uncheckedVertices = (V[]) new Object[vertexCapacity];
+        this.vertexObjects = uncheckedVertices;
         this.vertexToIndexMap = new HashMap<>(vertexCapacity);
 
         for (int vIndex = 0; vIndex < vertexCapacity; vIndex++) {
             vertices[vIndex] = arrowCount;
             V vertex = graph.getVertex(vIndex);
-            vertexObjects[vIndex] = vertex;
+            this.vertexObjects[vIndex] = vertex;
             vertexToIndexMap.put(vertex, vIndex);
             for (int i = 0, n = graph.getNextCount(vIndex); i < n; i++) {
                 arrowHeads[arrowCount] = graph.getNext(vIndex, i);
-                arrows[arrowCount] = graph.getNextArrow(vIndex, i);
+                this.arrows[arrowCount] = graph.getNextArrow(vIndex, i);
                 arrowCount++;
             }
         }
@@ -90,11 +93,13 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         final int vertexCapacity = graph.getVertexCount();
 
         this.arrowHeads = new int[arrowCapacity];
-        //noinspection unchecked
-        this.arrows = (A[]) new Object[arrowCapacity];
+        @SuppressWarnings("unchecked")
+        A[] uncheckedArrows = (A[]) new Object[arrowCapacity];
+        this.arrows = uncheckedArrows;
         this.vertices = new int[vertexCapacity];
-        //noinspection unchecked
-        this.vertexObjects = (V[]) new Object[vertexCapacity];
+        @SuppressWarnings("unchecked")
+        V[] uncheckedVertices = (V[]) new Object[vertexCapacity];
+        this.vertexObjects = uncheckedVertices;
         this.vertexToIndexMap = new HashMap<>(vertexCapacity);
 
         //    Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
@@ -112,10 +117,10 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
             for (V v : graph.getVertices()) {
 
                 vertices[i] = arrowCount;
-                vertexObjects[i] = v;
+                this.vertexObjects[i] = v;
                 for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
                     arrowHeads[arrowCount] = vertexToIndexMap.get(graph.getNext(v, j));
-                    arrows[arrowCount] = graph.getNextArrow(v, j);
+                    this.arrows[arrowCount] = graph.getNextArrow(v, j);
                     arrowCount++;
                 }
                 i++;

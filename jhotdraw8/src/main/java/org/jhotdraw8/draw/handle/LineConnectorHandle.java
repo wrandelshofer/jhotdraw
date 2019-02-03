@@ -88,7 +88,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
             targetNode.resize(size, size);
         }
         CssColor color = view.getHandleColor();
-        BorderStroke borderStroke = (BorderStroke) targetNode.getBorder().getStrokes().get(0);
+        BorderStroke borderStroke = targetNode.getBorder().getStrokes().get(0);
         Color color1 = (Color) Paintable.getPaint(color);
         if (borderStroke == null || !borderStroke.getTopStroke().equals(color1)) {
             targetNode.setBorder(new Border(
