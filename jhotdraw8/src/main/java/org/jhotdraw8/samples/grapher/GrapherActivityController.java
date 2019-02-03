@@ -3,18 +3,6 @@
  */
 package org.jhotdraw8.samples.grapher;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
-import java.util.prefs.Preferences;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -30,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.app.AbstractDocumentBasedActivity;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
@@ -53,25 +40,29 @@ import org.jhotdraw8.draw.action.AlignLeftAction;
 import org.jhotdraw8.draw.action.AlignRightAction;
 import org.jhotdraw8.draw.action.AlignTopAction;
 import org.jhotdraw8.draw.action.AlignVerticalAction;
+import org.jhotdraw8.draw.action.BringForwardAction;
 import org.jhotdraw8.draw.action.BringToFrontAction;
 import org.jhotdraw8.draw.action.GroupAction;
 import org.jhotdraw8.draw.action.RemoveFromGroupAction;
 import org.jhotdraw8.draw.action.RemoveTransformationsAction;
 import org.jhotdraw8.draw.action.SelectChildrenAction;
 import org.jhotdraw8.draw.action.SelectSameAction;
+import org.jhotdraw8.draw.action.SendBackwardAction;
 import org.jhotdraw8.draw.action.SendToBackAction;
 import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.draw.figure.SimpleBezierFigure;
-import org.jhotdraw8.draw.figure.SimpleCombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.SimpleEllipseFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FillableFigure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.SimpleBezierFigure;
+import org.jhotdraw8.draw.figure.SimpleCombinedPathFigure;
+import org.jhotdraw8.draw.figure.SimpleDrawing;
+import org.jhotdraw8.draw.figure.SimpleEllipseFigure;
 import org.jhotdraw8.draw.figure.SimpleGroupFigure;
 import org.jhotdraw8.draw.figure.SimpleImageFigure;
 import org.jhotdraw8.draw.figure.SimpleLabelFigure;
-import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.SimpleLineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.SimpleLineFigure;
 import org.jhotdraw8.draw.figure.SimplePageFigure;
@@ -79,9 +70,8 @@ import org.jhotdraw8.draw.figure.SimplePageLabelFigure;
 import org.jhotdraw8.draw.figure.SimplePolygonFigure;
 import org.jhotdraw8.draw.figure.SimplePolylineFigure;
 import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
-import org.jhotdraw8.draw.figure.SimpleDrawing;
-import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.SimpleSliceFigure;
+import org.jhotdraw8.draw.figure.SimpleTextAreaFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -125,8 +115,19 @@ import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.draw.action.SendBackwardAction;
-import org.jhotdraw8.draw.action.BringForwardAction;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
+import java.util.prefs.Preferences;
 
 /**
  * GrapherActivityController.
@@ -181,7 +182,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     /**
      * Creates a figure with a unique id.
      *
-     * @param <T> the figure type
+     * @param <T>      the figure type
      * @param supplier the supplier
      * @return the created figure
      */
@@ -262,17 +263,18 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(SimpleLineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
         ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(SimpleLineFigure::new), layerFactory), 2, 1, 16);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, SimplePolylineFigure.POINTS, () -> createFigure(SimplePolylineFigure::new), layerFactory), 4, 1);
-        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 5, 1,0);
+        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 5, 1, 0);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, SimpleBezierFigure.PATH, () -> createFigure(SimpleBezierFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
                 layerFactory), 6, 0);
+        ttbar.addTool(new CreationTool("edit.createTextArea", labels, () -> createFigure(SimpleTextAreaFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new SimplePageLabelFigure(0, 0,
-                labels.getFormatted("pageLabel.text", SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
-                FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
+                        labels.getFormatted("pageLabel.text", SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
+                        FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
                 layerFactory), 9, 1);
-        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 5, 0,0);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 5, 0, 0);
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 8, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             SimplePageFigure pf = new SimplePageFigure();
@@ -367,8 +369,8 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             dock.getItems().add(addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
             d.add(dock);
             return d;
-        }).whenComplete((list,e) -> {
-            if (e==null) {
+        }).whenComplete((list, e) -> {
+            if (e == null) {
                 ScrollableVBoxTrack vtrack = new ScrollableVBoxTrack();
                 Set<DockItem> items = new LinkedHashSet<>();
                 for (Dock dock : list) {
@@ -383,7 +385,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                 htrack.getItems().add(vtrack.getNode());
                 dockRoot.addTrack(htrack);
                 dockRoot.setDockableItems(FXCollections.observableSet(items));
-            }else {
+            } else {
                 e.printStackTrace();
             }
         });
@@ -412,7 +414,10 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             return drawing;
-        }).thenApply(drawing->{drawingView.setDrawing(drawing);return format;});
+        }).thenApply(drawing -> {
+            drawingView.setDrawing(drawing);
+            return format;
+        });
     }
 
     @Override

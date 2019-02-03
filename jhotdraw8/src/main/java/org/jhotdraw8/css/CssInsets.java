@@ -3,13 +3,13 @@
  */
 package org.jhotdraw8.css;
 
-import java.util.Objects;
 import javafx.geometry.Insets;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
+
+import java.util.Objects;
 
 /**
  * Represents a set of inside offsets specified as {@link CssSize}s.
@@ -96,6 +96,11 @@ public class CssInsets {
                 bottom.getConvertedValue(), left.getConvertedValue());
     }
 
+    @Nonnull
+    public Insets getConvertedValue(UnitConverter converter) {
+        return new Insets(top.getConvertedValue(converter), right.getConvertedValue(converter),
+                bottom.getConvertedValue(converter), left.getConvertedValue(converter));
+    }
     public CssSize getLeft() {
         return left;
     }

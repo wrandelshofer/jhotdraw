@@ -17,9 +17,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
@@ -27,8 +28,6 @@ import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
-
-import org.jhotdraw8.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -117,6 +116,11 @@ public class FigureTest {
             return new CssRectangle2D(getBoundsInLocal());
         }
         public void reshapeInLocal(Transform transform) {
+        }
+
+        @Override
+        public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+            // empty
         }
 
         public Node createNode(RenderContext ctx) {

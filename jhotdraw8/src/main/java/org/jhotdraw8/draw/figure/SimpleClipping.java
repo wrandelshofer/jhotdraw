@@ -3,18 +3,20 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.render.RenderContext;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * SimpleClipping.
@@ -37,6 +39,11 @@ public class SimpleClipping extends AbstractCompositeFigure
         for (Figure child : getChildren()) {
             child.reshapeInLocal(transform);
         }
+    }
+
+    @Override
+    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        // empty
     }
 
     @Override

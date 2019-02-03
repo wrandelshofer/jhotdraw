@@ -3,6 +3,16 @@
  */
 package org.jhotdraw8.draw.io;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.text.Converter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
@@ -18,17 +28,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.Text;
 
 /**
  * SimpleFigureFactory.
@@ -148,28 +147,6 @@ public class SimpleFigureFactory implements FigureFactory {
         figureToName.put(figureClass, name);
     }
 
-    /**
-     * Adds the provided mappings of XML attribute names from/to
-     * {@code Figure}s.
-     * <p>
-     * The provided {@code figureSupplier} is used to instantiate a figure from
-     * a name.</p>
-     * <p>
-     * If a figure with this name has already been added, it will be replaced by this figure.
-     *
-     * @param name           The element name
-     * @param figureSupplier The figure supplier is used for instantiating a
-     *                       figure from a name.
-     * @param figureClass    The figure class is used for determining the name of a
-     *                       figure.
-     */
-    public void addFigure(String name, Class<? extends Figure> figureClass, Supplier<Figure> figureSupplier) {
-        if (!nameToFigure.containsKey(name)) {
-            figureToName.remove(nameToFigure.get(name));
-        }
-        nameToFigure.put(name, figureSupplier);
-        figureToName.put(figureClass, name);
-    }
 
     /**
      * Adds the provided keys to the figure.

@@ -11,6 +11,8 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
@@ -24,9 +26,6 @@ import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 
 /**
  * A figure which supports font attributes.
@@ -115,7 +114,8 @@ public interface FontableFigure extends Figure {
             text.setTextOrigin(vp);
         }
 
-        final FontSmoothingType fst = FontSmoothingType.GRAY;
+
+        final FontSmoothingType fst = FontSmoothingType.LCD;
         if (text.getFontSmoothingType() != fst) {
             text.setFontSmoothingType(fst);
         }

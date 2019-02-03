@@ -3,24 +3,6 @@
  */
 package org.jhotdraw8.geom;
 
-import java.awt.BasicStroke;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.FlatteningPathIterator;
-import java.awt.geom.IllegalPathStateException;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
@@ -53,6 +35,25 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
+
+import java.awt.BasicStroke;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.FlatteningPathIterator;
+import java.awt.geom.IllegalPathStateException;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Shapes.
@@ -1273,5 +1274,34 @@ public class Shapes {
                     node.getWidth(),
                     node.getHeight()
             );
+    }
+
+    public static PathIterator emptyPathIterator() {
+        return new PathIterator() {
+            @Override
+            public int getWindingRule() {
+                return PathIterator.WIND_EVEN_ODD;
+            }
+
+            @Override
+            public boolean isDone() {
+                return true;
+            }
+
+            @Override
+            public void next() {
+                // empty
+            }
+
+            @Override
+            public int currentSegment(float[] coords) {
+                return PathIterator.SEG_CLOSE;
+            }
+
+            @Override
+            public int currentSegment(double[] coords) {
+                return PathIterator.SEG_CLOSE;
+            }
+        };
     }
 }

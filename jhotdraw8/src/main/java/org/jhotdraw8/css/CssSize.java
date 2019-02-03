@@ -3,13 +3,12 @@
  */
 package org.jhotdraw8.css;
 
-import java.util.Objects;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
+
+import java.util.Objects;
 
 /**
  * Represents a size specified in a particular unit.
@@ -72,6 +71,9 @@ public class CssSize {
         return DefaultUnitConverter.getInstance().convert(this, UnitConverter.DEFAULT);
     }
 
+    public double getConvertedValue(UnitConverter converter) {
+        return converter.convert(this, UnitConverter.DEFAULT);
+    }
     @Nonnull
     public String getUnits() {
         return units;

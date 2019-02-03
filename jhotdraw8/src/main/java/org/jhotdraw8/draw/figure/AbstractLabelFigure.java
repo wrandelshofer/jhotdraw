@@ -10,9 +10,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.css.CssPoint2D;
@@ -20,29 +21,16 @@ import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableSvgPathStyleableFigureKey;
-import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
-import org.jhotdraw8.geom.FXPathBuilder;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.geom.Shapes;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -53,48 +41,12 @@ import java.util.Objects;
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure
         implements TextFillableFigure, FillableFigure, StrokableFigure,
-        FontableFigure, ConnectableFigure, PathIterableFigure {
+        FontableFigure, ConnectableFigure, PathIterableFigure, ShapeableFigure,
+        PaddableFigure {
 
     public final static CssSizeStyleableFigureKey ORIGIN_X = new CssSizeStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     public final static CssSizeStyleableFigureKey ORIGIN_Y = new CssSizeStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     public final static CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
-
-    public final static CssSizeStyleableFigureKey PADDING_BOTTOM = new CssSizeStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey PADDING_LEFT = new CssSizeStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey PADDING_RIGHT = new CssSizeStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey PADDING_TOP = new CssSizeStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssInsetsStyleableMapAccessor PADDING = new CssInsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
-    public final static CssSizeStyleableFigureKey SHAPE_SLICE_BOTTOM = new CssSizeStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey SHAPE_SLICE_LEFT = new CssSizeStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey SHAPE_SLICE_RIGHT = new CssSizeStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey SHAPE_SLICE_TOP = new CssSizeStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    /**
-     * This property specifies inward offsets from the top, right, bottom, and
-     * left edges of the border image defined by the {@link #SHAPE_BOUNDS}
-     * property, dividing it into nine regions. Percentages are relative to the
-     * shape bounds: the width for the horizontal offsets, the height for the
-     * vertical offsets. Numbers represent pixel units in the image.
-     * <p>
-     * See
-     * <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
-     * Background: border-image-slice</a>.
-     */
-    public final static CssInsetsStyleableMapAccessor SHAPE_SLICE = new CssInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
-    /**
-     * This property specifies the bounds of a {@link #SHAPE} property. If the
-     * bounds are null or empty, then the bounds of the shape are used.
-     */
-    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_X = new DoubleStyleableFigureKey("shapeBoundsX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_Y = new DoubleStyleableFigureKey("shapeBoundsY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_WIDTH = new DoubleStyleableFigureKey("shapeBoundsWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_HEIGHT = new DoubleStyleableFigureKey("shapeBoundsHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static Rectangle2DStyleableMapAccessor SHAPE_BOUNDS = new Rectangle2DStyleableMapAccessor("shapeBounds", SHAPE_BOUNDS_X, SHAPE_BOUNDS_Y, SHAPE_BOUNDS_WIDTH, SHAPE_BOUNDS_HEIGHT);
-    /**
-     * Defines the border image as an SVG path.
-     */
-    @Nonnull
-    public final static NullableSvgPathStyleableFigureKey SHAPE = new NullableSvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
-    private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
     @Nonnull
     public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY = new ObjectKey<>("boundsInLocal", Bounds.class, null, true, true, null);
@@ -112,7 +64,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         set(FILL, null);
         set(STROKE, null);
     }
-    
+
     @Nonnull
     @Override
     public Node createNode(RenderContext drawingView) {
@@ -135,6 +87,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Bounds boundsInLocal = getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
         return boundsInLocal == null ? getLayoutBounds() : boundsInLocal;
     }
+
     @Nonnull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
@@ -149,7 +102,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      */
     @Nonnull
     public Bounds getLayoutBounds() {
-        Text  textNode = new Text();
+        Text textNode = new Text();
         updateTextNode(null, textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = getStyledNonnull(PADDING).getConvertedValue();
@@ -160,6 +113,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
                 b.getWidth() + i.getLeft() + i.getRight(),
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
     }
+
     /**
      * Returns the bounds of the text node for layout calculations. These bounds
      * only includes the text - without padding.
@@ -168,7 +122,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      */
     @Nonnull
     protected Bounds getTextBounds(@Nullable RenderContext ctx) {
-        Text  textNode = new Text();
+        Text textNode = new Text();
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
         return b;
@@ -224,34 +178,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     protected void updatePathNode(RenderContext ctx, @Nonnull Path node) {
         applyFillableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, node);
-
-        String content = getStyled(SHAPE);
-        if (content == null || content.trim().isEmpty()) {
-            content = SVG_SQUARE;
-        }
-        Bounds b = getBoundsInLocal();
-
-        try {
-            AWTPathBuilder builder = new AWTPathBuilder(new Path2D.Float());
-            Shapes.buildFromSvgString(builder, content);
-            Path2D path = builder.build();
-
-            FXPathBuilder builder2 = new FXPathBuilder();
-
-            javafx.geometry.Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
-
-            final Bounds srcBounds = shapeBounds == null || Geom.isEmpty(shapeBounds) ? Geom.getBounds(path) : Geom.getBounds(shapeBounds);
-            Insets shapeSlice = getStyledNonnull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
-            final NineRegionsScalingBuilder nineRegionsScalingBuilder = new NineRegionsScalingBuilder(builder2, srcBounds, shapeSlice, b);
-
-            Shapes.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
-            List<PathElement> elements = builder2.getElements();
-            node.getElements().setAll(elements);
-            node.setVisible(true);
-        } catch (IOException ex) {
-            node.setVisible(false);
-            return;
-        }
+        applyShapeableProperties(ctx, node);
     }
 
     protected void updateTextNode(RenderContext ctx, @Nonnull Text tn) {

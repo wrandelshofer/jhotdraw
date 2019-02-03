@@ -437,6 +437,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * Fires a property change event.
+     *
      * @param <T>      the value type
      * @param source   the event source
      * @param key      the property key
@@ -1018,13 +1019,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * Attempts to change the local bounds of the figure.
      * <p>
      * The figure may choose to only partially change its local bounds.
-     * <p>
-     * This method typically changes property values in this figure with null
-     * null null null null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
-     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
-     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
-     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
-     * {@code reshapeInLocal} on child figures.
      *
      * @param transform the desired transformation in local coordinates
      */
@@ -1033,7 +1027,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * Attempts to change the local bounds of the figure.
      * <p>
-     * See {#link #reshapeInLocal(Transform)} for a description of this method.
+     * See {@link #reshapeInLocal(CssSize, CssSize, CssSize, CssSize)} for a description of this method.
      *
      * @param bounds the desired bounds
      */
@@ -1064,16 +1058,23 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * This method takes parameters as {@code CssSize}s. This can be used to avoid rounding
      * errors when the figure is reshaped in non-pixel units.
+     * <p>
+     * This method can forward a call to {@link #reshapeInLocal(Transform)}
+     * using the following code:
+     * <pre><code>
+     * void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+     *   Transform tx = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
+     *   reshapeInLocal(tx);
+     * }
+     * </code></pre>
+     * </p>
      *
      * @param x      desired x-position in parent coordinates
      * @param y      desired y-position in parent coordinates
      * @param width  desired width in parent coordinates, may be negative
      * @param height desired height in parent coordinates, may be negative
      */
-    default void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
-        Transform tx = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
-        reshapeInLocal(tx);
-    }
+    void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height);
 
     /**
      * Attempts to change the parent bounds of the figure.
