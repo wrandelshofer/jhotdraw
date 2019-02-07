@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.app.action.file;
 
-import java.net.URI;
-import java.util.Optional;
-import java.util.function.BiFunction;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -16,7 +13,12 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
+
+import java.net.URI;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -64,7 +66,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentBased
     }
 
     private void doIt(DocumentBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
-            WorkState workState = new WorkState(getLabel());
+        WorkState workState = new SimpleWorkState(getLabel());
         view.addDisabler(workState);
 
         final BiFunction<DataFormat, Throwable, Void> handler = (actualDataFormat, throwable) -> {

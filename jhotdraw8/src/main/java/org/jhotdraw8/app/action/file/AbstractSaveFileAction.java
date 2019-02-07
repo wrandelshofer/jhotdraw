@@ -3,11 +3,6 @@
  */
 package org.jhotdraw8.app.action.file;
 
-import java.net.URI;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CancellationException;
-
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -16,7 +11,6 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
@@ -24,10 +18,16 @@ import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
+
+import java.net.URI;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CancellationException;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -88,7 +88,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
             return;
         }
         oldFocusOwner = v.getNode().getScene().getFocusOwner();
-        WorkState workState = new WorkState(getLabel());
+        WorkState workState = new SimpleWorkState(getLabel());
         v.addDisabler(workState);
         saveFileChooseUri(v, workState);
     }

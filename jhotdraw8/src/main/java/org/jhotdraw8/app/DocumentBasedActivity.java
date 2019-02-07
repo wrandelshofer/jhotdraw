@@ -10,6 +10,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
 import java.net.URI;
@@ -100,7 +101,7 @@ public interface DocumentBasedActivity extends Activity {
      * <p>
      * This method must not change the current document if reading fails or is canceled.
      * <p>
-     * The activity must be disabled with a {@link WorkState} during a read.
+     * The activity must be disabled with a {@link SimpleWorkState} during a read.
      * See {@link Disableable}.
      * <p>
      * Usage:
@@ -131,7 +132,7 @@ public interface DocumentBasedActivity extends Activity {
      * <p>
      * This method must not change the current document.
      * <p>
-     * The activity must be disabled with a {@link WorkState} during a read.
+     * The activity must be disabled with a {@link SimpleWorkState} during a read.
      * See usage example in {@link #read}.
      *
      * @param uri       the URI
@@ -160,7 +161,7 @@ public interface DocumentBasedActivity extends Activity {
      * <p>
      * This method must not change the current document.
      * <p>
-     * The activity must be disabled with a {@link WorkState} during printing.
+     * The activity must be disabled with a {@link SimpleWorkState} during printing.
      * See usage example in {@link #read}.
      *
      * @param job       the printer job

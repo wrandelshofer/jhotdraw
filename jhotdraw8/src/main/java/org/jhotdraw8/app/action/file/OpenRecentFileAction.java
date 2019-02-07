@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.app.action.file;
 
-import java.net.URI;
-import java.util.MissingResourceException;
-import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
@@ -15,9 +12,14 @@ import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
+
+import java.net.URI;
+import java.util.MissingResourceException;
+import java.util.concurrent.CancellationException;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -116,7 +118,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
     protected void openViewFromURI(@Nonnull final DocumentBasedActivity v, @Nonnull final URI uri, DataFormat format) {
         final Application app = getApplication();
-            WorkState workState = new WorkState(getLabel());
+        WorkState workState = new SimpleWorkState(getLabel());
         v.addDisabler(workState);
 
         // Open the file

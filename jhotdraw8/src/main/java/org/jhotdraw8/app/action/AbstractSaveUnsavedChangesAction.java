@@ -3,11 +3,6 @@
  */
 package org.jhotdraw8.app.action;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletionStage;
-
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,17 +15,22 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
+
+import java.net.URI;
+import java.util.Collections;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletionStage;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
@@ -90,7 +90,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
             final Resources labels = Labels.getLabels();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
-            WorkState workState = new WorkState(getLabel());
+            WorkState workState = new SimpleWorkState(getLabel());
             v.addDisabler(workState);
             if (v.isModified()) {
                 URI unsavedURI = v.getURI();

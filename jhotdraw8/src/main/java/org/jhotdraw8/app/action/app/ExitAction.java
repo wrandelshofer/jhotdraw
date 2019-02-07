@@ -3,11 +3,6 @@
  */
 package org.jhotdraw8.app.action.app;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -17,17 +12,23 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.concurrent.CancellationException;
 
 /**
  * Exits the application after letting the user review and possibly save all
@@ -59,7 +60,7 @@ public class ExitAction extends AbstractApplicationAction {
     @Override
     protected void handleActionPerformed(ActionEvent event, @Nonnull Application app) {
 
-        WorkState workState=new WorkState(getLabel());
+        WorkState workState = new SimpleWorkState(getLabel());
         app.addDisabler(workState);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;

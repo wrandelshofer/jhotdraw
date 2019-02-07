@@ -3,23 +3,25 @@
  */
 package org.jhotdraw8.app.action.file;
 
-import java.net.URI;
-import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Activity;
+
+import java.net.URI;
+import java.util.concurrent.CancellationException;
 
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an empty view.
@@ -57,7 +59,7 @@ public class OpenFileAction extends AbstractApplicationAction {
     @Override
     protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
         {
-            WorkState workState = new WorkState(getLabel());
+            WorkState workState = new SimpleWorkState(getLabel());
             app.addDisabler(workState);
             // Search for an empty view
             DocumentBasedActivity emptyView;

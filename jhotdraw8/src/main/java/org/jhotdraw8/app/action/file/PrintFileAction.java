@@ -7,12 +7,13 @@ import javafx.event.ActionEvent;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
 /**
@@ -53,7 +54,7 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentBasedA
 
     @Override
     protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity view) {
-        WorkState workState = new WorkState();
+        WorkState workState = new SimpleWorkState();
         view.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(view.getNode().getScene().getWindow())) {
