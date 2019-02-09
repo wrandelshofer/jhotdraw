@@ -3,15 +3,24 @@
  */
 package org.jhotdraw8.css;
 
+import javafx.css.StyleOrigin;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.ast.Declaration;
+import org.jhotdraw8.css.ast.Selector;
+import org.jhotdraw8.css.ast.StyleRule;
+import org.jhotdraw8.css.ast.Stylesheet;
+
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -20,17 +29,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import javafx.css.StyleOrigin;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.ast.Declaration;
-import org.jhotdraw8.css.ast.Selector;
-import org.jhotdraw8.css.ast.StyleRule;
-import org.jhotdraw8.css.ast.Stylesheet;
 
 /**
  * SimpleStylesheetsManager.
@@ -421,7 +419,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
                 Stylesheet s = p.parseStylesheet(uri);
-                LOGGER.info("Parsed " + uri + ".\nRules: " + s.getStyleRules());
+                LOGGER.info("Parsed " + uri + ".\n#rules: " + s.getStyleRules().size());
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
                     LOGGER.info("Parsed " + uri + ".\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
