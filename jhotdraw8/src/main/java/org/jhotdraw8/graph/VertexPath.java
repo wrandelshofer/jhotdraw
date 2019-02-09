@@ -5,15 +5,9 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadOnlyList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -65,6 +59,10 @@ public class VertexPath<V> {
         int hash = 7;
         hash = 53 * hash + Objects.hashCode(this.vertices);
         return hash;
+    }
+
+    public boolean isEmpty() {
+        return vertices.isEmpty();
     }
 
     public int size() {
