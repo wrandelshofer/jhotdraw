@@ -123,7 +123,11 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     private int ensureCapacity(K key) {
-        Integer index = keyMap.computeIfAbsent(key, k -> keyMap.size());
+        Integer index = keyMap.get(key);
+        if (index == null) {
+            index = keyMap.size();
+            keyMap.put(key, index);
+        }
         for (int i = values.size(), n = (1 + index); i < n; i++) {
             values.add(null);
         }

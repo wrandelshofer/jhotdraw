@@ -3,6 +3,10 @@
  */
 package org.jhotdraw8.collection;
 
+import javafx.collections.ObservableListBase;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
@@ -13,13 +17,8 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import javafx.collections.ObservableListBase;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -31,7 +30,7 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E>, ReadOnlySet<E> {
+public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
 
     /**
      * The underlying list.
@@ -775,7 +774,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public Stream<E> stream() {
-        return ReadOnlySet.super.stream();
+        return StreamSupport.stream(spliterator(), false);
     }
 
     public void fireItemUpdated(int index) {

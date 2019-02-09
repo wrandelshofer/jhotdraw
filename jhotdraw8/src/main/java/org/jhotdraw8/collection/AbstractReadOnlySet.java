@@ -13,7 +13,8 @@ public abstract class AbstractReadOnlySet<E> implements ReadOnlySet<E> {
             return false;
         }
 
-        ReadOnlyCollection<?> c = (ReadOnlyCollection<?>) o;
+        @SuppressWarnings("unchecked")
+        ReadOnlyCollection<E> c = (ReadOnlyCollection<E>) o;
         if (c.size() != size())
             return false;
         try {

@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.Nonnull;
+
 import java.util.AbstractCollection;
 import java.util.Iterator;
 
@@ -29,6 +30,7 @@ public class CollectionWrapper<E> extends AbstractCollection<E> {
 
     @Override
     public boolean contains(Object o) {
-        return backingCollection.contains(o);
+        @SuppressWarnings("unchecked") E e = (E) o;
+        return backingCollection.contains(e);
     }
 }
