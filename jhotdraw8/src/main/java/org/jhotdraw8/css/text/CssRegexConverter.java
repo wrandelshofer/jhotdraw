@@ -3,20 +3,19 @@
  */
 package org.jhotdraw8.css.text;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.RegexReplace;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.RegexReplace;
 
 /**
  * CssRegexConverter.
@@ -83,7 +82,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
     @Nullable
     @Override
     public RegexReplace fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new StreamCssTokenizer(new StringReader(in.toString()));
+        CssTokenizer tt = new StreamCssTokenizer(new StringReader(in == null ? "" : in.toString()));
         String find = null;
         String replace = null;
 
