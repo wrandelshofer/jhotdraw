@@ -30,29 +30,31 @@
                      </graphic>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false">
-                     <graphic>
-                        <RadioButton fx:id="showAttributeValues" mnemonicParsing="false" selected="true" text="%shownValues.attributeValues">
+                <MenuItem mnemonicParsing="false">
+                  <graphic>
+                    <RadioButton fx:id="showInitialValues" mnemonicParsing="false" text="%shownValues.initialValues">
                            <toggleGroup>
                               <ToggleGroup fx:id="shownValues" />
                            </toggleGroup>
-                        </RadioButton>
-                     </graphic>
-                  </MenuItem>
-                  <MenuItem mnemonicParsing="false">
-                     <graphic>
-                        <RadioButton fx:id="showStylesheetValues" mnemonicParsing="false" text="%shownValues.stylesheetValues" toggleGroup="$shownValues" />
-                     </graphic>
-                  </MenuItem>
-                <MenuItem mnemonicParsing="false">
-                  <graphic>
-                    <RadioButton fx:id="showDefaultValues" mnemonicParsing="false" text="%shownValues.defaultValues"
-                                 toggleGroup="$shownValues"/>
+                    </RadioButton>
                   </graphic>
                 </MenuItem>
                   <MenuItem mnemonicParsing="false">
                      <graphic>
-                        <RadioButton fx:id="showSpecifiedValues" mnemonicParsing="false" text="%shownValues.specifiedValues" toggleGroup="$shownValues" />
+                       <RadioButton fx:id="showAttributeValues" mnemonicParsing="false" selected="true"
+                                    text="%shownValues.attributeValues" toggleGroup="$shownValues"/>
+                     </graphic>
+                  </MenuItem>
+                <MenuItem mnemonicParsing="false">
+                  <graphic>
+                    <RadioButton fx:id="showStylesheetValues" mnemonicParsing="false"
+                                 text="%shownValues.stylesheetValues" toggleGroup="$shownValues"/>
+                  </graphic>
+                </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                       <RadioButton fx:id="showAppliedValues" mnemonicParsing="false" text="%shownValues.appliedValues"
+                                    toggleGroup="$shownValues"/>
                      </graphic>
                   </MenuItem>
               </items>
