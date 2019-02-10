@@ -4,6 +4,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                 return new ImmutableHashSet<>(true, a);
         }
     }
+
     public static <T> ImmutableSet<T> add(ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
@@ -36,6 +38,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                 return new ImmutableHashSet<>(true, a);
         }
     }
+
     @Nonnull
     @SuppressWarnings("unchecked")
     public static <T> ImmutableSet<T> emptySet() {
@@ -54,8 +57,12 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
     public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
         return collection.isEmpty() ? emptySet() : new ImmutableHashSet<>(collection);
     }
+
     @Nonnull
     public static <T> ImmutableSet<T> ofCollection(ReadOnlyCollection<T> collection) {
+        if (collection instanceof ImmutableSet) {
+            return (ImmutableSet<T>) collection;
+        }
         return collection.isEmpty() ? emptySet() : new ImmutableHashSet<>(collection);
     }
 
@@ -65,7 +72,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
     }
 
     @Nonnull
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> ImmutableSet<T> remove(Collection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
@@ -74,7 +81,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                 if (collection.contains(item)) {
                     return (ImmutableSet<T>) emptySet();
                 } else {
-                    return new ImmutableHashSet<>(true, Collections.singleton(item));
+                    return ImmutableSet.ofCollection(collection);
                 }
             case 2:
                 if (collection.contains(item)) {
@@ -84,7 +91,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                     return new ImmutableHashSet<>(true, Collections.singleton(one.equals(item) ? two : one));
 
                 } else {
-                    return new ImmutableHashSet<>(collection);
+                    return ImmutableSet.ofCollection(collection);
                 }
             default:
                 if (collection.contains(item)) {
@@ -92,12 +99,13 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                     a.remove(item);
                     return new ImmutableHashSet<>(true, a);
                 } else {
-                    return new ImmutableHashSet<>(collection);
+                    return ImmutableSet.ofCollection(collection);
                 }
         }
     }
+
     @Nonnull
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> ImmutableSet<T> remove(ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
@@ -106,7 +114,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                 if (collection.contains(item)) {
                     return (ImmutableSet<T>) emptySet();
                 } else {
-                    return new ImmutableHashSet<>(true, Collections.singleton(item));
+                    return ImmutableSet.ofCollection(collection);
                 }
             case 2:
                 if (collection.contains(item)) {
@@ -116,7 +124,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                     return new ImmutableHashSet<>(true, Collections.singleton(one.equals(item) ? two : one));
 
                 } else {
-                    return new ImmutableHashSet<>(collection);
+                    return ImmutableSet.ofCollection(collection);
                 }
             default:
                 if (collection.contains(item)) {
@@ -124,7 +132,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
                     a.remove(item);
                     return new ImmutableHashSet<>(true, a);
                 } else {
-                    return new ImmutableHashSet<>(collection);
+                    return ImmutableSet.ofCollection(collection);
                 }
         }
     }
