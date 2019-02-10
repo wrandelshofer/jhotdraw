@@ -42,10 +42,13 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,11 +61,20 @@ import java.util.Random;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 /**
  * An {@link DocumentBasedApplication} handles the life-cycle of {@link DocumentBasedActivity} objects and
  * provides windows to present them on screen.
- * 
+ * <p>
+ * This implementation supports the following command line parameters:
+ * <pre>
+ *     [uri ...]
+ * </pre>
+ * <dl>
+ *     <dt>uri</dt><dd>The URI of a document. Opens a DocumentBasedActivity for each provided URI.</dd>
+ * </dl>
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -71,6 +83,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     @Nullable
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
+    private Logger LOGGER = Logger.getLogger(DocumentBasedApplication.class.getName());
 
     /**
      * @param args the command line arguments
@@ -78,6 +91,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     public static void main(String[] args) {
         launch(args);
     }
+
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
     private final ReadOnlyObjectWrapper<Activity> activeView = new ReadOnlyObjectWrapper<>();
@@ -128,7 +142,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     /**
      * Creates a menu bar and sets it to the stage or to the system menu.
      *
-     * @param stage the stage, or null to set the system menu
+     * @param stage   the stage, or null to set the system menu
      * @param actions the action map
      * @return the menu bar
      */
@@ -374,7 +388,7 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     /**
      * Called immediately after a view has been removed from the views
-    * property.
+     * property.
      *
      * @param view the view
      */
@@ -402,7 +416,7 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     /**
      * Called immediately after a view has been removed from the views
- set.
+     * set.
      *
      * @param obs the observable
      */
@@ -440,6 +454,54 @@ public class DocumentBasedApplication extends AbstractApplication {
 */
         }
 
+        List<URI> urisToOpen = getUrisToOpen();
+        if (urisToOpen.isEmpty()) {
+            openEmptyView();
+        } else {
+            for (URI uri : urisToOpen) {
+                openView(uri);
+            }
+        }
+    }
+
+    private void openView(URI uri) {
+        final Resources labels = Labels.getLabels();
+        createView().whenComplete((pv, ex1) -> {
+            DocumentBasedActivity v = (DocumentBasedActivity) pv;
+            if (ex1 != null) {
+                ex1.printStackTrace();
+                final Alert alert = new Alert(Alert.AlertType.ERROR,
+                        labels.getString("application.createView.error"));
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.show();
+                return;
+            }
+            add(v);
+            v.addDisabler(this);
+            v.read(uri, null, null, false, new SimpleWorkState()).whenComplete((result, ex) -> {
+                if (ex != null) {
+                    ex.printStackTrace();
+                    final Alert alert = new Alert(Alert.AlertType.ERROR,
+                            labels.getFormatted("file.open.couldntOpen.message", uri)
+                                    + "\n" + ex.getMessage());
+                    alert.getDialogPane().setMaxWidth(640.0);
+                    alert.show();
+                }
+                v.removeDisabler(this);
+            });
+        }).handle((v, ex) -> {
+                    ex.printStackTrace();
+                    final Alert alert = new Alert(Alert.AlertType.ERROR,
+                            labels.getString("application.createView.error"));
+                    alert.getDialogPane().setMaxWidth(640.0);
+                    alert.showAndWait();
+                    exit();
+                    return null;
+                }
+        );
+    }
+
+    private void openEmptyView() {
         final Resources labels = Labels.getLabels();
         createView().whenComplete((pv, ex1) -> {
             DocumentBasedActivity v = (DocumentBasedActivity) pv;
@@ -465,15 +527,32 @@ public class DocumentBasedApplication extends AbstractApplication {
                 }
             });
         }).handle((v, ex) -> {
-            ex.printStackTrace();
-            final Alert alert = new Alert(Alert.AlertType.ERROR,
-                    labels.getString("application.createView.error"));
-            alert.getDialogPane().setMaxWidth(640.0);
-            alert.showAndWait();
-            exit();
-            return null;
-        }
+                    ex.printStackTrace();
+                    final Alert alert = new Alert(Alert.AlertType.ERROR,
+                            labels.getString("application.createView.error"));
+                    alert.getDialogPane().setMaxWidth(640.0);
+                    alert.showAndWait();
+                    exit();
+                    return null;
+                }
         );
+    }
+
+
+    private List<URI> getUrisToOpen() {
+        List<URI> uris = new ArrayList<>();
+        for (String s : getParameters().getUnnamed()) {
+            try {
+                URI uri = new URI(s);
+                if (uri.getScheme() == null) {
+                    uri = Paths.get(s).toUri();
+                }
+                uris.add(uri);
+            } catch (URISyntaxException e) {
+                LOGGER.warning("Ignoring unnamed parameter, because it is not a legal URI: " + s);
+            }
+        }
+        return uris;
     }
 
     private void updateRecentMenuItemsInAllMenuBars(Observable o) {
@@ -502,9 +581,9 @@ public class DocumentBasedApplication extends AbstractApplication {
                     Menu mmi = (Menu) mi;
                     if ("file.openRecentMenu".equals(mmi.getId())) {
                         mmi.getItems().clear();
-                        for (Map.Entry<URI,DataFormat> entry : recentUrisProperty()) {
-                            URI uri=entry.getKey();
-                            DataFormat format=entry.getValue();
+                        for (Map.Entry<URI, DataFormat> entry : recentUrisProperty()) {
+                            URI uri = entry.getKey();
+                            DataFormat format = entry.getValue();
                             MenuItem mii = new MenuItem();
                             Action a = new OpenRecentFileAction(this, uri, format);
                             Actions.bindMenuItem(mii, a);
