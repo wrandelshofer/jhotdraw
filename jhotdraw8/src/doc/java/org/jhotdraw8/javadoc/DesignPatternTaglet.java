@@ -6,6 +6,10 @@ package org.jhotdraw8.javadoc;
 
 
 import com.sun.source.doctree.DocTree;
+import com.sun.source.doctree.LinkTree;
+import com.sun.source.doctree.ReferenceTree;
+import com.sun.source.doctree.TextTree;
+import com.sun.source.util.DocTreeScanner;
 import jdk.javadoc.doclet.Taglet;
 
 import javax.lang.model.element.Element;
@@ -67,10 +71,226 @@ public class DesignPatternTaglet implements Taglet {
         return "design.pattern";
     }
 
+    private class TagsVisitor extends DocTreeScanner<Void, StringBuilder> {
+
+        @Override
+        public Void scan(DocTree node, StringBuilder result) {
+            switch (node.getKind()) {
+
+                case ATTRIBUTE:
+                    break;
+                case AUTHOR:
+                    break;
+                case CODE:
+                    break;
+                case COMMENT:
+                    break;
+                case DEPRECATED:
+                    break;
+                case DOC_COMMENT:
+                    break;
+                case DOC_ROOT:
+                    break;
+                case DOC_TYPE:
+                    break;
+                case END_ELEMENT:
+                    break;
+                case ENTITY:
+                    break;
+                case ERRONEOUS:
+                    break;
+                case EXCEPTION:
+                    break;
+                case HIDDEN:
+                    break;
+                case IDENTIFIER:
+                    break;
+                case INDEX:
+                    break;
+                case INHERIT_DOC:
+                    break;
+                case LINK:
+                    StringBuilder labelBuilder = new StringBuilder();
+                    for (DocTree docTree : ((LinkTree) node).getLabel()) {
+                        docTree.accept(this, labelBuilder);
+                    }
+                    String label = labelBuilder.toString();
+                    ReferenceTree reference = ((LinkTree) node).getReference();
+                    result.append(label);
+                    String href = reference.getSignature().replace('.', '/');
+                    if (label.isEmpty()) {
+                        label = reference.getSignature();
+                        int p = label.lastIndexOf('.');
+                        label = label.substring(p + 1);
+                    }
+
+                    result.append("<a href=\"");
+                           /*
+                            if (holder instanceof Type) {
+                                Type type = (Type) holder;
+                                String qualifiedName = type.qualifiedTypeName();
+                                for (int p = qualifiedName.indexOf('.'); p != -1; p = qualifiedName.indexOf('.', p + 1)) {
+                                    result.append("../");
+                                }
+                            }*/
+                    result.append(href)//
+                            .append(".html\">");
+                    result.append(label)//
+                            .append("</a>");
+                    break;
+                case LINK_PLAIN:
+                    break;
+                case LITERAL:
+                    break;
+                case PARAM:
+                    break;
+                case PROVIDES:
+                    break;
+                case REFERENCE:
+                    break;
+                case RETURN:
+                    break;
+                case SEE:
+                    break;
+                case SERIAL:
+                    break;
+                case SERIAL_DATA:
+                    break;
+                case SERIAL_FIELD:
+                    break;
+                case SINCE:
+                    break;
+                case START_ELEMENT:
+                    break;
+                case SUMMARY:
+                    break;
+                case TEXT:
+                    result.append(((TextTree) node).getBody());
+                    break;
+                case THROWS:
+                    break;
+                case UNKNOWN_BLOCK_TAG:
+                    break;
+                case UNKNOWN_INLINE_TAG:
+                    break;
+                case USES:
+                    break;
+                case VALUE:
+                    break;
+                case VERSION:
+                    break;
+                case OTHER:
+                    break;
+            }
+
+            return null;
+        }
+    }
+
     @Override
     public String toString(List<? extends DocTree> tags, Element element) {
-        return "todo";
+        if (tags.isEmpty()) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        result.append("<hr>\n");
+        result.append("<div class=\"block\">");
+        for (DocTree docTree : tags) {
+            result.append(docTree.getKind());
+            docTree.accept(new TagsVisitor(), result);
+        }
+
+//        for (int i = 0; i < tags.length; i++) {
+//            result.append("<p>");
+//            for (Tag parsedTag : lookupDescription(parseInlineTags(tags[i]))) {
+//                switch (parsedTag.kind()) {
+//                    case NAME:
+//                        DesignPatternHeaderTag dpt = (DesignPatternHeaderTag) parsedTag;
+//                        result.append("<b>Design Pattern:</b> ")//
+//                                // .append(dpt.instantiatingType).append(" ")//
+//                                .append(dpt.patternName);
+//                        if (dpt.patternRole.length() > 0) {
+//                            result.append(", <b>Role:</b> ").append(dpt.patternRole);
+//                        }
+//                        result.append('.');
+//                        result.append("<br>");
+//                        break;
+//                    case "@see":
+//                        if (parsedTag instanceof SeeTag) {
+//                            SeeTag see = (SeeTag) parsedTag;
+//                            String href = see.referencedClassName().replace('.', '/');
+//                            String label = see.label();
+//                            if (label.isEmpty()) {
+//                                label = see.referencedClassName();
+//                                int p = label.lastIndexOf('.');
+//                                label = label.substring(p + 1);
+//                            }
+//
+//                            result.append("<a href=\"");
+//                            Doc holder = tags[0].holder();
+//                            if (holder instanceof Type) {
+//                                Type type = (Type) holder;
+//                                String qualifiedName = type.qualifiedTypeName();
+//                                for (int p = qualifiedName.indexOf('.'); p != -1; p = qualifiedName.indexOf('.', p + 1)) {
+//                                    result.append("../");
+//                                }
+//                            }
+//                            result.append(href)//
+//                                    .append(".html\">");
+//                            result.append(label)//
+//                                    .append("</a>");
+//                        } else {
+//                            result.append(parsedTag.text());
+//                        }
+//                        break;
+//                    default:
+//                        result.append(parsedTag.text());
+//                        break;
+//                }
+//            }
+//
+//            String[] textParts = splitText(tags[i]);
+//            result.append("<b>Design Pattern:</b> ").append(textParts[0]);
+//            if (textParts[1].length() > 0) {
+//                result.append(", <b>Role:</b> ").append(textParts[1]);
+//            }
+//            result.append('.');
+//
+//            String description;
+//            if (textParts[2].length() > 0) {
+//                description = textParts[2];
+//                descriptions.put(textParts[0], textParts[2]);
+//            } else {
+//                description = descriptions.get(textParts[0]);
+//                if (description == null) {
+//                    description = "";
+//                }
+//            }
+//
+//            if (description.length() > 0) {
+//
+//                Doc holder = tags[0].holder();
+//                if (holder instanceof Type) {
+//                    Type type = (Type) holder;
+//                    String qualifiedName = type.qualifiedTypeName();
+//                    String href = "";
+//                    for (int p = qualifiedName.indexOf('.'); p != -1; p = qualifiedName.indexOf('.', p + 1)) {
+//                        href = "../" + href;
+//                    }
+//                    description = description.replaceAll("href=\"", "href=\"" + href);
+//                }
+//
+//                result.append("<br>").append(description);
+//            }
+//
+//            result.append("</p>");
+//        }
+        result.append("</div");
+        result.append("<hr>\n");
+        return result.toString();
     }
+
+
 /*
     public static final String NAME = "design.pattern";
     private static final String HEADER = "Design Patterns:";
@@ -182,114 +402,8 @@ public class DesignPatternTaglet implements Taglet {
     public String toString(Tag tag) {
         return toString(new Tag[]{tag});
     }
-
-    *//**
-     * Given an array of <code>Tag</code>s representing this custom tag, return
-     * its string representation.
-     *
-     * @param tags the array of <code>Tag</code>s representing of this custom
-     *             tag.
-     * @return the String representation
-     *//*
-    @Override
-    public String toString(Tag[] tags) {
-        if (tags.length == 0) {
-            return "";
-        }
-        StringBuilder result = new StringBuilder();
-        result.append("<hr>\n");
-        result.append("<div class=\"block\">");
-        for (int i = 0; i < tags.length; i++) {
-            result.append("<p>");
-            for (Tag parsedTag : lookupDescription(parseInlineTags(tags[i]))) {
-                switch (parsedTag.kind()) {
-                    case NAME:
-                        DesignPatternHeaderTag dpt = (DesignPatternHeaderTag) parsedTag;
-                        result.append("<b>Design Pattern:</b> ")//
-                                // .append(dpt.instantiatingType).append(" ")//
-                                .append(dpt.patternName);
-                        if (dpt.patternRole.length() > 0) {
-                            result.append(", <b>Role:</b> ").append(dpt.patternRole);
-                        }
-                        result.append('.');
-                        result.append("<br>");
-                        break;
-                    case "@see":
-                        if (parsedTag instanceof SeeTag) {
-                            SeeTag see = (SeeTag) parsedTag;
-                            String href = see.referencedClassName().replace('.', '/');
-                            String label = see.label();
-                            if (label.isEmpty()) {
-                                label = see.referencedClassName();
-                                int p = label.lastIndexOf('.');
-                                label = label.substring(p + 1);
-                            }
-
-                            result.append("<a href=\"");
-                            Doc holder = tags[0].holder();
-                            if (holder instanceof Type) {
-                                Type type = (Type) holder;
-                                String qualifiedName = type.qualifiedTypeName();
-                                for (int p = qualifiedName.indexOf('.'); p != -1; p = qualifiedName.indexOf('.', p + 1)) {
-                                    result.append("../");
-                                }
-                            }
-                            result.append(href)//
-                                    .append(".html\">");
-                            result.append(label)//
-                                    .append("</a>");
-                        } else {
-                            result.append(parsedTag.text());
-                        }
-                        break;
-                    default:
-                        result.append(parsedTag.text());
-                        break;
-                }
-            }
-            *//*
-            String[] textParts = splitText(tags[i]);
-            result.append("<b>Design Pattern:</b> ").append(textParts[0]);
-            if (textParts[1].length() > 0) {
-                result.append(", <b>Role:</b> ").append(textParts[1]);
-            }
-            result.append('.');
-
-            String description;
-            if (textParts[2].length() > 0) {
-                description = textParts[2];
-                descriptions.put(textParts[0], textParts[2]);
-            } else {
-                description = descriptions.get(textParts[0]);
-                if (description == null) {
-                    description = "";
-                }
-            }
-
-            if (description.length() > 0) {
-
-                Doc holder = tags[0].holder();
-                if (holder instanceof Type) {
-                    Type type = (Type) holder;
-                    String qualifiedName = type.qualifiedTypeName();
-                    String href = "";
-                    for (int p = qualifiedName.indexOf('.'); p != -1; p = qualifiedName.indexOf('.', p + 1)) {
-                        href = "../" + href;
-                    }
-                    description = description.replaceAll("href=\"", "href=\"" + href);
-                }
-
-                result.append("<br>").append(description);
-            }*//*
-
-            result.append("</p>");
-        }
-        result.append("</div");
-        result.append("<hr>\n");
-        return result.toString();
-    }
-
-    static class DesignPatternHeaderTag extends CompositeTag {
+*/
+    /*    static class DesignPatternHeaderTag extends CompositeTag {
         *//**
      * The qualified name of the instantiating type.
      *//*
@@ -325,9 +439,9 @@ public class DesignPatternTaglet implements Taglet {
             return patternRole;
         }
 
-    }
+    }*/
 
-    *//**
+    /**
      * Tries to return a qualified name. Returns the unqualified name,
      * if it can not be looked up.
      *
@@ -435,8 +549,8 @@ public class DesignPatternTaglet implements Taglet {
      *
      * @param tag A design pattern tag
      * @return The parsed inline tags
-     *//*
-    public static Tag[] parseInlineTags(Tag tag) {
+     */
+   /* public static Tag[] parseInlineTags(Tag tag) {
         Tag[] inline = tag.inlineTags();
         if (inline.length == 0 || "@see".equals(inline[0].kind())) {
             return inline;
