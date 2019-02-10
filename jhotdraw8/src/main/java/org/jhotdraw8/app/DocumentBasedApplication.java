@@ -43,6 +43,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.SimpleWorkState;
+import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
@@ -414,12 +415,6 @@ public class DocumentBasedApplication extends AbstractApplication {
         }
     }
 
-    /**
-     * Called immediately after a view has been removed from the views
-     * set.
-     *
-     * @param obs the observable
-     */
     protected void handleTitleChanged(Observable obs) {
         disambiguateViews();
     }
@@ -486,6 +481,11 @@ public class DocumentBasedApplication extends AbstractApplication {
                                     + "\n" + ex.getMessage());
                     alert.getDialogPane().setMaxWidth(640.0);
                     alert.show();
+                } else {
+                    v.setURI(uri);
+                    v.setDataFormat(result);
+                    v.clearModified();
+                    v.setTitle(UriUtil.getName(uri));
                 }
                 v.removeDisabler(this);
             });
