@@ -3,22 +3,6 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.prefs.Preferences;
-
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -36,27 +20,41 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
-import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.StyleRule;
+import org.jhotdraw8.css.ast.Stylesheet;
+import org.jhotdraw8.css.text.CssIdentConverter;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.Converter;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.prefs.Preferences;
 
 /**
  * FXML Controller class
@@ -87,6 +85,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
     @FXML
     private RadioButton showStylesheetValues;
+
+    @FXML
+    private RadioButton showDefaultValues;
 
     @FXML
     private RadioButton showSpecifiedValues;
@@ -168,6 +169,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             case "user":
                 showAttributeValues.setSelected(true);
                 break;
+            case "userAgent":
+                showDefaultValues.setSelected(true);
+                break;
             case "styled":
             default:
                 showSpecifiedValues.setSelected(true);
@@ -184,6 +188,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             origin = "user";
         } else if (showStylesheetValues.isSelected()) {
             origin = "author";
+        } else if (showDefaultValues.isSelected()) {
+            origin = "userAgent";
         } else {
             origin = "styled";
         }
@@ -249,6 +255,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             origin = StyleOrigin.USER;
         } else if (showStylesheetValues.isSelected()) {
             origin = StyleOrigin.AUTHOR;
+        } else if (showDefaultValues.isSelected()) {
+            origin = StyleOrigin.USER_AGENT;
         } else {
             origin = null;
         }
