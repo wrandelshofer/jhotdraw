@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.PropertyKey">
+  <title>Property Key</title>
+  <para>The drawing editor supports editing of the properties of the figures in a drawing.
+  </para>
+  <para>We do not want to use reflection for accessing property accessor methods of a JavaFX Bean.</para>
+  <para>We define an interface PropertyBean that provides a type-safe map of properties.</para>
+  <para>The keys of the map are instances of interface Key&lt;V&gt; with the following properties:</para>
+  <itemizedlist>
+    <listitem>
+      <para>&lt;V&gt; is the value type, so that we can create type safe map accessor methods like &lt;V&gt; V get(Key&lt;V&gt;
+        key).
+      </para>
+    </listitem>
+    <listitem>
+      <para>value class is a reference to the value type class Class&lt;V&gt;, so that we can perform runtime type
+        checks for values.
+      </para>
+    </listitem>
+  </itemizedlist>
+</section>

@@ -2,16 +2,6 @@
 <bibliography xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
 xmlns:xlink="http://www.w3.org/1999/xlink">
   
-<biblioentry xml:id="bib.cc-by">
-  <abbrev>CC-BY</abbrev>
-  <authorgroup><author><orgname>Creative Commons</orgname></author></authorgroup>
-  <copyright><year>2016</year><holder>Creative Commons</holder></copyright>
-  <title>Creative Commons Attribution 4.0</title>
-  <releaseinfo>
-    <link xlink:href="http://creativecommons.org/licenses/by/4.0/"/>
-  </releaseinfo>
-</biblioentry>
-
 <biblioentry xml:id="bib.ahig">
   <abbrev>MacHIGuidelines</abbrev>
   <authorgroup><author><orgname>Apple, Inc.</orgname></author></authorgroup>
@@ -31,16 +21,5 @@ xmlns:xlink="http://www.w3.org/1999/xlink">
     <link xlink:href="https://docs.microsoft.com/de-de/windows/desktop/uxguide/"/>
   </releaseinfo>
 </biblioentry>
-
-<biblioentry xml:id="bib.lgpl">
-  <abbrev>LGPL</abbrev>
-  <authorgroup><author><orgname>Free Software Foundation, Inc.</orgname></author></authorgroup>
-  <copyright><year>2007</year><holder>Free Software Foundation, Inc.</holder></copyright>
-  <title>GNU Lesser General Public License 3</title>
-  <releaseinfo>
-    <link xlink:href="http://www.gnu.org/licenses/lgpl-3.0.html"/>
-  </releaseinfo>
-</biblioentry>
-
 
 </bibliography>

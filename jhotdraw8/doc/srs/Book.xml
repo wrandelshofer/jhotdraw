@@ -3,7 +3,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 <info>
   <!-- see IEEE 830 SRS -->
-<title>JHotDraw 8: Software Requirements Specification</title>
+  <title>JHotDraw 8: Software Specification</title>
 <author>
     <personname>
         <firstname>Werner</firstname>
@@ -34,7 +34,8 @@
 <xi:include href="overalldescription/AssumptionsAndDependencies.xml"/>
 -->
 </chapter>
-<chapter><title>Specific requirements</title>
+  <chapter>
+    <title>Requirements</title>
   <!--
 <section><title>External Interface Requirements</title>
 <xi:include href="requirements/external/UserInterfaces.xml"/>
@@ -51,6 +52,9 @@
 </section>
 <section><title>Drawing Editor Framework</title>
 <xi:include href="requirements/draw/DrawingEditorFramework.xml"/>
+  <xi:include href="requirements/draw/AutomaticLayoutForFigures.xml"/>
+  <xi:include href="requirements/draw/CascadingStyleSheetsForDrawings.xml"/>
+  <xi:include href="requirements/draw/DrawingLayers.xml"/>
 </section>
 
 <!--
@@ -63,6 +67,21 @@
 3.2.1.3. n  Functional requirement  n
  -->
 </chapter>
+
+  <chapter>
+    <title>Design</title>
+    <!--
+  <section><title>Application Framework</title>
+  </section>
+  -->
+    <section>
+      <title>Drawing Editor Framework</title>
+      <xi:include href="design/draw/DrawingIsTreeStructure.xml"/>
+      <xi:include href="design/draw/LayoutDependencyBetweenFigures.xml"/>
+      <xi:include href="design/draw/PropertyKey.xml"/>
+    </section>
+  </chapter>
+
   <!--
 3.3 Performance requirements
 3.4 Design constraints

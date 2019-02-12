@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
   <title>Definitions</title>
+  <para>This chapter contains definitions.</para>
   <glossary>
     <title>List of terms:</title>
     <glossentry xml:id="glossterm.application">
