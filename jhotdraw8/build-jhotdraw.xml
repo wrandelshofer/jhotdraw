@@ -10,6 +10,8 @@
 
   <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home"/>
   <property name="jdk.version" value="8"/>
+  <property name="jdk.documentation" value="/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home"/>
+  <property name="jdk.documentation.version" value="11"/>
 
   <exec executable="git" outputproperty="git.hash.date.author" failifexecutionfails="false" errorproperty="">
     <arg value="log"/>
@@ -226,7 +228,7 @@
       <arg value="${doc}/srs/Book.xml"/>
     </exec>
   </target>
-  <target name="do-docbook.validate" depends="init,do-docbook.crossreference">
+  <target name="do-docbook.validate" depends="init,do-docbook.copy,do-docbook.crossreference">
     <!--property name="docbookfiles" value="doc/JHotDraw8Handbook.xml"/-->
     <pathconvert property="docbookfiles" pathsep=" ">
       <map from="${basedir}${file.separator}" to=""/>
@@ -752,10 +754,9 @@
   </target>
 
   <target name="do-docbook.compile" depends="init">
-    <!--
     <mkdir dir="${build.doc.classes}"/>
-    <javac executable="${jdk}/bin/javac" fork="yes"
-           source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.doc.classes}"
+    <javac executable="${jdk.documentation}/bin/javac" fork="yes"
+           source="${jdk.documentation.version}" target="${jdk.documentation.version}" encoding="UTF-8" destdir="${build.doc.classes}"
            debug="true"
     >
         <compilerarg value="-Xlint"/>
@@ -775,7 +776,6 @@
             <include name="**/*.css"/>
         </fileset>
     </copy>
-    -->
   </target>
   <target depends="init" name="do-javadoc">
     <mkdir dir="${build.javadoc}"/>
@@ -786,12 +786,13 @@
              maxmemory="256M"
              overview="${src.main.java}/org/jhotdraw8/overview.html"
              charset="UTF-8"
-             executable="${jdk}/bin/javadoc"
+             executable="${jdk.documentation}/bin/javadoc"
+             additionalparam="-html5"
     >
-      <!--
+
       <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
       <taglet name="org.jhotdraw8.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
-      -->
+
       <packageset dir="${src.main.java}">
         <include name="org/jhotdraw/**"/>
       </packageset>
@@ -801,8 +802,10 @@
       <classpath>
         <pathelement path="${lib.runtime}"/>
         <fileset file="${jdk}/lib/tools.jar"/>
+        <fileset file="${lib}/compile/modulepath/javafx-sdk-11.0.1/lib/*.jar"/>
         <!--pathelement path="${build.javadoc}"/-->
       </classpath>
+
     </javadoc>
   </target>
   <target name="do-jar.main" depends="init">
@@ -913,7 +916,7 @@
   </target>
   <target name="jar" depends="compile,do-jar.main" description="bundles the class files into a jar file">
   </target>
-  <target name="javadoc" depends="clean,compile,do-javadoc" description="generates api documentation">
+  <target name="javadoc" depends="clean,compile,do-docbook.compile,do-javadoc" description="generates api documentation">
   </target>
   <target name="docbook" depends="clean,javadoc,do-docbook"
           description="generates specification and user documentation">
