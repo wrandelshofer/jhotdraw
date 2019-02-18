@@ -11,6 +11,7 @@
 <xsl:template match="/">
 <section>
 <title>References</title>
+<para>This sections contains the bibliography.</para>
 <bibliography>
 <xsl:apply-templates/>
 </bibliography>
