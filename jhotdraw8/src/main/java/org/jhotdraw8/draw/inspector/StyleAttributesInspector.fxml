@@ -32,7 +32,7 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false">
                   <graphic>
-                    <RadioButton fx:id="showInitialValues" mnemonicParsing="false" text="%shownValues.initialValues">
+                    <RadioButton fx:id="showUserAgentValues" mnemonicParsing="false" text="%shownValues.userAgentValues">
                            <toggleGroup>
                               <ToggleGroup fx:id="shownValues" />
                            </toggleGroup>

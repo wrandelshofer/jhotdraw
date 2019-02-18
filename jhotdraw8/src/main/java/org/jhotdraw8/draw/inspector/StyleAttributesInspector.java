@@ -87,7 +87,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private RadioButton showStylesheetValues;
 
     @FXML
-    private RadioButton showInitialValues;
+    private RadioButton showUserAgentValues;
 
     @FXML
     private RadioButton showAppliedValues;
@@ -170,7 +170,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 showAttributeValues.setSelected(true);
                 break;
             case "userAgent":
-                showInitialValues.setSelected(true);
+                showUserAgentValues.setSelected(true);
                 break;
             case "styled":
             default:
@@ -188,7 +188,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             origin = "user";
         } else if (showStylesheetValues.isSelected()) {
             origin = "author";
-        } else if (showInitialValues.isSelected()) {
+        } else if (showUserAgentValues.isSelected()) {
             origin = "userAgent";
         } else {
             origin = "styled";
@@ -255,7 +255,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             origin = StyleOrigin.USER;
         } else if (showStylesheetValues.isSelected()) {
             origin = StyleOrigin.AUTHOR;
-        } else if (showInitialValues.isSelected()) {
+        } else if (showUserAgentValues.isSelected()) {
             origin = StyleOrigin.USER_AGENT;
         } else {
             origin = null;
