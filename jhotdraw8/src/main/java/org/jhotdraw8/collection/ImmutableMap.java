@@ -41,4 +41,15 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
         return new ImmutableHashMap<>(entrySet);
     }
 
+    static <K, V> ImmutableMap<K, V> ofMap(Map<? extends K, ? extends V> map) {
+        return new ImmutableHashMap<>(map);
+    }
+
+    static <K, V> ImmutableMap<K, V> emptyMap() {
+        @SuppressWarnings("unchecked")
+        ImmutableMap<K, V> map = (ImmutableMap<K, V>)ImmutableHashMap.EMPTY_MAP;
+        return map;
+    }
+
+
 }

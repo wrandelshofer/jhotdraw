@@ -8,8 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, ReadOnlyMap<K, V> {
+public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K,V> implements ImmutableMap<K, V> {
     private final Map<K, V> backingMap;
+    final static ImmutableMap<?,?> EMPTY_MAP = new ImmutableHashMap<>() ;
+
 
 
     public ImmutableHashMap(Map<? extends K, ? extends V> backingMap) {
@@ -112,5 +114,10 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, ReadOnlyMap<K
     @Override
     public boolean containsKey(K key) {
         return backingMap.containsKey(key);
+    }
+
+    @Override
+    public String toString() {
+        return  backingMap.toString();
     }
 }

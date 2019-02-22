@@ -40,7 +40,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
     }
 
     @Nonnull
-    static <T> ImmutableList<T> add(@Nullable Collection<T> collection, int index, T item) {
+    static <T> ImmutableList<T> add(@Nonnull Collection<T> collection, int index, T item) {
         if (collection == null || collection.isEmpty() && index == 0) {
             return ImmutableList.of(item);
         }
@@ -54,7 +54,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
     }
 
     @Nonnull
-    static <T> ImmutableList<T> add(@Nullable ReadOnlyCollection<T> collection, int index, T item) {
+    static <T> ImmutableList<T> add(@Nonnull ReadOnlyCollection<T> collection, int index, T item) {
         if (collection == null || collection.isEmpty() && index == 0) {
             return ImmutableList.of(item);
         }
@@ -65,6 +65,14 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
         System.arraycopy(a, index, b, index + 1, a.length - index);
         b[index] = item;
         return new ImmutableArrayList<>(true, b);
+    }
+    @Nonnull
+    static <T> ImmutableList<T> addAll(@Nonnull ReadOnlyCollection<T> first, @Nonnull ReadOnlyCollection<T> second) {
+        Object[] a = new Object[first.size()+second.size()];
+        int i=0;
+        for (T t:first) a[i++]=t;
+        for (T t:second) a[i++]=t;
+        return new ImmutableArrayList<>(true, a);
     }
 
     @Nonnull
