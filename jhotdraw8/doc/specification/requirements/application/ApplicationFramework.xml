@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.ApplicationFramework">
+    <title>Application Framework</title>
+    <para>The application framework</para>
+    <itemizedlist>
+        <listitem>
+            <para>defines a design for document-based applications,</para>
+        </listitem>
+        <listitem>
+            <para>provides an API of the design,</para>
+        </listitem>
+        <listitem>
+            <para>provides a reference implementation of the API.</para>
+        </listitem>
+    </itemizedlist>
+</section>

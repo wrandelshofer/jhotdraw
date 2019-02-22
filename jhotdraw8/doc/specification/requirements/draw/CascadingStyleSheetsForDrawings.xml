@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xml:id="requirement.CascadingStyleSheetForDrawings">
+  <title>Cascading Style Sheets for Drawings</title>
+  <para>A drawing can be styled with a cascading style sheet.</para>
+
+  <para>A drawing supports the 4 style origins defined in JavaFX class StyleOrigin:</para>
+  <variablelist>
+    <varlistentry>
+      <term>AUTHOR</term>
+      <listitem>
+        <para>the value is set from an external stylesheet</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>USER_AGENT</term>
+      <listitem>
+        <para>the value is set from an internal stylesheet,</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>USER</term>
+      <listitem>
+        <para>the value is set on the property</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>INLINE</term>
+      <listitem>
+        <para>the value is set from a style in the „style“ property of the figure</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+
+  <para>The user can:</para>
+  <itemizedlist>
+    <listitem>
+      <para>add and remove AUTHOR stylesheets.</para>
+    </listitem>
+    <listitem>
+      <para>edit USER property values</para>
+    </listitem>
+    <listitem>
+      <para>edit the value of the INLINE style property</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>The developer of a drawing editor can:</para>
+  <itemizedlist>
+    <listitem>
+      <para>define the USER_AGENT stylesheets.</para>
+    </listitem>
+  </itemizedlist>
+</section>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.GraphAsDirectedGraph">
+  <title>Graph as Directed Graph</title>
+  <para>A graph <inlineequation><mathphrase>G = (V, E)</mathphrase></inlineequation>
+    can by represented by a directed graph <inlineequation><mathphrase>DG = (V, A)</mathphrase></inlineequation>
+  using the following mapping:</para>
+<itemizedlist>
+  <listitem><para>A vertex in the graph is mapped to a vertex in the directed graph:
+    <inlineequation><mathphrase>V ∈ G ⇔ V ∈ DG</mathphrase></inlineequation>.</para>
+  </listitem>
+  <listitem>
+    <para>Vertex mapping is bijective: <inlineequation><mathphrase>V ∈ G = V ∈ DG</mathphrase></inlineequation>.</para>
+  </listitem>
+  <listitem><para>An edge in the graph is mapped to two arrows in the directed graph:
+    <inlineequation><mathphrase>E ∈ G = A_k, A_l ∈ DG, E = (v_i, v_j), A_k = (v_i, v_j), A_l = (v_j, v_i), i ≠ j, k ≠ l, v ∈ V</mathphrase></inlineequation>.
+  </para>
+  </listitem>
+  <listitem>
+    <para>Edge to Arrow mapping is injective. We can not map every Directed Graph back to a Graph.</para>
+  </listitem>
+</itemizedlist>
+  <para>This mapping is useful, because it allows to use algorithms for directed
+  graphs on undirected graphs, without having to re-implement the algorithms.</para>
+</section>

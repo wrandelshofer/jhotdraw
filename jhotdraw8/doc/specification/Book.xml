@@ -80,6 +80,13 @@
       <xi:include href="design/draw/LayoutDependencyBetweenFigures.xml"/>
       <xi:include href="design/draw/PropertyKey.xml"/>
     </section>
+    <section>
+      <title>Graph Library</title>
+      <xi:include href="design/graph/GraphLibrary.xml"/>
+      <xi:include href="design/graph/Graph.xml"/>
+      <xi:include href="design/graph/DirectedGraph.xml"/>
+      <xi:include href="design/graph/GraphAsDirectedGraph.xml"/>
+    </section>
   </chapter>
 
   <!--
