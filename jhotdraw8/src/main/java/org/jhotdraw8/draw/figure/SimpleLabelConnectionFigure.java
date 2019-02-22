@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @version $Id$
  */
 public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
-        implements HideableFigure, FontableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
+        implements HideableFigure, TextFontableFigure, TextLayoutableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.

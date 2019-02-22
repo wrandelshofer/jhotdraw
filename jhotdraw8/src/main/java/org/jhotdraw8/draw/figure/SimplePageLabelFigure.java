@@ -5,6 +5,8 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -12,8 +14,6 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.StringStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +26,7 @@ import java.time.format.FormatStyle;
  * @version $Id$
  */
 public class SimplePageLabelFigure extends AbstractLabelFigure
-        implements HideableFigure, FontableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
+        implements HideableFigure, TextFontableFigure, TextLayoutableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
     public final static String TYPE_SELECTOR = "PageLabel";
     public final static String NUM_PAGES_PLACEHOLDER = "${numPages}";
     public final static String PAGE_PLACEHOLDER = "${page}";

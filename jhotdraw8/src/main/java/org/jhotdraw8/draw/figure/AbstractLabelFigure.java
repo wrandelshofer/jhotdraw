@@ -41,7 +41,7 @@ import java.util.Objects;
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure
         implements TextFillableFigure, FillableFigure, StrokableFigure,
-        FontableFigure, ConnectableFigure, PathIterableFigure, ShapeableFigure,
+        TextFontableFigure, TextLayoutableFigure, ConnectableFigure, PathIterableFigure, ShapeableFigure,
         PaddableFigure {
 
     public final static CssSizeStyleableFigureKey ORIGIN_X = new CssSizeStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
@@ -136,7 +136,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
         tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
-        applyFontableFigureProperties(null, tn);
+        applyTextFontableFigureProperties(null, tn);
+        applyTextLayoutableFigureProperties(null, tn);
         return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 
@@ -190,7 +191,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         tn.setX(getStyledNonnull(ORIGIN_X).getConvertedValue());
         tn.setY(getStyledNonnull(ORIGIN_Y).getConvertedValue());
         applyTextFillableFigureProperties(ctx, tn);
-        applyFontableFigureProperties(ctx, tn);
+        applyTextFontableFigureProperties(ctx, tn);
+        applyTextLayoutableFigureProperties(ctx, tn);
     }
 
 }

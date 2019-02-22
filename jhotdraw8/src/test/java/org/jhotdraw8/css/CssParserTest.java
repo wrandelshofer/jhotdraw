@@ -326,7 +326,16 @@ public class CssParserTest {
 
                 dynamicTest("33", () -> testCssSyntax(false, "AB,, {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB x=\"y\"/></xml>"))
+                        "<xml><AB x=\"y\"/></xml>")),
+
+                // attribute value has curly braces
+                dynamicTest("41", () -> testCssSyntax(false, "AB {x:{y}}}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"{y}\"/></xml>")),
+                dynamicTest("42", () -> testCssSyntax(false, "AB {x:{class:[Object]};y=4}}", //
+                        "<xml><AB/></xml>",//
+                        "<xml><AB x=\"{class:[Object]}\" y=\"4\"/></xml>"))
+
         )/**/;
     }
 

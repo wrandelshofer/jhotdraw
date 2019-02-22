@@ -3,28 +3,6 @@
  */
 package org.jhotdraw8.svg;
 
-import java.awt.Graphics2D;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineBreakMeasurer;
-import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.net.URI;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -81,33 +59,51 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.text.CssDoubleConverter;
+import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.css.text.CssNumberConverter;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssDoubleConverter;
-import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.css.text.CssNumberConverter;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
-import org.jhotdraw8.xml.text.XmlNumberConverter;
+import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.xml.XmlUtil;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.awt.font.TextAttribute;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.net.URI;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Exports a JavaFX scene graph to SVG.
@@ -1133,7 +1129,7 @@ public class SvgExporter {
     }
 
     private Element writeText(Document doc, Element parent, Text node) {
-        Element elem= node.getWrappingWidth() > 0 ? writeWrappedText(doc, parent, node) : writeUnwrappedText(doc, parent, node);
+        Element elem = node.getWrappingWidth() > 0 ? writeWrappedText(doc, parent, node) : writeUnwrappedText(doc, parent, node);
         writeTextAttributes(elem, node);
         return elem;
     }
@@ -1191,13 +1187,13 @@ public class SvgExporter {
         Element elem = doc.createElement("text");
         parent.appendChild(elem);
         drawText(doc, elem, node.getText(), node.getLayoutBounds(), node.getFont(), 8,
-                node.isUnderline(), node.isStrikethrough(), node.getTextAlignment());
+                node.isUnderline(), node.isStrikethrough(), node.getTextAlignment(), node.getLineSpacing());
         return elem;
     }
 
     private void drawText(Document doc, Element parent, String str, Bounds textRect,
                           Font tfont, int tabSize, boolean isUnderlined, boolean isStrikethrough,
-                          TextAlignment textAlignment) {
+                          TextAlignment textAlignment, double lineSpacing) {
         FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
         java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
         float leftMargin = (float) textRect.getMinX();
@@ -1229,8 +1225,9 @@ public class SvgExporter {
                     }
                     int tabCount = paragraphs[i].split("\t").length - 1;
                     Rectangle2D.Double paragraphBounds = drawParagraph(doc, parent, frc,
-                           paragraphs[i], as.getIterator(), verticalPos, maxVerticalPos, leftMargin, rightMargin, tabStops, tabCount, textAlignment);
-                    verticalPos = (float) (paragraphBounds.y + paragraphBounds.height);
+                            paragraphs[i], as.getIterator(), verticalPos, maxVerticalPos, leftMargin, rightMargin, tabStops, tabCount, textAlignment,
+                            lineSpacing);
+                    verticalPos = (float) (paragraphBounds.y + paragraphBounds.height + lineSpacing);
                     if (verticalPos > maxVerticalPos) {
                         break;
                     }
@@ -1257,7 +1254,7 @@ public class SvgExporter {
                                              FontRenderContext frc, String paragraph, AttributedCharacterIterator styledText,
                                              float verticalPos, float maxVerticalPos, float leftMargin,
                                              float rightMargin, float[] tabStops, int tabCount,
-                                             TextAlignment textAlignment) {
+                                             TextAlignment textAlignment, double lineSpacing) {
         // This method is based on the code sample given
         // in the class comment of java.awt.font.LineBreakMeasurer,
 
@@ -1283,9 +1280,8 @@ public class SvgExporter {
         LineBreakMeasurer measurer = new LineBreakMeasurer(styledText, frc);
         int currentTab = 0;
 
-            int textIndex=0;
-        while (measurer.getPosition() < styledText.getEndIndex() &&
-                verticalPos <= maxVerticalPos) {
+        int textIndex = 0;
+        while (measurer.getPosition() < styledText.getEndIndex() && verticalPos <= maxVerticalPos) {
 
             // Lay out and draw each line.  All segments on a line
             // must be computed before any drawing can occur, since
@@ -1372,7 +1368,7 @@ public class SvgExporter {
 
                 Element tspan = doc.createElement("tspan");
                 int characterCount = nextLayout.getCharacterCount();
-                tspan.appendChild(doc.createTextNode(paragraph.substring(textIndex,textIndex+characterCount)));
+                tspan.appendChild(doc.createTextNode(paragraph.substring(textIndex, textIndex + characterCount)));
                 tspan.setAttribute("x", nb.toString(nextPosition));
                 tspan.setAttribute("y", nb.toString(verticalPos));
                 parent.appendChild(tspan);
@@ -1383,15 +1379,14 @@ public class SvgExporter {
                         layoutBounds.getWidth(),
                         layoutBounds.getHeight()));
 
-                textIndex+=characterCount;
+                textIndex += characterCount;
             }
 
-            verticalPos += maxDescent;
+            verticalPos += maxDescent + lineSpacing;
         }
 
         return paragraphBounds;
     }
-
 
     private void writeTextAttributes(Element elem, Text node) {
         Font ft = node.getFont();
@@ -1399,6 +1394,11 @@ public class SvgExporter {
         elem.setAttribute("font-size", nb.toString(ft.getSize()));
         elem.setAttribute("font-style", ft.getStyle().contains("italic") ? "italic" : "normal");
         elem.setAttribute("font-weight", ft.getStyle().contains("bold") || ft.getName().toLowerCase().contains("bold") ? "bold" : "normal");
+        if (node.isUnderline()) {
+            elem.setAttribute("text-decoration", "underline");
+        } else if (node.isStrikethrough()) {
+            elem.setAttribute("text-decoration", "line-through ");
+        }
     }
 
     private void writeTransformAttributes(@Nonnull Element elem, Node node) {

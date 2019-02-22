@@ -219,13 +219,13 @@
       <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
       <env key="XML_DEBUG_CATALOG" value="1"/>
       <arg value="--output"/>
-      <arg value="${builddoc}/srs/introduction/References.xml"/>
+      <arg value="${builddoc}/specification/introduction/References.xml"/>
       <arg value="--param"/>
       <arg value="writing.mode"/>
       <arg value="lr"/>
       <arg value="--xinclude"/>
       <arg value="${src.doc.xsl}/collectbiblio.xsl"/>
-      <arg value="${doc}/srs/Book.xml"/>
+      <arg value="${doc}/specification/Book.xml"/>
     </exec>
   </target>
   <target name="do-docbook.validate" depends="init,do-docbook.copy,do-docbook.crossreference">
@@ -237,7 +237,7 @@
                       <include name="*.xml"/>
                       <exclude name="catalog.xml"/>
                   </fileset>
-                  <fileset dir="${builddoc}/srs">
+                  <fileset dir="${builddoc}/specification">
                       <include name="*.xml"/>
                       <exclude name="catalog.xml"/>
                   </fileset>  -->
@@ -331,7 +331,7 @@
 
       <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
-        <include name="srs/JHotDraw8SRS.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
       </fileset>
       <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.html}/*/index.html"/>
     </apply>
@@ -356,17 +356,17 @@
 
       <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
-        <include name="srs/JHotDraw8SRS.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
       </fileset>
       <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.chunked}/*/index.html"/>
     </apply>
     <copy toDir="${basedir}/${build.doc.chunked}/handbook/JHotDraw8Handbook">
-      <fileset dir="${doc}/srs/requirements/draw">
+      <fileset dir="doc/specification/requirements/draw">
         <include name="**/*.svg"/>
       </fileset>
     </copy>
-    <copy toDir="${basedir}/${build.doc.chunked}/srs/JHotDraw8SRS">
-      <fileset dir="${doc}/srs/requirements/draw">
+    <copy toDir="${basedir}/${build.doc.chunked}/specification/JHotDraw8SRS">
+      <fileset dir="doc/specification/requirements/draw">
         <include name="**/*.svg"/>
       </fileset>
     </copy>
@@ -390,7 +390,7 @@
 
       <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
-        <include name="srs/JHotDraw8SRS.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
       </fileset>
       <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/fo/*.xml"/>
     </apply>
@@ -415,7 +415,7 @@
 
       <fileset dir="${builddoc}">
         <include name="handbook/JHotDraw8Handbook.xml"/>
-        <include name="srs/JHotDraw8SRS.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
       </fileset>
       <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/epub3/*"/>
     </apply>
@@ -425,14 +425,14 @@
         <include name="**/*.svg"/>
       </fileset>
     </copy>
-    <copy toDir="${basedir}/${build}/doc/epub3/srs/OEBPS">
-      <fileset dir="${doc}/srs/requirements/draw">
+    <copy toDir="${basedir}/${build}/doc/epub3/specification/OEBPS">
+      <fileset dir="doc/specification/requirements/draw">
         <include name="**/*.svg"/>
       </fileset>
     </copy>
 
-    <zip basedir="${basedir}/${build}/doc/epub3/srs"
-         destfile="${basedir}/${build}/doc/epub3/srs.epub">
+    <zip basedir="${basedir}/${build}/doc/epub3/specification"
+         destfile="${basedir}/${build}/doc/epub3/specification.epub">
       <include name="mimetype"/>
       <include name="META-INF/**"/>
       <include name="OEBPS/**"/>
@@ -605,10 +605,10 @@
                 style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
     />
 
-    <call-saxon destdir="${build.doc}/chunk/srs"
-                srcfile="${builddoc}/srs/Book.xml"
-                srcdir="${builddoc}/srs"
-                destfile="${build.doc}/chunk/srs/JHotDraw8SRS.xhtml"
+    <call-saxon destdir="${build.doc}/chunk/specification"
+                srcfile="${builddoc}/specification/Book.xml"
+                srcdir="${builddoc}/specification"
+                destfile="${build.doc}/chunk/specification/JHotDraw8SRS.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
     />
   </target>
@@ -621,16 +621,16 @@
                 imgdestdir="${build.doc}/epub3/handbook/OEBPS"
     />
 
-    <call-saxon destdir="${build.doc}/epub3/srs"
-                srcfile="${builddoc}/srs/Book.xml"
-                srcdir="${builddoc}/srs"
-                destfile="${build.doc.html}/epub3/srs/JHotDraw8SRS.xhtml"
+    <call-saxon destdir="${build.doc}/epub3/specification"
+                srcfile="${builddoc}/specification/Book.xml"
+                srcdir="${builddoc}/specification"
+                destfile="${build.doc.html}/epub3/specification/JHotDraw8SRS.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
-                imgdestdir="${build.doc}/epub3/srs/OEBPS"
+                imgdestdir="${build.doc}/epub3/specification/OEBPS"
     />
 
-    <zip basedir="${basedir}/${build.doc}/epub3/srs"
-         destfile="${basedir}/${build.doc}/epub3/JHotDraw8-SRS.epub">
+    <zip basedir="${basedir}/${build.doc}/epub3/specification"
+         destfile="${basedir}/${build.doc}/epub3/JHotDraw8-Specification.epub">
       <include name="mimetype"/>
       <include name="META-INF/**"/>
       <include name="OEBPS/**"/>
@@ -652,10 +652,10 @@
                 style="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"
     />
 
-    <call-saxon destdir="${build.doc}/html5/srs"
-                srcfile="${builddoc}/srs/Book.xml"
-                srcdir="${builddoc}/srs"
-                destfile="${build.doc}/html5/srs/JHotDraw8SRS.xhtml"
+    <call-saxon destdir="${build.doc}/html5/specification"
+                srcfile="${builddoc}/specification/Book.xml"
+                srcdir="${builddoc}/specification"
+                destfile="${build.doc}/html5/specification/JHotDraw8Specification.xhtml"
                 style="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"
     />
   </target>

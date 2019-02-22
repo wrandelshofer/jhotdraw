@@ -1,7 +1,7 @@
-/* @(#)GrapherActivityController.java
+/* @(#)DiagrammerActivityController.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.grapher;
+package org.jhotdraw8.samples.diagrammer;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
@@ -91,7 +91,6 @@ import org.jhotdraw8.draw.inspector.StylesheetsInspector;
 import org.jhotdraw8.draw.inspector.ToolsToolbar;
 import org.jhotdraw8.draw.inspector.ZoomToolbar;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
-import org.jhotdraw8.draw.io.DefaultFigureFactory;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
@@ -113,6 +112,8 @@ import org.jhotdraw8.gui.dock.SingleItemDock;
 import org.jhotdraw8.gui.dock.SplitPaneTrack;
 import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.samples.diagrammer.figure.UmlCompartmentableShapeFigure;
+import org.jhotdraw8.samples.diagrammer.io.DiagrammerFigureFactory;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.util.Resources;
 
@@ -130,14 +131,14 @@ import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
 /**
- * GrapherActivityController.
+ * DiagrammerActivityController.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
+public class DiagrammerActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
 
-    private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
+    private final static String DIAGRAMMER_NAMESPACE_URI = "http://jhotdraw.org/samples/diagrammer";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
     /**
      * Counter for incrementing layer names.
@@ -232,7 +233,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         map.put(VIEWTOGGLE_PROPERTIES, new ToggleBooleanAction(
                 getApplication(), this,
                 VIEWTOGGLE_PROPERTIES,
-                Resources.getResources("org.jhotdraw8.samples.grapher.Labels"), detailsVisible));
+                Resources.getResources("org.jhotdraw8.samples.diagrammer.Labels"), detailsVisible));
         map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(SimpleGroupFigure::new)));
         map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(SimpleCombinedPathFigure::new)));
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
@@ -251,7 +252,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
-        Resources labels = Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw8.samples.diagrammer.Labels");
         Supplier<Layer> layerFactory = () -> createFigure(SimpleLayer::new);
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("tool.resizeFigure", HandleType.RESIZE, null, HandleType.LEAD, labels), 0, 0);
@@ -270,7 +271,11 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                 layerFactory), 6, 0);
         ttbar.addTool(new CreationTool("edit.createTextArea", labels, () -> createFigure(SimpleTextAreaFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 5, 0, 0);
-        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 8, 0, 16);
+
+        ttbar.addTool(new CreationTool("edit.createUMLCompartmentableShape", labels, () -> createFigure(UmlCompartmentableShapeFigure::new), layerFactory), 8, 0, 16);
+
+
+        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 10, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             SimplePageFigure pf = new SimplePageFigure();
             pf.set(SimplePageFigure.PAPER_SIZE, new CssPoint2D(297, 210, "mm"));
@@ -280,12 +285,12 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                     FillableFigure.FILL, null, StrokableFigure.STROKE, null);
             pf.addChild(pl);
             return pf;
-        }), layerFactory), 8, 1, 16);
+        }), layerFactory), 10, 1, 16);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new SimplePageLabelFigure(0, 0,
                         labels.getFormatted("pageLabel.text", SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
                         FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 9, 1);
+                layerFactory), 11, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -298,7 +303,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("GrapherActivity.fxml"));
+            node = loader.load(getClass().getResourceAsStream("DiagrammerActivity.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -312,9 +317,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             modified.set(true);
         });
 
-        FigureFactory factory = new DefaultFigureFactory();
+        FigureFactory factory = new DiagrammerFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
-        SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+        SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 io, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(io));
@@ -408,9 +413,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     @Override
     public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
         return FXWorker.supply(() -> {
-            FigureFactory factory = new DefaultFigureFactory();
+            FigureFactory factory = new DiagrammerFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
-            SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+            SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             return drawing;
@@ -423,11 +428,11 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
-                GrapherApplication.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString(),//
-                GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
+                DiagrammerApplication.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString(),//
+                DiagrammerApplication.class.getResource("/org/jhotdraw8/samples/diagrammer/diagrammer.css").toString()//
         );
 
-        Preferences prefs = Preferences.userNodeForPackage(GrapherActivityController.class);
+        Preferences prefs = Preferences.userNodeForPackage(DiagrammerActivityController.class);
 //        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 
@@ -447,9 +452,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
                 io.write(uri, drawing, workState);
             } else {
-                FigureFactory factory = new DefaultFigureFactory();
+                FigureFactory factory = new DiagrammerFigureFactory();
                 IdFactory idFactory = new SimpleFigureIdFactory();
-                SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+                SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
                 io.write(uri, drawing, workState);
             }
         }).handle((voidvalue, ex) -> {

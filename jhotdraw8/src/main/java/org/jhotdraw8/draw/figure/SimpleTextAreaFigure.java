@@ -29,7 +29,7 @@ public class SimpleTextAreaFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,
-        TextableFigure, FontableFigure, TextFillableFigure, PaddableFigure {
+        TextableFigure, TextFontableFigure, TextLayoutableFigure, TextFillableFigure, PaddableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -68,7 +68,8 @@ public class SimpleTextAreaFigure extends AbstractLeafFigure
         applyStrokableFigureProperties(ctx, p);
         applyFillableFigureProperties(ctx, p);
         text.setText(getStyledNonnull(TEXT));
-        applyFontableFigureProperties(ctx, text);
+        applyTextFontableFigureProperties(ctx, text);
+        applyTextLayoutableFigureProperties(ctx, text);
         applyTextFillableFigureProperties(ctx, text);
         applyTransformableFigureProperties(ctx, node);
 

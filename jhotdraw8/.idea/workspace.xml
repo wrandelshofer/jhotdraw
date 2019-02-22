@@ -39,15 +39,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Bumps retention of nullity annotations to &quot;CLASS&quot;.">
-      <change afterPath="$PROJECT_DIR$/org.jhotdraw8.documentation.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Diagrammer.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextLayoutableFigure.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerActivity.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerActivityController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerApplicationModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerMenuBar.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/Labels.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/Labels_de.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/diagrammer.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/package-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/io/DiagrammerFigureFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentedDataStyleableFigureKey.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/package-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/text/CssUmlCompartmentalizedDataConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/text/XmlUmlCompartmentalizedDataConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedDataConverterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-jhotdraw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build-jhotdraw.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/doc/xsl/collectbiblio.xsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/doc/xsl/collectbiblio.xsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/FontableFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextFontableFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimplePageLabelFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimplePageLabelFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextAreaFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextAreaFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/GrapherActivityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/GrapherActivityController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="2ff40a52-acbb-47ed-83d2-e973858521bd" name="New changelist" comment="Minor changes." />
     <ignored path="out/" />
+    <ignored path="builddoc/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,83 +99,92 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Activity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1890">
-              <caret line="126" column="10" selection-start-line="126" selection-start-column="10" selection-end-line="126" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Disableable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
-              <caret line="53" selection-start-line="53" selection-end-line="53" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/javafx-src.zip!/javafx/scene/Node.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81210">
-              <caret line="5414" column="32" selection-start-line="5414" selection-start-column="32" selection-end-line="5414" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/AbstractActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="30" column="48" selection-start-line="30" selection-start-column="48" selection-end-line="30" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/doc/srs/Book.xml">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="189" column="25" lean-forward="true" selection-start-line="189" selection-start-column="25" selection-end-line="189" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextLayoutableFigure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="66">
+              <caret line="41" column="45" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="41" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextFontableFigure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-357">
+              <caret line="62" column="32" lean-forward="true" selection-start-line="62" selection-start-column="32" selection-end-line="62" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="353">
+              <caret line="221" column="38" selection-start-line="221" selection-start-column="38" selection-end-line="221" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelFigure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="318">
+              <caret line="195" selection-start-line="194" selection-end-line="195" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="146">
+              <caret line="18" column="75" selection-start-line="18" selection-start-column="53" selection-end-line="18" selection-end-column="75" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelFigure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="158">
+              <caret line="19" column="75" selection-start-line="19" selection-start-column="75" selection-end-line="19" selection-end-column="75" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimplePageLabelFigure.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="28" column="75" selection-start-line="28" selection-start-column="75" selection-end-line="28" selection-end-column="75" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextAreaFigure.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
-              <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
+              <caret line="71" column="53" selection-start-line="71" selection-start-column="53" selection-end-line="71" selection-end-column="53" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Application.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="37" column="3" selection-start-line="37" selection-start-column="3" selection-end-line="37" selection-end-column="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/action/AbstractSaveUnsavedChangesAction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2520">
-              <caret line="168" column="30" selection-start-line="168" selection-start-column="30" selection-end-line="168" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/teddy/TeddyApplication.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/teddy/TeddyActivityController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+            <state relative-caret-position="176">
+              <caret line="120" selection-start-line="120" selection-end-line="120" />
             </state>
           </provider>
         </entry>
@@ -154,25 +194,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="package-info" />
         <option value="Singleton" />
         <option value="module-info" />
         <option value="Interface" />
-        <option value="Class" />
+        <option value="package-info" />
         <option value="JUnit5 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>DCR_LINK</find>
-      <find>FROM_KEY</find>
-      <find>LINK_</find>
-      <find>Link</find>
-      <find>writePIOA</find>
-      <find>DCR_NODE</find>
-      <find>== goal</find>
-      <find>Nodes</find>
       <find>!=</find>
       <find>FontSmoothing</find>
       <find>List.of</find>
@@ -195,14 +227,16 @@
       <find>/unchecked/</find>
       <find>[/]unchecked</find>
       <find>Bumps retention of nullity annotations to &quot;CLASS&quot;.</find>
+      <find>srs</find>
+      <find>matphrase</find>
+      <find>&lt;varname</find>
+      <find>&lt;/varname</find>
+      <find>Grapher</find>
+      <find>edit.createTextArea</find>
+      <find>&lt;CompartmentedData&gt;</find>
+      <find>setCli</find>
     </findStrings>
     <replaceStrings>
-      <replace>TA$0</replace>
-      <replace>TATu</replace>
-      <replace>*/</replace>
-      <replace>railwayObject=&quot;TA</replace>
-      <replace>Labels.getLabels()</replace>
-      <replace>Layer id=&quot;TA</replace>
       <replace>&quot;secondPath&quot;</replace>
       <replace>marker-</replace>
       <replace>vertices</replace>
@@ -227,6 +261,12 @@
       <replace>GraphPathBuilder</replace>
       <replace>〉</replace>
       <replace>reversingLoop2</replace>
+      <replace>specification</replace>
+      <replace>mathphrase</replace>
+      <replace>&lt;inlineequation&gt;&lt;mathphrase</replace>
+      <replace>&lt;/mathphrase&lt;/inlineequation</replace>
+      <replace>Diagrammer</replace>
+      <replace>&lt;UMLCompartmentedData&gt;</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/main</dir>
@@ -247,65 +287,65 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/figure/MileageLabelFigure.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/action/SpreadPathOffsetsAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/geom/Transforms.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/StrokableFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssInsets.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/model/RailwayModel.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/inspector/EntityStatisticsInspector.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/inspector/AbstractDrawingViewInspector.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/inspector/ErrorReportInspector.java" />
-        <option value="$PROJECT_DIR$/ext/src/test/java/ch/systransis/arl/ferro/graph/DoubleVertexGraphTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/graph/VertexPath.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssToken.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/render/RenderContext.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/model/validator/AbstractRailwayModelValidator.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/figure/SimpleEntityLabelFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/SimpleDrawingView.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssStrokeConverter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextStrokeableFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/FontableFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/gui/dock/TabbedAccordionDock.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/project.css" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/figure/AdjacentEdgeShapeFigure.java" />
-        <option value="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/action/ApplyGeographicLayoutAction.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/graph/DirectedGraphPathBuilderTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/SimpleCssFunctionProcessorTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/io/UnitConverter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/SimpleCssFunctionProcessor.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/DimensionConverterTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssPoint3DConverter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssSize.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/annotation/Nullable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/annotation/Nonnull.java" />
-        <option value="$PROJECT_DIR$/src/doc/java/org/jhotdraw8/javadoc/DesignOverviewTaglet.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ObservableListWrapper.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/tree/TreeNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/input/MultiClipboardOutputFormat.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractRegionFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerApplicationModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/package-info.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UMLCompartmentableShape.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/GrapherActivityController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/Labels.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextableFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UMLCompartmentableShapeFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/CompartmentsStyleableFigureKey.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/Compartments.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UMLCompartmentableData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UMLCompartmentableElement.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/package-info.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UMLCompartmentedElement.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UMLCompartmentedData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UMLCompartmentDataConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UMLCompartmentedDataStyleableFigureKey.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssPaintConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentDataConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlDataElementConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlDataElement.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssTokenType.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableMap.java" />
+        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssParserTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssParser.java" />
+        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/AbstractReadOnlyMap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableHashMap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedData.java" />
+        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedDataConverterTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableList.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ReadOnlyCollection.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/GrapherMain.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/grapher.css" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/tree/TreeModel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TransformableFigure.java" />
-        <option value="$PROJECT_DIR$/build-jhotdraw.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Application.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/OldApplication.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/OldActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/AbstractActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Activity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/DocumentOrientedApplication.java" />
-        <option value="$PROJECT_DIR$/doc/srs/Book.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentedDataStyleableFigureKey.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedDataConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/CssUmlCompartmentalizedDataConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/XmlUmlCompartmentalizedDataConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/io/DiagrammerFigureFactory.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerActivityController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssToken.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/text/XmlUmlCompartmentalizedDataConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/FontableFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextLayoutableFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextFontableFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimplePageLabelFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextAreaFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="581" />
-    <option name="y" value="23" />
-    <option name="width" value="1391" />
-    <option name="height" value="1129" />
+    <option name="x" value="211" />
+    <option name="y" value="60" />
+    <option name="width" value="1550" />
+    <option name="height" value="1027" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -326,30 +366,589 @@
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
               <item name="build" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
+              <item name="build" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="build" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="chunk" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="build" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="chunk" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="builddoc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="draw" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="graph" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="requirements" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="requirements" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="requirements" type="462c0819:PsiDirectoryNode" />
+              <item name="draw" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="requirements" type="462c0819:PsiDirectoryNode" />
+              <item name="external" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
-              <item name="modulepath" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="annotation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="action" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="edit" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="beans" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="binding" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="collection" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="concurrent" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="ast" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="text" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="draw" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="connector" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="constrain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="figure" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="gui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="handle" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="input" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="inspector" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="io" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="key" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="locator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="render" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="event" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="fxml" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="geom" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="graph" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="dock" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="fontchooser" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="diagrammer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="figure" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="io" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="text" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="grapher" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="mini" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="teddy" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="styleable" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="svg" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tree" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="function" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="prefs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="xml" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="text" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
+              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
+              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
+              <item name="org.jhotdraw8.collection" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
+              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
+              <item name="org.jhotdraw8.css" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -454,27 +1053,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
-              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
-              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
-              <item name="org.jhotdraw8.collection" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="58d84e3e:PackageViewProjectNode" />
-              <item name="jhotdraw8" type="616d4139:PackageViewModuleNode" />
-              <item name="org.jhotdraw8.css" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -508,11 +1086,11 @@
       <recent name="org.jhotdraw8.css" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.jhotdraw8.samples.diagrammer.model" />
       <recent name="ch.systransis.arl.ferro.graph" />
       <recent name="org.jhotdraw8.graph" />
       <recent name="ch.systransis.arl.ferro.model.css" />
       <recent name="org.jhotdraw8.css.text" />
-      <recent name="org.jhotdraw8.css" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -530,18 +1108,18 @@
       <recent name="$PROJECT_DIR$/jsr305/src/main" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/doc/specification/design/graph" />
       <recent name="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/inspector" />
       <recent name="$PROJECT_DIR$/doc/srs/requirements/application" />
       <recent name="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/inspector" />
       <recent name="$PROJECT_DIR$/ext/data/TA/TAG/SigKonO/doc/Topology/AdmiRailEditor" />
-      <recent name="$PROJECT_DIR$/ext2/src/editorold" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.jhotdraw8.draw.figure" />
+      <recent name="org.jhotdraw8.samples.diagrammer.io" />
+      <recent name="org.jhotdraw8.collection" />
       <recent name="org.jhotdraw8.app" />
       <recent name="ch.systransis.arl.ferro.inspector" />
-      <recent name="ch.systransis.arl.ferro.model.css" />
-      <recent name="org.jhotdraw8.graph" />
-      <recent name="ch.systransis.arl.ferro.model.assoc" />
     </key>
     <key name="IntroduceConstantDialog.RECENTS_KEY">
       <recent name="ch.systransis.arl.ferro.io.TAFormatConstants" />
@@ -559,7 +1137,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Grapher">
+  <component name="RunManager" selected="Application.Diagrammer">
     <configuration name="Grapher" type="Application" factoryName="Application" singleton="false">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.grapher.GrapherMain" />
@@ -574,68 +1152,93 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="206" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="41" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="jhotdraw8" />
-      <option name="PACKAGE_NAME" value="" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.css.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.css" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.css.CssParserTest" />
+      <option name="METHOD_NAME" value="testCssSyntaxFactory" />
       <option name="TEST_OBJECT" value="uniqueId" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <uniqueIds>
-        <uniqueId value="[engine:junit-jupiter]/[class:org.jhotdraw8.css.SimpleCssFunctionProcessorTest]/[test-factory:testProcessingOfStandardFunctionsFactory()]/[dynamic-test:#26]" />
+        <uniqueId value="[engine:junit-jupiter]/[class:org.jhotdraw8.css.CssParserTest]/[test-factory:testCssSyntaxFactory()]/[dynamic-test:#30]" />
       </uniqueIds>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in jhotdraw8" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="42" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="jhotdraw8" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.css.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.css" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.css.CssParserTest" />
+      <option name="METHOD_NAME" value="testCssSyntaxFactory" />
+      <option name="TEST_OBJECT" value="uniqueId" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <uniqueIds>
+        <uniqueId value="[engine:junit-jupiter]/[class:org.jhotdraw8.css.CssParserTest]/[test-factory:testCssSyntaxFactory()]/[dynamic-test:#31]" />
+      </uniqueIds>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ClampedDoublePropertyTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CssParserTest.testCssSyntaxFactory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="jhotdraw8" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.jhotdraw8.beans.*" />
+          <option name="PATTERN" value="org.jhotdraw8.css.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.jhotdraw8.beans" />
-      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.beans.ClampedDoublePropertyTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ClampedDoublePropertyTest.testBind" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="jhotdraw8" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.jhotdraw8.beans.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.jhotdraw8.beans" />
-      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.beans.ClampedDoublePropertyTest" />
-      <option name="METHOD_NAME" value="testBind" />
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.css" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.css.CssParserTest" />
+      <option name="METHOD_NAME" value="testCssSyntaxFactory" />
       <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleCssFunctionProcessorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnull" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="jhotdraw8" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="uniqueId" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.samples.diagrammer.text.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.samples.diagrammer.model" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.diagrammer.model.UmlCompartmentalizedDataConverterTest" />
+      <option name="METHOD_NAME" value="parseNonnull(java.lang.String,org.jhotdraw8.samples.diagrammer.model.UmlCompartmentalizedData)" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <uniqueIds>
-        <uniqueId value="[engine:junit-jupiter]/[class:org.jhotdraw8.css.SimpleCssFunctionProcessorTest]" />
-      </uniqueIds>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jhotdraw8" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.samples.diagrammer.text.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.samples.diagrammer.model" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.diagrammer.model.UmlCompartmentalizedDataConverterTest" />
+      <option name="METHOD_NAME" value="parseNonnullFactory" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -658,23 +1261,25 @@
     <list>
       <item itemvalue="Application.Grapher" />
       <item itemvalue="Application.Teddy" />
-      <item itemvalue="JUnit.206" />
-      <item itemvalue="JUnit.All in jhotdraw8" />
-      <item itemvalue="JUnit.ClampedDoublePropertyTest" />
-      <item itemvalue="JUnit.ClampedDoublePropertyTest.testBind" />
-      <item itemvalue="JUnit.SimpleCssFunctionProcessorTest" />
+      <item itemvalue="Application.Diagrammer" />
+      <item itemvalue="JUnit.CssParserTest.testCssSyntaxFactory" />
+      <item itemvalue="JUnit.41" />
+      <item itemvalue="JUnit.42" />
+      <item itemvalue="JUnit.UmlCompartmentalizedDataConverterTest.parseNonnull" />
+      <item itemvalue="JUnit.UmlCompartmentalizedDataConverterTest.parseNonnullFactory" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ClampedDoublePropertyTest.testBind" />
-        <item itemvalue="JUnit.ClampedDoublePropertyTest" />
-        <item itemvalue="JUnit.All in jhotdraw8" />
-        <item itemvalue="JUnit.206" />
-        <item itemvalue="JUnit.SimpleCssFunctionProcessorTest" />
+        <item itemvalue="JUnit.UmlCompartmentalizedDataConverterTest.parseNonnullFactory" />
+        <item itemvalue="JUnit.UmlCompartmentalizedDataConverterTest.parseNonnull" />
+        <item itemvalue="JUnit.42" />
+        <item itemvalue="JUnit.CssParserTest.testCssSyntaxFactory" />
+        <item itemvalue="JUnit.41" />
       </list>
     </recent_temporary>
   </component>
   <component name="StructureViewFactory">
+    <option name="AUTOSCROLL_MODE" value="false" />
     <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
   </component>
   <component name="SvnConfiguration">
@@ -709,62 +1314,6 @@
       <workItem from="1546506762302" duration="7115000" />
       <workItem from="1546865664757" duration="1251000" />
       <workItem from="1546867144891" duration="4148000" />
-    </task>
-    <task id="LOCAL-00028" summary="Enhances Graph API.">
-      <created>1544630480020</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1544630480020</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Adds support for more CSS units.">
-      <created>1544731885114</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1544731885114</updated>
-    </task>
-    <task id="LOCAL-00030" summary="Swaps zoom buttons.">
-      <created>1544733751609</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1544733751609</updated>
-    </task>
-    <task id="LOCAL-00031" summary="Adds support for output properties.">
-      <created>1544733763543</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1544733763543</updated>
-    </task>
-    <task id="LOCAL-00032" summary="Adds RenderContext parameter to StrokableFigure methods.">
-      <created>1544783635497</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1544783635497</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Adds RenderContext as argument to more methods.">
-      <created>1544784790674</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1544784790674</updated>
-    </task>
-    <task id="LOCAL-00034" summary="Adds DummyRenderContext.">
-      <created>1544879779490</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1544879779490</updated>
-    </task>
-    <task id="LOCAL-00035" summary="DirectedGraphPathBuilder takes now a goal predicate.">
-      <created>1544953505742</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1544953505742</updated>
     </task>
     <task id="LOCAL-00036" summary="DirectedGraphPathBuilder takes now a goal predicate.">
       <created>1544953904538</created>
@@ -1053,39 +1602,95 @@
       <option name="project" value="LOCAL" />
       <updated>1549203706593</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="Fixes labels.">
+      <created>1550467433873</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1550467433873</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Adds dummy paragraph.">
+      <created>1550467457493</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1550467457493</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Updates IDE files.">
+      <created>1550467481199</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1550467481200</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Implements support for exporting javafx Text nodes with line wrapping.">
+      <created>1550835219590</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1550835219592</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Minor bug fixes in CSS support.">
+      <created>1550835253789</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1550835253789</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Adds documentation.">
+      <created>1550835330495</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1550835330495</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Improves collections.">
+      <created>1550835355555</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1550835355555</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Reformats code.">
+      <created>1550835381370</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1550835381370</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_in_jhotdraw8 - 2018.12.22 at 15h 34m 50s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 50m 47s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_jhotdraw8 - 2018.12.22 at 15h 36m 05s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 51m 59s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_jhotdraw8 - 2018.12.22 at 15h 37m 04s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 52m 31s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_jhotdraw8 - 2018.12.22 at 15h 40m 09s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 53m 38s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="206 - 2018.12.22 at 15h 40m 21s.xml">
-      <configuration name="206" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 53m 52s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="206 - 2018.12.22 at 15h 41m 13s.xml">
-      <configuration name="206" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 54m 30s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_jhotdraw8 - 2018.12.22 at 15h 41m 21s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 54m 43s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_in_jhotdraw8 - 2018.12.22 at 15h 42m 06s.xml">
-      <configuration name="All in jhotdraw8" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 57m 24s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClampedDoublePropertyTest - 2018.12.23 at 20h 57m 54s.xml">
-      <configuration name="ClampedDoublePropertyTest" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 58m 06s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClampedDoublePropertyTest_testBind - 2018.12.23 at 20h 58m 35s.xml">
-      <configuration name="ClampedDoublePropertyTest.testBind" configurationId="JUnit" />
+    <history-entry file="UmlCompartmentalizedDataConverterTest_parseNonnullFactory - 2019.02.22 at 09h 59m 43s.xml">
+      <configuration name="UmlCompartmentalizedDataConverterTest.parseNonnullFactory" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
@@ -1101,9 +1706,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="581" y="23" width="1391" height="1129" extended-state="0" />
+    <frame x="211" y="60" width="1550" height="1027" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.24462564" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.22877984" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.42218542" side_tool="true" weight="0.21424745" />
@@ -1112,13 +1717,13 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="2" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.7613047" side_tool="true" weight="0.34319526" />
-      <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.7605634" side_tool="true" weight="0.34319526" />
-      <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.7593548" side_tool="true" weight="0.4112426" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="3" sideWeight="0.76458883" side_tool="true" visible="true" weight="0.4276316" />
+      <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.76458883" side_tool="true" weight="0.4276316" />
+      <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.7627872" side_tool="true" weight="0.5264901" />
       <window_info anchor="bottom" id="TODO" order="6" side_tool="true" weight="0.3298077" />
-      <window_info anchor="bottom" id="Debug" order="7" sideWeight="0.7613047" side_tool="true" weight="0.34319526" />
-      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.7613047" side_tool="true" weight="0.34319526" />
-      <window_info anchor="bottom" id="Find" order="9" sideWeight="0.7605634" side_tool="true" weight="0.34319526" />
+      <window_info anchor="bottom" id="Debug" order="7" sideWeight="0.76458883" side_tool="true" weight="0.4276316" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.76458883" side_tool="true" weight="0.4276316" />
+      <window_info anchor="bottom" id="Find" order="9" sideWeight="0.76458883" side_tool="true" weight="0.4276316" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.6869658" side_tool="true" weight="0.39307535" />
       <window_info anchor="bottom" id="Run with VisualVM" order="11" sideWeight="0.3080955" weight="0.32790223" />
       <window_info anchor="bottom" id="Debug with VisualVM" order="12" sideWeight="0.49940193" weight="0.32938856" />
@@ -1127,10 +1732,10 @@
       <window_info anchor="bottom" id="Reviews" order="15" />
       <window_info anchor="bottom" id="Database Changes" order="16" show_stripe_button="false" />
       <window_info anchor="bottom" id="Inspection Results" order="17" sideWeight="0.49966556" weight="0.32934782" />
-      <window_info anchor="bottom" id="Structure" order="18" sideWeight="0.23869532" visible="true" weight="0.34319526" />
+      <window_info anchor="bottom" id="Structure" order="18" sideWeight="0.23541114" visible="true" weight="0.4276316" />
       <window_info anchor="bottom" id="Docker" order="19" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" visible="true" weight="0.22386953" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.22386953" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Maven Projects" order="4" />
@@ -1202,14 +1807,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Adds RenderContext as argument to more methods." />
-    <MESSAGE value="Adds DummyRenderContext." />
-    <MESSAGE value="DirectedGraphPathBuilder takes now a goal predicate." />
-    <MESSAGE value="Adds method findAllVertexPaths." />
-    <MESSAGE value="Improves performance." />
-    <MESSAGE value="Fixes nullable annotations." />
-    <MESSAGE value="More handles take now colors and size from DrawingView." />
-    <MESSAGE value="Refactors Graph APIs." />
     <MESSAGE value="Refactors graph API." />
     <MESSAGE value="Adds nullity annotations." />
     <MESSAGE value="CssSize units are now nonnull." />
@@ -1227,7 +1824,17 @@
     <MESSAGE value="Fixes compiler warnings.&#10;Always copies input arrays." />
     <MESSAGE value="Fixes compiler warnings." />
     <MESSAGE value="Updates documentation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates documentation." />
+    <MESSAGE value="Fixes labels." />
+    <MESSAGE value="Adds dummy paragraph." />
+    <MESSAGE value="Updates IDE files." />
+    <MESSAGE value="Implements support for exporting javafx Text nodes with line wrapping." />
+    <MESSAGE value="Minor bug fixes in CSS support." />
+    <MESSAGE value="Adds documentation." />
+    <MESSAGE value="Improves collections." />
+    <MESSAGE value="Reformats code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Reformats code." />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1281,6 +1888,20 @@
           <line>21</line>
           <properties />
           <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/io/SimpleFigureFactory.java</url>
+          <line>559</line>
+          <log-expression expression="&quot;valueToString &quot;+key+&quot; &quot;+value" language="JAVA" />
+          <properties />
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java</url>
+          <line>1374</line>
+          <log-expression expression="&quot;SvgExporter &quot;+paragraph.substring(textIndex,textIndex+characterCount)" language="JAVA" />
+          <properties />
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1395,58 +2016,88 @@
     </expressions>
     <expressions id="breakpointLogExpression">
       <expression>
+        <expression-string>&quot;SvgExporter &quot;+paragraph.substring(textIndex,textIndex+characterCount)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;SvgExporter textIndex: &quot;+textIndex+&quot; &quot;+nextLayout.getTextLineForTesting()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;SvgExporter textIndex: &quot;+textIndex+&quot; &quot;+styledText.getBeginIndex()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;SvgExporter textIndex: &quot;+textIndex+&quot; &quot;+styledText</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;SvgExporter textIndex: &quot;+textIndex</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;valueToString &quot;+key+&quot; &quot;+value</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>converter instanceof DefaultConverter</expression-string>
+        <language-id>JAVA</language-id>
+        <custom-info>org.jhotdraw8.text.DefaultConverter</custom-info>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>converter</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>&quot;outline contains &quot;+b</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;outline contains&quot;</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;Throwable &quot;+message</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>units.convert(new CssSize(4.0,&quot;vh&quot;),null)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>vertices.get(i)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>locationPath</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((RailwayObjectShapeFigure)f).getEntity()</expression-string>
-        <language-id>JAVA</language-id>
-        <custom-info>ch.systransis.arl.ferro.figure.RailwayObjectShapeFigure</custom-info>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>font</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;font size:&quot;+size</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;Throwable &quot;+message+&quot; &quot;+cause</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>node.getWrappingWidth()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>key.getFullValueType()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>valueToXML.get(key.getFullValueType())</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>valueToXML</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>valueToXML.containsKey(key.getFullValueType())</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>valueToXML.containsKey(key)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>keyValueToXML.containsKey(key)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>c.convert(dim2, dim2.getUnits()), dim.getUnits())</expression-string>
         <language-id>JAVA</language-id>
@@ -1457,337 +2108,363 @@
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>((RailwayObjectShapeFigure) f).getEntity().getAssociations().get(0)</expression-string>
-        <language-id>JAVA</language-id>
-        <custom-info>ch.systransis.arl.ferro.model.SimpleRailwayObject,ch.systransis.arl.ferro.figure.RailwayObjectShapeFigure</custom-info>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((SimpleRailwayObject) f).getAssociations().get(0).getLocationPaths(model)</expression-string>
-        <language-id>JAVA</language-id>
-        <custom-info>ch.systransis.arl.ferro.model.SimpleRailwayObject</custom-info>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>getAssociations().get(0).getLocationPaths()</expression-string>
-        <language-id>JAVA</language-id>
-        <custom-info>org.jhotdraw8.collection.SharedKeysMap.MapEntry,java.lang.Object[],org.jhotdraw8.collection.SharedKeysMap,ch.systransis.arl.ferro.model.SimpleRailwayObject,org.jhotdraw8.collection.ImmutableArrayList</custom-info>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>units.convert(styledNonnull,null)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>units.convert(getStyledNonnull(),null)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>units.convert(cssSize,null)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>units.convert(new CssSize(4,&quot;vh&quot;),null)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/DimensionConverterTest.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/util/AbstractMap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="915">
-          <caret line="61" column="88" selection-start-line="61" selection-start-column="88" selection-end-line="61" selection-end-column="88" />
+        <state relative-caret-position="-54">
+          <caret line="67" column="22" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssInsets.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssPoint3DConverter.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
+        <state relative-caret-position="327">
+          <caret line="211" column="4" selection-start-line="211" selection-start-column="4" selection-end-line="211" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssSize.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedDataConverterTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="3" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="3" />
+        <state relative-caret-position="131">
+          <caret line="25" column="52" lean-forward="true" selection-start-line="25" selection-start-column="52" selection-end-line="25" selection-end-column="52" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/beans/ClampedDoublePropertyTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="90" selection-start-line="24" selection-start-column="90" selection-end-line="24" selection-end-column="90" />
+        <state relative-caret-position="151">
+          <caret line="660" column="12" lean-forward="true" selection-start-line="660" selection-start-column="12" selection-end-line="660" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/doc/java/org/jhotdraw8/javadoc/DesignOverviewTaglet.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="33" selection-start-line="15" selection-start-column="33" selection-end-line="15" selection-end-column="33" />
+        <state relative-caret-position="401">
+          <caret line="58" column="15" selection-start-line="58" selection-start-column="15" selection-end-line="58" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/javafx-src.zip!/com/sun/javafx/collections/ElementObservableListDecorator.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/javafx-src.zip!/com/sun/javafx/collections/ImmutableObservableList.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/javafx-src.zip!/javafx/collections/ObservableList.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/javafx-src.zip!/javafx/scene/shape/SVGPath.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/tree/TreeNode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/StreamCssTokenizer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="74" column="29" selection-start-line="74" selection-start-column="29" selection-end-line="74" selection-end-column="29" />
+        <state relative-caret-position="-904">
+          <caret line="159" column="11" selection-start-line="159" selection-start-column="11" selection-end-line="159" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/javafx-src.zip!/javafx/beans/property/ReadOnlyDoubleWrapper.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableList.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssScanner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1350">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        <state relative-caret-position="207">
+          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableCollection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ReadOnlyList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/geom/Shapes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16200">
-          <caret line="1080" column="36" selection-start-line="1080" selection-start-column="28" selection-end-line="1080" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/key/NullableSvgPathStyleableFigureKey.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/graph/BreadthFirstSpliterator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="47" column="11" selection-start-line="47" selection-start-column="11" selection-end-line="47" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/xml/text/XmlCssFontConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ReadOnlyCollection.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssTokenizer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
-          <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+          <caret line="44" column="17" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/input/MultiClipboardOutputFormat.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssRadialGradient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="27" lean-forward="true" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
+        <state relative-caret-position="-918">
+          <caret line="51" column="11" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleRegionFigure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="47" selection-start-line="13" selection-start-column="47" selection-end-line="13" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractRegionFigure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/javax/swing/tree/TreeModel.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/FigureImplementationDetails.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/graph/DirectedGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/GrapherMain.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/Paintable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="17" column="60" selection-start-line="17" selection-start-column="60" selection-end-line="17" selection-end-column="60" />
+          <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/grapher.css">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssPaintableConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="68" selection-start-line="68" selection-end-line="68" />
+        <state relative-caret-position="178">
+          <caret line="47" column="88" selection-start-line="47" selection-start-column="88" selection-end-line="47" selection-end-column="88" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/model/DrawingModel.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssRadialGradientConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2265">
-          <caret line="151" column="29" lean-forward="true" selection-start-line="151" selection-start-column="29" selection-end-line="151" selection-end-column="29" />
+        <state relative-caret-position="15">
+          <caret line="53" column="11" selection-start-line="53" selection-start-column="11" selection-end-line="53" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8745">
-          <caret line="583" column="29" selection-start-line="583" selection-start-column="29" selection-end-line="583" selection-end-column="29" />
+        <state relative-caret-position="394">
+          <caret line="74" column="47" selection-start-line="74" selection-start-column="47" selection-end-line="74" selection-end-column="47" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/beans/ObservableMixin.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/javafx-src.zip!/com/sun/javafx/scene/text/TextLayout.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+        <state relative-caret-position="248">
+          <caret line="35" column="53" lean-forward="true" selection-start-line="35" selection-start-column="53" selection-end-line="35" selection-end-column="53" />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/src.zip!/java.desktop/javax/swing/tree/TreeModel.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/awt/Font.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1830">
-          <caret line="122" column="16" selection-start-line="122" selection-start-column="16" selection-end-line="122" selection-end-column="16" />
+        <state relative-caret-position="512">
+          <caret line="566" column="11" selection-start-line="566" selection-start-column="11" selection-end-line="566" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/tree/TreeModel.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/javafx-src.zip!/javafx/scene/text/TextAlignment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/FigurePersistenceDelegate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="36" column="89" selection-start-line="36" selection-start-column="89" selection-end-line="36" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TransformableFigure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4635">
-          <caret line="309" column="12" selection-start-line="309" selection-start-column="12" selection-end-line="309" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ObservableListWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build-jhotdraw.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="52" column="51" selection-start-line="52" selection-start-column="51" selection-end-line="52" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/geom/BezierPath.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="1341" column="40" lean-forward="true" selection-start-line="1341" selection-start-column="40" selection-end-line="1341" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/OldApplication.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/OldActivity.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/DocumentOrientedApplication.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/AbstractDocumentOrientedActivity.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Activity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1890">
-          <caret line="126" column="10" selection-start-line="126" selection-start-column="10" selection-end-line="126" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Disableable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
+        <state relative-caret-position="188">
+          <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/javafx-src.zip!/javafx/scene/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81210">
-          <caret line="5414" column="32" selection-start-line="5414" selection-start-column="32" selection-end-line="5414" selection-end-column="32" />
+        <state relative-caret-position="188">
+          <caret line="3236" column="24" selection-start-line="3236" selection-start-column="24" selection-end-line="3236" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/AbstractActivity.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/text/AttributedString.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="48" selection-start-line="30" selection-start-column="48" selection-end-line="30" selection-end-column="48" />
+        <state relative-caret-position="1601">
+          <caret line="124" column="11" selection-start-line="124" selection-start-column="11" selection-end-line="124" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/Application.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/awt/font/TextLayout.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="37" column="3" selection-start-line="37" selection-start-column="3" selection-end-line="37" selection-end-column="3" />
+        <state relative-caret-position="240">
+          <caret line="2646" column="19" selection-start-line="2646" selection-start-column="19" selection-end-line="2646" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/app/action/AbstractSaveUnsavedChangesAction.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/awt/font/TextLine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2520">
-          <caret line="168" column="30" selection-start-line="168" selection-start-column="30" selection-end-line="168" selection-end-column="30" />
+        <state relative-caret-position="309">
+          <caret line="790" column="25" selection-start-line="790" selection-start-column="25" selection-end-line="790" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/teddy/TeddyApplication.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/lang/Object.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        <state relative-caret-position="158">
+          <caret line="234" column="18" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/teddy/TeddyActivityController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/io/DefaultFigureFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+        <state relative-caret-position="158">
+          <caret line="110" column="11" selection-start-line="110" selection-start-column="11" selection-end-line="110" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/doc/srs/Book.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/SimpleDrawingView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="1445" selection-start-line="1445" selection-end-line="1445" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/AbstractDrawingView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="33">
+          <caret line="134" column="54" selection-start-line="134" selection-start-column="54" selection-end-line="134" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/AbstractCssConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/io/SimpleXmlIO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="773" selection-start-line="773" selection-end-line="773" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/io/SimpleFigureFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="572" column="34" lean-forward="true" selection-start-line="572" selection-start-column="34" selection-end-line="572" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentedDataStyleableFigureKey.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="75" selection-start-line="75" selection-end-line="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/text/CssUmlCompartmentalizedDataConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerActivityController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="423" column="44" selection-start-line="423" selection-start-column="44" selection-end-line="423" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/lang/Character.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="4569" selection-start-line="4569" selection-end-line="4569" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssToken.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="84" column="5" selection-start-line="84" selection-start-column="5" selection-end-line="84" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/text/CssPaintConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53">
+          <caret line="44" column="88" selection-start-line="44" selection-start-column="88" selection-end-line="44" selection-end-column="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableHashMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="113" column="13" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextableFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="40" lean-forward="true" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/io/DiagrammerFigureFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="207" column="94" selection-start-line="207" selection-start-column="94" selection-end-line="207" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/text/XmlUmlCompartmentalizedDataConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="31" column="44" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/javafx-src.zip!/javafx/scene/text/Text.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="683" column="24" selection-start-line="683" selection-start-column="24" selection-end-line="683" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="1393" selection-start-line="1393" selection-end-line="1393" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/javafx-src.zip!/javafx/scene/control/Labeled.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="95" column="22" selection-start-line="95" selection-start-column="22" selection-end-line="95" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelConnectionFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="52" column="22" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="18" column="75" selection-start-line="18" selection-start-column="53" selection-end-line="18" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="19" column="75" selection-start-line="19" selection-start-column="75" selection-end-line="19" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimplePageLabelFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="28" column="75" selection-start-line="28" selection-start-column="75" selection-end-line="28" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="195" selection-start-line="194" selection-end-line="195" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextAreaFigure.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
-          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
+          <caret line="71" column="53" selection-start-line="71" selection-start-column="53" selection-end-line="71" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="120" selection-start-line="120" selection-end-line="120" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextLayoutableFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="41" column="45" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="41" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextFontableFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-357">
+          <caret line="62" column="32" lean-forward="true" selection-start-line="62" selection-start-column="32" selection-end-line="62" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="221" column="38" selection-start-line="221" selection-start-column="38" selection-end-line="221" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="189" column="25" lean-forward="true" selection-start-line="189" selection-start-column="25" selection-end-line="189" selection-end-column="25" />
         </state>
       </provider>
     </entry>

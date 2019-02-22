@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -19,24 +20,22 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.RelativeLocator;
-import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.Shapes;
-
-import org.jhotdraw8.annotation.Nonnull;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
 /**
- * {@code SimpleTextFigure} is a {@code FontableFigure} which supports stroking and
+ * {@code SimpleTextFigure} is a {@code TextFontableFigure} which supports stroking and
  * filling of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class SimpleTextFigure extends AbstractLeafFigure
-        implements StrokableFigure, FillableFigure, TransformableFigure, FontableFigure,
+        implements StrokableFigure, FillableFigure, TransformableFigure, TextFontableFigure, TextLayoutableFigure,
         TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 
@@ -116,7 +115,8 @@ public class SimpleTextFigure extends AbstractLeafFigure
         applyStrokableFigureProperties(ctx, tn);
         applyFillableFigureProperties(ctx, tn);
         applyCompositableFigureProperties(ctx, tn);
-        applyFontableFigureProperties(ctx, tn);
+        applyTextFontableFigureProperties(ctx, tn);
+        applyTextLayoutableFigureProperties(ctx, tn);
         applyStyleableFigureProperties(ctx, node);
         tn.applyCss();// really??
     }
