@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Drawing height="240" id="drawing1" width="320" xmlns="http://jhotdraw.org/samples/grapher">
-<Layer id="layer1">
-  <Polyline fill="none" id="polyline1" points="135,150 135,180 240,180 240,60 160,60"/>
-  <Label id="label1" origin="120 60.86328125" padding="8">Figure</Label>
-  <Label fill="none" id="label2" origin="90 130.86328125" padding="8">CompositeFigure</Label>
-  <LineConnectionWithMarkers end="136.7198684692383 71.90625" endConnector="rectangle" endTarget="label1" fill="black" id="lineconnectionwithmarkers1" marker-line-inset-end="10" marker-line-inset-start="10" marker-shape-end="M0,0 L-10,5 -10,-5Z M-1.8,0 L-9,-3.5 -9,3.5Z" start="135.9725143432617 111.5" startConnector="rectangle" startTarget="label2"/>
-  <Polygon id="polygon1" points="135,142 130,147 135,152 140,147"/>
-</Layer>
-</Drawing>
