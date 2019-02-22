@@ -292,13 +292,21 @@ public class CssTokenType {
      */
     public final static int TT_RIGHT_BRACKET = ')';
     /**
-     * Defines the right curly bracket "" delim-token.
+     * Defines the right curly bracket "}" delim-token.
      */
     public final static int TT_RIGHT_CURLY_BRACKET = '}';
+    /**
+     * Defines the left curly bracket "{" delim-token.
+     */
+    public final static int TT_LEFT_CURLY_BRACKET = '{';
     /**
      * Defines the right square bracket "]" delim-token.
      */
     public final static int TT_RIGHT_SQUARE_BRACKET = ']';
+    /**
+     * Defines the left square bracket "[" delim-token.
+     */
+    public final static int TT_LEFT_SQUARE_BRACKET = '[';
     /**
      * Defines the slash "/" delim-token.
      */

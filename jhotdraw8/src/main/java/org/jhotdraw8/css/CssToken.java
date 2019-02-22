@@ -48,7 +48,7 @@ public class CssToken /*extends AST*/ {
     }
 
     public CssToken(int ttype, String stringValue, @Nullable Character preferredQuoteChar) {
-        this(ttype, stringValue, null, preferredQuoteChar, 0, stringValue.length());
+        this(ttype, stringValue, null, preferredQuoteChar, 0,0, stringValue.length());
 
     }
 

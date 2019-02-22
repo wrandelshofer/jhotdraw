@@ -63,7 +63,7 @@ public class CssPaintConverter extends AbstractCssConverter<Paint> {
 
     @Override
     public String getHelpText() {
-        throw new UnsupportedOperationException();
+        return paintableConverter.getHelpText();
     }
 
     @Override

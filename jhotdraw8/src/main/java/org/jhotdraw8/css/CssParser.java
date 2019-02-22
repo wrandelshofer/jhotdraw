@@ -125,8 +125,14 @@ import org.jhotdraw8.css.ast.UniversalSelector;
  *                ( NUMBER , { S } | PERCENTAGE , { S }  | LENGTH , { S }
  *                | EMS , { S } | EXS , { S } | ANGLE , { S } | TIME , { S }
  *                | FREQ , { S } | STRING , { S } | IDENT , { S } | URI , { S }
- *                | hexcolor | function
+ *                | hexcolor
+ *                | function
+ *                | bracketedTerms
  *                ) ;
+ *
+ * bracketedTerms = "{", {term} "}"
+ *                | "[", {term} "]";
+ *
  *
  * function     = FUNCTION , { S } , expr , ')' , { S } ;
  * expr         = term , { [ operator ] , term } ;
@@ -660,7 +666,39 @@ public class CssParser {
         tt.pushBack();
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
                 && //
-                tt.current() != '}' && tt.current() != ';') {
+                tt.current() != CssTokenType.TT_RIGHT_CURLY_BRACKET && tt.current() !=CssTokenType.TT_SEMICOLON) {
+            switch (tt.current()) {
+                case CssTokenType.TT_CDC:
+                case CssTokenType.TT_CDO:
+                    break;
+                case CssTokenType.TT_BAD_URI:
+                    throw new ParseException("Terms: Bad URI in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                case CssTokenType.TT_BAD_STRING:
+                    throw new ParseException("Terms: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                case CssTokenType.TT_LEFT_CURLY_BRACKET:
+                    parseBracketedTerms(tt,terms,CssTokenType.TT_RIGHT_CURLY_BRACKET);
+                    break;
+                case CssTokenType.TT_LEFT_SQUARE_BRACKET:
+                    parseBracketedTerms(tt,terms,CssTokenType.TT_RIGHT_SQUARE_BRACKET);
+                    break;
+                default:
+                    terms.add(new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
+                            tt.getLineNumber(),tt.getStartPosition(), tt.getEndPosition()));
+                    break;
+            }
+        }
+        tt.pushBack();
+        return terms;
+    }
+
+    private void parseBracketedTerms(CssTokenizer tt, List<CssToken> terms, int endBracket) throws IOException, ParseException {
+        terms.add(new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
+                tt.getLineNumber(),tt.getStartPosition(), tt.getEndPosition()));
+        tt.nextNoSkip();
+        skipWhitespaceAndComments(tt);
+        tt.pushBack();
+        while (tt.nextNoSkip() != CssTokenType.TT_EOF
+                && tt.current() !=endBracket) {
             switch (tt.current()) {
                 case CssTokenType.TT_CDC:
                 case CssTokenType.TT_CDO:
@@ -675,13 +713,11 @@ public class CssParser {
                     break;
             }
         }
-        tt.pushBack();
-
-        /*if (terms.isEmpty()) {
-            throw new ParseException("Terms: Terms expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
-        }*/
-        return terms;
+        terms.add(new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
+                tt.getLineNumber(),tt.getStartPosition(), tt.getEndPosition()));
     }
+
+
 
     private CssToken parseTerm(CssTokenizer tt) throws IOException, ParseException {
         switch (tt.nextNoSkip()) {
