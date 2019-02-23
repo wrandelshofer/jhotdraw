@@ -119,11 +119,6 @@ public class MLClassifierFigure extends AbstractLeafFigure
     private Path path;
 
     public MLClassifierFigure() {
-        /*
-        setStyled(StyleOrigin.USER_AGENT,LABEL_FONT_SIZE,new CssSize(9));
-        setStyled(StyleOrigin.USER_AGENT,NAME_FONT_FAMILY, "Arial Bold");
-        setStyled(StyleOrigin.USER_AGENT,PADDING,new CssInsets(4,4,4,4,UnitConverter.DEFAULT));
-        */
     }
 
     @Override
@@ -233,14 +228,16 @@ public class MLClassifierFigure extends AbstractLeafFigure
                 node = textNodes.get(i++);
                 applyLabelStyle(ctx, node);
                 node.setText("«" + metaclass + "»");
+                node.setWrappingWidth(wrappingWidth);
                 node.setY(y);
-                y += node.prefHeight(wrappingWidth) + lineSpacing;
+                y += node.getLayoutBounds().getHeight() + lineSpacing;
             }
             node = textNodes.get(i++);
             applyNameStyle(ctx, node);
             node.setText(name);
+            node.setWrappingWidth(wrappingWidth);
             node.setY(y);
-            y += node.prefHeight(wrappingWidth) + lineSpacing;
+            y += node.getLayoutBounds().getHeight() + lineSpacing;
 
             // add compartments
             for (Map.Entry<String, ImmutableList<String>> entry : cpData.getMap().entrySet()) {
@@ -255,7 +252,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
                     node.setText(entry.getKey());
                     node.setY(y);
                     applyLabelStyle(ctx, node);
-                    y += node.prefHeight(wrappingWidth) + lineSpacing;
+                    y += node.getLayoutBounds().getHeight() + lineSpacing;
                 }
 
                 // add compartment items
@@ -270,7 +267,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
                 }
                 node.setText(buf.toString());
                 applyItemStyle(ctx, node);
-                y += node.prefHeight(wrappingWidth) + lineSpacing;
+                y += node.getLayoutBounds().getHeight() + lineSpacing;
             }
         }
 
