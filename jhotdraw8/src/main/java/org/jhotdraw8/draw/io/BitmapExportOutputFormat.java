@@ -3,6 +3,39 @@
  */
 package org.jhotdraw8.draw.io;
 
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.DataFormat;
+import javafx.scene.transform.Transform;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.SimplePageFigure;
+import org.jhotdraw8.draw.figure.Slice;
+import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.geom.Transforms;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOInvalidTreeException;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -16,40 +49,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.DataFormat;
-import javafx.scene.transform.Transform;
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.metadata.IIOInvalidTreeException;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
-import javax.imageio.stream.ImageOutputStream;
-import javax.imageio.stream.MemoryCacheImageOutputStream;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.concurrent.WorkState;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.render.RenderingIntent;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.SimplePageFigure;
-import org.jhotdraw8.draw.figure.Slice;
-import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.geom.Transforms;
-import org.jhotdraw8.draw.figure.Page;
 
 /**
  * BitmapExportOutputFormat.
@@ -133,7 +134,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         IIOMetadataNode vert = new IIOMetadataNode("VerticalPixelSize");
         vert.setAttribute("value", Double.toString(dotsPerMilli));
 
-        IIOMetadataNode dim = new IIOMetadataNode("CssSize");
+        IIOMetadataNode dim = new IIOMetadataNode("Dimension");
         dim.appendChild(horiz);
         dim.appendChild(vert);
 
@@ -188,11 +189,10 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
             setDPI(metadata, dpi);
 
-            ImageOutputStream output = new MemoryCacheImageOutputStream(out);
-
-            writer.setOutput(output);
-            writer.write(metadata, new IIOImage(image, null, metadata), writeParam);
-            output.flush();
+            try (ImageOutputStream output = new MemoryCacheImageOutputStream(out)) {
+                writer.setOutput(output);
+                writer.write(metadata, new IIOImage(image, null, metadata), writeParam);
+            }
             break;
         }
     }
