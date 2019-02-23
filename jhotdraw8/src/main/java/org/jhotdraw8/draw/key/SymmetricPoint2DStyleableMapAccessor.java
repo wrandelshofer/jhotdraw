@@ -3,10 +3,8 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.Nonnull;
-
 import javafx.geometry.Point2D;
-import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssSymmetricPoint2DConverterOLD;
 
@@ -21,7 +19,7 @@ implements NonnullMapAccessor<Point2D> {
 
     private final static long serialVersionUID = 1L;
 
-    public SymmetricPoint2DStyleableMapAccessor(String name, @Nonnull MapAccessor<Double> xKey, @Nonnull MapAccessor<Double> yKey) {
+    public SymmetricPoint2DStyleableMapAccessor(String name, @Nonnull NonnullMapAccessor<Double> xKey, @Nonnull NonnullMapAccessor<Double> yKey) {
         super(name, xKey, yKey, new CssSymmetricPoint2DConverterOLD(false));
     }
 }

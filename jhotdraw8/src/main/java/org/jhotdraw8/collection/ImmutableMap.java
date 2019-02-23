@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection;
 
 import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -16,6 +17,19 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
 
     static <K, V> ImmutableMap<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
         return new ImmutableHashMap<>(k1, v1, k2, v2, k3, v3);
+    }
+
+    static <K, V> ImmutableMap<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+        return new ImmutableHashMap<>(k1, v1, k2, v2, k3, v3, k4, v4);
+    }
+
+    static <K, V> Map.Entry<K, V> entry(K k, V v) {
+        return new AbstractMap.SimpleImmutableEntry<>(k, v);
+    }
+
+    @SafeVarargs
+    static <K, V> ImmutableMap<K, V> ofEntries(Map.Entry<K, V>... entries) {
+        return new ImmutableHashMap<>(Arrays.asList(entries));
     }
 
     static <K, V> ImmutableMap<K, V> of(Map<K, V> map) {

@@ -3,24 +3,24 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.collection.NonnullMapAccessor;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.css.text.CssStringOrIdentConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.css.text.CssStringOrIdentConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+
+import java.util.function.Function;
 
 /**
- * This key has a string value which can be given as a CSS ident-token or
- * as a CSS string-token.
+ * This key has a string value which can be given as a CSS "IDENT"-token or
+ * as a CSS "STRING"-token.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -60,7 +60,7 @@ public class StringOrIdentStyleableFigureKey extends AbstractStyleableFigureKey<
      * @param defaultValue The default value.
      */
     public StringOrIdentStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
-        super(name, String.class, false, mask, defaultValue);
+        super(null, name, String.class, false, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

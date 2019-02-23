@@ -1,7 +1,7 @@
 /* @(#)DefaultFigureFactory.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.diagrammer.io;
+package org.jhotdraw8.samples.modeler.io;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -80,9 +80,11 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.io.SimpleFigureFactory;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.diagrammer.figure.UmlCompartmentableShapeFigure;
-import org.jhotdraw8.samples.diagrammer.model.UmlCompartmentalizedData;
-import org.jhotdraw8.samples.diagrammer.text.XmlUmlCompartmentalizedDataConverter;
+import org.jhotdraw8.samples.modeler.figure.MLClassifierFigure;
+import org.jhotdraw8.samples.modeler.figure.MLDiagramFigure;
+import org.jhotdraw8.samples.modeler.figure.MLEdgeFigure;
+import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
+import org.jhotdraw8.samples.modeler.text.XmlUmlCompartmentalizedDataConverter;
 import org.jhotdraw8.text.DefaultConverter;
 import org.jhotdraw8.text.RegexReplace;
 import org.jhotdraw8.xml.text.XmlBezierNodeListConverter;
@@ -111,13 +113,13 @@ import java.util.Set;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DiagrammerFigureFactory extends SimpleFigureFactory {
+public class ModelerFigureFactory extends SimpleFigureFactory {
 
-    public DiagrammerFigureFactory() {
+    public ModelerFigureFactory() {
         this(new SimpleFigureIdFactory());
     }
 
-    public DiagrammerFigureFactory(IdFactory idFactory) {
+    public ModelerFigureFactory(IdFactory idFactory) {
         super(idFactory);
 
         addFigureKeysAndNames("Layer", SimpleLayer.class);
@@ -130,7 +132,9 @@ public class DiagrammerFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Polygon", SimplePolygonFigure.class);
         addFigureKeysAndNames("Page", SimplePageFigure.class);
         addFigureKeysAndNames("CombinedPath", SimpleCombinedPathFigure.class);
-        addFigureKeysAndNames("UMLCompartmentableShape", UmlCompartmentableShapeFigure.class);
+        addFigureKeysAndNames("MLClassifier", MLClassifierFigure.class);
+        addFigureKeysAndNames("MLEdge", MLEdgeFigure.class);
+        addFigureKeysAndNames("MLDiagram", MLDiagramFigure.class);
 
         {
             Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(SimpleDrawing.class));
@@ -221,7 +225,7 @@ public class DiagrammerFigureFactory extends SimpleFigureFactory {
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
-        addConverterForType(UmlCompartmentalizedData.class, new XmlUmlCompartmentalizedDataConverter(false));
+        addConverterForType(MLCompartmentalizedData.class, new XmlUmlCompartmentalizedDataConverter(false));
 
         checkConverters();
     }

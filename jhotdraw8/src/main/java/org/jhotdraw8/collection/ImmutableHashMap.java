@@ -40,28 +40,37 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K,V> implements 
     }
 
     public ImmutableHashMap(K k1, V v1) {
-        HashMap<K, V> backingMap1 = new HashMap<>(1);
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(1);
         backingMap1.put(k1, v1);
         this.backingMap = backingMap1;
     }
 
     public ImmutableHashMap(K k1, V v1, K k2, V v2) {
-        HashMap<K, V> backingMap1 = new HashMap<>(2);
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(2);
         backingMap1.put(k1, v1);
         backingMap1.put(k2, v2);
         this.backingMap = backingMap1;
     }
 
     public ImmutableHashMap(K k1, V v1, K k2, V v2, K k3, V v3) {
-        HashMap<K, V> backingMap1 = new HashMap<>(2);
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(2);
         backingMap1.put(k1, v1);
         backingMap1.put(k2, v2);
         backingMap1.put(k3, v3);
         this.backingMap = backingMap1;
     }
 
-    public ImmutableHashMap(Collection<Map.Entry<K, V>> entries) {
-        HashMap<K, V> backingMap1 = new HashMap<>(entries.size());
+    public ImmutableHashMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(2);
+        backingMap1.put(k1, v1);
+        backingMap1.put(k2, v2);
+        backingMap1.put(k3, v3);
+        backingMap1.put(k4, v4);
+        this.backingMap = backingMap1;
+    }
+
+    public ImmutableHashMap(Collection<? extends Map.Entry<K, V>> entries) {
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size());
         for (Map.Entry<K, V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
         }
@@ -69,7 +78,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K,V> implements 
     }
 
     public ImmutableHashMap(ReadOnlyCollection<Map.Entry<K, V>> entries) {
-        HashMap<K, V> backingMap1 = new HashMap<>(entries.size());
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size());
         for (Map.Entry<K, V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
         }

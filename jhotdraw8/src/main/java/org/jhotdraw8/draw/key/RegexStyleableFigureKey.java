@@ -3,20 +3,20 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.css.text.CssRegexConverter;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.RegexReplace;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+
+import java.util.function.Function;
 
 /**
  * RegexStyleableFigureKey.
@@ -73,7 +73,7 @@ public class RegexStyleableFigureKey extends AbstractStyleableFigureKey<RegexRep
      * @param defaultValue The default value.
      */
     public RegexStyleableFigureKey(String name, boolean nullable, DirtyMask mask, RegexReplace defaultValue) {
-        super(name, RegexReplace.class, nullable, mask, defaultValue);
+        super(null, name, RegexReplace.class, nullable, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<RegexReplace>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

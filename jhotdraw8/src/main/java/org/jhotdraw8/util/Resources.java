@@ -3,6 +3,16 @@
  */
 package org.jhotdraw8.util;
 
+import javafx.scene.Node;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.Menu;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.action.Action;
+
 import java.io.Serializable;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -17,17 +27,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import javafx.scene.Node;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.Menu;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.app.action.Action;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import org.jhotdraw8.annotation.Nullable;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a
@@ -92,7 +93,7 @@ private final static Logger LOG = Logger.getLogger(Resources.class.getName());
      * The global verbose property.
      * FIXME use logging API instead
      */
-    private static boolean isVerbose = false;
+    private static boolean isVerbose = true;
     /**
      * The global map of property name modifiers. The key of this map is the
      * name of the property name modifier, the value of this map is a fallback

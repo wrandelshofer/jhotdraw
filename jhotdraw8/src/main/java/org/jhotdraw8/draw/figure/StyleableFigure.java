@@ -7,22 +7,22 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
-import org.jhotdraw8.draw.key.ObjectFigureKey;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.key.ObjectFigureKey;
 import org.jhotdraw8.draw.key.ObservableWordListFigureKey;
-import org.jhotdraw8.draw.key.StringReadableStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringStyleableFigureKey;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.RenderingIntent;
 
 /**
- * {@code StyleableFigure} supports styling ofCollection a figure using
- {@code FigureMapAccessor}s.
+ * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
+ * and a non-user-editable "pseudo-class" property.
  *
  * @design.pattern Figure Mixin, Traits.
  *
@@ -37,7 +37,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nonnull
-    StringReadableStyleableFigureKey ID = new StringReadableStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE),null );
+    StringStyleableFigureKey ID = new StringStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), true, null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
@@ -48,7 +48,8 @@ public interface StyleableFigure extends Figure {
     ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableList.emptyList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
-     * are used for styling a figure with CSS. The should not be made persistent.
+     * are used for styling a figure with CSS.
+     * This property should not be made persistent because it is a computed value.
      *
      * Default value: {@code null}.
      */

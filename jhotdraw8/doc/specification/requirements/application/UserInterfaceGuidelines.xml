@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.supportedUserInterfaceGuidelines">
-    <title>Supported User Interface Guidelines</title>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.UserInterfaceGuidelines">
+    <title>User Interface Guidelines</title>
     <para>The application framework supports the following user interface guidelines.</para>
     <itemizedlist>
         <listitem>

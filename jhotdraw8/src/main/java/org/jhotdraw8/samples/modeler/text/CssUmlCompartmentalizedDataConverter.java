@@ -1,4 +1,4 @@
-package org.jhotdraw8.samples.diagrammer.text;
+package org.jhotdraw8.samples.modeler.text;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -9,7 +9,7 @@ import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.text.AbstractCssConverter;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.diagrammer.model.UmlCompartmentalizedData;
+import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<UmlCompartmentalizedData> {
+public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<MLCompartmentalizedData> {
 
     public CssUmlCompartmentalizedDataConverter(boolean nullable) {
         super(nullable);
@@ -27,7 +27,7 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<U
 
     @Nonnull
     @Override
-    public UmlCompartmentalizedData parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public MLCompartmentalizedData parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         LinkedHashMap<String, ImmutableList<String>> map = new LinkedHashMap<>();
         tt.requireNextToken(CssTokenType.TT_LEFT_CURLY_BRACKET, "Left curly bracket expected.");
         List<String> items = new ArrayList<>();
@@ -69,20 +69,20 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<U
 
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_CURLY_BRACKET, "Right curly bracket expected.");
-        return new UmlCompartmentalizedData(map);
+        return new MLCompartmentalizedData(map);
     }
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨CompartmentalizedData⟩: { ⟨Entry⟩｛,⟨Entry⟩｝ }"
-                + "\nFormat of ⟨Entry⟩: ⟨Keyword⟩:[ \"⟨Item⟩\"｛,\"⟨Item⟩\"｝]"
+        return "Format of ⟨Compartments⟩: { ⟨Compartment⟩｛,⟨Compartment⟩｝ }"
+                + "\nFormat of ⟨Compartment⟩: ⟨Name⟩:[ \"⟨Item⟩\"｛,\"⟨Item⟩\"｝]"
                 + "\nExample:"
-                + "\n  {«class»:[\"Point\"], properties:[\"x:double\",\"y:double\"]}";
+                + "\n  {properties:[\"x:double\",\"y:double\"], methods:[\"magnitude()\"]}";
 
     }
 
     @Override
-    protected <TT extends UmlCompartmentalizedData> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends MLCompartmentalizedData> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_LEFT_CURLY_BRACKET));
         ReadOnlySet<Map.Entry<String, ImmutableList<String>>> entries = value.getMap().entrySet();
         if (!entries.isEmpty()) {

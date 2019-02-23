@@ -1,4 +1,4 @@
-package org.jhotdraw8.samples.diagrammer.text;
+package org.jhotdraw8.samples.modeler.text;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -7,7 +7,7 @@ import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.diagrammer.model.UmlCompartmentalizedData;
+import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -18,7 +18,7 @@ public class XmlUmlCompartmentalizedDataConverter extends CssUmlCompartmentalize
     }
 
     @Override
-    protected <TT extends UmlCompartmentalizedData> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends MLCompartmentalizedData> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_LEFT_CURLY_BRACKET));
         ReadOnlySet<Map.Entry<String, ImmutableList<String>>> entries = value.getMap().entrySet();
         boolean firstKey = true;

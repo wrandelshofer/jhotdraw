@@ -3,8 +3,33 @@
  */
 package org.jhotdraw8.draw.css;
 
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.FXCollections;
+import javafx.css.PseudoClass;
+import javafx.css.StyleOrigin;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.CompositeMapAccessor;
+import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.ListCssTokenizer;
+import org.jhotdraw8.css.QualifiedName;
+import org.jhotdraw8.css.SelectorModel;
+import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.css.text.CssStringConverter;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.text.Converter;
+
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,32 +41,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.SimpleMapProperty;
-import javafx.collections.FXCollections;
-import javafx.css.PseudoClass;
-import javafx.css.StyleOrigin;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-import org.jhotdraw8.collection.CompositeMapAccessor;
-import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.ListCssTokenizer;
-import org.jhotdraw8.css.QualifiedName;
-import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.SelectorModel;
-import org.jhotdraw8.css.text.CssConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssStringConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * FigureSelectorModel.
@@ -68,7 +67,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Nonnull
     private HashMap<WriteableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new HashMap<>();
     @Nonnull
-    private Map<Class<? extends Figure>, Map<QualifiedName, WriteableStyleableMapAccessor<Object>>> figureToMetaMap = new HashMap<>();
+    private Map<Class<? extends Figure>, Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>>> figureToMetaMap = new HashMap<>();
 
     @Nonnull
     public MapProperty<String, Set<Figure>> additionalPseudoClassStatesProperty() {
@@ -116,6 +115,9 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             if (k instanceof ReadableStyleableMapAccessor) {
                 ReadableStyleableMapAccessor<?> sk = (ReadableStyleableMapAccessor<?>) k;
                 nameToReadableKeyMap.put(new QualifiedName(sk.getCssNamespace(),element.getClass() + "$" + sk.getCssName()), sk);
+                if (sk.getCssNamespace() != null) {
+                    nameToReadableKeyMap.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
+                }
             }
         }
     }
@@ -393,9 +395,9 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         return k == null ? null : k.getConverter();
     }
 
-    private Map<QualifiedName, WriteableStyleableMapAccessor<Object>> getMetaMap(Figure elem) {
+    private Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> getMetaMap(Figure elem) {
 
-        Map<QualifiedName, WriteableStyleableMapAccessor<Object>> metaMap = figureToMetaMap.get(elem.getClass());
+        Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = figureToMetaMap.get(elem.getClass());
         if (metaMap == null) {
             metaMap = new HashMap<>();
             figureToMetaMap.put(elem.getClass(), metaMap);
@@ -404,7 +406,11 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 if (k instanceof WriteableStyleableMapAccessor) {
                     @SuppressWarnings("unchecked")
                     WriteableStyleableMapAccessor<Object> sk = (WriteableStyleableMapAccessor<Object>) k;
-                    metaMap.put(new QualifiedName(sk.getCssNamespace(),sk.getCssName()), sk);
+                    metaMap.computeIfAbsent(new QualifiedName(sk.getCssNamespace(), sk.getCssName()), key -> new ArrayList<>()).add(sk);
+                    if (sk.getCssNamespace() != null) {
+                        // all names can be accessed without specificying a namespace
+                        metaMap.computeIfAbsent(new QualifiedName(null, sk.getCssName()), key -> new ArrayList<>()).add(sk);
+                    }
                 }
             }
         }
@@ -413,10 +419,11 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadOnlyList<CssToken> value) {
-        Map<QualifiedName, WriteableStyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
+        Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = getMetaMap(elem);
 
-        WriteableStyleableMapAccessor<Object> k = metaMap.get(new QualifiedName(namespace,name));
-        if (k != null) {
+        List<WriteableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
+        if (ks != null) {
+            for (WriteableStyleableMapAccessor<Object> k : ks) {
             if (value == null) {
                 elem.remove(origin, k);
             } else {
@@ -444,6 +451,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 } catch (@Nonnull ParseException | IOException ex) {
                     LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
                 }
+            }
             }
         }
     }

@@ -1,7 +1,7 @@
-/* @(#)DiagrammerApplication.java
+/* @(#)ModelerApplication.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.diagrammer;
+package org.jhotdraw8.samples.modeler;
 
 import org.jhotdraw8.app.DocumentBasedApplication;
 import org.jhotdraw8.app.action.Action;
@@ -10,18 +10,18 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.util.Resources;
 
 /**
- * DiagrammerApplication.
+ * ModelerApplication.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DiagrammerApplication extends DocumentBasedApplication {
+public class ModelerApplication extends DocumentBasedApplication {
 
-    public DiagrammerApplication() {
+    public ModelerApplication() {
         super();
 
         Resources.setVerbose(true);
-        setModel(new DiagrammerApplicationModel());
+        setModel(new ModelerApplicationModel());
     }
 
     @Override

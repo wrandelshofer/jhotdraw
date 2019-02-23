@@ -1,7 +1,7 @@
-/* @(#)DiagrammerApplicationModel.java
+/* @(#)ModelerApplicationModel.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.diagrammer;
+package org.jhotdraw8.samples.modeler;
 
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
@@ -20,26 +20,26 @@ import org.jhotdraw8.util.Resources;
 import java.util.ResourceBundle;
 
 /**
- * DiagrammerApplicationModel.
+ * ModelerApplicationModel.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DiagrammerApplicationModel extends SimpleApplicationModel {
+public class ModelerApplicationModel extends SimpleApplicationModel {
     public final static DataFormat GRAPHER_FORMAT;
 
     static {
-        DataFormat fmt = DataFormat.lookupMimeType("application/xml+diagrammer");
+        DataFormat fmt = DataFormat.lookupMimeType("application/xml+modeler");
         if (fmt == null) {
-            fmt = new DataFormat("application/xml+diagrammer");
+            fmt = new DataFormat("application/xml+modeler");
         }
         GRAPHER_FORMAT = fmt;
     }
 
-    public DiagrammerApplicationModel() {
-        super("Diagrammer", DiagrammerActivityController::new,
-                DiagrammerApplication.class.getResource("DiagrammerMenuBar.fxml"),
-                "Diagrammer Files", GRAPHER_FORMAT, "*.xml");
+    public ModelerApplicationModel() {
+        super("Modeler", ModelerActivityController::new,
+                ModelerApplication.class.getResource("ModelerMenuBar.fxml"),
+                "Modeler Files", GRAPHER_FORMAT, "*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
         getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_FORMAT, "*.png"));
         getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.ser.xml"));
@@ -55,14 +55,14 @@ public class DiagrammerApplicationModel extends SimpleApplicationModel {
 
     @Override
     public ResourceBundle getResources() {
-        return Resources.getResources("org.jhotdraw8.samples.diagrammer.Labels");
+        return Resources.getResources("org.jhotdraw8.samples.modeler.Labels");
     }
 
     @Override
     public String getCopyright() {
-        return "Version " + DiagrammerApplicationModel.class.getPackage().getImplementationVersion() + ". MIT License";
+        return "Version " + ModelerApplicationModel.class.getPackage().getImplementationVersion() + ". MIT License";
         /* Needs Java SE 9 or higher:
-        ModuleDescriptor descriptor = DiagrammerApplicationModel.class.getModule().getDescriptor();
+        ModuleDescriptor descriptor = ModelerApplicationModel.class.getModule().getDescriptor();
         return "Version "+descriptor.version().orElse(null)+". MIT License.";
         */
     }

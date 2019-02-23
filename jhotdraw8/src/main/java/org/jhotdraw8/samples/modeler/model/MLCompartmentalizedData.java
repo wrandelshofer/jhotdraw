@@ -1,4 +1,4 @@
-package org.jhotdraw8.samples.diagrammer.model;
+package org.jhotdraw8.samples.modeler.model;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
@@ -10,23 +10,23 @@ import java.util.Objects;
 /**
  * Represents a set of compartmentalized data.
  * <p>
- * A data compartment contains a keyword and a list of textual items.
+ * A compartment has a name and a list of textual items.
  * <p>
  * Thus this is effectively a map of type {@literal Map<String,List<String>>>}.
  */
-public class UmlCompartmentalizedData {
+public class MLCompartmentalizedData {
     @Nonnull
     private final ImmutableMap<String, ImmutableList<String>> map;
 
-    public UmlCompartmentalizedData() {
+    public MLCompartmentalizedData() {
         this.map = ImmutableMap.emptyMap();
     }
 
-    public UmlCompartmentalizedData(ImmutableMap<String, ImmutableList<String>> map) {
+    public MLCompartmentalizedData(ImmutableMap<String, ImmutableList<String>> map) {
         this.map = map;
     }
 
-    public UmlCompartmentalizedData(Map<String, ? extends ImmutableList<String>> map) {
+    public MLCompartmentalizedData(Map<String, ? extends ImmutableList<String>> map) {
         this.map = ImmutableMap.ofMap(map);
     }
 
@@ -43,7 +43,7 @@ public class UmlCompartmentalizedData {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        UmlCompartmentalizedData that = (UmlCompartmentalizedData) o;
+        MLCompartmentalizedData that = (MLCompartmentalizedData) o;
         return map.equals(that.map);
     }
 
@@ -54,7 +54,7 @@ public class UmlCompartmentalizedData {
 
     @Override
     public String toString() {
-        return "UmlCompartmentalizedData{" +
+        return "MLCompartmentalizedData{" +
                 map +
                 '}';
     }

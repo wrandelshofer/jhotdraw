@@ -78,14 +78,11 @@ public class StringStyleableFigureKey extends AbstractStyleableFigureKey<String>
      * @param helpText the help text
      */
     public StringStyleableFigureKey(String name, DirtyMask mask,boolean nullable, String defaultValue, String helpText) {
-        super(name, String.class, nullable, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createSizeCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
+        this(null, name, mask, nullable, defaultValue, helpText);
+    }
+
+    public StringStyleableFigureKey(String namespace, String name, DirtyMask mask, boolean nullable, String defaultValue, String helpText) {
+        super(namespace, name, String.class, nullable, mask, defaultValue);
         converter = new CssStringConverter(false,'\'', helpText);
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

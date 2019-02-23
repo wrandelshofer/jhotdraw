@@ -1,23 +1,26 @@
-/* @(#)StringStyleableFigureKey.java
+/* @(#)StringReadableStyleableFigureKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
+
+import java.util.function.Function;
 
 /**
  * StringStyleableFigureKey.
+ * <p>
+ * XXX - A key should not define whether the user can edit the property in an inspector or not.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -68,7 +71,7 @@ public class StringReadableStyleableFigureKey extends AbstractStyleableFigureKey
      * @param helpText the help text
      */
     public StringReadableStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
-        super(name, String.class, true, mask, defaultValue);
+        super(null, name, String.class, true, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
          cssMetaData = factory.createSizeCssMetaData(

@@ -8,4 +8,4 @@
  * </li>
  * </ul>
  */
-package org.jhotdraw8.samples.diagrammer.model;
+package org.jhotdraw8.samples.modeler.model;

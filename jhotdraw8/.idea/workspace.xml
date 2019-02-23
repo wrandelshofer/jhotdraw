@@ -39,41 +39,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Bumps retention of nullity annotations to &quot;CLASS&quot;.">
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Diagrammer.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextLayoutableFigure.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerActivity.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerActivityController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerApplicationModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerMain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/DiagrammerMenuBar.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/Labels.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/Labels_de.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/diagrammer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/package-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/io/DiagrammerFigureFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentedDataStyleableFigureKey.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/package-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/text/CssUmlCompartmentalizedDataConverter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/text/XmlUmlCompartmentalizedDataConverter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedDataConverterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-jhotdraw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build-jhotdraw.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/AbstractLabelFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/FontableFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextFontableFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimplePageLabelFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimplePageLabelFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextAreaFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextAreaFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/GrapherActivityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/grapher/GrapherActivityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssParserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="2ff40a52-acbb-47ed-83d2-e973858521bd" name="New changelist" comment="Minor changes." />
@@ -99,12 +65,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
-              <caret line="189" column="25" lean-forward="true" selection-start-line="189" selection-start-column="25" selection-end-line="189" selection-end-column="25" />
+              <caret line="189" column="25" selection-start-line="189" selection-start-column="25" selection-end-line="189" selection-end-column="25" />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1127" />
           </provider>
         </entry>
       </file>
@@ -112,7 +85,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextLayoutableFigure.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="66">
-              <caret line="41" column="45" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="41" selection-end-column="45" />
+              <caret line="34" column="45" selection-start-line="32" selection-start-column="3" selection-end-line="34" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -121,7 +94,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextFontableFigure.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-357">
-              <caret line="62" column="32" lean-forward="true" selection-start-line="62" selection-start-column="32" selection-end-line="62" selection-end-column="32" />
+              <caret line="59" column="32" lean-forward="true" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -140,15 +113,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="318">
               <caret line="195" selection-start-line="194" selection-end-line="195" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleLabelConnectionFigure.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="18" column="75" selection-start-line="18" selection-start-column="53" selection-end-line="18" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -184,7 +148,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="176">
-              <caret line="120" selection-start-line="120" selection-end-line="120" />
+              <caret line="119" selection-start-line="119" selection-end-line="119" />
             </state>
           </provider>
         </entry>
@@ -312,7 +276,6 @@
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableMap.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/css/CssParserTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/CssParser.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/AbstractReadOnlyMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection/ImmutableHashMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/model/UmlCompartmentalizedData.java" />
@@ -338,6 +301,7 @@
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/Figure.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java" />
+        <option value="$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java" />
       </list>
     </option>
   </component>
@@ -1315,13 +1279,6 @@
       <workItem from="1546865664757" duration="1251000" />
       <workItem from="1546867144891" duration="4148000" />
     </task>
-    <task id="LOCAL-00036" summary="DirectedGraphPathBuilder takes now a goal predicate.">
-      <created>1544953904538</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1544953904538</updated>
-    </task>
     <task id="LOCAL-00037" summary="DirectedGraphPathBuilder takes now a goal predicate.">
       <created>1544954828205</created>
       <option name="number" value="00037" />
@@ -1658,7 +1615,14 @@
       <option name="project" value="LOCAL" />
       <updated>1550835381370</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="Adds diagrammer sample and supporting classes.">
+      <created>1550840471358</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1550840471358</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1807,7 +1771,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Refactors graph API." />
     <MESSAGE value="Adds nullity annotations." />
     <MESSAGE value="CssSize units are now nonnull." />
     <MESSAGE value="Adds size method." />
@@ -1832,7 +1795,8 @@
     <MESSAGE value="Adds documentation." />
     <MESSAGE value="Improves collections." />
     <MESSAGE value="Reformats code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Reformats code." />
+    <MESSAGE value="Adds diagrammer sample and supporting classes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds diagrammer sample and supporting classes." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1898,7 +1862,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="NONE" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java</url>
-          <line>1374</line>
+          <line>1370</line>
           <log-expression expression="&quot;SvgExporter &quot;+paragraph.substring(textIndex,textIndex+characterCount)" language="JAVA" />
           <properties />
           <option name="timeStamp" value="27" />
@@ -2111,13 +2075,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/util/AbstractMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-54">
-          <caret line="67" column="22" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="327">
@@ -2436,21 +2393,21 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/SimpleTextFigure.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
-          <caret line="120" selection-start-line="120" selection-end-line="120" />
+          <caret line="119" selection-start-line="119" selection-end-line="119" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextLayoutableFigure.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
-          <caret line="41" column="45" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="41" selection-end-column="45" />
+          <caret line="34" column="45" selection-start-line="32" selection-start-column="3" selection-end-line="34" selection-end-column="45" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/draw/figure/TextFontableFigure.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-357">
-          <caret line="62" column="32" lean-forward="true" selection-start-line="62" selection-start-column="32" selection-end-line="62" selection-end-column="32" />
+          <caret line="59" column="32" lean-forward="true" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -2464,8 +2421,13 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/samples/diagrammer/figure/UmlCompartmentableShapeFigure.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="189" column="25" lean-forward="true" selection-start-line="189" selection-start-column="25" selection-end-line="189" selection-end-column="25" />
+          <caret line="189" column="25" selection-start-line="189" selection-start-column="25" selection-end-line="189" selection-end-column="25" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/text/CssListConverterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1127" />
       </provider>
     </entry>
   </component>

@@ -6,6 +6,9 @@ package org.jhotdraw8.draw.inspector;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -54,6 +57,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.prefs.Preferences;
 
 /**
@@ -91,6 +95,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
     @FXML
     private RadioButton showAppliedValues;
+
+    private final ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
 
     private Node node;
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
@@ -261,15 +267,20 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             origin = null;
         }
 
+        Predicate<QualifiedName> filter = getAttributeFilter();
         boolean first = true;
         for (Figure f : newValue) {
             selectorModel.getAttributeNames(f);
+
             if (first) {
                 first = false;
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
+                    if (!filter.test(qname)) {
+                        continue;
+                    }
                     String attribute = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
                     attr.put(qname, attribute == null ? CssTokenType.IDENT_INITIAL : attribute);
                 }
@@ -279,6 +290,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 type = selectorModel.getType(f).equals(type) ? type : null;
                 styleClasses.retainAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : attr.keySet()) {
+                    if (!filter.test(qname)) {
+                        continue;
+                    }
                     String oldAttrValue = attr.get(qname);
                     if (oldAttrValue != null) {
                         String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
@@ -500,5 +514,23 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 }
             }
         }
+    }
+
+    /**
+     * Attribute filter can be used to show only a specific set
+     * of attributes in the inspector.
+     *
+     * @return
+     */
+    public Property<Predicate<QualifiedName>> attributeFilter() {
+        return attributeFilter;
+    }
+
+    public Predicate<QualifiedName> getAttributeFilter() {
+        return attributeFilter.get();
+    }
+
+    public void setAttributeFilter(Predicate<QualifiedName> attributeFilter) {
+        this.attributeFilter.set(attributeFilter);
     }
 }

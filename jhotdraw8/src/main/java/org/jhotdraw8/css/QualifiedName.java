@@ -5,6 +5,7 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Objects;
 
 public class QualifiedName implements Comparable<QualifiedName> {
@@ -47,5 +48,13 @@ public class QualifiedName implements Comparable<QualifiedName> {
     @Override
     public int compareTo(@Nonnull QualifiedName o) {
         return this.name.compareTo(o.name);
+    }
+
+    @Override
+    public String toString() {
+        return "QualifiedName{" +
+                "namespace='" + namespace + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

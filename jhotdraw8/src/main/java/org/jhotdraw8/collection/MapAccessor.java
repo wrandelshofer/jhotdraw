@@ -3,11 +3,12 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 
 /**
  * A type safe accessor for maps.
@@ -54,7 +55,7 @@ public interface MapAccessor<T> extends Serializable {
      * Puts the value of the attribute denoted by this accessor from a Map.
      *
      * @param a A map.
-     * @param value The new value.
+     * @param value The new value. Subclasses may require that the value is non-null.
      * @return The old value.
      */
     @Nullable

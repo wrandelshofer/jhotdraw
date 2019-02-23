@@ -1,0 +1,21 @@
+/* @(#)user-agent.css
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ *
+ * User-Agent stylesheet for SysML and UML diagrams.
+ */
+MLDiagram {
+  kind-font: 12 Arial Bold;
+  name-font: 12 Arial;
+  padding: 4 14 4 6;
+  shape: "M0,0 20,0 20,10 10,20 0,20Z";
+  shape-slice: 0 10 10 0;
+}
+MLClassifier {
+  label-font: 9 Arial;
+  name-font: 12 Arial Bold;
+  font: 12 Arial;
+  padding: 4;
+}
+MLClassifier[metaclass="block"] {
+ compartment-labels-visible: true;
+}

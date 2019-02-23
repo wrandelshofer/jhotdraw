@@ -45,10 +45,24 @@
 </section>
 -->
 <section><title>Application Framework</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="requirements/application/figures/ApplicationFrameworkRequirementsDiagram.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>Application Framework Requirements Diagram</phrase>
+    </textobject>
+    <caption>
+      <para>This diagram shows the top-level requirements for the application framework.
+      </para>
+    </caption>
+  </mediaobject>
 <xi:include href="requirements/application/ApplicationFramework.xml"/>
-  <xi:include href="requirements/application/SupportedUserInterfaceGuidelines.xml"/>
-  <xi:include href="requirements/application/SupportedMacOSMenuBarItems.xml"/>
-  <xi:include href="requirements/application/SupportedWindowsMenuBarItems.xml"/>
+  <xi:include href="requirements/application/UserInterfaceGuidelines.xml"/>
+  <xi:include href="requirements/application/JavaSE8.xml"/>
+  <xi:include href="requirements/application/JavaFX.xml"/>
+  <xi:include href="requirements/application/MacOSMenuBarItems.xml"/>
+  <xi:include href="requirements/application/WindowsMenuBarItems.xml"/>
 </section>
 <section><title>Drawing Editor Framework</title>
 <xi:include href="requirements/draw/DrawingEditorFramework.xml"/>

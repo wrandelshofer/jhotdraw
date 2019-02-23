@@ -60,11 +60,14 @@ public interface ShapeableFigure extends Figure {
     String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
     default void applyShapeableProperties(RenderContext ctx, @Nonnull Path node) {
+        applyShapeableProperties(ctx, node, getBoundsInLocal());
+    }
+
+    default void applyShapeableProperties(RenderContext ctx, @Nonnull Path node, Bounds b) {
         String content = getStyled(SHAPE);
         if (content == null || content.trim().isEmpty()) {
             content = SVG_SQUARE;
         }
-        Bounds b = getBoundsInLocal();
 
         try {
             AWTPathBuilder builder = new AWTPathBuilder(new Path2D.Float());

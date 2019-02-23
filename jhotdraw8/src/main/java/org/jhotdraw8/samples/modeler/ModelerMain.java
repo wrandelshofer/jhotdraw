@@ -1,22 +1,22 @@
-/* @(#)DiagrammerMain.java
+/* @(#)ModelerMain.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.diagrammer;
+package org.jhotdraw8.samples.modeler;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * DiagrammerMain.
+ * ModelerMain.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DiagrammerMain extends Application {
+public class ModelerMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        new DiagrammerApplication().start(primaryStage);
+        new ModelerApplication().start(primaryStage);
     }
 
     /**
@@ -24,7 +24,7 @@ public class DiagrammerMain extends Application {
      */
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
-        DiagrammerApplication.main(args);
+        ModelerApplication.main(args);
     }
 
 }

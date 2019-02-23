@@ -1,12 +1,13 @@
-/* @(#)DiagrammerActivityController.java
+/* @(#)ModelerActivityController.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.diagrammer;
+package org.jhotdraw8.samples.modeler;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.css.StyleOrigin;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
@@ -23,6 +24,8 @@ import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
@@ -83,7 +86,6 @@ import org.jhotdraw8.draw.inspector.HandlesInspector;
 import org.jhotdraw8.draw.inspector.HelpTextInspector;
 import org.jhotdraw8.draw.inspector.HierarchyInspector;
 import org.jhotdraw8.draw.inspector.Inspector;
-import org.jhotdraw8.draw.inspector.Labels;
 import org.jhotdraw8.draw.inspector.LayersInspector;
 import org.jhotdraw8.draw.inspector.StyleAttributesInspector;
 import org.jhotdraw8.draw.inspector.StyleClassesInspector;
@@ -97,6 +99,7 @@ import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
 import org.jhotdraw8.draw.io.SimpleXmlIO;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
+import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.draw.tool.ConnectionTool;
 import org.jhotdraw8.draw.tool.CreationTool;
@@ -112,13 +115,18 @@ import org.jhotdraw8.gui.dock.SingleItemDock;
 import org.jhotdraw8.gui.dock.SplitPaneTrack;
 import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.diagrammer.figure.UmlCompartmentableShapeFigure;
-import org.jhotdraw8.samples.diagrammer.io.DiagrammerFigureFactory;
+import org.jhotdraw8.samples.modeler.figure.MLClassifierFigure;
+import org.jhotdraw8.samples.modeler.figure.MLConstants;
+import org.jhotdraw8.samples.modeler.figure.MLDiagramFigure;
+import org.jhotdraw8.samples.modeler.figure.MLEdgeFigure;
+import org.jhotdraw8.samples.modeler.io.ModelerFigureFactory;
+import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -131,14 +139,14 @@ import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
 /**
- * DiagrammerActivityController.
+ * ModelerActivityController.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DiagrammerActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
+public class ModelerActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
 
-    private final static String DIAGRAMMER_NAMESPACE_URI = "http://jhotdraw.org/samples/diagrammer";
+    private final static String DIAGRAMMER_NAMESPACE_URI = "http://jhotdraw.org/samples/modeler";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
     /**
      * Counter for incrementing layer names.
@@ -163,7 +171,7 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
 
     @Nonnull
     private DockItem addInspector(Inspector inspector, String id, Priority grow) {
-        Resources r = Labels.getResources();
+        Resources r = ModelerLabels.getInspectorResources();
         DockItem dockItem = new DockItem();
         dockItem.setText(r.getString(id + ".toolbar"));
         dockItem.setContent(inspector.getNode());
@@ -171,10 +179,29 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
         return dockItem;
     }
 
+    private void applyUserAgentStylesheet(Drawing d) {
+        try {
+            d.getStyleManager().clearStylesheets(StyleOrigin.USER_AGENT);
+            d.getStyleManager().addStylesheet(StyleOrigin.USER_AGENT,
+                    ModelerActivityController.class.getResource("user-agent.css").toURI());
+            SimpleRenderContext ctx = new SimpleRenderContext();
+            for (Figure f : d.preorderIterable()) {
+                f.updateCss();
+            }
+            for (Figure f : d.preorderIterable()) {
+                f.layout(ctx);
+            }
+
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("can't load my own resources", e);
+        }
+    }
+
     @Nonnull
     @Override
     public CompletionStage<Void> clear() {
         Drawing d = new SimpleDrawing();
+        applyUserAgentStylesheet(d);
         d.set(StyleableFigure.ID, "drawing1");
         drawingView.setDrawing(d);
         return CompletableFuture.completedFuture(null);
@@ -233,7 +260,7 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
         map.put(VIEWTOGGLE_PROPERTIES, new ToggleBooleanAction(
                 getApplication(), this,
                 VIEWTOGGLE_PROPERTIES,
-                Resources.getResources("org.jhotdraw8.samples.diagrammer.Labels"), detailsVisible));
+                Resources.getResources("org.jhotdraw8.samples.modeler.Labels"), detailsVisible));
         map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(SimpleGroupFigure::new)));
         map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(SimpleCombinedPathFigure::new)));
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
@@ -252,30 +279,81 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
     private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
-        Resources labels = Resources.getResources("org.jhotdraw8.samples.diagrammer.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw8.samples.modeler.Labels");
         Supplier<Layer> layerFactory = () -> createFigure(SimpleLayer::new);
+
+        // selection tools -----------
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("tool.resizeFigure", HandleType.RESIZE, null, HandleType.LEAD, labels), 0, 0);
         ttbar.addTool(new SelectionTool("tool.moveFigure", HandleType.MOVE, null, HandleType.LEAD, labels), 1, 0);
         ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, labels), 0, 1);
         ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, labels), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(SimpleRectangleFigure::new), layerFactory), 2, 0, 16);
-        ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(SimpleEllipseFigure::new), layerFactory), 3, 0);
-        ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(SimpleLineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
-        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(SimpleLineFigure::new), layerFactory), 2, 1, 16);
-        ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, SimplePolylineFigure.POINTS, () -> createFigure(SimplePolylineFigure::new), layerFactory), 4, 1);
-        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 5, 1, 0);
-        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, SimpleBezierFigure.PATH, () -> createFigure(SimpleBezierFigure::new), layerFactory), 6, 1);
+
+
+        // modeling shape creation tools -----------
+        ttbar.addTool(new CreationTool("edit.createSysMLRequirement", labels, () -> createFigure(() -> {
+            MLClassifierFigure f = new MLClassifierFigure();
+            f.set(MLClassifierFigure.METACLASS, "requirement");
+            f.set(MLClassifierFigure.NAME, "Name");
+            f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
+                    ImmutableMap.of("text", ImmutableList.emptyList())
+            ));
+            return f;
+        }), layerFactory), 10, 0, 16);
+        ttbar.addTool(new CreationTool("edit.createSysMLBlock", labels, () -> createFigure(() -> {
+            MLClassifierFigure f = new MLClassifierFigure();
+            f.set(MLClassifierFigure.METACLASS, "block");
+            f.set(MLClassifierFigure.NAME, "Name");
+            f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
+                    ImmutableMap.ofEntries(ImmutableMap.entry("parts", ImmutableList.emptyList()),
+                            ImmutableMap.entry("references", ImmutableList.emptyList()),
+                            ImmutableMap.entry("values", ImmutableList.emptyList()),
+                            ImmutableMap.entry("constraints", ImmutableList.emptyList()),
+                            ImmutableMap.entry("ports", ImmutableList.emptyList()))
+            ));
+            return f;
+        }), layerFactory), 11, 0, 0);
+        ttbar.addTool(new CreationTool("edit.createUmlClass", labels, () -> createFigure(() -> {
+            MLClassifierFigure f = new MLClassifierFigure();
+            f.set(MLClassifierFigure.METACLASS, "class");
+            f.set(MLClassifierFigure.NAME, "Name");
+            f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
+                    ImmutableMap.ofEntries(ImmutableMap.entry("attributes", ImmutableList.emptyList()),
+                            ImmutableMap.entry("operations", ImmutableList.emptyList()))
+            ));
+            return f;
+        }), layerFactory), 12, 0, 0);
+
+        // modeling edge creation tools --------
+        ttbar.addTool(new ConnectionTool("edit.createUmlEdge", labels, () -> createFigure(MLEdgeFigure::new), layerFactory), 20, 1, 16);
+
+        // modeling diagram creation tools --------
+        ttbar.addTool(new CreationTool("edit.createSysMLRequirementDiagram", labels, () -> createFigure(() -> {
+            MLDiagramFigure f = new MLDiagramFigure();
+            f.set(MLDiagramFigure.DIAGRAM_KIND, "req");
+            f.set(MLDiagramFigure.MODEL_ELEMENT_NAME, "Name");
+            return f;
+        })
+                , layerFactory), 40, 0, 16);
+
+        // general drawing element creation tools -----------
+
+        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(SimpleRectangleFigure::new), layerFactory), 102, 0, 16);
+        ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(SimpleEllipseFigure::new), layerFactory), 103, 0);
+        ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(SimpleLineConnectionWithMarkersFigure::new), layerFactory), 103, 1);
+        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(SimpleLineFigure::new), layerFactory), 102, 1, 16);
+        ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, SimplePolylineFigure.POINTS, () -> createFigure(SimplePolylineFigure::new), layerFactory), 104, 1);
+        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 105, 1, 0);
+        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, SimpleBezierFigure.PATH, () -> createFigure(SimpleBezierFigure::new), layerFactory), 106, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 6, 0);
-        ttbar.addTool(new CreationTool("edit.createTextArea", labels, () -> createFigure(SimpleTextAreaFigure::new), layerFactory), 6, 1);
-        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 5, 0, 0);
+                layerFactory), 106, 0);
+        ttbar.addTool(new CreationTool("edit.createTextArea", labels, () -> createFigure(SimpleTextAreaFigure::new), layerFactory), 106, 1);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 105, 0, 0);
 
-        ttbar.addTool(new CreationTool("edit.createUMLCompartmentableShape", labels, () -> createFigure(UmlCompartmentableShapeFigure::new), layerFactory), 8, 0, 16);
+        // --------- page and slice elements creation tools
 
-
-        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 10, 0, 16);
+        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 200, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             SimplePageFigure pf = new SimplePageFigure();
             pf.set(SimplePageFigure.PAPER_SIZE, new CssPoint2D(297, 210, "mm"));
@@ -285,12 +363,14 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
                     FillableFigure.FILL, null, StrokableFigure.STROKE, null);
             pf.addChild(pl);
             return pf;
-        }), layerFactory), 10, 1, 16);
+        }), layerFactory), 200, 1, 16);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new SimplePageLabelFigure(0, 0,
                         labels.getFormatted("pageLabel.text", SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
                         FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 11, 1);
+                layerFactory), 201, 1);
+
+        // --------
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -303,7 +383,7 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("DiagrammerActivity.fxml"));
+            node = loader.load(getClass().getResourceAsStream("ModelerActivity.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -317,7 +397,7 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
             modified.set(true);
         });
 
-        FigureFactory factory = new DiagrammerFigureFactory();
+        FigureFactory factory = new ModelerFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
         SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
@@ -359,7 +439,17 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
         FXWorker.supply(() -> {
             Set<Dock> d = new LinkedHashSet<>();
             Dock dock = new TabbedAccordionDock();
-            dock.getItems().add(addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS));
+
+            StyleAttributesInspector modelAttrInspector = new StyleAttributesInspector();
+            modelAttrInspector.setAttributeFilter(k ->
+                    "id".equals(k.getName()) || MLConstants.ML_NAMESPACE_PREFIX.equals(k.getNamespace())
+            );
+            dock.getItems().add(addInspector(modelAttrInspector, "modelAttributes", Priority.ALWAYS));
+            StyleAttributesInspector styleAttrInspector = new StyleAttributesInspector();
+            styleAttrInspector.setAttributeFilter(k ->
+                    !"model".equals(k.getNamespace())
+            );
+            dock.getItems().add(addInspector(styleAttrInspector, "styleAttributes", Priority.ALWAYS));
             dock.getItems().add(addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER));
             dock.getItems().add(addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS));
             d.add(dock);
@@ -413,11 +503,12 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
     @Override
     public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
         return FXWorker.supply(() -> {
-            FigureFactory factory = new DiagrammerFigureFactory();
+            FigureFactory factory = new ModelerFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
             SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
+            applyUserAgentStylesheet(drawing);
             return drawing;
         }).thenApply(drawing -> {
             drawingView.setDrawing(drawing);
@@ -428,11 +519,11 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
-                DiagrammerApplication.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString(),//
-                DiagrammerApplication.class.getResource("/org/jhotdraw8/samples/diagrammer/diagrammer.css").toString()//
+                ModelerApplication.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString(),//
+                ModelerApplication.class.getResource("/org/jhotdraw8/samples/modeler/modeler.css").toString()//
         );
 
-        Preferences prefs = Preferences.userNodeForPackage(DiagrammerActivityController.class);
+        Preferences prefs = Preferences.userNodeForPackage(ModelerActivityController.class);
 //        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 
@@ -452,7 +543,7 @@ public class DiagrammerActivityController extends AbstractDocumentBasedActivity 
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
                 io.write(uri, drawing, workState);
             } else {
-                FigureFactory factory = new DiagrammerFigureFactory();
+                FigureFactory factory = new ModelerFigureFactory();
                 IdFactory idFactory = new SimpleFigureIdFactory();
                 SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
                 io.write(uri, drawing, workState);
