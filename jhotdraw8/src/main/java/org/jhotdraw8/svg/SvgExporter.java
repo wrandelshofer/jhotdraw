@@ -1151,10 +1151,10 @@ public class SvgExporter {
                 vposOffset = 0;// FIXME this is incorrect
                 break;
             case CENTER:// FIXME this is incorrect
-                vposOffset = node.getBoundsInLocal().getHeight() * 0.5;
+                vposOffset = node.getLayoutBounds().getHeight() * 0.5;
                 break;
-            case TOP:// FIXME this is incorrect
-                vposOffset = node.getBoundsInLocal().getHeight();
+            case TOP:
+                vposOffset = node.getBaselineOffset();
                 break;
         }
         elem.setAttribute("x", x);
