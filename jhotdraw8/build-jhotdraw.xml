@@ -555,7 +555,7 @@
         </classpath>
       </java>
 
-      <copy toDir="@{imgdestdir}" flatten="true">
+      <copy toDir="@{imgdestdir}" flatten="false">
         <fileset dir="@{srcdir}">
           <include name="**/*.svg"/>
           <include name="**/*.png"/>

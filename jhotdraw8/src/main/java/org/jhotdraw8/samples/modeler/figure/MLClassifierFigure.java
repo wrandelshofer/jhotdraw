@@ -108,9 +108,10 @@ public class MLClassifierFigure extends AbstractLeafFigure
      * The labeled item lists. Default value: {@code ""}.
      */
     public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "compartments", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new MLCompartmentalizedData());
-    public final static StringStyleableFigureKey METACLASS = new StringStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "metaclass", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), true, null, null);
+    public final static StringStyleableFigureKey KEYWORD = MLConstants.KEYWORD;
     public final static StringStyleableFigureKey NAME = new StringStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "name", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, "unnamed", null);
     public final static BooleanStyleableFigureKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableFigureKey("compartmentLabelsVisible", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false);
+    public final static BooleanStyleableFigureKey KEYWORD_VISIBLE = MLConstants.KEYWORD_VISIBLE;
     /**
      * The line spacing. Default value: {@code 0.0}
      */
@@ -165,7 +166,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
         Bounds bounds = getBoundsInLocal();
         updateTextNodes(ctx, textNodes,
                 p.getElements(),
-                get(METACLASS),
+                get(KEYWORD),
                 getNonnull(NAME),
                 cpData,
                 bounds,
@@ -224,7 +225,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
             Text node;
 
             // add metaclass and name
-            if (metaclass != null) {
+            if (metaclass != null && getStyledNonnull(KEYWORD_VISIBLE)) {
                 node = textNodes.get(i++);
                 applyLabelStyle(ctx, node);
                 node.setText("«" + metaclass + "»");

@@ -3946,7 +3946,8 @@
     <antcall target="jfxsa-run-no-another-jvm"/>
   </target>
 
-  <target depends="-profile-check-1,-profile-pre72" description="Profile a project in the IDE." if="profiler.configured" name="jfx-project-profile" unless="profiler.info.jvmargs.agent">
+  <target depends="-profile-check-1,-profile-pre72" description="Profile a project in the IDE." if="profiler.configured"
+          name="jfx-project-profile" unless="profiler.info.jvmargs.agent">
         <startprofiler/>
     <antcall target="-profile-on-another-platform"/>
     <antcall target="-profile-on-same-platform"/>

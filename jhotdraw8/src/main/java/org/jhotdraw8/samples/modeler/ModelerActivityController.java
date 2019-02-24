@@ -119,6 +119,7 @@ import org.jhotdraw8.samples.modeler.figure.MLClassifierFigure;
 import org.jhotdraw8.samples.modeler.figure.MLConstants;
 import org.jhotdraw8.samples.modeler.figure.MLDiagramFigure;
 import org.jhotdraw8.samples.modeler.figure.MLEdgeFigure;
+import org.jhotdraw8.samples.modeler.figure.MLKeyword;
 import org.jhotdraw8.samples.modeler.io.ModelerFigureFactory;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 import org.jhotdraw8.svg.SvgExporter;
@@ -291,41 +292,55 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
 
         // modeling shape creation tools -----------
-        ttbar.addTool(new CreationTool("edit.createSysMLRequirement", labels, () -> createFigure(() -> {
+        ttbar.addTool(new CreationTool("edit.createSysMLRequirementClassifier", labels, () -> createFigure(() -> {
             MLClassifierFigure f = new MLClassifierFigure();
-            f.set(MLClassifierFigure.METACLASS, "requirement");
+            f.set(MLClassifierFigure.KEYWORD, MLKeyword.REQUIREMENT.getName());
             f.set(MLClassifierFigure.NAME, "Name");
             f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMap.of("text", ImmutableList.emptyList())
+                    ImmutableMap.of(MLKeyword.TEXT.getName(), ImmutableList.emptyList())
             ));
             return f;
         }), layerFactory), 10, 0, 16);
-        ttbar.addTool(new CreationTool("edit.createSysMLBlock", labels, () -> createFigure(() -> {
+        ttbar.addTool(new CreationTool("edit.createSysMLBlockClassifier", labels, () -> createFigure(() -> {
             MLClassifierFigure f = new MLClassifierFigure();
-            f.set(MLClassifierFigure.METACLASS, "block");
+            f.set(MLClassifierFigure.KEYWORD, MLKeyword.BLOCK.getName());
             f.set(MLClassifierFigure.NAME, "Name");
             f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMap.ofEntries(ImmutableMap.entry("parts", ImmutableList.emptyList()),
-                            ImmutableMap.entry("references", ImmutableList.emptyList()),
-                            ImmutableMap.entry("values", ImmutableList.emptyList()),
-                            ImmutableMap.entry("constraints", ImmutableList.emptyList()),
-                            ImmutableMap.entry("ports", ImmutableList.emptyList()))
+                    ImmutableMap.ofEntries(ImmutableMap.entry(MLKeyword.PARTS.getName(), ImmutableList.emptyList()),
+                            ImmutableMap.entry(MLKeyword.REFERENCES.getName(), ImmutableList.emptyList()),
+                            ImmutableMap.entry(MLKeyword.VALUES.getName(), ImmutableList.emptyList()),
+                            ImmutableMap.entry(MLKeyword.CONSTRAINTS.getName(), ImmutableList.emptyList()),
+                            ImmutableMap.entry(MLKeyword.PORTS.getName(), ImmutableList.emptyList()))
             ));
             return f;
         }), layerFactory), 11, 0, 0);
-        ttbar.addTool(new CreationTool("edit.createUmlClass", labels, () -> createFigure(() -> {
+        ttbar.addTool(new CreationTool("edit.createUmlClassClassifier", labels, () -> createFigure(() -> {
             MLClassifierFigure f = new MLClassifierFigure();
-            f.set(MLClassifierFigure.METACLASS, "class");
+            f.set(MLClassifierFigure.KEYWORD, MLKeyword.CLASS.getName());
             f.set(MLClassifierFigure.NAME, "Name");
             f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMap.ofEntries(ImmutableMap.entry("attributes", ImmutableList.emptyList()),
-                            ImmutableMap.entry("operations", ImmutableList.emptyList()))
+                    ImmutableMap.ofEntries(ImmutableMap.entry(MLKeyword.ATTRIBUTES.getName(), ImmutableList.emptyList()),
+                            ImmutableMap.entry(MLKeyword.OPERATIONS.getName(), ImmutableList.emptyList()))
             ));
             return f;
         }), layerFactory), 12, 0, 0);
 
         // modeling edge creation tools --------
-        ttbar.addTool(new ConnectionTool("edit.createUmlEdge", labels, () -> createFigure(MLEdgeFigure::new), layerFactory), 20, 1, 16);
+        ttbar.addTool(new ConnectionTool("edit.createUmlDependencyEdge", labels, () -> createFigure(() -> {
+            MLEdgeFigure f = new MLEdgeFigure();
+            f.set(MLEdgeFigure.KEYWORD, MLKeyword.DEPENDENCY.getName());
+            return f;
+        }), layerFactory), 20, 1, 16);
+        ttbar.addTool(new ConnectionTool("edit.createSysMLContainmentEdge", labels, () -> createFigure(() -> {
+            MLEdgeFigure f = new MLEdgeFigure();
+            f.set(MLEdgeFigure.KEYWORD, MLKeyword.CONTAINMENT.getName());
+            return f;
+        }), layerFactory), 20, 0, 16);
+        ttbar.addTool(new ConnectionTool("edit.createUmlGeneralizationEdge", labels, () -> createFigure(() -> {
+            MLEdgeFigure f = new MLEdgeFigure();
+            f.set(MLEdgeFigure.KEYWORD, MLKeyword.CONTAINMENT.getName());
+            return f;
+        }), layerFactory), 21, 0, 0);
 
         // modeling diagram creation tools --------
         ttbar.addTool(new CreationTool("edit.createSysMLRequirementDiagram", labels, () -> createFigure(() -> {
@@ -447,7 +462,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             dock.getItems().add(addInspector(modelAttrInspector, "modelAttributes", Priority.ALWAYS));
             StyleAttributesInspector styleAttrInspector = new StyleAttributesInspector();
             styleAttrInspector.setAttributeFilter(k ->
-                    !"model".equals(k.getNamespace())
+                    !MLConstants.ML_NAMESPACE_PREFIX.equals(k.getNamespace())
             );
             dock.getItems().add(addInspector(styleAttrInspector, "styleAttributes", Priority.ALWAYS));
             dock.getItems().add(addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER));
