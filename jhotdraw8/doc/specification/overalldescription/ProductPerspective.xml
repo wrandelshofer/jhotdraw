@@ -13,11 +13,20 @@
     <listitem><para>the "Application Framework"</para></listitem>
   </itemizedlist>
 
-  <para>Samples:</para>
+  <para>Example programs:</para>
   <itemizedlist>
-    <listitem><para>the "Mini" samples</para></listitem>
-    <listitem><para>the "Grapher" sample</para></listitem>
-    <listitem><para>the "Teddy" sample</para></listitem>
+    <listitem>
+      <para>the "Mini" examples</para>
+    </listitem>
+    <listitem>
+      <para>the "Grapher" example</para>
+    </listitem>
+    <listitem>
+      <para>the "Modeler" example</para>
+    </listitem>
+    <listitem>
+      <para>the "Teddy" example</para>
+    </listitem>
   </itemizedlist>
 
   <para>The "Drawing Editor Framework" can be used to realize drawing
@@ -26,16 +35,25 @@
     a data model, allowing a structured drawing editor to be used as a user interface
     for the data model.</para>
 
-  <para>The "Application Framework" can be used to create
-    applications which comply to platform-specific user interface guidelines.
+  <para>The "Application Framework" can be used to create document-based
+    applications that comply to platform-specific user interface guidelines.
     Such as <xref linkend="bib.ahig"/> and <xref linkend="bib.whig"/>.</para>
 
-  <para>The "Mini" samples demonstrate small use cases from both frameworks.</para>
+  <para>The "Mini" examples demonstrate small use cases from both frameworks.</para>
 
-  <para>The "Grapher" sample demonstrate a working drawing editor application. It focuses on many use cases
-    of the application framework and the drawing framework.</para>
+  <para>The "Grapher" example demonstrate a working drawing editor application. It focuses on many use cases
+    of the application framework and the drawing framework.
+    It exercises the "simple" implementation classes that are provided with the drawing framework.
+  </para>
 
-  <para>The "Teddy" sample demonstrates a working text editor. It focuses on the application framework only.</para>
+  <para>The "Modeler" example demonstrate a working drawing editor application. It focuses on many use cases
+    of the application framework and the drawing framework.
+    It adds implementation classes that exercise the extensibility of the drawing framework.
+  </para>
+
+  <para>The "Teddy" example demonstrates a working text editor. It focuses on the application framework.
+    It exercises the "simple" implementation classes that are provided with the application framework.
+  </para>
 
 </section>
 
