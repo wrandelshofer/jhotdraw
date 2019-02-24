@@ -520,7 +520,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
      * Attribute filter can be used to show only a specific set
      * of attributes in the inspector.
      *
-     * @return
+     * @return attribute filter
      */
     public Property<Predicate<QualifiedName>> attributeFilter() {
         return attributeFilter;

@@ -21,6 +21,7 @@ public interface WorkState extends Worker<Void> {
 
     /**
      * Returns true if the worker associated to this work state should cancel.
+     * @return true if cancelled
      */
     boolean isCancelled();
 }

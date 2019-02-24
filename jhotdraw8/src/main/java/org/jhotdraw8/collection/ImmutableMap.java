@@ -29,7 +29,9 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
 
     @SafeVarargs
     static <K, V> ImmutableMap<K, V> ofEntries(Map.Entry<K, V>... entries) {
-        return new ImmutableHashMap<>(Arrays.asList(entries));
+        @SuppressWarnings("varargs")
+        ImmutableHashMap<K, V> result = new ImmutableHashMap<>(Arrays.asList(entries));
+        return result;
     }
 
     static <K, V> ImmutableMap<K, V> of(Map<K, V> map) {

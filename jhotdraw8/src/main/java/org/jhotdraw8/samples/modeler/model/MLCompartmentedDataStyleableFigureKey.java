@@ -5,6 +5,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.AbstractStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -29,55 +30,55 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableFigu
      * Creates a new instance with the specified name and with an empty String
      * as the default value.
      *
-     * @param namespace
+     * @param namespace The namespace
      * @param name The name of the key.
      */
-    public MLCompartmentedDataStyleableFigureKey(String namespace, String name) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name) {
         this(namespace, name, null);
     }
 
     /**
      * Creates a new instance with the specified name and default value.
      *
-     * @param namespace
+     * @param namespace The namespace
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public MLCompartmentedDataStyleableFigureKey(String namespace, String name, MLCompartmentalizedData defaultValue) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, MLCompartmentalizedData defaultValue) {
         this(namespace, name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
     /**
      * Creates a new instance with the specified name, mask and default value.
      *
-     * @param namespace
+     * @param namespace The namespace
      * @param name         The name of the key.
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public MLCompartmentedDataStyleableFigureKey(String namespace, String name, DirtyMask mask, MLCompartmentalizedData defaultValue) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, DirtyMask mask, MLCompartmentalizedData defaultValue) {
         this(namespace, name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
-    public MLCompartmentedDataStyleableFigureKey(String namespace, String name, DirtyMask mask, boolean nullable, MLCompartmentalizedData defaultValue) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, DirtyMask mask, boolean nullable, MLCompartmentalizedData defaultValue) {
         this(namespace, name, DirtyMask.of(DirtyBits.NODE), nullable, defaultValue, null);
     }
 
-    public MLCompartmentedDataStyleableFigureKey(String namespace, String name, DirtyMask mask, MLCompartmentalizedData defaultValue, String helpText) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, DirtyMask mask, MLCompartmentalizedData defaultValue, String helpText) {
         this(namespace, name, DirtyMask.of(DirtyBits.NODE), false, defaultValue, helpText);
     }
 
     /**
      * Creates a new instance with the specified name, mask and default value.
      *
-     * @param namespace
+     * @param namespace The namespace
      * @param name         The name of the key.
      * @param mask         The dirty mask.
      * @param nullable     Whether the value may be set to null
      * @param defaultValue The default value.
      * @param helpText     the help text
      */
-    public MLCompartmentedDataStyleableFigureKey(String namespace, String name, DirtyMask mask, boolean nullable, MLCompartmentalizedData defaultValue, String helpText) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, DirtyMask mask, boolean nullable, MLCompartmentalizedData defaultValue, String helpText) {
         super(namespace, name, MLCompartmentalizedData.class, nullable, mask, defaultValue);
         converter = new CssUmlCompartmentalizedDataConverter(true);
         Function<Styleable, StyleableProperty<MLCompartmentalizedData>> function = s -> {

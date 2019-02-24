@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
 
@@ -63,14 +64,14 @@ public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements Figur
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
-     * @param namespace
+     * @param namespace The namespace
      * @param name         The name of the key.
      * @param clazz        The type of the value.
      * @param isNullable   Whether the value may be set to null
      * @param dirtyMask    the dirty bits
      * @param defaultValue The default value.
      */
-    public AbstractStyleableFigureKey(String namespace, String name, Class<?> clazz, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
+    public AbstractStyleableFigureKey(@Nullable String namespace, String name, Class<?> clazz, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
         this(namespace, name, clazz, null, isNullable, dirtyMask, defaultValue);
     }
 
@@ -78,7 +79,7 @@ public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements Figur
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
-     * @param namespace
+     * @param namespace The namespace
      * @param name           The name of the key.
      * @param clazz          The type of the value.
      * @param typeParameters The type parameters of the class. Specify "" if no
@@ -87,7 +88,7 @@ public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements Figur
      * @param dirtyMask      the dirty bits
      * @param defaultValue   The default value.
      */
-    public AbstractStyleableFigureKey(String namespace, String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
+    public AbstractStyleableFigureKey(@Nullable String namespace, String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
         super(name, clazz, typeParameters, isNullable, defaultValue);
         this.dirtyMask = dirtyMask;
         this.cssName = ReadableStyleableMapAccessor.toCssName(name);
@@ -96,7 +97,7 @@ public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements Figur
 
     @Nonnull
     private final String cssName;
-    @Nonnull
+    @Nullable
     private final String namespace;
 
     public DirtyMask getDirtyMask() {
@@ -108,7 +109,7 @@ public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements Figur
         return cssName;
     }
 
-    @Nonnull
+    @Nullable
     public String getCssNamespace() {
         return namespace;
     }
