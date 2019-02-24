@@ -68,7 +68,11 @@
 <xi:include href="requirements/draw/DrawingEditorFramework.xml"/>
   <xi:include href="requirements/draw/AutomaticLayoutForFigures.xml"/>
   <xi:include href="requirements/draw/CascadingStyleSheetsForDrawings.xml"/>
-  <xi:include href="requirements/draw/DrawingLayers.xml"/>
+  <xi:include href="requirements/draw/Layers.xml"/>
+  <xi:include href="requirements/draw/Locking.xml"/>
+  <xi:include href="requirements/draw/Visibility.xml"/>
+  <xi:include href="requirements/draw/ZOrder.xml"/>
+  <xi:include href="requirements/draw/ConstructiveAreaGeometry.xml"/>
 </section>
 
 <!--

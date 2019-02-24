@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
   <title>Definitions</title>
-  <para>This chapter contains definitions.</para>
+  <para></para>
   <glossary>
     <title>List of terms:</title>
     <glossentry xml:id="glossterm.application">
@@ -15,7 +15,7 @@
     <glossentry>
       <glossterm>Activity</glossterm>
       <glossdef>
-        <para>An activity is a set of actions that relate to the same topic.</para>
+        <para>An activity is a set of actions that relate to a topic of some kind.</para>
       </glossdef>
     </glossentry>
     <glossentry>
@@ -25,16 +25,17 @@
       </glossdef>
     </glossentry>
     <glossentry>
-      <glossterm>document-based Application</glossterm>
+      <glossterm>Document-based Application</glossterm>
       <glossdef>
         <para>An application that supports document-based activities.</para>
       </glossdef>
     </glossentry>
     <glossentry>
-      <glossterm>document-based Activity</glossterm>
+      <glossterm>Document-based Activity</glossterm>
       <glossdef>
-        <para>An activity with actions that relate to a persistent document of some kind
-          (such as a text document or a drawing document).</para>
+        <para>An activity with actions that relate to a document
+          that can be stored and retrieved from a file.
+        </para>
       </glossdef>
     </glossentry>
     <glossentry>
@@ -47,7 +48,7 @@
       <glossterm>Figure</glossterm>
       <glossdef>
         <para>A figure is a visual representation of some kind
-          (such as a line, rectangle or something more complex).
+          (such as a line, a rectangle or something more complex).
         </para>
       </glossdef>
     </glossentry>

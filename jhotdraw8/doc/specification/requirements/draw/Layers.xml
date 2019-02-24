@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.Layers">
+  <title>Layers</title>
+  <para>The figures in a drawing are organized in layers.</para>
+
+  <para>A drawing has the following structure:</para>
+  <itemizedlist>
+    <listitem>
+      <para>The children of a drawing are layers.</para>
+    </listitem>
+    <listitem>
+      <para>The children of a layer are figures except drawings and layers.</para>
+    </listitem>
+    <listitem>
+      <para>The children of a figure are figures except drawings and layers.</para>
+    </listitem>
+  </itemizedlist>
+</section>

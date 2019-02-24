@@ -4,10 +4,10 @@
   <title>Automatic Layout for Figures</title>
   <para>The drawing framework supports figures that can be laid out automatically.</para>
 
-  <para>For some kinds of drawings, e.g. diagrams, the user should not required to layout all figures of by himself.
+  <para>For some kinds of drawings, e.g. diagrams, the user is not required to layout all figures manually.
   </para>
 
-  <para>Figures that should be laid out automatically include:</para>
+  <para>Figures that can be laid out automatically include:</para>
   <itemizedlist>
     <listitem>
       <para>connection lines between diagram elements</para>

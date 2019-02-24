@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.ZOrder">
+  <title>Z-Order</title>
+  <para>The figures in a drawing are arranged in a z-order.</para>
+  <para>Figures with higher z-order are drawn before figures with lower z-order.</para>
+</section>
