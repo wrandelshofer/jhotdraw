@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xml:id="requirement.AutomaticLayoutForFigures">
-  <title>Automatic Layout for Figures</title>
+         xml:id="requirement.AutomaticLayout">
+  <title>Automatic Layout</title>
   <para>The drawing framework supports figures that can be laid out automatically.</para>
 
   <para>For some kinds of drawings, e.g. diagrams, the user is not required to layout all figures manually.

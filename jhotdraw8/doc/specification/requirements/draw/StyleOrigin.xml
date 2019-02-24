@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xml:id="requirement.CascadingStyleSheetsOrigin">
+  <title>Style Origin</title>
+  <para>The value of a styled property can origin from the 4 style origins defined in JavaFX class StyleOrigin:</para>
+  <variablelist>
+    <varlistentry>
+      <term>INLINE</term>
+      <listitem>
+        <para>The value is set from a style in the „style“ property of a figure.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>AUTHOR</term>
+      <listitem>
+        <para>The value is set from an external stylesheet.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>USER</term>
+      <listitem>
+        <para>The value is set on a property of a figure.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>USER_AGENT</term>
+      <listitem>
+        <para>The value is set from an internal stylesheet.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+
+  <para>If a value is defined in more than one style origin, then values are taken with
+    the following precedence rule:
+  </para>
+  <itemizedlist>
+    <listitem>
+      <para>INLINE</para>
+    </listitem>
+    <listitem>
+      <para>AUTHOR</para>
+    </listitem>
+    <listitem>
+      <para>USER</para>
+    </listitem>
+    <listitem>
+      <para>USER_AGENT</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>The user of a drawing editor can:</para>
+  <itemizedlist>
+    <listitem>
+      <para>Add and remove AUTHOR stylesheets.</para>
+    </listitem>
+    <listitem>
+      <para>Edit USER property values</para>
+    </listitem>
+    <listitem>
+      <para>Edit the value of the INLINE style property</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>The developer of a drawing editor can:</para>
+  <itemizedlist>
+    <listitem>
+      <para>define the USER_AGENT stylesheets.</para>
+    </listitem>
+  </itemizedlist>
+</section>
