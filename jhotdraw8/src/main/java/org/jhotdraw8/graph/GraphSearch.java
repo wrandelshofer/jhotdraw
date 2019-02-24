@@ -169,6 +169,40 @@ public class GraphSearch {
     }
 
     /**
+     * Given a set of vertices and a list of arrows ordered by cost, returns a
+     * builder with the minimum spanning tree. This is an undirected graph with
+     * an arrow in each direction.
+     * <p>
+     *
+     * @param <V>            the vertex type
+     * @param <A>            the arrow type
+     * @param vertices       the list of vertices
+     * @param orderedArrows  list of arrows sorted by cost in ascending order
+     *                       (lowest cost first, highest cost last)
+     * @param includedArrows optional, all included arrows are added to this
+     *                       list, if it is provided.
+     * @param rejectedArrows optional, all excluded arrows are added to this
+     *                       list, if it is provided.
+     * @return the graph builder
+     */
+    @Nonnull
+    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull Collection<V> vertices, @Nonnull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
+        List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
+        if (includedArrows != null) {
+            includedArrows.addAll(includedArrowList);
+        }
+        DirectedGraphBuilder<V, A> builder = new DirectedGraphBuilder<>();
+        for (V v : vertices) {
+            builder.addVertex(v);
+        }
+        for (A e : includedArrowList) {
+            builder.addArrow(e.getStart(), e.getEnd(), e);
+            builder.addArrow(e.getEnd(), e.getStart(), e);
+        }
+        return builder;
+    }
+
+    /**
      * Given a set of vertices and a list of arrows ordered by cost, returns
      * the minimum spanning tree.
      * <p>

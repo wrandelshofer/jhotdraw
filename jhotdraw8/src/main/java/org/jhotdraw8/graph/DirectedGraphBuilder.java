@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 
@@ -70,6 +71,34 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         }
         return b;
     }
+
+    /**
+     * Creates a builder which contains a copy of the specified graph.
+     *
+     * @param <VV>         the vertex source type
+     * @param <AA>         the arrow source type
+     * @param <V>          the vertex target type
+     * @param <A>          the arrow target type
+     * @param graph        a graph
+     * @param vertexMapper maps a vertex of source type VV to the target type V
+     * @param arrowMapper  maps an arrow of source type AA to the target type A
+     * @return a new graph
+     */
+    @Nonnull
+    public static <VV, AA, V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(DirectedGraph<VV, AA> graph,
+                                                                            Function<VV, V> vertexMapper,
+                                                                            Function<AA, A> arrowMapper) {
+        DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
+        for (VV vv : graph.getVertices()) {
+            V v = vertexMapper.apply(vv);
+            b.addVertex(v);
+            for (int j = 0, m = graph.getNextCount(vv); j < m; j++) {
+                b.addArrow(v, vertexMapper.apply(graph.getNext(vv, j)), arrowMapper.apply(graph.getNextArrow(vv, j)));
+            }
+        }
+        return b;
+    }
+
 
     /**
      * Creates a builder which contains the specified vertices, and only arrows
