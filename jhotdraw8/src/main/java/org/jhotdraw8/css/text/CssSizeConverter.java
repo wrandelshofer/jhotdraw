@@ -3,18 +3,17 @@
  */
 package org.jhotdraw8.css.text;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.function.Consumer;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.function.Consumer;
 
 /**
  * CssDoubleConverter.
@@ -46,7 +45,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         if (nullable) {
             if (tt.next() == CssTokenType.TT_IDENT && "none".equals(tt.currentString())) {
                 //tt.skipWhitespace();
-                return null;
+                return nullable ? null : CssSize.ZERO;
             } else {
                 tt.pushBack();
             }
