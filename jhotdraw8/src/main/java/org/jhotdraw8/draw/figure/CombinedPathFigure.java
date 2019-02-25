@@ -1,7 +1,27 @@
-/* @(#)SimpleCombinedPathFigure.java
+/* @(#)CombinedPathFigure.java
  * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
+
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Path;
+import javafx.scene.transform.Transform;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.NullableEnumStyleableFigureKey;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.ConcatenatedPathIterator;
+import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 
 import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
@@ -10,26 +30,6 @@ import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Path;
-import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableEnumStyleableFigureKey;
-import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
-import org.jhotdraw8.geom.ConcatenatedPathIterator;
-import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * This is lake a group, but the shapes of the child figures are presented as a
@@ -40,7 +40,7 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleCombinedPathFigure extends AbstractCompositeFigure
+public class CombinedPathFigure extends AbstractCompositeFigure
         implements StrokableFigure, FillableFigure, Grouping,
         ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure,

@@ -6,12 +6,12 @@ package org.jhotdraw8.draw.locator;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.draw.figure.SimpleBezierFigure;
+import org.jhotdraw8.draw.figure.BezierFigure;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * A {@link Locator} which can be used to place a label on the path of a
- * {@link SimpleBezierFigure}.
+ * {@link BezierFigure}.
  * <p>
  * The point is located at a distance and an angle relative to the total length
  * of the bezier path.
@@ -52,13 +52,13 @@ public class BezierLabelLocator implements Locator {
     @Nonnull
     @Override
     public Point2D locate(Figure owner) {
-        return getRelativePoint((SimpleBezierFigure) owner);
+        return getRelativePoint((BezierFigure) owner);
     }
 
     @Nonnull
     @Override
     public Point2D locate(Figure owner, Figure label) {
-        Point2D relativePoint = getRelativeLabelPoint((SimpleBezierFigure) owner, label);
+        Point2D relativePoint = getRelativeLabelPoint((BezierFigure) owner, label);
         return relativePoint;
     }
 
@@ -70,7 +70,7 @@ public class BezierLabelLocator implements Locator {
      * @return the coordinates
      */
     @Nonnull
-    public Point2D getRelativePoint(@Nonnull SimpleBezierFigure owner) {
+    public Point2D getRelativePoint(@Nonnull BezierFigure owner) {
         Point2D point = owner.getPointOnPath((float) relativePosition, 3);
         Point2D nextPoint = owner.getPointOnPath(
                 (relativePosition < 0.5) ? (float) relativePosition + 0.1f : (float) relativePosition - 0.1f,
@@ -103,7 +103,7 @@ public class BezierLabelLocator implements Locator {
      * @return the position
      */
     @Nonnull
-    public Point2D getRelativeLabelPoint(@Nonnull SimpleBezierFigure owner, Figure label) {
+    public Point2D getRelativeLabelPoint(@Nonnull BezierFigure owner, Figure label) {
         // Get a point on the path an the next point on the path
         Point2D point = owner.getPointOnPath((float) relativePosition, 3);
         if (point == null) {

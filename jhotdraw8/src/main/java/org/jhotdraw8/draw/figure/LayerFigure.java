@@ -1,4 +1,4 @@
-/* @(#)SimpleLayer.java
+/* @(#)LayerFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SimpleLayer.
+ * LayerFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLayer extends AbstractCompositeFigure
+public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure {
 
     @Override

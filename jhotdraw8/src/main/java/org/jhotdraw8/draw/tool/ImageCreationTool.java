@@ -3,19 +3,20 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import java.net.URI;
-import java.util.function.Supplier;
 import javafx.stage.FileChooser;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.SimpleImageFigure;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.util.Resources;
+
+import java.net.URI;
+import java.util.function.Supplier;
 
 /**
  * ImageCreationTool.
@@ -27,7 +28,7 @@ import org.jhotdraw8.util.Resources;
  */
 public class ImageCreationTool extends CreationTool {
 
-    private MapAccessor<URI> uriKey = SimpleImageFigure.IMAGE_URI;
+    private MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;
     private URIChooser uriChooser;
     private URI uri;
 

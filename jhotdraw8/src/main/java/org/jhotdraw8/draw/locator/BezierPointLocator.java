@@ -5,11 +5,11 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.draw.figure.SimpleBezierFigure;
+import org.jhotdraw8.draw.figure.BezierFigure;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
- * A {@link Locator} which locates a node on the bezier path of a SimpleBezierFigure.
+ * A {@link Locator} which locates a node on the bezier path of a BezierFigure.
  *
  *
  * @author Werner Randelshofer
@@ -34,7 +34,7 @@ public class BezierPointLocator extends AbstractLocator {
     @Nonnull
     @Override
     public Point2D locate(Figure owner) {
-        SimpleBezierFigure plf = (SimpleBezierFigure) owner;
+        BezierFigure plf = (BezierFigure) owner;
         if (index < plf.getNodeCount()) {
             return plf.getPoint(index, coord);
         }

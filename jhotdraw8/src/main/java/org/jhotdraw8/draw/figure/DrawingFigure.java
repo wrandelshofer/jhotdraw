@@ -1,11 +1,8 @@
-/* @(#)SimpleDrawing.java
+/* @(#)DrawingFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
-import static java.lang.Math.abs;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
 import javafx.geometry.Bounds;
@@ -15,23 +12,25 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * SimpleDrawing.
+ * DrawingFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleDrawing extends AbstractCompositeFigure
+public class DrawingFigure extends AbstractCompositeFigure
         implements Drawing, StyleableFigure, LockableFigure, NonTransformableFigure {
 
     /**
@@ -40,14 +39,15 @@ public class SimpleDrawing extends AbstractCompositeFigure
     @Nullable
     private StylesheetsManager<Figure> styleManager = null;
 
-    public SimpleDrawing() {
+    public DrawingFigure() {
     }
-    public SimpleDrawing(double width, double height) {
+
+    public DrawingFigure(double width, double height) {
         this(new CssSize(width),new CssSize(height));
 
     }
 
-    public SimpleDrawing(CssSize width, CssSize height) {
+    public DrawingFigure(CssSize width, CssSize height) {
         set(WIDTH, width);
         set(HEIGHT, height);
     }

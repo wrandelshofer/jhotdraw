@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import static java.lang.Math.sqrt;
-import java.util.List;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -16,19 +14,22 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.figure.BezierFigure;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.List;
+
+import static java.lang.Math.sqrt;
 
 /**
  * Draws the {@code wireframe} of a {@code PolylineFigure}.
@@ -45,11 +46,11 @@ public class BezierOutlineHandle extends AbstractHandle {
     private Path node;
     private String styleclass;
 
-    public BezierOutlineHandle(SimpleBezierFigure figure, MapAccessor<ImmutableList<BezierNode>> key) {
+    public BezierOutlineHandle(BezierFigure figure, MapAccessor<ImmutableList<BezierNode>> key) {
         this(figure, key, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
-    public BezierOutlineHandle(SimpleBezierFigure figure, MapAccessor<ImmutableList<BezierNode>> key, String styleclass) {
+    public BezierOutlineHandle(BezierFigure figure, MapAccessor<ImmutableList<BezierNode>> key, String styleclass) {
         super(figure);
         this.key = key;
         node = new Path();
@@ -65,7 +66,7 @@ public class BezierOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(@Nonnull DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
-        final SimpleBezierFigure o = getOwner();
+        final BezierFigure o = getOwner();
         Point2D localp = Transforms.concat(dv.getViewToWorld(), o.getWorldToLocal()).transform(x, y);
         Intersection isect = Intersections.intersectPathIteratorCircle(o.getPathIterator(null),
                 localp.getX(), localp.getY(), tolerance);
@@ -87,8 +88,8 @@ public class BezierOutlineHandle extends AbstractHandle {
 
     @Nonnull
     @Override
-    public SimpleBezierFigure getOwner() {
-        return (SimpleBezierFigure) super.getOwner();
+    public BezierFigure getOwner() {
+        return (BezierFigure) super.getOwner();
     }
 
     @Override
@@ -101,7 +102,7 @@ public class BezierOutlineHandle extends AbstractHandle {
             double tolerance = dv.getViewToWorld().deltaTransform(dv.getTolerance(), dv.getTolerance()).getX();
             // pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
             Point2D localp = owner.worldToLocal(pInDrawing);
-            final SimpleBezierFigure o = getOwner();
+            final BezierFigure o = getOwner();
 
             final ImmutableList<BezierNode> nodes = o.get(key);
             BezierNodePath path = new BezierNodePath(nodes);

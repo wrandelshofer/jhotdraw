@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
@@ -18,9 +20,9 @@ import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.SimpleImageFigure;
-import org.jhotdraw8.draw.figure.SimplePageFigure;
+import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -39,8 +41,6 @@ import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -97,7 +97,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     @Nonnull
     private SvgExporter createExporter() {
-        SvgExporter exporter = new SvgExporter(SimpleImageFigure.IMAGE_URI, SKIP_KEY);
+        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setUriResolver(getUriResolver());
         return exporter;
     }
@@ -183,7 +183,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     @Override
     protected void writePage(@Nonnull Path file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
+        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
         final SvgExporter exporter = createExporter();
@@ -196,8 +196,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private void writePageElementAttributes(Element docElement, Page page, int internalPageNumber) throws IOException {
         Bounds b = page.getBoundsInLocal();
         Bounds pb = page.getPageBounds(internalPageNumber);
-        docElement.setAttribute("width", sznb.toString(page.get(SimplePageFigure.PAPER_WIDTH)));
-        docElement.setAttribute("height", sznb.toString(page.get(SimplePageFigure.PAPER_HEIGHT)));
+        docElement.setAttribute("width", sznb.toString(page.get(PageFigure.PAPER_WIDTH)));
+        docElement.setAttribute("height", sznb.toString(page.get(PageFigure.PAPER_HEIGHT)));
         docElement.setAttribute("viewBox", nb.
                 toString(pb.getMinX()) + " " + nb.toString(pb.getMinY())
                 + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));

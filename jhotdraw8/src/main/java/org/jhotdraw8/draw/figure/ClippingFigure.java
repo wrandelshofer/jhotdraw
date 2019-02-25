@@ -1,4 +1,4 @@
-/* @(#)SimpleClipping.java
+/* @(#)ClippingFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -19,18 +19,18 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * SimpleClipping.
+ * ClippingFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleClipping extends AbstractCompositeFigure
+public class ClippingFigure extends AbstractCompositeFigure
         implements Clipping, StyleableFigure, LockedFigure, NonTransformableFigure {
 
-    public SimpleClipping() {
+    public ClippingFigure() {
     }
 
-    public SimpleClipping(@Nonnull Collection<Figure> children) {
+    public ClippingFigure(@Nonnull Collection<Figure> children) {
         getChildren().addAll(children);
     }
 

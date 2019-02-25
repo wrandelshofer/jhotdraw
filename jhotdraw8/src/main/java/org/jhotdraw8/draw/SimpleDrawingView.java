@@ -40,15 +40,17 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.constrain.NullConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.DrawingFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -64,8 +66,6 @@ import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.tree.TreeModelEvent;
 import org.jhotdraw8.util.ReversedList;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -959,7 +959,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // different from the old value!
         drawingPane.layoutBoundsProperty().addListener(observer -> updateLayout());
 
-        drawingModel.get().setRoot(new SimpleDrawing());
+        drawingModel.get().setRoot(new DrawingFigure());
         handleNewDrawingModel(null, drawingModel.get());
 
         // Set stylesheet

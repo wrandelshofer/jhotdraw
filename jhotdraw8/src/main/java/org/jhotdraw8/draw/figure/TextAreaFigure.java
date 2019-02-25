@@ -1,4 +1,4 @@
-/* @(#)SimpleTextAreaFigure.java
+/* @(#)TextAreaFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -25,7 +25,7 @@ import org.jhotdraw8.io.UnitConverter;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-public class SimpleTextAreaFigure extends AbstractLeafFigure
+public class TextAreaFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,

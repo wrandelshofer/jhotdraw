@@ -8,6 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
@@ -19,8 +20,6 @@ import org.jhotdraw8.draw.key.NullableSvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.Shapes;
-
-import org.jhotdraw8.annotation.Nonnull;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -36,17 +35,17 @@ import java.io.IOException;
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
     @Nonnull
-    public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     @Nonnull
-    public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static CssSizeStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
     @Nonnull
     public final static NullableSvgPathStyleableFigureKey SHAPE = new NullableSvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "M 0,0 h 1 v -1 h -1 Z");
     @Nonnull
-    public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static CssSizeStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
     @Nonnull
-    public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static CssSizeStyleableFigureKey X = RectangleFigure.X;
     @Nonnull
-    public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static CssSizeStyleableFigureKey Y = RectangleFigure.Y;
 
     public final static BooleanStyleableFigureKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableFigureKey("ShapePreserveRatio", DirtyMask.of(DirtyBits.NODE), false);
 

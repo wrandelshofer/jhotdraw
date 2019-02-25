@@ -3,26 +3,26 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import java.util.function.Supplier;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import java.util.ArrayList;
-import java.util.Objects;
-import javafx.scene.Cursor;
-import org.jhotdraw8.draw.DrawingEditor;
-import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.figure.SimpleLayer;
-import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.util.Resources;
+
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * CreationTool for polyline figures.
@@ -44,7 +44,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     private final Point2DListStyleableFigureKey key;
 
     public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableFigureKey key, Supplier<Figure> factory) {
-        this(name, rsrc, key, factory, SimpleLayer::new);
+        this(name, rsrc, key, factory, LayerFigure::new);
     }
 
     public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableFigureKey key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {

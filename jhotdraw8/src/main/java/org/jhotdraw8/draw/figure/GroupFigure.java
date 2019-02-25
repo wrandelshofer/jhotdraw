@@ -1,18 +1,18 @@
-/* @(#)SimpleGroupFigure.java
+/* @(#)GroupFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A figure which groups child figures, so that they can be edited by the user
@@ -21,7 +21,7 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleGroupFigure extends AbstractCompositeFigure
+public class GroupFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**

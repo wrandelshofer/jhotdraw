@@ -1,12 +1,7 @@
-/* @(#)SimpleBezierFigure.java
+/* @(#)BezierFigure.java
  * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
-
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
@@ -16,10 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-
-import org.jhotdraw8.annotation.Nonnull;
-
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -44,13 +37,18 @@ import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A {@link Figure} which draws a {@link BezierNodePath}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleBezierFigure extends AbstractLeafFigure
+public class BezierFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
@@ -62,7 +60,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Bezier";
 
-    public SimpleBezierFigure() {
+    public BezierFigure() {
         setStyled(StyleOrigin.USER_AGENT, FILL, null);
     }
 

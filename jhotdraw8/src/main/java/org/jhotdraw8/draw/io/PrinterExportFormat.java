@@ -3,10 +3,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import static java.lang.Math.abs;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.print.PageLayout;
@@ -17,21 +13,24 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import javax.imageio.metadata.IIOInvalidTreeException;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
-
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.SimplePageFigure;
+import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
-import org.jhotdraw8.draw.figure.Page;
+
+import javax.imageio.metadata.IIOInvalidTreeException;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import java.io.IOException;
+import java.nio.file.Path;
+
+import static java.lang.Math.abs;
 
 /**
  * PrinterExportFormat.
@@ -146,12 +145,12 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     @Override
     protected void writePage(Path file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
+        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
 
-        printSlice(page.get(SimplePageFigure.PAPER_SIZE), page, pageBounds, node, pagesDpi * factor);
+        printSlice(page.get(PageFigure.PAPER_SIZE), page, pageBounds, node, pagesDpi * factor);
     }
 
     protected boolean writeSlice(Path file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {

@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Represents a set of compartmentalized data.
  * <p>
- * A compartment has a name and a list of textual items.
+ * Each compartment has a label and a list of textual items.
  * <p>
  * Thus this is effectively a map of type {@literal Map<String,List<String>>>}.
  */

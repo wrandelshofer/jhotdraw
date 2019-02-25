@@ -96,7 +96,7 @@ import static java.lang.Math.min;
  * {@code Layer}s, {@code Group}s and into layout hierarchies.<br>
  * The provider/dependant relationships are typically used for the creation of
  * line connections between figures, such as with
- * {@link SimpleLineConnectionFigure}. The strategy for updating the state of
+ * {@link LineConnectionFigure}. The strategy for updating the state of
  * dependent figures is implement in {@link DrawingModel}.
  * <p>
  * <b>Handles.</b> A figure can produce {@code Handle}s which allow to

@@ -1,14 +1,7 @@
-/* @(#)SimplePageFigure.java
+/* @(#)PageFigure.java
  * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
-
-import static java.lang.Double.max;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
@@ -27,27 +20,30 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.Double.max;
 
 /**
  * Defines a page layout for printing.
@@ -55,11 +51,11 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimplePageFigure extends AbstractCompositeFigure
+public class PageFigure extends AbstractCompositeFigure
         implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
         FillableFigure, StrokableFigure {
 
-    public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static CssSizeStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
     public final static DoubleStyleableFigureKey NUM_PAGES_X = new DoubleStyleableFigureKey("num-pages-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     public final static DoubleStyleableFigureKey NUM_PAGES_Y = new DoubleStyleableFigureKey("num-pages-y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     public final static Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
@@ -78,16 +74,16 @@ public class SimplePageFigure extends AbstractCompositeFigure
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Page";
-    public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
-    public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
-    public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
-    public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    public final static CssSizeStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
+    public final static CssSizeStyleableFigureKey X = RectangleFigure.X;
+    public final static CssSizeStyleableFigureKey Y = RectangleFigure.Y;
+    public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     private final static Object CONTENT_BOUNDS_PROPERTY = new Object();
     private final static Object PAGE_INSETS_PROPERTY = new Object();
     private final static Object PAGE_BOUNDS_PROPERTY = new Object();
     private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
-    public SimplePageFigure() {
+    public PageFigure() {
         set(FILL, new CssColor(Color.TRANSPARENT));
         set(STROKE_TYPE, StrokeType.CENTERED);
     }

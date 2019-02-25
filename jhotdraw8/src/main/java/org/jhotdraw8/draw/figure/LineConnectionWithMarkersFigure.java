@@ -1,4 +1,4 @@
-/* @(#)SimpleLineConnectionWithMarkersFigure.java
+/* @(#)LineConnectionWithMarkersFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -13,30 +13,30 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
- * SimpleLineConnectionWithMarkersFigure.
+ * LineConnectionWithMarkersFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectionWithMarkersFigure
+public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,
-        LockableFigure, CompositableFigure, MarkerFillableFigure, StrokableFigure, StartMarkerableFigure,
-        EndMarkerableFigure, StrokeCuttableFigure {
+        LockableFigure, CompositableFigure, MarkerFillableFigure, StrokableFigure, MarkerStartableFigure,
+        MarkerEndableFigure, StrokeCuttableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "LineConnectionWithMarkers";
 
-    public SimpleLineConnectionWithMarkersFigure() {
+    public LineConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimpleLineConnectionWithMarkersFigure(Point2D start, Point2D end) {
+    public LineConnectionWithMarkersFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
-    public SimpleLineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
+    public LineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
         set(MARKER_FILL, new CssColor("black", Color.BLACK));
     }
@@ -76,22 +76,22 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
 
     @Override
     public double getMarkerEndScaleFactor() {
-        return getStyledNonnull(EndMarkerableFigure.MARKER_END_SCALE_FACTOR);
+        return getStyledNonnull(MarkerEndableFigure.MARKER_END_SCALE_FACTOR);
     }
 
     @Override
     public String getMarkerEndShape() {
-        return getStyled(EndMarkerableFigure.MARKER_END_SHAPE);
+        return getStyled(MarkerEndableFigure.MARKER_END_SHAPE);
     }
 
     @Override
     public double getMarkerStartScaleFactor() {
-        return getStyledNonnull(StartMarkerableFigure.MARKER_START_SCALE_FACTOR);
+        return getStyledNonnull(MarkerStartableFigure.MARKER_START_SCALE_FACTOR);
     }
 
     @Override
     public String getMarkerStartShape() {
-        return getStyled(StartMarkerableFigure.MARKER_START_SHAPE);
+        return getStyled(MarkerStartableFigure.MARKER_START_SHAPE);
     }
 
     @Override
@@ -102,5 +102,15 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
     @Override
     public double getStrokeCutStart(RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutStart(); 
+    }
+
+    @Override
+    public String getMarkerCenterShape() {
+        return null;
+    }
+
+    @Override
+    public double getMarkerCenterScaleFactor() {
+        return 1.0;
     }
 }

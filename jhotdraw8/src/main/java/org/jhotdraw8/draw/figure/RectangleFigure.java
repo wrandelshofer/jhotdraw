@@ -1,4 +1,4 @@
-/* @(#)SimpleRectangleFigure.java
+/* @(#)RectangleFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -30,7 +30,7 @@ import java.awt.geom.PathIterator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleRectangleFigure extends AbstractLeafFigure
+public class RectangleFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure {
@@ -44,15 +44,15 @@ public class SimpleRectangleFigure extends AbstractLeafFigure
     public final static CssSizeStyleableFigureKey ARC_WIDTH = new CssSizeStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
     public final static SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
-    public SimpleRectangleFigure() {
+    public RectangleFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimpleRectangleFigure(double x, double y, double width, double height) {
+    public RectangleFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
-    public SimpleRectangleFigure(Rectangle2D rect) {
+    public RectangleFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 

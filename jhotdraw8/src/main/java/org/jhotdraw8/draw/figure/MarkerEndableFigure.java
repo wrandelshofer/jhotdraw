@@ -1,4 +1,4 @@
-/* @(#)EndMarkerableFigure.java
+/* @(#)MarkerEndableFigure.java
  * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -15,18 +15,21 @@ import org.jhotdraw8.draw.key.NullableSvgPathStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface EndMarkerableFigure extends Figure {
+public interface MarkerEndableFigure extends Figure {
 
+    /**
+     * Marker end is an SVG path that points to the right, with coordinate 0,0 at the tail of the path.
+     */
     NullableSvgPathStyleableFigureKey MARKER_END_SHAPE = new NullableSvgPathStyleableFigureKey("marker-end-shape", DirtyMask.of(DirtyBits.NODE), null);
     DoubleStyleableFigureKey MARKER_END_SCALE_FACTOR = new DoubleStyleableFigureKey("marker-end-scale-factor", DirtyMask.of(DirtyBits.NODE), 1.0);
 
     @Nullable
     default String getMarkerEndShape() {
-        return getStyled(EndMarkerableFigure.MARKER_END_SHAPE);
+        return getStyled(MARKER_END_SHAPE);
     }
 
     default double getMarkerEndScaleFactor() {
-        return getStyled(EndMarkerableFigure.MARKER_END_SCALE_FACTOR);
+        return getStyledNonnull(MARKER_END_SCALE_FACTOR);
     }
 
 }

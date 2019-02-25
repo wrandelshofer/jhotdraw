@@ -1,4 +1,4 @@
-/* @(#)SimplePageLabelFigure.java
+/* @(#)PageLabelFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -20,12 +20,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 /**
- * SimplePageLabelFigure.
+ * PageLabelFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimplePageLabelFigure extends AbstractLabelFigure
+public class PageLabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
     public final static String TYPE_SELECTOR = "PageLabel";
     public final static String NUM_PAGES_PLACEHOLDER = "${numPages}";
@@ -37,15 +37,15 @@ public class SimplePageLabelFigure extends AbstractLabelFigure
     public final static StringStyleableFigureKey TEXT_WITH_PLACEHOLDERS = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "",
             "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER + ", " + DATE_PLACEHOLDER);
 
-    public SimplePageLabelFigure() {
+    public PageLabelFigure() {
         this(0, 0, "");
     }
 
-    public SimplePageLabelFigure(Point2D position, String text) {
+    public PageLabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public SimplePageLabelFigure(double x, double y, String text, Object... keyValues) {
+    public PageLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {

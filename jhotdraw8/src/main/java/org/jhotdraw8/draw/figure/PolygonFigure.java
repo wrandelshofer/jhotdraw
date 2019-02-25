@@ -3,10 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -14,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -29,13 +24,18 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A figure which draws a closed polygon.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimplePolygonFigure extends AbstractLeafFigure 
+public class PolygonFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure, 
         ConnectableFigure, PathIterableFigure {
@@ -45,17 +45,17 @@ public class SimplePolygonFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Polygon";
 
-    public final static Point2DListStyleableFigureKey POINTS = SimplePolylineFigure.POINTS;
+    public final static Point2DListStyleableFigureKey POINTS = PolylineFigure.POINTS;
 
-    public SimplePolygonFigure() {
+    public PolygonFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimplePolygonFigure(double startX, double startY, double endX, double endY) {
+    public PolygonFigure(double startX, double startY, double endX, double endY) {
         set(POINTS, ImmutableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
     }
 
-    public SimplePolygonFigure(Point2D... points) {
+    public PolygonFigure(Point2D... points) {
         set(POINTS, ImmutableList.of(points));
     }
 

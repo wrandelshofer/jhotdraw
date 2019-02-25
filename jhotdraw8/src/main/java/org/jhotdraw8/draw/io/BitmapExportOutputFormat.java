@@ -19,7 +19,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.SimplePageFigure;
+import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -199,7 +199,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     protected void writePage(@Nonnull Path file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
+        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();

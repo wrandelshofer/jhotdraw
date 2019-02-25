@@ -3,6 +3,41 @@
  */
 package org.jhotdraw8.draw.io;
 
+import javafx.css.StyleOrigin;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.DataFormat;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.CompositeMapAccessor;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.draw.figure.Clipping;
+import org.jhotdraw8.draw.figure.ClippingFigure;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.input.ClipboardInputFormat;
+import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.UriResolver;
+import org.jhotdraw8.xml.XmlUtil;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Comment;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.ProcessingInstruction;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -24,43 +59,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javafx.css.StyleOrigin;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.DataFormat;
-
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
-
-import org.jhotdraw8.collection.CompositeMapAccessor;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.concurrent.WorkState;
-import org.jhotdraw8.draw.figure.Clipping;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.SimpleClipping;
-import org.jhotdraw8.draw.figure.SimpleLayer;
-import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.input.ClipboardInputFormat;
-import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
-import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.UriResolver;
-import org.jhotdraw8.xml.XmlUtil;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Comment;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.ProcessingInstruction;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
 
 /**
  * SimpleXmlIO.
@@ -278,7 +276,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             if (layer == null) {
                 layer = (Layer) drawing.getLastChild();
                 if (layer == null) {
-                    layer = new SimpleLayer();
+                    layer = new LayerFigure();
                     layer.set(StyleableFigure.ID, idFactory.createId(layer));
                     model.addChildTo(layer, drawing);
                 }
@@ -664,7 +662,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             }
         }
 
-        Clipping external = new SimpleClipping();
+        Clipping external = new ClippingFigure();
 
         idFactory.reset();
         final String docElemName = figureFactory.figureToName(external);

@@ -5,22 +5,21 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.scene.Node;
-import javafx.scene.transform.Transform;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 
 /**
  * Renders a {@code javafx.scene.shape.Arc}.
@@ -28,7 +27,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleArcFigure extends AbstractLeafFigure implements StrokableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -45,15 +44,15 @@ public class SimpleArcFigure extends AbstractLeafFigure implements StrokableFigu
     public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
     public final static CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 
-    public SimpleArcFigure() {
+    public ArcFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimpleArcFigure(double x, double y, double width, double height) {
+    public ArcFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
-    public SimpleArcFigure(Rectangle2D rect) {
+    public ArcFigure(Rectangle2D rect) {
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 

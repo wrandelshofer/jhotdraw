@@ -1,9 +1,7 @@
-/* @(#)SimpleImageFigure.java
+/* @(#)ImageFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
-
-import java.net.URI;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -13,27 +11,27 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.UriStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.render.RenderContext;
+
+import java.net.URI;
 
 /**
- * SimpleImageFigure.
+ * ImageFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleImageFigure extends AbstractLeafFigure
+public class ImageFigure extends AbstractLeafFigure
         implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure,
         HideableFigure {
 
@@ -51,29 +49,29 @@ public class SimpleImageFigure extends AbstractLeafFigure
     @Nonnull
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
     @Nonnull
-    public final static CssSizeStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static CssSizeStyleableFigureKey X = RectangleFigure.X;
     @Nonnull
-    public final static CssSizeStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static CssSizeStyleableFigureKey Y = RectangleFigure.Y;
     @Nonnull
-    public final static CssSizeStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static CssSizeStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
     @Nonnull
-    public final static CssSizeStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static CssSizeStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
     @Nonnull
-    public final static CssRectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
+    public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     @Nullable
     private Image cachedImage;
     @Nullable
     private URI cachedImageUri;
 
-    public SimpleImageFigure() {
+    public ImageFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimpleImageFigure(double x, double y, double width, double height) {
+    public ImageFigure(double x, double y, double width, double height) {
         set(BOUNDS, new CssRectangle2D(x, y, width, height));
     }
 
-    public SimpleImageFigure(CssRectangle2D rect) {
+    public ImageFigure(CssRectangle2D rect) {
         set(BOUNDS, rect);
     }
 

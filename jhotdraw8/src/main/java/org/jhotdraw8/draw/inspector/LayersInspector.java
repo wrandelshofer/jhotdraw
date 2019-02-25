@@ -29,22 +29,20 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.SimpleLayer;
+import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.io.IOException;
@@ -139,7 +137,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     public LayersInspector(@Nonnull URL fxmlUrl) {
-        this(fxmlUrl, SimpleLayer::new);
+        this(fxmlUrl, LayerFigure::new);
     }
 
     public LayersInspector(@Nonnull URL fxmlUrl, Supplier<Layer> layerFactory) {

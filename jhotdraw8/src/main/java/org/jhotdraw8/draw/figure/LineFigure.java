@@ -1,4 +1,4 @@
-/* @(#)SimpleLineFigure.java
+/* @(#)LineFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -24,7 +25,6 @@ import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
-import org.jhotdraw8.annotation.Nonnull;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLineFigure extends AbstractLeafFigure 
+public class LineFigure extends AbstractLeafFigure
         implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure, TransformableFigure, PathIterableFigure {
 
@@ -51,16 +51,16 @@ public class SimpleLineFigure extends AbstractLeafFigure
     public final static CssPoint2DStyleableMapAccessor START = new CssPoint2DStyleableMapAccessor("start", START_X, START_Y);
     public final static CssPoint2DStyleableMapAccessor END = new CssPoint2DStyleableMapAccessor("end", END_X, END_Y);
 
-    public SimpleLineFigure() {
+    public LineFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimpleLineFigure(double startX, double startY, double endX, double endY) {
+    public LineFigure(double startX, double startY, double endX, double endY) {
         set(START, new CssPoint2D(startX, startY));
         set(END, new CssPoint2D(endX, endY));
     }
 
-    public SimpleLineFigure(Point2D start, Point2D end) {
+    public LineFigure(Point2D start, Point2D end) {
         set(START, new CssPoint2D(start));
         set(END, new CssPoint2D(end));
     }

@@ -3,10 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -14,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -30,13 +25,18 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A figure which draws a connected line segments.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimplePolylineFigure extends AbstractLeafFigure
+public class PolylineFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure{
@@ -47,16 +47,16 @@ public class SimplePolylineFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Polyline";
 
-    public SimplePolylineFigure() {
+    public PolylineFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimplePolylineFigure(double startX, double startY, double endX, double endY) {
+    public PolylineFigure(double startX, double startY, double endX, double endY) {
         set(POINTS, ImmutableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
         set(FILL, null);
     }
 
-    public SimplePolylineFigure(Point2D... points) {
+    public PolylineFigure(Point2D... points) {
         set(POINTS, ImmutableList.of(points));
         set(FILL, null);
     }

@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -13,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
@@ -21,14 +19,16 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.RelativePointHandle;
 import org.jhotdraw8.draw.handle.ResizeHandleKit;
+import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.RenderingIntent;
+
+import java.util.List;
 
 /**
  * This is a special figure which is used to segment a drawing into tiles, when
@@ -40,7 +40,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
+public class SliceFigure extends AbstractLeafFigure implements Slice, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -56,15 +56,15 @@ public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, Tran
     public final static CssSizeStyleableFigureKey SLICE_ORIGIN_Y = new CssSizeStyleableFigureKey("sliceOriginY", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     public final static CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 
-    public SimpleSliceFigure() {
+    public SliceFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimpleSliceFigure(double x, double y, double width, double height) {
+    public SliceFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
-    public SimpleSliceFigure(Rectangle2D rect) {
+    public SliceFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 

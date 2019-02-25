@@ -20,14 +20,14 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.SimplePolylineFigure;
+import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * Draws the {@code wireframe} ofCollection a {@code SimplePolylineFigure}.
+ * Draws the {@code wireframe} ofCollection a {@code PolylineFigure}.
  * <p>
  * The user can insert a new point by double clicking the line.
  *
@@ -122,7 +122,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        double[] points = SimplePolylineFigure.toPointArray(f, key);
+        double[] points = PolylineFigure.toPointArray(f, key);
         if (t != null) {
             t.transform2DPoints(points, 0, points, 0, points.length / 2);
         }

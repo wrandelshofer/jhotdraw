@@ -3,26 +3,19 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Supplier;
-
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.SimpleLayer;
+import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableFigureKey;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -31,6 +24,11 @@ import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.util.Resources;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * CreationTool for bezier figures.
@@ -61,7 +59,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     private Line rubberBand = new Line();
 
     public BezierCreationTool(String name, Resources rsrc, BezierNodeListStyleableFigureKey key, Supplier<Figure> factory) {
-        this(name, rsrc, key, factory, SimpleLayer::new);
+        this(name, rsrc, key, factory, LayerFigure::new);
     }
 
     public BezierCreationTool(String name, Resources rsrc, BezierNodeListStyleableFigureKey key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {

@@ -8,15 +8,16 @@ import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.draw.figure.AbstractLineConnectionWithMarkersFigure;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.draw.figure.AbstractStraightLineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.CompositableFigure;
-import org.jhotdraw8.draw.figure.EndMarkerableFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.MarkerEndableFigure;
 import org.jhotdraw8.draw.figure.MarkerFillableFigure;
+import org.jhotdraw8.draw.figure.MarkerMidableFigure;
+import org.jhotdraw8.draw.figure.MarkerStartableFigure;
 import org.jhotdraw8.draw.figure.MarkerStrokableFigure;
-import org.jhotdraw8.draw.figure.MidMarkerableFigure;
-import org.jhotdraw8.draw.figure.StartMarkerableFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StrokeCuttableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -35,10 +36,10 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class MLEdgeFigure extends AbstractLineConnectionWithMarkersFigure
+public class MLEdgeFigure extends AbstractStraightLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, MarkerFillableFigure, MarkerStrokableFigure, StrokableFigure,
-        StartMarkerableFigure, EndMarkerableFigure, MidMarkerableFigure, StrokeCuttableFigure {
+        MarkerStartableFigure, MarkerEndableFigure, MarkerMidableFigure, StrokeCuttableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -93,22 +94,22 @@ public class MLEdgeFigure extends AbstractLineConnectionWithMarkersFigure
 
     @Override
     public double getMarkerEndScaleFactor() {
-        return getStyledNonnull(EndMarkerableFigure.MARKER_END_SCALE_FACTOR);
+        return getStyledNonnull(MarkerEndableFigure.MARKER_END_SCALE_FACTOR);
     }
 
     @Override
     public String getMarkerEndShape() {
-        return getStyled(EndMarkerableFigure.MARKER_END_SHAPE);
+        return getStyled(MarkerEndableFigure.MARKER_END_SHAPE);
     }
 
     @Override
     public double getMarkerStartScaleFactor() {
-        return getStyledNonnull(StartMarkerableFigure.MARKER_START_SCALE_FACTOR);
+        return getStyledNonnull(MarkerStartableFigure.MARKER_START_SCALE_FACTOR);
     }
 
     @Override
     public String getMarkerStartShape() {
-        return getStyled(StartMarkerableFigure.MARKER_START_SHAPE);
+        return getStyled(MarkerStartableFigure.MARKER_START_SHAPE);
     }
 
     @Override
@@ -119,5 +120,15 @@ public class MLEdgeFigure extends AbstractLineConnectionWithMarkersFigure
     @Override
     public double getStrokeCutStart(RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutStart();
+    }
+
+    @Override
+    public @Nullable String getMarkerCenterShape() {
+        return null;
+    }
+
+    @Override
+    public double getMarkerCenterScaleFactor() {
+        return 1.0;
     }
 }

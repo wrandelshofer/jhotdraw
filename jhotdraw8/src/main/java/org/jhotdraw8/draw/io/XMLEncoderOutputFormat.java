@@ -3,18 +3,19 @@
  */
 package org.jhotdraw8.draw.io;
 
+import javafx.scene.input.DataFormat;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.draw.figure.Drawing;
+
 import java.beans.XMLEncoder;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.concurrent.WorkState;
-import org.jhotdraw8.draw.figure.Drawing;
 
 /**
  * XMLEncoderOutputFormat.
@@ -50,7 +51,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
            /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
             o.setPersistenceDelegate(Figure.class, delegate);
             o.setPersistenceDelegate(Drawing.class, delegate);
-            o.setPersistenceDelegate(SimpleRectangleFigure.class, delegate);*/
+            o.setPersistenceDelegate(RectangleFigure.class, delegate);*/
             o.writeObject(drawing);
         }
     }

@@ -5,15 +5,14 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableObjectFigureKey;
-
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 
 /**
  * LineConnectingFigure.
@@ -26,7 +25,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * The end position of the line.
      */
     @Nonnull
-    CssPoint2DStyleableMapAccessor END = SimpleLineFigure.END;
+    CssPoint2DStyleableMapAccessor END = LineFigure.END;
     /**
      * The end connector.
      */
@@ -41,17 +40,17 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * The end position of the line.
      */
     @Nonnull
-    CssSizeStyleableFigureKey END_X = SimpleLineFigure.END_X;
+    CssSizeStyleableFigureKey END_X = LineFigure.END_X;
     /**
      * The end position of the line.
      */
     @Nonnull
-    CssSizeStyleableFigureKey END_Y = SimpleLineFigure.END_Y;
+    CssSizeStyleableFigureKey END_Y = LineFigure.END_Y;
     /**
      * The start position of the line.
      */
     @Nonnull
-    CssPoint2DStyleableMapAccessor START = SimpleLineFigure.START;
+    CssPoint2DStyleableMapAccessor START = LineFigure.START;
     /**
      * The start connector.
      */
@@ -65,11 +64,11 @@ public interface LineConnectingFigure extends ConnectingFigure {
     /**
      * The start position of the line.
      */
-    CssSizeStyleableFigureKey START_X = SimpleLineFigure.START_X;
+    CssSizeStyleableFigureKey START_X = LineFigure.START_X;
     /**
      * The start position of the line.
      */
-    CssSizeStyleableFigureKey START_Y = SimpleLineFigure.START_Y;
+    CssSizeStyleableFigureKey START_Y = LineFigure.START_Y;
 
     default boolean isStartConnected() {
         return get(START_CONNECTOR) != null && get(START_TARGET) != null;

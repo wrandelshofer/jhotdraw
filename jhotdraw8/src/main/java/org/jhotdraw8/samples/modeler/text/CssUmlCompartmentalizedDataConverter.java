@@ -75,9 +75,9 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
     @Override
     public String getHelpText() {
         return "Format of ⟨Compartments⟩: { ⟨Compartment⟩｛,⟨Compartment⟩｝ }"
-                + "\nFormat of ⟨Compartment⟩: ⟨Name⟩:[ \"⟨Item⟩\"｛,\"⟨Item⟩\"｝]"
+                + "\nFormat of ⟨Compartment⟩: ⟨Label⟩:[ \"⟨Item⟩\"｛,\"⟨Item⟩\"｝]"
                 + "\nExample:"
-                + "\n  {properties:[\"x:double\",\"y:double\"], methods:[\"magnitude()\"]}";
+                + "\n  {attributes:[\"x:double\",\"y:double\"], operations:[\"magnitude()\"]}";
 
     }
 

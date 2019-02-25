@@ -1,17 +1,17 @@
-/* @(#)SimpleLineConnectionFigure.java
+/* @(#)LineConnectionFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
+
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 
 /**
  * A figure which draws a line connection between two figures.
@@ -19,7 +19,7 @@ import org.jhotdraw8.geom.Shapes;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLineConnectionFigure extends AbstractLineConnectionFigure
+public class LineConnectionFigure extends AbstractLineConnectionFigure
         implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         PathIterableFigure {
 
@@ -28,15 +28,15 @@ public class SimpleLineConnectionFigure extends AbstractLineConnectionFigure
      */
     public final static String TYPE_SELECTOR = "LineConnection";
 
-    public SimpleLineConnectionFigure() {
+    public LineConnectionFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SimpleLineConnectionFigure(Point2D start, Point2D end) {
+    public LineConnectionFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
-    public SimpleLineConnectionFigure(double startX, double startY, double endX, double endY) {
+    public LineConnectionFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
     }
 

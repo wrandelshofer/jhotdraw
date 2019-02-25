@@ -3,31 +3,27 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import java.util.function.Supplier;
-
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.Figure;
-
-import java.util.List;
-
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.figure.SimpleLayer;
-import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
+import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.ReversedList;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * ConnectionTool.
@@ -56,7 +52,7 @@ public class ConnectionTool extends AbstractTool {
     private HandleType handleType = null;
 
     public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory) {
-        this(name, rsrc, figureFactory, SimpleLayer::new);
+        this(name, rsrc, figureFactory, LayerFigure::new);
     }
 
     public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory,
@@ -128,7 +124,7 @@ public class ConnectionTool extends AbstractTool {
             Figure newConnectionTarget = null;
             DrawingModel model = view.getModel();
             // must clear end target, otherwise findConnector won't work as expected
-            model.set(figure, SimpleLineConnectionFigure.END_TARGET, null);
+            model.set(figure, LineConnectionFigure.END_TARGET, null);
             if (!event.isMetaDown()) {
                 List<Figure> list = view.findFigures(pointInViewCoordinates, true);
                 SearchLoop:
@@ -149,9 +145,9 @@ public class ConnectionTool extends AbstractTool {
                 }
             }
 
-            model.set(figure, SimpleLineConnectionFigure.END, new CssPoint2D(figure.worldToLocal(constrainedPoint)));
-            model.set(figure, SimpleLineConnectionFigure.END_CONNECTOR, newConnector);
-            model.set(figure, SimpleLineConnectionFigure.END_TARGET, newConnectionTarget);
+            model.set(figure, LineConnectionFigure.END, new CssPoint2D(figure.worldToLocal(constrainedPoint)));
+            model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
+            model.set(figure, LineConnectionFigure.END_TARGET, newConnectionTarget);
         }
         event.consume();
     }
@@ -195,8 +191,8 @@ public class ConnectionTool extends AbstractTool {
                 }
             }
         }
-        figure.set(SimpleLineConnectionFigure.START_CONNECTOR, newConnector);
-        figure.set(SimpleLineConnectionFigure.START_TARGET, newConnectedFigure);
+        figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
+        figure.set(LineConnectionFigure.START_TARGET, newConnectedFigure);
 
         dm.addChildTo(figure, layer);
         event.consume();

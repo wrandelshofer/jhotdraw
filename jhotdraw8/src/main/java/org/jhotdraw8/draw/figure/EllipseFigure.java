@@ -3,20 +3,13 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-
-import static java.lang.Math.max;
-
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
-
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
@@ -29,13 +22,16 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+
 /**
  * Renders a {@code javafx.scene.shape.Ellipse}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleEllipseFigure extends AbstractLeafFigure
+public class EllipseFigure extends AbstractLeafFigure
         implements StrokableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, ConnectableFigure, PathIterableFigure {
 
@@ -50,15 +46,15 @@ public class SimpleEllipseFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Ellipse";
 
-    public SimpleEllipseFigure() {
+    public EllipseFigure() {
         this(0, 0, 2, 2);// the values must correspond to the default values of the property keys
     }
 
-    public SimpleEllipseFigure(double x, double y, double width, double height) {
+    public EllipseFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
-    public SimpleEllipseFigure(Rectangle2D rect) {
+    public EllipseFigure(Rectangle2D rect) {
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 

@@ -16,7 +16,7 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
+import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -79,10 +79,10 @@ public class LineOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        points[0] = f.getNonnull(SimpleLineConnectionFigure.START).getX().getConvertedValue();
-        points[1] = f.getNonnull(SimpleLineConnectionFigure.START).getY().getConvertedValue();
-        points[2] = f.getNonnull(SimpleLineConnectionFigure.END).getX().getConvertedValue();
-        points[3] = f.getNonnull(SimpleLineConnectionFigure.END).getY().getConvertedValue();
+        points[0] = f.getNonnull(LineConnectionFigure.START).getX().getConvertedValue();
+        points[1] = f.getNonnull(LineConnectionFigure.START).getY().getConvertedValue();
+        points[2] = f.getNonnull(LineConnectionFigure.END).getX().getConvertedValue();
+        points[3] = f.getNonnull(LineConnectionFigure.END).getY().getConvertedValue();
 
             t.transform2DPoints(points, 0, points, 0, 2);
         ObservableList<Double> pp = node.getPoints();

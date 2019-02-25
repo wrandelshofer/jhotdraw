@@ -3,8 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
@@ -14,27 +12,35 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+
 /**
- * LineConnectionWithMarkersFigure.
+ * AbstractElbowLineConnectionWithMarkersFigure draws a straight line or an elbow line from start to end.
+ * <p>
+ * A subclass can hardcode the markers, or can implement one or multiple "markerable" interfaces
+ * that allow user-defineable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
+ * {@link MarkerSegmentableFigure}, {@link MarkerMidableFigure}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
+public abstract class AbstractElbowLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public AbstractLineConnectionWithMarkersFigure() {
+    public AbstractElbowLineConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
     }
 
-    public AbstractLineConnectionWithMarkersFigure(Point2D start, Point2D end) {
+    public AbstractElbowLineConnectionWithMarkersFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
-    public AbstractLineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
+    public AbstractElbowLineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
     }
 
@@ -43,9 +49,9 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         final Line line = new Line();
-        final Path startMarker=new Path();
-        final Path endMarker=new Path();
-        g.getChildren().addAll(line,startMarker,endMarker);
+        final Path startMarker = new Path();
+        final Path endMarker = new Path();
+        g.getChildren().addAll(line, startMarker, endMarker);
         return g;
     }
 
@@ -53,7 +59,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
      * This method can be overridden by a subclass to apply styles to the line
      * node.
      *
-     * @param ctx the context
+     * @param ctx  the context
      * @param node the node
      */
     protected void updateLineNode(RenderContext ctx, Line node) {
@@ -64,22 +70,22 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
      * This method can be overridden by a subclass to apply styles to the marker
      * node.
      *
-     * @param ctx the context
+     * @param ctx  the context
      * @param node the node
      */
     protected void updateStartMarkerNode(RenderContext ctx, Path node) {
-            // empty
+        // empty
     }
 
     /**
      * This method can be overridden by a subclass to apply styles to the marker
      * node.
      *
-     * @param ctx the context
+     * @param ctx  the context
      * @param node the node
      */
     protected void updateEndMarkerNode(RenderContext ctx, Path node) {
-            // empty
+        // empty
     }
 
     @Override
@@ -100,10 +106,10 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         updateMarkerNode(ctx, g, endMarkerNode, end, start, endMarkerStr, getMarkerEndScaleFactor());
 
         Point2D dir = end.subtract(start).normalize();
-        if (startInset != 0 ) {
+        if (startInset != 0) {
             start = start.add(dir.multiply(startInset));
         }
-        if (endInset != 0 ) {
+        if (endInset != 0) {
             end = end.add(dir.multiply(-endInset));
         }
         lineNode.setStartX(start.getX());
@@ -127,7 +133,7 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
                     new Scale(markerScaleFactor, markerScaleFactor, start.getX(), start.getY()),
                     new Translate(start.getX(), start.getY()));
             markerNode.setVisible(true);
-        }else{
+        } else {
             markerNode.setVisible(false);
         }
     }
@@ -153,5 +159,15 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     public abstract String getMarkerEndShape();
 
     public abstract double getMarkerEndScaleFactor();
+
+    /**
+     * The offset of the elbow from the end of the line.
+     * <p>
+     * If the value is null, or less or equal 0, then a straight line is drawn instead of an elbow.
+     *
+     * @return an offset
+     */
+    @Nullable
+    public abstract CssSize getElbowOffset();
 
 }

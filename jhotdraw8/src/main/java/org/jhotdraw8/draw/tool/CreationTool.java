@@ -3,30 +3,27 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import java.util.function.Supplier;
-
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-
 import org.jhotdraw8.annotation.Nonnull;
-
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.Figure;
-
-import static java.lang.Math.*;
-
-import javafx.scene.Cursor;
 import org.jhotdraw8.draw.DrawingEditor;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.figure.SimpleLayer;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
-import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
+import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.util.Resources;
+
+import java.util.function.Supplier;
+
+import static java.lang.Math.abs;
 
 /**
  * CreationTool.
@@ -52,7 +49,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     private double minSize = 2;
 
     public CreationTool(String name, Resources rsrc, Supplier<Figure> factory) {
-        this(name, rsrc, factory, SimpleLayer::new);
+        this(name, rsrc, factory, LayerFigure::new);
     }
 
     public CreationTool(String name, Resources rsrc, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {

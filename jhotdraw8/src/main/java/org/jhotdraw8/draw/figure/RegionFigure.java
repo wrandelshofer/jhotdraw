@@ -3,15 +3,14 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
+import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
-
-public class SimpleRegionFigure extends AbstractRegionFigure
+public class RegionFigure extends AbstractRegionFigure
         implements FillableFigure, StrokableFigure, CompositableFigure,
         StyleableFigure, TransformableFigure, HideableFigure,
         ConnectableFigure, LockableFigure, ResizableFigure {

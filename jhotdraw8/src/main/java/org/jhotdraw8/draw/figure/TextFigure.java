@@ -1,4 +1,4 @@
-/* @(#)SimpleTextFigure.java
+/* @(#)TextFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -28,13 +28,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
 /**
- * {@code SimpleTextFigure} is a {@code TextFontableFigure} which supports stroking and
+ * {@code TextFigure} is a {@code TextFontableFigure} which supports stroking and
  * filling of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleTextFigure extends AbstractLeafFigure
+public class TextFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure, TextFontableFigure, TextLayoutableFigure,
         TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure {
@@ -47,15 +47,15 @@ public class SimpleTextFigure extends AbstractLeafFigure
 
     private Text textNode;
 
-    public SimpleTextFigure() {
+    public TextFigure() {
         this(0, 0, "");
     }
 
-    public SimpleTextFigure(Point2D position, String text) {
+    public TextFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public SimpleTextFigure(double x, double y, String text) {
+    public TextFigure(double x, double y, String text) {
         set(TEXT, text);
         set(ORIGIN, new CssPoint2D(x, y));
     }

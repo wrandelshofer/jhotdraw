@@ -8,9 +8,9 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.draw.figure.FillableFigure;
-import org.jhotdraw8.draw.figure.SimpleLabelFigure;
 import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.draw.figure.FillableFigure;
+import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.text.Converter;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class FigureSelectorModelTest {
     @Test
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
-        SimpleLabelFigure figure = new SimpleLabelFigure();
+        LabelFigure figure = new LabelFigure();
         FigureSelectorModel instance = new FigureSelectorModel();
 
         final NullablePaintableStyleableFigureKey key = FillableFigure.FILL;

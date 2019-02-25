@@ -11,12 +11,12 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
- * SimpleLabelFigure.
+ * LabelFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLabelFigure extends AbstractLabelFigure
+public class LabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure,
         CompositableFigure {
     /**
@@ -24,15 +24,15 @@ public class SimpleLabelFigure extends AbstractLabelFigure
      */
     public final static String TYPE_SELECTOR = "Label";
 
-    public SimpleLabelFigure() {
+    public LabelFigure() {
         this(0, 0, "");
     }
 
-    public SimpleLabelFigure(Point2D position, String text) {
+    public LabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public SimpleLabelFigure(double x, double y, String text, Object... keyValues) {
+    public LabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
