@@ -2,8 +2,8 @@
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  *
  * This class is a based on:
-*
-*  Polynomial.js by Kevin Lindsey.
+ *
+ *  Polynomial.js by Kevin Lindsey.
  * Copyright (C) 2002, Kevin Lindsey.
  *
  * MgcPolynomial.cpp by David Eberly.
@@ -17,11 +17,9 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.geom.Intersection.Status;
 
 import java.awt.geom.PathIterator;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -31,7 +29,7 @@ import static org.jhotdraw8.geom.Geom.pointOnLine;
 
 /**
  * Provides a collection of intersection tests.
- *
+ * <p>
  * This class is a port of Intersection.js by Kevin Lindsey. Part of
  * Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic
  * Software. Inc.
@@ -58,25 +56,27 @@ public class Intersections {
      */
     private final static double EPSILON = 1.0 / (1L << 33);
 
-        /** Prevent instantiation. */
+    /**
+     * Prevent instantiation.
+     */
     private Intersections() {
     }
 
     @Nonnull
     private static double[] addZeroAndOne(double[] clampedRoots) {
-        double[] roots=new double[clampedRoots.length+2];
-        int numRoots=0;
+        double[] roots = new double[clampedRoots.length + 2];
+        int numRoots = 0;
         Arrays.sort(clampedRoots);
-        if (clampedRoots.length==0||clampedRoots[0]>0) {
-            roots[numRoots++]=0.0;
+        if (clampedRoots.length == 0 || clampedRoots[0] > 0) {
+            roots[numRoots++] = 0.0;
         }
-        for (int i=0;i<clampedRoots.length;i++) {
-            roots[numRoots++]=clampedRoots[i];
+        for (int i = 0; i < clampedRoots.length; i++) {
+            roots[numRoots++] = clampedRoots[i];
         }
-        if (clampedRoots.length==0||clampedRoots[clampedRoots.length-1]<1) {
-            roots[numRoots++]=1;
+        if (clampedRoots.length == 0 || clampedRoots[clampedRoots.length - 1] < 1) {
+            roots[numRoots++] = 1;
         }
-        return Polynomial.trim(numRoots,roots);
+        return Polynomial.trim(numRoots, roots);
     }
 
     /**
@@ -140,7 +140,7 @@ public class Intersections {
     }
 
     public static Intersection intersectQuadraticCurveQuadraticCurve(double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
-            double bx0, double by0, double bx1, double by1, double bx2, double by2) {
+                                                                     double bx0, double by0, double bx1, double by1, double bx2, double by2) {
         return intersectQuadraticCurveQuadraticCurve(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
                 new Point2D(bx0, by0), new Point2D(bx1, by1), new Point2D(bx2, by2));
 
@@ -168,7 +168,8 @@ public class Intersections {
 
         c12 = a0.add(a1.multiply(-2).add(a2));
         c11 = a0.multiply(-2).add(a1.multiply(2));
-        c10 = a0;;
+        c10 = a0;
+        ;
         c22 = b0.add(b1.multiply(-2).add(b2));
         c21 = b0.multiply(-2).add(b1.multiply(2));
         c20 = b0;
@@ -220,7 +221,7 @@ public class Intersections {
 
         double[] roots = poly.getRoots();
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
 
@@ -244,7 +245,7 @@ public class Intersections {
                         if (0 <= xRoot && xRoot <= 1) {
                             for (int k = 0; k < yRoots.length; k++) {
                                 if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                    result.add(new AbstractMap.SimpleEntry<>(xRoot, c22.multiply(s * s).add(c21.multiply(s).add(c20))));
+                                    result.add(new Intersection.IntersectionPoint(xRoot, c22.multiply(s * s).add(c21.multiply(s).add(c20))));
                                     break checkRoots;
                                 }
                             }
@@ -258,7 +259,7 @@ public class Intersections {
     }
 
     public static Intersection intersectQuadraticCurveCubicCurve(double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
-            double bx0, double by0, double bx1, double by1, double bx2, double by2, double bx3, double by3) {
+                                                                 double bx0, double by0, double bx1, double by1, double bx2, double by2, double bx3, double by3) {
         return intersectQuadraticCurveCubicCurve(new Point2D(ax0, ay0), new Point2D(ax1, ay1), new Point2D(ax2, ay2),
                 new Point2D(bx0, by0), new Point2D(bx1, by1), new Point2D(bx2, by2), new Point2D(bx3, by3));
 
@@ -328,33 +329,33 @@ public class Intersections {
         Polynomial poly = new Polynomial(
                 -2 * c12x * c12y * c23x * c23y + c12x2 * c23y2 + c12y2 * c23x2,
                 -2 * c12x * c12y * c22x * c23y - 2 * c12x * c12y * c22y * c23x + 2 * c12y2 * c22x * c23x
-                + 2 * c12x2 * c22y * c23y,
+                        + 2 * c12x2 * c22y * c23y,
                 -2 * c12x * c21x * c12y * c23y - 2 * c12x * c12y * c21y * c23x - 2 * c12x * c12y * c22x * c22y
-                + 2 * c21x * c12y2 * c23x + c12y2 * c22x2 + c12x2 * (2 * c21y * c23y + c22y2),
+                        + 2 * c21x * c12y2 * c23x + c12y2 * c22x2 + c12x2 * (2 * c21y * c23y + c22y2),
                 2 * c10x * c12x * c12y * c23y + 2 * c10y * c12x * c12y * c23x + c11x * c11y * c12x * c23y
-                + c11x * c11y * c12y * c23x - 2 * c20x * c12x * c12y * c23y - 2 * c12x * c20y * c12y * c23x
-                - 2 * c12x * c21x * c12y * c22y - 2 * c12x * c12y * c21y * c22x - 2 * c10x * c12y2 * c23x
-                - 2 * c10y * c12x2 * c23y + 2 * c20x * c12y2 * c23x + 2 * c21x * c12y2 * c22x
-                - c11y2 * c12x * c23x - c11x2 * c12y * c23y + c12x2 * (2 * c20y * c23y + 2 * c21y * c22y),
+                        + c11x * c11y * c12y * c23x - 2 * c20x * c12x * c12y * c23y - 2 * c12x * c20y * c12y * c23x
+                        - 2 * c12x * c21x * c12y * c22y - 2 * c12x * c12y * c21y * c22x - 2 * c10x * c12y2 * c23x
+                        - 2 * c10y * c12x2 * c23y + 2 * c20x * c12y2 * c23x + 2 * c21x * c12y2 * c22x
+                        - c11y2 * c12x * c23x - c11x2 * c12y * c23y + c12x2 * (2 * c20y * c23y + 2 * c21y * c22y),
                 2 * c10x * c12x * c12y * c22y + 2 * c10y * c12x * c12y * c22x + c11x * c11y * c12x * c22y
-                + c11x * c11y * c12y * c22x - 2 * c20x * c12x * c12y * c22y - 2 * c12x * c20y * c12y * c22x
-                - 2 * c12x * c21x * c12y * c21y - 2 * c10x * c12y2 * c22x - 2 * c10y * c12x2 * c22y
-                + 2 * c20x * c12y2 * c22x - c11y2 * c12x * c22x - c11x2 * c12y * c22y + c21x2 * c12y2
-                + c12x2 * (2 * c20y * c22y + c21y2),
+                        + c11x * c11y * c12y * c22x - 2 * c20x * c12x * c12y * c22y - 2 * c12x * c20y * c12y * c22x
+                        - 2 * c12x * c21x * c12y * c21y - 2 * c10x * c12y2 * c22x - 2 * c10y * c12x2 * c22y
+                        + 2 * c20x * c12y2 * c22x - c11y2 * c12x * c22x - c11x2 * c12y * c22y + c21x2 * c12y2
+                        + c12x2 * (2 * c20y * c22y + c21y2),
                 2 * c10x * c12x * c12y * c21y + 2 * c10y * c12x * c21x * c12y + c11x * c11y * c12x * c21y
-                + c11x * c11y * c21x * c12y - 2 * c20x * c12x * c12y * c21y - 2 * c12x * c20y * c21x * c12y
-                - 2 * c10x * c21x * c12y2 - 2 * c10y * c12x2 * c21y + 2 * c20x * c21x * c12y2
-                - c11y2 * c12x * c21x - c11x2 * c12y * c21y + 2 * c12x2 * c20y * c21y,
+                        + c11x * c11y * c21x * c12y - 2 * c20x * c12x * c12y * c21y - 2 * c12x * c20y * c21x * c12y
+                        - 2 * c10x * c21x * c12y2 - 2 * c10y * c12x2 * c21y + 2 * c20x * c21x * c12y2
+                        - c11y2 * c12x * c21x - c11x2 * c12y * c21y + 2 * c12x2 * c20y * c21y,
                 -2 * c10x * c10y * c12x * c12y - c10x * c11x * c11y * c12y - c10y * c11x * c11y * c12x
-                + 2 * c10x * c12x * c20y * c12y + 2 * c10y * c20x * c12x * c12y + c11x * c20x * c11y * c12y
-                + c11x * c11y * c12x * c20y - 2 * c20x * c12x * c20y * c12y - 2 * c10x * c20x * c12y2
-                + c10x * c11y2 * c12x + c10y * c11x2 * c12y - 2 * c10y * c12x2 * c20y
-                - c20x * c11y2 * c12x - c11x2 * c20y * c12y + c10x2 * c12y2 + c10y2 * c12x2
-                + c20x2 * c12y2 + c12x2 * c20y2
+                        + 2 * c10x * c12x * c20y * c12y + 2 * c10y * c20x * c12x * c12y + c11x * c20x * c11y * c12y
+                        + c11x * c11y * c12x * c20y - 2 * c20x * c12x * c20y * c12y - 2 * c10x * c20x * c12y2
+                        + c10x * c11y2 * c12x + c10y * c11x2 * c12y - 2 * c10y * c12x2 * c20y
+                        - c20x * c11y2 * c12x - c11x2 * c20y * c12y + c10x2 * c12y2 + c10y2 * c12x2
+                        + c20x2 * c12y2 + c12x2 * c20y2
         );
         final double[] roots = poly.getRootsInInterval(0, 1);
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
             double[] xRoots = new Polynomial(
@@ -376,7 +377,7 @@ public class Intersections {
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.add(new AbstractMap.SimpleEntry<>(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
+                                result.add(new Intersection.IntersectionPoint(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
                                 break checkRoots;
                             }
                         }
@@ -395,8 +396,8 @@ public class Intersections {
      * @param p0 control point P0 of 'p'
      * @param p1 control point P1 of 'p'
      * @param p2 control point P3 of 'p'
-     * @param c the center of the circle
-     * @param r the radius of the circle
+     * @param c  the center of the circle
+     * @param r  the radius of the circle
      * @return the computed result
      */
     public static Intersection intersectQuadraticCurveCircle(@Nonnull Point2D p0, @Nonnull Point2D p1, @Nonnull Point2D p2, @Nonnull Point2D c, double r) {
@@ -425,7 +426,7 @@ public class Intersections {
      * @param p0 control point P0 of 'p'
      * @param p1 control point P1 of 'p'
      * @param p2 control point P2 of 'p'
-     * @param c the center of the ellipse
+     * @param c  the center of the ellipse
      * @param rx the x-radius of the ellipse
      * @param ry the y-radius of the ellipse
      * @return the computed result. Status can be{@link Status#INTERSECTION},
@@ -453,18 +454,18 @@ public class Intersections {
                 ryry * cx2 * cx2 + rxrx * cy2 * cy2,
                 2 * (ryry * cx2 * cx1 + rxrx * cy2 * cy1),
                 ryry * (2 * cx2 * cx0 + cx1 * cx1) + rxrx * (2 * cy2 * cy0 + cy1 * cy1)
-                - 2 * (ryry * ecx * cx2 + rxrx * ecy * cy2),
+                        - 2 * (ryry * ecx * cx2 + rxrx * ecy * cy2),
                 2 * (ryry * cx1 * (cx0 - ecx) + rxrx * cy1 * (cy0 - ecy)),
                 ryry * (cx0 * cx0 + ecx * ecx) + rxrx * (cy0 * cy0 + ecy * ecy)
-                - 2 * (ryry * ecx * cx0 + rxrx * ecy * cy0) - rxrx * ryry
+                        - 2 * (ryry * ecx * cx0 + rxrx * ecy * cy0) - rxrx * ryry
         ).getRoots();
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
             if (0 <= t && t <= 1) {
-                result.add(new AbstractMap.SimpleEntry<>(t, c2.multiply(t * t).add(c1.multiply(t).add(c0))));
+                result.add(new Intersection.IntersectionPoint(t, c2.multiply(t * t).add(c1.multiply(t).add(c0))));
             }
         }
 
@@ -529,7 +530,7 @@ public class Intersections {
         // Any roots in closed interval [0,1] are intersections on Bezier, but
         // might not be on the line segment.
         // Find intersections and calculate point coordinates
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final Point2D topLeft, bottomRight;
         topLeft = topLeft(a0, a1); // used to determine if point is on line segment
@@ -551,16 +552,16 @@ public class Intersections {
                 if (a0x == a1x) {
                     if (topLeft.getY() <= p6.getY() && p6.getY() <= bottomRight.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(t, p6));
+                        result.add(new Intersection.IntersectionPoint(t, p6));
                     }
                 } else if (a0y == a1y) {
                     if (topLeft.getX() <= p6.getX() && p6.getX() <= bottomRight.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(t, p6));
+                        result.add(new Intersection.IntersectionPoint(t, p6));
                     }
                 } else if (gte(p6, topLeft) && lte(p6, bottomRight)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new AbstractMap.SimpleEntry<>(t, p6));
+                    result.add(new Intersection.IntersectionPoint(t, p6));
                 }
             }
         }
@@ -605,7 +606,7 @@ public class Intersections {
      * </li>
      * <li>{@literal (c2x^2 + c2y^2)*t^4 }<br>
      * {@literal+ 2*(c1x*c2x + c1y*c2y)*t^3 }<br>
-     * {@literal+ (c1x^2 + c1y^2 + 2*c0x*c2x + 2*c0y*c2y - 2*c2x*cx - 2*c2y*cy)*t^2 }<br>
+     * {@literal+ (c1x ^ 2 + c1y ^ 2 + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy)*t^2 }<br>
      * {@literal+ c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t}<br>
      * : coefficients collected for t</li>
      * <li>{@literal a·t⁴ + b·t³ + c·t² + d·t + e = 0, 0 ≤ t ≤ 1 }<br>
@@ -624,7 +625,7 @@ public class Intersections {
      * @param y2 y-coordinate of control point P1 of the bezier curve
      * @param cx x-coordinate of the point
      * @param cy y-coordinate of the point
-     * @param r the tolerance radius
+     * @param r  the tolerance radius
      * @return the intersection
      */
     public static Intersection intersectQuadraticCurvePoint(
@@ -651,7 +652,7 @@ public class Intersections {
         final double[] roots = new Polynomial(4 * a, 3 * b, 2 * c, d).getRoots();
 
         // Select roots with closest distance to point
-        final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        final List<Intersection.IntersectionPoint> result = new ArrayList<>();
         final Point2D p1, p2, p3;
         p1 = new Point2D(x0, y0);
         p2 = new Point2D(x1, y1);
@@ -677,11 +678,11 @@ public class Intersections {
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
                 if (abs(dd - bestDistance) < EPSILON) {
-                    result.add(new AbstractMap.SimpleEntry<>(tt, p));
+                    result.add(new Intersection.IntersectionPoint(tt, p));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;
                     result.clear();
-                    result.add(new AbstractMap.SimpleEntry<>(tt, p));
+                    result.add(new Intersection.IntersectionPoint(tt, p));
                 }
             }
         }
@@ -696,14 +697,14 @@ public class Intersections {
      * The intersection will contain the parameters 't' of curve 'a' in range
      * [0,1].
      *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
+     * @param p0     control point P0 of 'p'
+     * @param p1     control point P1 of 'p'
+     * @param p2     control point P2 of 'p'
      * @param points the points of the polygon
      * @return the computed intersection
      */
     public static Intersection intersectQuadraticCurvePolygon(@Nonnull Point2D p0, @Nonnull Point2D p1, @Nonnull Point2D p2, List<Point2D> points) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -742,7 +743,7 @@ public class Intersections {
         inter3 = Intersections.intersectQuadraticCurveLine(p0, p1, p2, bottomRight, bottomLeft);
         inter4 = Intersections.intersectQuadraticCurveLine(p0, p1, p2, bottomLeft, topLeft);
 
-        final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        final List<Intersection.IntersectionPoint> result = new ArrayList<>();
         result.addAll(inter1.getIntersections());
         result.addAll(inter2.getIntersections());
         result.addAll(inter3.getIntersections());
@@ -792,7 +793,7 @@ public class Intersections {
     public static Intersection intersectCubicCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2, @Nonnull Point2D a3,
                                                              Point2D b0, Point2D b1, Point2D b2, @Nonnull Point2D b3) {
         Point2D a, b, c, d;         // temporary variables
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         // Calculate the coefficients of cubic polynomial
         final Point2D c13, c12, c11, c10;
@@ -858,188 +859,188 @@ public class Intersections {
 
         Polynomial poly = new Polynomial(
                 -c13x3 * c23y3 + c13y3 * c23x3 - 3 * c13x * c13y2 * c23x2 * c23y
-                + 3 * c13x2 * c13y * c23x * c23y2,
+                        + 3 * c13x2 * c13y * c23x * c23y2,
                 -6 * c13x * c22x * c13y2 * c23x * c23y + 6 * c13x2 * c13y * c22y * c23x * c23y + 3 * c22x * c13y3 * c23x2
-                - 3 * c13x3 * c22y * c23y2 - 3 * c13x * c13y2 * c22y * c23x2 + 3 * c13x2 * c22x * c13y * c23y2,
+                        - 3 * c13x3 * c22y * c23y2 - 3 * c13x * c13y2 * c22y * c23x2 + 3 * c13x2 * c22x * c13y * c23y2,
                 -6 * c21x * c13x * c13y2 * c23x * c23y - 6 * c13x * c22x * c13y2 * c22y * c23x + 6 * c13x2 * c22x * c13y * c22y * c23y
-                + 3 * c21x * c13y3 * c23x2 + 3 * c22x2 * c13y3 * c23x + 3 * c21x * c13x2 * c13y * c23y2 - 3 * c13x * c21y * c13y2 * c23x2
-                - 3 * c13x * c22x2 * c13y2 * c23y + c13x2 * c13y * c23x * (6 * c21y * c23y + 3 * c22y2) + c13x3 * (-c21y * c23y2
-                - 2 * c22y2 * c23y - c23y * (2 * c21y * c23y + c22y2)),
+                        + 3 * c21x * c13y3 * c23x2 + 3 * c22x2 * c13y3 * c23x + 3 * c21x * c13x2 * c13y * c23y2 - 3 * c13x * c21y * c13y2 * c23x2
+                        - 3 * c13x * c22x2 * c13y2 * c23y + c13x2 * c13y * c23x * (6 * c21y * c23y + 3 * c22y2) + c13x3 * (-c21y * c23y2
+                        - 2 * c22y2 * c23y - c23y * (2 * c21y * c23y + c22y2)),
                 c11x * c12y * c13x * c13y * c23x * c23y - c11y * c12x * c13x * c13y * c23x * c23y + 6 * c21x * c22x * c13y3 * c23x
-                + 3 * c11x * c12x * c13x * c13y * c23y2 + 6 * c10x * c13x * c13y2 * c23x * c23y - 3 * c11x * c12x * c13y2 * c23x * c23y
-                - 3 * c11y * c12y * c13x * c13y * c23x2 - 6 * c10y * c13x2 * c13y * c23x * c23y - 6 * c20x * c13x * c13y2 * c23x * c23y
-                + 3 * c11y * c12y * c13x2 * c23x * c23y - 2 * c12x * c12y2 * c13x * c23x * c23y - 6 * c21x * c13x * c22x * c13y2 * c23y
-                - 6 * c21x * c13x * c13y2 * c22y * c23x - 6 * c13x * c21y * c22x * c13y2 * c23x + 6 * c21x * c13x2 * c13y * c22y * c23y
-                + 2 * c12x2 * c12y * c13y * c23x * c23y + c22x3 * c13y3 - 3 * c10x * c13y3 * c23x2 + 3 * c10y * c13x3 * c23y2
-                + 3 * c20x * c13y3 * c23x2 + c12y3 * c13x * c23x2 - c12x3 * c13y * c23y2 - 3 * c10x * c13x2 * c13y * c23y2
-                + 3 * c10y * c13x * c13y2 * c23x2 - 2 * c11x * c12y * c13x2 * c23y2 + c11x * c12y * c13y2 * c23x2 - c11y * c12x * c13x2 * c23y2
-                + 2 * c11y * c12x * c13y2 * c23x2 + 3 * c20x * c13x2 * c13y * c23y2 - c12x * c12y2 * c13y * c23x2
-                - 3 * c20y * c13x * c13y2 * c23x2 + c12x2 * c12y * c13x * c23y2 - 3 * c13x * c22x2 * c13y2 * c22y
-                + c13x2 * c13y * c23x * (6 * c20y * c23y + 6 * c21y * c22y) + c13x2 * c22x * c13y * (6 * c21y * c23y + 3 * c22y2)
-                + c13x3 * (-2 * c21y * c22y * c23y - c20y * c23y2 - c22y * (2 * c21y * c23y + c22y2) - c23y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                        + 3 * c11x * c12x * c13x * c13y * c23y2 + 6 * c10x * c13x * c13y2 * c23x * c23y - 3 * c11x * c12x * c13y2 * c23x * c23y
+                        - 3 * c11y * c12y * c13x * c13y * c23x2 - 6 * c10y * c13x2 * c13y * c23x * c23y - 6 * c20x * c13x * c13y2 * c23x * c23y
+                        + 3 * c11y * c12y * c13x2 * c23x * c23y - 2 * c12x * c12y2 * c13x * c23x * c23y - 6 * c21x * c13x * c22x * c13y2 * c23y
+                        - 6 * c21x * c13x * c13y2 * c22y * c23x - 6 * c13x * c21y * c22x * c13y2 * c23x + 6 * c21x * c13x2 * c13y * c22y * c23y
+                        + 2 * c12x2 * c12y * c13y * c23x * c23y + c22x3 * c13y3 - 3 * c10x * c13y3 * c23x2 + 3 * c10y * c13x3 * c23y2
+                        + 3 * c20x * c13y3 * c23x2 + c12y3 * c13x * c23x2 - c12x3 * c13y * c23y2 - 3 * c10x * c13x2 * c13y * c23y2
+                        + 3 * c10y * c13x * c13y2 * c23x2 - 2 * c11x * c12y * c13x2 * c23y2 + c11x * c12y * c13y2 * c23x2 - c11y * c12x * c13x2 * c23y2
+                        + 2 * c11y * c12x * c13y2 * c23x2 + 3 * c20x * c13x2 * c13y * c23y2 - c12x * c12y2 * c13y * c23x2
+                        - 3 * c20y * c13x * c13y2 * c23x2 + c12x2 * c12y * c13x * c23y2 - 3 * c13x * c22x2 * c13y2 * c22y
+                        + c13x2 * c13y * c23x * (6 * c20y * c23y + 6 * c21y * c22y) + c13x2 * c22x * c13y * (6 * c21y * c23y + 3 * c22y2)
+                        + c13x3 * (-2 * c21y * c22y * c23y - c20y * c23y2 - c22y * (2 * c21y * c23y + c22y2) - c23y * (2 * c20y * c23y + 2 * c21y * c22y)),
                 6 * c11x * c12x * c13x * c13y * c22y * c23y + c11x * c12y * c13x * c22x * c13y * c23y + c11x * c12y * c13x * c13y * c22y * c23x
-                - c11y * c12x * c13x * c22x * c13y * c23y - c11y * c12x * c13x * c13y * c22y * c23x - 6 * c11y * c12y * c13x * c22x * c13y * c23x
-                - 6 * c10x * c22x * c13y3 * c23x + 6 * c20x * c22x * c13y3 * c23x + 6 * c10y * c13x3 * c22y * c23y + 2 * c12y3 * c13x * c22x * c23x
-                - 2 * c12x3 * c13y * c22y * c23y + 6 * c10x * c13x * c22x * c13y2 * c23y + 6 * c10x * c13x * c13y2 * c22y * c23x
-                + 6 * c10y * c13x * c22x * c13y2 * c23x - 3 * c11x * c12x * c22x * c13y2 * c23y - 3 * c11x * c12x * c13y2 * c22y * c23x
-                + 2 * c11x * c12y * c22x * c13y2 * c23x + 4 * c11y * c12x * c22x * c13y2 * c23x - 6 * c10x * c13x2 * c13y * c22y * c23y
-                - 6 * c10y * c13x2 * c22x * c13y * c23y - 6 * c10y * c13x2 * c13y * c22y * c23x - 4 * c11x * c12y * c13x2 * c22y * c23y
-                - 6 * c20x * c13x * c22x * c13y2 * c23y - 6 * c20x * c13x * c13y2 * c22y * c23x - 2 * c11y * c12x * c13x2 * c22y * c23y
-                + 3 * c11y * c12y * c13x2 * c22x * c23y + 3 * c11y * c12y * c13x2 * c22y * c23x - 2 * c12x * c12y2 * c13x * c22x * c23y
-                - 2 * c12x * c12y2 * c13x * c22y * c23x - 2 * c12x * c12y2 * c22x * c13y * c23x - 6 * c20y * c13x * c22x * c13y2 * c23x
-                - 6 * c21x * c13x * c21y * c13y2 * c23x - 6 * c21x * c13x * c22x * c13y2 * c22y + 6 * c20x * c13x2 * c13y * c22y * c23y
-                + 2 * c12x2 * c12y * c13x * c22y * c23y + 2 * c12x2 * c12y * c22x * c13y * c23y + 2 * c12x2 * c12y * c13y * c22y * c23x
-                + 3 * c21x * c22x2 * c13y3 + 3 * c21x2 * c13y3 * c23x - 3 * c13x * c21y * c22x2 * c13y2 - 3 * c21x2 * c13x * c13y2 * c23y
-                + c13x2 * c22x * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c13x2 * c13y * c23x * (6 * c20y * c22y + 3 * c21y2)
-                + c21x * c13x2 * c13y * (6 * c21y * c23y + 3 * c22y2) + c13x3 * (-2 * c20y * c22y * c23y - c23y * (2 * c20y * c22y + c21y2)
-                - c21y * (2 * c21y * c23y + c22y2) - c22y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                        - c11y * c12x * c13x * c22x * c13y * c23y - c11y * c12x * c13x * c13y * c22y * c23x - 6 * c11y * c12y * c13x * c22x * c13y * c23x
+                        - 6 * c10x * c22x * c13y3 * c23x + 6 * c20x * c22x * c13y3 * c23x + 6 * c10y * c13x3 * c22y * c23y + 2 * c12y3 * c13x * c22x * c23x
+                        - 2 * c12x3 * c13y * c22y * c23y + 6 * c10x * c13x * c22x * c13y2 * c23y + 6 * c10x * c13x * c13y2 * c22y * c23x
+                        + 6 * c10y * c13x * c22x * c13y2 * c23x - 3 * c11x * c12x * c22x * c13y2 * c23y - 3 * c11x * c12x * c13y2 * c22y * c23x
+                        + 2 * c11x * c12y * c22x * c13y2 * c23x + 4 * c11y * c12x * c22x * c13y2 * c23x - 6 * c10x * c13x2 * c13y * c22y * c23y
+                        - 6 * c10y * c13x2 * c22x * c13y * c23y - 6 * c10y * c13x2 * c13y * c22y * c23x - 4 * c11x * c12y * c13x2 * c22y * c23y
+                        - 6 * c20x * c13x * c22x * c13y2 * c23y - 6 * c20x * c13x * c13y2 * c22y * c23x - 2 * c11y * c12x * c13x2 * c22y * c23y
+                        + 3 * c11y * c12y * c13x2 * c22x * c23y + 3 * c11y * c12y * c13x2 * c22y * c23x - 2 * c12x * c12y2 * c13x * c22x * c23y
+                        - 2 * c12x * c12y2 * c13x * c22y * c23x - 2 * c12x * c12y2 * c22x * c13y * c23x - 6 * c20y * c13x * c22x * c13y2 * c23x
+                        - 6 * c21x * c13x * c21y * c13y2 * c23x - 6 * c21x * c13x * c22x * c13y2 * c22y + 6 * c20x * c13x2 * c13y * c22y * c23y
+                        + 2 * c12x2 * c12y * c13x * c22y * c23y + 2 * c12x2 * c12y * c22x * c13y * c23y + 2 * c12x2 * c12y * c13y * c22y * c23x
+                        + 3 * c21x * c22x2 * c13y3 + 3 * c21x2 * c13y3 * c23x - 3 * c13x * c21y * c22x2 * c13y2 - 3 * c21x2 * c13x * c13y2 * c23y
+                        + c13x2 * c22x * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c13x2 * c13y * c23x * (6 * c20y * c22y + 3 * c21y2)
+                        + c21x * c13x2 * c13y * (6 * c21y * c23y + 3 * c22y2) + c13x3 * (-2 * c20y * c22y * c23y - c23y * (2 * c20y * c22y + c21y2)
+                        - c21y * (2 * c21y * c23y + c22y2) - c22y * (2 * c20y * c23y + 2 * c21y * c22y)),
                 c11x * c21x * c12y * c13x * c13y * c23y + c11x * c12y * c13x * c21y * c13y * c23x + c11x * c12y * c13x * c22x * c13y * c22y
-                - c11y * c12x * c21x * c13x * c13y * c23y - c11y * c12x * c13x * c21y * c13y * c23x - c11y * c12x * c13x * c22x * c13y * c22y
-                - 6 * c11y * c21x * c12y * c13x * c13y * c23x - 6 * c10x * c21x * c13y3 * c23x + 6 * c20x * c21x * c13y3 * c23x
-                + 2 * c21x * c12y3 * c13x * c23x + 6 * c10x * c21x * c13x * c13y2 * c23y + 6 * c10x * c13x * c21y * c13y2 * c23x
-                + 6 * c10x * c13x * c22x * c13y2 * c22y + 6 * c10y * c21x * c13x * c13y2 * c23x - 3 * c11x * c12x * c21x * c13y2 * c23y
-                - 3 * c11x * c12x * c21y * c13y2 * c23x - 3 * c11x * c12x * c22x * c13y2 * c22y + 2 * c11x * c21x * c12y * c13y2 * c23x
-                + 4 * c11y * c12x * c21x * c13y2 * c23x - 6 * c10y * c21x * c13x2 * c13y * c23y - 6 * c10y * c13x2 * c21y * c13y * c23x
-                - 6 * c10y * c13x2 * c22x * c13y * c22y - 6 * c20x * c21x * c13x * c13y2 * c23y - 6 * c20x * c13x * c21y * c13y2 * c23x
-                - 6 * c20x * c13x * c22x * c13y2 * c22y + 3 * c11y * c21x * c12y * c13x2 * c23y - 3 * c11y * c12y * c13x * c22x2 * c13y
-                + 3 * c11y * c12y * c13x2 * c21y * c23x + 3 * c11y * c12y * c13x2 * c22x * c22y - 2 * c12x * c21x * c12y2 * c13x * c23y
-                - 2 * c12x * c21x * c12y2 * c13y * c23x - 2 * c12x * c12y2 * c13x * c21y * c23x - 2 * c12x * c12y2 * c13x * c22x * c22y
-                - 6 * c20y * c21x * c13x * c13y2 * c23x - 6 * c21x * c13x * c21y * c22x * c13y2 + 6 * c20y * c13x2 * c21y * c13y * c23x
-                + 2 * c12x2 * c21x * c12y * c13y * c23y + 2 * c12x2 * c12y * c21y * c13y * c23x + 2 * c12x2 * c12y * c22x * c13y * c22y
-                - 3 * c10x * c22x2 * c13y3 + 3 * c20x * c22x2 * c13y3 + 3 * c21x2 * c22x * c13y3 + c12y3 * c13x * c22x2
-                + 3 * c10y * c13x * c22x2 * c13y2 + c11x * c12y * c22x2 * c13y2 + 2 * c11y * c12x * c22x2 * c13y2
-                - c12x * c12y2 * c22x2 * c13y - 3 * c20y * c13x * c22x2 * c13y2 - 3 * c21x2 * c13x * c13y2 * c22y
-                + c12x2 * c12y * c13x * (2 * c21y * c23y + c22y2) + c11x * c12x * c13x * c13y * (6 * c21y * c23y + 3 * c22y2)
-                + c21x * c13x2 * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c12x3 * c13y * (-2 * c21y * c23y - c22y2)
-                + c10y * c13x3 * (6 * c21y * c23y + 3 * c22y2) + c11y * c12x * c13x2 * (-2 * c21y * c23y - c22y2)
-                + c11x * c12y * c13x2 * (-4 * c21y * c23y - 2 * c22y2) + c10x * c13x2 * c13y * (-6 * c21y * c23y - 3 * c22y2)
-                + c13x2 * c22x * c13y * (6 * c20y * c22y + 3 * c21y2) + c20x * c13x2 * c13y * (6 * c21y * c23y + 3 * c22y2)
-                + c13x3 * (-2 * c20y * c21y * c23y - c22y * (2 * c20y * c22y + c21y2) - c20y * (2 * c21y * c23y + c22y2)
-                - c21y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                        - c11y * c12x * c21x * c13x * c13y * c23y - c11y * c12x * c13x * c21y * c13y * c23x - c11y * c12x * c13x * c22x * c13y * c22y
+                        - 6 * c11y * c21x * c12y * c13x * c13y * c23x - 6 * c10x * c21x * c13y3 * c23x + 6 * c20x * c21x * c13y3 * c23x
+                        + 2 * c21x * c12y3 * c13x * c23x + 6 * c10x * c21x * c13x * c13y2 * c23y + 6 * c10x * c13x * c21y * c13y2 * c23x
+                        + 6 * c10x * c13x * c22x * c13y2 * c22y + 6 * c10y * c21x * c13x * c13y2 * c23x - 3 * c11x * c12x * c21x * c13y2 * c23y
+                        - 3 * c11x * c12x * c21y * c13y2 * c23x - 3 * c11x * c12x * c22x * c13y2 * c22y + 2 * c11x * c21x * c12y * c13y2 * c23x
+                        + 4 * c11y * c12x * c21x * c13y2 * c23x - 6 * c10y * c21x * c13x2 * c13y * c23y - 6 * c10y * c13x2 * c21y * c13y * c23x
+                        - 6 * c10y * c13x2 * c22x * c13y * c22y - 6 * c20x * c21x * c13x * c13y2 * c23y - 6 * c20x * c13x * c21y * c13y2 * c23x
+                        - 6 * c20x * c13x * c22x * c13y2 * c22y + 3 * c11y * c21x * c12y * c13x2 * c23y - 3 * c11y * c12y * c13x * c22x2 * c13y
+                        + 3 * c11y * c12y * c13x2 * c21y * c23x + 3 * c11y * c12y * c13x2 * c22x * c22y - 2 * c12x * c21x * c12y2 * c13x * c23y
+                        - 2 * c12x * c21x * c12y2 * c13y * c23x - 2 * c12x * c12y2 * c13x * c21y * c23x - 2 * c12x * c12y2 * c13x * c22x * c22y
+                        - 6 * c20y * c21x * c13x * c13y2 * c23x - 6 * c21x * c13x * c21y * c22x * c13y2 + 6 * c20y * c13x2 * c21y * c13y * c23x
+                        + 2 * c12x2 * c21x * c12y * c13y * c23y + 2 * c12x2 * c12y * c21y * c13y * c23x + 2 * c12x2 * c12y * c22x * c13y * c22y
+                        - 3 * c10x * c22x2 * c13y3 + 3 * c20x * c22x2 * c13y3 + 3 * c21x2 * c22x * c13y3 + c12y3 * c13x * c22x2
+                        + 3 * c10y * c13x * c22x2 * c13y2 + c11x * c12y * c22x2 * c13y2 + 2 * c11y * c12x * c22x2 * c13y2
+                        - c12x * c12y2 * c22x2 * c13y - 3 * c20y * c13x * c22x2 * c13y2 - 3 * c21x2 * c13x * c13y2 * c22y
+                        + c12x2 * c12y * c13x * (2 * c21y * c23y + c22y2) + c11x * c12x * c13x * c13y * (6 * c21y * c23y + 3 * c22y2)
+                        + c21x * c13x2 * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c12x3 * c13y * (-2 * c21y * c23y - c22y2)
+                        + c10y * c13x3 * (6 * c21y * c23y + 3 * c22y2) + c11y * c12x * c13x2 * (-2 * c21y * c23y - c22y2)
+                        + c11x * c12y * c13x2 * (-4 * c21y * c23y - 2 * c22y2) + c10x * c13x2 * c13y * (-6 * c21y * c23y - 3 * c22y2)
+                        + c13x2 * c22x * c13y * (6 * c20y * c22y + 3 * c21y2) + c20x * c13x2 * c13y * (6 * c21y * c23y + 3 * c22y2)
+                        + c13x3 * (-2 * c20y * c21y * c23y - c22y * (2 * c20y * c22y + c21y2) - c20y * (2 * c21y * c23y + c22y2)
+                        - c21y * (2 * c20y * c23y + 2 * c21y * c22y)),
                 -c10x * c11x * c12y * c13x * c13y * c23y + c10x * c11y * c12x * c13x * c13y * c23y + 6 * c10x * c11y * c12y * c13x * c13y * c23x
-                - 6 * c10y * c11x * c12x * c13x * c13y * c23y - c10y * c11x * c12y * c13x * c13y * c23x + c10y * c11y * c12x * c13x * c13y * c23x
-                + c11x * c11y * c12x * c12y * c13x * c23y - c11x * c11y * c12x * c12y * c13y * c23x + c11x * c20x * c12y * c13x * c13y * c23y
-                + c11x * c20y * c12y * c13x * c13y * c23x + c11x * c21x * c12y * c13x * c13y * c22y + c11x * c12y * c13x * c21y * c22x * c13y
-                - c20x * c11y * c12x * c13x * c13y * c23y - 6 * c20x * c11y * c12y * c13x * c13y * c23x - c11y * c12x * c20y * c13x * c13y * c23x
-                - c11y * c12x * c21x * c13x * c13y * c22y - c11y * c12x * c13x * c21y * c22x * c13y - 6 * c11y * c21x * c12y * c13x * c22x * c13y
-                - 6 * c10x * c20x * c13y3 * c23x - 6 * c10x * c21x * c22x * c13y3 - 2 * c10x * c12y3 * c13x * c23x + 6 * c20x * c21x * c22x * c13y3
-                + 2 * c20x * c12y3 * c13x * c23x + 2 * c21x * c12y3 * c13x * c22x + 2 * c10y * c12x3 * c13y * c23y - 6 * c10x * c10y * c13x * c13y2 * c23x
-                + 3 * c10x * c11x * c12x * c13y2 * c23y - 2 * c10x * c11x * c12y * c13y2 * c23x - 4 * c10x * c11y * c12x * c13y2 * c23x
-                + 3 * c10y * c11x * c12x * c13y2 * c23x + 6 * c10x * c10y * c13x2 * c13y * c23y + 6 * c10x * c20x * c13x * c13y2 * c23y
-                - 3 * c10x * c11y * c12y * c13x2 * c23y + 2 * c10x * c12x * c12y2 * c13x * c23y + 2 * c10x * c12x * c12y2 * c13y * c23x
-                + 6 * c10x * c20y * c13x * c13y2 * c23x + 6 * c10x * c21x * c13x * c13y2 * c22y + 6 * c10x * c13x * c21y * c22x * c13y2
-                + 4 * c10y * c11x * c12y * c13x2 * c23y + 6 * c10y * c20x * c13x * c13y2 * c23x + 2 * c10y * c11y * c12x * c13x2 * c23y
-                - 3 * c10y * c11y * c12y * c13x2 * c23x + 2 * c10y * c12x * c12y2 * c13x * c23x + 6 * c10y * c21x * c13x * c22x * c13y2
-                - 3 * c11x * c20x * c12x * c13y2 * c23y + 2 * c11x * c20x * c12y * c13y2 * c23x + c11x * c11y * c12y2 * c13x * c23x
-                - 3 * c11x * c12x * c20y * c13y2 * c23x - 3 * c11x * c12x * c21x * c13y2 * c22y - 3 * c11x * c12x * c21y * c22x * c13y2
-                + 2 * c11x * c21x * c12y * c22x * c13y2 + 4 * c20x * c11y * c12x * c13y2 * c23x + 4 * c11y * c12x * c21x * c22x * c13y2
-                - 2 * c10x * c12x2 * c12y * c13y * c23y - 6 * c10y * c20x * c13x2 * c13y * c23y - 6 * c10y * c20y * c13x2 * c13y * c23x
-                - 6 * c10y * c21x * c13x2 * c13y * c22y - 2 * c10y * c12x2 * c12y * c13x * c23y - 2 * c10y * c12x2 * c12y * c13y * c23x
-                - 6 * c10y * c13x2 * c21y * c22x * c13y - c11x * c11y * c12x2 * c13y * c23y - 2 * c11x * c11y2 * c13x * c13y * c23x
-                + 3 * c20x * c11y * c12y * c13x2 * c23y - 2 * c20x * c12x * c12y2 * c13x * c23y - 2 * c20x * c12x * c12y2 * c13y * c23x
-                - 6 * c20x * c20y * c13x * c13y2 * c23x - 6 * c20x * c21x * c13x * c13y2 * c22y - 6 * c20x * c13x * c21y * c22x * c13y2
-                + 3 * c11y * c20y * c12y * c13x2 * c23x + 3 * c11y * c21x * c12y * c13x2 * c22y + 3 * c11y * c12y * c13x2 * c21y * c22x
-                - 2 * c12x * c20y * c12y2 * c13x * c23x - 2 * c12x * c21x * c12y2 * c13x * c22y - 2 * c12x * c21x * c12y2 * c22x * c13y
-                - 2 * c12x * c12y2 * c13x * c21y * c22x - 6 * c20y * c21x * c13x * c22x * c13y2 - c11y2 * c12x * c12y * c13x * c23x
-                + 2 * c20x * c12x2 * c12y * c13y * c23y + 6 * c20y * c13x2 * c21y * c22x * c13y + 2 * c11x2 * c11y * c13x * c13y * c23y
-                + c11x2 * c12x * c12y * c13y * c23y + 2 * c12x2 * c20y * c12y * c13y * c23x + 2 * c12x2 * c21x * c12y * c13y * c22y
-                + 2 * c12x2 * c12y * c21y * c22x * c13y + c21x3 * c13y3 + 3 * c10x2 * c13y3 * c23x - 3 * c10y2 * c13x3 * c23y
-                + 3 * c20x2 * c13y3 * c23x + c11y3 * c13x2 * c23x - c11x3 * c13y2 * c23y - c11x * c11y2 * c13x2 * c23y
-                + c11x2 * c11y * c13y2 * c23x - 3 * c10x2 * c13x * c13y2 * c23y + 3 * c10y2 * c13x2 * c13y * c23x - c11x2 * c12y2 * c13x * c23y
-                + c11y2 * c12x2 * c13y * c23x - 3 * c21x2 * c13x * c21y * c13y2 - 3 * c20x2 * c13x * c13y2 * c23y + 3 * c20y2 * c13x2 * c13y * c23x
-                + c11x * c12x * c13x * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c12x3 * c13y * (-2 * c20y * c23y - 2 * c21y * c22y)
-                + c10y * c13x3 * (6 * c20y * c23y + 6 * c21y * c22y) + c11y * c12x * c13x2 * (-2 * c20y * c23y - 2 * c21y * c22y)
-                + c12x2 * c12y * c13x * (2 * c20y * c23y + 2 * c21y * c22y) + c11x * c12y * c13x2 * (-4 * c20y * c23y - 4 * c21y * c22y)
-                + c10x * c13x2 * c13y * (-6 * c20y * c23y - 6 * c21y * c22y) + c20x * c13x2 * c13y * (6 * c20y * c23y + 6 * c21y * c22y)
-                + c21x * c13x2 * c13y * (6 * c20y * c22y + 3 * c21y2) + c13x3 * (-2 * c20y * c21y * c22y - c20y2 * c23y
-                - c21y * (2 * c20y * c22y + c21y2) - c20y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                        - 6 * c10y * c11x * c12x * c13x * c13y * c23y - c10y * c11x * c12y * c13x * c13y * c23x + c10y * c11y * c12x * c13x * c13y * c23x
+                        + c11x * c11y * c12x * c12y * c13x * c23y - c11x * c11y * c12x * c12y * c13y * c23x + c11x * c20x * c12y * c13x * c13y * c23y
+                        + c11x * c20y * c12y * c13x * c13y * c23x + c11x * c21x * c12y * c13x * c13y * c22y + c11x * c12y * c13x * c21y * c22x * c13y
+                        - c20x * c11y * c12x * c13x * c13y * c23y - 6 * c20x * c11y * c12y * c13x * c13y * c23x - c11y * c12x * c20y * c13x * c13y * c23x
+                        - c11y * c12x * c21x * c13x * c13y * c22y - c11y * c12x * c13x * c21y * c22x * c13y - 6 * c11y * c21x * c12y * c13x * c22x * c13y
+                        - 6 * c10x * c20x * c13y3 * c23x - 6 * c10x * c21x * c22x * c13y3 - 2 * c10x * c12y3 * c13x * c23x + 6 * c20x * c21x * c22x * c13y3
+                        + 2 * c20x * c12y3 * c13x * c23x + 2 * c21x * c12y3 * c13x * c22x + 2 * c10y * c12x3 * c13y * c23y - 6 * c10x * c10y * c13x * c13y2 * c23x
+                        + 3 * c10x * c11x * c12x * c13y2 * c23y - 2 * c10x * c11x * c12y * c13y2 * c23x - 4 * c10x * c11y * c12x * c13y2 * c23x
+                        + 3 * c10y * c11x * c12x * c13y2 * c23x + 6 * c10x * c10y * c13x2 * c13y * c23y + 6 * c10x * c20x * c13x * c13y2 * c23y
+                        - 3 * c10x * c11y * c12y * c13x2 * c23y + 2 * c10x * c12x * c12y2 * c13x * c23y + 2 * c10x * c12x * c12y2 * c13y * c23x
+                        + 6 * c10x * c20y * c13x * c13y2 * c23x + 6 * c10x * c21x * c13x * c13y2 * c22y + 6 * c10x * c13x * c21y * c22x * c13y2
+                        + 4 * c10y * c11x * c12y * c13x2 * c23y + 6 * c10y * c20x * c13x * c13y2 * c23x + 2 * c10y * c11y * c12x * c13x2 * c23y
+                        - 3 * c10y * c11y * c12y * c13x2 * c23x + 2 * c10y * c12x * c12y2 * c13x * c23x + 6 * c10y * c21x * c13x * c22x * c13y2
+                        - 3 * c11x * c20x * c12x * c13y2 * c23y + 2 * c11x * c20x * c12y * c13y2 * c23x + c11x * c11y * c12y2 * c13x * c23x
+                        - 3 * c11x * c12x * c20y * c13y2 * c23x - 3 * c11x * c12x * c21x * c13y2 * c22y - 3 * c11x * c12x * c21y * c22x * c13y2
+                        + 2 * c11x * c21x * c12y * c22x * c13y2 + 4 * c20x * c11y * c12x * c13y2 * c23x + 4 * c11y * c12x * c21x * c22x * c13y2
+                        - 2 * c10x * c12x2 * c12y * c13y * c23y - 6 * c10y * c20x * c13x2 * c13y * c23y - 6 * c10y * c20y * c13x2 * c13y * c23x
+                        - 6 * c10y * c21x * c13x2 * c13y * c22y - 2 * c10y * c12x2 * c12y * c13x * c23y - 2 * c10y * c12x2 * c12y * c13y * c23x
+                        - 6 * c10y * c13x2 * c21y * c22x * c13y - c11x * c11y * c12x2 * c13y * c23y - 2 * c11x * c11y2 * c13x * c13y * c23x
+                        + 3 * c20x * c11y * c12y * c13x2 * c23y - 2 * c20x * c12x * c12y2 * c13x * c23y - 2 * c20x * c12x * c12y2 * c13y * c23x
+                        - 6 * c20x * c20y * c13x * c13y2 * c23x - 6 * c20x * c21x * c13x * c13y2 * c22y - 6 * c20x * c13x * c21y * c22x * c13y2
+                        + 3 * c11y * c20y * c12y * c13x2 * c23x + 3 * c11y * c21x * c12y * c13x2 * c22y + 3 * c11y * c12y * c13x2 * c21y * c22x
+                        - 2 * c12x * c20y * c12y2 * c13x * c23x - 2 * c12x * c21x * c12y2 * c13x * c22y - 2 * c12x * c21x * c12y2 * c22x * c13y
+                        - 2 * c12x * c12y2 * c13x * c21y * c22x - 6 * c20y * c21x * c13x * c22x * c13y2 - c11y2 * c12x * c12y * c13x * c23x
+                        + 2 * c20x * c12x2 * c12y * c13y * c23y + 6 * c20y * c13x2 * c21y * c22x * c13y + 2 * c11x2 * c11y * c13x * c13y * c23y
+                        + c11x2 * c12x * c12y * c13y * c23y + 2 * c12x2 * c20y * c12y * c13y * c23x + 2 * c12x2 * c21x * c12y * c13y * c22y
+                        + 2 * c12x2 * c12y * c21y * c22x * c13y + c21x3 * c13y3 + 3 * c10x2 * c13y3 * c23x - 3 * c10y2 * c13x3 * c23y
+                        + 3 * c20x2 * c13y3 * c23x + c11y3 * c13x2 * c23x - c11x3 * c13y2 * c23y - c11x * c11y2 * c13x2 * c23y
+                        + c11x2 * c11y * c13y2 * c23x - 3 * c10x2 * c13x * c13y2 * c23y + 3 * c10y2 * c13x2 * c13y * c23x - c11x2 * c12y2 * c13x * c23y
+                        + c11y2 * c12x2 * c13y * c23x - 3 * c21x2 * c13x * c21y * c13y2 - 3 * c20x2 * c13x * c13y2 * c23y + 3 * c20y2 * c13x2 * c13y * c23x
+                        + c11x * c12x * c13x * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c12x3 * c13y * (-2 * c20y * c23y - 2 * c21y * c22y)
+                        + c10y * c13x3 * (6 * c20y * c23y + 6 * c21y * c22y) + c11y * c12x * c13x2 * (-2 * c20y * c23y - 2 * c21y * c22y)
+                        + c12x2 * c12y * c13x * (2 * c20y * c23y + 2 * c21y * c22y) + c11x * c12y * c13x2 * (-4 * c20y * c23y - 4 * c21y * c22y)
+                        + c10x * c13x2 * c13y * (-6 * c20y * c23y - 6 * c21y * c22y) + c20x * c13x2 * c13y * (6 * c20y * c23y + 6 * c21y * c22y)
+                        + c21x * c13x2 * c13y * (6 * c20y * c22y + 3 * c21y2) + c13x3 * (-2 * c20y * c21y * c22y - c20y2 * c23y
+                        - c21y * (2 * c20y * c22y + c21y2) - c20y * (2 * c20y * c23y + 2 * c21y * c22y)),
                 -c10x * c11x * c12y * c13x * c13y * c22y + c10x * c11y * c12x * c13x * c13y * c22y + 6 * c10x * c11y * c12y * c13x * c22x * c13y
-                - 6 * c10y * c11x * c12x * c13x * c13y * c22y - c10y * c11x * c12y * c13x * c22x * c13y + c10y * c11y * c12x * c13x * c22x * c13y
-                + c11x * c11y * c12x * c12y * c13x * c22y - c11x * c11y * c12x * c12y * c22x * c13y + c11x * c20x * c12y * c13x * c13y * c22y
-                + c11x * c20y * c12y * c13x * c22x * c13y + c11x * c21x * c12y * c13x * c21y * c13y - c20x * c11y * c12x * c13x * c13y * c22y
-                - 6 * c20x * c11y * c12y * c13x * c22x * c13y - c11y * c12x * c20y * c13x * c22x * c13y - c11y * c12x * c21x * c13x * c21y * c13y
-                - 6 * c10x * c20x * c22x * c13y3 - 2 * c10x * c12y3 * c13x * c22x + 2 * c20x * c12y3 * c13x * c22x + 2 * c10y * c12x3 * c13y * c22y
-                - 6 * c10x * c10y * c13x * c22x * c13y2 + 3 * c10x * c11x * c12x * c13y2 * c22y - 2 * c10x * c11x * c12y * c22x * c13y2
-                - 4 * c10x * c11y * c12x * c22x * c13y2 + 3 * c10y * c11x * c12x * c22x * c13y2 + 6 * c10x * c10y * c13x2 * c13y * c22y
-                + 6 * c10x * c20x * c13x * c13y2 * c22y - 3 * c10x * c11y * c12y * c13x2 * c22y + 2 * c10x * c12x * c12y2 * c13x * c22y
-                + 2 * c10x * c12x * c12y2 * c22x * c13y + 6 * c10x * c20y * c13x * c22x * c13y2 + 6 * c10x * c21x * c13x * c21y * c13y2
-                + 4 * c10y * c11x * c12y * c13x2 * c22y + 6 * c10y * c20x * c13x * c22x * c13y2 + 2 * c10y * c11y * c12x * c13x2 * c22y
-                - 3 * c10y * c11y * c12y * c13x2 * c22x + 2 * c10y * c12x * c12y2 * c13x * c22x - 3 * c11x * c20x * c12x * c13y2 * c22y
-                + 2 * c11x * c20x * c12y * c22x * c13y2 + c11x * c11y * c12y2 * c13x * c22x - 3 * c11x * c12x * c20y * c22x * c13y2
-                - 3 * c11x * c12x * c21x * c21y * c13y2 + 4 * c20x * c11y * c12x * c22x * c13y2 - 2 * c10x * c12x2 * c12y * c13y * c22y
-                - 6 * c10y * c20x * c13x2 * c13y * c22y - 6 * c10y * c20y * c13x2 * c22x * c13y - 6 * c10y * c21x * c13x2 * c21y * c13y
-                - 2 * c10y * c12x2 * c12y * c13x * c22y - 2 * c10y * c12x2 * c12y * c22x * c13y - c11x * c11y * c12x2 * c13y * c22y
-                - 2 * c11x * c11y2 * c13x * c22x * c13y + 3 * c20x * c11y * c12y * c13x2 * c22y - 2 * c20x * c12x * c12y2 * c13x * c22y
-                - 2 * c20x * c12x * c12y2 * c22x * c13y - 6 * c20x * c20y * c13x * c22x * c13y2 - 6 * c20x * c21x * c13x * c21y * c13y2
-                + 3 * c11y * c20y * c12y * c13x2 * c22x + 3 * c11y * c21x * c12y * c13x2 * c21y - 2 * c12x * c20y * c12y2 * c13x * c22x
-                - 2 * c12x * c21x * c12y2 * c13x * c21y - c11y2 * c12x * c12y * c13x * c22x + 2 * c20x * c12x2 * c12y * c13y * c22y
-                - 3 * c11y * c21x2 * c12y * c13x * c13y + 6 * c20y * c21x * c13x2 * c21y * c13y + 2 * c11x2 * c11y * c13x * c13y * c22y
-                + c11x2 * c12x * c12y * c13y * c22y + 2 * c12x2 * c20y * c12y * c22x * c13y + 2 * c12x2 * c21x * c12y * c21y * c13y
-                - 3 * c10x * c21x2 * c13y3 + 3 * c20x * c21x2 * c13y3 + 3 * c10x2 * c22x * c13y3 - 3 * c10y2 * c13x3 * c22y + 3 * c20x2 * c22x * c13y3
-                + c21x2 * c12y3 * c13x + c11y3 * c13x2 * c22x - c11x3 * c13y2 * c22y + 3 * c10y * c21x2 * c13x * c13y2
-                - c11x * c11y2 * c13x2 * c22y + c11x * c21x2 * c12y * c13y2 + 2 * c11y * c12x * c21x2 * c13y2 + c11x2 * c11y * c22x * c13y2
-                - c12x * c21x2 * c12y2 * c13y - 3 * c20y * c21x2 * c13x * c13y2 - 3 * c10x2 * c13x * c13y2 * c22y + 3 * c10y2 * c13x2 * c22x * c13y
-                - c11x2 * c12y2 * c13x * c22y + c11y2 * c12x2 * c22x * c13y - 3 * c20x2 * c13x * c13y2 * c22y + 3 * c20y2 * c13x2 * c22x * c13y
-                + c12x2 * c12y * c13x * (2 * c20y * c22y + c21y2) + c11x * c12x * c13x * c13y * (6 * c20y * c22y + 3 * c21y2)
-                + c12x3 * c13y * (-2 * c20y * c22y - c21y2) + c10y * c13x3 * (6 * c20y * c22y + 3 * c21y2)
-                + c11y * c12x * c13x2 * (-2 * c20y * c22y - c21y2) + c11x * c12y * c13x2 * (-4 * c20y * c22y - 2 * c21y2)
-                + c10x * c13x2 * c13y * (-6 * c20y * c22y - 3 * c21y2) + c20x * c13x2 * c13y * (6 * c20y * c22y + 3 * c21y2)
-                + c13x3 * (-2 * c20y * c21y2 - c20y2 * c22y - c20y * (2 * c20y * c22y + c21y2)),
+                        - 6 * c10y * c11x * c12x * c13x * c13y * c22y - c10y * c11x * c12y * c13x * c22x * c13y + c10y * c11y * c12x * c13x * c22x * c13y
+                        + c11x * c11y * c12x * c12y * c13x * c22y - c11x * c11y * c12x * c12y * c22x * c13y + c11x * c20x * c12y * c13x * c13y * c22y
+                        + c11x * c20y * c12y * c13x * c22x * c13y + c11x * c21x * c12y * c13x * c21y * c13y - c20x * c11y * c12x * c13x * c13y * c22y
+                        - 6 * c20x * c11y * c12y * c13x * c22x * c13y - c11y * c12x * c20y * c13x * c22x * c13y - c11y * c12x * c21x * c13x * c21y * c13y
+                        - 6 * c10x * c20x * c22x * c13y3 - 2 * c10x * c12y3 * c13x * c22x + 2 * c20x * c12y3 * c13x * c22x + 2 * c10y * c12x3 * c13y * c22y
+                        - 6 * c10x * c10y * c13x * c22x * c13y2 + 3 * c10x * c11x * c12x * c13y2 * c22y - 2 * c10x * c11x * c12y * c22x * c13y2
+                        - 4 * c10x * c11y * c12x * c22x * c13y2 + 3 * c10y * c11x * c12x * c22x * c13y2 + 6 * c10x * c10y * c13x2 * c13y * c22y
+                        + 6 * c10x * c20x * c13x * c13y2 * c22y - 3 * c10x * c11y * c12y * c13x2 * c22y + 2 * c10x * c12x * c12y2 * c13x * c22y
+                        + 2 * c10x * c12x * c12y2 * c22x * c13y + 6 * c10x * c20y * c13x * c22x * c13y2 + 6 * c10x * c21x * c13x * c21y * c13y2
+                        + 4 * c10y * c11x * c12y * c13x2 * c22y + 6 * c10y * c20x * c13x * c22x * c13y2 + 2 * c10y * c11y * c12x * c13x2 * c22y
+                        - 3 * c10y * c11y * c12y * c13x2 * c22x + 2 * c10y * c12x * c12y2 * c13x * c22x - 3 * c11x * c20x * c12x * c13y2 * c22y
+                        + 2 * c11x * c20x * c12y * c22x * c13y2 + c11x * c11y * c12y2 * c13x * c22x - 3 * c11x * c12x * c20y * c22x * c13y2
+                        - 3 * c11x * c12x * c21x * c21y * c13y2 + 4 * c20x * c11y * c12x * c22x * c13y2 - 2 * c10x * c12x2 * c12y * c13y * c22y
+                        - 6 * c10y * c20x * c13x2 * c13y * c22y - 6 * c10y * c20y * c13x2 * c22x * c13y - 6 * c10y * c21x * c13x2 * c21y * c13y
+                        - 2 * c10y * c12x2 * c12y * c13x * c22y - 2 * c10y * c12x2 * c12y * c22x * c13y - c11x * c11y * c12x2 * c13y * c22y
+                        - 2 * c11x * c11y2 * c13x * c22x * c13y + 3 * c20x * c11y * c12y * c13x2 * c22y - 2 * c20x * c12x * c12y2 * c13x * c22y
+                        - 2 * c20x * c12x * c12y2 * c22x * c13y - 6 * c20x * c20y * c13x * c22x * c13y2 - 6 * c20x * c21x * c13x * c21y * c13y2
+                        + 3 * c11y * c20y * c12y * c13x2 * c22x + 3 * c11y * c21x * c12y * c13x2 * c21y - 2 * c12x * c20y * c12y2 * c13x * c22x
+                        - 2 * c12x * c21x * c12y2 * c13x * c21y - c11y2 * c12x * c12y * c13x * c22x + 2 * c20x * c12x2 * c12y * c13y * c22y
+                        - 3 * c11y * c21x2 * c12y * c13x * c13y + 6 * c20y * c21x * c13x2 * c21y * c13y + 2 * c11x2 * c11y * c13x * c13y * c22y
+                        + c11x2 * c12x * c12y * c13y * c22y + 2 * c12x2 * c20y * c12y * c22x * c13y + 2 * c12x2 * c21x * c12y * c21y * c13y
+                        - 3 * c10x * c21x2 * c13y3 + 3 * c20x * c21x2 * c13y3 + 3 * c10x2 * c22x * c13y3 - 3 * c10y2 * c13x3 * c22y + 3 * c20x2 * c22x * c13y3
+                        + c21x2 * c12y3 * c13x + c11y3 * c13x2 * c22x - c11x3 * c13y2 * c22y + 3 * c10y * c21x2 * c13x * c13y2
+                        - c11x * c11y2 * c13x2 * c22y + c11x * c21x2 * c12y * c13y2 + 2 * c11y * c12x * c21x2 * c13y2 + c11x2 * c11y * c22x * c13y2
+                        - c12x * c21x2 * c12y2 * c13y - 3 * c20y * c21x2 * c13x * c13y2 - 3 * c10x2 * c13x * c13y2 * c22y + 3 * c10y2 * c13x2 * c22x * c13y
+                        - c11x2 * c12y2 * c13x * c22y + c11y2 * c12x2 * c22x * c13y - 3 * c20x2 * c13x * c13y2 * c22y + 3 * c20y2 * c13x2 * c22x * c13y
+                        + c12x2 * c12y * c13x * (2 * c20y * c22y + c21y2) + c11x * c12x * c13x * c13y * (6 * c20y * c22y + 3 * c21y2)
+                        + c12x3 * c13y * (-2 * c20y * c22y - c21y2) + c10y * c13x3 * (6 * c20y * c22y + 3 * c21y2)
+                        + c11y * c12x * c13x2 * (-2 * c20y * c22y - c21y2) + c11x * c12y * c13x2 * (-4 * c20y * c22y - 2 * c21y2)
+                        + c10x * c13x2 * c13y * (-6 * c20y * c22y - 3 * c21y2) + c20x * c13x2 * c13y * (6 * c20y * c22y + 3 * c21y2)
+                        + c13x3 * (-2 * c20y * c21y2 - c20y2 * c22y - c20y * (2 * c20y * c22y + c21y2)),
                 -c10x * c11x * c12y * c13x * c21y * c13y + c10x * c11y * c12x * c13x * c21y * c13y + 6 * c10x * c11y * c21x * c12y * c13x * c13y
-                - 6 * c10y * c11x * c12x * c13x * c21y * c13y - c10y * c11x * c21x * c12y * c13x * c13y + c10y * c11y * c12x * c21x * c13x * c13y
-                - c11x * c11y * c12x * c21x * c12y * c13y + c11x * c11y * c12x * c12y * c13x * c21y + c11x * c20x * c12y * c13x * c21y * c13y
-                + 6 * c11x * c12x * c20y * c13x * c21y * c13y + c11x * c20y * c21x * c12y * c13x * c13y - c20x * c11y * c12x * c13x * c21y * c13y
-                - 6 * c20x * c11y * c21x * c12y * c13x * c13y - c11y * c12x * c20y * c21x * c13x * c13y - 6 * c10x * c20x * c21x * c13y3
-                - 2 * c10x * c21x * c12y3 * c13x + 6 * c10y * c20y * c13x3 * c21y + 2 * c20x * c21x * c12y3 * c13x + 2 * c10y * c12x3 * c21y * c13y
-                - 2 * c12x3 * c20y * c21y * c13y - 6 * c10x * c10y * c21x * c13x * c13y2 + 3 * c10x * c11x * c12x * c21y * c13y2
-                - 2 * c10x * c11x * c21x * c12y * c13y2 - 4 * c10x * c11y * c12x * c21x * c13y2 + 3 * c10y * c11x * c12x * c21x * c13y2
-                + 6 * c10x * c10y * c13x2 * c21y * c13y + 6 * c10x * c20x * c13x * c21y * c13y2 - 3 * c10x * c11y * c12y * c13x2 * c21y
-                + 2 * c10x * c12x * c21x * c12y2 * c13y + 2 * c10x * c12x * c12y2 * c13x * c21y + 6 * c10x * c20y * c21x * c13x * c13y2
-                + 4 * c10y * c11x * c12y * c13x2 * c21y + 6 * c10y * c20x * c21x * c13x * c13y2 + 2 * c10y * c11y * c12x * c13x2 * c21y
-                - 3 * c10y * c11y * c21x * c12y * c13x2 + 2 * c10y * c12x * c21x * c12y2 * c13x - 3 * c11x * c20x * c12x * c21y * c13y2
-                + 2 * c11x * c20x * c21x * c12y * c13y2 + c11x * c11y * c21x * c12y2 * c13x - 3 * c11x * c12x * c20y * c21x * c13y2
-                + 4 * c20x * c11y * c12x * c21x * c13y2 - 6 * c10x * c20y * c13x2 * c21y * c13y - 2 * c10x * c12x2 * c12y * c21y * c13y
-                - 6 * c10y * c20x * c13x2 * c21y * c13y - 6 * c10y * c20y * c21x * c13x2 * c13y - 2 * c10y * c12x2 * c21x * c12y * c13y
-                - 2 * c10y * c12x2 * c12y * c13x * c21y - c11x * c11y * c12x2 * c21y * c13y - 4 * c11x * c20y * c12y * c13x2 * c21y
-                - 2 * c11x * c11y2 * c21x * c13x * c13y + 3 * c20x * c11y * c12y * c13x2 * c21y - 2 * c20x * c12x * c21x * c12y2 * c13y
-                - 2 * c20x * c12x * c12y2 * c13x * c21y - 6 * c20x * c20y * c21x * c13x * c13y2 - 2 * c11y * c12x * c20y * c13x2 * c21y
-                + 3 * c11y * c20y * c21x * c12y * c13x2 - 2 * c12x * c20y * c21x * c12y2 * c13x - c11y2 * c12x * c21x * c12y * c13x
-                + 6 * c20x * c20y * c13x2 * c21y * c13y + 2 * c20x * c12x2 * c12y * c21y * c13y + 2 * c11x2 * c11y * c13x * c21y * c13y
-                + c11x2 * c12x * c12y * c21y * c13y + 2 * c12x2 * c20y * c21x * c12y * c13y + 2 * c12x2 * c20y * c12y * c13x * c21y
-                + 3 * c10x2 * c21x * c13y3 - 3 * c10y2 * c13x3 * c21y + 3 * c20x2 * c21x * c13y3 + c11y3 * c21x * c13x2 - c11x3 * c21y * c13y2
-                - 3 * c20y2 * c13x3 * c21y - c11x * c11y2 * c13x2 * c21y + c11x2 * c11y * c21x * c13y2 - 3 * c10x2 * c13x * c21y * c13y2
-                + 3 * c10y2 * c21x * c13x2 * c13y - c11x2 * c12y2 * c13x * c21y + c11y2 * c12x2 * c21x * c13y - 3 * c20x2 * c13x * c21y * c13y2
-                + 3 * c20y2 * c21x * c13x2 * c13y,
+                        - 6 * c10y * c11x * c12x * c13x * c21y * c13y - c10y * c11x * c21x * c12y * c13x * c13y + c10y * c11y * c12x * c21x * c13x * c13y
+                        - c11x * c11y * c12x * c21x * c12y * c13y + c11x * c11y * c12x * c12y * c13x * c21y + c11x * c20x * c12y * c13x * c21y * c13y
+                        + 6 * c11x * c12x * c20y * c13x * c21y * c13y + c11x * c20y * c21x * c12y * c13x * c13y - c20x * c11y * c12x * c13x * c21y * c13y
+                        - 6 * c20x * c11y * c21x * c12y * c13x * c13y - c11y * c12x * c20y * c21x * c13x * c13y - 6 * c10x * c20x * c21x * c13y3
+                        - 2 * c10x * c21x * c12y3 * c13x + 6 * c10y * c20y * c13x3 * c21y + 2 * c20x * c21x * c12y3 * c13x + 2 * c10y * c12x3 * c21y * c13y
+                        - 2 * c12x3 * c20y * c21y * c13y - 6 * c10x * c10y * c21x * c13x * c13y2 + 3 * c10x * c11x * c12x * c21y * c13y2
+                        - 2 * c10x * c11x * c21x * c12y * c13y2 - 4 * c10x * c11y * c12x * c21x * c13y2 + 3 * c10y * c11x * c12x * c21x * c13y2
+                        + 6 * c10x * c10y * c13x2 * c21y * c13y + 6 * c10x * c20x * c13x * c21y * c13y2 - 3 * c10x * c11y * c12y * c13x2 * c21y
+                        + 2 * c10x * c12x * c21x * c12y2 * c13y + 2 * c10x * c12x * c12y2 * c13x * c21y + 6 * c10x * c20y * c21x * c13x * c13y2
+                        + 4 * c10y * c11x * c12y * c13x2 * c21y + 6 * c10y * c20x * c21x * c13x * c13y2 + 2 * c10y * c11y * c12x * c13x2 * c21y
+                        - 3 * c10y * c11y * c21x * c12y * c13x2 + 2 * c10y * c12x * c21x * c12y2 * c13x - 3 * c11x * c20x * c12x * c21y * c13y2
+                        + 2 * c11x * c20x * c21x * c12y * c13y2 + c11x * c11y * c21x * c12y2 * c13x - 3 * c11x * c12x * c20y * c21x * c13y2
+                        + 4 * c20x * c11y * c12x * c21x * c13y2 - 6 * c10x * c20y * c13x2 * c21y * c13y - 2 * c10x * c12x2 * c12y * c21y * c13y
+                        - 6 * c10y * c20x * c13x2 * c21y * c13y - 6 * c10y * c20y * c21x * c13x2 * c13y - 2 * c10y * c12x2 * c21x * c12y * c13y
+                        - 2 * c10y * c12x2 * c12y * c13x * c21y - c11x * c11y * c12x2 * c21y * c13y - 4 * c11x * c20y * c12y * c13x2 * c21y
+                        - 2 * c11x * c11y2 * c21x * c13x * c13y + 3 * c20x * c11y * c12y * c13x2 * c21y - 2 * c20x * c12x * c21x * c12y2 * c13y
+                        - 2 * c20x * c12x * c12y2 * c13x * c21y - 6 * c20x * c20y * c21x * c13x * c13y2 - 2 * c11y * c12x * c20y * c13x2 * c21y
+                        + 3 * c11y * c20y * c21x * c12y * c13x2 - 2 * c12x * c20y * c21x * c12y2 * c13x - c11y2 * c12x * c21x * c12y * c13x
+                        + 6 * c20x * c20y * c13x2 * c21y * c13y + 2 * c20x * c12x2 * c12y * c21y * c13y + 2 * c11x2 * c11y * c13x * c21y * c13y
+                        + c11x2 * c12x * c12y * c21y * c13y + 2 * c12x2 * c20y * c21x * c12y * c13y + 2 * c12x2 * c20y * c12y * c13x * c21y
+                        + 3 * c10x2 * c21x * c13y3 - 3 * c10y2 * c13x3 * c21y + 3 * c20x2 * c21x * c13y3 + c11y3 * c21x * c13x2 - c11x3 * c21y * c13y2
+                        - 3 * c20y2 * c13x3 * c21y - c11x * c11y2 * c13x2 * c21y + c11x2 * c11y * c21x * c13y2 - 3 * c10x2 * c13x * c21y * c13y2
+                        + 3 * c10y2 * c21x * c13x2 * c13y - c11x2 * c12y2 * c13x * c21y + c11y2 * c12x2 * c21x * c13y - 3 * c20x2 * c13x * c21y * c13y2
+                        + 3 * c20y2 * c21x * c13x2 * c13y,
                 c10x * c10y * c11x * c12y * c13x * c13y - c10x * c10y * c11y * c12x * c13x * c13y + c10x * c11x * c11y * c12x * c12y * c13y
-                - c10y * c11x * c11y * c12x * c12y * c13x - c10x * c11x * c20y * c12y * c13x * c13y + 6 * c10x * c20x * c11y * c12y * c13x * c13y
-                + c10x * c11y * c12x * c20y * c13x * c13y - c10y * c11x * c20x * c12y * c13x * c13y - 6 * c10y * c11x * c12x * c20y * c13x * c13y
-                + c10y * c20x * c11y * c12x * c13x * c13y - c11x * c20x * c11y * c12x * c12y * c13y + c11x * c11y * c12x * c20y * c12y * c13x
-                + c11x * c20x * c20y * c12y * c13x * c13y - c20x * c11y * c12x * c20y * c13x * c13y - 2 * c10x * c20x * c12y3 * c13x
-                + 2 * c10y * c12x3 * c20y * c13y - 3 * c10x * c10y * c11x * c12x * c13y2 - 6 * c10x * c10y * c20x * c13x * c13y2
-                + 3 * c10x * c10y * c11y * c12y * c13x2 - 2 * c10x * c10y * c12x * c12y2 * c13x - 2 * c10x * c11x * c20x * c12y * c13y2
-                - c10x * c11x * c11y * c12y2 * c13x + 3 * c10x * c11x * c12x * c20y * c13y2 - 4 * c10x * c20x * c11y * c12x * c13y2
-                + 3 * c10y * c11x * c20x * c12x * c13y2 + 6 * c10x * c10y * c20y * c13x2 * c13y + 2 * c10x * c10y * c12x2 * c12y * c13y
-                + 2 * c10x * c11x * c11y2 * c13x * c13y + 2 * c10x * c20x * c12x * c12y2 * c13y + 6 * c10x * c20x * c20y * c13x * c13y2
-                - 3 * c10x * c11y * c20y * c12y * c13x2 + 2 * c10x * c12x * c20y * c12y2 * c13x + c10x * c11y2 * c12x * c12y * c13x
-                + c10y * c11x * c11y * c12x2 * c13y + 4 * c10y * c11x * c20y * c12y * c13x2 - 3 * c10y * c20x * c11y * c12y * c13x2
-                + 2 * c10y * c20x * c12x * c12y2 * c13x + 2 * c10y * c11y * c12x * c20y * c13x2 + c11x * c20x * c11y * c12y2 * c13x
-                - 3 * c11x * c20x * c12x * c20y * c13y2 - 2 * c10x * c12x2 * c20y * c12y * c13y - 6 * c10y * c20x * c20y * c13x2 * c13y
-                - 2 * c10y * c20x * c12x2 * c12y * c13y - 2 * c10y * c11x2 * c11y * c13x * c13y - c10y * c11x2 * c12x * c12y * c13y
-                - 2 * c10y * c12x2 * c20y * c12y * c13x - 2 * c11x * c20x * c11y2 * c13x * c13y - c11x * c11y * c12x2 * c20y * c13y
-                + 3 * c20x * c11y * c20y * c12y * c13x2 - 2 * c20x * c12x * c20y * c12y2 * c13x - c20x * c11y2 * c12x * c12y * c13x
-                + 3 * c10y2 * c11x * c12x * c13x * c13y + 3 * c11x * c12x * c20y2 * c13x * c13y + 2 * c20x * c12x2 * c20y * c12y * c13y
-                - 3 * c10x2 * c11y * c12y * c13x * c13y + 2 * c11x2 * c11y * c20y * c13x * c13y + c11x2 * c12x * c20y * c12y * c13y
-                - 3 * c20x2 * c11y * c12y * c13x * c13y - c10x3 * c13y3 + c10y3 * c13x3 + c20x3 * c13y3 - c20y3 * c13x3
-                - 3 * c10x * c20x2 * c13y3 - c10x * c11y3 * c13x2 + 3 * c10x2 * c20x * c13y3 + c10y * c11x3 * c13y2
-                + 3 * c10y * c20y2 * c13x3 + c20x * c11y3 * c13x2 + c10x2 * c12y3 * c13x - 3 * c10y2 * c20y * c13x3 - c10y2 * c12x3 * c13y
-                + c20x2 * c12y3 * c13x - c11x3 * c20y * c13y2 - c12x3 * c20y2 * c13y - c10x * c11x2 * c11y * c13y2
-                + c10y * c11x * c11y2 * c13x2 - 3 * c10x * c10y2 * c13x2 * c13y - c10x * c11y2 * c12x2 * c13y + c10y * c11x2 * c12y2 * c13x
-                - c11x * c11y2 * c20y * c13x2 + 3 * c10x2 * c10y * c13x * c13y2 + c10x2 * c11x * c12y * c13y2
-                + 2 * c10x2 * c11y * c12x * c13y2 - 2 * c10y2 * c11x * c12y * c13x2 - c10y2 * c11y * c12x * c13x2 + c11x2 * c20x * c11y * c13y2
-                - 3 * c10x * c20y2 * c13x2 * c13y + 3 * c10y * c20x2 * c13x * c13y2 + c11x * c20x2 * c12y * c13y2 - 2 * c11x * c20y2 * c12y * c13x2
-                + c20x * c11y2 * c12x2 * c13y - c11y * c12x * c20y2 * c13x2 - c10x2 * c12x * c12y2 * c13y - 3 * c10x2 * c20y * c13x * c13y2
-                + 3 * c10y2 * c20x * c13x2 * c13y + c10y2 * c12x2 * c12y * c13x - c11x2 * c20y * c12y2 * c13x + 2 * c20x2 * c11y * c12x * c13y2
-                + 3 * c20x * c20y2 * c13x2 * c13y - c20x2 * c12x * c12y2 * c13y - 3 * c20x2 * c20y * c13x * c13y2 + c12x2 * c20y2 * c12y * c13x
+                        - c10y * c11x * c11y * c12x * c12y * c13x - c10x * c11x * c20y * c12y * c13x * c13y + 6 * c10x * c20x * c11y * c12y * c13x * c13y
+                        + c10x * c11y * c12x * c20y * c13x * c13y - c10y * c11x * c20x * c12y * c13x * c13y - 6 * c10y * c11x * c12x * c20y * c13x * c13y
+                        + c10y * c20x * c11y * c12x * c13x * c13y - c11x * c20x * c11y * c12x * c12y * c13y + c11x * c11y * c12x * c20y * c12y * c13x
+                        + c11x * c20x * c20y * c12y * c13x * c13y - c20x * c11y * c12x * c20y * c13x * c13y - 2 * c10x * c20x * c12y3 * c13x
+                        + 2 * c10y * c12x3 * c20y * c13y - 3 * c10x * c10y * c11x * c12x * c13y2 - 6 * c10x * c10y * c20x * c13x * c13y2
+                        + 3 * c10x * c10y * c11y * c12y * c13x2 - 2 * c10x * c10y * c12x * c12y2 * c13x - 2 * c10x * c11x * c20x * c12y * c13y2
+                        - c10x * c11x * c11y * c12y2 * c13x + 3 * c10x * c11x * c12x * c20y * c13y2 - 4 * c10x * c20x * c11y * c12x * c13y2
+                        + 3 * c10y * c11x * c20x * c12x * c13y2 + 6 * c10x * c10y * c20y * c13x2 * c13y + 2 * c10x * c10y * c12x2 * c12y * c13y
+                        + 2 * c10x * c11x * c11y2 * c13x * c13y + 2 * c10x * c20x * c12x * c12y2 * c13y + 6 * c10x * c20x * c20y * c13x * c13y2
+                        - 3 * c10x * c11y * c20y * c12y * c13x2 + 2 * c10x * c12x * c20y * c12y2 * c13x + c10x * c11y2 * c12x * c12y * c13x
+                        + c10y * c11x * c11y * c12x2 * c13y + 4 * c10y * c11x * c20y * c12y * c13x2 - 3 * c10y * c20x * c11y * c12y * c13x2
+                        + 2 * c10y * c20x * c12x * c12y2 * c13x + 2 * c10y * c11y * c12x * c20y * c13x2 + c11x * c20x * c11y * c12y2 * c13x
+                        - 3 * c11x * c20x * c12x * c20y * c13y2 - 2 * c10x * c12x2 * c20y * c12y * c13y - 6 * c10y * c20x * c20y * c13x2 * c13y
+                        - 2 * c10y * c20x * c12x2 * c12y * c13y - 2 * c10y * c11x2 * c11y * c13x * c13y - c10y * c11x2 * c12x * c12y * c13y
+                        - 2 * c10y * c12x2 * c20y * c12y * c13x - 2 * c11x * c20x * c11y2 * c13x * c13y - c11x * c11y * c12x2 * c20y * c13y
+                        + 3 * c20x * c11y * c20y * c12y * c13x2 - 2 * c20x * c12x * c20y * c12y2 * c13x - c20x * c11y2 * c12x * c12y * c13x
+                        + 3 * c10y2 * c11x * c12x * c13x * c13y + 3 * c11x * c12x * c20y2 * c13x * c13y + 2 * c20x * c12x2 * c20y * c12y * c13y
+                        - 3 * c10x2 * c11y * c12y * c13x * c13y + 2 * c11x2 * c11y * c20y * c13x * c13y + c11x2 * c12x * c20y * c12y * c13y
+                        - 3 * c20x2 * c11y * c12y * c13x * c13y - c10x3 * c13y3 + c10y3 * c13x3 + c20x3 * c13y3 - c20y3 * c13x3
+                        - 3 * c10x * c20x2 * c13y3 - c10x * c11y3 * c13x2 + 3 * c10x2 * c20x * c13y3 + c10y * c11x3 * c13y2
+                        + 3 * c10y * c20y2 * c13x3 + c20x * c11y3 * c13x2 + c10x2 * c12y3 * c13x - 3 * c10y2 * c20y * c13x3 - c10y2 * c12x3 * c13y
+                        + c20x2 * c12y3 * c13x - c11x3 * c20y * c13y2 - c12x3 * c20y2 * c13y - c10x * c11x2 * c11y * c13y2
+                        + c10y * c11x * c11y2 * c13x2 - 3 * c10x * c10y2 * c13x2 * c13y - c10x * c11y2 * c12x2 * c13y + c10y * c11x2 * c12y2 * c13x
+                        - c11x * c11y2 * c20y * c13x2 + 3 * c10x2 * c10y * c13x * c13y2 + c10x2 * c11x * c12y * c13y2
+                        + 2 * c10x2 * c11y * c12x * c13y2 - 2 * c10y2 * c11x * c12y * c13x2 - c10y2 * c11y * c12x * c13x2 + c11x2 * c20x * c11y * c13y2
+                        - 3 * c10x * c20y2 * c13x2 * c13y + 3 * c10y * c20x2 * c13x * c13y2 + c11x * c20x2 * c12y * c13y2 - 2 * c11x * c20y2 * c12y * c13x2
+                        + c20x * c11y2 * c12x2 * c13y - c11y * c12x * c20y2 * c13x2 - c10x2 * c12x * c12y2 * c13y - 3 * c10x2 * c20y * c13x * c13y2
+                        + 3 * c10y2 * c20x * c13x2 * c13y + c10y2 * c12x2 * c12y * c13x - c11x2 * c20y * c12y2 * c13x + 2 * c20x2 * c11y * c12x * c13y2
+                        + 3 * c20x * c20y2 * c13x2 * c13y - c20x2 * c12x * c12y2 * c13y - 3 * c20x2 * c20y * c13x * c13y2 + c12x2 * c20y2 * c12y * c13x
         );
 
         final double[] roots = poly.getRootsInInterval(0, 1);
@@ -1064,7 +1065,7 @@ public class Intersections {
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.add(new AbstractMap.SimpleEntry<>(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
+                                result.add(new Intersection.IntersectionPoint(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
                                 break checkRoots;
                             }
                         }
@@ -1084,8 +1085,8 @@ public class Intersections {
      * @param p1 control point P1 of 'p'
      * @param p2 control point P2 of 'p'
      * @param p3 control point P3 of 'p'
-     * @param c the center of the circle
-     * @param r the radius of the circle
+     * @param c  the center of the circle
+     * @param r  the radius of the circle
      * @return the computed result
      */
     public static Intersection intersectCubicCurveCircle(
@@ -1127,7 +1128,7 @@ public class Intersections {
             Point2D p0, Point2D p1, Point2D p2, @Nonnull Point2D p3,
             Point2D ec, double rx, double ry) {
         Point2D a, b, c, d;       // temporary variables
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         // Calculate the coefficients of cubic polynomial
         final Point2D c3, c2, c1, c0;
@@ -1155,19 +1156,19 @@ public class Intersections {
                 2 * (c3x * c2x * ryry + c3y * c2y * rxrx),
                 2 * (c3x * c1x * ryry + c3y * c1y * rxrx) + c2x * c2x * ryry + c2y * c2y * rxrx,
                 2 * c3x * ryry * (c0x - ecx) + 2 * c3y * rxrx * (c0y - ecy)
-                + 2 * (c2x * c1x * ryry + c2y * c1y * rxrx),
+                        + 2 * (c2x * c1x * ryry + c2y * c1y * rxrx),
                 2 * c2x * ryry * (c0x - ecx) + 2 * c2y * rxrx * (c0y - ecy)
-                + c1x * c1x * ryry + c1y * c1y * rxrx,
+                        + c1x * c1x * ryry + c1y * c1y * rxrx,
                 2 * c1x * ryry * (c0x - ecx) + 2 * c1y * rxrx * (c0y - ecy),
                 c0x * c0x * ryry - 2 * c0y * ecy * rxrx - 2 * c0x * ecx * ryry
-                + c0y * c0y * rxrx + ecx * ecx * ryry + ecy * ecy * rxrx - rxrx * ryry
+                        + c0y * c0y * rxrx + ecx * ecx * ryry + ecy * ecy * rxrx - rxrx * ryry
         );
         double[] roots = poly.getRootsInInterval(0, 1);
 
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            result.add(new AbstractMap.SimpleEntry<>(t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))));
+            result.add(new Intersection.IntersectionPoint(t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))));
         }
 
         if (result.size() > 0) {
@@ -1200,7 +1201,7 @@ public class Intersections {
     public static Intersection intersectCubicCurveLine(Point2D p0, Point2D p1, Point2D p2, @Nonnull Point2D p3, @Nonnull Point2D a0, @Nonnull Point2D a1) {
         final Point2D topLeft = topLeft(a0, a1); // used to determine if point is on line segment
         final Point2D bottomRight = bottomRight(a0, a1); // used to determine if point is on line segment
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
         //     (1-t^3)P0 + 3t(1-t)^2P1 + 3t^2(1-t)P2 + t^3P3
@@ -1266,16 +1267,16 @@ public class Intersections {
                 if (a0x == a1x) {
                     if (topLeft.getY() <= p10.getY() && p10.getY() <= bottomRight.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(t, p10));
+                        result.add(new Intersection.IntersectionPoint(t, p10));
                     }
                 } else if (a0y == a1y) {
                     if (topLeft.getX() <= p10.getX() && p10.getX() <= bottomRight.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(t, p10));
+                        result.add(new Intersection.IntersectionPoint(t, p10));
                     }
                 } else if (gte(p10, topLeft) && lte(p10, bottomRight)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new AbstractMap.SimpleEntry<>(t, p10));
+                    result.add(new Intersection.IntersectionPoint(t, p10));
                 }
             }
         }
@@ -1340,7 +1341,7 @@ public class Intersections {
      * @param y3 y-coordinate of control point P3 of the bezier curve
      * @param cx x-coordinate of the point
      * @param cy y-coordinate of the point
-     * @param r the tolerance radius
+     * @param r  the tolerance radius
      * @return the intersection
      */
     public static Intersection intersectCubicCurvePoint(
@@ -1352,7 +1353,7 @@ public class Intersections {
         c3y = -(y0 - 3 * y1 + 3 * y2 - y3);
         c2x = 3 * (x0 - 2 * x1 + x2);
         c2y = 3 * (y0 - 2 * y1 + y2);
-        c1x = - 3 * (x0 - x1);
+        c1x = -3 * (x0 - x1);
         c1y = -3 * (y0 - y1);
         c0x = x0;
         c0y = y0;
@@ -1368,10 +1369,10 @@ public class Intersections {
         // Solve for roots in derivative
         final double[] clampedRoots = new Polynomial(6 * a, 5 * b, 4 * c, 3 * d, 2 * e, f).getRootsInInterval(0, 1);
         // Add zero and one, because we have clamped the roots
-        final double[] roots=addZeroAndOne(clampedRoots);
+        final double[] roots = addZeroAndOne(clampedRoots);
 
         // Select roots with closest distance to point
-        final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        final List<Intersection.IntersectionPoint> result = new ArrayList<>();
         final Point2D p0, p1, p2, p3;
         p0 = new Point2D(x0, y0);
         p1 = new Point2D(x1, y1);
@@ -1379,21 +1380,21 @@ public class Intersections {
         p3 = new Point2D(x3, y3);
         final double rr = r * r;
         double bestDistance = Double.POSITIVE_INFINITY;
-        for (double t: roots) {
+        for (double t : roots) {
             final Point2D p;
-                p = p0.multiply((1 - t) * (1 - t) * (1 - t))
-                        .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
-                        .add(p2.multiply(3 * (1 - t) * t * t))
-                        .add(p3.multiply(t * t * t));
+            p = p0.multiply((1 - t) * (1 - t) * (1 - t))
+                    .add(p1.multiply(3 * (1 - t) * (1 - t) * t))
+                    .add(p2.multiply(3 * (1 - t) * t * t))
+                    .add(p3.multiply(t * t * t));
 
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
                 if (abs(dd - bestDistance) < EPSILON) {
-                    result.add(new AbstractMap.SimpleEntry<>(t, p));
+                    result.add(new Intersection.IntersectionPoint(t, p));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;
                     result.clear();
-                    result.add(new AbstractMap.SimpleEntry<>(t, p));
+                    result.add(new Intersection.IntersectionPoint(t, p));
                 }
             }
         }
@@ -1405,15 +1406,15 @@ public class Intersections {
      * Computes the intersection between cubic bezier curve 'p' and the given
      * closed polygon.
      *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
-     * @param p3 control point P3 of 'p'
+     * @param p0     control point P0 of 'p'
+     * @param p1     control point P1 of 'p'
+     * @param p2     control point P2 of 'p'
+     * @param p3     control point P3 of 'p'
      * @param points the points of the polygon
      * @return the computed intersection
      */
     public static Intersection intersectCubicCurvePolygon(@Nonnull Point2D p0, @Nonnull Point2D p1, @Nonnull Point2D p2, @Nonnull Point2D p3, List<Point2D> points) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -1452,7 +1453,7 @@ public class Intersections {
         inter3 = Intersections.intersectCubicCurveLine(p0, p1, p2, p3, bottomRight, bottomLeft);
         inter4 = Intersections.intersectCubicCurveLine(p0, p1, p2, p3, bottomLeft, topLeft);
 
-        final List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        final List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         result.addAll(inter1.getIntersections());
         result.addAll(inter2.getIntersections());
@@ -1477,7 +1478,7 @@ public class Intersections {
      * @return computed intersection
      */
     public static Intersection intersectCircleCircle(Point2D c1, double r1, @Nonnull Point2D c2, double r2) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         // Determine minimum and maximum radii where circles can intersect
         double r_max = r1 + r2;
@@ -1501,12 +1502,12 @@ public class Intersections {
             double b = h / c_dist;
 
             // FIXME compute t
-            result.add(new AbstractMap.SimpleEntry<>(Double.NaN, new Point2D(
+            result.add(new Intersection.IntersectionPoint(Double.NaN, new Point2D(
                     p.getX() - b * (c2.getY() - c1.getY()),
                     p.getY() + b * (c2.getX() - c1.getX())
             )
             ));
-            result.add(new AbstractMap.SimpleEntry<>(Double.NaN, new Point2D(
+            result.add(new Intersection.IntersectionPoint(Double.NaN, new Point2D(
                     p.getX() + b * (c2.getY() - c1.getY()),
                     p.getY() - b * (c2.getX() - c1.getX())
             )
@@ -1519,7 +1520,7 @@ public class Intersections {
      * Computes the intersection between a circle and an ellipse.
      *
      * @param cc the center of the circle
-     * @param r the radius of the circle
+     * @param r  the radius of the circle
      * @param ec the center of the ellipse
      * @param rx the x-radius of the ellipse
      * @param ry the y-radius of the ellipse
@@ -1544,8 +1545,8 @@ public class Intersections {
      * FIXME actually computes line intersection with parameter t of line, and
      * not t of circle.
      *
-     * @param c the center of the circle
-     * @param r the radius of the circle
+     * @param c  the center of the circle
+     * @param r  the radius of the circle
      * @param a0 point 1 of the line
      * @param a1 point 2 of the line
      * @return computed intersection
@@ -1562,7 +1563,7 @@ public class Intersections {
     }
 
     public static Intersection intersectCirclePoint(Point2D cc, double cr, @Nonnull Point2D pc, double pr) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         double c_dist = cc.distance(pc);
 
@@ -1576,7 +1577,7 @@ public class Intersections {
             if (dd <= pr * pr) {
                 status = Intersection.Status.INTERSECTION;
                 // FIXME compute t
-                result.add(new AbstractMap.SimpleEntry<>(Double.NaN, p));
+                result.add(new Intersection.IntersectionPoint(Double.NaN, p));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
@@ -1587,13 +1588,13 @@ public class Intersections {
     /**
      * Computes the intersection between a circle and a polygon.
      *
-     * @param c the center of the circle
-     * @param r the radius of the circle
+     * @param c      the center of the circle
+     * @param r      the radius of the circle
      * @param points the points of the polygon
      * @return computed intersection
      */
     public static Intersection intersectCirclePolygon(@Nonnull Point2D c, double r, List<Point2D> points) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
         Intersection inter = null;
 
@@ -1623,8 +1624,8 @@ public class Intersections {
     /**
      * Computes the intersection between a circle and a rectangle.
      *
-     * @param c the center of the circle
-     * @param r the radius of the circle
+     * @param c  the center of the circle
+     * @param r  the radius of the circle
      * @param r0 corner point 0 of the rectangle
      * @param r1 corner point 1 of the rectangle
      * @return computed intersection
@@ -1642,7 +1643,7 @@ public class Intersections {
         inter3 = Intersections.intersectCircleLine(c, r, bottomRight, bottomLeft);
         inter4 = Intersections.intersectCircleLine(c, r, bottomLeft, topLeft);
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         result.addAll(inter1.getIntersections());
         result.addAll(inter2.getIntersections());
@@ -1673,10 +1674,10 @@ public class Intersections {
     /**
      * Computes the intersection between two ellipses.
      *
-     * @param c1 the center of ellipse 1
+     * @param c1  the center of ellipse 1
      * @param rx1 the x-radius of ellipse 1
      * @param ry1 the y-radius of ellipse 1
-     * @param c2 the center of ellipse 2
+     * @param c2  the center of ellipse 2
      * @param rx2 the x-radius of ellipse 2
      * @param ry2 the y-radius of ellipse 2
      * @return computed intersection
@@ -1700,27 +1701,27 @@ public class Intersections {
      */
     public static Intersection intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
         double[] a = {
-            ry1 * ry1,
-            0,
-            rx1 * rx1,
-            -2 * ry1 * ry1 * cx1,
-            -2 * rx1 * rx1 * cy1,
-            ry1 * ry1 * cx1 * cx1 + rx1 * rx1 * cy1 * cy1 - rx1 * rx1 * ry1 * ry1
+                ry1 * ry1,
+                0,
+                rx1 * rx1,
+                -2 * ry1 * ry1 * cx1,
+                -2 * rx1 * rx1 * cy1,
+                ry1 * ry1 * cx1 * cx1 + rx1 * rx1 * cy1 * cy1 - rx1 * rx1 * ry1 * ry1
         };
         double[] b = {
-            ry2 * ry2,
-            0,
-            rx2 * rx2,
-            -2 * ry2 * ry2 * cx2,
-            -2 * rx2 * rx2 * cy2,
-            ry2 * ry2 * cx2 * cx2 + rx2 * rx2 * cy2 * cy2 - rx2 * rx2 * ry2 * ry2
+                ry2 * ry2,
+                0,
+                rx2 * rx2,
+                -2 * ry2 * ry2 * cx2,
+                -2 * rx2 * rx2 * cy2,
+                ry2 * ry2 * cx2 * cx2 + rx2 * rx2 * cy2 * cy2 - rx2 * rx2 * ry2 * ry2
         };
 
         Polynomial yPoly = Intersections.bezout(a, b);
         double[] yRoots = yPoly.getRoots();
         double norm0 = (a[0] * a[0] + 2 * a[1] * a[1] + a[2] * a[2]) * EPSILON;
         double norm1 = (b[0] * b[0] + 2 * b[1] * b[1] + b[2] * b[2]) * EPSILON;
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         for (int y = 0; y < yRoots.length; y++) {
             Polynomial xPoly = new Polynomial(
@@ -1738,7 +1739,7 @@ public class Intersections {
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
                         // FIXME compute angle in radians
-                        result.add(new AbstractMap.SimpleEntry<>(Double.NaN, new Point2D(xRoots[x], yRoots[y])));
+                        result.add(new Intersection.IntersectionPoint(Double.NaN, new Point2D(xRoots[x], yRoots[y])));
                     }
                 }
             }
@@ -1775,14 +1776,14 @@ public class Intersections {
     /**
      * Computes the intersection between a circle and a polygon.
      *
-     * @param c the center of the ellipse
-     * @param rx the x-radius of the ellipse
-     * @param ry the y-radius of the ellipse
+     * @param c      the center of the ellipse
+     * @param rx     the x-radius of the ellipse
+     * @param ry     the y-radius of the ellipse
      * @param points the points of the polygon
      * @return computed intersection
      */
     public static Intersection intersectEllipsePolygon(@Nonnull Point2D c, double rx, double ry, List<Point2D> points) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
@@ -1801,14 +1802,14 @@ public class Intersections {
     /**
      * Computes the intersection between an ellipse and a rectangle.
      *
-     * @param c the center of the ellipse
+     * @param c  the center of the ellipse
      * @param rx the x-radius of the ellipse
      * @param ry the y-radius of the ellipse
      * @param r1 corner point 1 of the rectangle
      * @param r2 corner point 2 of the rectangle
      * @return computed intersection
      */
-public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double rx, double ry, @Nonnull Point2D r1, @Nonnull Point2D r2) {
+    public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double rx, double ry, @Nonnull Point2D r1, @Nonnull Point2D r2) {
         final Point2D topLeft, bottomRight, topRight, bottomLeft;
         topLeft = topLeft(r1, r2);
         bottomRight = bottomRight(r1, r2);
@@ -1821,7 +1822,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
         inter3 = Intersections.intersectEllipseLine(c, rx, ry, bottomRight, bottomLeft);
         inter4 = Intersections.intersectEllipseLine(c, rx, ry, bottomLeft, topLeft);
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         result.addAll(inter1.getIntersections());
         result.addAll(inter2.getIntersections());
@@ -1855,17 +1856,17 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     }
 
     public static Intersection intersectLineQuadraticCurve(double a0x, double a0y, double a1x, double a1y,
-            double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
+                                                           double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         /* steps:
-        * 1. Rotate the bezier curve so that the line coincides with the x-axis.
-        *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
-        * 2. Insert the control points of the rotated bezier curve in the polynomial equation.
-        * 3. Find the roots of the polynomial equation.
+         * 1. Rotate the bezier curve so that the line coincides with the x-axis.
+         *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
+         * 2. Insert the control points of the rotated bezier curve in the polynomial equation.
+         * 3. Find the roots of the polynomial equation.
          */
 
         Point2D topLeft = topLeft(a0x, a0y, a1x, a1y); // used to determine if point is on line segment
         Point2D bottomRight = bottomRight(a0x, a0y, a1x, a1y); // used to determine if point is on line segment
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         final Point2D p0, p1;
         p0 = new Point2D(p0x, p0y);
@@ -1913,16 +1914,16 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
                 if (a0x == a1x) {
                     if (topLeft.getY() <= p6.getY() && p6.getY() <= bottomRight.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
+                        result.add(new Intersection.IntersectionPoint(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
                     }
                 } else if (a0y == a1y) {
                     if (topLeft.getX() <= p6.getX() && p6.getX() <= bottomRight.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
+                        result.add(new Intersection.IntersectionPoint(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
                     }
                 } else if (gte(p6, topLeft) && lte(p6, bottomRight)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
+                    result.add(new Intersection.IntersectionPoint(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
                 }
             }
         }
@@ -1946,7 +1947,6 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * @param p3y control point P3 of 'p'
      * @param a0y point 1 of 'a'
      * @param a1y point 2 of 'a'
-     *
      * @return the computed intersection
      */
     public static Intersection intersectLineCubicCurve(
@@ -1983,7 +1983,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
 
         final Point2D amin = topLeft(a0, a1); // used to determine if point is on line segment
         final Point2D amax = bottomRight(a0, a1); // used to determine if point is on line segment
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
         //     (1-t^3)P0 + 3t(1-t)^2P1 + 3t^2(1-t)P2 + t^3P3
@@ -2046,16 +2046,16 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
                 if (a0x == a1x) {
                     if (amin.getY() <= p10.getY() && p10.getY() <= amax.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
+                        result.add(new Intersection.IntersectionPoint(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
                     }
                 } else if (a0y == a1y) {
                     if (amin.getX() <= p10.getX() && p10.getX() <= amax.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
+                        result.add(new Intersection.IntersectionPoint(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
                     }
                 } else if (gte(p10, amin) && lte(p10, amax)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new AbstractMap.SimpleEntry<>(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
+                    result.add(new Intersection.IntersectionPoint(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
                 }
             }
         }
@@ -2069,8 +2069,8 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * The intersection will contain the parameters 't' of the line in range
      * [0,1].
      *
-     * @param c the center of the circle
-     * @param r the radius of the circle
+     * @param c  the center of the circle
+     * @param r  the radius of the circle
      * @param a0 point 0 of the line
      * @param a1 point 1 of the line
      * @return computed intersection
@@ -2112,11 +2112,11 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * @param y1 point 1 of the line
      * @param cx the center of the circle
      * @param cy the center of the circle
-     * @param r the radius of the circle
+     * @param r  the radius of the circle
      * @return computed intersection
      */
     public static Intersection intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         final double Δx, Δy;
         Δx = x1 - x0;
         Δy = y1 - y0;
@@ -2144,17 +2144,17 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
             } else {
                 status = Intersection.Status.INTERSECTION;
                 if (0 <= t1 && t1 <= 1) {
-                    result.add(new AbstractMap.SimpleEntry<>(t1, lerp(x0, y0, x1, y1, t1)));
+                    result.add(new Intersection.IntersectionPoint(t1, lerp(x0, y0, x1, y1, t1)));
                 }
                 if (0 <= t2 && t2 <= 1) {
-                    result.add(new AbstractMap.SimpleEntry<>(t2, lerp(x0, y0, x1, y1, t2)));
+                    result.add(new Intersection.IntersectionPoint(t2, lerp(x0, y0, x1, y1, t2)));
                 }
             }
         } else {
             double t = (-b) / (2 * a);
             if (0 <= t && t <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.add(new AbstractMap.SimpleEntry<>(t, lerp(x0, y0, x1, y1, t)));
+                result.add(new Intersection.IntersectionPoint(t, lerp(x0, y0, x1, y1, t)));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
@@ -2169,7 +2169,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * The intersection will contain the parameters 't' of the line in range
      * [0,1].
      *
-     * @param e the bounds of the ellipse
+     * @param e  the bounds of the ellipse
      * @param a0 point 0 of the line
      * @param a1 point 1 of the line
      * @return computed intersection
@@ -2198,8 +2198,8 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     }
 
     public static Intersection intersectLineEllipse(double x0, double y0, double x1, double y1,
-            double cx, double cy, double rx, double ry) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+                                                    double cx, double cy, double rx, double ry) {
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         final Point2D origin, dir, center, diff, mDir, mDiff;
         origin = new Point2D(x0, y0);
@@ -2233,17 +2233,17 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
             } else {
                 status = Intersection.Status.INTERSECTION;
                 if (0 <= t0 && t0 <= 1) {
-                    result.add(new AbstractMap.SimpleEntry<>(t0, lerp(x0, y0, x1, y1, t0)));
+                    result.add(new Intersection.IntersectionPoint(t0, lerp(x0, y0, x1, y1, t0)));
                 }
                 if (0 <= t1 && t1 <= 1) {
-                    result.add(new AbstractMap.SimpleEntry<>(t1, lerp(x0, y0, x1, y1, t1)));
+                    result.add(new Intersection.IntersectionPoint(t1, lerp(x0, y0, x1, y1, t1)));
                 }
             }
         } else {
             final double t = -b / a;
             if (0 <= t && t <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.add(new AbstractMap.SimpleEntry<>(t, lerp(x0, y0, x1, y1, t)));
+                result.add(new Intersection.IntersectionPoint(t, lerp(x0, y0, x1, y1, t)));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
@@ -2277,7 +2277,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     public static Intersection intersectLineLine(
             double a0x, double a0y, double a1x, double a1y,
             double b0x, double b0y, double b1x, double b1y) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         double ua_t = (b1x - b0x) * (a0y - b0y) - (b1y - b0y) * (a0x - b0x);
@@ -2290,7 +2290,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
 
             if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.add(new AbstractMap.SimpleEntry<>(ua, new Point2D(
+                result.add(new Intersection.IntersectionPoint(ua, new Point2D(
                         a0x + ua * (a1x - a0x),
                         a0y + ua * (a1y - a0y)
                 )
@@ -2310,7 +2310,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     }
 
     public static Intersection intersectLinePathIterator(Point2D a0, Point2D a1, PathIterator pit) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final double a0x, a0y, a1x, a1y;
         a0x = a0.getX();
@@ -2404,11 +2404,11 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * @param y1 point 1 of the line
      * @param cx the center of the point p.x
      * @param cy the center of the point p.y
-     * @param r the tolerance radius
+     * @param r  the tolerance radius
      * @return computed intersection
      */
     public static Intersection intersectLinePoint(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         // Build polynomial
         final double Δx, Δy, a, b;
         Δx = x1 - x0;
@@ -2425,7 +2425,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
             double y = y0 + t * Δy;
             double dd = (x - cx) * (x - cx) + (y - cy) * (y - cy);
             if (dd <= r * r) {
-                result.add(new AbstractMap.SimpleEntry<>(t, new Point2D(x, y)));
+                result.add(new Intersection.IntersectionPoint(t, new Point2D(x, y)));
             }
         }
 
@@ -2438,13 +2438,13 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * The intersection will contain the parameters 't' of the line in range
      * [0,1].
      *
-     * @param a0 point 0 of the line
-     * @param a1 point 1 of the line
+     * @param a0     point 0 of the line
+     * @param a1     point 1 of the line
      * @param points the points of the polygon
      * @return computed intersection
      */
     public static Intersection intersectLinePolygon(@Nonnull Point2D a0, @Nonnull Point2D a1, List<Point2D> points) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         int length = points.size();
 
@@ -2498,7 +2498,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
         inter3 = Intersections.intersectLineLine(a0, a1, bottomRight, bottomLeft);
         inter4 = Intersections.intersectLineLine(a0, a1, bottomLeft, topLeft);
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         result.addAll(inter1.getIntersections());
@@ -2510,7 +2510,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     }
 
     public static Intersection intersectPathIteratorCircle(PathIterator pit, double cx, double cy, double r) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;
@@ -2564,21 +2564,21 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     /**
      * Intersects the given path iterator with the given point.
      *
-     * @param pit the path iterator
-     * @param px the x-coordinate of the point
-     * @param py the y-coordinate of the point
+     * @param pit       the path iterator
+     * @param px        the x-coordinate of the point
+     * @param py        the y-coordinate of the point
      * @param tolerance radius around the point which counts as hit.
      * @return the intersection
      */
     public static Intersection intersectPathIteratorPoint(PathIterator pit, double px, double py, double tolerance) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;
         double lastx = 0, lasty = 0;
         double x, y;
         int i = 0;
-        double closestDistance=Double.POSITIVE_INFINITY;
+        double closestDistance = Double.POSITIVE_INFINITY;
         for (; !pit.isDone(); pit.next(), i++) {
             Intersection inter;
             switch (pit.currentSegment(seg)) {
@@ -2616,14 +2616,14 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
                     break;
             }
             if (inter != null) {
-                for (Map.Entry<Double, Point2D> entry : inter.getIntersections()) {
-                    final double dd = Geom.squaredDistance(entry.getValue(),px,py);
-                    if (abs(dd-closestDistance)<EPSILON){
-                    result.add(new AbstractMap.SimpleEntry<>(entry.getKey() + i, entry.getValue()));
-                    }else if (dd<closestDistance){
+                for (Intersection.IntersectionPoint entry : inter.getIntersections()) {
+                    final double dd = Geom.squaredDistance(entry.getPoint(), px, py);
+                    if (abs(dd - closestDistance) < EPSILON) {
+                        result.add(new Intersection.IntersectionPoint(entry.getT() + i, entry.getPoint()));
+                    } else if (dd < closestDistance) {
                         result.clear();
-                        closestDistance=dd;
-                    result.add(new AbstractMap.SimpleEntry<>(entry.getKey() + i, entry.getValue()));
+                        closestDistance = dd;
+                        result.add(new Intersection.IntersectionPoint(entry.getT() + i, entry.getPoint()));
                     }
                 }
             }
@@ -2637,13 +2637,13 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     /**
      * Computes the intersection between a point and a circle.
      *
-     * @param point the point
+     * @param point  the point
      * @param center the center of the circle
      * @param radius the radius of the circle
      * @return computed intersection
      */
     public static Intersection intersectPointCircle(Point2D point, @Nonnull Point2D center, double radius) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         final double distance = point.distance(center);
 
@@ -2651,7 +2651,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
         if (distance - radius < EPSILON) {
             status = Intersection.Status.INTERSECTION;
             // FIXME compute t with atan2/2*PI
-            result.add(new AbstractMap.SimpleEntry<>(0.0, point));
+            result.add(new Intersection.IntersectionPoint(0.0, point));
         } else if (distance < radius) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
@@ -2663,15 +2663,15 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     /**
      * Computes the intersection between a point and an ellipse.
      *
-     * @param point the point
+     * @param point  the point
      * @param center the center of the ellipse
-     * @param rx the x-radius of ellipse
-     * @param ry the y-radius of ellipse
+     * @param rx     the x-radius of ellipse
+     * @param ry     the y-radius of ellipse
      * @return computed intersection. Status can be{@link Status#INTERSECTION},
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
     public static Intersection intersectPointEllipse(Point2D point, Point2D center, double rx, double ry) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         double px = point.getX();
         double py = point.getY();
@@ -2682,7 +2682,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
         Intersection.Status status;
         if (abs(det) - 1 == EPSILON) {
             status = Intersection.Status.INTERSECTION;
-            result.add(new AbstractMap.SimpleEntry<>(0.0, point));
+            result.add(new Intersection.IntersectionPoint(0.0, point));
         } else if (det < 1) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
@@ -2700,7 +2700,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * @return computed intersection
      */
     public static Intersection intersectPolygonPolygon(List<Point2D> points1, @Nonnull List<Point2D> points2) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
         int length = points1.size();
 
@@ -2720,8 +2720,8 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * Computes the intersection between a polygon and a rectangle.
      *
      * @param points the points of the polygon
-     * @param r0 corner point 0 of the rectangle
-     * @param r1 corner point 1 of the rectangle
+     * @param r0     corner point 0 of the rectangle
+     * @param r1     corner point 1 of the rectangle
      * @return computed intersection
      */
     public static Intersection intersectPolygonRectangle(@Nonnull List<Point2D> points, @Nonnull Point2D r0, @Nonnull Point2D r1) {
@@ -2737,7 +2737,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
         inter3 = Intersections.intersectLinePolygon(bottomRight, bottomLeft, points);
         inter4 = Intersections.intersectLinePolygon(bottomLeft, topLeft, points);
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         result.addAll(inter1.getIntersections());
@@ -2761,10 +2761,10 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
      * @return computed intersection
      */
     public static Intersection intersectRayRay(Point2D a0, Point2D a1, Point2D b0, Point2D b1) {
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
-        
-        final double a0y, b1x, b0x, b0y, b1y, a0x, a1y        ;
+
+        final double a0y, b1x, b0x, b0y, b1y, a0x, a1y;
         a0y = a0.getY();
         b1x = b1.getX();
         b0x = b0.getX();
@@ -2782,7 +2782,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
             double ua = ua_t / u_b;
 
             status = Intersection.Status.INTERSECTION;
-            result.add(new AbstractMap.SimpleEntry<>(ua, new Point2D(
+            result.add(new Intersection.IntersectionPoint(ua, new Point2D(
                     a0x + ua * (a1x - a0x),
                     a0y + ua * (a1y - a0y)
             )
@@ -2799,7 +2799,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
     }
 
     public static Intersection intersectRectangleRectangle(double ax, double ay, double aw, double ah,
-            double bx, double by, double bw, double bh) {
+                                                           double bx, double by, double bw, double bh) {
         return intersectRectangleRectangle(
                 new Point2D(ax, ay), new Point2D(ax + aw, ay + ah),
                 new Point2D(bx, by), new Point2D(bx + bw, by + bh));
@@ -2828,7 +2828,7 @@ public static Intersection intersectEllipseRectangle(@Nonnull Point2D c, double 
         inter3 = Intersections.intersectLineRectangle(bottomRight, bottomLeft, b0, b1);
         inter4 = Intersections.intersectLineRectangle(bottomLeft, topLeft, b0, b1);
 
-        List<Map.Entry<Double, Point2D>> result = new ArrayList<>();
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
 
         result.addAll(inter1.getIntersections());

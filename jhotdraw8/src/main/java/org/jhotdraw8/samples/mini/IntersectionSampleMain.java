@@ -3,12 +3,6 @@
  */
 package org.jhotdraw8.samples.mini;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +33,13 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.Beziers;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * IntersectionSampleMain.
@@ -542,8 +543,8 @@ public class IntersectionSampleMain extends Application {
 
             if (isect != null) {
                 double r = 3.5;
-                for (Map.Entry<Double, Point2D> entry : isect.getIntersections()) {
-                    Point2D p = entry.getValue();
+                for (Intersection.IntersectionPoint entry : isect.getIntersections()) {
+                    Point2D p = entry.getPoint();
                     System.out.println("  p:" + p);
                     double x = p.getX();
                     double y = p.getY();

@@ -12,11 +12,14 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 
 /**
@@ -31,6 +34,8 @@ import java.awt.geom.PathIterator;
  */
 public abstract class AbstractElbowLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
+
+    private final Path2D.Double path = new Path2D.Double();
 
     public AbstractElbowLineConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
@@ -140,7 +145,6 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        // FIXME include markers in path
         return Shapes.awtShapeFromFX(new Line(
                 getNonnull(START_X).getConvertedValue(),
                 getNonnull(START_Y).getConvertedValue(),
@@ -170,4 +174,31 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     @Nullable
     public abstract CssSize getElbowOffset();
 
+
+    @Override
+    public void layout(@Nonnull RenderContext ctx) {
+        Point2D start = getNonnull(START).getConvertedValue();
+        Point2D end = getNonnull(END).getConvertedValue();
+        Connector startConnector = get(START_CONNECTOR);
+        Connector endConnector = get(END_CONNECTOR);
+        Figure startTarget = get(START_TARGET);
+        Figure endTarget = get(END_TARGET);
+        if (startConnector != null && startTarget != null) {
+            start = startConnector.getPositionInWorld(this, startTarget);
+        }
+        if (endConnector != null && endTarget != null) {
+            end = endConnector.getPositionInWorld(this, endTarget);
+        }
+
+        // We must switch off rotations for the following computations
+        // because
+        if (startConnector != null && startTarget != null) {
+            final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end));
+            set(START, new CssPoint2D(p));
+        }
+        if (endConnector != null && endTarget != null) {
+            final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end));
+            set(END, new CssPoint2D(p));
+        }
+    }
 }

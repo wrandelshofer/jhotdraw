@@ -11,12 +11,13 @@
  */
 package org.jhotdraw8.geom;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.Nonnull;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Describes the result of an intersection test.
@@ -41,45 +42,85 @@ import org.jhotdraw8.annotation.Nonnull;
  */
 public class Intersection {
 
+    public static class IntersectionPoint {
+        /**
+         * The 'time' value of the parametric function at the intersection.
+         */
+        final double t;
+        /**
+         * The point of intersection.
+         */
+        final Point2D point;
+        /**
+         * The tangent vector of the intersection.
+         */
+        final Point2D tangent;
+
+        public IntersectionPoint(double t, Point2D point) {
+            this(t, point, new Point2D(0, -1));
+        }
+
+        public IntersectionPoint(double t, Point2D point, Point2D tangent) {
+            this.t = t;
+            this.point = point;
+            this.tangent = tangent;
+        }
+
+        public double getT() {
+            return t;
+        }
+
+        public Point2D getPoint() {
+            return point;
+        }
+
+        public Point2D getTangent() {
+            return tangent;
+        }
+    }
+
+
     @Nonnull
-    private final List<Map.Entry<Double, Point2D>> intersections;
+    private final List<IntersectionPoint> intersections;
     private final Status status;
 
-    public Intersection(@Nonnull List<Map.Entry<Double, Point2D>> intersections) {
+    public Intersection(@Nonnull List<IntersectionPoint>  intersections) {
         this(intersections.isEmpty() ? Status.NO_INTERSECTION : Status.INTERSECTION, intersections);
     }
     public Intersection(Status status) {
         this(status, Collections.emptyList());
     }
 
-    public Intersection(Status status, @Nonnull List<Map.Entry<Double, Point2D>> intersections) {
+    public Intersection(Status status, @Nonnull List<IntersectionPoint> intersections) {
         if (status == Status.INTERSECTION && intersections.isEmpty()
                 || status != Status.INTERSECTION && !intersections.isEmpty()) {
             throw new IllegalArgumentException("status=" + status + " intersections=" + intersections);
         }
-        intersections.sort((a,b)->Double.compare(a.getKey(),b.getKey()));
+        intersections.sort(Comparator.comparingDouble(IntersectionPoint::getT));
+
         this.intersections = Collections.unmodifiableList(intersections);
         this.status = status;
     }
 
     @Nonnull
-    public List<Map.Entry<Double, Point2D>> getIntersections() {
+    public List<IntersectionPoint> getIntersections() {
         return intersections;
     }
 
     public Point2D getLastPoint() {
-        return intersections.get(intersections.size()-1).getValue();
+        return intersections.get(intersections.size() - 1).getPoint();
     }
 
     public double getLastT() {
-        return intersections.get(intersections.size()-1).getKey();
+        return intersections.get(intersections.size() - 1).getT();
     }
+
     public double getFirstT() {
-        return intersections.get(0).getKey();
+        return intersections.get(0).getT();
     }
 
     public List<Point2D> getPoints() {
-        return intersections.stream().map(Map.Entry::getValue).collect(Collectors.toList());
+        return intersections.stream().map(IntersectionPoint::getPoint).collect(Collectors.toList());
     }
 
     public Status getStatus() {
@@ -87,7 +128,7 @@ public class Intersection {
     }
 
     public List<Double> getTs() {
-        return intersections.stream().map(Map.Entry::getKey).collect(Collectors.toList());
+        return intersections.stream().map(IntersectionPoint::getT).collect(Collectors.toList());
     }
 
     public boolean isEmpty() {

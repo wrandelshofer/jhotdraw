@@ -45,7 +45,7 @@ public interface Connector {
      * @return A tangent vector on the target figure in local coordinates of the
      * target figure.
      */
-        default Point2D getTangentInLocal( Figure connection,  Figure target) {
+    default Point2D getTangentInLocal(Figure connection, Figure target) {
         return new Point2D(1.0, 0.0);
     }
 

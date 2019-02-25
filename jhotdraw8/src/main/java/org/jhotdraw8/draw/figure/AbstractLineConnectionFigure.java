@@ -3,12 +3,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
@@ -30,7 +24,10 @@ import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
-import org.jhotdraw8.draw.render.RenderContext;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Base class for line connection figure.
@@ -167,32 +164,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         return true;
     }
 
-    @Override
-    public void layout(@Nonnull RenderContext ctx) {
-        Point2D start = getNonnull(START).getConvertedValue();
-        Point2D end = getNonnull(END).getConvertedValue();
-        Connector startConnector = get(START_CONNECTOR);
-        Connector endConnector = get(END_CONNECTOR);
-        Figure startTarget = get(START_TARGET);
-        Figure endTarget = get(END_TARGET);
-        if (startConnector != null && startTarget != null) {
-            start = startConnector.getPositionInWorld(this, startTarget);
-        }
-        if (endConnector != null && endTarget != null) {
-            end = endConnector.getPositionInWorld(this, endTarget);
-        }
-
-        // We must switch off rotations for the following computations
-        // because
-        if (startConnector != null && startTarget != null) {
-            final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end));
-                set(START,new CssPoint2D( p));
-        }
-        if (endConnector != null && endTarget != null) {
-            final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end));
-                set(END, new CssPoint2D(p));
-        }
-    }
 
     @Override
     public void removeAllLayoutSubjects() {
