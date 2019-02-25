@@ -114,11 +114,11 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         final String startMarkerStr = getMarkerStartShape();
 
         ObservableList<Double> points = lineNode.getPoints();
-        int size = points.size();
 
         points.setAll(path.getPoints());
+        int size = points.size();
         Point2D p0, p1, p3, p2;
-        if (path.getPoints().size() > 4) {
+        if (size > 4) {
             p0 = new Point2D(points.get(0), points.get(1));
             p1 = new Point2D(points.get(2), points.get(3));
             p3 = new Point2D(points.get(size - 2), points.get(size - 1));
