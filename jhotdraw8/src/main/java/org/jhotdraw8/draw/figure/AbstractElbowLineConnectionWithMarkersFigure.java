@@ -16,6 +16,14 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
@@ -24,6 +32,7 @@ import org.jhotdraw8.io.UnitConverter;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.util.List;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
@@ -66,6 +75,36 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         return g;
     }
 
+    @Override
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+        if (handleType == HandleType.SELECT) {
+            list.add(new LineOutlineHandle(this));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new PathIterableOutlineHandle(this, true));
+            if (get(START_CONNECTOR) == null) {
+                list.add(new MoveHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE));
+            } else {
+                list.add(new SelectionHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
+            }
+            if (get(END_CONNECTOR) == null) {
+                list.add(new MoveHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE));
+            } else {
+                list.add(new SelectionHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
+            }
+        } else if (handleType == HandleType.RESIZE) {
+            list.add(new PathIterableOutlineHandle(this, true));
+            list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
+            list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
+        } else if (handleType == HandleType.POINT) {
+            list.add(new PathIterableOutlineHandle(this, true));
+            list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, START, START_CONNECTOR, START_TARGET));
+            list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, END, END_CONNECTOR, END_TARGET));
+        } else if (handleType == HandleType.TRANSFORM) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+        } else {
+            super.createHandles(handleType, list);
+        }
+    }
     /**
      * This method can be overridden by a subclass to apply styles to the line
      * node.
@@ -124,8 +163,8 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             p3 = new Point2D(points.get(size - 2), points.get(size - 1));
             p2 = new Point2D(points.get(size - 4), points.get(size - 3));
         } else {
-            p3 = p0 = new Point2D(points.get(0), points.get(1));
-            p2 = p1 = new Point2D(points.get(2), points.get(3));
+            p2 = p0 = new Point2D(points.get(0), points.get(1));
+            p3 = p1 = new Point2D(points.get(2), points.get(3));
         }
         updateMarkerNode(ctx, g, startMarkerNode, p0,
                 p1, startMarkerStr, getMarkerStartScaleFactor());
