@@ -45,16 +45,7 @@ public class NullableCssSizeStyleableFigureKey extends AbstractStyleableFigureKe
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param mask         The dirty mask.
-     * @param defaultValue The default value.
-     */
-    public NullableCssSizeStyleableFigureKey(String name, DirtyMask mask, @Nullable CssSize defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), false, defaultValue);
-    }
+
 
     /**
      * Creates a new instance with the specified name, mask and default value.
@@ -63,7 +54,7 @@ public class NullableCssSizeStyleableFigureKey extends AbstractStyleableFigureKe
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public NullableCssSizeStyleableFigureKey(String name, DirtyMask mask, boolean nullable, @Nullable CssSize defaultValue) {
+    public NullableCssSizeStyleableFigureKey(String name, DirtyMask mask, @Nullable CssSize defaultValue) {
         super(null, name, CssSize.class, true, mask, defaultValue);
         Function<Styleable, StyleableProperty<CssSize>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

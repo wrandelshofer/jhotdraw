@@ -887,7 +887,7 @@
       </fileset>
     </copy>
     <jar file="${dist}/${ant.project.name}-src.jar">
-      <fileset dir="${src}/main">
+      <fileset dir="${src}/main/java">
         <exclude name=".*"/>
       </fileset>
       <fileset dir=".">
