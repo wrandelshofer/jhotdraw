@@ -11,7 +11,7 @@
                padding="4 14 4 6"/>
   </Layer>
   <Layer id="content">
-    <MLClassifier bounds="190 110 170 85"
+    <MLClassifier bounds="190 110 180 85"
                   compartments="{text:['Supports the creation of document-based applications.']}"
                   id="requirement.ApplicationFramework"
                   keyword="requirement"
@@ -19,7 +19,7 @@
                   name="JHotDraw Application Framework"
                   nameFont="12 Arial Bold"
                   padding="4"/>
-    <MLClassifier bounds="400 290 140 85"
+    <MLClassifier bounds="370 300 130 85"
                   compartments="{text:['Supports macOS and Windows guidelines.']}"
                   id="requirement.UserInterfaceGuidelines"
                   keyword="requirement"
@@ -27,7 +27,7 @@
                   name="User Interface Guidelines"
                   nameFont="12 Arial Bold"
                   padding="4"/>
-    <MLClassifier bounds="210 290 120 85"
+    <MLClassifier bounds="210 300 130 85"
                   compartments="{text:['Builds on JavaFX.']}"
                   id="requirement.JavaFX"
                   keyword="requirement"
@@ -35,23 +35,25 @@
                   name="JavaFX"
                   nameFont="12 Arial Bold"
                   padding="4"/>
-    <MLEdge end="321.5523465703971 195"
-            endConnector="path relative(47.05882352941176%,47.368421052631575%)"
+    <MLEdge elbowOffset="50%"
+            end="274.70588235294116 195"
+            endConnector="path relative(47.05882352941176%,100%)"
             endTarget="requirement.ApplicationFramework"
             id="umledge1"
             keyword="containment"
-            start="431.02527075812276 290"
-            startConnector="path relative(57.14285714285714%,50%)"
+            start="435 300"
+            startConnector="path relative(50%,0%)"
             startTarget="requirement.UserInterfaceGuidelines"/>
-    <MLEdge end="270 195"
-            endConnector="path relative(47.05882352941176%,47.368421052631575%)"
+    <MLEdge elbowOffset="50%"
+            end="274.70588235294116 195"
+            endConnector="path relative(47.05882352941176%,100%)"
             endTarget="requirement.ApplicationFramework"
             id="umledge2"
             keyword="containment"
-            start="270 290"
-            startConnector="path relative(50%,50%)"
+            start="275 300"
+            startConnector="path relative(50%,0%)"
             startTarget="requirement.JavaFX"/>
-    <MLClassifier bounds="20 290 130 85"
+    <MLClassifier bounds="50 300 130 85"
                   compartments="{text:['Builds on Java SE 8.']}"
                   id="requirement.JavaSE8"
                   keyword="requirement"
@@ -59,13 +61,14 @@
                   name="Java SE 8"
                   nameFont="12 Arial Bold"
                   padding="4"/>
-    <MLEdge end="224.58483754512636 195"
-            endConnector="path relative(47.05882352941176%,47.368421052631575%)"
+    <MLEdge elbowOffset="50%"
+            end="274.70588235294116 195"
+            endConnector="path relative(47.05882352941176%,100%)"
             endTarget="requirement.ApplicationFramework"
             id="umledge6"
             keyword="containment"
-            start="128.14440433212997 290"
-            startConnector="path relative(50%,50%)"
+            start="115 300"
+            startConnector="path relative(50%,0%)"
             startTarget="requirement.JavaSE8"/>
   </Layer>
 </Drawing>
