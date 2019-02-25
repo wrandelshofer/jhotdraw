@@ -3,10 +3,6 @@
  */
 package org.jhotdraw8.geom;
 
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import static java.lang.Math.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -18,6 +14,20 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
+
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan2;
+import static java.lang.Math.ceil;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * Some geometric utilities.
@@ -1180,7 +1190,7 @@ public class Geom {
     }
 
     /**
-     * Given a point p on a line, computes t.
+     * Given a point p on a line, computes the value of the argument 't'.
      *
      * @param px point
      * @param py point
@@ -1188,9 +1198,9 @@ public class Geom {
      * @param y1 start of line
      * @param x2 end of line
      * @param y2 end of line
-     * @return t
+     * @return argument 't' at point px,py on the line.
      */
-    public static double pointOnLine(double px, double py, double x1, double y1, double x2, double y2) {
+    public static double argumentOnLine(double px, double py, double x1, double y1, double x2, double y2) {
         double w = x2 - x1;
         double h = y2 - y1;
         if (Math.abs(w) > Math.abs(h)) {
@@ -1218,8 +1228,8 @@ public class Geom {
      * @param x1 point 2 of the line
      * @param y1 point 2 of the line
      * @param t where to split
-     * @param leftLineTo if not null, accepts the curve from x1,y1 to t
-     * @param rightLineTo if not null, accepts the curve from t to x2,y2
+     * @param leftLineTo if not null, accepts the curve from x1,y1 to t1
+     * @param rightLineTo if not null, accepts the curve from t1 to x2,y2
      */
     public static void splitLine(double x0, double y0, double x1, double y1, double t,
                                  @Nullable Double2Consumer leftLineTo,
@@ -1233,5 +1243,11 @@ public class Geom {
         if (rightLineTo != null) {
             rightLineTo.accept(x1, y1);
         }
+    }
+
+    public static double squaredMagnitude(Point2D p) {
+        double x = p.getX();
+        double y = p.getY();
+        return x * x + y * y;
     }
 }

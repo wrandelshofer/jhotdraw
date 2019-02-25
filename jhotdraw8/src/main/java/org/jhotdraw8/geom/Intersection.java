@@ -13,6 +13,7 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,38 +45,58 @@ public class Intersection {
 
     public static class IntersectionPoint {
         /**
-         * The 'time' value of the parametric function at the intersection.
+         * The value of the argument 't' of the first parametric function at the intersection.
          */
-        final double t;
+        final double t1;
+        /**
+         * The value of the argument 't' of the second parametric function at the intersection.
+         */
+        final double t2;
         /**
          * The point of intersection.
          */
         final Point2D point;
         /**
-         * The tangent vector of the intersection.
+         * The tangent vector at the intersection of the first parametric function.
+         * This vector is not normalized.
          */
-        final Point2D tangent;
+        final Point2D tangent1;
+        /**
+         * The tangent vector at the intersection of the second parametric function.
+         * This vector is not normalized.
+         */
+        final Point2D tangent2;
 
-        public IntersectionPoint(double t, Point2D point) {
-            this(t, point, new Point2D(0, -1));
+        public IntersectionPoint(Point2D point, double t1) {
+            this(point, t1, new Point2D(1, 0), 0, new Point2D(0, -1));
         }
 
-        public IntersectionPoint(double t, Point2D point, Point2D tangent) {
-            this.t = t;
+        public IntersectionPoint(Point2D point, double t1, Point2D tangent1, double t2, Point2D tangent2) {
             this.point = point;
-            this.tangent = tangent;
+            this.t1 = t1;
+            this.tangent1 = tangent1;
+            this.t2 = t2;
+            this.tangent2 = tangent2;
         }
 
-        public double getT() {
-            return t;
+        public double getT1() {
+            return t1;
         }
 
         public Point2D getPoint() {
             return point;
         }
 
-        public Point2D getTangent() {
-            return tangent;
+        public Point2D getTangent1() {
+            return tangent1;
+        }
+
+        public double getT2() {
+            return t2;
+        }
+
+        public Point2D getTangent2() {
+            return tangent2;
         }
     }
 
@@ -96,7 +117,7 @@ public class Intersection {
                 || status != Status.INTERSECTION && !intersections.isEmpty()) {
             throw new IllegalArgumentException("status=" + status + " intersections=" + intersections);
         }
-        intersections.sort(Comparator.comparingDouble(IntersectionPoint::getT));
+        intersections.sort(Comparator.comparingDouble(IntersectionPoint::getT1));
 
         this.intersections = Collections.unmodifiableList(intersections);
         this.status = status;
@@ -112,11 +133,16 @@ public class Intersection {
     }
 
     public double getLastT() {
-        return intersections.get(intersections.size() - 1).getT();
+        return intersections.get(intersections.size() - 1).getT1();
+    }
+
+    @Nullable
+    public IntersectionPoint getLastIntersectionPoint() {
+        return intersections.isEmpty() ? null : intersections.get(intersections.size() - 1);
     }
 
     public double getFirstT() {
-        return intersections.get(0).getT();
+        return intersections.get(0).getT1();
     }
 
     public List<Point2D> getPoints() {
@@ -128,7 +154,7 @@ public class Intersection {
     }
 
     public List<Double> getTs() {
-        return intersections.stream().map(IntersectionPoint::getT).collect(Collectors.toList());
+        return intersections.stream().map(IntersectionPoint::getT1).collect(Collectors.toList());
     }
 
     public boolean isEmpty() {

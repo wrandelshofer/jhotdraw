@@ -1148,6 +1148,7 @@ public class Shapes {
 
     public static PathIterator pathIteratorFromPoints(@Nonnull List<javafx.geometry.Point2D> points, boolean closed, int windingRule, @Nullable AffineTransform tx) {
         return new PathIterator() {
+            private final int size = points.size();
             int index = 0;
             @Nonnull
             float[] srcf = new float[2];
@@ -1156,7 +1157,7 @@ public class Shapes {
 
             @Override
             public int currentSegment(float[] coords) {
-                if (index < points.size()) {
+                if (index < size) {
                     javafx.geometry.Point2D p = points.get(index);
                     if (tx == null) {
                         coords[0] = (float) p.getX();
@@ -1167,7 +1168,7 @@ public class Shapes {
                         tx.transform(srcf, 0, coords, 0, 1);
                     }
                     return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
-                } else if (index == points.size() && closed) {
+                } else if (index == size && closed) {
                     return PathIterator.SEG_CLOSE;
                 } else {
                     throw new IndexOutOfBoundsException();
@@ -1176,7 +1177,7 @@ public class Shapes {
 
             @Override
             public int currentSegment(double[] coords) {
-                if (index < points.size()) {
+                if (index < size) {
                     javafx.geometry.Point2D p = points.get(index);
                     if (tx == null) {
                         coords[0] = p.getX();
@@ -1187,7 +1188,7 @@ public class Shapes {
                         tx.transform(srcd, 0, coords, 0, 1);
                     }
                     return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
-                } else if (index == points.size() && closed) {
+                } else if (index == size && closed) {
                     return PathIterator.SEG_CLOSE;
                 } else {
                     throw new IndexOutOfBoundsException();
@@ -1201,13 +1202,84 @@ public class Shapes {
 
             @Override
             public boolean isDone() {
-                return index >= points.size() + (closed ? 1 : 0);
+                return index >= size + (closed ? 1 : 0);
             }
 
             @Override
             public void next() {
-                if (index < Integer.MAX_VALUE) {
+                if (index < size) {
                     index++;
+                }
+            }
+
+        };
+    }
+
+    public static PathIterator pathIteratorFromPointCoords(@Nonnull List<Double> coordsList, boolean closed, int windingRule, @Nullable AffineTransform tx) {
+        return new PathIterator() {
+            private final int size = coordsList.size();
+            int index = 0;
+            @Nonnull
+            float[] srcf = new float[2];
+            @Nonnull
+            double[] srcd = new double[2];
+
+            @Override
+            public int currentSegment(float[] coords) {
+                if (index < size) {
+                    double x = coordsList.get(index);
+                    double y = coordsList.get(index + 1);
+                    if (tx == null) {
+                        coords[0] = (float) x;
+                        coords[1] = (float) y;
+                    } else {
+                        srcf[0] = (float) x;
+                        srcf[1] = (float) y;
+                        tx.transform(srcf, 0, coords, 0, 1);
+                    }
+                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
+                } else if (index == size && closed) {
+                    return PathIterator.SEG_CLOSE;
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+
+            @Override
+            public int currentSegment(double[] coords) {
+                if (index < size) {
+                    double x = coordsList.get(index);
+                    double y = coordsList.get(index + 1);
+                    if (tx == null) {
+                        coords[0] = x;
+                        coords[1] = y;
+                    } else {
+                        srcd[0] = x;
+                        srcd[1] = y;
+                        tx.transform(srcd, 0, coords, 0, 1);
+                    }
+                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
+                } else if (index == size && closed) {
+                    return PathIterator.SEG_CLOSE;
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+
+            @Override
+            public int getWindingRule() {
+                return windingRule;
+            }
+
+            @Override
+            public boolean isDone() {
+                return index >= size + (closed ? 1 : 0);
+            }
+
+            @Override
+            public void next() {
+                if (index < size) {
+                    index += 2;
                 }
             }
 

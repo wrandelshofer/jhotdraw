@@ -24,8 +24,8 @@ import java.util.List;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.jhotdraw8.geom.Geom.argumentOnLine;
 import static org.jhotdraw8.geom.Geom.lerp;
-import static org.jhotdraw8.geom.Geom.pointOnLine;
 
 /**
  * Provides a collection of intersection tests.
@@ -150,7 +150,7 @@ public class Intersections {
      * Computes the intersection between quadratic bezier curve 'a' and
      * quadratic bezier curve 'b'.
      * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
+     * The intersection will contain the parameters 't1' of curve 'a' in range
      * [0,1].
      *
      * @param a0 control point P0 of 'a'
@@ -245,7 +245,7 @@ public class Intersections {
                         if (0 <= xRoot && xRoot <= 1) {
                             for (int k = 0; k < yRoots.length; k++) {
                                 if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                    result.add(new Intersection.IntersectionPoint(xRoot, c22.multiply(s * s).add(c21.multiply(s).add(c20))));
+                                    result.add(new Intersection.IntersectionPoint(c22.multiply(s * s).add(c21.multiply(s).add(c20)), xRoot));
                                     break checkRoots;
                                 }
                             }
@@ -269,7 +269,7 @@ public class Intersections {
      * Computes the intersection between a quadratic bezier curve 'a' and cubic
      * bezier curve 'b'.
      * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
+     * The intersection will contain the parameters 't1' of curve 'a' in range
      * [0,1].
      *
      * @param a0 control point P0 of 'a'
@@ -377,7 +377,7 @@ public class Intersections {
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.add(new Intersection.IntersectionPoint(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
+                                result.add(new Intersection.IntersectionPoint(c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20))), xRoot));
                                 break checkRoots;
                             }
                         }
@@ -420,7 +420,7 @@ public class Intersections {
      * Computes the intersection between quadratic bezier curve 'p' and the
      * given ellipse.
      * <p>
-     * The intersection will contain the parameters 't' of curve 'p' in range
+     * The intersection will contain the parameters 't1' of curve 'p' in range
      * [0,1].
      *
      * @param p0 control point P0 of 'p'
@@ -465,7 +465,7 @@ public class Intersections {
             double t = roots[i];
 
             if (0 <= t && t <= 1) {
-                result.add(new Intersection.IntersectionPoint(t, c2.multiply(t * t).add(c1.multiply(t).add(c0))));
+                result.add(new Intersection.IntersectionPoint(c2.multiply(t * t).add(c1.multiply(t).add(c0)), t));
             }
         }
 
@@ -483,7 +483,7 @@ public class Intersections {
      * Computes the intersection between quadratic bezier curve 'p' and the line
      * 'a'.
      * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
+     * The intersection will contain the parameters 't1' of curve 'a' in range
      * [0,1].
      *
      * @param p0 control point P0 of 'p'
@@ -552,16 +552,16 @@ public class Intersections {
                 if (a0x == a1x) {
                     if (topLeft.getY() <= p6.getY() && p6.getY() <= bottomRight.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(t, p6));
+                        result.add(new Intersection.IntersectionPoint(p6, t));
                     }
                 } else if (a0y == a1y) {
                     if (topLeft.getX() <= p6.getX() && p6.getX() <= bottomRight.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(t, p6));
+                        result.add(new Intersection.IntersectionPoint(p6, t));
                     }
                 } else if (gte(p6, topLeft) && lte(p6, bottomRight)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new Intersection.IntersectionPoint(t, p6));
+                    result.add(new Intersection.IntersectionPoint(p6, t));
                 }
             }
         }
@@ -678,11 +678,11 @@ public class Intersections {
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
                 if (abs(dd - bestDistance) < EPSILON) {
-                    result.add(new Intersection.IntersectionPoint(tt, p));
+                    result.add(new Intersection.IntersectionPoint(p, tt));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;
                     result.clear();
-                    result.add(new Intersection.IntersectionPoint(tt, p));
+                    result.add(new Intersection.IntersectionPoint(p, tt));
                 }
             }
         }
@@ -1065,7 +1065,7 @@ public class Intersections {
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.add(new Intersection.IntersectionPoint(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))));
+                                result.add(new Intersection.IntersectionPoint(c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20))), xRoot));
                                 break checkRoots;
                             }
                         }
@@ -1168,7 +1168,7 @@ public class Intersections {
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            result.add(new Intersection.IntersectionPoint(t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))));
+            result.add(new Intersection.IntersectionPoint(c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0))), t));
         }
 
         if (result.size() > 0) {
@@ -1267,16 +1267,16 @@ public class Intersections {
                 if (a0x == a1x) {
                     if (topLeft.getY() <= p10.getY() && p10.getY() <= bottomRight.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(t, p10));
+                        result.add(new Intersection.IntersectionPoint(p10, t));
                     }
                 } else if (a0y == a1y) {
                     if (topLeft.getX() <= p10.getX() && p10.getX() <= bottomRight.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(t, p10));
+                        result.add(new Intersection.IntersectionPoint(p10, t));
                     }
                 } else if (gte(p10, topLeft) && lte(p10, bottomRight)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new Intersection.IntersectionPoint(t, p10));
+                    result.add(new Intersection.IntersectionPoint(p10, t));
                 }
             }
         }
@@ -1390,11 +1390,11 @@ public class Intersections {
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
                 if (abs(dd - bestDistance) < EPSILON) {
-                    result.add(new Intersection.IntersectionPoint(t, p));
+                    result.add(new Intersection.IntersectionPoint(p, t));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;
                     result.clear();
-                    result.add(new Intersection.IntersectionPoint(t, p));
+                    result.add(new Intersection.IntersectionPoint(p, t));
                 }
             }
         }
@@ -1475,7 +1475,7 @@ public class Intersections {
      * @param r1 the radius of circle 1
      * @param c2 the center of circle 2
      * @param r2 the radius of circle 2
-     * @return computed intersection
+     * @return computed intersection with parameters of circle 2 at the intersection point
      */
     public static Intersection intersectCircleCircle(Point2D c1, double r1, @Nonnull Point2D c2, double r2) {
         List<Intersection.IntersectionPoint> result = new ArrayList<>();
@@ -1501,16 +1501,16 @@ public class Intersections {
             Point2D p = lerp(c1, c2, a / c_dist);
             double b = h / c_dist;
 
-            // FIXME compute t
-            result.add(new Intersection.IntersectionPoint(Double.NaN, new Point2D(
+            // FIXME compute t1 of circle b
+            result.add(new Intersection.IntersectionPoint(new Point2D(
                     p.getX() - b * (c2.getY() - c1.getY()),
                     p.getY() + b * (c2.getX() - c1.getX())
-            )
+            ), Double.NaN
             ));
-            result.add(new Intersection.IntersectionPoint(Double.NaN, new Point2D(
+            result.add(new Intersection.IntersectionPoint(new Point2D(
                     p.getX() + b * (c2.getY() - c1.getY()),
                     p.getY() - b * (c2.getX() - c1.getX())
-            )
+            ), Double.NaN
             ));
         }
         return new Intersection(status, result);
@@ -1577,7 +1577,7 @@ public class Intersections {
             if (dd <= pr * pr) {
                 status = Intersection.Status.INTERSECTION;
                 // FIXME compute t
-                result.add(new Intersection.IntersectionPoint(Double.NaN, p));
+                result.add(new Intersection.IntersectionPoint(p, Double.NaN));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
@@ -1739,7 +1739,7 @@ public class Intersections {
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
                         // FIXME compute angle in radians
-                        result.add(new Intersection.IntersectionPoint(Double.NaN, new Point2D(xRoots[x], yRoots[y])));
+                        result.add(new Intersection.IntersectionPoint(new Point2D(xRoots[x], yRoots[y]), Double.NaN));
                     }
                 }
             }
@@ -1914,16 +1914,16 @@ public class Intersections {
                 if (a0x == a1x) {
                     if (topLeft.getY() <= p6.getY() && p6.getY() <= bottomRight.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
+                        result.add(new Intersection.IntersectionPoint(p6, argumentOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y)));
                     }
                 } else if (a0y == a1y) {
                     if (topLeft.getX() <= p6.getX() && p6.getX() <= bottomRight.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
+                        result.add(new Intersection.IntersectionPoint(p6, argumentOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y)));
                     }
                 } else if (gte(p6, topLeft) && lte(p6, bottomRight)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new Intersection.IntersectionPoint(pointOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y), p6));
+                    result.add(new Intersection.IntersectionPoint(p6, argumentOnLine(p6.getX(), p6.getY(), a0x, a0y, a1x, a1y)));
                 }
             }
         }
@@ -2046,16 +2046,16 @@ public class Intersections {
                 if (a0x == a1x) {
                     if (amin.getY() <= p10.getY() && p10.getY() <= amax.getY()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
+                        result.add(new Intersection.IntersectionPoint(p10, argumentOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y)));
                     }
                 } else if (a0y == a1y) {
                     if (amin.getX() <= p10.getX() && p10.getX() <= amax.getX()) {
                         status = Intersection.Status.INTERSECTION;
-                        result.add(new Intersection.IntersectionPoint(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
+                        result.add(new Intersection.IntersectionPoint(p10, argumentOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y)));
                     }
                 } else if (gte(p10, amin) && lte(p10, amax)) {
                     status = Intersection.Status.INTERSECTION;
-                    result.add(new Intersection.IntersectionPoint(pointOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y), p10));
+                    result.add(new Intersection.IntersectionPoint(p10, argumentOnLine(p10.getX(), p10.getY(), a0x, a0y, a1x, a1y)));
                 }
             }
         }
@@ -2144,17 +2144,17 @@ public class Intersections {
             } else {
                 status = Intersection.Status.INTERSECTION;
                 if (0 <= t1 && t1 <= 1) {
-                    result.add(new Intersection.IntersectionPoint(t1, lerp(x0, y0, x1, y1, t1)));
+                    result.add(new Intersection.IntersectionPoint(lerp(x0, y0, x1, y1, t1), t1));
                 }
                 if (0 <= t2 && t2 <= 1) {
-                    result.add(new Intersection.IntersectionPoint(t2, lerp(x0, y0, x1, y1, t2)));
+                    result.add(new Intersection.IntersectionPoint(lerp(x0, y0, x1, y1, t2), t2));
                 }
             }
         } else {
             double t = (-b) / (2 * a);
             if (0 <= t && t <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.add(new Intersection.IntersectionPoint(t, lerp(x0, y0, x1, y1, t)));
+                result.add(new Intersection.IntersectionPoint(lerp(x0, y0, x1, y1, t), t));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
@@ -2166,7 +2166,7 @@ public class Intersections {
     /**
      * Computes the intersection between a line and an ellipse.
      * <p>
-     * The intersection will contain the parameters 't' of the line in range
+     * The intersection will contain the parameters 't1' of the line in range
      * [0,1].
      *
      * @param e  the bounds of the ellipse
@@ -2183,7 +2183,7 @@ public class Intersections {
     /**
      * Computes the intersection between a line and an ellipse.
      * <p>
-     * The intersection will contain the parameters 't' of the line in range
+     * The intersection will contain the parameters 't1' of the line in range
      * [0,1].
      *
      * @param ec the center of the ellipse
@@ -2233,17 +2233,17 @@ public class Intersections {
             } else {
                 status = Intersection.Status.INTERSECTION;
                 if (0 <= t0 && t0 <= 1) {
-                    result.add(new Intersection.IntersectionPoint(t0, lerp(x0, y0, x1, y1, t0)));
+                    result.add(new Intersection.IntersectionPoint(lerp(x0, y0, x1, y1, t0), t0));
                 }
                 if (0 <= t1 && t1 <= 1) {
-                    result.add(new Intersection.IntersectionPoint(t1, lerp(x0, y0, x1, y1, t1)));
+                    result.add(new Intersection.IntersectionPoint(lerp(x0, y0, x1, y1, t1), t1));
                 }
             }
         } else {
             final double t = -b / a;
             if (0 <= t && t <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.add(new Intersection.IntersectionPoint(t, lerp(x0, y0, x1, y1, t)));
+                result.add(new Intersection.IntersectionPoint(lerp(x0, y0, x1, y1, t), t));
             } else {
                 status = Intersection.Status.NO_INTERSECTION_OUTSIDE;
             }
@@ -2253,27 +2253,35 @@ public class Intersections {
     }
 
     /**
-     * Computes the intersection between two lines 'a' and 'b'
+     * Computes the intersection of line 'a' with line 'b'.
      *
-     * @param a0 point 0 of line 'a'
-     * @param a1 point 1 of line 'a'
-     * @param b0 point 0 of line 'b'
-     * @param b1 point 1 of line 'b'
-     * @return computed intersection
+     * @param a0 start of line 'a'
+     * @param a1 end of line 'a'
+     * @param b0 start of line 'b'
+     * @param b1 end of line 'b'
+     * @return computed intersection with parameters of line 'a' at the intersection point
      */
     public static Intersection intersectLineLine(Point2D a0, Point2D a1, Point2D b0, Point2D b1) {
-        final double a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y;
-        a0x = a0.getX();
-        a0y = a0.getY();
-        a1x = a1.getX();
-        a1y = a1.getY();
-        b0x = b0.getX();
-        b0y = b0.getY();
-        b1x = b1.getX();
-        b1y = b1.getY();
-        return intersectLineLine(a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y);
+        return intersectLineLine(
+                a0.getX(), a0.getY(),
+                a1.getX(), a1.getY(),
+                b0.getX(), b0.getY(),
+                b1.getX(), b1.getY());
     }
 
+    /**
+     * Intersects line 'a' with line 'b'.
+     *
+     * @param a0x start x coordinate of line 'a'
+     * @param a0y start y coordinate of line 'a'
+     * @param a1x end x coordinate of line 'a'
+     * @param a1y end y coordinate of line 'a'
+     * @param b0x start x coordinate of line 'b'
+     * @param b0y start y coordinate of line 'b'
+     * @param b1x end x coordinate of line 'b'
+     * @param b1y end y coordinate of line 'b'
+     * @return computed intersection with parameters of line 'a' at the intersection point
+     */
     public static Intersection intersectLineLine(
             double a0x, double a0y, double a1x, double a1y,
             double b0x, double b0y, double b1x, double b1y) {
@@ -2290,10 +2298,12 @@ public class Intersections {
 
             if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
                 status = Intersection.Status.INTERSECTION;
-                result.add(new Intersection.IntersectionPoint(ua, new Point2D(
+                result.add(new Intersection.IntersectionPoint(new Point2D(
                         a0x + ua * (a1x - a0x),
                         a0y + ua * (a1y - a0y)
-                )
+                ),
+                        ua, new Point2D(a1x - a0x, a1y - a0y),
+                        ub, new Point2D(b1x - b0x, b1y - b0y)
                 ));
             } else {
                 status = Intersection.Status.NO_INTERSECTION;
@@ -2362,11 +2372,64 @@ public class Intersections {
         return new Intersection(result);
     }
 
+    public static Intersection intersectPathIteratorLine(PathIterator pit, Point2D a0, Point2D a1) {
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
+        final double a0x, a0y, a1x, a1y;
+        a0x = a0.getX();
+        a0y = a0.getY();
+        a1x = a1.getX();
+        a1y = a1.getY();
+        final double[] seg = new double[6];
+        double firstx = 0, firsty = 0;
+        double lastx = 0, lasty = 0;
+        double x, y;
+        for (; !pit.isDone(); pit.next()) {
+            Intersection inter;
+            switch (pit.currentSegment(seg)) {
+                case PathIterator.SEG_CLOSE:
+                    inter = Intersections.intersectLineLine(lastx, lasty, firstx, firsty, a0x, a0y, a1x, a1y);
+                    result.addAll(inter.getIntersections());
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    x = seg[4];
+                    y = seg[5];
+                    inter = Intersections.intersectCubicCurveLine(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, a0x, a0y, a1x, a1y);
+                    result.addAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    x = seg[0];
+                    y = seg[1];
+                    inter = Intersections.intersectLineLine(lastx, lasty, x, y, a0x, a0y, a1x, a1y);
+                    result.addAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    lastx = firstx = seg[0];
+                    lasty = firsty = seg[1];
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    x = seg[2];
+                    y = seg[3];
+                    inter = Intersections.intersectQuadraticCurveLine(lastx, lasty, seg[0], seg[1], x, y, a0x, a0y, a1x, a1y);
+                    result.addAll(inter.getIntersections());
+                    lastx = x;
+                    lasty = y;
+                    break;
+            }
+        }
+
+        return new Intersection(result);
+    }
+
     /**
      * Computes the intersection between a line and a point with tolerance
      * radius r.
      * <p>
-     * The returned intersection contain the parameters 't' of the line in range
+     * The returned intersection contain the parameters 't1' of the line in range
      * [0,1].
      * <p>
      * The intersection will have one of the following status:
@@ -2377,24 +2440,24 @@ public class Intersections {
      * <p>
      * This method solves the last equation shown in the list below.
      * <ol>
-     * <li>{@literal p0 + (p1 - p0) · t , 0 ≤ t ≤ 1}<br>
+     * <li>{@literal p0 + (p1 - p0) · t1 , 0 ≤ t1 ≤ 1}<br>
      * : line equation in vector form</li>
-     * <li>{@literal x0 + (x1 - x0) · t, y0 + (y1 - y0) · t }<br>
+     * <li>{@literal x0 + (x1 - x0) · t1, y0 + (y1 - y0) · t1 }<br>
      * : line equation in matrix form</li>
-     * <li>{@literal x0 + Δx · t, y0 + Δy · t }<br>
+     * <li>{@literal x0 + Δx · t1, y0 + Δy · t1 }<br>
      * : partially compacted coefficients</li>
      * <li>{@literal fx, fy }<br>
      * : compacted coefficients in matrix form</li>
      * <li>{@literal (fx - cx)² + (fy - cy)² = 0}<br>
      * : distance to point equation with fx, fy coefficients inserted</li>
-     * <li>{@literal Δx²·Δy²·t² }<br>
-     * {@literal + 2·(Δx·(x0 - cx)+Δy·(y0 - cy))·t }<br>
+     * <li>{@literal Δx²·Δy²·t1² }<br>
+     * {@literal + 2·(Δx·(x0 - cx)+Δy·(y0 - cy))·t1 }<br>
      * {@literal - 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  = 0 }<br>
      * : fx, fy coefficients expanded and equation reordered</li>
-     * <li>{@literal a·t² + b·t + c = 0, 0 ≤ t ≤ 1 }<br>
+     * <li>{@literal a·t1² + b·t1 + c = 0, 0 ≤ t1 ≤ 1 }<br>
      * : final quadratic polynomial
      * </li>
-     * <li>{@literal 2·a·t + b = 0, 0 ≤ t ≤ 1 }<br>
+     * <li>{@literal 2·a·t1 + b = 0, 0 ≤ t1 ≤ 1 }<br>
      * : derivative</li>
      * </ol>
      *
@@ -2425,7 +2488,7 @@ public class Intersections {
             double y = y0 + t * Δy;
             double dd = (x - cx) * (x - cx) + (y - cy) * (y - cy);
             if (dd <= r * r) {
-                result.add(new Intersection.IntersectionPoint(t, new Point2D(x, y)));
+                result.add(new Intersection.IntersectionPoint(new Point2D(x, y), t));
             }
         }
 
@@ -2435,7 +2498,7 @@ public class Intersections {
     /**
      * Computes the intersection between a line and a polygon.
      * <p>
-     * The intersection will contain the parameters 't' of the line in range
+     * The intersection will contain the parameters 't1' of the line in range
      * [0,1].
      *
      * @param a0     point 0 of the line
@@ -2462,7 +2525,7 @@ public class Intersections {
     /**
      * Computes the intersection between a line and a rectangle.
      * <p>
-     * The intersection will contain the parameters 't' of the line in range
+     * The intersection will contain the parameters 't1' of the line in range
      * [0,1].
      *
      * @param a0 point 0 of the line
@@ -2509,6 +2572,36 @@ public class Intersections {
         return new Intersection(result);
     }
 
+    public static Intersection intersectRectangleLine(Bounds r, @Nonnull Point2D a0, @Nonnull Point2D a1) {
+        return intersectRectangleLine(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY(), a0, a1);
+    }
+
+    public static Intersection intersectRectangleLine(
+            double rminx, double rminy, double rmaxx, double rmaxy,
+            @Nonnull Point2D a0, @Nonnull Point2D a1) {
+
+        final Point2D topLeft, bottomRight, topRight, bottomLeft;
+        topLeft = new Point2D(rminx, rminy);
+        bottomRight = new Point2D(rmaxx, rmaxy);
+        topRight = new Point2D(rmaxx, rminy);
+        bottomLeft = new Point2D(rminx, rmaxy);
+
+        final Intersection inter1, inter2, inter3, inter4;
+        inter1 = Intersections.intersectLineLine(topRight, topLeft, a0, a1);
+        inter2 = Intersections.intersectLineLine(bottomRight, topRight, a0, a1);
+        inter3 = Intersections.intersectLineLine(bottomLeft, bottomRight, a0, a1);
+        inter4 = Intersections.intersectLineLine(topLeft, bottomLeft, a0, a1);
+
+        List<Intersection.IntersectionPoint> result = new ArrayList<>();
+        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
+
+        result.addAll(inter1.getIntersections());
+        result.addAll(inter2.getIntersections());
+        result.addAll(inter3.getIntersections());
+        result.addAll(inter4.getIntersections());
+
+        return new Intersection(result);
+    }
     public static Intersection intersectPathIteratorCircle(PathIterator pit, double cx, double cy, double r) {
         List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status = Intersection.Status.NO_INTERSECTION;
@@ -2619,11 +2712,11 @@ public class Intersections {
                 for (Intersection.IntersectionPoint entry : inter.getIntersections()) {
                     final double dd = Geom.squaredDistance(entry.getPoint(), px, py);
                     if (abs(dd - closestDistance) < EPSILON) {
-                        result.add(new Intersection.IntersectionPoint(entry.getT() + i, entry.getPoint()));
+                        result.add(new Intersection.IntersectionPoint(entry.getPoint(), entry.getT1() + i));
                     } else if (dd < closestDistance) {
                         result.clear();
                         closestDistance = dd;
-                        result.add(new Intersection.IntersectionPoint(entry.getT() + i, entry.getPoint()));
+                        result.add(new Intersection.IntersectionPoint(entry.getPoint(), entry.getT1() + i));
                     }
                 }
             }
@@ -2651,7 +2744,7 @@ public class Intersections {
         if (distance - radius < EPSILON) {
             status = Intersection.Status.INTERSECTION;
             // FIXME compute t with atan2/2*PI
-            result.add(new Intersection.IntersectionPoint(0.0, point));
+            result.add(new Intersection.IntersectionPoint(point, 0.0));
         } else if (distance < radius) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
@@ -2682,7 +2775,7 @@ public class Intersections {
         Intersection.Status status;
         if (abs(det) - 1 == EPSILON) {
             status = Intersection.Status.INTERSECTION;
-            result.add(new Intersection.IntersectionPoint(0.0, point));
+            result.add(new Intersection.IntersectionPoint(point, 0.0));
         } else if (det < 1) {
             status = Intersection.Status.NO_INTERSECTION_INSIDE;
         } else {
@@ -2782,10 +2875,10 @@ public class Intersections {
             double ua = ua_t / u_b;
 
             status = Intersection.Status.INTERSECTION;
-            result.add(new Intersection.IntersectionPoint(ua, new Point2D(
+            result.add(new Intersection.IntersectionPoint(new Point2D(
                     a0x + ua * (a1x - a0x),
                     a0y + ua * (a1y - a0y)
-            )
+            ), ua
             ));
         } else {
             if (ua_t == 0 || ub_t == 0) {
@@ -2869,5 +2962,6 @@ public class Intersections {
     private static Point2D topLeft(double ax, double ay, double bx, double by) {
         return new Point2D(Math.min(ax, bx), Math.min(ay, by));
     }
+
 
 }

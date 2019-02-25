@@ -5,8 +5,8 @@ package org.jhotdraw8.samples.modeler.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Polyline;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
@@ -76,8 +76,7 @@ public class MLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
     }
 
     @Override
-    protected void updateLineNode(RenderContext ctx, @Nonnull Line node) {
-        super.updateLineNode(ctx, node);
+    protected void updateLineNode(RenderContext ctx, @Nonnull Polyline node) {
         applyStrokableFigureProperties(ctx, node);
     }
 

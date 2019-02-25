@@ -187,11 +187,11 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         // We must switch off rotations for the following computations
         // because
         if (startConnector != null && startTarget != null) {
-            final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end));
+            final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end).getPoint());
             set(START, new CssPoint2D(p));
         }
         if (endConnector != null && endTarget != null) {
-            final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end));
+            final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end).getPoint());
             set(END, new CssPoint2D(p));
         }
     }

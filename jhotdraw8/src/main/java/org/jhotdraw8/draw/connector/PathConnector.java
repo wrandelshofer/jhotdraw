@@ -3,18 +3,20 @@
  */
 package org.jhotdraw8.draw.connector;
 
-import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
-import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
-import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
+
+import java.awt.geom.PathIterator;
+
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
 
 /**
  * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
@@ -36,7 +38,7 @@ public class PathConnector extends LocatorConnector {
 
     @Nullable
     @Override
-    public Double intersect(Figure connection, Figure target, @Nonnull Point2D start, @Nonnull Point2D end) {
+    public Intersection.IntersectionPoint intersect(Figure connection, Figure target, @Nonnull Point2D start, @Nonnull Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
             return super.intersect(connection, target, start, end);
         }
@@ -67,6 +69,6 @@ public class PathConnector extends LocatorConnector {
         }
 
         Intersection i = Intersections.intersectLinePathIterator(s, e, pit);
-        return i.isEmpty() ? null : i.getLastT();
+        return i.getLastIntersectionPoint();
     }
 }
