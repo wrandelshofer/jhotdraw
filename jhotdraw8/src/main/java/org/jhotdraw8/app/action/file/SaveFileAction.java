@@ -3,13 +3,14 @@
  */
 package org.jhotdraw8.app.action.file;
 
-import java.net.URI;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
+
+import java.net.URI;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -77,6 +78,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
         v.setURI(uri);
        v.clearModified();
         v.setTitle(UriUtil.getName(uri));
+        v.setDataFormat(format);
         app.addRecentURI(uri,format);
     }
 
