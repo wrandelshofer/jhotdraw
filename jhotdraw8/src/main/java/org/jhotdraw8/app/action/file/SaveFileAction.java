@@ -38,7 +38,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
     /**
      * Creates a new instance.
      *
-     * @param app the application
+     * @param app  the application
      * @param view the view
      */
     public SaveFileAction(Application app, DocumentBasedActivity view) {
@@ -48,8 +48,8 @@ public class SaveFileAction extends AbstractSaveFileAction {
     /**
      * Creates a new instance.
      *
-     * @param app the application
-     * @param view the view
+     * @param app    the application
+     * @param view   the view
      * @param saveAs whether to force a file dialog
      */
     public SaveFileAction(Application app, DocumentBasedActivity view, boolean saveAs) {
@@ -59,9 +59,9 @@ public class SaveFileAction extends AbstractSaveFileAction {
     /**
      * Creates a new instance.
      *
-     * @param app the application
-     * @param view the view
-     * @param id the id
+     * @param app    the application
+     * @param view   the view
+     * @param id     the id
      * @param saveAs whether to force a file dialog
      */
     public SaveFileAction(Application app, DocumentBasedActivity view, String id, boolean saveAs) {
@@ -76,10 +76,10 @@ public class SaveFileAction extends AbstractSaveFileAction {
     @Override
     protected void handleSucceeded(@Nonnull DocumentBasedActivity v, @Nonnull URI uri, DataFormat format) {
         v.setURI(uri);
-       v.clearModified();
+        v.clearModified();
         v.setTitle(UriUtil.getName(uri));
         v.setDataFormat(format);
-        app.addRecentURI(uri,format);
+        app.addRecentURI(uri, format);
     }
 
 }
