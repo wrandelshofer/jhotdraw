@@ -16,11 +16,7 @@ import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -50,15 +46,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -539,7 +527,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
 
-    private List<URI> getUrisToOpen() {
+    protected List<URI> getUrisToOpen() {
         List<URI> uris = new ArrayList<>();
         for (String s : getParameters().getUnnamed()) {
             try {
