@@ -262,16 +262,26 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
         ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1, 16);
-        ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
-        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1, 0);
-        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory), 6, 1);
+        ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory),
+                4, 1);
+        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels,
+                        PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory),
+                4, 0, 0);
+        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels,
+                        BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory),
+                5, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 6, 0);
-        ttbar.addTool(new CreationTool("edit.createTextArea", labels, () -> createFigure(TextAreaFigure::new), layerFactory), 6, 1);
-        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 5, 0, 0);
-        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0, 16);
-        ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
+                layerFactory), 6, 1);
+        ttbar.addTool(new CreationTool("edit.createTextArea", labels,
+                        () -> createFigure(TextAreaFigure::new), layerFactory),
+                6, 0);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", labels,
+                () -> createFigure(ImageFigure::new), layerFactory), 5, 0, 0);
+        ttbar.addTool(new CreationTool("edit.createSlice", labels,
+                () -> createFigure(SliceFigure::new), layerFactory), 10, 0, 0);
+        ttbar.addTool(new CreationTool("edit.createPage", labels,
+                () -> createFigure(() -> {
             PageFigure pf = new PageFigure();
             pf.set(PageFigure.PAPER_SIZE, new CssPoint2D(297, 210, "mm"));
             pf.set(PageFigure.PAGE_INSETS, new CssInsets(2, 1, 2, 1, "cm"));
@@ -280,12 +290,12 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                     FillableFigure.FILL, null, StrokableFigure.STROKE, null);
             pf.addChild(pl);
             return pf;
-        }), layerFactory), 8, 1, 16);
+                }), layerFactory), 9, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new PageLabelFigure(0, 0,
                         labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
                         FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 9, 1);
+                layerFactory), 9, 1, 16);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
