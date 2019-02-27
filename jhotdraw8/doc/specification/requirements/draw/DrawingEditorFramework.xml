@@ -4,13 +4,13 @@
     <para>The drawing editor framework</para>
     <itemizedlist>
         <listitem>
-            <para>defines a design for drawing editors,</para>
+            <para>must define a design for drawing editors,</para>
         </listitem>
         <listitem>
-            <para>provides an API of the design,</para>
+            <para>must provide an API of the design,</para>
         </listitem>
         <listitem>
-            <para>provides a reference implementation of the API.</para>
+            <para>must provide a reference implementation of the API.</para>
         </listitem>
     </itemizedlist>
 </section>

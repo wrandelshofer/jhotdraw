@@ -95,8 +95,8 @@
   -->
     <section>
       <title>Drawing Editor Framework</title>
-      <xi:include href="design/draw/DrawingIsTreeStructure.xml"/>
-      <xi:include href="design/draw/LayoutDependencyBetweenFigures.xml"/>
+      <xi:include href="design/draw/DrawingTreeStructure.xml"/>
+      <xi:include href="design/draw/LayoutDependencies.xml"/>
       <xi:include href="design/draw/PropertyKey.xml"/>
     </section>
     <section>

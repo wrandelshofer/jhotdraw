@@ -2,7 +2,7 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
          xml:id="requirement.ConstructiveAreaGeometry">
   <title>Constructive Area Geometry</title>
-  <para>The paths of multiple figures can be combined into a new figure.
+  <para>The paths of multiple figures must be combinable into a new figures using constructive area geometry.
     The combined figures behave like a single figure.
   </para>
 </section>

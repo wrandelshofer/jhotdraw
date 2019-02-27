@@ -2,7 +2,9 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
          xml:id="requirement.CascadingStyleSheetsOrigin">
   <title>Style Origin</title>
-  <para>The value of a styled property can origin from the 4 style origins defined in JavaFX class StyleOrigin:</para>
+  <para>The value of a styled property must origin from one of the 4 style origins defined in JavaFX class
+    StyleOrigin:
+  </para>
   <variablelist>
     <varlistentry>
       <term>INLINE</term>

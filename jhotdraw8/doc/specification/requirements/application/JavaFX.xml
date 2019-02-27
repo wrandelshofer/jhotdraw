@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.JavaFX">
   <title>Java FX</title>
-  <para>The application framework builds on Java FX.</para>
+  <para>The application framework must build on Java FX.</para>
 </section>

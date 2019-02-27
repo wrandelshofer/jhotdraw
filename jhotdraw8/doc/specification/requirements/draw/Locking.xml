@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.Locking">
   <title>Locking</title>
-  <para>A Figure can be locked/unlocked. Locked Figures can not be selected.</para>
+  <para>The drawing framework must support locking for figures.
+    A locked Figure must not be selectable in a drawing view.
+  </para>
 </section>

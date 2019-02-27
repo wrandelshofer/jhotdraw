@@ -2,7 +2,7 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
          xml:id="requirement.supportedWindowsMenuBarItems">
   <title>Supported Windows menu bar items</title>
-  <para>The application framework supports the following menu bar items on Windows.</para>
+  <para>The application framework must support the following menu bar items on Windows.</para>
 
   <itemizedlist>
     <listitem>

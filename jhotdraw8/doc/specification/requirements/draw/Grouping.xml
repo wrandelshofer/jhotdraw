@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.Grouping">
   <title>Grouping</title>
-  <para>Figures can be grouped/ungrouped. Grouped figures act like they were a single figure.</para>
+  <para>The drawing framework must support grouping for figures.
+    Grouped figures must act like they were a single figure.
+  </para>
 </section>
