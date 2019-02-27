@@ -124,6 +124,45 @@ public class LayersInspector extends AbstractDrawingInspector {
             }
         }
     };
+
+
+    /**
+     * The list change listener notifies the drawing model when it must update itself.
+     * <p>
+     * FIXME we should call model.insertChildAt(figure,layer,index) to reorder a layer
+     */
+    ListChangeListener<? super Figure> listChangeListener = c -> {
+        boolean addedOrRemoved = false;
+        while (c.next()) {
+            if (c.wasPermutated()) {
+                for (int i = c.getFrom(); i < c.getTo(); ++i) {
+                    //permutate
+                }
+            } else if (c.wasUpdated()) {
+                //update item
+            } else {
+                int index = c.getFrom();
+                addedOrRemoved = true;
+                /*
+                for (Figure remitem : c.getRemoved()) {
+                    getDrawingModel().fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(
+                            getDrawingModel(), remitem, getDrawing(), index++)
+                    );
+                }
+                for (Figure additem : c.getAddedSubList()) {
+                    getDrawingModel().fireTreeModelEvent(TreeModelEvent.nodeAddedToParent(
+                            getDrawingModel(), additem, getDrawing(), index++)
+                    );
+                }*/
+                // removed or added
+                break;
+            }
+        }
+        if (addedOrRemoved) {
+            getDrawingModel().fireNodeInvalidated(getDrawing());
+        }
+    };
+
     @Nonnull
     private InvalidationListener selectionInvalidationListener = new InvalidationListener() {
         @Override
@@ -288,9 +327,14 @@ public class LayersInspector extends AbstractDrawingInspector {
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
         if (oldValue != null) {
             listView.setItems(FXCollections.observableArrayList());
+            if (layers != null) {
+                layers.removeListener(listChangeListener);
+                layers = null;
+            }
         }
         if (newValue != null) {
             layers = new ReversedList<>(newValue.getRoot().getChildren());
+            layers.addListener(listChangeListener);
             listView.setItems(layers);
         }
     }

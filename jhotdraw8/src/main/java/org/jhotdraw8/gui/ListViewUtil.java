@@ -16,10 +16,10 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import org.jhotdraw8.draw.inspector.LayerCell;
-
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.draw.inspector.LayerCell;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
