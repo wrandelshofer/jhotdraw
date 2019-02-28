@@ -1,4 +1,4 @@
-/* @(#)SimpleFigureFactory.java
+/* @(#)AbstractFigureFactory.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.io;
@@ -30,13 +30,13 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 /**
- * SimpleFigureFactory.
+ * AbstractFigureFactory.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleFigureFactory implements FigureFactory {
-    private final static Logger LOGGER = Logger.getLogger(SimpleFigureFactory.class.getName());
+public abstract class AbstractFigureFactory implements FigureFactory {
+    private final static Logger LOGGER = Logger.getLogger(AbstractFigureFactory.class.getName());
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
     private final Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> elemToKey = new HashMap<>();
@@ -58,11 +58,11 @@ public class SimpleFigureFactory implements FigureFactory {
     @Nullable
     private IdFactory idFactory;
 
-    public SimpleFigureFactory() {
+    public AbstractFigureFactory() {
         this(new SimpleFigureIdFactory());
     }
 
-    public SimpleFigureFactory(@Nullable IdFactory idFactory) {
+    public AbstractFigureFactory(@Nullable IdFactory idFactory) {
         if (idFactory == null) {
             throw new IllegalArgumentException("idFactory is null");
         }
@@ -156,9 +156,7 @@ public class SimpleFigureFactory implements FigureFactory {
      */
     public void addFigureAttributeKeys(Class<? extends Figure> f, @Nonnull Collection<MapAccessor<?>> keys) {
         for (MapAccessor<?> key : keys) {
-            if (key instanceof MapAccessor) {
                 addKey(f, key.getName(), (MapAccessor<?>) key);
-            }
         }
     }
 
@@ -170,18 +168,14 @@ public class SimpleFigureFactory implements FigureFactory {
         addFigure(figureName, f);
         addFigureAttributeKeys(f, keys);
         for (MapAccessor<?> key : keys) {
-            if (key instanceof MapAccessor) {
                 addKey(f, key.getName(), (MapAccessor<?>) key);
-            }
         }
     }
 
     public void addFigureKeysAndNames(Class<? extends Figure> f, @Nonnull Collection<MapAccessor<?>> keys) {
         addFigureAttributeKeys(f, keys);
         for (MapAccessor<?> key : keys) {
-            if (key instanceof MapAccessor) {
                 addKey(f, key.getName(), (MapAccessor<?>) key);
-            }
         }
     }
 
@@ -600,6 +594,7 @@ public class SimpleFigureFactory implements FigureFactory {
             if (getClass() != obj.getClass()) {
                 return false;
             }
+
             final FigureAccessorKey<?> other = (FigureAccessorKey<?>) obj;
             if (!Objects.equals(this.figure, other.figure)) {
                 return false;

@@ -6,7 +6,6 @@ module jhotdraw8 {
     requires transitive java.prefs;
     requires transitive javafx.fxml;
     requires transitive javafx.swing;
-    requires transitive jsr305;
     requires jdk.javadoc;
 
     opens org.jhotdraw8.draw.inspector
@@ -19,6 +18,7 @@ module jhotdraw8 {
             to javafx.fxml, javafx.graphics;
 
     exports org.jhotdraw8.app;
+    exports org.jhotdraw8.annotation;
     exports org.jhotdraw8.app.action;
     exports org.jhotdraw8.app.action.view;
     exports org.jhotdraw8.collection;

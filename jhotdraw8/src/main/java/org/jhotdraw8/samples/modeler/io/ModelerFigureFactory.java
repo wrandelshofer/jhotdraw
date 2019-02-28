@@ -77,7 +77,7 @@ import org.jhotdraw8.draw.figure.TextAreaFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.figure.TextStrokeableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import org.jhotdraw8.draw.io.SimpleFigureFactory;
+import org.jhotdraw8.draw.io.AbstractFigureFactory;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.samples.modeler.figure.MLClassifierFigure;
@@ -113,7 +113,7 @@ import java.util.Set;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ModelerFigureFactory extends SimpleFigureFactory {
+public class ModelerFigureFactory extends AbstractFigureFactory {
 
     public ModelerFigureFactory() {
         this(new SimpleFigureIdFactory());

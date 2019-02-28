@@ -375,7 +375,7 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
     // Size of priority deque and frontierMap is the expected size of the frontier.
     // We use a size that is smaller than 256 bytes (assuming 12 bytes for object header).
     private PriorityQueue<NodeWithCost<V, A>> frontier = new PriorityQueue<>(61);
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private NodeWithCost<V, A>[] frontierMap = new NodeWithCost[0];
     // Size of explored is the expected number of vertices that we need to explore.
     private BitSet explored = new BitSet(61);
@@ -386,8 +386,9 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
                                                 double maxCost) {
         frontier.clear();
         if (frontierMap.length != vertexCount) {
-            //noinspection unchecked,ConstantConditions
-            frontierMap = (NodeWithCost<V, A>[]) new NodeWithCost[vertexCount];
+            @SuppressWarnings({"rawtypes", "unchecked"})
+            NodeWithCost<V, A>[] tmp = new NodeWithCost[vertexCount];
+            this.frontierMap = tmp;
         } else {
             Arrays.fill(frontierMap, null);
         }

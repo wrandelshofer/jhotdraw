@@ -101,12 +101,10 @@ import java.util.Set;
 /**
  * DefaultFigureFactory.
  *
- * FIXME rename to GrapherFigureFactory.
- *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DefaultFigureFactory extends SimpleFigureFactory {
+public class DefaultFigureFactory extends AbstractFigureFactory {
 
     public DefaultFigureFactory() {
         this(new SimpleFigureIdFactory());
