@@ -15,14 +15,13 @@
         <property name="lib" value="lib"/>
         <property name="src" value="src/main/java"/>
         <property name="build" value="build"/>
-        <property name="classes" value="${build}/classes"/>
         <property name="dist" value="dist/jhotdraw-${version}"/>
         <property name="javadoc" value="dist/JHotDraw ${version}/javadoc"/>
         <property name="doc" value="dist/JHotDraw ${version}/documentation"/>
         <property name="docsrc" value="src/documentation"/>
     </target>
     <target name="clean" depends="init">
-        <delete dir="${classes}" />
+        <delete dir="${build}" />
         <delete dir="${dist}" />
     </target>
     <target depends="init" description="Javadoc for my API." name="javadoc">
@@ -46,8 +45,8 @@
         </exec>
     </target>
     <target name="compile" depends="init,clean">
-        <mkdir dir="${classes}"/>
-        <javac  destdir="${classes}"
+        <mkdir dir="${build}/classes"/>
+        <javac  destdir="${build}/classes"
                 modulesourcepath="${src}"
                 
                 debug="${javac.debug}"
@@ -61,7 +60,7 @@
             <compilerarg value="-Xlint:all"/>
             <include name="**/*.java"/>
         </javac>
-        <copy todir="${classes}">
+        <copy todir="${build}/classes">
             <fileset dir="${src}">
                 <exclude name="**/*.java"/>
                 <exclude name="**/.*"/>
@@ -73,9 +72,9 @@
         <attribute name="module" />
         <attribute name="mainclass" default="" />
         <sequential>
-            <mkdir dir="${dist}"/>
-            <jar destfile="${dist}/modules/@{module}.jar"
-                 basedir="${classes}/@{module}"
+            <mkdir dir="${build}/modules"/>
+            <jar destfile="${build}/modules/@{module}.jar"
+                 basedir="${build}/classes/@{module}"
             >
 
                 <manifest>
@@ -90,39 +89,40 @@
                 </manifest>
             </jar>
             <exec executable="jar" unless:blank="@{mainclass}">
-                <arg line="-f &quot;${dist}/modules/@{module}.jar&quot;"/>
+                <arg line="-f &quot;${build}/modules/@{module}.jar&quot;"/>
                 <arg line="-u"/>
                 <arg line="-e @{mainclass}"/>
             </exec>
 
-            <jar destfile="${dist}/sources/@{module}-src.jar"
+            <jar destfile="${build}/sources/@{module}-src.jar"
                  basedir="${src}/@{module}"
             >
             </jar>
         </sequential>
     </macrodef>
+
     <target name="run-teddy" depends="init">
-        <java module="org.jhotdraw7.samples.teddy" modulepath="${dist}/modules" fork="true">
+        <java module="org.jhotdraw7.samples.teddy" modulepath="${build}/modules" fork="true">
         </java>
     </target>
     <target name="run-svg" depends="init">
-        <java module="org.jhotdraw7.samples.svg" modulepath="${dist}/modules" fork="true">
+        <java module="org.jhotdraw7.samples.svg" modulepath="${build}/modules" fork="true">
         </java>
     </target>
     <target name="run-pert" depends="init">
-        <java module="org.jhotdraw7.samples.pert" modulepath="${dist}/modules" fork="true">
+        <java module="org.jhotdraw7.samples.pert" modulepath="${build}/modules" fork="true">
         </java>
     </target>
     <target name="run-net" depends="init">
-        <java module="org.jhotdraw7.samples.net" modulepath="${dist}/modules" fork="true">
+        <java module="org.jhotdraw7.samples.net" modulepath="${build}/modules" fork="true">
         </java>
     </target>
     <target name="run-odg" depends="init">
-        <java module="org.jhotdraw7.samples.odg" modulepath="${dist}/modules" fork="true">
+        <java module="org.jhotdraw7.samples.odg" modulepath="${build}/modules" fork="true">
         </java>
     </target>
     <target name="run-draw" depends="init">
-        <java module="org.jhotdraw7.samples.draw" modulepath="${dist}/modules" fork="true">
+        <java module="org.jhotdraw7.samples.draw" modulepath="${build}/modules" fork="true">
         </java>
     </target>
 
@@ -156,7 +156,7 @@
             <arg value="--name"/>
             <arg value="@{title}"/>
             <arg value="--module-path"/>
-            <arg path="${dist}/modules"/>
+            <arg path="${build}/modules"/>
             <arg value="--identifier"/>
             <arg value="@{module}"/>
             <arg value="--module"/>

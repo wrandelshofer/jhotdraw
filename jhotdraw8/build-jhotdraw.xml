@@ -3,13 +3,20 @@
  * @(#)build-jhotdraw8.xml
  * Copyright (c) 2015-2017 The authors and contributors of JHotDraw. MIT License.
 -->
-<project name="jhotdraw8" basedir="." default="all">
+<project name="jhotdraw8" basedir="." default="all"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+>
+  <!-- gobal build properties -->
+  <property file="build.properties"/>
 
   <!-- ignore system classpath to get consistent builds on different platforms -->
   <property name="build.sysclasspath" value="ignore"/>
 
   <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home"/>
   <property name="jdk.version" value="8"/>
+  <property name="jdk.modular" value="/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home"/>
+  <property name="jdk.modular.version" value="11"/>
   <property name="jdk.documentation" value="/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home"/>
   <property name="jdk.documentation.version" value="11"/>
 
@@ -50,7 +57,9 @@
   <property name="lib.test" value="${lib}/test"/>
   <property name="src" value="src"/>
   <property name="doc" location="doc"/>
-  <property name="build.main.classes" value="${build}/jhotdraw8/classes"/>
+  <property name="build.main.classes" value="${build}/classes"/>
+  <property name="classes" value="${build}/module-classes"/>
+  <property name="build.main.modules" value="${build}/modules"/>
   <property name="build.doc.classes" value="${build}/doc/classes"/>
   <property name="builddoc" value="builddoc"/>
   <property name="build.doc.tools" value="${build}/doc/tools"/>
@@ -78,6 +87,7 @@
 
   <target name="do-clean.compile" depends="init">
     <delete dir="${build.main.classes}"/>
+    <delete dir="${classes}"/>
   </target>
   <target name="do-clean.jar" depends="init">
     <delete dir="${build.main.jars}"/>
@@ -90,48 +100,54 @@
     <delete dir="${dist}"/>
   </target>
 
-  <target name="do-check-nullness"
-          description="Check for null pointer dereferences"
-          depends="init">
-    <mkdir dir="${build.main.classes}"/>
-    <javac source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.main.classes}"
-           debug="true"
-    >
-      <compilerarg line="-processor org.checkerframework.checker.nullness.NullnessChecker"/>
-      <!-- optional, to not check uses of library methods:
-        <compilerarg value="-AskipUses=^(java\.awt\.|javax\.swing\.)"/>
-      -->
-      <compilerarg line="-Xmaxerrs 100"/>
-      <src path="${src.main.java}"/>
-      <classpath>
-        <fileset dir="${lib.compile}"/>
-        <fileset file="${jdk}/../lib/tools.jar"/>
-      </classpath>
-      <compilerarg value="-version"/>
-    </javac>
-  </target>
-
-  <target name="do-compile.main" depends="init">
+  <target name="do-compile-classes.main" depends="init">
     <mkdir dir="${build.main.classes}"/>
     <javac executable="${jdk}/bin/javac" fork="yes"
            source="${jdk.version}" target="${jdk.version}"
            encoding="UTF-8" destdir="${build.main.classes}"
            debug="true"
            verbose="false"
+           srcdir="${src.main.java}/org.jhotdraw8"
+
     >
       <compilerarg value="-Xlint"/>
-      <src path="${src.main.java}"/>
-      <!--
-      <modulepath>
-          <fileset dir="${lib.compile}/modulepath" includes="**/*.jar" />
-      </modulepath>
-      -->
+      <exclude name="module-info.java"/>
       <classpath>
         <fileset dir="${lib.compile}/classpath" includes="**/*.jar"/>
       </classpath>
       <compilerarg value="-version"/>
     </javac>
     <copy todir="${build.main.classes}">
+      <fileset dir="${src.main.java}/org.jhotdraw8">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="do-compile-modules.main" depends="init">
+    <mkdir dir="${classes}"/>
+    <javac executable="${jdk.modular}/bin/javac" fork="yes"
+           source="${jdk.modular.version}" target="${jdk.modular.version}"
+           encoding="UTF-8" destdir="${classes}"
+           debug="true"
+           verbose="true"
+    >
+      <compilerarg value="-Xlint"/>
+      <compilerarg value="-XprintRounds"/>
+      <compilerarg value="-Xdiags:verbose"/>
+      <modulesourcepath path="${src.main.java}"/>
+      <modulepath>
+          <fileset dir="${lib.compile}/modulepath" includes="**/*.jar" />
+      </modulepath>
+      <classpath>
+        <fileset dir="${lib.compile}/classpath" includes="**/*.jar"/>
+      </classpath>
+      <compilerarg value="-version"/>
+    </javac>
+    <copy todir="${classes}">
       <fileset dir="${src.main.java}">
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
@@ -784,7 +800,7 @@
              header="${ant.project.name} ${version}"
              windowtitle="${ant.project.name} ${version}"
              maxmemory="256M"
-             overview="${src.main.java}/org/jhotdraw8/overview.html"
+             overview="${src.main.java}/org.jhotdraw8/org.jhotdraw8/org/jhotdraw8/overview.html"
              charset="UTF-8"
              executable="${jdk.documentation}/bin/javadoc"
              additionalparam="-html5"
@@ -793,11 +809,11 @@
       <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
       <taglet name="org.jhotdraw8.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
 
-      <packageset dir="${src.main.java}">
+      <packageset dir="${src.main.java}/org.jhotdraw8">
         <include name="org/jhotdraw/**"/>
       </packageset>
       <sourcepath>
-        <pathelement location="${src.main.java}"/>
+        <pathelement location="${src.main.java}/org.jhotdraw8"/>
       </sourcepath>
       <classpath>
         <pathelement path="${lib.runtime}"/>
@@ -868,10 +884,47 @@
       <arg value="--module-version=${manifest.implementation-version}"/>
     </exec>
     <jar destfile="${build.main.jars}/${ant.project.name}-javadoc.jar">
-      <fileset dir="${src.main.java}">
-        <exclude name=".*"/>
+      <fileset dir="${src.main.java}/org.jhotdraw8">
+        <exclude name="**/.*"/>
       </fileset>
     </jar>
+  </target>
+
+  <macrodef name="modular-jar">
+    <attribute name="module" />
+    <attribute name="mainclass" default="" />
+    <sequential>
+      <mkdir dir="${dist}"/>
+      <jar destfile="${dist}/modules/@{module}.jar"
+           basedir="${classes}/@{module}"
+      >
+
+        <manifest>
+          <attribute name="Copyright" value="${author}"/>
+          <attribute name="License" value="${license}"/>
+          <attribute name="Implementation-Title" value="@{module}"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+          <attribute name="Implementation-Vendor" value="${author}"/>
+          <attribute name="Specification-Title" value="@{module}"/>
+          <attribute name="Specification-Version" value="${version}"/>
+          <attribute name="Specification-Vendor" value="${author}"/>
+        </manifest>
+      </jar>
+      <exec executable="jar" unless:blank="@{mainclass}">
+        <arg line="-f &quot;${dist}/modules/@{module}.jar&quot;"/>
+        <arg line="-u"/>
+        <arg line="-e @{mainclass}"/>
+      </exec>
+
+      <jar destfile="${dist}/sources/@{module}-src.jar"
+           basedir="${src.main.java}/@{module}"
+      >
+      </jar>
+    </sequential>
+  </macrodef>
+
+  <target name="do-jar-modules.main" depends="init">
+    <modular-jar module="org.jhotdraw8"/>
   </target>
 
   <target name="do-dist" depends="init">
@@ -911,7 +964,7 @@
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
   </target>
-  <target name="compile" depends="clean,do-compile.main"
+  <target name="compile" depends="clean,do-compile-classes.main"
           description="compiles the java sources and copies resource files">
   </target>
   <target name="jar" depends="compile,do-jar.main" description="bundles the class files into a jar file">

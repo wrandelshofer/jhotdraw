@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.StyleAttributesInspector">
+  <title>Style Attributes Inspector</title>
+  <para>The “Style Attributes Inspector” is a control that allows to edit style attributes of the
+    currently selected figures in the drawing view.
+  </para>
+
+  <para>The inspector has the following components:</para>
+  <itemizedlist>
+    <listitem>
+      <para>a text area</para>
+    </listitem>
+    <listitem>
+      <para>a vertical toolbar</para>
+    </listitem>
+    <listitem>
+      <para>a horizontal toolbar</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>The text area shows the style attributes of the selected figures in the current drawing view. The style
+    attributes are formatted as a CSS rule-set, consisting of a selector and a block of declarations.
+  </para>
+
+  <para>The text area is editable.</para>
+
+  <para>The vertical toolbar is displayed along the left border of the text area.
+    It contains a push button next to each declaration in the text area.
+    The push buttons can be used to open a pop-up dialog for editing a declared value.
+  </para>
+
+  <para>The horizontal toolbar contains a settings menu, and an apply button and a select button.</para>
+  <para>The settings menu can be used to select different display options for the text area.</para>
+  <para>The apply button can be used to apply the CSS rule-set to the drawing.</para>
+  <para>The select button can be used to evaluate the CSS</para>
+</section>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.MasterDetailsInspectorPattern">
+  <title>Master-Details-Inspector Pattern</title>
+
+  <para>The master-details-inspector pattern is a window layout which contains the following panes:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>the master pane in the left area of the window</para>
+      <para>the details pane in the center area of the window</para>
+      <para>the inspector pane in the right area of the window</para>
+    </listitem>
+  </itemizedlist>
+
+
+  <para>A master pane is a control that displays a collection of objects,
+    from which one can be selected.</para>
+
+  <para>A details pane is a control that displays the selected object from the master pane.
+    The object can be structured, from which one or multiple sub-objects can be selected.
+  </para>
+
+  <para>An inspector pane is a control that displays properties of the selected sub-objects
+    in the details pane.</para>
+
+  <para>We can use the following design to implement this pattern with JavaFX:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>For each component (master pane, detail pane, inspector pane) we create a FXML
+      file for the layout, and a JavaFX controller class: MasterPaneController,
+      DetailsPaneController, InspectorPaneController.</para>
+      <para>The MasterPaneController has a JavaFX ObservableList for the collection
+        that it displays, and a JavaFX Property for the selected object</para>
+      <para>The DetailsPaneController has a JavaFX Property for the object that it displays
+        and a JavaFX ObservableList for the selection of sub-objects.</para>
+      <para>The InspectorPaneController has a JavaFX property for the selection of objects
+        for which it can display properties.</para>
+      <para>We bind the properties of the panes with JavaFX bindings.</para>
+    </listitem>
+  </itemizedlist>
+
+
+
+  <para>This pattern can be altered in various ways:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>The master pane can be omitted, which leaves us with a details-inspector pattern.</para>
+      <para>The inspector pane can be omitted, which leaves us with a master-details pattern.</para>
+      <para>the master pane can support multiple selection, which turns the object that is
+        displayed in the details pane into a collection.</para>
+      <para>The inspector pane can only show the properties of the main object in the details
+      pane instead from the selected sub-objects.</para>
+      <para>The inspector pane can show properties of the details pane itself.</para>
+      <para>The window can contain more than one inspector pane.</para>
+    </listitem>
+  </itemizedlist>
+
+</section>
