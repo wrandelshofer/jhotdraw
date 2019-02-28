@@ -139,7 +139,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         nameToFigure.put(name, () -> {
             try {
                 return figureClass.getDeclaredConstructor().newInstance();
-            } catch (@Nonnull InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 throw new InternalError("Couldn't instantiate " + figureClass, e);
             }
         });
