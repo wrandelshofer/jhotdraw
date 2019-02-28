@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Modeler" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.modeler.ModelerMain" />
-    <module name="jhotdraw8" />
+    <module name="org.jhotdraw8.samples.modeler" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.jhotdraw8.samples.diagrammer.*" />

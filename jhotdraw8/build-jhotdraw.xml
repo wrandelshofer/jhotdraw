@@ -953,9 +953,11 @@
     </jar>
   </target>
   <target name="do-run" depends="init" description="runs the built jar files">
-    <java module="jhotdraw8" fork="true">
+    <java module="org.jhotdraw8" fork="true"
+          classname="org.jhotdraw8.samples.grapher.GrapherMain"
+    >
       <modulepath>
-        <pathelement location="${build.main.jars}"/>
+        <pathelement location="${build.main.modules}"/>
         <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
       </modulepath>
     </java>

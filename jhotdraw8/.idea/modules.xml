@@ -3,6 +3,15 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/jhotdraw8.iml" filepath="$PROJECT_DIR$/.idea/jhotdraw8.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org.jhotdraw8.samples.grapher.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org.jhotdraw8.samples.grapher.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.misc/org.jhotdraw8.samples.misc.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.misc/org.jhotdraw8.samples.misc.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org.jhotdraw8.samples.modeler.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org.jhotdraw8.samples.modeler.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.net/org.jhotdraw8.samples.net.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.net/org.jhotdraw8.samples.net.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.pert/org.jhotdraw8.samples.pert.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.pert/org.jhotdraw8.samples.pert.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.svg/org.jhotdraw8.samples.svg.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.svg/org.jhotdraw8.samples.svg.iml" group="org/jhotdraw8" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.teddy/org.jhotdraw8.samples.teddy.iml" filepath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.teddy/org.jhotdraw8.samples.teddy.iml" group="org/jhotdraw8" />
     </modules>
   </component>
 </project>
