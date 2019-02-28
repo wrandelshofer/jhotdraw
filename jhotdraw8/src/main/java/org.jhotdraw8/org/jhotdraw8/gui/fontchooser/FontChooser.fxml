@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<SplitPane dividerPositions="0.1" orientation="VERTICAL" xmlns="http://javafx.com/javafx/8.0.65"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jhotdraw8.gui.fontchooser.FontChooserController">
+  <items>
+    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" SplitPane.resizableWithParent="false">
+      <children>
+        <TextArea fx:id="previewTextArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  minHeight="50.0" prefColumnCount="10" prefRowCount="1" styleClass="fontPreview"
+                  text="Now is the time for all good men." wrapText="true" VBox.vgrow="ALWAYS">
+          <font>
+            <Font size="24.0"/>
+          </font>
+        </TextArea>
+        <Label fx:id="fontNameLabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+               maxWidth="1.7976931348623157E308" styleClass="fontNameLabel" text="%FontChooser.nothingSelected"
+               textAlignment="CENTER" VBox.vgrow="NEVER"/>
+      </children>
+    </VBox>
+    <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="160.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="160.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="160.0"/>
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+      </rowConstraints>
+      <children>
+        <HBox alignment="CENTER_LEFT">
+          <children>
+            <Label maxWidth="1.7976931348623157E308" text="%FontCollection.collection" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="addCollectionButton" mnemonicParsing="false" onAction="#onAddCollectionPerformed"
+                    styleClass="placardButton" text="+"/>
+            <Button fx:id="removeCollectionButton" mnemonicParsing="false" onAction="#onRemoveCollectionPerformed"
+                    styleClass="placardButton" text="-"/>
+          </children>
+          <GridPane.margin>
+            <Insets left="4.0" right="4.0"/>
+          </GridPane.margin>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+          <children>
+            <Label maxWidth="1.7976931348623157E308" text="%FontCollection.family" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="removeFamilyButton" mnemonicParsing="false" onAction="#onRemoveFamilyPerformed"
+                    styleClass="placardButton" text="-"/>
+          </children>
+          <opaqueInsets>
+            <Insets/>
+          </opaqueInsets>
+          <GridPane.margin>
+            <Insets left="4.0" right="4.0"/>
+          </GridPane.margin>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2">
+          <children>
+            <Label text="%FontCollection.typeface"/>
+          </children>
+          <GridPane.margin>
+            <Insets left="4.0" right="4.0"/>
+          </GridPane.margin>
+        </HBox>
+        <ListView fx:id="collectionList" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1"/>
+        <ListView fx:id="familyList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                  GridPane.rowIndex="1"/>
+        <ListView fx:id="typefaceList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+                  GridPane.rowIndex="1"/>
+      </children>
+    </GridPane>
+  </items>
+</SplitPane>

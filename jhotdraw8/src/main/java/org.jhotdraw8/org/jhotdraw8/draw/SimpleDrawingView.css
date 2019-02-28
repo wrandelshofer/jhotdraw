@@ -1,0 +1,132 @@
+/* @(#)SimpleDrawingView.css
+ * Copyright (c) 2015 The authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
+ */
+
+/**
+ * This CSS is used by {@code SimpleDrawingView} to style JavaFX Nodes which are 
+ * laid over a drawing, such as {@code Tool}s and {@code Handle}s.
+ */
+
+/* Styles the rubberbands drawn by tools. See {@code Tool}. */
+.tool-rubberband {
+    -fx-stroke: black;
+}
+
+/* Styles the selection outline drawn by handles. See {@code Handle}. */
+.handle-select-outline {
+    -fx-stroke: blue;
+}
+/* Styles the anchor selection outline drawn by handles. See {@code Handle}. */
+.handle-anchor-outline {
+    -fx-stroke: gray;
+}
+.handle-multi-select-outline {
+    -fx-stroke: blue;
+    -fx-stroke-dash-array: 5;
+}
+
+/* Styles the move outline drawn by handles. See {@code Handle}. */
+.handle-move-outline {
+    -fx-stroke: blue;
+}
+/* Styles the reshape outline drawn by handles. See {@code Handle}. */
+.handle-resize-outline {
+    -fx-stroke: darkcyan;
+}
+/* Styles the transform outline drawn by handles. See {@code Handle}. */
+.handle-transform-outline {
+    -fx-stroke: purple;
+}
+/* Styles the transform outline drawn by handles. See {@code Handle}. */
+.handle-point-outline,
+.handle-control-point-outline {
+    -fx-stroke: magenta;
+}
+
+/* Styles the transform outline drawn by handles. See {@code Handle}. */
+.handle-control-point-outline {
+    -fx-stroke-dash-array: 4;
+}
+
+/* Styles move and point handles. See {@code Handle}. */
+.handle-custom {
+    -fx-border-color: black;
+    -fx-background-color: yellow;
+}
+
+.handle-move,
+.handle-multi-move {
+    -fx-border-color: blue;
+    -fx-background-color: white;
+}
+.handle-move-locked {
+    -fx-border-color: white;
+    -fx-background-color: blue;
+}
+.handle-point,
+.handle-control-point {
+    -fx-border-color: magenta;
+    -fx-background-color: white;
+}
+.handle-point-connected {
+    -fx-border-color: magenta;
+    -fx-background-color: magenta;
+}
+
+/* Styles disconnected connection point handles. See {@code Handle}. */
+.handle-connection-point-disconnected {
+    -fx-border-color: darkcyan;
+    -fx-background-color: white;
+}
+
+/* Styles connected connection point handles. See {@code Handle}. */
+.handle-connection-point-connected,
+.handle-connection-line-connected
+{
+    -fx-stroke: darkcyan;
+    -fx-border-color: darkcyan;
+    -fx-background-color: darkcyan;
+}
+
+/* Styles the resize handles. See {@code Handle}. */
+.handle-resize {
+    -fx-border-color: darkcyan;
+    -fx-background-color: white;
+}
+
+/* Styles the rotate handles. See {@code Handle}. */
+.handle-rotate,
+.handle-scale-translate {
+    -fx-border-color: purple;
+    -fx-background-color: white;
+}
+
+.constrainer-minor-grid {
+    -fx-stroke: hsba(226,100%,75%,0.2);
+}
+.constrainer-major-grid {
+    -fx-stroke: hsba(226,100%,75%,0.4);
+}
+/* Styles the canvas pane behind the drawing. This is a rectangle with a checkerboard pattern on it. */
+#canvasPane {
+    /*-fx-effect: dropshadow(gaussian,rgba(0,0,0,0.6),10,0,0,2);*//* XXX very poor performance with dropshadow! */
+}
+
+/* Styles the tool pane in front of the drawing. This is a group. */
+#toolPane {
+    -fx-border-color: black;
+    /* -fx-border-style: dashed;*//* XXX very poor performance with dashed lines! */
+}
+
+#toolEventPane {
+    -fx-border-width: 1.4;
+}
+
+#toolEventPane:focused {
+    -fx-border-color: -fx-focus-color;
+}
+
+.handle {
+-fx-effect: dropshadow(one-pass-box,white,3.24,1.0,0,0)    ;
+}

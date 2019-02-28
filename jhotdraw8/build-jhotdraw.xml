@@ -4,7 +4,6 @@
  * Copyright (c) 2015-2017 The authors and contributors of JHotDraw. MIT License.
 -->
 <project name="jhotdraw8" basedir="." default="all"
-         xmlns:if="ant:if"
          xmlns:unless="ant:unless"
 >
   <!-- gobal build properties -->
@@ -894,8 +893,8 @@
     <attribute name="module" />
     <attribute name="mainclass" default="" />
     <sequential>
-      <mkdir dir="${dist}"/>
-      <jar destfile="${dist}/modules/@{module}.jar"
+      <mkdir dir="${build}/modules"/>
+      <jar destfile="${build}/modules/@{module}.jar"
            basedir="${classes}/@{module}"
       >
 
@@ -916,7 +915,7 @@
         <arg line="-e @{mainclass}"/>
       </exec>
 
-      <jar destfile="${dist}/sources/@{module}-src.jar"
+      <jar destfile="${build}/sources/@{module}-src.jar"
            basedir="${src.main.java}/@{module}"
       >
       </jar>

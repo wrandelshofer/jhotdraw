@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<GridPane hgap="4.0" styleClass="inspector" vgap="4.0" xmlns="http://javafx.com/javafx/8.0.65"
+          xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <HBox GridPane.columnSpan="2147483647">
+      <children>
+        <CheckBox fx:id="snapToGridCheckBox" mnemonicParsing="false" text="%snapToGrid.checkBoxText"/>
+        <CheckBox fx:id="drawGridCheckBox" mnemonicParsing="false" text="%showGrid.checkBoxText">
+          <HBox.margin>
+            <Insets left="8.0"/>
+          </HBox.margin>
+        </CheckBox>
+      </children>
+    </HBox>
+    <Label text="%grid.x.shortLabelText" GridPane.rowIndex="2">
+      <tooltip>
+        <Tooltip text="%grid.x.toolTipText"/>
+      </tooltip>
+    </Label>
+    <TextField prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="xField"/>
+    <Label text="%grid.y.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="2">
+      <tooltip>
+        <Tooltip text="%grid.y.toolTipText"/>
+      </tooltip>
+    </Label>
+    <TextField fx:id="yField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+    <Label fx:id="widthLabel" text="%grid.width.shortLabelText" GridPane.rowIndex="3">
+      <tooltip>
+        <Tooltip text="%grid.width.toolTipText"/>
+      </tooltip>
+    </Label>
+    <TextField fx:id="widthField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <Label text="%grid.height.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="3">
+      <tooltip>
+        <Tooltip text="%grid.height.toolTipText"/>
+      </tooltip>
+    </Label>
+    <TextField fx:id="heightField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+    <Label text="%grid.majorX.shortLabelText" GridPane.rowIndex="4">
+      <tooltip>
+        <Tooltip text="%grid.majorX.toolTipText"/>
+      </tooltip>
+    </Label>
+    <TextField fx:id="majorXField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    <Label text="%grid.majorY.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="4">
+      <tooltip>
+        <Tooltip text="%grid.majorY.toolTipText"/>
+      </tooltip>
+    </Label>
+    <TextField fx:id="majorYField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+    <Label fx:id="heightLabel" text="%grid.angle.shortLabelText" GridPane.rowIndex="5">
+      <tooltip>
+        <Tooltip text="%grid.angle.toolTipText"/>
+      </tooltip>
+    </Label>
+    <TextField fx:id="angleField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    <Label text="%grid.color.shortLabelText" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+    <HBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
+      <children>
+        <TextField fx:id="gridColorField" prefColumnCount="14"/>
+        <ColorPicker fx:id="gridColorPicker" style="-fx-color-label-visible: false;"/>
+      </children>
+    </HBox>
+  </children>
+  <columnConstraints>
+    <ColumnConstraints fillWidth="false" hgrow="NEVER"/>
+    <ColumnConstraints fillWidth="false" hgrow="NEVER"/>
+    <ColumnConstraints fillWidth="false" hgrow="NEVER"/>
+    <ColumnConstraints fillWidth="false" hgrow="NEVER"/>
+  </columnConstraints>
+  <padding>
+    <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+  </padding>
+  <rowConstraints>
+    <RowConstraints vgrow="NEVER"/>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
+    <RowConstraints vgrow="NEVER"/>
+    <RowConstraints vgrow="NEVER"/>
+    <RowConstraints vgrow="NEVER"/>
+    <RowConstraints vgrow="NEVER"/>
+  </rowConstraints>
+</GridPane>

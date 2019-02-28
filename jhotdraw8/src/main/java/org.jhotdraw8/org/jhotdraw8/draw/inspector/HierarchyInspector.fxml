@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import java.lang.String?>
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
+  <center>
+    <TreeTableView fx:id="treeView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                   minHeight="66.0" prefHeight="200.0" styleClass="flush" BorderPane.alignment="CENTER">
+      <columns>
+        <TreeTableColumn fx:id="visibleColumn" prefWidth="75.0" sortable="false" text="%object.visible.text"/>
+        <TreeTableColumn fx:id="lockedColumn" prefWidth="75.0" sortable="false" text="%object.locked.text"/>
+        <TreeTableColumn fx:id="typeColumn" maxWidth="1.7976931348623157E308" prefWidth="160.0" sortable="false"
+                         text="%object.type.text"/>
+        <TreeTableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="120.0" sortable="false"
+                         text="%object.id.text"/>
+        <TreeTableColumn fx:id="styleClassesColumn" prefWidth="160.0" sortable="false"
+                         text="%object.styleClasses.text"/>
+        <TreeTableColumn fx:id="pseudoClassesColumn" prefWidth="160.0" sortable="false"
+                         text="%object.pseudoClasses.text"/>
+      </columns>
+    </TreeTableView>
+  </center>
+  <styleClass>
+    <String fx:value="inspector"/>
+    <String fx:value="flush"/>
+  </styleClass>
+</BorderPane>
