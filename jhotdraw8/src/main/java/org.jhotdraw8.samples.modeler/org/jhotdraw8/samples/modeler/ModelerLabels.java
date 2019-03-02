@@ -25,6 +25,6 @@ public class ModelerLabels {
     }
 
     public static Resources getInspectorResources() {
-        return Resources.getResources("org.jhotdraw8.samples.modeler", INSPECTOR_RESOURCE_BUNDLE);
+        return Resources.getResources("org.jhotdraw8.samples.modeler", RESOURCE_BUNDLE);
     }
 }

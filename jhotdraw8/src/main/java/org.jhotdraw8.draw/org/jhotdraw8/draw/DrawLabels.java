@@ -10,7 +10,7 @@ public class DrawLabels {
 
     public static Resources getResources() {
         if (labels == null) {
-            labels = Resources.getResources("org.jhotdraw8.draw", "org.jhotdraw8.draw.InspectorLabels");
+            labels = Resources.getResources("org.jhotdraw8.draw", "org.jhotdraw8.draw.Labels");
         }
         return labels;
     }
