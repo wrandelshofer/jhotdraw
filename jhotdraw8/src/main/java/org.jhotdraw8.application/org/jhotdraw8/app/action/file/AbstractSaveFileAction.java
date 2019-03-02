@@ -134,7 +134,18 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
 
     protected void saveFileChooseOptions(@Nonnull final DocumentBasedActivity v, @Nonnull URI uri, DataFormat format, WorkState workState) {
         Map<? super Key<?>, Object> options = null;
-        Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
+        Dialog<Map<? super Key<?>, Object>> dialog = null;
+        try {
+            dialog = createOptionsDialog(format);
+        } catch (RuntimeException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(e));
+            alert.getDialogPane().setMaxWidth(640.0);
+            Resources labels = ApplicationLabels.getResources();
+            alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));
+            alert.showAndWait();
+            v.removeDisabler(this);
+            return;
+        }
         if (dialog != null) {
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(v.getNode().getScene().getWindow());
