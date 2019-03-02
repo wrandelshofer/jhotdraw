@@ -11,6 +11,6 @@ module org.jhotdraw8.samples.grapher {
 
     opens org.jhotdraw8.samples.grapher;
 
-    uses ResourceBundleProvider;
-    provides ResourceBundleProvider with org.jhotdraw8.samples.grapher.spi.GrapherLabelsProvider;
+    uses java.util.spi.ResourceBundleProvider;
+    provides java.util.spi.ResourceBundleProvider with org.jhotdraw8.samples.grapher.spi.GrapherLabelsProvider;
 }

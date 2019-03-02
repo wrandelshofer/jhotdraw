@@ -29,7 +29,7 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.gui.dock;
     exports org.jhotdraw8.gui.fontchooser;
 
-    uses ResourceBundleProvider;
-    provides ResourceBundleProvider with ApplicationLabelsProvider;
+    uses java.util.spi.ResourceBundleProvider;
+    provides java.util.spi.ResourceBundleProvider with ApplicationLabelsProvider;
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
 }

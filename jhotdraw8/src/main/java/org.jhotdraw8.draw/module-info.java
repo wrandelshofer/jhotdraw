@@ -40,5 +40,5 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.text;
     exports org.jhotdraw8.draw.gui;
 
-    provides ResourceBundleProvider with org.jhotdraw8.draw.spi.DrawLabelsProvider;
+    provides java.util.spi.ResourceBundleProvider with org.jhotdraw8.draw.spi.DrawLabelsProvider;
 }

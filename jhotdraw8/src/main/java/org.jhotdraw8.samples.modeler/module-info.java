@@ -11,5 +11,5 @@ module org.jhotdraw8.samples.modeler {
     opens org.jhotdraw8.samples.modeler.figure
             to org.jhotdraw8.draw;
 
-    provides ResourceBundleProvider with ModelerLabelsProvider;
+    provides java.util.spi.ResourceBundleProvider with ModelerLabelsProvider;
 }
