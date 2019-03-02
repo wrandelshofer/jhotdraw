@@ -35,7 +35,6 @@ import org.jhotdraw8.draw.figure.ShapeableFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TextFillableFigure;
-import org.jhotdraw8.draw.figure.TextFontableFigure;
 import org.jhotdraw8.draw.figure.TextLayoutableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
@@ -98,7 +97,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,
-        TextFontableFigure, TextFillableFigure, PaddableFigure,
+        BodyFontableFigure, TextFillableFigure, PaddableFigure,
         NameFontableFigure, LabelFontableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -292,7 +291,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
     }
 
     private void applyItemStyle(RenderContext ctx, Text node) {
-        applyTextFontableFigureProperties(ctx, node);
+        applyBodyTextFontableFigureProperties(ctx, node);
         node.setTextAlignment(TextAlignment.LEFT);
     }
 

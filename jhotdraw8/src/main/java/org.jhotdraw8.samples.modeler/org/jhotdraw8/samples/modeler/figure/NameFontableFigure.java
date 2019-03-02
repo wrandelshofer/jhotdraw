@@ -44,10 +44,6 @@ public interface NameFontableFigure extends Figure {
     EnumStyleableFigureKey<FontWeight> NAME_FONT_WEIGHT = new EnumStyleableFigureKey<>("nameFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
     FontStyleableMapAccessor NAME_FONT = new FontStyleableMapAccessor("nameFont", NAME_FONT_FAMILY, NAME_FONT_WEIGHT, NAME_FONT_STYLE, NAME_FONT_SIZE);
     /**
-     * Whether to strike through the text. Default value: {@code false}
-     */
-    BooleanStyleableFigureKey NAME_STRIKETHROUGH = new BooleanStyleableFigureKey("nameStrikethrough", DirtyMask.of(DirtyBits.NODE), false);
-    /**
      * Whether to underline the text. Default value: {@code false}
      */
     BooleanStyleableFigureKey NAME_UNDERLINE = new BooleanStyleableFigureKey("nameUnderline", DirtyMask.of(DirtyBits.NODE), false);
@@ -75,11 +71,6 @@ public interface NameFontableFigure extends Figure {
         if (text.isUnderline() != b) {
             text.setUnderline(b);
         }
-        b = getStyledNonnull(NAME_STRIKETHROUGH);
-        if (text.isStrikethrough() != b) {
-            text.setStrikethrough(b);
-        }
-
         final FontSmoothingType fst = FontSmoothingType.LCD;
         if (text.getFontSmoothingType() != fst) {
             text.setFontSmoothingType(fst);

@@ -16,7 +16,6 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -43,14 +42,6 @@ public interface LabelFontableFigure extends Figure {
     EnumStyleableFigureKey<FontPosture> LABEL_FONT_STYLE = new EnumStyleableFigureKey<>("labelFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
     EnumStyleableFigureKey<FontWeight> LABEL_FONT_WEIGHT = new EnumStyleableFigureKey<>("labelFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
     FontStyleableMapAccessor LABEL_FONT = new FontStyleableMapAccessor("labelFont", LABEL_FONT_FAMILY, LABEL_FONT_WEIGHT, LABEL_FONT_STYLE, LABEL_FONT_SIZE);
-    /**
-     * Whether to strike through the text. Default value: {@code false}
-     */
-    BooleanStyleableFigureKey LABEL_STRIKETHROUGH = new BooleanStyleableFigureKey("labelStrikethrough", DirtyMask.of(DirtyBits.NODE), false);
-    /**
-     * Whether to underline the text. Default value: {@code false}
-     */
-    BooleanStyleableFigureKey LABEL_UNDERLINE = new BooleanStyleableFigureKey("labelUnderline", DirtyMask.of(DirtyBits.NODE), false);
 
     /**
      * Updates a text node with fontable properties.
@@ -71,14 +62,6 @@ public interface LabelFontableFigure extends Figure {
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }
-        boolean b = getStyledNonnull(LABEL_UNDERLINE);
-        if (text.isUnderline() != b) {
-            text.setUnderline(b);
-        }
-        b = getStyledNonnull(LABEL_STRIKETHROUGH);
-        if (text.isStrikethrough() != b) {
-            text.setStrikethrough(b);
-        }
 
         final FontSmoothingType fst = FontSmoothingType.LCD;
         if (text.getFontSmoothingType() != fst) {
@@ -98,10 +81,6 @@ public interface LabelFontableFigure extends Figure {
         Font font = getStyledNonnull(LABEL_FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
-        }
-        boolean b = getStyledNonnull(LABEL_UNDERLINE);
-        if (text.isUnderline() == b) {
-            text.setUnderline(b);
         }
     }
 }

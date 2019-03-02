@@ -31,17 +31,17 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
-public interface KindFontableFigure extends Figure {
+public interface BodyFontableFigure extends Figure {
 
     // text properties
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableFigureKey KIND_FONT_FAMILY = new StringOrIdentStyleableFigureKey("kindFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableFigureKey KIND_FONT_SIZE = new CssSizeStyleableFigureKey("kindFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableFigureKey<FontPosture> KIND_FONT_STYLE = new EnumStyleableFigureKey<>("kindFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableFigureKey<FontWeight> KIND_FONT_WEIGHT = new EnumStyleableFigureKey<>("kindFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
-    FontStyleableMapAccessor KIND_FONT = new FontStyleableMapAccessor("kindFont", KIND_FONT_FAMILY, KIND_FONT_WEIGHT, KIND_FONT_STYLE, KIND_FONT_SIZE);
+    StringOrIdentStyleableFigureKey BODY_FONT_FAMILY = new StringOrIdentStyleableFigureKey("bodyFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
+    CssSizeStyleableFigureKey BODY_FONT_SIZE = new CssSizeStyleableFigureKey("bodyFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
+    EnumStyleableFigureKey<FontPosture> BODY_FONT_STYLE = new EnumStyleableFigureKey<>("bodyFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
+    EnumStyleableFigureKey<FontWeight> BODY_FONT_WEIGHT = new EnumStyleableFigureKey<>("bodyFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    FontStyleableMapAccessor BODY_FONT = new FontStyleableMapAccessor("bodyFont", BODY_FONT_FAMILY, BODY_FONT_WEIGHT, BODY_FONT_STYLE, BODY_FONT_SIZE);
 
     /**
      * Updates a text node with fontable properties.
@@ -49,12 +49,12 @@ public interface KindFontableFigure extends Figure {
      * @param ctx  RenderContext, can be null
      * @param text a text node
      */
-    default void applyKindTextFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
-        String family = getStyledNonnull(KIND_FONT_FAMILY);
-        FontPosture style = getStyledNonnull(KIND_FONT_STYLE);
-        FontWeight weight = getStyledNonnull(KIND_FONT_WEIGHT);
+    default void applyBodyTextFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
+        String family = getStyledNonnull(BODY_FONT_FAMILY);
+        FontPosture style = getStyledNonnull(BODY_FONT_STYLE);
+        FontWeight weight = getStyledNonnull(BODY_FONT_WEIGHT);
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        CssSize cssSize = getStyledNonnull(KIND_FONT_SIZE);
+        CssSize cssSize = getStyledNonnull(BODY_FONT_SIZE);
         double size = units.convert(cssSize, UnitConverter.DEFAULT);
         CssFont f = CssFont.font(family, weight, style, size);
 
@@ -76,9 +76,9 @@ public interface KindFontableFigure extends Figure {
      * @param ctx  context
      * @param text a text node
      */
-    default void applyKindTextFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
+    default void applyBodyTextFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        Font font = getStyledNonnull(KIND_FONT).getFont();
+        Font font = getStyledNonnull(BODY_FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }
