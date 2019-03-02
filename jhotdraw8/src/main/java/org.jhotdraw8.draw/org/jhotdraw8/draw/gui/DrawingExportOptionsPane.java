@@ -16,6 +16,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.text.CssNumberConverter;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.gui.InputDialog;
 import org.jhotdraw8.text.StringConverterAdapter;
@@ -90,7 +91,7 @@ public class DrawingExportOptionsPane extends GridPane {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setRoot(this);
-        loader.setResources(ApplicationLabels.getResources().asResourceBundle());
+        loader.setResources(DrawLabels.getResources().asResourceBundle());
         try {
             loader.load(getClass().getResourceAsStream("DrawingExportOptionsPane.fxml"));
         } catch (IOException ex) {
