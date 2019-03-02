@@ -117,5 +117,31 @@ public class ZoomToolbar extends BorderPane {
         zoomPower.set(zoomPower.get() + 1);
     }
 
+    @Nonnull
+    public DoubleProperty minProperty() {
+        return zoomSlider.minProperty();
+    }
+
+    @Nonnull
+    public DoubleProperty maxProperty() {
+        return zoomSlider.maxProperty();
+    }
+
+    public double getMin() {
+        return minProperty().get();
+    }
+
+    public double getMax() {
+        return maxProperty().get();
+    }
+
+    public void setMin(double value) {
+        minProperty().set(value);
+    }
+
+    public void setMax(double value) {
+        maxProperty().set(value);
+    }
+
 
 }

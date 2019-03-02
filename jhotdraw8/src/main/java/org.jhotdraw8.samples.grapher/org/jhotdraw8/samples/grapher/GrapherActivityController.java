@@ -28,6 +28,7 @@ import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
@@ -433,7 +434,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
-                GrapherApplication.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString(),//
+                DrawStylesheets.getInspectorsStylesheet(),//
                 GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
         );
 

@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
@@ -31,6 +32,7 @@ import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
@@ -389,6 +391,16 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
+
+        toolsToolBar.getItems().add(new Separator());
+        ZoomToolbar ztbar = new ZoomToolbar();
+        ztbar.zoomFactorProperty().bindBidirectional(drawingView.zoomFactorProperty());
+        toolsToolBar.getItems().add(ztbar);
+        ztbar.setMin(-5);
+        ztbar.setMax(5);
+
+
+
         return layerFactory;
     }
 
@@ -430,9 +442,6 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
         Supplier<Layer> layerFactory = initToolBar();
 
-        ZoomToolbar ztbar = new ZoomToolbar();
-        ztbar.zoomFactorProperty().bindBidirectional(drawingView.zoomFactorProperty());
-        toolsToolBar.getItems().add(ztbar);
         initInspectors(viewScrollPane, layerFactory);
 
     }
@@ -534,7 +543,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
-                ModelerApplication.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString(),//
+                DrawStylesheets.getInspectorsStylesheet(),//
                 ModelerApplication.class.getResource("/org/jhotdraw8/samples/modeler/modeler.css").toString()//
         );
 
