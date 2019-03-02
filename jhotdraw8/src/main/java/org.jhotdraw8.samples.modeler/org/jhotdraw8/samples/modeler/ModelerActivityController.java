@@ -261,7 +261,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         map.put(VIEWTOGGLE_PROPERTIES, new ToggleBooleanAction(
                 getApplication(), this,
                 VIEWTOGGLE_PROPERTIES,
-                Resources.getResources("org.jhotdraw8.samples.modeler.Labels"), detailsVisible));
+                ModelerLabels.getResources(), detailsVisible));
         map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
         map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(CombinedPathFigure::new)));
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
@@ -280,7 +280,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
-        Resources labels = Resources.getResources("org.jhotdraw8.samples.modeler.Labels");
+        Resources labels = ModelerLabels.getResources();
         Supplier<Layer> layerFactory = () -> createFigure(LayerFigure::new);
 
         // selection tools -----------

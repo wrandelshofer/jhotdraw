@@ -9,9 +9,9 @@ module org.jhotdraw8.draw {
     requires jdk.javadoc;
     requires transitive org.jhotdraw8.application;
 
-    opens org.jhotdraw8.draw.inspector
-            to javafx.fxml;
+    opens org.jhotdraw8.draw.inspector;
     opens org.jhotdraw8.draw;
+    opens org.jhotdraw8.draw.action.images;
 
     exports org.jhotdraw8.css;
     exports org.jhotdraw8.css.ast;
@@ -40,4 +40,5 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.text;
     exports org.jhotdraw8.draw.gui;
 
+    provides ResourceBundleProvider with org.jhotdraw8.draw.spi.DrawLabelsProvider;
 }

@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.util.Resources;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 
@@ -95,7 +95,7 @@ public class DefaultFontChooserModelFactory {
     protected ObservableList<FontCollection> generateCollections(@Nonnull List<FontFamily> families) {
         ObservableList<FontCollection> root = FXCollections.observableArrayList();
 
-        final ResourceBundle labels = Resources.getBundle("org.jhotdraw8.gui.Labels");
+        final Resources labels = ApplicationLabels.getGuiResources();
 
         // All fonts
         FontCollection allFonts = new FontCollection(labels.getString("FontCollection.allFonts"), true, families);

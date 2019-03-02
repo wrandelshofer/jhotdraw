@@ -249,7 +249,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public ResourceBundle getResources() {
-        return Labels.getLabels();
+        return ApplicationLabels.getResources().asResourceBundle();
     }
 
     public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {

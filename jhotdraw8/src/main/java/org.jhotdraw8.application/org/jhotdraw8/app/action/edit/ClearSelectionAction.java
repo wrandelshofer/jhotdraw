@@ -7,8 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.app.Labels;
 
 /**
  * Clears (de-selects) the selected region.
@@ -40,7 +40,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
      */
     public ClearSelectionAction(Application app, Node target) {
         super(app, target);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override

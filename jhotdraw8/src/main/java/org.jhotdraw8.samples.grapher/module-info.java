@@ -9,7 +9,8 @@ module org.jhotdraw8.samples.grapher {
     requires jdk.javadoc;
     requires transitive org.jhotdraw8.draw;
 
-    opens org.jhotdraw8.samples.grapher
-            to javafx.fxml, javafx.graphics, org.jhotdraw8.application;
+    opens org.jhotdraw8.samples.grapher;
 
+    uses ResourceBundleProvider;
+    provides ResourceBundleProvider with org.jhotdraw8.samples.grapher.spi.GrapherLabelsProvider;
 }

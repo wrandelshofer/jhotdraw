@@ -12,6 +12,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
@@ -28,13 +29,13 @@ public class FontDialog extends Dialog<String> {
     private FontChooserController controller;
 
     public FontDialog() {
-        final Resources labels = Resources.getResources("org.jhotdraw8.gui.Labels");
+        final Resources labels = ApplicationLabels.getGuiResources();
         final DialogPane dialogPane = getDialogPane();
         try {
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(FontDialog.class.getResource("FontChooser.fxml"));
-            loader.setResources(labels);
+            loader.setResources(labels.asResourceBundle());
             loader.load();
             final Parent root = loader.getRoot();
             dialogPane.setContent(root);

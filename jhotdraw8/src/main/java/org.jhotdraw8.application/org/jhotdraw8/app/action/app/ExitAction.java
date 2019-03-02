@@ -14,8 +14,8 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.concurrent.SimpleWorkState;
@@ -54,7 +54,7 @@ public class ExitAction extends AbstractApplicationAction {
      */
     public ExitAction(Application app) {
         super(app);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ExitAction extends AbstractApplicationAction {
             return;
         }
 
-        final Resources labels = Labels.getLabels();
+        final Resources labels = ApplicationLabels.getResources();
         switch (unsavedViewsCount) {
             case 0: {
                 doExit(workState);
@@ -138,7 +138,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveChanges(WorkState workState) {
         DocumentBasedActivity v = unsavedView;
-        Resources labels = Labels.getLabels();
+        Resources labels = ApplicationLabels.getResources();
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = null;
@@ -182,7 +182,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewChanges(WorkState workState) {
         if (!unsavedView.isDisabled()) {
-            final Resources labels = Labels.getLabels();
+            final Resources labels = ApplicationLabels.getResources();
             oldFocusOwner = unsavedView.getNode().getScene().getFocusOwner();
             unsavedView.removeDisabler(workState);
             URI unsavedURI = unsavedView.getURI();
@@ -279,7 +279,7 @@ public class ExitAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception;
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Labels.getLabels();
+                Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)) + "</b><p>"
                                 + ((message == null) ? "" : message));
@@ -309,7 +309,7 @@ public class ExitAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception.getCause();
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Labels.getLabels();
+                Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)) + "</b><p>"
                                 + ((message == null) ? "" : message));

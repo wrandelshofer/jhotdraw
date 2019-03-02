@@ -26,6 +26,7 @@ import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.util.Resources;
 
 import java.net.URL;
@@ -88,7 +89,7 @@ public class FontChooserController {
 
     @Nonnull
     private FontCollection createFontCollection() {
-        final Resources labels = Resources.getResources("org.jhotdraw8.gui.Labels");
+        final Resources labels = ApplicationLabels.getGuiResources();
         FontCollection collection = new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
         return collection;
     }
@@ -227,7 +228,7 @@ public class FontChooserController {
     }
 
     private void initListSelectionBehavior() throws MissingResourceException {
-        final Resources labels = Resources.getResources("org.jhotdraw8.gui.Labels");
+        final Resources labels = ApplicationLabels.getGuiResources();
 
         collectionList.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> {
             familyList.setItems(newv == null ? null : newv.getFamilies());

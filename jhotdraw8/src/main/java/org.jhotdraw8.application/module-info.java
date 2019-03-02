@@ -1,3 +1,5 @@
+import org.jhotdraw8.app.spi.ApplicationLabelsProvider;
+
 module org.jhotdraw8.application {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
@@ -12,6 +14,7 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.annotation;
     exports org.jhotdraw8.app.action;
     exports org.jhotdraw8.app.action.view;
+    exports org.jhotdraw8.app.spi;
     exports org.jhotdraw8.collection;
     exports org.jhotdraw8.concurrent;
     exports org.jhotdraw8.util;
@@ -26,5 +29,7 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.gui.dock;
     exports org.jhotdraw8.gui.fontchooser;
 
-    opens org.jhotdraw8.app;
+    uses ResourceBundleProvider;
+    provides ResourceBundleProvider with ApplicationLabelsProvider;
+    opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
 }

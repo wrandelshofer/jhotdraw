@@ -83,7 +83,7 @@ import org.jhotdraw8.draw.inspector.HandlesInspector;
 import org.jhotdraw8.draw.inspector.HelpTextInspector;
 import org.jhotdraw8.draw.inspector.HierarchyInspector;
 import org.jhotdraw8.draw.inspector.Inspector;
-import org.jhotdraw8.draw.inspector.Labels;
+import org.jhotdraw8.draw.inspector.InspectorLabels;
 import org.jhotdraw8.draw.inspector.LayersInspector;
 import org.jhotdraw8.draw.inspector.StyleAttributesInspector;
 import org.jhotdraw8.draw.inspector.StyleClassesInspector;
@@ -162,7 +162,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
 
     @Nonnull
     private DockItem addInspector(Inspector inspector, String id, Priority grow) {
-        Resources r = Labels.getResources();
+        Resources r = InspectorLabels.getResources();
         DockItem dockItem = new DockItem();
         dockItem.setText(r.getString(id + ".toolbar"));
         dockItem.setContent(inspector.getNode());
@@ -232,7 +232,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         map.put(VIEWTOGGLE_PROPERTIES, new ToggleBooleanAction(
                 getApplication(), this,
                 VIEWTOGGLE_PROPERTIES,
-                Resources.getResources("org.jhotdraw8.samples.grapher.Labels"), detailsVisible));
+                GrapherLabels.getResources(), detailsVisible));
         map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
         map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(CombinedPathFigure::new)));
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
@@ -251,7 +251,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
-        Resources labels = Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
+        Resources labels = GrapherLabels.getResources();
         Supplier<Layer> layerFactory = () -> createFigure(LayerFigure::new);
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("tool.resizeFigure", HandleType.RESIZE, null, HandleType.LEAD, labels), 0, 0);

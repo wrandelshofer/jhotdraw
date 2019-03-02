@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -35,7 +36,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
     public BringToFrontAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
-                = Resources.getResources("org.jhotdraw8.draw.Labels");
+                = ApplicationLabels.getResources();
         labels.configureAction(this, ID);
     }
 

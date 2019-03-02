@@ -17,8 +17,8 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
@@ -87,7 +87,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
 
     public void handleActionOnViewPerformed(@Nonnull DocumentBasedActivity v) {
         if (!v.isDisabled()) {
-            final Resources labels = Labels.getLabels();
+            final Resources labels = ApplicationLabels.getResources();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
             WorkState workState = new SimpleWorkState(getLabel());
@@ -221,7 +221,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewContr
                 }
             } else if (exception != null) {
                 Throwable value = exception;
-                Resources labels = Labels.getLabels();
+                Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));

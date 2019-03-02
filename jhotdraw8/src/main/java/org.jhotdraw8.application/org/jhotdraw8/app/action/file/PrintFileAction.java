@@ -10,8 +10,8 @@ import javafx.scene.control.Alert.AlertType;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
@@ -49,7 +49,7 @@ public class PrintFileAction extends AbstractViewControllerAction<DocumentBasedA
      */
     public PrintFileAction(Application app, @Nullable DocumentBasedActivity view) {
         super(app, view, DocumentBasedActivity.class);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override

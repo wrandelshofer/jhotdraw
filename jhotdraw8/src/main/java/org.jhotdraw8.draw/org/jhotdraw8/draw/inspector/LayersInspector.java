@@ -227,7 +227,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             FXMLLoader loader = new FXMLLoader();
             loader.setController(this);
-            loader.setResources(Labels.getBundle());
+            loader.setResources(InspectorLabels.getResources().asResourceBundle());
 
             try (InputStream in = fxmlUrl.openStream()) {
                 node = loader.load(in);

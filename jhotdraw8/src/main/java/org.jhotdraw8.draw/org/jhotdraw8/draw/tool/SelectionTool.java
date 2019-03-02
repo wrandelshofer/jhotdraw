@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -96,7 +97,7 @@ public class SelectionTool extends AbstractTool {
     // Constructors
     // ---
     public SelectionTool() {
-        this("tool.selectFigure", HandleType.RESIZE, Resources.getResources("org.jhotdraw8.draw.Labels"));
+        this("tool.selectFigure", HandleType.RESIZE, ApplicationLabels.getResources());
     }
 
     public SelectionTool(String name, Resources rsrc) {

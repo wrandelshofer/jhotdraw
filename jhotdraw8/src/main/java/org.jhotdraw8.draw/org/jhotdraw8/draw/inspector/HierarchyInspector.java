@@ -97,7 +97,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
-                Labels.getBundle());
+                InspectorLabels.getResources().asResourceBundle());
     }
 
     public HierarchyInspector(@Nonnull URL fxmlUrl, ResourceBundle resources) {

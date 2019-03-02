@@ -76,8 +76,8 @@ public class LayerCell extends ListCell<Figure> {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
-        Resources rsrc = Labels.getResources();
-        loader.setResources(rsrc);
+        Resources rsrc = InspectorLabels.getResources();
+        loader.setResources(rsrc.asResourceBundle());
 
         try (InputStream in = fxmlUrl.openStream()) {
             node = loader.load(in);

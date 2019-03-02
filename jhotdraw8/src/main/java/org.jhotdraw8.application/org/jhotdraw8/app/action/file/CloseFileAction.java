@@ -6,8 +6,8 @@ package org.jhotdraw8.app.action.file;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 
 import java.util.concurrent.CompletableFuture;
@@ -33,7 +33,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
      */
     public CloseFileAction(Application app, DocumentBasedActivity view) {
         super(app, view);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     public CloseFileAction(Application app) {

@@ -6,7 +6,7 @@ package org.jhotdraw8.app.action.file;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.Labels;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 
 import java.beans.PropertyChangeListener;
@@ -36,7 +36,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
      */
     public ClearRecentFilesMenuAction(Application app) {
         super(app);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
         //     updateEnabled();
     }
 

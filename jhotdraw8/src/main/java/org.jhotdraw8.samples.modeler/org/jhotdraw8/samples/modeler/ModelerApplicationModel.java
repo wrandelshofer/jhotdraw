@@ -15,7 +15,6 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.svg.SvgExporter;
-import org.jhotdraw8.util.Resources;
 
 import java.util.ResourceBundle;
 
@@ -55,7 +54,7 @@ public class ModelerApplicationModel extends SimpleApplicationModel {
 
     @Override
     public ResourceBundle getResources() {
-        return Resources.getResources("org.jhotdraw8.samples.modeler.Labels");
+        return ModelerLabels.getBundle();
     }
 
     @Override

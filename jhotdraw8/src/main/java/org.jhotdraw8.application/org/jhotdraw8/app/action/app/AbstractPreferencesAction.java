@@ -4,7 +4,7 @@
 package org.jhotdraw8.app.action.app;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.Labels;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 
 /**
@@ -27,6 +27,6 @@ public abstract class AbstractPreferencesAction extends AbstractApplicationActio
      */
     public AbstractPreferencesAction(Application app) {
         super(app);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 }

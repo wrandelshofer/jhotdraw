@@ -7,8 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.app.Labels;
 
 /**
  * Copies the selected region and place its contents into the system clipboard.
@@ -41,7 +41,7 @@ public class CopyAction extends AbstractSelectionAction {
      */
     public CopyAction(Application app, Node target) {
         super(app, target);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override

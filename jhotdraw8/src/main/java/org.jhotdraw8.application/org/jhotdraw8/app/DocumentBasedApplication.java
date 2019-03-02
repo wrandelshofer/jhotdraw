@@ -195,7 +195,7 @@ public class DocumentBasedApplication extends AbstractApplication {
                 .handle((v, e) -> {
                     if (e != null) {
                         e.printStackTrace();
-                        final Resources labels = Labels.getLabels();
+                        final Resources labels = ApplicationLabels.getResources();
                         Alert alert = new Alert(Alert.AlertType.ERROR,
                                 labels.getString("application.createView.error"));
                         alert.getDialogPane().setMaxWidth(640.0);
@@ -253,7 +253,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      * @return the resource bundle
      */
     protected Resources getLabels() {
-        return Labels.getLabels();
+        return ApplicationLabels.getResources();
     }
 
     @Override
@@ -460,7 +460,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     private void openView(URI uri) {
-        final Resources labels = Labels.getLabels();
+        final Resources labels = ApplicationLabels.getResources();
         createView().whenComplete((pv, ex1) -> {
             DocumentBasedActivity v = (DocumentBasedActivity) pv;
             if (ex1 != null) {
@@ -502,7 +502,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     private void openEmptyView() {
-        final Resources labels = Labels.getLabels();
+        final Resources labels = ApplicationLabels.getResources();
         createView().whenComplete((pv, ex1) -> {
             DocumentBasedActivity v = (DocumentBasedActivity) pv;
             if (ex1 != null) {

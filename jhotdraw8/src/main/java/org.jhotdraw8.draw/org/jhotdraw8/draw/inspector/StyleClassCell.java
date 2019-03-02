@@ -49,7 +49,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
-        loader.setResources(Labels.getBundle());
+        loader.setResources(InspectorLabels.getResources().asResourceBundle());
 
         try (InputStream in = fxmlUrl.openStream()) {
             node = loader.load(in);

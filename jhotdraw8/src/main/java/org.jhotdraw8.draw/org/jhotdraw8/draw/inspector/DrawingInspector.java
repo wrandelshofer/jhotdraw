@@ -81,7 +81,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
-            loader.setResources(Labels.getBundle());
+            loader.setResources(InspectorLabels.getResources().asResourceBundle());
             loader.setController(this);
 
             try (InputStream in = fxmlUrl.openStream()) {

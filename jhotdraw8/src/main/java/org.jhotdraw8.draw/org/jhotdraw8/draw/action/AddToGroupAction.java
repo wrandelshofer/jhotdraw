@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -37,7 +38,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
      */
     public AddToGroupAction(Application app, DrawingEditor editor) {
         super(app, editor);
-        Resources labels = Resources.getResources("org.jhotdraw8.draw.Labels");
+        Resources labels = ApplicationLabels.getResources();
         labels.configureAction(this, ID);
     }
 

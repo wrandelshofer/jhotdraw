@@ -10,8 +10,8 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
@@ -42,7 +42,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentBased
      */
     public RevertFileAction(Application app, DocumentBasedActivity view) {
         super(app, view, DocumentBasedActivity.class);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class RevertFileAction extends AbstractViewControllerAction<DocumentBased
         final DataFormat dataFormat = view.getDataFormat();
         if (view.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
-                    Labels.getLabels().getString("file.revert.doYouWantToRevert.message"), ButtonType.YES, ButtonType.CANCEL);
+                    ApplicationLabels.getResources().getString("file.revert.doYouWantToRevert.message"), ButtonType.YES, ButtonType.CANCEL);
             alert.getDialogPane().setMaxWidth(640.0);
             Optional<ButtonType> answer = alert.showAndWait();
             if (answer.isPresent() && answer.get() == ButtonType.YES) {

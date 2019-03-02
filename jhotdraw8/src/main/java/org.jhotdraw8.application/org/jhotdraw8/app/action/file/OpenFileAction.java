@@ -9,8 +9,8 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.Labels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -45,7 +45,7 @@ public class OpenFileAction extends AbstractApplicationAction {
      */
     public OpenFileAction(Application app) {
         super(app);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     protected URIChooser getChooser(DocumentBasedActivity view) {
@@ -128,7 +128,7 @@ public class OpenFileAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception;
                 value.printStackTrace();
-                Resources labels = Labels.getLabels();
+                Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(value));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));

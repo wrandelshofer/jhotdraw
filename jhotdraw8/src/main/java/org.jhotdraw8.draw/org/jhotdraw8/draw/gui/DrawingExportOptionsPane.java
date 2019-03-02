@@ -13,6 +13,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.text.CssNumberConverter;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
@@ -41,7 +42,7 @@ import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_
 public class DrawingExportOptionsPane extends GridPane {
 
     public static Dialog<Map<? super Key<?>, Object>> createDialog(DataFormat format) {
-        Resources labels = Resources.getResources("org.jhotdraw8.draw.Labels");
+        Resources labels = ApplicationLabels.getResources();
         final DrawingExportOptionsPane pane = new DrawingExportOptionsPane();
         pane.setFormat(format);
         return new InputDialog<>(labels.getString("export.dialog.title"), labels.getString("export.dialog.headerText"), pane, pane::getExportOptions);
@@ -89,7 +90,7 @@ public class DrawingExportOptionsPane extends GridPane {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setRoot(this);
-        loader.setResources(Resources.getResources("org.jhotdraw8.draw.Labels"));
+        loader.setResources(ApplicationLabels.getResources().asResourceBundle());
         try {
             loader.load(getClass().getResourceAsStream("DrawingExportOptionsPane.fxml"));
         } catch (IOException ex) {

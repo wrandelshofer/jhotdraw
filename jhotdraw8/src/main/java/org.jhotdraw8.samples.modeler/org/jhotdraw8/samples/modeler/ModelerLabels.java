@@ -13,18 +13,18 @@ public class ModelerLabels {
     public final static String INSPECTOR_RESOURCE_BUNDLE = "org.jhotdraw8.samples.modeler.InspectorLabels";
 
     public static ResourceBundle getBundle() {
-        return Resources.getBundle(RESOURCE_BUNDLE);
+        return getResources().asResourceBundle();
     }
 
     public static Resources getResources() {
-        return Resources.getResources(RESOURCE_BUNDLE);
+        return Resources.getResources("org.jhotdraw8.samples.modeler", RESOURCE_BUNDLE);
     }
 
     public static ResourceBundle getInspectorBundle() {
-        return Resources.getBundle(INSPECTOR_RESOURCE_BUNDLE);
+        return getInspectorResources().asResourceBundle();
     }
 
     public static Resources getInspectorResources() {
-        return Resources.getResources(INSPECTOR_RESOURCE_BUNDLE);
+        return Resources.getResources("org.jhotdraw8.samples.modeler", INSPECTOR_RESOURCE_BUNDLE);
     }
 }

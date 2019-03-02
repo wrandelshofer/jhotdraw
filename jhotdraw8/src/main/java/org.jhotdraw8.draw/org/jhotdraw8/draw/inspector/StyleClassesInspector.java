@@ -146,7 +146,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
-            loader.setResources(Labels.getBundle());
+            loader.setResources(InspectorLabels.getResources().asResourceBundle());
             loader.setController(this);
 
             try (InputStream in = fxmlUrl.openStream()) {

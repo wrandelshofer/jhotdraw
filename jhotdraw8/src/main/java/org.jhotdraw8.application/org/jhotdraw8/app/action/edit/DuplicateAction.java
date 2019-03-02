@@ -7,8 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.app.Labels;
 
 /**
  * Duplicates the selected region.
@@ -40,7 +40,7 @@ public class DuplicateAction extends AbstractSelectionAction {
      */
     public DuplicateAction(Application app, Node target) {
         super(app, target);
-        Labels.getLabels().configureAction(this, ID);
+        ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     /*
