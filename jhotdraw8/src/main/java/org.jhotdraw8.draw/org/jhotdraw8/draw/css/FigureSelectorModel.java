@@ -13,31 +13,17 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.ListCssTokenizer;
-import org.jhotdraw8.css.QualifiedName;
-import org.jhotdraw8.css.SelectorModel;
-import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.ReadableStyleableMapAccessor;
+import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -60,7 +46,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Nonnull
     private HashMap<QualifiedName, WriteableStyleableMapAccessor<?>> nameToKeyMap = new HashMap<>();
     @Nonnull
-    private HashMap<QualifiedName, ReadableStyleableMapAccessor<?>> nameToReadableKeyMap = new HashMap<>();
+    private HashMap<QualifiedName, ReadOnlyStyleableMapAccessor<?>> nameToReadableKeyMap = new HashMap<>();
     /**
      * Maps a key to an attribute name.
      */
@@ -112,8 +98,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) k;
                 nameToKeyMap.put(new QualifiedName(sk.getCssNamespace(), element.getClass() + "$" + sk.getCssName()), sk);
             }
-            if (k instanceof ReadableStyleableMapAccessor) {
-                ReadableStyleableMapAccessor<?> sk = (ReadableStyleableMapAccessor<?>) k;
+            if (k instanceof ReadOnlyStyleableMapAccessor) {
+                ReadOnlyStyleableMapAccessor<?> sk = (ReadOnlyStyleableMapAccessor<?>) k;
                 nameToReadableKeyMap.put(new QualifiedName(sk.getCssNamespace(), element.getClass() + "$" + sk.getCssName()), sk);
                 if (sk.getCssNamespace() != null) {
                     nameToReadableKeyMap.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
@@ -130,7 +116,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         return result;
     }
 
-    private ReadableStyleableMapAccessor<?> findReadableKey(Figure element, @Nullable String namespace, String attributeName) {
+    private ReadOnlyStyleableMapAccessor<?> findReadableKey(Figure element, @Nullable String namespace, String attributeName) {
         if (mappedFigureClasses.add(element.getClass())) {
             mapFigureClass(element);
         }
@@ -149,26 +135,26 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean attributeValueEquals(@Nonnull Figure element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String requestedValue) {
-        String stringValue = getReadableAttributeValueAsString(element, namespace, attributeName);
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
         return Objects.equals(stringValue, requestedValue);
     }
 
     @Override
     public boolean attributeValueStartsWith(@Nonnull Figure element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
-        String stringValue = getReadableAttributeValueAsString(element, namespace, attributeName);
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
         return stringValue != null && stringValue.startsWith(substring);
     }
 
     @Nullable
-    protected ReadableStyleableMapAccessor<Object> getReadableAttributeAccessor(@Nonnull Figure element, @Nullable String namespace, String attributeName) {
+    protected ReadOnlyStyleableMapAccessor<Object> getReadableAttributeAccessor(@Nonnull Figure element, @Nullable String namespace, String attributeName) {
         @SuppressWarnings("unchecked")
-        ReadableStyleableMapAccessor<Object> k = (ReadableStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
+        ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
         return k;
     }
 
     @Nullable
-    protected String getReadableAttributeValueAsString(@Nonnull Figure element, @Nullable String namespace, String attributeName) {
-        ReadableStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
+    protected String getReadOnlyAttributeValueAsString(@Nonnull Figure element, @Nullable String namespace, String attributeName) {
+        ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
         if (k == null) {
             return null;
         }
@@ -183,19 +169,19 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean attributeValueEndsWith(@Nonnull Figure element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
-        String stringValue = getReadableAttributeValueAsString(element, namespace, attributeName);
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
         return stringValue != null && stringValue.endsWith(substring);
     }
 
     @Override
     public boolean attributeValueContains(@Nonnull Figure element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
-        String stringValue = getReadableAttributeValueAsString(element, namespace, attributeName);
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
         return stringValue != null && stringValue.contains(substring);
     }
 
     @Override
     public boolean attributeValueContainsWord(@Nonnull Figure element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String word) {
-        ReadableStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
+        ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
         if (k == null) {
             return false;
         }
