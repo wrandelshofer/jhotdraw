@@ -9,8 +9,8 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -38,7 +38,7 @@ public class SelectSameAction extends AbstractSelectedAction {
      */
     public SelectSameAction(Application app, DrawingEditor editor) {
         super(app, editor);
-        Resources labels = ApplicationLabels.getResources();
+        Resources labels = DrawLabels.getResources();
         set(Action.ID_KEY, ID);
         labels.configureAction(this, ID);
     }

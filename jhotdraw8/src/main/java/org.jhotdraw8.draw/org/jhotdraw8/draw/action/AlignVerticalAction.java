@@ -6,7 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ApplicationLabels;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -29,7 +29,7 @@ public class AlignVerticalAction extends AbstractSelectedAction {
     public AlignVerticalAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
-                = ApplicationLabels.getResources();
+                = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 

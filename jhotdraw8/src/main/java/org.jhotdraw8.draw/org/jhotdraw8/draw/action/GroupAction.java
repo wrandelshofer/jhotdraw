@@ -9,8 +9,8 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.collection.Iterators;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -50,7 +50,7 @@ public class GroupAction extends AbstractSelectedAction {
     public GroupAction(String id, Application app, DrawingEditor editor, @Nullable Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
-                = ApplicationLabels.getResources();
+                = DrawLabels.getResources();
         labels.configureAction(this, id);
         this.groupFactory = groupFactory;
         if (groupFactory == null) {
