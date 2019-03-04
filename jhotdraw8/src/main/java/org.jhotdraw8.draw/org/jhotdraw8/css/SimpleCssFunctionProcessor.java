@@ -1,5 +1,6 @@
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ReadOnlyList;
 
@@ -199,88 +200,71 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         }
         int end = tt.getEndPosition();
 
-        String attrValue = model.getAttributeAsString(element, attrName.getNamespace(), attrName.getName());
-        if (attrValue != null && !attrValue.isEmpty()) {
-            if (typeOrUnit == null) {
-                typeOrUnit = "string";
-            }
-            StreamCssTokenizer att = new StreamCssTokenizer(attrValue);
+        @Nullable List<CssToken> strValue = model.getAttribute(element, null, attrName.getNamespace(), attrName.getName());
+        if (strValue != null) {
             Outer:
-            switch (typeOrUnit) {
-                case "string":
-                    String strValue;
-                    switch (att.next()) {
-                        case CssTokenType.TT_STRING:
-                        case CssTokenType.TT_IDENT:
-                            strValue = att.currentValue();
-                            break;
-                        case CssTokenType.TT_NUMBER:
-                        case CssTokenType.TT_PERCENTAGE:
-                        case CssTokenType.TT_DIMENSION:
-                            strValue = att.getToken().fromToken();
-                            break;
-                        default:
-                            strValue = null;
-                            break;
+            switch (typeOrUnit == null ? "string" : typeOrUnit) {
+                case "string": {
+                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                    while (t2.next() != CssTokenType.TT_EOF) {
+                        switch (t2.current()) {
+                            case CssTokenType.TT_STRING:
+                            case CssTokenType.TT_IDENT:
+                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonnull(), null, line, start, end));
+                                break;
+                            case CssTokenType.TT_NUMBER:
+                            case CssTokenType.TT_DIMENSION:
+                            case CssTokenType.TT_PERCENTAGE:
+                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonnull().toString(), null, line, start, end));
+                                break;
+                            default:
+                                break Outer; // use fallback
+                        }
                     }
-                    if (strValue == null) {
-                        throw new ParseException("〈attr〉: could not convert attribute value of attribute " + attrName + "=" + attrValue, tt.getStartPosition());
-                    }
-                    out.accept(new CssToken(CssTokenType.TT_STRING, strValue, null, line, start, end));
-                    return;
+                    return; // use output
+                }
                 case "color":
-                    if (attrValue.startsWith("#")) {
-                        out.accept(new CssToken(CssTokenType.TT_IDENT, attrValue.substring(1), null, line, start, end));
-                    }
-                    return;
                 case "url":
-                    out.accept(new CssToken(CssTokenType.TT_FUNCTION, "url", null, line, start, end));
-                    out.accept(new CssToken(CssTokenType.TT_STRING, attrValue, null, line, start, end));
-                    out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET, null, null, line, start, end));
-                    return;
+                    break;//use fallback
                 case "integer":
-                    try {
-                        out.accept(new CssToken(CssTokenType.TT_NUMBER, null, Integer.parseInt(attrValue, start), line, start, end));
-                        return;
-                    } catch (NumberFormatException e) {
-                        break;
-                    }
                 case "number":
-                    try {
-                        out.accept(new CssToken(CssTokenType.TT_NUMBER, null, parseDimensionOrDouble(attrValue, start).getValue(), line, start, end));
-                        return;
-                    } catch (NumberFormatException e) {
-                        break;
+                    break;//use fallback
+                case "length": {
+                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                    while (t2.next() != CssTokenType.TT_EOF) {
+                        switch (t2.current()) {
+                            case CssTokenType.TT_STRING:
+                            case CssTokenType.TT_IDENT:
+                                double d;
+                                try {
+                                    d = Double.parseDouble(t2.currentStringNonnull());
+                                } catch (NumberFormatException e) {
+                                    break Outer; // use fallback
+                                }
+                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, null, d, line, start, end));
+                                break;
+                            case CssTokenType.TT_NUMBER:
+                            case CssTokenType.TT_DIMENSION:
+                            case CssTokenType.TT_PERCENTAGE:
+                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, null, t2.currentNumberNonnull(), line, start, end));
+                                break;
+                            default:
+                                break Outer; // use fallback
+                        }
                     }
-                case "length":
+                    return; // use output
+                }
                 case "angle":
                 case "time":
                 case "frequency":
-                    try {
-                        CssSize dim = parseDimensionOrDouble(attrValue, start);
-                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, dim.getUnits(), dim.getValue(), line, start, end));
-                        return;
-                    } catch (NumberFormatException | ParseException e) {
-                        break;
-                    }
                 case "%length":
                 case "%angle":
                 case "%time":
                 case "%frequency":
-                    try {
-                        out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, "%", parseDimensionOrDouble(attrValue, start).getValue(), line, start, end));
-                        return;
-                    } catch (NumberFormatException e) {
-                        break;
-                    }
                 default:
-                    try {
-                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, parseDimensionOrDouble(attrValue, start).getValue(), line, start, end));
-                        return;
-                    } catch (NumberFormatException e) {
-                        break;
-                    }
+                    break;// use fallback
             }
+
         }
         processToken(element, new ListCssTokenizer(attrFallback), out);
 
