@@ -3,15 +3,7 @@
  */
 package org.jhotdraw8.draw.constrain;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -25,20 +17,12 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.DefaultUnitConverter;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 
 /**
  * GridConstrainer.
@@ -307,11 +291,17 @@ public class GridConstrainer extends AbstractConstrainer {
         return result < 0 ? 360 + result : result;
     }
 
+    private boolean canSnapToGrid() {
+        return snapToGrid.get() && getWidth().getValue() > 0 && getHeight().getValue() > 0;
+    }
+
     @Nonnull
     @Override
     public CssPoint2D translatePoint(Figure f, @Nonnull CssPoint2D cssp, @Nonnull CssPoint2D dir) {
-        if (!snapToGrid.get()) {
-            return cssp;
+        if (!canSnapToGrid()) {
+            Point2D p = cssp.getConvertedValue();
+            Point2D covertedDir = dir.getConvertedValue();
+            return new CssPoint2D(p.add(covertedDir));
         }
 
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
@@ -352,8 +342,10 @@ public class GridConstrainer extends AbstractConstrainer {
     @Nonnull
     @Override
     public CssRectangle2D translateRectangle(Figure f, @Nonnull CssRectangle2D cssr, @Nonnull CssPoint2D cssdir) {
-        if (!snapToGrid.get()) {
-            return cssr;
+        if (!canSnapToGrid()) {
+            Rectangle2D r = cssr.getConvertedValue();
+            Point2D dir = cssdir.getConvertedValue();
+            return new CssRectangle2D(r.getMinX() + dir.getX(), r.getMinY() + dir.getY(), r.getWidth(), r.getHeight());
         }
 
         Rectangle2D r = cssr.getConvertedValue();
