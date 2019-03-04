@@ -34,7 +34,7 @@ public class StringStyleableKey extends StringKey implements WriteableStyleableM
         final StyleConverter<String, String> styleConverter
                 = new StyleConverterAdapter<>(this.converter);
         cssMetaData = new SimpleCssMetaData<>(key, function, styleConverter, defaultValue, false);
-        cssName = ReadableStyleableMapAccessor.toCssName(getName());
+        cssName = ReadOnlyStyleableMapAccessor.toCssName(getName());
     }
 
     @Nullable

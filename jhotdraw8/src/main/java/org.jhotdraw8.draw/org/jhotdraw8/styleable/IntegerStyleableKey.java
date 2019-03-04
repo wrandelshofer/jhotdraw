@@ -24,7 +24,7 @@ public class IntegerStyleableKey extends SimpleStyleableKey<Integer> implements 
     private final static long serialVersionUID = 1L;
 
     public IntegerStyleableKey(String key) {
-        this(key, ReadableStyleableMapAccessor.toCssName(key));
+        this(key, ReadOnlyStyleableMapAccessor.toCssName(key));
     }
 
     public IntegerStyleableKey(String key, String cssName) {

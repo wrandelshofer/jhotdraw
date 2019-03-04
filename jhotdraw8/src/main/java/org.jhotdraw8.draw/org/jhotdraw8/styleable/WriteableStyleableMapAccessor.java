@@ -9,7 +9,7 @@ package org.jhotdraw8.styleable;
  * @param <T> The value type.
  * @author Werner Randelshofer
  */
-public interface WriteableStyleableMapAccessor<T> extends ReadableStyleableMapAccessor<T> {
+public interface WriteableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAccessor<T> {
 
     final static long serialVersionUID = 1L;
 
