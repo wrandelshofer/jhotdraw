@@ -17,13 +17,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
-import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -238,6 +232,14 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
+        CssSize elbowOffset1 = getElbowOffset();
+        double elbowOffset = elbowOffset1 == null ? 0.0 : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(elbowOffset1, UnitConverter.DEFAULT);
+
+
+        ObservableList<Double> points = path.getPoints();
+        points.clear();
+
+
         if (startConnector != null && startTarget != null) {
             start = startConnector.getPositionInWorld(this, startTarget);
         }
@@ -245,13 +247,9 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             end = endConnector.getPositionInWorld(this, endTarget);
         }
 
-        // We must switch off rotations for the following computations
-        // because
-        Point2D startTangent = null;
         Point2D endTangent = null;
         if (startConnector != null && startTarget != null) {
             Intersection.IntersectionPoint intersectionPoint = startConnector.chopStart(this, startTarget, start, end);
-            startTangent = intersectionPoint.getTangent2();
             start = worldToParent(intersectionPoint.getPoint());
             set(START, new CssPoint2D(start));
         }
@@ -262,11 +260,10 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             set(END, new CssPoint2D(end));
         }
 
-        ObservableList<Double> points = path.getPoints();
-        points.clear();
+        //ObservableList<Double> points = path.getPoints();
+        // points.clear();
         CssSize elbowOffsetSize = getElbowOffset();
         UnitConverter unitConverter = ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        double elbowOffset = elbowOffsetSize == null ? 0.0 : unitConverter.convert(elbowOffsetSize, UnitConverter.DEFAULT);
         if (elbowOffset == 0 || endTangent == null || Geom.squaredMagnitude(endTangent) < 1e-7) {
             points.addAll(start.getX(), start.getY());
             points.addAll(end.getX(), end.getY());
