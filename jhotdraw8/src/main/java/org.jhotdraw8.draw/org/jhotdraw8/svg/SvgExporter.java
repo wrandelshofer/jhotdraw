@@ -14,44 +14,9 @@ import javafx.scene.Parent;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BorderImage;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.FillRule;
-import javafx.scene.shape.HLineTo;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.QuadCurve;
-import javafx.scene.shape.QuadCurveTo;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
-import javafx.scene.shape.VLineTo;
+import javafx.scene.layout.*;
+import javafx.scene.paint.*;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -97,12 +62,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -1141,24 +1101,9 @@ public class SvgExporter {
         String x = nb.toString(node.getX());
 
         VPos vpos = node.getTextOrigin();
-        final double vposOffset;
-        switch (vpos) {
-            default:
-            case BASELINE:
-                vposOffset = 0;
-                break;
-            case BOTTOM: // bottom of multiline text
-                vposOffset = 0;// FIXME this is incorrect
-                break;
-            case CENTER:// FIXME this is incorrect
-                vposOffset = node.getLayoutBounds().getHeight() * 0.5;
-                break;
-            case TOP:
-                vposOffset = node.getBaselineOffset();
-                break;
-        }
+        final double y = node.getLayoutBounds().getMinY() + node.getBaselineOffset();
         elem.setAttribute("x", x);
-        elem.setAttribute("y", nb.toString(node.getY() + vposOffset));
+        elem.setAttribute("y", nb.toString(y));
         double lineSpacing = node.getLineSpacing();
         double fontSize = node.getFont().getSize() * 96 / 72;
 
