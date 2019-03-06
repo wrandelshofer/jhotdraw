@@ -14,9 +14,35 @@ import javafx.scene.Parent;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
-import javafx.scene.shape.*;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BorderImage;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.FillRule;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -62,7 +88,12 @@ import java.io.Writer;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -649,94 +680,8 @@ public class SvgExporter {
         }
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
-        StringBuilder buf = new StringBuilder();
-        char prev = '\0'; // previous command
-        for (PathElement pe : node.getElements()) {
-            if (buf.length() != 0) {
-                buf.append(' ');
-            }
-            if (pe instanceof MoveTo) {
-                MoveTo e = (MoveTo) pe;
-                if (prev != 'M') {
-                    buf.append('M');
-                    prev = 'L'; // move implies line
-                }
-                buf.append(nb.toString(e.getX()))
-                        .append(',')
-                        .append(nb.toString(e.getY()));
-            } else if (pe instanceof LineTo) {
-                LineTo e = (LineTo) pe;
-                if (prev != 'L') {
-                    buf.append(prev = 'L');
-                }
-                buf.append(nb.toString(e.getX()))
-                        .append(',')
-                        .append(nb.toString(e.getY()));
-            } else if (pe instanceof CubicCurveTo) {
-                CubicCurveTo e = (CubicCurveTo) pe;
-                if (prev != 'C') {
-                    buf.append(prev = 'C');
-                }
-                buf.append(nb.toString(e.getControlX1()))
-                        .append(',')
-                        .append(nb.toString(e.getControlY1()))
-                        .append(',')
-                        .append(nb.toString(e.getControlX2()))
-                        .append(',')
-                        .append(nb.toString(e.getControlY2()))
-                        .append(',')
-                        .append(nb.toString(e.getX()))
-                        .append(',')
-                        .append(nb.toString(e.getY()));
-            } else if (pe instanceof QuadCurveTo) {
-                QuadCurveTo e = (QuadCurveTo) pe;
-                if (prev != 'Q') {
-                    buf.append(prev = 'Q');
-                }
-                buf.append(nb.toString(e.getControlX()))
-                        .append(',')
-                        .append(nb.toString(e.getControlY()))
-                        .append(',')
-                        .append(nb.toString(e.getX()))
-                        .append(',')
-                        .append(nb.toString(e.getY()));
-            } else if (pe instanceof ArcTo) {
-                ArcTo e = (ArcTo) pe;
-                if (prev != 'A') {
-                    buf.append(prev = 'A');
-                }
-                buf.append(nb.toString(e.getRadiusX()))
-                        .append(',')
-                        .append(nb.toString(e.getRadiusY()))
-                        .append(',')
-                        .append(nb.toString(e.getXAxisRotation()))
-                        .append(',')
-                        .append(e.isLargeArcFlag() ? '1' : '0')
-                        .append(',')
-                        .append(e.isSweepFlag() ? '1' : '0')
-                        .append(',')
-                        .append(nb.toString(e.getX()))
-                        .append(',')
-                        .append(nb.toString(e.getY()));
-            } else if (pe instanceof HLineTo) {
-                HLineTo e = (HLineTo) pe;
-                if (prev != 'H') {
-                    buf.append(prev = 'H');
-                }
-                buf.append(nb.toString(e.getX()));
-            } else if (pe instanceof VLineTo) {
-                VLineTo e = (VLineTo) pe;
-                if (prev != 'V') {
-                    buf.append(prev = 'V');
-                }
-                buf.append(nb.toString(e.getY()));
-            } else if (pe instanceof ClosePath) {
-                if (prev != 'Z') {
-                    buf.append(prev = 'Z');
-                }
-            }
-        }
-        elem.setAttribute("d", buf.toString());
+        String d = Shapes.doubleSvgStringFromElements(node.getElements());
+        elem.setAttribute("d", d);
         return elem;
     }
 

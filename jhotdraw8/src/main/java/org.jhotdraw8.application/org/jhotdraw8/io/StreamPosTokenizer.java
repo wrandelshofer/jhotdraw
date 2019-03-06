@@ -490,6 +490,12 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
         readpos--;
     }
 
+    public void requireNextToken(int ttype, String errorMessage) throws IOException {
+        if (nextToken() != ttype) {
+            throw new IOException(errorMessage);
+        }
+    }
+
     /**
      * Parses the next token from the input stream of this tokenizer. The type
      * of the next token is returned in the <code>ttype</code> field. Additional

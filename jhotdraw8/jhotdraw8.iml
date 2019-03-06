@@ -22,8 +22,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="TEST" name="junit-5.3.1" level="project" />
-    <orderEntry type="library" name="saxon9" level="project" />
-    <orderEntry type="library" name="javafx-11.0.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="junit-5.3.2" level="project" />
+    <orderEntry type="library" name="javafx-11.0.2" level="project" />
   </component>
 </module>
