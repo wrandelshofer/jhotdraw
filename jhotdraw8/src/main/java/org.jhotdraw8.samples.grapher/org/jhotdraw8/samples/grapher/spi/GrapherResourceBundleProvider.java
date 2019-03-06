@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.spi.AbstractResourceBundleProvider;
 
-public class GrapherLabelsProvider extends AbstractResourceBundleProvider {
+public class GrapherResourceBundleProvider extends AbstractResourceBundleProvider {
 
 
     @Override

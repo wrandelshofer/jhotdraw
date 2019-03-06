@@ -1,10 +1,10 @@
-package org.jhotdraw8.draw.spi;
+package org.jhotdraw8.app.spi;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.spi.AbstractResourceBundleProvider;
 
-public class DrawLabelsProvider extends AbstractResourceBundleProvider {
+public class ApplicationResourceBundleProvider extends AbstractResourceBundleProvider {
 
     @Override
     public ResourceBundle getBundle(String baseName, Locale locale) {

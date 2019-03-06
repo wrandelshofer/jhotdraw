@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class ClasspathResources extends ResourceBundle implements Serializable, Resources {
     private final static Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
-
+    private final static long serialVersionUID = 1L;
 
     /**
      * The base class

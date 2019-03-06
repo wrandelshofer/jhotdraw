@@ -1,4 +1,4 @@
-import org.jhotdraw8.app.spi.ApplicationLabelsProvider;
+import org.jhotdraw8.app.spi.ApplicationResourceBundleProvider;
 
 module org.jhotdraw8.application {
     requires transitive javafx.graphics;
@@ -30,6 +30,6 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.gui.fontchooser;
 
     uses java.util.spi.ResourceBundleProvider;
-    provides java.util.spi.ResourceBundleProvider with ApplicationLabelsProvider;
+    provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
 }

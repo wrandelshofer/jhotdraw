@@ -1,3 +1,5 @@
+import org.jhotdraw8.samples.grapher.spi.GrapherResourceBundleProvider;
+
 module org.jhotdraw8.samples.grapher {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
@@ -12,5 +14,5 @@ module org.jhotdraw8.samples.grapher {
     opens org.jhotdraw8.samples.grapher to javafx.fxml, javafx.graphics;
 
     uses java.util.spi.ResourceBundleProvider;
-    provides java.util.spi.ResourceBundleProvider with org.jhotdraw8.samples.grapher.spi.GrapherLabelsProvider;
+    provides java.util.spi.ResourceBundleProvider with GrapherResourceBundleProvider;
 }

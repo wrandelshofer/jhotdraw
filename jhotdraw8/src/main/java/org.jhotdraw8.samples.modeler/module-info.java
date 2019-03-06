@@ -1,4 +1,4 @@
-import org.jhotdraw8.samples.modeler.spi.ModelerLabelsProvider;
+import org.jhotdraw8.samples.modeler.spi.ModelerResourceBundleProvider;
 
 module org.jhotdraw8.samples.modeler {
     requires java.desktop;
@@ -11,5 +11,5 @@ module org.jhotdraw8.samples.modeler {
     opens org.jhotdraw8.samples.modeler.figure
             to org.jhotdraw8.draw;
 
-    provides java.util.spi.ResourceBundleProvider with ModelerLabelsProvider;
+    provides java.util.spi.ResourceBundleProvider with ModelerResourceBundleProvider;
 }

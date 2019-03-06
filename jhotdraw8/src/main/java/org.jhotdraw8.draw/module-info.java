@@ -1,3 +1,5 @@
+import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
+
 module org.jhotdraw8.draw {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
@@ -40,5 +42,5 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.text;
     exports org.jhotdraw8.draw.gui;
 
-    provides java.util.spi.ResourceBundleProvider with org.jhotdraw8.draw.spi.DrawLabelsProvider;
+    provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
 }
