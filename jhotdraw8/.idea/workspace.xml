@@ -45,18 +45,8 @@
     </treeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Temporarily does not build javadoc for dist.">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_junit_jupiter_junit_jupiter_api_5_3_2.xml" afterDir="false" />
+    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Fixes code that broke unit tests.&#10;Updates to JUnit 5.3.2.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-jhotdraw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build-jhotdraw.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org.jhotdraw8.samples.modeler.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org.jhotdraw8.samples.modeler.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssParserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/FigureTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/FigureTest.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="2ff40a52-acbb-47ed-83d2-e973858521bd" name="New changelist" comment="Minor changes." />
@@ -130,7 +120,7 @@
         <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssParserTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="202">
-              <caret line="334" column="35" selection-start-line="334" selection-start-column="35" selection-end-line="334" selection-end-column="35" />
+              <caret line="330" column="35" selection-start-line="330" selection-start-column="35" selection-end-line="330" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -147,8 +137,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/FigureTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="124" column="123" selection-start-line="124" selection-start-column="123" selection-end-line="124" selection-end-column="123" />
+            <state relative-caret-position="287">
+              <caret line="91" column="25" selection-start-line="91" selection-start-column="25" selection-end-line="91" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -157,7 +147,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssToken.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="188">
-              <caret line="85" column="40" selection-start-line="85" selection-start-column="40" selection-end-line="85" selection-end-column="40" />
+              <caret line="85" column="41" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -376,6 +366,19 @@
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="junit-5.3.2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -559,14 +562,14 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw8/ext/src/ferro/ch/systransis/arl/ferro/io/RailwayDrawingConnectorXmlConverter.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551878663082" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551878798377" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.3218391" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
@@ -772,14 +775,7 @@
       <workItem from="1546506762302" duration="7115000" />
       <workItem from="1546865664757" duration="1251000" />
       <workItem from="1546867144891" duration="4148000" />
-      <workItem from="1551863996220" duration="7547000" />
-    </task>
-    <task id="LOCAL-00048" summary="Refactors Graph APIs.">
-      <created>1545129242959</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1545129242959</updated>
+      <workItem from="1551863996220" duration="7725000" />
     </task>
     <task id="LOCAL-00049" summary="Refactors Graph APIs.">
       <created>1545134200980</created>
@@ -1117,22 +1113,17 @@
       <option name="project" value="LOCAL" />
       <updated>1551866582248</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="Fixes code that broke unit tests.&#10;Updates to JUnit 5.3.2.">
+      <created>1551878700491</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1551878700491</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="12 - 2019.03.06 at 14h 06m 57s.xml">
-      <configuration name="12" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="12 - 2019.03.06 at 14h 07m 34s.xml">
-      <configuration name="12" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 07m 45s.xml">
-      <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="205 - 2019.03.06 at 14h 08m 57s.xml">
-      <configuration name="205" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="205 - 2019.03.06 at 14h 09m 54s.xml">
       <configuration name="205" configurationId="JUnit" />
     </history-entry>
@@ -1151,9 +1142,21 @@
     <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 16m 55s.xml">
       <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 23m 05s.xml">
+      <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 24m 04s.xml">
+      <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_org_jhotdraw8_application - 2019.03.06 at 14h 24m 10s.xml">
+      <configuration name="All in org.jhotdraw8.application" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_org_jhotdraw8_samples_modeler - 2019.03.06 at 14h 24m 14s.xml">
+      <configuration name="All in org.jhotdraw8.samples.modeler" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="105861000" />
+    <option name="totallyTimeSpent" value="106039000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1166,9 +1169,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="631" y="59" width="1694" height="1311" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.24031477" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.24031477" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.42218542" side_tool="true" weight="0.21424745" />
@@ -1177,12 +1179,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="2" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.8032688" side_tool="true" weight="0.36371237" />
+      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.7699758" side_tool="true" visible="true" weight="0.42809364" />
       <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
       <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
       <window_info anchor="bottom" id="TODO" order="6" side_tool="true" weight="0.3298077" />
       <window_info anchor="bottom" id="Debug" order="7" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
-      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.7699758" side_tool="true" visible="true" weight="0.42809364" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.7699758" side_tool="true" weight="0.42809364" />
       <window_info anchor="bottom" id="Find" order="9" sideWeight="0.76937044" side_tool="true" weight="0.42842743" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.6869658" side_tool="true" weight="0.39307535" />
       <window_info anchor="bottom" id="Run with VisualVM" order="11" sideWeight="0.3080955" weight="0.32790223" />
@@ -1192,7 +1194,7 @@
       <window_info anchor="bottom" id="Reviews" order="15" />
       <window_info anchor="bottom" id="Database Changes" order="16" show_stripe_button="false" />
       <window_info anchor="bottom" id="Inspection Results" order="17" sideWeight="0.49966556" weight="0.32934782" />
-      <window_info active="true" anchor="bottom" id="Structure" order="18" sideWeight="0.23002422" visible="true" weight="0.42809364" />
+      <window_info anchor="bottom" id="Structure" order="18" sideWeight="0.23002422" visible="true" weight="0.42809364" />
       <window_info anchor="bottom" id="Docker" order="19" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" visible="true" weight="0.22336562" />
@@ -1267,7 +1269,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Bumps retention of nullity annotations to &quot;CLASS&quot;." />
     <MESSAGE value="Fixes bugs in SimpleCssFunctionProcessor." />
     <MESSAGE value="Fixes unsave varargs warning." />
     <MESSAGE value="The default value of SHAPE must be a Rectangle." />
@@ -1292,7 +1293,8 @@
     <MESSAGE value="Tweaks layout." />
     <MESSAGE value="Renames providers." />
     <MESSAGE value="Temporarily does not build javadoc for dist." />
-    <option name="LAST_COMMIT_MESSAGE" value="Temporarily does not build javadoc for dist." />
+    <MESSAGE value="Fixes code that broke unit tests.&#10;Updates to JUnit 5.3.2." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes code that broke unit tests.&#10;Updates to JUnit 5.3.2." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1894,7 +1896,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssToken.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
-          <caret line="85" column="40" selection-start-line="85" selection-start-column="40" selection-end-line="85" selection-end-column="40" />
+          <caret line="85" column="41" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -1915,7 +1917,7 @@
     <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
-          <caret line="334" column="35" selection-start-line="334" selection-start-column="35" selection-end-line="334" selection-end-column="35" />
+          <caret line="330" column="35" selection-start-line="330" selection-start-column="35" selection-end-line="330" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -1956,8 +1958,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/FigureTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="124" column="123" selection-start-line="124" selection-start-column="123" selection-end-line="124" selection-end-column="123" />
+        <state relative-caret-position="287">
+          <caret line="91" column="25" selection-start-line="91" selection-start-column="25" selection-end-line="91" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -1977,7 +1979,6 @@
             <option name="proportions">
               <list>
                 <option value="0.3218391" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
