@@ -44,6 +44,10 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
 
     private void commitSelectionChange(Observable o) {
         Property<Boolean> p = (Property<Boolean>) getTableColumn().getCellObservableValue(getIndex());
-        p.setValue(checkBox.isSelected());
+        // Note: We must not call setValue if the value has not changed, because
+        // setValue will fire an invalidation event that we do not want.
+        if (p.getValue() != checkBox.isSelected()) {
+            p.setValue(checkBox.isSelected());
+        }
     }
 }
