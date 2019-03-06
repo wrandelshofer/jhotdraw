@@ -70,6 +70,23 @@ public class CssToken /*extends AST*/ {
     }
 
     public CssToken(int ttype, String stringValue, Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
+        switch (ttype) {
+            case CssTokenType.TT_DIMENSION:
+                if (numericValue == null)
+                    throw new IllegalArgumentException("numeric value must not be null for ttype=" + ttype);
+                if (stringValue == null)
+                    throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
+                break;
+            case CssTokenType.TT_NUMBER:
+            case CssTokenType.TT_PERCENTAGE:
+                if (numericValue == null)
+                    throw new IllegalArgumentException("numeric value must not be null for ttype=" + ttype);
+                break;
+            default:
+                if (ttype < 0 && ttype != CssTokenType.TT_EOF && stringValue == null)
+                    throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
+                break;
+        }
         this.ttype = ttype;
         this.stringValue = stringValue;
         this.numericValue = numericValue;

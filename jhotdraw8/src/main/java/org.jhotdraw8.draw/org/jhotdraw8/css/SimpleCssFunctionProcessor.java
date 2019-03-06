@@ -154,7 +154,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
      *     attr = "attr(" ,  s* , attr-name, s* , [ type-or-unit ] ,  s* , [ "," ,  s* , attr-fallback ] ,  s* , ")" ;
      *     attr-name = qualified-name;
      *     type-or-unit = "string" | "color" | "url" | "integer" | "number"
-     *                   | ["%" ,] ( "length" | "angle" | "time" | "frequency" )
+     *                   | "%" ( "length" | "angle" | "time" | "frequency" )
      *                   ;
      *     attr-fallback = ident-token;
      *
@@ -178,12 +178,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
 
         List<CssToken> attrFallback = new ArrayList<>();
         if (tt.next() == CssTokenType.TT_PERCENT_DELIM) {
-            if (tt.next() == CssTokenType.TT_IDENT) {
-                typeOrUnit = UnitConverter.PERCENTAGE + tt.currentString();
-            } else {
                 typeOrUnit = UnitConverter.PERCENTAGE;
-                tt.pushBack();
-            }
         } else if (tt.current() == CssTokenType.TT_IDENT) {
             typeOrUnit = tt.currentString();
         } else {
@@ -213,9 +208,11 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                                 out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonnull(), null, line, start, end));
                                 break;
                             case CssTokenType.TT_NUMBER:
-                            case CssTokenType.TT_DIMENSION:
                             case CssTokenType.TT_PERCENTAGE:
                                 out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonnull().toString(), null, line, start, end));
+                                break;
+                            case CssTokenType.TT_DIMENSION:
+                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonnull().toString() + t2.currentStringNonnull(), null, line, start, end));
                                 break;
                             default:
                                 break Outer; // use fallback
@@ -227,9 +224,65 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 case "url":
                     break;//use fallback
                 case "integer":
-                case "number":
-                    break;//use fallback
+                case "number": {
+                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                    if (t2.next() == CssTokenType.TT_EOF) {
+                        break Outer; // use fallback
+                    }
+                    t2.pushBack();
+                    while (t2.next() != CssTokenType.TT_EOF) {
+                        switch (t2.current()) {
+                            case CssTokenType.TT_STRING:
+                            case CssTokenType.TT_IDENT:
+                                double d;
+                                try {
+                                    d = Double.parseDouble(t2.currentStringNonnull());
+                                } catch (NumberFormatException e) {
+                                    break Outer; // use fallback
+                                }
+                                out.accept(new CssToken(CssTokenType.TT_NUMBER, null, d, line, start, end));
+                                break;
+                            case CssTokenType.TT_NUMBER:
+                            case CssTokenType.TT_DIMENSION:
+                            case CssTokenType.TT_PERCENTAGE:
+                                out.accept(new CssToken(CssTokenType.TT_NUMBER, null, t2.currentNumberNonnull(), line, start, end));
+                                break;
+                            default:
+                                break Outer; // use fallback
+                        }
+                    }
+                    return; // use output
+                }
                 case "length": {
+                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                    if (t2.next() == CssTokenType.TT_EOF) {
+                        break Outer; // use fallback
+                    }
+                    t2.pushBack();
+                    while (t2.next() != CssTokenType.TT_EOF) {
+                        switch (t2.current()) {
+                            case CssTokenType.TT_STRING:
+                            case CssTokenType.TT_IDENT:
+                                double d;
+                                try {
+                                    d = Double.parseDouble(t2.currentStringNonnull());
+                                } catch (NumberFormatException e) {
+                                    break Outer; // use fallback
+                                }
+                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, UnitConverter.DEFAULT, d, line, start, end));
+                                break;
+                            case CssTokenType.TT_NUMBER:
+                            case CssTokenType.TT_DIMENSION:
+                            case CssTokenType.TT_PERCENTAGE:
+                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, t2.currentString() == null ? "" : t2.currentStringNonnull(), t2.currentNumberNonnull(), line, start, end));
+                                break;
+                            default:
+                                break Outer; // use fallback
+                        }
+                    }
+                    return; // use output
+                }
+                case "%": {
                     final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
                     while (t2.next() != CssTokenType.TT_EOF) {
                         switch (t2.current()) {
@@ -241,12 +294,12 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                                 } catch (NumberFormatException e) {
                                     break Outer; // use fallback
                                 }
-                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, null, d, line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, d, line, start, end));
                                 break;
                             case CssTokenType.TT_NUMBER:
                             case CssTokenType.TT_DIMENSION:
                             case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, null, t2.currentNumberNonnull(), line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, t2.currentNumberNonnull(), line, start, end));
                                 break;
                             default:
                                 break Outer; // use fallback
@@ -257,12 +310,25 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 case "angle":
                 case "time":
                 case "frequency":
-                case "%length":
-                case "%angle":
-                case "%time":
-                case "%frequency":
+                    // XXX currently not implemented
+                    break; // use fallback
                 default:
-                    break;// use fallback
+                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                    while (t2.next() != CssTokenType.TT_EOF) {
+                        switch (t2.current()) {
+                            case CssTokenType.TT_STRING:
+                            case CssTokenType.TT_IDENT:
+                                break Outer;// use fallback
+                            case CssTokenType.TT_NUMBER:
+                            case CssTokenType.TT_DIMENSION:
+                            case CssTokenType.TT_PERCENTAGE:
+                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonnull(), line, start, end));
+                                break;
+                            default:
+                                break Outer; // use fallback
+                        }
+                    }
+                    return; // use output
             }
 
         }

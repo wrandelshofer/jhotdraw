@@ -927,28 +927,7 @@
         <attribute name="Trusted-Only" value="false"/>
         <attribute name="Trusted-Library" value="false"/>
       </manifest>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.application">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.draw">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.grapher">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.misc">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.net">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.pert">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.teddy">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.modeler">
+        <fileset dir="${build.main.classes}">
         <exclude name=".*"/>
       </fileset>
     </jar>

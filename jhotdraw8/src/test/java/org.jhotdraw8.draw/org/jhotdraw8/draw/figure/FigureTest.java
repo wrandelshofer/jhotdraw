@@ -7,15 +7,10 @@ package org.jhotdraw8.draw.figure;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import javafx.css.CssMetaData;
-import javafx.css.PseudoClass;
-import javafx.css.StyleOrigin;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
+import javafx.css.*;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
@@ -25,63 +20,20 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
-import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
  * @author werni
  */
 public class FigureTest {
 
-
-    /**
-     * Test of reshapeInLocal method, of class Figure.
-     */
-    public void testReshape_4args(Rectangle initial, Rectangle reshape, Rectangle expected) {
-        System.out.println("reshape");
-
-
-        Transform[] actual = new Transform[1];
-        Figure instance = new FigureImpl() {
-            Rectangle r = new Rectangle(initial.getX(), initial.getY(), initial.getWidth(), initial.getHeight());
-
-            public Bounds getBoundsInLocal() {
-                return r.getBoundsInLocal();
-            }
-
-            public void reshapeInLocal(Transform t) {
-                actual[0] = t;
-                Bounds b = t.transform(getBoundsInLocal());
-                r.setX(b.getMinX());
-                r.setY(b.getMinY());
-                r.setWidth(b.getWidth());
-                r.setHeight(b.getHeight());
-            }
-        };
-        instance.reshapeInLocal(reshape.getX(), reshape.getY(), reshape.getWidth(), reshape.getHeight());
-        System.out.println(actual[0]);
-        System.out.println(instance.getBoundsInLocal());
-        assertEquals(expected.getBoundsInLocal(), instance.getBoundsInLocal());
-    }
-
-    @TestFactory
-    public List<DynamicTest> testdataReshape_4argsFactory() {
-        return Arrays.asList(
-                dynamicTest("1", () -> testReshape_4args(new Rectangle(10, 20, 30, 40), new Rectangle(10, 20, 30, 40), new Rectangle(10, 20, 30, 40))),
-                dynamicTest("2", () -> testReshape_4args(new Rectangle(10, 20, 30, 40), new Rectangle(50, 60, 70, 80), new Rectangle(50, 60, 70, 80))),
-                dynamicTest("3", () -> testReshape_4args(new Rectangle(50, 60, 70, 80), new Rectangle(10, 20, 30, 40), new Rectangle(10, 20, 30, 40)))
-        );
-    }
 
     /**
      * Test of getDeclaredAndInheritedMapAccessors method, of class Figure.

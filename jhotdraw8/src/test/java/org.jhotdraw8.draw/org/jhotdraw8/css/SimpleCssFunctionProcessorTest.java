@@ -57,6 +57,7 @@ class SimpleCssFunctionProcessorTest {
             assertEquals(expected, buf.toString());
         } catch (ParseException e) {
             if (expected != null) {
+                e.printStackTrace();
                 fail("must not throw ParseException " + e);
             }
         }
@@ -77,8 +78,8 @@ class SimpleCssFunctionProcessorTest {
                 dynamicTest("8", () -> doTestProcess("attr(length px, auto)", "3475px")),
                 dynamicTest("9", () -> doTestProcess("attr(doors)", "\"5\"")),
                 dynamicTest("10", () -> doTestProcess("attr(doors length)", "5")),
-                dynamicTest("11", () -> doTestProcess("attr(doors % length)", "5%")),
-                dynamicTest("12", () -> doTestProcess("attr(foo,fallback)", "fallback")),
+                dynamicTest("11", () -> doTestProcess("attr(doors %)", "5%")),
+                dynamicTest("12", () -> doTestProcess("attr(foo length,fallback)", "fallback")),
                 dynamicTest("13", () -> doTestProcess("foo(attr(id))", "foo(\"o1\")")),
                 dynamicTest("14", () -> doTestProcess("foo()", "foo()")),
                 //
