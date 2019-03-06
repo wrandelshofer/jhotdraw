@@ -45,10 +45,12 @@
     </treeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Renames providers.">
+    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Temporarily does not build javadoc for dist.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.net/org/jhotdraw8/samples/net/NetMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.pert/org/jhotdraw8/samples/pert/PertMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-jhotdraw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build-jhotdraw.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/input/MultiClipboardInputFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/input/MultiClipboardInputFormat.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="2ff40a52-acbb-47ed-83d2-e973858521bd" name="New changelist" comment="Minor changes." />
@@ -76,8 +78,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build-jhotdraw.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="866">
-              <caret line="992" column="35" selection-start-line="992" selection-start-column="35" selection-end-line="992" selection-end-column="35" />
+            <state relative-caret-position="253">
+              <caret line="45" column="55" selection-start-line="45" selection-start-column="55" selection-end-line="45" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -179,7 +181,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>[/]unchecked</find>
       <find>Bumps retention of nullity annotations to &quot;CLASS&quot;.</find>
       <find>srs</find>
       <find>matphrase</find>
@@ -209,6 +210,7 @@
       <find>css</find>
       <find>&lt;src</find>
       <find>11.0.1</find>
+      <find>javadoc.jar</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;\n&quot;, &quot;\n&quot;, &quot;&quot;</replace>
@@ -318,7 +320,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="639" />
+    <option name="x" value="631" />
     <option name="y" value="59" />
     <option name="width" value="1694" />
     <option name="height" value="1311" />
@@ -338,17 +340,6 @@
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="dist" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="dist" type="462c0819:PsiDirectoryNode" />
-              <item name="0.2-128-ga1862d396" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
@@ -519,7 +510,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw8/ext/src/ferro/ch/systransis/arl/ferro/io/RailwayDrawingConnectorXmlConverter.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546531614418" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551874005920" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
@@ -767,21 +758,7 @@
       <workItem from="1546506762302" duration="7115000" />
       <workItem from="1546865664757" duration="1251000" />
       <workItem from="1546867144891" duration="4148000" />
-      <workItem from="1551863996220" duration="2388000" />
-    </task>
-    <task id="LOCAL-00046" summary="More handles take now colors and size from DrawingView.">
-      <created>1545127978182</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1545127978182</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Refactors Graph APIs.">
-      <created>1545129017977</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1545129017977</updated>
+      <workItem from="1551863996220" duration="4185000" />
     </task>
     <task id="LOCAL-00048" summary="Refactors Graph APIs.">
       <created>1545129242959</created>
@@ -1112,7 +1089,21 @@
       <option name="project" value="LOCAL" />
       <updated>1551865171970</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="Temporarily does not build javadoc for dist.">
+      <created>1551866492850</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1551866492850</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Temporarily does not build javadoc for dist.">
+      <created>1551866582248</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1551866582248</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1148,7 +1139,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100702000" />
+    <option name="totallyTimeSpent" value="102499000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1160,9 +1151,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="639" y="59" width="1694" height="1311" extended-state="0" />
+    <frame x="631" y="59" width="1694" height="1311" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.24031477" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.24031477" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.42218542" side_tool="true" weight="0.21424745" />
@@ -1171,8 +1162,8 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="2" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
-      <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.8044794" side_tool="true" visible="true" weight="0.36371237" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="3" sideWeight="0.8032688" side_tool="true" visible="true" weight="0.36371237" />
+      <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
       <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
       <window_info anchor="bottom" id="TODO" order="6" side_tool="true" weight="0.3298077" />
       <window_info anchor="bottom" id="Debug" order="7" sideWeight="0.76937044" side_tool="true" weight="0.42842743" />
@@ -1181,7 +1172,7 @@
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.6869658" side_tool="true" weight="0.39307535" />
       <window_info anchor="bottom" id="Run with VisualVM" order="11" sideWeight="0.3080955" weight="0.32790223" />
       <window_info anchor="bottom" id="Debug with VisualVM" order="12" sideWeight="0.49940193" weight="0.32938856" />
-      <window_info anchor="bottom" id="TeamCity" order="13" sideWeight="0.19552058" visible="true" weight="0.36371237" />
+      <window_info anchor="bottom" id="TeamCity" order="13" sideWeight="0.19673124" visible="true" weight="0.36371237" />
       <window_info anchor="bottom" id="Statistic" order="14" weight="0.33595112" />
       <window_info anchor="bottom" id="Reviews" order="15" />
       <window_info anchor="bottom" id="Database Changes" order="16" show_stripe_button="false" />
@@ -1261,7 +1252,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Removes module JSR 305 due to copyright issues." />
     <MESSAGE value="Bumps retention of nullity annotations to &quot;CLASS&quot;." />
     <MESSAGE value="Fixes bugs in SimpleCssFunctionProcessor." />
     <MESSAGE value="Fixes unsave varargs warning." />
@@ -1286,7 +1276,8 @@
     <MESSAGE value="Reduces font options." />
     <MESSAGE value="Tweaks layout." />
     <MESSAGE value="Renames providers." />
-    <option name="LAST_COMMIT_MESSAGE" value="Renames providers." />
+    <MESSAGE value="Temporarily does not build javadoc for dist." />
+    <option name="LAST_COMMIT_MESSAGE" value="Temporarily does not build javadoc for dist." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1926,8 +1917,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/build-jhotdraw.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="866">
-          <caret line="992" column="35" selection-start-line="992" selection-start-column="35" selection-end-line="992" selection-end-column="35" />
+        <state relative-caret-position="253">
+          <caret line="45" column="55" selection-start-line="45" selection-start-column="55" selection-end-line="45" selection-end-column="55" />
         </state>
       </provider>
     </entry>

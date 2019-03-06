@@ -121,7 +121,49 @@
       <compilerarg value="-version"/>
     </javac>
     <copy todir="${build.main.classes}">
-      <fileset dir="${src.main.java}">
+      <fileset dir="${src.main.java}/org.jhotdraw8.application">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="${src.main.java}/org.jhotdraw8.draw">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="${src.main.java}/org.jhotdraw8.samples.grapher">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="${src.main.java}/org.jhotdraw8.samples.misc">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="${src.main.java}/org.jhotdraw8.samples.modeler">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="${src.main.java}/org.jhotdraw8.samples.pert">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="${src.main.java}/org.jhotdraw8.samples.net">
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
@@ -885,7 +927,28 @@
         <attribute name="Trusted-Only" value="false"/>
         <attribute name="Trusted-Library" value="false"/>
       </manifest>
-      <fileset dir="${build.main.classes}">
+      <fileset dir="${build.main.classes}/org.jhotdraw8.application">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.main.classes}/org.jhotdraw8.draw">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.grapher">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.misc">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.net">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.pert">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.teddy">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.main.classes}/org.jhotdraw8.samples.modeler">
         <exclude name=".*"/>
       </fileset>
     </jar>
