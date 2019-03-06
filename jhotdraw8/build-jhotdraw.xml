@@ -895,11 +895,13 @@
       <arg value="--main-class=${manifest.main-class}"/>
       <arg value="--module-version=${manifest.implementation-version}"/>
     </exec>
+    <!--
     <jar destfile="${build.main.jars}/${ant.project.name}-javadoc.jar">
       <fileset dir="${src.main.java}">
         <exclude name="**/.*"/>
       </fileset>
     </jar>
+    -->
   </target>
 
   <macrodef name="modular-jar">
