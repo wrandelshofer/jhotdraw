@@ -182,8 +182,8 @@ public class ResizeHandleKit {
     static {
         final String square = "M 0,0 9,0 9,9 0,9 Z ";
         NORTH_EAST_SHAPE.setContent(square + "M 0,4.5 4.5,4.5 4.5,9");
-        NORTH_WEST_SHAPE.setContent(square + "M 9,4.5 4.5,4.5 4.5,9");
-        SOUTH_EAST_SHAPE.setContent(square + "M 0,4.5 4.5,4.5 4.5,0");
+        NORTH_WEST_SHAPE.setContent(square + "M 4.5,9 4.5,4.5 9,4.5 ");
+        SOUTH_EAST_SHAPE.setContent(square + "M 4.5,0 4.5,4.5 0,4.5 ");
         SOUTH_WEST_SHAPE.setContent(square + "M 9,4.5 4.5,4.5 4.5,0");
         SOUTH_SHAPE.setContent(square + "M 0,4.5 9,4.5");
         NORTH_SHAPE.setContent(square + "M 0,4.5 9,4.5");
