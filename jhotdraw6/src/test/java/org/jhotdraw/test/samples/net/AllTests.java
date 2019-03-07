@@ -11,13 +11,14 @@
 package org.jhotdraw.test.samples.net;
 
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
  * @author <a href="mailto:mtnygard@charter.net">Michael T. Nygard</a>
  * @version $Revision: 231 $
  */
-public class AllTests {
+public class AllTests extends TestCase {
 
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(AllTests.class);
