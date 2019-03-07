@@ -398,7 +398,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * If subclass overrides {@link #reshapeInLocal(javafx.scene.transform.Transform) } then the
      * implementation of this method is most likely as follows:
      * <pre>
-     *         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
+     * reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
      * </pre>
      *
      * @param x      the x coordinate

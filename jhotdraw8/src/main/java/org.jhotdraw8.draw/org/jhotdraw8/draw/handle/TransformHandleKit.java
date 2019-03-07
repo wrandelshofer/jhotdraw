@@ -19,7 +19,6 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -32,6 +31,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Transforms;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -59,20 +59,22 @@ public class TransformHandleKit {
 
     static {
         final String circle = "M 9,4.5 A 4.5,4.5 0 1 0 0,4.5 A 4.5,4.5 0 1 0 9,4.5 Z ";
-        NORTH_EAST_SHAPE.setContent(circle + "M 0,4.5 4.5,4.5 4.5,9");
+        NORTH_EAST_SHAPE.setContent(circle + "M 4.5,9 4.5,4.5 0,4.5 ");
         NORTH_WEST_SHAPE.setContent(circle + "M 9,4.5 4.5,4.5 4.5,9");
         SOUTH_EAST_SHAPE.setContent(circle + "M 0,4.5 4.5,4.5 4.5,0");
-        SOUTH_WEST_SHAPE.setContent(circle + "M 9,4.5 4.5,4.5 4.5,0");
+        SOUTH_WEST_SHAPE.setContent(circle + "M 4.5,0 4.5,4.5 9,4.5 ");
         SOUTH_SHAPE.setContent(circle + "M 0,4.5 9,4.5");
         NORTH_SHAPE.setContent(circle + "M 0,4.5 9,4.5");
         EAST_SHAPE.setContent(circle + "M 4.5,0 4.5,9");
         WEST_SHAPE.setContent(circle + "M 4.5,0 4.5,9");
     }
 
-    @Nullable
+    @Nonnull
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
+    @Nonnull
+    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
+            new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
+    );
 
     /**
      * Prevent instance creation.
@@ -205,7 +207,7 @@ public class TransformHandleKit {
 
         ImmutableList<Transform> startTransforms;
 
-        public AbstractTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Border border) {
+        public AbstractTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Function<Color, Border> border) {
             super(owner, styleclass, locator, shape, bg, border);
         }
 

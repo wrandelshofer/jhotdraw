@@ -1725,7 +1725,7 @@ public class Shapes {
 
             @Override
             public void next() {
-                if (index < size) {
+                if (index < size + (closed ? 1 : 0)) {
                     index++;
                 }
             }

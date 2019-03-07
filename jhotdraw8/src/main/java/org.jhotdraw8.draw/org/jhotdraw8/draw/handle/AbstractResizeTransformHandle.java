@@ -8,9 +8,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -26,6 +26,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.function.Function;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -50,8 +52,9 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     protected CssRectangle2D startBounds;
     private Transform startWorldToLocal;
     private final String styleclass;
+    private final Function<Color, Border> borderFactory;
 
-    public AbstractResizeTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Border border) {
+    public AbstractResizeTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Function<Color, Border> borderFactory) {
         super(owner, locator);
         this.styleclass = styleclass;
         node = new Region();
@@ -60,9 +63,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
-
-        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
-        node.setBorder(border);
+        this.borderFactory = borderFactory;
         node.setBackground(bg);
     }
 
@@ -78,12 +79,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
             node.resize(size, size);
         }
         CssColor color = view.getHandleColor();
-        BorderStroke borderStroke = node.getBorder().getStrokes().get(0);
-        if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
-            node.setBorder(new Border(
-                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
-            ));
-        }
+        node.setBorder(borderFactory.apply(color.getColor()));
         return node;
     }
 

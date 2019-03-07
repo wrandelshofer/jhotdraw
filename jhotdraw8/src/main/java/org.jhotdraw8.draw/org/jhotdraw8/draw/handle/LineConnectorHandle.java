@@ -9,6 +9,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -28,6 +29,8 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Transforms;
+
+import java.util.function.Function;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -53,7 +56,10 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
     @Nullable
     private Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
+            new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(2)),
+            new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
+    );
     private static final Circle REGION_SHAPE = new Circle(4);
 
     @Nonnull
@@ -75,8 +81,6 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         targetNode.setScaleShape(true);
         targetNode.setCenterShape(true);
         targetNode.resize(10, 10);
-        //targetNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
-        targetNode.setBorder(REGION_BORDER);
     }
 
 
@@ -88,13 +92,8 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
             targetNode.resize(size, size);
         }
         CssColor color = view.getHandleColor();
-        BorderStroke borderStroke = targetNode.getBorder().getStrokes().get(0);
         Color color1 = (Color) Paintable.getPaint(color);
-        if (borderStroke == null || !borderStroke.getTopStroke().equals(color1)) {
-            targetNode.setBorder(new Border(
-                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
-            ));
-        }
+        targetNode.setBorder(REGION_BORDER.apply(color.getColor()));
         REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(color1, null, null));
         return targetNode;
     }

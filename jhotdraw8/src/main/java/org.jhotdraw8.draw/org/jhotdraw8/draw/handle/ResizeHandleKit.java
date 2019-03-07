@@ -21,6 +21,7 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 /**
  * /**
@@ -193,8 +194,10 @@ public class ResizeHandleKit {
 
     @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
+    @Nonnull
+    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
+            new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
+    );
 
     private static class NorthEastHandle extends AbstractResizeTransformHandle {
 

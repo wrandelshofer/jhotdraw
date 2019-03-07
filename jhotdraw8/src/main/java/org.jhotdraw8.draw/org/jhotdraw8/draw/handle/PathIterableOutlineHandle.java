@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.handle;
 
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
@@ -30,8 +31,9 @@ import java.util.List;
  */
 public class PathIterableOutlineHandle extends AbstractHandle {
 
-    @Nonnull
-    private final Path node;
+    private final Group node;
+    private final Path path2;
+    private final Path path1;
     private final String styleclass;
     private final boolean selectable;
 
@@ -41,15 +43,17 @@ public class PathIterableOutlineHandle extends AbstractHandle {
 
     public PathIterableOutlineHandle(PathIterableFigure figure, boolean selectable, String styleclass) {
         super(figure);
-        node = new Path();
+        node = new Group();
+        path2 = new Path();
+        path1 = new Path();
+        node.getChildren().addAll(path1, path2);
         this.styleclass = styleclass;
-        initNode(node);
         this.selectable = selectable;
     }
 
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
-        return node.contains(x, y);
+        return path1.contains(x, y);
     }
 
     @Nullable
@@ -62,14 +66,10 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     @Override
     public Node getNode(DrawingView view) {
         CssColor color = view.getHandleColor();
-        node.setStroke(Paintable.getPaint(color));
+        path1.setStroke(Color.WHITE);
+        path1.setStrokeWidth(3);
+        path2.setStroke(Paintable.getPaint(color));
         return node;
-    }
-
-    protected void initNode(@Nonnull Path r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override
@@ -95,7 +95,8 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         List<PathElement> elements = new ArrayList<>();
         FXPathBuilder builder = new FXPathBuilder(elements);
         Shapes.buildFromPathIterator(builder, f.getPathIterator(Shapes.awtTransformFromFX(t)));
-        node.getElements().setAll(elements);
+        path1.getElements().setAll(elements);
+        path2.getElements().setAll(elements);
     }
 
 }

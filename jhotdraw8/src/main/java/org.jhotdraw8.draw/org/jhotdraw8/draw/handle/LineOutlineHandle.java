@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.handle;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
@@ -27,8 +28,9 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class LineOutlineHandle extends AbstractHandle {
-
-    private Polyline node;
+    private Group node;
+    private Polyline polyline2;
+    private Polyline polyline1;
     private double[] points;
     private String styleclass;
 
@@ -38,11 +40,12 @@ public class LineOutlineHandle extends AbstractHandle {
 
     public LineOutlineHandle(Figure figure, String styleclass) {
         super(figure);
-
+        node = new Group();
         points = new double[4];
-        node = new Polyline(points);
+        polyline1 = new Polyline(points);
+        polyline2 = new Polyline(points);
+        node.getChildren().addAll(polyline1, polyline2);
         this.styleclass = styleclass;
-        initNode(node);
     }
 
     @Override
@@ -59,15 +62,13 @@ public class LineOutlineHandle extends AbstractHandle {
     @Override
     public Node getNode(DrawingView view) {
         CssColor color = view.getHandleColor();
-        node.setStroke(Paintable.getPaint(color));
+        polyline1.setStroke(Color.WHITE);
+        polyline1.setStrokeWidth(3);
+        polyline2.setStroke(Paintable.getPaint(color));
         return node;
     }
 
-    protected void initNode(@Nonnull Polyline r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
-    }
+
 
     @Override
     public boolean isSelectable() {
@@ -85,9 +86,11 @@ public class LineOutlineHandle extends AbstractHandle {
         points[3] = f.getNonnull(LineConnectionFigure.END).getY().getConvertedValue();
 
         t.transform2DPoints(points, 0, points, 0, 2);
-        ObservableList<Double> pp = node.getPoints();
+        ObservableList<Double> pp1 = polyline1.getPoints();
+        ObservableList<Double> pp2 = polyline2.getPoints();
         for (int i = 0; i < points.length; i++) {
-            pp.set(i, points[i]);
+            pp1.set(i, points[i]);
+            pp2.set(i, points[i]);
         }
     }
 

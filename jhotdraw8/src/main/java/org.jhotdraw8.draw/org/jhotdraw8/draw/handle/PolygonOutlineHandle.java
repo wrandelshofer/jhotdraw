@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -39,7 +40,9 @@ public class PolygonOutlineHandle extends AbstractHandle {
     private boolean editable;
     private final NonnullMapAccessor<ImmutableList<Point2D>> key;
 
-    private Polygon node;
+    private Group node;
+    private Polygon poly1;
+    private Polygon poly2;
     private String styleclass;
 
     public PolygonOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key) {
@@ -50,9 +53,13 @@ public class PolygonOutlineHandle extends AbstractHandle {
         super(figure);
         this.key = key;
         this.editable = editable;
-        node = new Polygon();
+        node = new Group();
+        poly1 = new Polygon();
+        poly2 = new Polygon();
+        poly1.setFill(null);
+        poly2.setFill(null);
+        node.getChildren().addAll(poly1, poly2);
         this.styleclass = styleclass;
-        initNode(node);
     }
 
     @Override
@@ -69,7 +76,9 @@ public class PolygonOutlineHandle extends AbstractHandle {
     @Override
     public Node getNode(DrawingView view) {
         CssColor color = view.getHandleColor();
-        node.setStroke(Paintable.getPaint(color));
+        poly1.setStroke(Color.WHITE);
+        poly1.setStrokeWidth(3);
+        poly2.setStroke(Paintable.getPaint(color));
         return node;
     }
 
@@ -106,12 +115,6 @@ public class PolygonOutlineHandle extends AbstractHandle {
         }
     }
 
-    protected void initNode(@Nonnull Polygon r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
-    }
-
     @Override
     public boolean isSelectable() {
         return true;
@@ -126,10 +129,13 @@ public class PolygonOutlineHandle extends AbstractHandle {
         if (t != null) {
             t.transform2DPoints(points, 0, points, 0, points.length / 2);
         }
-        ObservableList<Double> pp = node.getPoints();
-        pp.clear();
+        ObservableList<Double> pp1 = poly1.getPoints();
+        ObservableList<Double> pp2 = poly2.getPoints();
+        pp2.clear();
+        pp1.clear();
         for (int i = 0; i < points.length; i++) {
-            pp.add(i, points[i]);
+            pp1.add(points[i]);
+            pp2.add(points[i]);
         }
     }
 }

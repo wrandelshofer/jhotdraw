@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.handle;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -27,7 +28,9 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class BoundsInLocalOutlineHandle extends AbstractHandle {
 
-    private Polygon node;
+    private Group node;
+    private Polygon poly1;
+    private Polygon poly2;
     private double[] points;
     private String styleclass;
 
@@ -37,11 +40,15 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
 
     public BoundsInLocalOutlineHandle(Figure figure, String styleclass) {
         super(figure);
-
+        node = new Group();
         points = new double[8];
-        node = new Polygon(points);
+        poly1 = new Polygon(points);
+        poly2 = new Polygon(points);
+        poly1.setFill(null);
+        poly2.setFill(null);
+        node.getChildren().addAll(poly1, poly2);
+
         this.styleclass = styleclass;
-        initNode(node);
     }
 
     @Override
@@ -58,14 +65,10 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     @Override
     public Node getNode(DrawingView view) {
         CssColor color = view.getHandleColor();
-        node.setStroke(Paintable.getPaint(color));
+        poly1.setStroke(Color.WHITE);
+        poly1.setStrokeWidth(3);
+        poly2.setStroke(Paintable.getPaint(color));
         return node;
-    }
-
-    protected void initNode(@Nonnull Polygon r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        //r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override
@@ -91,11 +94,11 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
             t.transform2DPoints(points, 0, points, 0, 4);
         }
 
-        node.setStroke(view.getHandleColor().getColor());
-
-        ObservableList<Double> pp = node.getPoints();
+        ObservableList<Double> pp1 = poly1.getPoints();
+        ObservableList<Double> pp2 = poly2.getPoints();
         for (int i = 0; i < points.length; i++) {
-            pp.set(i, points[i]);
+            pp1.set(i, points[i]);
+            pp2.set(i, points[i]);
         }
     }
 
