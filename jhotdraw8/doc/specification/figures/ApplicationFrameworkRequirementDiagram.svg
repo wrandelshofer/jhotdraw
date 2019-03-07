@@ -1,218 +1,112 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg"
-     baseProfile="tiny"
-     height="14.8cm"
-     version="1.2"
-     width="14.8cm">
-   <defs>
-      <clipPath id="clipPath1">
-         <rect fill="#000000"
-               height="559.3700787401575"
-               stroke-linecap="square"
-               stroke-miterlimit="10"
-               width="559.3700787401575"/>
-      </clipPath>
-   </defs>
-   <g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
-      <rect fill="#ffffff"
-            height="559.3700787401575"
-            id="background"
-            stroke-linecap="square"
-            stroke-miterlimit="10"
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg baseProfile="tiny" height="14.8cm" version="1.2" width="14.8cm" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clipPath1">
+      <rect fill="#000000" height="559.3700787401575" stroke-linecap="square" stroke-miterlimit="10"
             width="559.3700787401575"/>
-      <g class="Layer" id="frame">
-         <g>
-            <path d="M1,1 167.71875,1 167.71875,12.40625 157.71875,22.40625 1,22.40625 Z M1,1 558,1 558,558 1,558 Z"
-                  fill="#ffffff"
-                  stroke="#000000"/>
-            <text fill="#000000"
-                  font-family="'Arial Bold', 'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="bold"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10"
-                  x="7"
-                  y="15.86328125">req
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10"
-                  x="31.673828125"
-                  y="15.86328125">Application Framework
-            </text>
-         </g>
+    </clipPath>
+  </defs>
+  <g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
+    <rect fill="#ffffff" height="559.3700787401575" id="background" stroke-linecap="square" stroke-miterlimit="10"
+          width="559.3700787401575"/>
+    <g class="Layer" id="frame">
+      <g>
+        <path d="M1,1 167.71875,1 167.71875,12.40625 157.71875,22.40625 1,22.40625 Z M1,1 558,1 558,558 1,558 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10" x="7" y="15.86328125">req
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="31.673828125" y="15.86328125">Application Framework
+        </text>
       </g>
-      <g class="Layer" id="content">
-         <g>
-            <path d="M190.00000000000003,110 370,110 370,195 190.00000000000003,195 Z M190,155.759765625 370,155.759765625"
-                  fill="#ffffff"
-                  stroke="#000000"/>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="9"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="250.98291016" y="122.14746094">«requirement»</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial Bold', 'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="bold"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-              <tspan x="218.07519531" y="135.65625">JHotDraw Application</tspan>
-               <tspan x="247.79980469" y="149.7890625">Framework</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-              <tspan x="194" y="171.12304688">Supports the creation of</tspan>
-               <tspan x="194" y="184.921875">document-based applications.</tspan>
-            </text>
-         </g>
-         <g>
-            <path d="M370,300 500,300 500,385 370,385 Z M370,345.759765625 500,345.759765625"
-                  fill="#ffffff"
-                  stroke="#000000"/>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="9"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="405.98291016" y="312.14746094">«requirement»</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial Bold', 'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="bold"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-              <tspan x="394.65820312" y="325.65625">User Interface</tspan>
-               <tspan x="404.49316406" y="339.7890625">Guidelines</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-              <tspan x="374" y="361.12304688">Supports macOS and</tspan>
-               <tspan x="374" y="374.921875">Windows guidelines.</tspan>
-            </text>
-         </g>
-         <g>
-            <path d="M210,300 340,300 340,385 210,385 Z M210,331.9609375 340,331.9609375"
-                  fill="#ffffff"
-                  stroke="#000000"/>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="9"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="245.98291016" y="312.14746094">«requirement»</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial Bold', 'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="bold"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="256.42871094" y="325.65625">JavaFX</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="214" y="347.32421875">Builds on JavaFX.</tspan>
-            </text>
-         </g>
-         <g class="MLEdge" id="umledge1">
-            <polyline fill="none"
-                      points="435,300 435,247.5 280,247.5 280,195"
-                      stroke="#000000"/>
-            <path d="M-12,0 A6,6,0,0,0,0,0 6,6,0,0,0,-12,0 M-6,-6 -6,6 M-12,0 0,0"
-                  fill="#ffffff"
-                  stroke="#000000"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10"
-                  transform="rotate(-90, 280,195), matrix(1,0,0,1,0,0), translate(280,195)"/>
-         </g>
-         <g class="MLEdge" id="umledge2">
-            <polyline fill="none"
-                      points="280,300 280,247.5 280,247.5 280,195"
-                      stroke="#000000"/>
-            <path d="M-12,0 A6,6,0,0,0,0,0 6,6,0,0,0,-12,0 M-6,-6 -6,6 M-12,0 0,0"
-                  fill="#ffffff"
-                  stroke="#000000"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10"
-                  transform="rotate(-90, 280,195), matrix(1,0,0,1,0,0), translate(280,195)"/>
-         </g>
-         <g>
-            <path d="M50,300 180,300 180,385 50,385 Z M50,331.9609375 180,331.9609375"
-                  fill="#ffffff"
-                  stroke="#000000"/>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="9"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="85.98291016" y="312.14746094">«requirement»</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial Bold', 'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="bold"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="89.32714844" y="325.65625">Java SE 8</tspan>
-            </text>
-            <text fill="#000000"
-                  font-family="'Arial'"
-                  font-size="12"
-                  font-style="normal"
-                  font-weight="normal"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10">
-               <tspan x="54" y="347.32421875">Builds on Java SE 8.</tspan>
-            </text>
-         </g>
-         <g class="MLEdge" id="umledge6">
-            <polyline fill="none"
-                      points="120,300 120,247.5 280,247.5 280,195"
-                      stroke="#000000"/>
-            <path d="M-12,0 A6,6,0,0,0,0,0 6,6,0,0,0,-12,0 M-6,-6 -6,6 M-12,0 0,0"
-                  fill="#ffffff"
-                  stroke="#000000"
-                  stroke-linecap="square"
-                  stroke-miterlimit="10"
-                  transform="rotate(-90, 280,195), matrix(1,0,0,1,0,0), translate(280,195)"/>
-         </g>
+    </g>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M190.00000000000003,110 370,110 370,195 190.00000000000003,195 Z M190,155.759765625 370,155.759765625"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="250.98291016" y="122.14746094">«requirement»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="218.07519531" y="135.65625">JHotDraw Application</tspan>
+          <tspan x="247.79980469" y="149.7890625">Framework</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="194" y="171.12304688">Must support the creation of</tspan>
+          <tspan x="194" y="184.921875">document-based applications.</tspan>
+        </text>
       </g>
-   </g>
+      <g>
+        <path d="M370,300 520,300 520,390 370,390 Z M370,345.759765625 520,345.759765625" fill="#ffffff"
+              stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="415.98291016" y="312.14746094">«requirement»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="404.65820312" y="325.65625">User Interface</tspan>
+          <tspan x="414.49316406" y="339.7890625">Guidelines</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="374" y="361.12304688">Must support macOS and</tspan>
+          <tspan x="374" y="374.921875">Windows guidelines.</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M210,300 340,300 340,385 210,385 Z M210,331.9609375 340,331.9609375" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="245.98291016" y="312.14746094">«requirement»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="256.42871094" y="325.65625">JavaFX</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="214" y="347.32421875">Must build on JavaFX.</tspan>
+        </text>
+      </g>
+      <g class="MLEdge" id="umledge1">
+        <polyline fill="none" points="445,300 445,247.5 280,247.5 280,195" stroke="#000000"/>
+        <path d="M-12,0 A6,6 0 0,0 0,0 6,6 0 0,0 -12,0 M-6,-6 -6,6 M-12,0 0,0" fill="#ffffff" stroke="#000000"
+              stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-90, 280,195), matrix(1,0,0,1,0,0), translate(280,195)"/>
+      </g>
+      <g class="MLEdge" id="umledge2">
+        <polyline fill="none" points="280,300 280,247.5 280,247.5 280,195" stroke="#000000"/>
+        <path d="M-12,0 A6,6 0 0,0 0,0 6,6 0 0,0 -12,0 M-6,-6 -6,6 M-12,0 0,0" fill="#ffffff" stroke="#000000"
+              stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-90, 280,195), matrix(1,0,0,1,0,0), translate(280,195)"/>
+      </g>
+      <g>
+        <path d="M50,300 180,300 180,385 50,385 Z M50,331.9609375 180,331.9609375" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="85.98291016" y="312.14746094">«requirement»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="89.32714844" y="325.65625">Java SE 8</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="54" y="347.32421875">Must build on Java</tspan>
+          <tspan x="54" y="361.12304688">SE 8.</tspan>
+        </text>
+      </g>
+      <g class="MLEdge" id="umledge6">
+        <polyline fill="none" points="120,300 120,247.5 280,247.5 280,195" stroke="#000000"/>
+        <path d="M-12,0 A6,6 0 0,0 0,0 6,6 0 0,0 -12,0 M-6,-6 -6,6 M-12,0 0,0" fill="#ffffff" stroke="#000000"
+              stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-90, 280,195), matrix(1,0,0,1,0,0), translate(280,195)"/>
+      </g>
+    </g>
+  </g>
 </svg>
