@@ -8,7 +8,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -53,12 +52,6 @@ public class RectangleFigure extends AbstractLeafFigure
 
     public RectangleFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
-    }
-
-    @Nonnull
-    @Override
-    public CssRectangle2D getCssBoundsInLocal() {
-        return getNonnull(BOUNDS);
     }
 
     @Override

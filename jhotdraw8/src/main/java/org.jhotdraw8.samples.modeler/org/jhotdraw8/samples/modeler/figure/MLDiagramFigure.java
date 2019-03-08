@@ -18,7 +18,6 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -101,11 +100,6 @@ public class MLDiagramFigure extends AbstractLeafFigure
         Text diagramNameText = new Text();
         g.getChildren().addAll(p, diagramKindText, diagramNameText);
         return g;
-    }
-
-    @Override
-    public CssRectangle2D getCssBoundsInLocal() {
-        return getNonnull(BOUNDS);
     }
 
     private String getDiagramTitle() {

@@ -15,7 +15,6 @@ import javafx.scene.text.TextAlignment;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
@@ -128,12 +127,6 @@ public class MLClassifierFigure extends AbstractLeafFigure
         g.getChildren().addAll(p, text);
         return g;
     }
-
-    @Override
-    public CssRectangle2D getCssBoundsInLocal() {
-        return getNonnull(BOUNDS);
-    }
-
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Group g = (Group) node;

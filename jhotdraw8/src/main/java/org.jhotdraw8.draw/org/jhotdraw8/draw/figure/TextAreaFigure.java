@@ -12,7 +12,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -43,11 +42,6 @@ public class TextAreaFigure extends AbstractLeafFigure
         Text text = new Text();
         g.getChildren().addAll(p, text);
         return g;
-    }
-
-    @Override
-    public CssRectangle2D getCssBoundsInLocal() {
-        return getNonnull(BOUNDS);
     }
 
     @Override
