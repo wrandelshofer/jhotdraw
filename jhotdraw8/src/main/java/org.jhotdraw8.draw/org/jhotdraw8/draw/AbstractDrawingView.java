@@ -64,6 +64,7 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         public void set(CssColor newValue) {
             super.set(newValue);
             Preferences.userNodeForPackage(AbstractDrawingView.class).put("handleColor", newValue.getName());
+            recreateHandles();
         }
     };
     private IntegerProperty handleSize = new SimpleIntegerProperty(
@@ -73,6 +74,7 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         public void set(int newValue) {
             super.set(newValue);
             Preferences.userNodeForPackage(AbstractDrawingView.class).putInt("handleSize", newValue);
+            recreateHandles();
         }
     };
 

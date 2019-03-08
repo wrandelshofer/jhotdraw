@@ -29,7 +29,7 @@
           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
       <children>
         <TextField fx:id="handleSizeField" prefColumnCount="4"/>
-        <Slider fx:id="handleSizeSlider" majorTickUnit="10.0" max="40.0" maxWidth="1.7976931348623157E308"
+        <Slider fx:id="handleSizeSlider" majorTickUnit="10.0" max="20.0" min="5.0" maxWidth="1.7976931348623157E308"
                 minorTickCount="10" showTickMarks="true" HBox.hgrow="ALWAYS"/>
       </children>
     </HBox>
