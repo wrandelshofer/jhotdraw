@@ -19,7 +19,6 @@ import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -107,14 +106,6 @@ public class MLDiagramFigure extends AbstractLeafFigure
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
         return getNonnull(BOUNDS);
-    }
-
-    @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
-        set(X, width.getValue() < 0 ? x.add(width) : x);
-        set(Y, height.getValue() < 0 ? y.add(height) : y);
-        set(WIDTH, width.abs());
-        set(HEIGHT, height.abs());
     }
 
     private String getDiagramTitle() {

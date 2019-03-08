@@ -20,8 +20,28 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
-import org.jhotdraw8.draw.figure.*;
-import org.jhotdraw8.draw.key.*;
+import org.jhotdraw8.draw.figure.AbstractLeafFigure;
+import org.jhotdraw8.draw.figure.CompositableFigure;
+import org.jhotdraw8.draw.figure.ConnectableFigure;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.FillableFigure;
+import org.jhotdraw8.draw.figure.HideableFigure;
+import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.PaddableFigure;
+import org.jhotdraw8.draw.figure.PathIterableFigure;
+import org.jhotdraw8.draw.figure.RectangularFigure;
+import org.jhotdraw8.draw.figure.ResizableFigure;
+import org.jhotdraw8.draw.figure.ShapeableFigure;
+import org.jhotdraw8.draw.figure.StrokableFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.TextFillableFigure;
+import org.jhotdraw8.draw.figure.TextLayoutableFigure;
+import org.jhotdraw8.draw.figure.TransformableFigure;
+import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.StringStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -112,14 +132,6 @@ public class MLClassifierFigure extends AbstractLeafFigure
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
         return getNonnull(BOUNDS);
-    }
-
-    @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
-        set(X, width.getValue() < 0 ? x.add(width) : x);
-        set(Y, height.getValue() < 0 ? y.add(height) : y);
-        set(WIDTH, width.abs());
-        set(HEIGHT, height.abs());
     }
 
     @Override
