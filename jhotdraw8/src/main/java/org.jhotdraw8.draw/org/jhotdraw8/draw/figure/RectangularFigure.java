@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 
 /**
- * Defines properties for a figure which has a rectangular shape.
+ * Defines properties and default methods for figures which have a rectangular shape.
  */
 public interface RectangularFigure extends Figure {
     CssSizeStyleableFigureKey X = new CssSizeStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
