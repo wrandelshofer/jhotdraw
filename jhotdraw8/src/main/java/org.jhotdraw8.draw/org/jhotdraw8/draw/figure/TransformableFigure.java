@@ -17,7 +17,6 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -390,25 +389,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
-    }
-
-    /**
-     * Throws unsupported operation exception.
-     * <p>
-     * If subclass overrides {@link #reshapeInLocal(javafx.scene.transform.Transform) } then the
-     * implementation of this method is most likely as follows:
-     * <pre>
-     * reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
-     * </pre>
-     *
-     * @param x      the x coordinate
-     * @param y      the y coordinate
-     * @param width  the width
-     * @param height the height
-     */
-    @Override
-    default void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
-        throw new UnsupportedOperationException("this method must be overriden in class " + getClass());
     }
 
     @Override

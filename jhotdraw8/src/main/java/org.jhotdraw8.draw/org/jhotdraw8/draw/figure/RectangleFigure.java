@@ -75,14 +75,6 @@ public class RectangleFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
-        set(X, width.getValue() < 0 ? x.add(width) : x);
-        set(Y, height.getValue() < 0 ? y.add(height) : y);
-        set(WIDTH, width.abs());
-        set(HEIGHT, height.abs());
-    }
-
-    @Override
     public void translateInLocal(CssPoint2D t) {
         set(X, getNonnull(X).add(t.getX()));
         set(Y, getNonnull(Y).add(t.getY()));
