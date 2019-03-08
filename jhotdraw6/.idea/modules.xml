@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JHotDraw6.iml" filepath="$PROJECT_DIR$/JHotDraw6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../jmodeller/JModeller.iml" filepath="$PROJECT_DIR$/../jmodeller/JModeller.iml" />
     </modules>
   </component>
 </project>
