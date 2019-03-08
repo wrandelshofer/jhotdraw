@@ -36,8 +36,8 @@ import static java.lang.Math.abs;
 public class CreationTool extends AbstractCreationTool<Figure> {
 
 
-    private double defaultWidth = 10;
-    private double defaultHeight = 10;
+    private double defaultWidth = 100;
+    private double defaultHeight = 100;
     /**
      * The rubber band.
      */
@@ -111,7 +111,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
                 CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
                 CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1
-                        + minSize, y1 + minSize)), Constrainer.DIRECTION_NEAREST);
+                        + defaultWidth, y1 + defaultHeight)), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(c1.getX().getConvertedValue() + defaultWidth, c1.getY().getConvertedValue() + defaultHeight));
                 }

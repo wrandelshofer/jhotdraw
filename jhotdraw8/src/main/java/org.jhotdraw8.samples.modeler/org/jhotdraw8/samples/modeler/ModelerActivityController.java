@@ -294,7 +294,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
 
         // modeling shape creation tools -----------
-        ttbar.addTool(new CreationTool("edit.createSysMLRequirementClassifier", labels, () -> createFigure(() -> {
+        CreationTool createSysMLRequirementTool = new CreationTool("edit.createSysMLRequirementClassifier", labels, () -> createFigure(() -> {
             MLClassifierFigure f = new MLClassifierFigure();
             f.set(MLClassifierFigure.KEYWORD, MLKeyword.REQUIREMENT.getName());
             f.set(MLClassifierFigure.NAME, "Name");
@@ -302,8 +302,11 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
                     ImmutableMap.of(MLKeyword.TEXT.getName(), ImmutableList.emptyList())
             ));
             return f;
-        }), layerFactory), 10, 0, 16);
-        ttbar.addTool(new CreationTool("edit.createSysMLBlockClassifier", labels, () -> createFigure(() -> {
+        }), layerFactory);
+        createSysMLRequirementTool.setDefaultWidth(120);
+        createSysMLRequirementTool.setDefaultHeight(100);
+        ttbar.addTool(createSysMLRequirementTool, 10, 0, 16);
+        CreationTool createSysMLBlockTool = new CreationTool("edit.createSysMLBlockClassifier", labels, () -> createFigure(() -> {
             MLClassifierFigure f = new MLClassifierFigure();
             f.set(MLClassifierFigure.KEYWORD, MLKeyword.BLOCK.getName());
             f.set(MLClassifierFigure.NAME, "Name");
@@ -315,8 +318,11 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
                             ImmutableMap.entry(MLKeyword.PORTS.getName(), ImmutableList.emptyList()))
             ));
             return f;
-        }), layerFactory), 11, 0, 0);
-        ttbar.addTool(new CreationTool("edit.createUmlClassClassifier", labels, () -> createFigure(() -> {
+        }), layerFactory);
+        createSysMLBlockTool.setDefaultWidth(120);
+        createSysMLBlockTool.setDefaultHeight(200);
+        ttbar.addTool(createSysMLBlockTool, 11, 0, 0);
+        CreationTool createUmlClassifierTool = new CreationTool("edit.createUmlClassClassifier", labels, () -> createFigure(() -> {
             MLClassifierFigure f = new MLClassifierFigure();
             f.set(MLClassifierFigure.KEYWORD, MLKeyword.CLASS.getName());
             f.set(MLClassifierFigure.NAME, "Name");
@@ -325,7 +331,10 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
                             ImmutableMap.entry(MLKeyword.OPERATIONS.getName(), ImmutableList.emptyList()))
             ));
             return f;
-        }), layerFactory), 12, 0, 0);
+        }), layerFactory);
+        createUmlClassifierTool.setDefaultWidth(120);
+        createUmlClassifierTool.setDefaultHeight(100);
+        ttbar.addTool(createUmlClassifierTool, 12, 0, 0);
 
         // modeling edge creation tools --------
         ttbar.addTool(new ConnectionTool("edit.createUmlDependencyEdge", labels, () -> createFigure(() -> {
@@ -345,13 +354,16 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         }), layerFactory), 21, 0, 0);
 
         // modeling diagram creation tools --------
-        ttbar.addTool(new CreationTool("edit.createSysMLRequirementDiagram", labels, () -> createFigure(() -> {
+        CreationTool createSysMLDiagramTool = new CreationTool("edit.createSysMLRequirementDiagram", labels, () -> createFigure(() -> {
             MLDiagramFigure f = new MLDiagramFigure();
             f.set(MLDiagramFigure.DIAGRAM_KIND, "req");
             f.set(MLDiagramFigure.MODEL_ELEMENT_NAME, "Name");
             return f;
         })
-                , layerFactory), 40, 0, 16);
+                , layerFactory);
+        createSysMLDiagramTool.setDefaultWidth(240);
+        createSysMLDiagramTool.setDefaultHeight(200);
+        ttbar.addTool(createSysMLDiagramTool, 40, 0, 16);
 
         // general drawing element creation tools -----------
 
