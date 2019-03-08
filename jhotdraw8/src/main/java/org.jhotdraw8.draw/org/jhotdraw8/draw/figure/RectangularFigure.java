@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
@@ -27,5 +28,10 @@ public interface RectangularFigure extends Figure {
         set(HEIGHT, height.abs());
     }
 
+    @Override
+    default void translateInLocal(CssPoint2D t) {
+        set(X, getNonnull(X).add(t.getX()));
+        set(Y, getNonnull(Y).add(t.getY()));
+    }
 
 }

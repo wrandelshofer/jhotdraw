@@ -8,7 +8,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
@@ -74,11 +73,6 @@ public class RectangleFigure extends AbstractLeafFigure
         return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
-    @Override
-    public void translateInLocal(CssPoint2D t) {
-        set(X, getNonnull(X).add(t.getX()));
-        set(Y, getNonnull(Y).add(t.getY()));
-    }
 
     @Nonnull
     @Override
