@@ -167,12 +167,15 @@ public class Beziers {
                                          double tolerance) {
         final Point2D start = new Point2D(x0, y0);
         final Intersection isect = Intersections.intersectRayRay(start, new Point2D(x01, y01), new Point2D(x2, y2), new Point2D(x12, y12));
-        final Point2D ctrl = isect.isEmpty() ? null : isect.getLastPoint();
+        if (isect.isEmpty()) {
+            return null;
+        }
+        final Point2D ctrl = isect.getLastPoint();
 
         final double t = start.distance(x01, y01) / start.distance(ctrl);
         final Point2D joint01 = evalQuadCurve(x0, y0, ctrl.getX(), ctrl.getY(), x2, y2, t);
 
-        return (ctrl != null && joint01.distance(x012, y012) <= tolerance) ? ctrl : null;
+        return (joint01.distance(x012, y012) <= tolerance) ? ctrl : null;
     }
 
     /**
