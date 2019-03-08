@@ -24,7 +24,7 @@ import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInTranslationOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.MoveHandle;
@@ -365,8 +365,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
             }
         } else if (handleType == HandleType.TRANSFORM) {
+            list.add(new BoundsInTranslationOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
-            list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             if (this instanceof TransformableFigure) {
                 TransformableFigure tf = (TransformableFigure) this;
                 list.add(new RotateHandle(tf));
