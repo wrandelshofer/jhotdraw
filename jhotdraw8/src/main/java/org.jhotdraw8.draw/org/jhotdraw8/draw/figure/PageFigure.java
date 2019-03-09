@@ -161,6 +161,7 @@ public class PageFigure extends AbstractCompositeFigure
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         return getCssBoundsInLocal().getConvertedBoundsValue();

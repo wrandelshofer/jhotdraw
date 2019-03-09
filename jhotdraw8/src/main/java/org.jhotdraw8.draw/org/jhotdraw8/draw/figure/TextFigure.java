@@ -80,6 +80,7 @@ public class TextFigure extends AbstractLeafFigure
         updateNode(ctx, textNode);
     }
 
+    @Nonnull
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }

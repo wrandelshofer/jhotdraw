@@ -7,7 +7,11 @@ package org.jhotdraw8.draw.figure;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import javafx.css.*;
+import javafx.css.CssMetaData;
+import javafx.css.PseudoClass;
+import javafx.css.StyleOrigin;
+import javafx.css.Styleable;
+import javafx.css.StyleableProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -61,10 +65,12 @@ public class FigureTest {
             return null;
         }
 
+        @Nonnull
         public Bounds getBoundsInLocal() {
             return null;
         }
 
+        @Nonnull
         public CssRectangle2D getCssBoundsInLocal() {
             return new CssRectangle2D(getBoundsInLocal());
         }

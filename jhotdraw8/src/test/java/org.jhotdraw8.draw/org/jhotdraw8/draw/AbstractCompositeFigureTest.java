@@ -117,6 +117,7 @@ public class AbstractCompositeFigureTest {
 
         private static final long serialVersionUID = 1L;
 
+        @Nonnull
         @Override
         public Bounds getBoundsInLocal() {
             throw new UnsupportedOperationException("Not supported yet.");

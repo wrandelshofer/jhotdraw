@@ -123,6 +123,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return true;
     }
 
+    @Nonnull
     @Override
     public Bounds getBoundsInLocal() {
         double minX = Double.POSITIVE_INFINITY;
@@ -140,6 +141,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
+    @Nonnull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());

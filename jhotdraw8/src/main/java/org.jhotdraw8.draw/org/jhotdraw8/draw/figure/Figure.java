@@ -488,10 +488,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the local bounds
      */
+    @Nonnull
     default Bounds getBoundsInLocal() {
         return getCssBoundsInLocal().getConvertedBoundsValue();
     }
 
+    @Nonnull
     CssRectangle2D getCssBoundsInLocal();
 
     /**

@@ -59,10 +59,6 @@ public class ModelerApplicationModel extends SimpleApplicationModel {
 
     @Override
     public String getCopyright() {
-        return "Version " + ModelerApplicationModel.class.getPackage().getImplementationVersion() + ". MIT License";
-        /* Needs Java SE 9 or higher:
-        ModuleDescriptor descriptor = ModelerApplicationModel.class.getModule().getDescriptor();
-        return "Version "+descriptor.version().orElse(null)+". MIT License.";
-        */
+        return "MIT License";
     }
 }
