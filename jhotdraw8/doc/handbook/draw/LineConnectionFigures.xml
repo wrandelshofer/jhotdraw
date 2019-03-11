@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://docbook.org/ns/docbook http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbook.xsd"
@@ -20,7 +19,10 @@
   <example xml:id="listing.ConnectingFiguresSample">
     <title>ConnectingFiguresSample</title>
     <programlisting language="java" linenumbering="numbered" startinglinenumber="1"
-    ><xi:include href="../../../src/main/java/org/jhotdraw8/samples/mini/ConnectingFiguresSample.java" parse="text"/>
+    >
+      <xi:include
+              href="../../../src/main/java/org.jhotdraw8.samples.misc/org/jhotdraw8/samples/mini/ConnectingFiguresSample.java"
+              parse="text"/>
     </programlisting>
   </example>
 

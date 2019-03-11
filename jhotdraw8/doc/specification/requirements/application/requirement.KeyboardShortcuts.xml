@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xml:id="requirement.KeyboardShortcuts">
+  <title>Keyboard shortcuts</title>
+  <para>The application framework must support platform-specific keyboard shortcuts.</para>
+</section>

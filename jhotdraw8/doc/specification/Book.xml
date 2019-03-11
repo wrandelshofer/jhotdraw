@@ -45,35 +45,27 @@
 </section>
 -->
 <section><title>Application Framework</title>
-  <mediaobject>
-    <imageobject>
-      <imagedata fileref="figures/ApplicationFrameworkRequirementDiagram.svg" format="SVG"/>
-    </imageobject>
-    <textobject>
-      <phrase>Application Framework Requirements Diagram</phrase>
-    </textobject>
-    <caption>
-      <para>This diagram shows the top-level requirements for the application framework.
-      </para>
-    </caption>
-  </mediaobject>
-<xi:include href="requirements/application/ApplicationFramework.xml"/>
-  <xi:include href="requirements/application/UserInterfaceGuidelines.xml"/>
-  <xi:include href="requirements/application/JavaSE8.xml"/>
-  <xi:include href="requirements/application/JavaFX.xml"/>
-  <xi:include href="requirements/application/MacOSMenuBarItems.xml"/>
-  <xi:include href="requirements/application/WindowsMenuBarItems.xml"/>
+  <xi:include href="figures/figure.ApplicationFramework.xml"/>
+  <xi:include href="figures/figure.UserInterfaceGuidelines.xml"/>
+  <xi:include href="requirements/application/requirement.ApplicationFramework.xml"/>
+  <xi:include href="requirements/application/requirement.UserInterfaceGuidelines.xml"/>
+  <xi:include href="requirements/application/requirement.JavaSE8.xml"/>
+  <xi:include href="requirements/application/requirement.JavaFX.xml"/>
+  <xi:include href="requirements/application/requirement.MenuBarItems.xml"/>
+  <xi:include href="requirements/application/requirement.MacOSMenuBarItems.xml"/>
+  <xi:include href="requirements/application/requirement.WindowsMenuBarItems.xml"/>
+  <xi:include href="requirements/application/requirement.KeyboardShortcuts.xml"/>
 </section>
 <section><title>Drawing Editor Framework</title>
-<xi:include href="requirements/draw/DrawingEditorFramework.xml"/>
-  <xi:include href="requirements/draw/AutomaticLayout.xml"/>
-  <xi:include href="requirements/draw/CascadingStyleSheets.xml"/>
-  <xi:include href="requirements/draw/StyleOrigin.xml"/>
-  <xi:include href="requirements/draw/Layers.xml"/>
-  <xi:include href="requirements/draw/Locking.xml"/>
-  <xi:include href="requirements/draw/Visibility.xml"/>
-  <xi:include href="requirements/draw/ZOrder.xml"/>
-  <xi:include href="requirements/draw/ConstructiveAreaGeometry.xml"/>
+  <xi:include href="requirements/draw/requirement.DrawingEditorFramework.xml"/>
+  <xi:include href="requirements/draw/requirement.AutomaticLayout.xml"/>
+  <xi:include href="requirements/draw/requirement.CascadingStyleSheets.xml"/>
+  <xi:include href="requirements/draw/requirement.StyleOrigin.xml"/>
+  <xi:include href="requirements/draw/requirement.Layers.xml"/>
+  <xi:include href="requirements/draw/requirement.Locking.xml"/>
+  <xi:include href="requirements/draw/requirement.Visibility.xml"/>
+  <xi:include href="requirements/draw/requirement.ZOrder.xml"/>
+  <xi:include href="requirements/draw/requirement.ConstructiveAreaGeometry.xml"/>
 </section>
 
 <!--

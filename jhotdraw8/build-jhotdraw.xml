@@ -205,7 +205,6 @@
   <target name="do-docbook.unzip-docbook" depends="init">
     <unzip dest="${build.doc.tools}" src="${lib.doc}/docbook-5.0b5.zip"/>
     <unzip dest="${build.doc.tools}" src="${lib.doc}/docbook-xsl-ns-1.79.1.zip"/>
-    <unzip dest="${build.doc.tools}" src="${lib.doc}/xalan-j_2_7_2-bin.zip"/>
     <copy todir="${lib.doc.xalan}">
       <fileset dir="${lib.doc}">
         <include name="*.jar"/>
@@ -872,10 +871,11 @@
         <fileset file="${jdk}/lib/tools.jar"/>
         <!--pathelement path="${build.javadoc}"/-->
       </classpath>
+      <!--
       <modulepath>
         <fileset file="${lib}/compile/modulepath/javafx-sdk-11.0.2/lib/*.jar"/>
       </modulepath>
-
+      -->
     </javadoc>
   </target>
   <target name="do-jar.main" depends="init">

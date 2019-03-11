@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="req" id="sysmldiagram1" modelElementName="User Interface Guidelines"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <MLClassifier bounds="210 80 150 90" compartments="{text:['Must support macOS and Windows guidelines.']}"
+                  id="requirement.UserInterfaceGuidelines" keyword="requirement" labelFont="9 Arial"
+                  name="User Interface Guidelines" nameFont="12 Arial Bold" padding="4"/>
+    <MLClassifier bounds="50 300 130 110"
+                  compartments="{text:['Must support platform-specific standard menu bar items.']}"
+                  id="requirement.JavaSE8" keyword="requirement" labelFont="9 Arial" name="Menu Bar Items"
+                  nameFont="12 Arial Bold" padding="4"/>
+    <MLEdge elbowOffset="50%" end="290 170" endConnector="path relative(53.333333333333336%,100%)"
+            endTarget="requirement.UserInterfaceGuidelines" id="umledge6" keyword="containment" start="120 300"
+            startConnector="path relative(53.84615384615385%,0%)" startTarget="requirement.JavaSE8"/>
+    <MLClassifier bounds="230 300 130 110"
+                  compartments="{text:['Must support platform-specific standard keyboard shortcuts.']}"
+                  id="mlclassifier1" keyword="requirement" name="Keyboard Shortcuts"/>
+    <MLEdge end="290 170" endConnector="path relative(53.333333333333336%,100%)"
+            endTarget="requirement.UserInterfaceGuidelines" id="mledge1" keyword="containment" start="290 300"
+            startConnector="path relative(46.15384615384615%,10%)" startTarget="mlclassifier1"/>
+  </Layer>
+</Drawing>
