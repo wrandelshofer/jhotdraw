@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.MasterDetailsInspectorLayout">
+  <title>Master-Details-Inspector Layout</title>
+
+  <para>The master-details-inspector layout is a layout that consists of the following three panes:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>The master pane in the left area of the window</para>
+      <para>A master pane is a control that displays a collection of objects
+        from which one can be selected.
+      </para>
+    </listitem>
+    <listitem>
+      <para>The details pane in the center area of the window</para>
+      <para>A details pane is a control that displays the selected object from the master pane.
+        The object can be structured from which one or multiple elements can be selected.
+      </para>
+    </listitem>
+    <listitem>
+      <para>The inspector pane in the right area of the window</para>
+      <para>An inspector pane is a control that displays properties of the selected element
+        in the details pane.
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  <para>The master-details-inspector layout is used by many applications, and thus is well known
+    and understood by most users.
+  </para>
+
+  <para>We can use the following design to implement this layout with JavaFX:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>For each component (master pane, detail pane, inspector pane) we create a FXML
+        file for the layout, and a JavaFX controller class: MasterPaneController,
+        DetailsPaneController, InspectorPaneController.
+      </para>
+    </listitem>
+    <listitem>
+      <para>The MasterPaneController has a JavaFX ObservableList for the collection
+        that it displays, and a JavaFX Property for the selected object
+      </para>
+    </listitem>
+    <listitem>
+      <para>The DetailsPaneController has a JavaFX Property for the object that it displays
+        and a JavaFX ObservableList for the selection of sub-objects.
+      </para>
+    </listitem>
+    <listitem>
+      <para>The InspectorPaneController has a JavaFX property for the selection of objects
+        for which it can display properties.
+      </para>
+    </listitem>
+    <listitem>
+      <para>We can bind the properties of the panes with JavaFX bindings.</para>
+    </listitem>
+  </itemizedlist>
+
+
+  <para>This layout can be altered in various ways:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>The master pane can be omitted, which leaves us with a details-inspector layout.</para>
+    </listitem>
+    <listitem>
+      <para>The inspector pane can be omitted, which leaves us with a master-details layout.</para>
+    </listitem>
+    <listitem>
+      <para>the master pane can support multiple selection, which turns the object that is
+        displayed in the details pane into a collection.
+      </para>
+    </listitem>
+    <listitem>
+      <para>The inspector pane can only show the properties of the main object in the details
+        pane instead from the selected sub-objects.
+      </para>
+    </listitem>
+    <listitem>
+      <para>The inspector pane can show properties of the details pane itself.</para>
+    </listitem>
+    <listitem>
+      <para>The window can contain more than one inspector pane.</para>
+    </listitem>
+  </itemizedlist>
+
+</section>

@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
          xml:id="design.LayoutDependencies">
-  <title>Layout dependencies</title>
+  <title>Layout Dependencies</title>
   <para>The layout of a figure can depend on the layout of other figures.</para>
-  <para>The layout dependencies of all figures in a drawing can be represented by a directed graph.</para>
+
+  <para>In order to layout a drawing with such figures, we must layout first the figures
+    that do not depend on other figures. Then we can continue to layout figures that depend on
+    figures that we have already laid out.
+  </para>
+
+  <para>The layout dependencies can be thought of as a directed graph.
+    By sorting this directed graph topologically, we can get the sequence in which
+    we must layout the figures.
+  </para>
 </section>

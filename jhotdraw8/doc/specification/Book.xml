@@ -82,14 +82,19 @@
 
   <chapter>
     <title>Design</title>
-    <!--
-  <section><title>Application Framework</title>
-  </section>
-  -->
+    <section>
+      <title>Principles</title>
+      <xi:include href="design/general/design.HighCohesion.xml"/>
+      <xi:include href="design/general/design.LooseCoupling.xml"/>
+    </section>
+    <section>
+      <title>Application Framework</title>
+      <xi:include href="design/application/design.MasterDetailsInspectorLayout.xml"/>
+    </section>
     <section>
       <title>Drawing Editor Framework</title>
       <xi:include href="design/draw/design.Layers.xml"/>
-      <xi:include href="design/draw/design.DrawingCompositePattern.xml"/>
+      <xi:include href="design/draw/design.DrawingDataStructure.xml"/>
       <xi:include href="design/draw/design.LayoutDependencies.xml"/>
       <xi:include href="design/draw/design.TypeSafeMap.xml"/>
       <xi:include href="design/draw/design.StyleAttributesInspector.xml"/>
