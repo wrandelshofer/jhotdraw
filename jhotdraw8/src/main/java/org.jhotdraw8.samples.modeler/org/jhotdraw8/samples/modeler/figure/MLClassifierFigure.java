@@ -97,7 +97,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,
         BodyFontableFigure, TextFillableFigure, PaddableFigure,
-        NameFontableFigure, LabelFontableFigure {
+        NameFontableFigure, CompartmentLabelFontableFigure, KeywordLabelFontableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -106,8 +106,8 @@ public class MLClassifierFigure extends AbstractLeafFigure
     public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "compartments", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new MLCompartmentalizedData());
     public final static StringStyleableFigureKey KEYWORD = MLConstants.KEYWORD;
     public final static StringStyleableFigureKey NAME = new StringStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "name", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, "unnamed", null);
-    public final static BooleanStyleableFigureKey LABELS_VISIBLE = new BooleanStyleableFigureKey("labelsVisible", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false);
-    public final static BooleanStyleableFigureKey KEYWORD_VISIBLE = MLConstants.KEYWORD_VISIBLE;
+    public final static BooleanStyleableFigureKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableFigureKey("compartmentLabelsVisible", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false);
+    public final static BooleanStyleableFigureKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
     /**
      * The line spacing. Default value: {@code 0.0}
      */
@@ -184,7 +184,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
         }
 
         // Ensure that we have enough text nodes.
-        boolean compartmentNamesVisible = getStyledNonnull(LABELS_VISIBLE);
+        boolean compartmentNamesVisible = getStyledNonnull(COMPARTMENT_LABELS_VISIBLE);
         ensureEnoughTextNodes(textNodes, metaclass, cpData, compartmentNamesVisible);
 
         // Compute geometry
@@ -207,9 +207,9 @@ public class MLClassifierFigure extends AbstractLeafFigure
             Text node;
 
             // add metaclass and name
-            if (metaclass != null && getStyledNonnull(KEYWORD_VISIBLE)) {
+            if (metaclass != null && getStyledNonnull(KEYWORD_LABEL_VISIBLE)) {
                 node = textNodes.get(i++);
-                applyLabelStyle(ctx, node);
+                applyKeywordLabelStyle(ctx, node);
                 node.setText("«" + metaclass + "»");
                 node.setWrappingWidth(wrappingWidth);
                 node.setY(y);
@@ -234,7 +234,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
                     node = textNodes.get(i++);
                     node.setText(entry.getKey());
                     node.setY(y);
-                    applyLabelStyle(ctx, node);
+                    applyCompartmentLabelStyle(ctx, node);
                     y += node.getLayoutBounds().getHeight() + lineSpacing;
                 }
 
@@ -263,8 +263,13 @@ public class MLClassifierFigure extends AbstractLeafFigure
         }
     }
 
-    private void applyLabelStyle(RenderContext ctx, Text node) {
-        applyLabelTextFontableFigureProperties(ctx, node);
+    private void applyCompartmentLabelStyle(RenderContext ctx, Text node) {
+        applyCompartmentLabelTextFontableFigureProperties(ctx, node);
+        node.setTextAlignment(TextAlignment.CENTER);
+    }
+
+    private void applyKeywordLabelStyle(RenderContext ctx, Text node) {
+        applyKeywordLabelTextFontableFigureProperties(ctx, node);
         node.setTextAlignment(TextAlignment.CENTER);
     }
 

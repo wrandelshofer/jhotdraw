@@ -49,7 +49,7 @@ public class MLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
      */
     public final static String TYPE_SELECTOR = "MLEdge";
     public final static StringStyleableFigureKey KEYWORD = MLConstants.KEYWORD;
-    public final static BooleanStyleableFigureKey KEYWORD_VISIBLE = MLConstants.KEYWORD_VISIBLE;
+    public final static BooleanStyleableFigureKey KEYWORD_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
 
     public MLEdgeFigure() {
         this(0, 0, 1, 1);
