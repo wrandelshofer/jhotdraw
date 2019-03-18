@@ -4,12 +4,10 @@
   <para></para>
   <glossary>
     <title>List of terms:</title>
-    <glossentry xml:id="glossterm.application">
-      <glossterm>Application</glossterm>
-      <glossdef xml:id="glossdef.application">
-        <para>An application is a computer program with a graphical user interface that can be used to perform
-          one or more activities.
-        </para>
+    <glossentry>
+      <glossterm>Action</glossterm>
+      <glossdef>
+        <para>An action is a command that can be invoked using a graphical user interface.</para>
       </glossdef>
     </glossentry>
     <glossentry>
@@ -18,22 +16,11 @@
         <para>An activity is a set of actions that relate to a topic of some kind.</para>
       </glossdef>
     </glossentry>
-    <glossentry>
-      <glossterm>Action</glossterm>
-      <glossdef>
-        <para>An action is a command that can be invoked by the user.</para>
-      </glossdef>
-    </glossentry>
-    <glossentry>
-      <glossterm>Document-based Application</glossterm>
-      <glossdef>
-        <para>A document-based application is an application that supports document-based activities.</para>
-      </glossdef>
-    </glossentry>
-    <glossentry>
-      <glossterm>Document-based Activity</glossterm>
-      <glossdef>
-        <para>A document-based activity is an activity with actions that relate to a document.
+    <glossentry xml:id="glossterm.application">
+      <glossterm>Application</glossterm>
+      <glossdef xml:id="glossdef.application">
+        <para>An application is a computer program with a graphical user interface that can be used to perform
+          one or more activities.
         </para>
       </glossdef>
     </glossentry>
@@ -44,16 +31,29 @@
       </glossdef>
     </glossentry>
     <glossentry>
+      <glossterm>Document-based Activity</glossterm>
+      <glossdef>
+        <para>A document-based activity is an activity with actions that relate to a document.
+        </para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>Document-based Application</glossterm>
+      <glossdef>
+        <para>A document-based application is an application that supports document-based activities.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
       <glossterm>Drawing</glossterm>
       <glossdef>
-        <para>A drawing is a set of figures presented on a canvas.</para>
+        <para>A drawing is a collection of figures presented on a canvas.</para>
       </glossdef>
     </glossentry>
     <glossentry>
       <glossterm>Figure</glossterm>
       <glossdef>
         <para>A figure is a visual representation of some kind
-          (such as a line, a rectangle or something more complex).
+          (such as a line, a shape, a diagram element or something more complex).
         </para>
       </glossdef>
     </glossentry>
