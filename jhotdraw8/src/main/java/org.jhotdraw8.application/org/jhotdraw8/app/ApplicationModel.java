@@ -4,6 +4,7 @@
 package org.jhotdraw8.app;
 
 import javafx.scene.control.MenuBar;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
@@ -75,16 +76,27 @@ public interface ApplicationModel {
     /**
      * Returns the version of the application.
      *
-     * @return version
+     * @return version or null if unknown
      */
+    @Nullable
     String getVersion();
 
     /**
-     * Returns the copyright of the application.
+     * Returns the vendor of the application.
+     * (this is typically the vendor or author of the application).
      *
-     * @return copyright
+     * @return vendor or null if unknown
      */
-    String getCopyright();
+    @Nullable
+    String getVendor();
+
+    /**
+     * Returns the license of the application
+     *
+     * @return the license or null if unknown
+     */
+    @Nullable
+    String getLicense();
 
     /**
      * Returns true if the same URI can be opened more than once.

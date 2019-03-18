@@ -12,19 +12,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.app.AboutAction;
 import org.jhotdraw8.app.action.app.ExitAction;
-import org.jhotdraw8.app.action.edit.ClearSelectionAction;
-import org.jhotdraw8.app.action.edit.CopyAction;
-import org.jhotdraw8.app.action.edit.CutAction;
-import org.jhotdraw8.app.action.edit.DeleteAction;
-import org.jhotdraw8.app.action.edit.PasteAction;
-import org.jhotdraw8.app.action.edit.SelectAllAction;
-import org.jhotdraw8.app.action.file.CloseFileAction;
-import org.jhotdraw8.app.action.file.ExportFileAction;
-import org.jhotdraw8.app.action.file.NewFileAction;
-import org.jhotdraw8.app.action.file.OpenFileAction;
-import org.jhotdraw8.app.action.file.RevertFileAction;
-import org.jhotdraw8.app.action.file.SaveFileAction;
-import org.jhotdraw8.app.action.file.SaveFileAsAction;
+import org.jhotdraw8.app.action.edit.*;
+import org.jhotdraw8.app.action.file.*;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
@@ -47,13 +36,14 @@ import java.util.prefs.Preferences;
  */
 public class SimpleApplicationModel implements ApplicationModel {
 
-    private String name;
     private final List<URIExtensionFilter> openExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
+    private String name;
     private Supplier<DocumentBasedActivity> activityFactory;
     private Supplier<MenuBar> menuFactory;
+    private String license;
 
     public SimpleApplicationModel() {
 
@@ -110,122 +100,6 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.activityFactory = activityFactory;
     }
 
-    @Override
-    public Preferences getPreferences() {
-        return Preferences.userNodeForPackage(getClass());
-    }
-
-    public Supplier<DocumentBasedActivity> getActivityFactory() {
-        return activityFactory;
-    }
-
-    public void setActivityFactory(Supplier<DocumentBasedActivity> factory) {
-        this.activityFactory = factory;
-    }
-
-    public Supplier<MenuBar> getMenuFactory() {
-        return menuFactory;
-    }
-
-    public void setMenuFactory(Supplier<MenuBar> factory) {
-        this.menuFactory = factory;
-    }
-
-    public void setMenuFxml(URL fxml) {
-        this.menuFactory = () -> SimpleApplicationModel.createMenuBar(fxml, getResources());
-    }
-
-    @Nonnull
-    public List<URIExtensionFilter> getOpenExtensionFilters() {
-        return openExtensionFilters;
-    }
-
-    @Nonnull
-    public List<URIExtensionFilter> getSaveExtensionFilters() {
-        return saveExtensionFilters;
-    }
-
-    @Nonnull
-    public List<URIExtensionFilter> getImportExtensionFilters() {
-        return importExtensionFilters;
-    }
-
-    @Nonnull
-    public List<URIExtensionFilter> getExportExtensionFilters() {
-        return exportExtensionFilters;
-    }
-
-    @Override
-    public DocumentBasedActivity createActivity() {
-        return activityFactory.get();
-    }
-
-    @Nonnull
-    @Override
-    public URIChooser createOpenChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.OPEN);
-        c.setExtensionFilters(openExtensionFilters);
-        return c;
-    }
-
-    @Nonnull
-    @Override
-    public URIChooser createSaveChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.SAVE);
-        c.setExtensionFilters(saveExtensionFilters);
-        return c;
-    }
-
-    @Nonnull
-    @Override
-    public URIChooser createImportChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.OPEN);
-        c.setExtensionFilters(importExtensionFilters);
-        return c;
-    }
-
-    @Nonnull
-    @Override
-    public URIChooser createExportChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.SAVE);
-        c.setExtensionFilters(exportExtensionFilters);
-        return c;
-    }
-
-    @Override
-    public String getName() {
-        return name != null ? name : getClass().getPackage().getImplementationVersion();
-    }
-
-    public void setName(String newValue) {
-        name = newValue;
-    }
-
-    @Override
-    public String getVersion() {
-        return getClass().getPackage().getImplementationVersion();
-    }
-
-    @Override
-    public String getCopyright() {
-        return getClass().getPackage().getImplementationVendor();
-    }
-
-    @Override
-    public boolean isAllowMultipleViewsPerURI() {
-        return false;
-    }
-
-    @Nullable
-    @Override
-    public MenuBar createMenuBar() {
-        return menuFactory == null ? null : menuFactory.get();
-    }
-
     private static MenuBar createMenuBar(URL fxml, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
         loader.setResources(resources);
@@ -248,8 +122,8 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public ResourceBundle getResources() {
-        return ApplicationLabels.getResources().asResourceBundle();
+    public DocumentBasedActivity createActivity() {
+        return activityFactory.get();
     }
 
     public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
@@ -272,4 +146,128 @@ public class SimpleApplicationModel implements ApplicationModel {
         return map;
     }
 
+    @Nonnull
+    @Override
+    public URIChooser createExportChooser() {
+        FileURIChooser c = new FileURIChooser();
+        c.setMode(FileURIChooser.Mode.SAVE);
+        c.setExtensionFilters(exportExtensionFilters);
+        return c;
+    }
+
+    @Nonnull
+    @Override
+    public URIChooser createImportChooser() {
+        FileURIChooser c = new FileURIChooser();
+        c.setMode(FileURIChooser.Mode.OPEN);
+        c.setExtensionFilters(importExtensionFilters);
+        return c;
+    }
+
+    @Nullable
+    @Override
+    public MenuBar createMenuBar() {
+        return menuFactory == null ? null : menuFactory.get();
+    }
+
+    @Nonnull
+    @Override
+    public URIChooser createOpenChooser() {
+        FileURIChooser c = new FileURIChooser();
+        c.setMode(FileURIChooser.Mode.OPEN);
+        c.setExtensionFilters(openExtensionFilters);
+        return c;
+    }
+
+    @Nonnull
+    @Override
+    public URIChooser createSaveChooser() {
+        FileURIChooser c = new FileURIChooser();
+        c.setMode(FileURIChooser.Mode.SAVE);
+        c.setExtensionFilters(saveExtensionFilters);
+        return c;
+    }
+
+    public Supplier<DocumentBasedActivity> getActivityFactory() {
+        return activityFactory;
+    }
+
+    public void setActivityFactory(Supplier<DocumentBasedActivity> factory) {
+        this.activityFactory = factory;
+    }
+
+    @Nonnull
+    public List<URIExtensionFilter> getExportExtensionFilters() {
+        return exportExtensionFilters;
+    }
+
+    @Nonnull
+    public List<URIExtensionFilter> getImportExtensionFilters() {
+        return importExtensionFilters;
+    }
+
+    @Override
+    public @Nullable String getLicense() {
+        return license;
+    }
+
+    public void setLicense(@Nullable String license) {
+        this.license = license;
+    }
+
+    public Supplier<MenuBar> getMenuFactory() {
+        return menuFactory;
+    }
+
+    public void setMenuFactory(Supplier<MenuBar> factory) {
+        this.menuFactory = factory;
+    }
+
+    @Override
+    public String getName() {
+        return name != null ? name : getClass().getPackage().getImplementationVersion();
+    }
+
+    public void setName(String newValue) {
+        name = newValue;
+    }
+
+    @Nonnull
+    public List<URIExtensionFilter> getOpenExtensionFilters() {
+        return openExtensionFilters;
+    }
+
+    @Override
+    public Preferences getPreferences() {
+        return Preferences.userNodeForPackage(getClass());
+    }
+
+    @Override
+    public ResourceBundle getResources() {
+        return ApplicationLabels.getResources().asResourceBundle();
+    }
+
+    @Nonnull
+    public List<URIExtensionFilter> getSaveExtensionFilters() {
+        return saveExtensionFilters;
+    }
+
+    @Override
+    public String getVendor() {
+        return getClass().getPackage().getImplementationVendor();
+    }
+
+    @Override
+    public String getVersion() {
+        return getClass().getPackage().getImplementationVersion();
+    }
+
+    @Override
+    public boolean isAllowMultipleViewsPerURI() {
+        return false;
+    }
+
+    public void setMenuFxml(URL fxml) {
+        this.menuFactory = () -> SimpleApplicationModel.createMenuBar(fxml, getResources());
+    }
 }

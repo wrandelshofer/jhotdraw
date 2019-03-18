@@ -62,7 +62,8 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
                 ((Figure) newValue).getLayoutObservers().add(AbstractLineConnectionFigure.this);
             }
             updateConnectedProperty();
-
+        } else if (key == START_CONNECTOR) {
+            updateConnectedProperty();
         } else if (key == END_CONNECTOR) {
             updateConnectedProperty();
         }
@@ -134,14 +135,12 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
     @Override
     public void removeLayoutSubject(Figure subject) {
-
         if (subject == get(START_TARGET)) {
             set(START_TARGET, null);
         }
         if (subject == get(END_TARGET)) {
             set(END_TARGET, null);
         }
-
     }
 
     @Override
@@ -174,9 +173,12 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         set(START_TARGET, target);
     }
 
-    private void updateConnectedProperty() {
+    protected void updateConnectedProperty() {
         connected.set(get(START_CONNECTOR) != null
                 && get(START_TARGET) != null && get(END_CONNECTOR) != null && get(END_TARGET) != null);
     }
 
+    public ReadOnlyBooleanWrapper connectedProperty() {
+        return connected;
+    }
 }

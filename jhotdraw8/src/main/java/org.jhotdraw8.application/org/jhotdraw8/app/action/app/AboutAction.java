@@ -43,8 +43,16 @@ public class AboutAction extends AbstractApplicationAction {
         addDisabler(this);
         ApplicationModel model = app.getModel();
 
+        String name = model.getName();
+        String version = model.getVersion();
+        String vendor = model.getVendor();
+        String license = model.getLicense();
+
+
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                model.getCopyright()
+                (vendor == null ? "" : vendor)
+                        + (license == null ? "" : "\n" + license)
                         + "\n\nRunning on"
                         + "\n  Java: " + System.getProperty("java.version")
                         + ", " + System.getProperty("java.vendor")
@@ -53,7 +61,7 @@ public class AboutAction extends AbstractApplicationAction {
                         + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
                         + ", " + System.getProperty("os.arch"));
         alert.getDialogPane().setMaxWidth(640.0);
-        alert.setHeaderText(model.getName() + (model.getVersion() == null ? "" : " " + model.getVersion()));
+        alert.setHeaderText((name == null ? "unnamed" : name) + (version == null ? "" : " " + version));
         alert.setGraphic(null);
         alert.initModality(Modality.NONE);
         alert.showingProperty().addListener((observable, oldValue, newValue) -> {

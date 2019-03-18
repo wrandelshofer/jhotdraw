@@ -56,9 +56,4 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     public ResourceBundle getResources() {
         return GrapherLabels.getResources().asResourceBundle();
     }
-
-    @Override
-    public String getCopyright() {
-        return "MIT License";
-    }
 }

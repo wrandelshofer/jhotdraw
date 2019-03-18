@@ -57,8 +57,4 @@ public class ModelerApplicationModel extends SimpleApplicationModel {
         return ModelerLabels.getBundle();
     }
 
-    @Override
-    public String getCopyright() {
-        return "MIT License";
-    }
 }
