@@ -3,4 +3,5 @@
          xml:id="design.LayoutDependencies">
   <title>Layout dependencies</title>
   <para>The layout of a figure can depend on the layout of other figures.</para>
+  <para>The layout dependencies of all figures in a drawing can be represented by a directed graph.</para>
 </section>

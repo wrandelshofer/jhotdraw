@@ -9,8 +9,7 @@
   <listitem><para>An arrow <inlineequation><mathphrase>a ∈ A</mathphrase></inlineequation> is an ordered pair of vertices: <inlineequation><mathphrase>a = (v_i, v_j), i≠j, v ∈ V</mathphrase></inlineequation>.</para></listitem>
   <listitem><para>An arrow <inlineequation><mathphrase>a ∈ A</mathphrase></inlineequation> can have an identity.</para></listitem>
 </itemizedlist>
-  <simplesect>
-    <title>Rationale</title>
+
   <para>This design differs from the general definition of a graph in the following ways:</para>
   <itemizedlist>
     <listitem>
@@ -31,5 +30,4 @@
       </para>
     </listitem>
   </itemizedlist>
-  </simplesect>
 </section>

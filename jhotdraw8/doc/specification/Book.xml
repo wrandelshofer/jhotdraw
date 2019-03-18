@@ -60,11 +60,12 @@
   <xi:include href="requirements/draw/requirement.DrawingEditorFramework.xml"/>
   <xi:include href="requirements/draw/requirement.AutomaticLayout.xml"/>
   <xi:include href="requirements/draw/requirement.CascadingStyleSheets.xml"/>
-  <xi:include href="requirements/draw/requirement.StyleOrigin.xml"/>
+  <xi:include href="requirements/draw/requirement.CascadingStyleSheetsStyleOrigin.xml"/>
   <xi:include href="requirements/draw/requirement.Layers.xml"/>
   <xi:include href="requirements/draw/requirement.Locking.xml"/>
   <xi:include href="requirements/draw/requirement.Visibility.xml"/>
   <xi:include href="requirements/draw/requirement.ZOrder.xml"/>
+  <xi:include href="requirements/draw/requirement.Grouping.xml"/>
   <xi:include href="requirements/draw/requirement.ConstructiveAreaGeometry.xml"/>
 </section>
 
@@ -87,16 +88,18 @@
   -->
     <section>
       <title>Drawing Editor Framework</title>
-      <xi:include href="design/draw/DrawingTreeStructure.xml"/>
-      <xi:include href="design/draw/LayoutDependencies.xml"/>
-      <xi:include href="design/draw/PropertyKey.xml"/>
+      <xi:include href="design/draw/design.Layers.xml"/>
+      <xi:include href="design/draw/design.DrawingCompositePattern.xml"/>
+      <xi:include href="design/draw/design.LayoutDependencies.xml"/>
+      <xi:include href="design/draw/design.TypeSafeMap.xml"/>
+      <xi:include href="design/draw/design.StyleAttributesInspector.xml"/>
     </section>
     <section>
       <title>Graph Library</title>
-      <xi:include href="design/graph/GraphLibrary.xml"/>
-      <xi:include href="design/graph/Graph.xml"/>
-      <xi:include href="design/graph/DirectedGraph.xml"/>
-      <xi:include href="design/graph/GraphAsDirectedGraph.xml"/>
+      <xi:include href="design/graph/design.GraphLibrary.xml"/>
+      <xi:include href="design/graph/design.Graph.xml"/>
+      <xi:include href="design/graph/design.DirectedGraph.xml"/>
+      <xi:include href="design/graph/design.GraphAsDirectedGraph.xml"/>
     </section>
   </chapter>
 

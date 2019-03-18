@@ -27,15 +27,20 @@
     <glossentry>
       <glossterm>Document-based Application</glossterm>
       <glossdef>
-        <para>An application that supports document-based activities.</para>
+        <para>A document-based application is an application that supports document-based activities.</para>
       </glossdef>
     </glossentry>
     <glossentry>
       <glossterm>Document-based Activity</glossterm>
       <glossdef>
-        <para>An activity with actions that relate to a document
-          that can be stored and retrieved from a file.
+        <para>A document-based activity is an activity with actions that relate to a document.
         </para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>Document</glossterm>
+      <glossdef>
+        <para>A document is an editable dataset that can be stored in a file.</para>
       </glossdef>
     </glossentry>
     <glossentry>

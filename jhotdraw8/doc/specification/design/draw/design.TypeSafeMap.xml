@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.TypeSafeMap">
+  <title>Type-Safe Map</title>
+  <para>The drawing editor supports editing of the properties of the figures in a drawing.
+    The number of properties is not known at the implementation-time of the drawing framework.
+  </para>
+  <para>We do not want to use reflection for accessing property accessor methods of a JavaFX Bean.</para>
+  <para>We can define a type named <code>Key&lt;V&gt;</code> which can be used as the key for
+    a map.
+  </para>
+  <para>The type parameter <code>&lt;V&gt;</code> of the key can be used to create type-safe map
+    accessors of the style <code>&lt;V&gt; V get(Key&lt;V&gt; key)</code>.
+  </para>
+  <para>These type safe map accessors can be defined in this key class, or alternatively,
+    in a type-safe map class.
+  </para>
+</section>

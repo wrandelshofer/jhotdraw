@@ -70,7 +70,8 @@
         </text>
         <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
               stroke-linecap="square" stroke-miterlimit="10">
-          <tspan x="214" y="347.32421875">Must build on JavaFX.</tspan>
+          <tspan x="214" y="347.32421875">Must be built on</tspan>
+          <tspan x="214" y="361.12304688">JavaFX.</tspan>
         </text>
       </g>
       <g class="MLEdge" id="umledge1">
@@ -97,7 +98,7 @@
         </text>
         <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
               stroke-linecap="square" stroke-miterlimit="10">
-          <tspan x="54" y="347.32421875">Must build on Java</tspan>
+          <tspan x="54" y="347.32421875">Must be built on Java</tspan>
           <tspan x="54" y="361.12304688">SE 8.</tspan>
         </text>
       </g>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.DrawingTreeStructure">
-  <title>Drawing Tree Structure</title>
-  <para>A drawing is organized in a tree structure.</para>
-</section>

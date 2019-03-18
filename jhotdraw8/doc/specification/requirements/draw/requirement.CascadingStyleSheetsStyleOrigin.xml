@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
          xml:id="requirement.CascadingStyleSheetsOrigin">
-  <title>Style Origin</title>
+  <title>Cascading Style Sheets Style Origin</title>
   <para>The value of a styled property must origin from one of the 4 style origins defined in JavaFX class
     StyleOrigin:
   </para>
@@ -32,7 +32,7 @@
     </varlistentry>
   </variablelist>
 
-  <para>If a value is defined in more than one style origin, then values are taken with
+  <para>If a value is defined in more than one style origin, then values must be taken with
     the following precedence rule:
   </para>
   <itemizedlist>
@@ -50,7 +50,7 @@
     </listitem>
   </itemizedlist>
 
-  <para>The user of a drawing editor can:</para>
+  <para>The framework must support the following user editing functions:</para>
   <itemizedlist>
     <listitem>
       <para>Add and remove AUTHOR stylesheets.</para>
@@ -63,7 +63,7 @@
     </listitem>
   </itemizedlist>
 
-  <para>The developer of a drawing editor can:</para>
+  <para>The developer of a drawing editor must be able to:</para>
   <itemizedlist>
     <listitem>
       <para>define the USER_AGENT stylesheets.</para>

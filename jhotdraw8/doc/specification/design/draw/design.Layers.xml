@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.Layers">
+  <title>Layers</title>
+
+  <para>A drawing that supports layers can be implemented with the following tree structure:</para>
+  <itemizedlist>
+    <listitem>
+      <para>The children of a drawing are layers.</para>
+    </listitem>
+    <listitem>
+      <para>The children of a layer are figures except drawings and layers.</para>
+    </listitem>
+    <listitem>
+      <para>The children of a figure are figures except drawings and layers.</para>
+    </listitem>
+  </itemizedlist>
+</section>
