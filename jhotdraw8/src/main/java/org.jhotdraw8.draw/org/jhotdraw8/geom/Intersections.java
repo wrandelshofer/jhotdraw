@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static org.jhotdraw8.geom.Geom.argumentOnLine;
 import static org.jhotdraw8.geom.Geom.lerp;
 
@@ -790,7 +792,6 @@ public class Intersections {
      */
     public static Intersection intersectCubicCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2, @Nonnull Point2D a3,
                                                              Point2D b0, Point2D b1, Point2D b2, @Nonnull Point2D b3) {
-        Point2D a, b, c, d;         // temporary variables
         List<Intersection.IntersectionPoint> result = new ArrayList<>();
 
         // Calculate the coefficients of cubic polynomial
@@ -1043,8 +1044,7 @@ public class Intersections {
 
         final double[] roots = poly.getRootsInInterval(0, 1);
 
-        for (int i = 0; i < roots.length; i++) {
-            double s = roots[i];
+        for (double s : roots) {
             double[] xRoots = new Polynomial(
                     c13x, c12x, c11x,
                     c10x - c20x - s * c21x - s * s * c22x - s * s * s * c23x
@@ -1055,14 +1055,13 @@ public class Intersections {
             ).getRoots();
 
             if (xRoots.length > 0 && yRoots.length > 0) {
-                double TOLERANCE = 1e-4;
+                final double TOLERANCE = 1e-4;
 
                 checkRoots:
-                for (int j = 0; j < xRoots.length; j++) {
-                    double xRoot = xRoots[j];
+                for (double xRoot : xRoots) {
                     if (0 <= xRoot && xRoot <= 1) {
-                        for (int k = 0; k < yRoots.length; k++) {
-                            if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
+                        for (double yRoot : yRoots) {
+                            if (abs(xRoot - yRoot) < TOLERANCE) {
                                 result.add(new Intersection.IntersectionPoint(c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20))), xRoot));
                                 break checkRoots;
                             }
@@ -1473,7 +1472,7 @@ public class Intersections {
      * @param r1 the radius of circle 1
      * @param c2 the center of circle 2
      * @param r2 the radius of circle 2
-     * @return computed intersection with parameters of circle 2 at the intersection point
+     * @return computed intersection with parameters of circle 1 at the intersection point
      */
     public static Intersection intersectCircleCircle(Point2D c1, double r1, @Nonnull Point2D c2, double r2) {
         List<Intersection.IntersectionPoint> result = new ArrayList<>();
@@ -1499,7 +1498,7 @@ public class Intersections {
             Point2D p = lerp(c1, c2, a / c_dist);
             double b = h / c_dist;
 
-            // FIXME compute t1 of circle b
+            // FIXME compute t of circle 1
             result.add(new Intersection.IntersectionPoint(new Point2D(
                     p.getX() - b * (c2.getY() - c1.getY()),
                     p.getY() + b * (c2.getX() - c1.getX())

@@ -67,7 +67,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doPathDone() {
-// empty
+        // empty
     }
 
     @Nonnull
