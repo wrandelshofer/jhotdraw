@@ -63,18 +63,18 @@ import java.util.Map;
  * <p>
  * The first compartment shows the following information:
  * <ul>
- * <li>Metaclass (optional)</li>
+ * <li>Keyword (optional)</li>
  * <li>Name</li>
  * </ul>
  * <p>
  * All other compartments show the following information:
  * <ul>
  * <li>Compartment Name (hideable)</li>
- * <li>a list of textual Items</li>
+ * <li>List of textual items</li>
  * </ul>
  * <p>
  * Metaclass, Name and CompartmentName are centered.
- * The Items are left aligned.
+ * The textual items are left aligned.
  * <p>
  * Example of a UMLClassifierShape:
  * <pre>
@@ -127,6 +127,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
         g.getChildren().addAll(p, text);
         return g;
     }
+
     @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Group g = (Group) node;
@@ -161,21 +162,21 @@ public class MLClassifierFigure extends AbstractLeafFigure
     }
 
     /**
-     * @param ctx
+     * @param ctx          the render context
      * @param textNodes    Text nodes for rendering the text contents. Text nodes already contained
      *                     in this list will be reused.
      * @param pathElements Path elements for rendering the separator between compartments.
      *                     Path elements already containd in this list will not be altered.
-     * @param metaclass
-     * @param name
-     * @param cpData
-     * @param lineSpacing
-     * @param padding
+     * @param keyword      the keyword
+     * @param name         the name
+     * @param cpData       the compartment data
+     * @param lineSpacing  the line spacing
+     * @param padding      the padding
      */
     private void updateTextNodes(@Nonnull RenderContext ctx,
                                  List<Text> textNodes,
                                  List<PathElement> pathElements,
-                                 @Nullable String metaclass, @Nonnull String name, MLCompartmentalizedData cpData,
+                                 @Nullable String keyword, @Nonnull String name, MLCompartmentalizedData cpData,
                                  Bounds bounds,
                                  double lineSpacing, Insets padding) {
         if (cpData == null) {
@@ -185,7 +186,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
 
         // Ensure that we have enough text nodes.
         boolean compartmentNamesVisible = getStyledNonnull(COMPARTMENT_LABELS_VISIBLE);
-        ensureEnoughTextNodes(textNodes, metaclass, cpData, compartmentNamesVisible);
+        ensureEnoughTextNodes(textNodes, keyword, cpData, compartmentNamesVisible);
 
         // Compute geometry
         double width = bounds.getWidth();
@@ -207,10 +208,10 @@ public class MLClassifierFigure extends AbstractLeafFigure
             Text node;
 
             // add metaclass and name
-            if (metaclass != null && getStyledNonnull(KEYWORD_LABEL_VISIBLE)) {
+            if (keyword != null && getStyledNonnull(KEYWORD_LABEL_VISIBLE)) {
                 node = textNodes.get(i++);
                 applyKeywordLabelStyle(ctx, node);
-                node.setText("«" + metaclass + "»");
+                node.setText("«" + keyword + "»");
                 node.setWrappingWidth(wrappingWidth);
                 node.setY(y);
                 y += node.getLayoutBounds().getHeight() + lineSpacing;
