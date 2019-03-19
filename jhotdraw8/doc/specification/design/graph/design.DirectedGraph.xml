@@ -18,7 +18,7 @@
     </listitem>
     <listitem>
       <para>In the general definition, <inlineequation><mathphrase>A</mathphrase></inlineequation> is an unordered set: <inlineequation><mathphrase>A = {a_1, a_2, ...}</mathphrase></inlineequation>.</para>
-      <para>We again use 'ordered' instead of 'unordered' to achieve reproduceability.</para>
+      <para>We again use "ordered" instead of "unordered" to achieve reproduceability.</para>
       <para>We use a 'list' instead of a 'set' because we want to support use cases, which
         require multiple arrows between the same vertex pair.
       </para>
