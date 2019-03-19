@@ -7,32 +7,18 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
+import javafx.scene.transform.*;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.ObjectFigureKey;
-import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.TransformListStyleableFigureKey;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Transforms;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.CACHE;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.IDENTITY_TRANSFORM;
@@ -92,7 +78,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * about the center ofCollection the figure.
      */
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
-    TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
+    TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableLists.emptyList());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -151,7 +137,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         set(ROTATE, 0.0);
         set(TRANSLATE_X, 0.0);
         set(TRANSLATE_Y, 0.0);
-        set(TRANSFORMS, ImmutableList.of());
+        set(TRANSFORMS, ImmutableLists.of());
     }
 
     default void flattenTransforms() {
@@ -162,9 +148,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
         set(TRANSLATE_X, 0.0);
         set(TRANSLATE_Y, 0.0);
         if (p2l == null || p2l.isIdentity()) {
-            set(TRANSFORMS, ImmutableList.emptyList());
+            set(TRANSFORMS, ImmutableLists.emptyList());
         } else {
-            set(TRANSFORMS, ImmutableList.of(p2l));
+            set(TRANSFORMS, ImmutableLists.of(p2l));
         }
     }
 
@@ -338,9 +324,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     default void setTransforms(@Nonnull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, ImmutableList.emptyList());
+            set(TRANSFORMS, ImmutableLists.emptyList());
         } else {
-            set(TRANSFORMS, ImmutableList.of(transforms));
+            set(TRANSFORMS, ImmutableLists.of(transforms));
         }
     }
 
@@ -373,14 +359,14 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
             ImmutableList<Transform> ts = getNonnull(TRANSFORMS);
             if (ts.isEmpty()) {
-                set(TRANSFORMS, ImmutableList.of(transform));
+                set(TRANSFORMS, ImmutableLists.of(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = Transforms.concat(ts.get(last), transform);
                 if (concatenatedWithLast instanceof Affine) {
-                    set(TRANSFORMS, ImmutableList.add(ts, transform));
+                    set(TRANSFORMS, ImmutableLists.add(ts, transform));
                 } else {
-                    set(TRANSFORMS, ImmutableList.set(ts, last, concatenatedWithLast));
+                    set(TRANSFORMS, ImmutableLists.set(ts, last, concatenatedWithLast));
                 }
             }
             return;
@@ -415,9 +401,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 flattenTransforms();
                 ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);
                 if (transforms.isEmpty()) {
-                    set(TRANSFORMS, ImmutableList.of(transform));
+                    set(TRANSFORMS, ImmutableLists.of(transform));
                 } else {
-                    set(TRANSFORMS, ImmutableList.add(transforms, 0, transform));
+                    set(TRANSFORMS, ImmutableLists.add(transforms, 0, transform));
                 }
             }
         } else {
@@ -430,9 +416,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
         flattenTransforms();
         ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);
         if (transforms.isEmpty()) {
-            set(TRANSFORMS, ImmutableList.of(t));
+            set(TRANSFORMS, ImmutableLists.of(t));
         } else {
-            set(TRANSFORMS, ImmutableList.add(transforms, t));
+            set(TRANSFORMS, ImmutableLists.add(transforms, t));
         }
     }
 
@@ -449,9 +435,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
             flattenTransforms();
             ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);
             if (transforms.isEmpty()) {
-                set(TRANSFORMS, ImmutableList.of(t));
+                set(TRANSFORMS, ImmutableLists.of(t));
             } else {
-                set(TRANSFORMS, ImmutableList.add(transforms, 0, t));
+                set(TRANSFORMS, ImmutableLists.add(transforms, 0, t));
             }
         }
     }

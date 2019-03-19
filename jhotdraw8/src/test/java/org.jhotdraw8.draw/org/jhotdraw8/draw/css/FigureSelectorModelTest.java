@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.css;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.Paintable;
@@ -15,9 +15,7 @@ import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
 import org.jhotdraw8.text.Converter;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * FigureSelectorModelTest.
@@ -49,7 +47,7 @@ public class FigureSelectorModelTest {
 
         assertEquals("none", instance.getAttributeAsString(figure, namespace, attrName), "no value has been set, must be 'none'");
 
-        instance.setAttribute(figure, StyleOrigin.USER, namespace, attrName, ImmutableList.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
+        instance.setAttribute(figure, StyleOrigin.USER, namespace, attrName, ImmutableLists.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
 
         assertNull(figure.get(key), "figure.get(key) value has been explicitly set to null");
 

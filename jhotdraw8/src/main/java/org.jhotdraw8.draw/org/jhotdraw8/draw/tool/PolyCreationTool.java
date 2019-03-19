@@ -8,7 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -82,7 +82,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
         } else {
             points.add(c);
         }
-        dm.set(createdFigure, key, ImmutableList.ofCollection(points));
+        dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
 
         event.consume();
     }
@@ -107,7 +107,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
             Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2))).getConvertedValue();
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, c2);
-            dm.set(createdFigure, key, ImmutableList.ofCollection(points));
+            dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
         }
         event.consume();
     }
@@ -125,7 +125,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, ImmutableList.ofCollection(points));
+                    dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
                     dv.getSelectedFigures().clear();
                     dv.setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);

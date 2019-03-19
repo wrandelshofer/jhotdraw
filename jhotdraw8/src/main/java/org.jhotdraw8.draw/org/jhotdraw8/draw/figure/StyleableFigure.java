@@ -9,14 +9,10 @@ import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
-import org.jhotdraw8.draw.key.ObjectFigureKey;
-import org.jhotdraw8.draw.key.ObservableWordListFigureKey;
-import org.jhotdraw8.draw.key.StringStyleableFigureKey;
+import org.jhotdraw8.collection.ImmutableSets;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 
@@ -44,7 +40,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nonnull
-    ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableList.emptyList());
+    ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableLists.emptyList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
@@ -53,7 +49,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nonnull
-    ObjectFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new ObjectFigureKey<>("pseudoClassStates", ImmutableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableSet.emptySet());
+    ObjectFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new ObjectFigureKey<>("pseudoClassStates", ImmutableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableSets.emptySet());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.

@@ -7,6 +7,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ListKey;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
@@ -25,11 +26,11 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
     private final String cssName;
 
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull CssConverter<T> converter) {
-        this(key, elemClass, ImmutableList.emptyList(), converter);
+        this(key, elemClass, ImmutableLists.emptyList(), converter);
     }
 
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull CssListConverter<T> converter) {
-        this(key, elemClass, ImmutableList.emptyList(), converter);
+        this(key, elemClass, ImmutableLists.emptyList(), converter);
     }
 
     public ListStyleableKey(@Nonnull String key, @Nonnull Class<T> elemClass, @Nonnull ImmutableList<T> defaultValue, @Nonnull CssConverter<T> converter) {

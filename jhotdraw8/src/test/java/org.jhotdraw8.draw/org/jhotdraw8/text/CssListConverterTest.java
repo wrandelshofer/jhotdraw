@@ -6,6 +6,7 @@
 package org.jhotdraw8.text;
 
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssStringConverter;
@@ -40,7 +41,7 @@ public class CssListConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), " ");
-        instance.toString(out, idFactory, value == null ? null : ImmutableList.ofCollection(value));
+        instance.toString(out, idFactory, value == null ? null : ImmutableLists.ofCollection(value));
         String actual = out.toString();
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

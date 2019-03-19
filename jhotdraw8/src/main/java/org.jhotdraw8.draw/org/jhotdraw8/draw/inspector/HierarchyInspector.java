@@ -11,12 +11,7 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableRow;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
@@ -24,7 +19,9 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.css.text.CssPseudoClassConverter;
 import org.jhotdraw8.css.text.CssSetConverter;
 import org.jhotdraw8.css.text.CssWordListConverter;
@@ -47,11 +44,7 @@ import org.jhotdraw8.tree.TreePresentationModel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 /**
  * FXML Controller class
@@ -160,7 +153,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     @SuppressWarnings("unchecked")
                     public ImmutableList<String> getValue() {
-                        return figure == null ? null : ImmutableList.ofCollection(figure.getStyleClass());
+                        return figure == null ? null : ImmutableLists.ofCollection(figure.getStyleClass());
                     }
                 }
         );
@@ -170,7 +163,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     @SuppressWarnings("unchecked")
                     public ImmutableSet<PseudoClass> getValue() {
-                        return figure == null ? null : ImmutableSet.ofCollection(figure.getPseudoClassStates());
+                        return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClassStates());
                     }
                 }
         );
@@ -244,7 +237,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                     @Override
                     public void commitEdit(@Nonnull ImmutableList<String> newValue) {
-                        ImmutableList<String> newValueSet = ImmutableList.removeAll(newValue, syntheticClasses);
+                        ImmutableList<String> newValueSet = ImmutableLists.removeAll(newValue, syntheticClasses);
                         super.commitEdit(newValueSet);
                     }
 
@@ -271,7 +264,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             }
                             // show the computed  classes! 
                             if (figure != null) {
-                                setText(wordListConverter.toString(ImmutableList.ofCollection(figure.getStyleClass())));
+                                setText(wordListConverter.toString(ImmutableLists.ofCollection(figure.getStyleClass())));
                             }
                         }
                         if (isEditable) {

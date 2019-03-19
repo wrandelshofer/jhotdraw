@@ -7,11 +7,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
@@ -20,6 +16,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -237,11 +234,11 @@ public class TransformHandleKit {
             }
             switch (oldTransforms.size()) {
                 case 0:
-                    model.set(owner, TRANSFORMS, ImmutableList.of(transform));
+                    model.set(owner, TRANSFORMS, ImmutableLists.of(transform));
                     break;
                 default:
                     int last = oldTransforms.size() - 1;
-                    model.set(owner, TRANSFORMS, ImmutableList.set(oldTransforms, last, Transforms.concat(oldTransforms.get(last), transform)));
+                    model.set(owner, TRANSFORMS, ImmutableLists.set(oldTransforms, last, Transforms.concat(oldTransforms.get(last), transform)));
                     break;
             }
         }

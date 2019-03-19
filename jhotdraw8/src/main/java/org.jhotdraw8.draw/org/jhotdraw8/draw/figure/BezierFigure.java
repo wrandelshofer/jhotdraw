@@ -14,17 +14,13 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
-import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableFigureKey;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -53,7 +49,7 @@ public class BezierFigure extends AbstractLeafFigure
         PathIterableFigure {
 
     public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), false);
-    public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
+    public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -160,7 +156,7 @@ public class BezierFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).transform(transform));
         }
-        set(PATH, ImmutableList.ofCollection(newP));
+        set(PATH, ImmutableLists.ofCollection(newP));
     }
 
     @Override

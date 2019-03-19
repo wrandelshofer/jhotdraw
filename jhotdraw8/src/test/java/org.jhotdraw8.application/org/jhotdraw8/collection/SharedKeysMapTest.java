@@ -7,12 +7,7 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -94,11 +89,11 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(ImmutableSet.of("one", "two").asSet(), instance1.keySet());
+        assertEquals(ImmutableSets.of("one", "two").asSet(), instance1.keySet());
 
         // THEN instance 2 must contain zero entries
         assertEquals(0, instance2.keySet().size());
-        assertEquals(ImmutableSet.of().asSet(), instance2.keySet());
+        assertEquals(ImmutableSets.of().asSet(), instance2.keySet());
 
         // WHEN
         instance2.put("two", 22);
@@ -106,11 +101,11 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(ImmutableSet.of("one", "two").asSet(), instance1.keySet());
+        assertEquals(ImmutableSets.of("one", "two").asSet(), instance1.keySet());
 
         // THEN instance 2 must contain two entries
         assertEquals(2, instance2.keySet().size());
-        assertEquals(ImmutableSet.of("two", "three").asSet(), instance2.keySet());
+        assertEquals(ImmutableSets.of("two", "three").asSet(), instance2.keySet());
 
     }
 

@@ -11,6 +11,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -54,11 +55,11 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     public PolygonFigure(double startX, double startY, double endX, double endY) {
-        set(POINTS, ImmutableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
+        set(POINTS, ImmutableLists.of(new Point2D(startX, startY), new Point2D(endX, endY)));
     }
 
     public PolygonFigure(Point2D... points) {
-        set(POINTS, ImmutableList.of(points));
+        set(POINTS, ImmutableLists.of(points));
     }
 
     @Nonnull
@@ -94,7 +95,7 @@ public class PolygonFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
-        set(POINTS, ImmutableList.ofCollection(newP));
+        set(POINTS, ImmutableLists.ofCollection(newP));
     }
 
     @Override
@@ -103,7 +104,7 @@ public class PolygonFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
-        set(POINTS, ImmutableList.ofCollection(newP));
+        set(POINTS, ImmutableLists.ofCollection(newP));
     }
 
     @Nonnull

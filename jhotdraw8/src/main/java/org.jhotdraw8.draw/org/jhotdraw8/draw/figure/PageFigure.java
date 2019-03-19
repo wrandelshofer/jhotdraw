@@ -9,32 +9,18 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.Geom;
@@ -334,7 +320,7 @@ public class PageFigure extends AbstractCompositeFigure
     @Override
     public void layout(@Nonnull RenderContext ctx) {
         int currentPage = 0;
-        ImmutableList<Transform> transforms = ImmutableList.of(getPageTransform(currentPage));
+        ImmutableList<Transform> transforms = ImmutableLists.of(getPageTransform(currentPage));
 
         for (Figure child : getChildren()) {
             child.set(TRANSFORMS, transforms);

@@ -13,25 +13,15 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LabelConnectorHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -157,7 +147,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? ImmutableSet.emptySet() : ImmutableSet.of(labelTarget);
+        return labelTarget == null ? ImmutableSets.emptySet() : ImmutableSets.of(labelTarget);
     }
 
     public boolean isConnected() {

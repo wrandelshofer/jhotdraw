@@ -12,21 +12,16 @@ import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.ListStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
-import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -118,7 +113,7 @@ public interface StrokableFigure extends Figure {
      * Stroke Properties</a>
      */
     ListStyleableFigureKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableFigureKey<>("stroke-dasharray", DirtyMask.of(DirtyBits.NODE),
-            CssSize.class, new CssSizeConverter(false), ImmutableList.emptyList());
+            CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**
      * Combined map accessor for all stroke style properties.

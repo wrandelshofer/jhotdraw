@@ -4,6 +4,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 
 import java.util.Objects;
 
@@ -19,12 +20,12 @@ public class CssStroke {
 
     public CssStroke(Paintable paint) {
         this(CssSize.ONE, paint, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4.0),
-                CssSize.ZERO, ImmutableList.emptyList());
+                CssSize.ZERO, ImmutableLists.emptyList());
     }
 
     public CssStroke(CssSize width, Paintable paint) {
         this(width, paint, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4.0),
-                CssSize.ZERO, ImmutableList.emptyList());
+                CssSize.ZERO, ImmutableLists.emptyList());
     }
 
     public CssStroke(CssSize width, Paintable paint, StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,

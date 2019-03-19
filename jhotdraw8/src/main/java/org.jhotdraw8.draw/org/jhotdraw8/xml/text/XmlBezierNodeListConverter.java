@@ -6,6 +6,7 @@ package org.jhotdraw8.xml.text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
@@ -79,6 +80,6 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
 
     @Override
     public ImmutableList<BezierNode> getDefaultValue() {
-        return ImmutableList.emptyList();
+        return ImmutableLists.emptyList();
     }
 }

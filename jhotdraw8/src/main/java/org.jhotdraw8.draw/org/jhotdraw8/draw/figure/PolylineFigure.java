@@ -11,15 +11,12 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.PolyPointEditHandle;
-import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
-import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
@@ -43,7 +40,7 @@ public class PolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
-    public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableList.emptyList());
+    public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -54,12 +51,12 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     public PolylineFigure(double startX, double startY, double endX, double endY) {
-        set(POINTS, ImmutableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
+        set(POINTS, ImmutableLists.of(new Point2D(startX, startY), new Point2D(endX, endY)));
         set(FILL, null);
     }
 
     public PolylineFigure(Point2D... points) {
-        set(POINTS, ImmutableList.of(points));
+        set(POINTS, ImmutableLists.of(points));
         set(FILL, null);
     }
 
@@ -128,7 +125,7 @@ public class PolylineFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
-        set(POINTS, ImmutableList.ofCollection(newP));
+        set(POINTS, ImmutableLists.ofCollection(newP));
     }
 
     @Override
@@ -137,7 +134,7 @@ public class PolylineFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
-        set(POINTS, ImmutableList.ofCollection(newP));
+        set(POINTS, ImmutableLists.ofCollection(newP));
     }
 
 

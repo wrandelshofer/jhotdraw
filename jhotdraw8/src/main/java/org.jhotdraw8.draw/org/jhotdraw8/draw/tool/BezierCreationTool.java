@@ -10,6 +10,7 @@ import javafx.scene.shape.Line;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -97,7 +98,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, ImmutableList.ofCollection(points));
+                    dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
                     dv.getSelectedFigures().clear();
                     dv.setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);
@@ -122,7 +123,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             } else {
                 points.add(new BezierNode(c2));
             }
-            dm.set(createdFigure, key, ImmutableList.ofCollection(points));
+            dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
         }
         event.consume();
     }
@@ -173,7 +174,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         } else {
             points.add(new BezierNode(c.getConvertedValue()));
         }
-        dm.set(createdFigure, key, ImmutableList.ofCollection(points));
+        dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
 
         rubberBand.setVisible(false);
         dragStartIndex = -1;
@@ -212,7 +213,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             points = newList;
 
             DrawingModel dm = dv.getModel();
-            dm.set(createdFigure, key, ImmutableList.ofCollection(points));
+            dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
             dragStartIndex = -1;
         }
     }

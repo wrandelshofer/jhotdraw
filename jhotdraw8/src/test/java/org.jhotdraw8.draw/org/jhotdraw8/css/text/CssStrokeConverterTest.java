@@ -3,7 +3,7 @@ package org.jhotdraw8.css.text;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStroke;
@@ -77,19 +77,19 @@ class CssStrokeConverterTest {
                         "2 black")),
                 dynamicTest("3", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
-                                , new CssSize(4), ImmutableList.of(new CssSize(5), new CssSize(6))),
+                                , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
                         "2 black round miter miter-limit(3) dash-offset(4) dash-array(5 6)")),
                 dynamicTest("4", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(3)
-                                , new CssSize(4), ImmutableList.of(new CssSize(5), new CssSize(6))),
+                                , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
                         "2 black miter-limit(3) dash-offset(4) dash-array(5 6)")),
                 dynamicTest("5", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
-                                , new CssSize(4), ImmutableList.of(new CssSize(5), new CssSize(6))),
+                                , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
                         "2 black inside round miter miter-limit(3) dash-offset(4) dash-array(5 6)")),
                 dynamicTest("6", () -> doTest(
                         new CssStroke(new CssSize(1), null, StrokeType.CENTERED, StrokeLineCap.SQUARE, StrokeLineJoin.MITER, new CssSize(10)
-                                , new CssSize(0), ImmutableList.emptyList()),
+                                , new CssSize(0), ImmutableLists.emptyList()),
                         "none"))
         );
     }

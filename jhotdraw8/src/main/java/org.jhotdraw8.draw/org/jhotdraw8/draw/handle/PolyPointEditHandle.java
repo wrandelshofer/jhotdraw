@@ -6,12 +6,7 @@ package org.jhotdraw8.draw.handle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
@@ -21,6 +16,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -107,7 +103,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
-                dv.getModel().set(owner, pointKey, ImmutableList.remove(owner.get(pointKey), pointIndex));
+                dv.getModel().set(owner, pointKey, ImmutableLists.remove(owner.get(pointKey), pointIndex));
                 dv.recreateHandles();
             }
         }
@@ -123,7 +119,7 @@ public class PolyPointEditHandle extends AbstractHandle {
         }
 
         ImmutableList<Point2D> list = owner.get(pointKey);
-        view.getModel().set(getOwner(), pointKey, ImmutableList.set(list, pointIndex, getOwner().worldToLocal(newPoint)));
+        view.getModel().set(getOwner(), pointKey, ImmutableLists.set(list, pointIndex, getOwner().worldToLocal(newPoint)));
     }
 
     @Override

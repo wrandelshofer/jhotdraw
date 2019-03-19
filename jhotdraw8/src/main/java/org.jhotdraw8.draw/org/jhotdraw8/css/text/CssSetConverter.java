@@ -6,6 +6,7 @@ package org.jhotdraw8.css.text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -46,7 +47,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
             }
         } while (tt.next() == CssTokenType.TT_COMMA || tt.current() == CssTokenType.TT_S);
         tt.pushBack();
-        return ImmutableSet.ofCollection(list);
+        return ImmutableSets.ofCollection(list);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
     @Nullable
     @Override
     public ImmutableSet<T> getDefaultValue() {
-        return ImmutableSet.emptySet();
+        return ImmutableSets.emptySet();
     }
 
     @Override

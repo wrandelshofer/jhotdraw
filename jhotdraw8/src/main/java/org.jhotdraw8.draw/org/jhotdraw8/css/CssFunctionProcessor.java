@@ -1,6 +1,7 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public interface CssFunctionProcessor<T> {
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception.", e);
         }
-        return ImmutableList.ofCollection(out);
+        return ImmutableLists.ofCollection(out);
     }
 
     /**

@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -31,12 +32,7 @@ import org.jhotdraw8.gui.PlatformUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -107,7 +103,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getDrawingModel().set(f, tagsKey, ImmutableList.ofCollection(newTags));
+                        getDrawingModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
                     }
                 }
                 updateList();
@@ -189,7 +185,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getDrawingModel().set(f, tagsKey, ImmutableList.ofCollection(newTags));
+                        getDrawingModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
                     }
                 }
                 updateList();

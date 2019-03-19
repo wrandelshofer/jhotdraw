@@ -14,35 +14,9 @@ import javafx.scene.Parent;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BorderImage;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.FillRule;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.QuadCurve;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.layout.*;
+import javafx.scene.paint.*;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -53,6 +27,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssNumberConverter;
@@ -88,12 +63,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -944,7 +914,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
         }
         if (!shape.getStrokeDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableList.ofCollection(shape.getStrokeDashArray())));
+            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(shape.getStrokeDashArray())));
         }
         if (shape.getStrokeDashOffset() != 0) {
             elem.setAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
@@ -987,7 +957,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
         }
         if (!style.getDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableList.ofCollection(style.getDashArray())));
+            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(style.getDashArray())));
         }
         if (style.getDashOffset() != 0) {
             elem.setAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
@@ -1313,7 +1283,7 @@ public class SvgExporter {
     private void writeTransformAttributes(@Nonnull Element elem, List<Transform> txs) {
 
         if (txs.size() > 0) {
-            String value = tx.toString(ImmutableList.ofCollection(txs));
+            String value = tx.toString(ImmutableLists.ofCollection(txs));
             if (!value.isEmpty()) {
                 elem.setAttribute("transform", value);
             }

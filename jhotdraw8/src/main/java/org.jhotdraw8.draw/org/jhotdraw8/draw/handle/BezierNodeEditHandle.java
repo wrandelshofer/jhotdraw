@@ -7,24 +7,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -159,7 +149,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
                             break;
                     }
                     path.getNodes().set(pointIndex, node);
-                    dv.getModel().set(owner, pointKey, ImmutableList.ofCollection(path.getNodes()));
+                    dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
                     dv.recreateHandles();
                 }
             } else if (event.getClickCount() == 2) {
@@ -167,7 +157,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
                     if (owner.get(pointKey).size() > 2) {
                         BezierNodePath path = new BezierNodePath(owner.get(pointKey));
                         path.join(pointIndex, 1.0);
-                        dv.getModel().set(owner, pointKey, ImmutableList.ofCollection(path.getNodes()));
+                        dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
                         dv.recreateHandles();
                     }
                 }
@@ -190,7 +180,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
         BezierNode p = list.get(pointIndex);
         view.getModel().set(getOwner(), pointKey,
-                ImmutableList.set(list, pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
+                ImmutableLists.set(list, pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
     }
 
     @Override

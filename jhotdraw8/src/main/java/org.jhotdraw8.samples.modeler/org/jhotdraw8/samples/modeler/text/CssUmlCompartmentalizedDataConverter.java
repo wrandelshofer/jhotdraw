@@ -3,6 +3,7 @@ package org.jhotdraw8.samples.modeler.text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -61,7 +62,7 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
                         throw new ParseException("String or Identifier expected", tt.getStartPosition());
                 }
             }
-            map.merge(keyword, ImmutableList.ofCollection(items), ImmutableList::addAll);
+            map.merge(keyword, ImmutableLists.ofCollection(items), ImmutableLists::addAll);
             if (tt.next() != CssTokenType.TT_COMMA) {
                 tt.pushBack();
             }

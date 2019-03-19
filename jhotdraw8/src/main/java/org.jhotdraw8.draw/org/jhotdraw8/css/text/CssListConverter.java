@@ -3,6 +3,7 @@ package org.jhotdraw8.css.text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -55,9 +56,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                             ReadOnlyList<CssToken> suffix
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = ImmutableList.ofCollection(delimiter);
-        this.prefix = ImmutableList.ofCollection(prefix);
-        this.suffix = ImmutableList.ofCollection(suffix);
+        this.delimiter = ImmutableLists.ofCollection(delimiter);
+        this.prefix = ImmutableLists.ofCollection(prefix);
+        this.suffix = ImmutableLists.ofCollection(suffix);
     }
 
     public CssListConverter(CssConverter<T> elementConverter,
@@ -66,16 +67,16 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                             List<? extends CssToken> suffix
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = ImmutableList.ofCollection(delimiter);
-        this.prefix = ImmutableList.ofCollection(prefix);
-        this.suffix = ImmutableList.ofCollection(suffix);
+        this.delimiter = ImmutableLists.ofCollection(delimiter);
+        this.prefix = ImmutableLists.ofCollection(prefix);
+        this.suffix = ImmutableLists.ofCollection(suffix);
     }
 
 
     @Override
     public ImmutableList<T> parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return ImmutableList.emptyList();
+            return ImmutableLists.emptyList();
         } else {
             tt.pushBack();
         }
@@ -105,7 +106,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
         }
         tt.pushBack();
-        return ImmutableList.ofCollection(list);
+        return ImmutableLists.ofCollection(list);
     }
 
     @Override
@@ -139,7 +140,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     @Nullable
     @Override
     public ImmutableList<T> getDefaultValue() {
-        return ImmutableList.emptyList();
+        return ImmutableLists.emptyList();
     }
 
     @Override

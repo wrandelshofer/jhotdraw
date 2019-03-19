@@ -7,28 +7,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -168,7 +154,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     BezierNode bn = list.get(pointIndex);
 
                     dv.getModel().set(owner, pointKey,
-                            ImmutableList.set(list, pointIndex, bn.setColinear(!bn.isColinear())));
+                            ImmutableLists.set(list, pointIndex, bn.setColinear(!bn.isColinear())));
                 }
             }
         }
@@ -195,7 +181,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             // move control point independently
             BezierNode newBezierNode = bn.setC(controlPointMask, p);
             view.getModel().set(f, pointKey,
-                    ImmutableList.set(list, pointIndex, newBezierNode));
+                    ImmutableLists.set(list, pointIndex, newBezierNode));
 
         } else {
             Point2D c0 = bn.getC0();
@@ -225,7 +211,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 newBezierNode = bn.setC2(p).setC1(p2);
             }
             view.getModel().set(f, pointKey,
-                    ImmutableList.set(list, pointIndex, newBezierNode));
+                    ImmutableLists.set(list, pointIndex, newBezierNode));
         }
     }
 

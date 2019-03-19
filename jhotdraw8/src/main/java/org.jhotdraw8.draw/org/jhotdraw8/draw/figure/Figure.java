@@ -15,22 +15,14 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.BoundsInTranslationOutlineHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.ResizeHandleKit;
-import org.jhotdraw8.draw.handle.RotateHandle;
-import org.jhotdraw8.draw.handle.TransformHandleKit;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -41,15 +33,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Math.max;
@@ -710,7 +694,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return a list of layout subjects
      */
     default ReadOnlySet<Figure> getLayoutSubjects() {
-        return ImmutableSet.emptySet();
+        return ImmutableSets.emptySet();
     }
 
     /**

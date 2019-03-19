@@ -9,6 +9,7 @@ import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
@@ -42,7 +43,7 @@ public class Point2DListStyleableFigureKey extends AbstractStyleableFigureKey<Im
      * @param name The name of the key.
      */
     public Point2DListStyleableFigureKey(String name) {
-        this(name, ImmutableList.emptyList());
+        this(name, ImmutableLists.emptyList());
     }
 
     /**

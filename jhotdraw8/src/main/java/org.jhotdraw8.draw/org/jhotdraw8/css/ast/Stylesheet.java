@@ -5,6 +5,7 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class Stylesheet extends AST {
     private final ImmutableList<StyleRule> styleRules;
 
     public Stylesheet(@Nonnull List<Rule> rules) {
-        this.rules = ImmutableList.ofCollection(rules);
-        this.styleRules = ImmutableList.ofCollection(
+        this.rules = ImmutableLists.ofCollection(rules);
+        this.styleRules = ImmutableLists.ofCollection(
                 rules.stream()
                         .filter(r -> r instanceof StyleRule)
                         .map(r -> (StyleRule) r)

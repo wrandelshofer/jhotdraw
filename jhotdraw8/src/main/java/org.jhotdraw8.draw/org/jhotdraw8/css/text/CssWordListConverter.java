@@ -5,6 +5,7 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.PatternConverter;
@@ -60,12 +61,12 @@ public class CssWordListConverter implements Converter<ImmutableList<String>> {
     @Override
     public ImmutableList<String> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ImmutableList<String> l = ImmutableList.ofArray(v, 1, (int) v[0]);
+        ImmutableList<String> l = ImmutableLists.ofArray(v, 1, (int) v[0]);
         return l;
     }
 
     @Override
     public ImmutableList<String> getDefaultValue() {
-        return ImmutableList.emptyList();
+        return ImmutableLists.emptyList();
     }
 }

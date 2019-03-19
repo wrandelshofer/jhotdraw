@@ -6,13 +6,8 @@ import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssStroke;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.io.IdFactory;
 
 import java.io.IOException;
@@ -122,7 +117,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
 
         CssSize miterLimit = new CssSize(4);
         CssSize dashOffset = new CssSize(0);
-        ImmutableList<CssSize> dashArray = ImmutableList.emptyList();
+        ImmutableList<CssSize> dashArray = ImmutableLists.emptyList();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
@@ -148,11 +143,11 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         if (tt.next() == CssTokenType.TT_FUNCTION) {
             if (!DASH_ARRAY.equals(tt.currentStringNonnull())) {
                 tt.pushBack();
-                return ImmutableList.emptyList();
+                return ImmutableLists.emptyList();
             }
         } else {
             tt.pushBack();
-            return ImmutableList.emptyList();
+            return ImmutableLists.emptyList();
         }
         List<CssSize> list = new ArrayList<>();
         while (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_DIMENSION) {
@@ -164,7 +159,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         }
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨Stroke⟩: ⟨" + DASH_ARRAY + "⟩ right bracket expected.");
-        return ImmutableList.ofCollection(list);
+        return ImmutableLists.ofCollection(list);
     }
 
     private CssSize parseNumericFunction(String functionName, CssSize defaultValue, @Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {

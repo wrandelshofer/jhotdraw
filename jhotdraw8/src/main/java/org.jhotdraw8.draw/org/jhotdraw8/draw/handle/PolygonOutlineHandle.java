@@ -16,6 +16,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
@@ -109,7 +110,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
                 }
             }
             if (insertAt != -1 && insertLocation != null) {
-                dv.getModel().set(owner, key, ImmutableList.add(owner.get(key), insertAt, insertLocation));
+                dv.getModel().set(owner, key, ImmutableLists.add(owner.get(key), insertAt, insertLocation));
                 dv.recreateHandles();
             }
         }

@@ -6,6 +6,7 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssToken;
 
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class Declaration extends AST {
     public Declaration(@Nullable String propertyNamespace, @Nonnull String propertyName, @Nonnull List<CssToken> terms, int startPos, int endPos) {
         this.propertyNamespace = propertyNamespace;
         this.propertyName = propertyName;
-        this.terms = ImmutableList.ofCollection(terms);
+        this.terms = ImmutableLists.ofCollection(terms);
         this.startPos = startPos;
         this.endPos = endPos;
     }

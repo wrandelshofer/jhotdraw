@@ -8,6 +8,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
@@ -44,7 +45,7 @@ public class ListStyleableFigureKey<T> extends AbstractStyleableFigureKey<Immuta
      * @param converter String converter for a list element
      */
     public ListStyleableFigureKey(@Nonnull String name, @Nonnull Class<T> clazz, @Nonnull CssConverter<T> converter) {
-        this(name, clazz, converter, ImmutableList.emptyList());
+        this(name, clazz, converter, ImmutableLists.emptyList());
     }
 
     /**

@@ -6,6 +6,7 @@ package org.jhotdraw8.css.text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.PatternConverter;
@@ -62,13 +63,13 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
     @Override
     public ImmutableSet<String> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ImmutableSet<String> l = ImmutableSet.ofArray(v, 1, (int) v[0]);
+        ImmutableSet<String> l = ImmutableSets.ofArray(v, 1, (int) v[0]);
         return l;
     }
 
     @Override
     public ImmutableSet<String> getDefaultValue() {
-        return ImmutableSet.emptySet();
+        return ImmutableSets.emptySet();
     }
 
 }
