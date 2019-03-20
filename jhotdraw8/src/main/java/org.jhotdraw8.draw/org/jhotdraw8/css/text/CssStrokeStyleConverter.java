@@ -7,7 +7,13 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.css.*;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.CssStroke;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.io.IdFactory;
 
 import java.io.IOException;
@@ -16,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
+public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
 
     public static final String INSIDE = "inside";
     public static final String OUTSIDE = "outside";
@@ -29,8 +35,9 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
     public static final String DASH_OFFSET = "dash-offset";
     public static final String DASH_ARRAY = "dash-array";
     public static final String MITER_LIMIT = "miter-limit";
+    private boolean printAllValues = true;
 
-    public CssStrokeConverter(boolean nullable) {
+    public CssStrokeStyleConverter(boolean nullable) {
         super(nullable);
     }
 
@@ -197,7 +204,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨Stroke⟩: ［⟨width⟩］⟨Paint⟩［⟨Type⟩］［⟨LineCap⟩］［⟨LineJoin⟩］［⟨MiterLimit⟩］［⟨DashOffset⟩］［⟨DashArray⟩］"
+        return "Format of ⟨StrokeStyle⟩: ［⟨width⟩］⟨Paint⟩［⟨Type⟩］［⟨LineCap⟩］［⟨LineJoin⟩］［⟨MiterLimit⟩］［⟨DashOffset⟩］［⟨DashArray⟩］"
                 + "\n  with ⟨width⟩: size"
                 + "\n  with ⟨Paint⟩: ⟨Color⟩｜⟨Gradient⟩"
                 + "\n  with ⟨Type⟩: inside｜outside｜centered"
@@ -236,8 +243,8 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
                 break;
         }
 
-        boolean mustPrintLineCap = value.getLineJoin() != StrokeLineJoin.MITER;
-        boolean mustPrintLineJoin = value.getLineCap() != StrokeLineCap.BUTT;
+        boolean mustPrintLineCap = printAllValues || value.getLineJoin() != StrokeLineJoin.MITER;
+        boolean mustPrintLineJoin = printAllValues || value.getLineCap() != StrokeLineCap.BUTT;
 
         switch (value.getLineCap()) {
             case BUTT:
@@ -273,7 +280,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         }
 
         CssSize miterLimit = value.getMiterLimit();
-        if (!miterLimit.getUnits().equals(UnitConverter.DEFAULT) || miterLimit.getConvertedValue() != 4.0) {
+        if (printAllValues || !miterLimit.getUnits().equals(UnitConverter.DEFAULT) || miterLimit.getConvertedValue() != 4.0) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, MITER_LIMIT));
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, miterLimit.getValue(), miterLimit.getUnits()));
@@ -281,7 +288,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         }
 
         CssSize dashOffset = value.getDashOffset();
-        if (!dashOffset.getUnits().equals(UnitConverter.DEFAULT) || dashOffset.getConvertedValue() != 0.0) {
+        if (printAllValues || !dashOffset.getUnits().equals(UnitConverter.DEFAULT) || dashOffset.getConvertedValue() != 0.0) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASH_OFFSET));
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, dashOffset.getValue(), dashOffset.getUnits()));
@@ -289,7 +296,7 @@ public class CssStrokeConverter extends AbstractCssConverter<CssStroke> {
         }
 
         ImmutableList<CssSize> dashArray = value.getDashArray();
-        if (!dashArray.isEmpty()) {
+        if (printAllValues || !dashArray.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASH_ARRAY));
             for (int i = 0, n = dashArray.size(); i < n; i++) {

@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 class CssStrokeConverterTest {
     /**
-     * Test of fromString method, of class CssStrokeConverter.
+     * Test of fromString method, of class CssStrokeStyleConverter.
      */
     static
     public void doTestFromString(CssStroke expected, String string) throws Exception {
@@ -36,7 +36,7 @@ class CssStrokeConverterTest {
 
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssStrokeConverter instance = new CssStrokeConverter(false);
+        CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
         CssStroke actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -44,12 +44,12 @@ class CssStrokeConverterTest {
     }
 
     /**
-     * Test of toString method, of class CssStrokeConverter.
+     * Test of toString method, of class CssStrokeStyleConverter.
      */
     static
     public void doTestToString(CssStroke value, String expected) throws Exception {
         System.out.println("toString " + value);
-        CssStrokeConverter instance = new CssStrokeConverter(false);
+        CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
         String actual = instance.toString(value);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -57,7 +57,7 @@ class CssStrokeConverterTest {
     }
 
     /**
-     * Test of fromString and toString methods, of class CssStrokeConverter.
+     * Test of fromString and toString methods, of class CssStrokeStyleConverter.
      */
     static
     public void doTest(CssStroke value, String str) throws Exception {

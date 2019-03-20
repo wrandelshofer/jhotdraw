@@ -18,7 +18,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStroke;
 import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.css.text.CssStrokeConverter;
+import org.jhotdraw8.css.text.CssStrokeStyleConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -104,7 +104,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
 
     }
 
-    private final Converter<CssStroke> converter = new CssStrokeConverter(false);
+    private final Converter<CssStroke> converter = new CssStrokeStyleConverter(false);
     ;
 
     @Override

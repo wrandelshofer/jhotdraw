@@ -37,7 +37,7 @@ import java.awt.geom.PathIterator;
 public class TextFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure, TextFontableFigure, TextLayoutableFigure,
         TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
-        ConnectableFigure, PathIterableFigure {
+        ConnectableFigure, PathIterableFigure, TextEditableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -70,6 +70,11 @@ public class TextFigure extends AbstractLeafFigure
 
         Bounds b = textNode.getBoundsInLocal();
         return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+    }
+
+    @Override
+    public TextEditorData getTextEditorDataFor(Point2D pointInLocal) {
+        return new TextEditorData(this, getBoundsInLocal(), TEXT);
     }
 
     @Override
@@ -141,5 +146,6 @@ public class TextFigure extends AbstractLeafFigure
         }
         return Shapes.awtShapeFromFX(textNode).getPathIterator(tx);
     }
+
 
 }

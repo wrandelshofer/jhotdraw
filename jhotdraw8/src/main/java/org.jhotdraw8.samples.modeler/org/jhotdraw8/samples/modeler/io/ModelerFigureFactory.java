@@ -43,7 +43,7 @@ import org.jhotdraw8.css.text.CssPoint3DConverter;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.css.text.CssRegexConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.css.text.CssStrokeConverter;
+import org.jhotdraw8.css.text.CssStrokeStyleConverter;
 import org.jhotdraw8.css.text.CssTransformConverter;
 import org.jhotdraw8.css.text.CssWordListConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
@@ -212,7 +212,7 @@ public class ModelerFigureFactory extends AbstractFigureFactory {
         addConverterForType(StrokeLineJoin.class, new CssEnumConverter<>(StrokeLineJoin.class));
         addConverterForType(StrokeLineCap.class, new CssEnumConverter<>(StrokeLineCap.class));
         addConverterForType(StrokeType.class, new CssEnumConverter<>(StrokeType.class));
-        addConverterForType(CssStroke.class, new CssStrokeConverter(false));
+        addConverterForType(CssStroke.class, new CssStrokeStyleConverter(false));
 
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());

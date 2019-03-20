@@ -27,7 +27,7 @@ public class TextAreaFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,
-        TextableFigure, TextFontableFigure, TextLayoutableFigure, TextFillableFigure, PaddableFigure {
+        TextableFigure, TextFontableFigure, TextLayoutableFigure, TextFillableFigure, PaddableFigure, TextEditableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -42,6 +42,11 @@ public class TextAreaFigure extends AbstractLeafFigure
         Text text = new Text();
         g.getChildren().addAll(p, text);
         return g;
+    }
+
+    @Override
+    public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal) {
+        return new TextEditorData(this, getBoundsInLocal(), TEXT);
     }
 
     @Override

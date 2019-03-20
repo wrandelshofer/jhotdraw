@@ -22,14 +22,14 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractCreationTool<F extends Figure> extends AbstractTool {
     protected Supplier<Layer> layerFactory;
-    protected Supplier<F> figureFactory;
+    protected Supplier<? extends F> figureFactory;
     /**
      * The created figure.
      */
     @Nullable
     protected F createdFigure;
 
-    public AbstractCreationTool(String name, Resources rsrc, Supplier<F> figureFactory, Supplier<Layer> layerFactory) {
+    public AbstractCreationTool(String name, Resources rsrc, Supplier<? extends F> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc);
         this.figureFactory = figureFactory;
         this.layerFactory = layerFactory;

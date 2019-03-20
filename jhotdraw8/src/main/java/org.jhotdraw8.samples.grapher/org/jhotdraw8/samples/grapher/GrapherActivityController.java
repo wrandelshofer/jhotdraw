@@ -105,6 +105,7 @@ import org.jhotdraw8.draw.tool.CreationTool;
 import org.jhotdraw8.draw.tool.ImageCreationTool;
 import org.jhotdraw8.draw.tool.PolyCreationTool;
 import org.jhotdraw8.draw.tool.SelectionTool;
+import org.jhotdraw8.draw.tool.TextEditingTool;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.gui.dock.Dock;
 import org.jhotdraw8.gui.dock.DockItem;
@@ -271,10 +272,10 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels,
                         BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory),
                 5, 1);
-        ttbar.addTool(new CreationTool("edit.createText", labels,//
+        ttbar.addTool(new TextEditingTool("edit.createText", labels,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
                 layerFactory), 6, 1);
-        ttbar.addTool(new CreationTool("edit.createTextArea", labels,
+        ttbar.addTool(new TextEditingTool("edit.createTextArea", labels,
                         () -> createFigure(TextAreaFigure::new), layerFactory),
                 6, 0);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels,

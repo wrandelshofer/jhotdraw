@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  */
 public class LabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure,
-        CompositableFigure {
+        CompositableFigure, TextEditableFigure {
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
@@ -40,6 +40,11 @@ public class LabelFigure extends AbstractLabelFigure
                     Key<Object> key = (Key<Object>) keyValues[i];
             set(key, keyValues[i + 1]);
         }
+    }
+
+    @Override
+    public TextEditorData getTextEditorDataFor(Point2D pointInLocal) {
+        return new TextEditorData(this, getBoundsInLocal(), TEXT);
     }
 
     @Override
