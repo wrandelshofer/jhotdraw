@@ -17,4 +17,12 @@ public class PathBuilderException extends Exception {
         super(message);
     }
 
+    public PathBuilderException(Exception cause) {
+        super(cause);
+    }
+
+    public PathBuilderException(String message, Exception cause) {
+        super(message, cause);
+    }
+
 }

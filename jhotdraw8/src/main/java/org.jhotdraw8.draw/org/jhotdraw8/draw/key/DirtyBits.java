@@ -18,11 +18,6 @@ public enum DirtyBits {
      * <p>
      * All objects which depend on the state of the figure need to be updated.
      */
-    /**
-     * Affects the state of the figure.
-     * <p>
-     * All objects which depend on the state of the figure need to be updated.
-     */
     STATE,
     /**
      * Affects the JavaFX {@code Node} created by the figure.

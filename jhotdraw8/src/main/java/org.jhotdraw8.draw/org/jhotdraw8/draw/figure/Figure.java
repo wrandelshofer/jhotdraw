@@ -22,7 +22,15 @@ import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInTranslationOutlineHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.ResizeHandleKit;
+import org.jhotdraw8.draw.handle.RotateHandle;
+import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -33,7 +41,15 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Math.max;
@@ -394,6 +410,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation of this method is empty.
      */
     default void layoutSubjectChangedNotify() {
+    }
+
+    /**
+     * This method is invoked on a figure by
+     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that a
+     * property has been changed.
+     * <p>
+     * The default implementation of this method is empty.
+     */
+    default <T> void propertyChangedNotify(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
     }
 
     /**

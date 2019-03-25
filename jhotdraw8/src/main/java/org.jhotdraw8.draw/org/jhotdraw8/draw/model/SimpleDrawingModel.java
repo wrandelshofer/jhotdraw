@@ -430,6 +430,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     }
                 }
             }
+
             // all figures with dirty bit "TRANSFORM"
             // invoke transformNotify
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -439,6 +440,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     f.transformNotify();
                 }
             }
+
             // for all figures with dirty bit "LAYOUT" we must also update the node of their layoutable parents
             DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -474,9 +476,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                             todo.add(a);
                         }
                     } else if (dm.intersects(dmLayoutObservers)) {
-                        for (Figure obs : f.getLayoutObservers()) {
-                            todo.add(obs);
-                        }
+                        todo.addAll(f.getLayoutObservers());
                     }
                 }
             }
@@ -551,17 +551,15 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-            case LAYOUT_SUBJECT_CHANGED:
-                figure.layoutSubjectChangedNotify();
-                markDirty(figure, DirtyBits.LAYOUT_OBSERVERS);
-                invalidate();
-                break;
             case TRANSFORM_CHANGED:
                 markDirty(figure, DirtyBits.TRANSFORM);
                 invalidate();
                 break;
             case PROPERTY_VALUE_CHANGED: {
-                Key<?> key = event.getKey();
+                Key<Object> key = (Key<Object>) event.getKey();
+                Object oldValue = event.getOldValue();
+                Object newValue = event.getNewValue();
+                figure.propertyChangedNotify(key, oldValue, newValue);
                 if (key instanceof FigureKey) {
                     FigureKey<?> fk = (FigureKey<?>) key;
                     final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
@@ -572,13 +570,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
                     // This is sent if a layout subject has been added or removed.
                     // - The event is sent on the observing figure (the layout observer).
-                    // - The observed figure (the layout subject) may change its appearance, hence we 
+                    // - The observed figure (the layout subject) may change its appearance, hence we
                     //   invoke a notify method on it, and we repaint it.
-                    if (key instanceof FigureKey
-                            && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)
+                    if (((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)
                             && Figure.class.isAssignableFrom(key.getValueType())) {
-                        Object oldValue = event.getOldValue();
-                        Object newValue = event.getNewValue();
                         if (oldValue != null) {
                             markDirty((Figure) oldValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
                         }

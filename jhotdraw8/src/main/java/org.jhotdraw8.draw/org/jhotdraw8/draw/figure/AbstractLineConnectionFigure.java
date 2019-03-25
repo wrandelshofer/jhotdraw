@@ -69,7 +69,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         }
     }
 
-
     @Nonnull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {

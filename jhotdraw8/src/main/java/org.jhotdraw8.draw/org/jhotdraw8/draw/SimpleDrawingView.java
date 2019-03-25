@@ -153,7 +153,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 repaint();
                 break;
             case PROPERTY_VALUE_CHANGED:
-            case LAYOUT_SUBJECT_CHANGED:
             case TRANSFORM_CHANGED:
                 break;
             default:

@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.model;
 
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -34,10 +35,6 @@ public class DrawingModelEvent extends Event<DrawingModel> {
          */
         STYLE_CHANGED,
         /**
-         * The connection of a figure has changed.
-         */
-        LAYOUT_SUBJECT_CHANGED,
-        /**
          * The transform of a figure has changed.
          */
         TRANSFORM_CHANGED,
@@ -67,10 +64,6 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
     public static <T> DrawingModelEvent propertyValueChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
-    }
-
-    public static <T> DrawingModelEvent layoutSubjectChanged(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.LAYOUT_SUBJECT_CHANGED, figure, null, null, -1, null, null, null);
     }
 
     public static <T> DrawingModelEvent transformChanged(DrawingModel source, Figure figure) {
@@ -113,7 +106,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the old value
      */
-    @Nonnull
+    @Nullable
     public <T> T getOldValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) oldValue;
@@ -126,7 +119,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the new value
      */
-    @Nonnull
+    @Nullable
     public <T> T getNewValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) newValue;

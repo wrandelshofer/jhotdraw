@@ -62,7 +62,7 @@ public class UnorderedPair<V> implements Pair<V> {
 
     @Override
     public int hashCode() {
-        return a.hashCode() * b.hashCode();
+        return Objects.hashCode(a) + Objects.hashCode(b);
     }
 
     @Nonnull
