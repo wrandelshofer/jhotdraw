@@ -73,7 +73,7 @@ public class TextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public TextEditorData getTextEditorDataFor(Point2D pointInLocal) {
+    public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getBoundsInLocal(), TEXT);
     }
 

@@ -36,6 +36,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -541,6 +542,46 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         List<Figure> list = new ArrayList<>();
         findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose);
         return list;
+    }
+
+    @Override
+    public @Nullable Node findFigureNode(@Nonnull Figure figure, double vx, double vy) {
+
+        Node n = figureToNodeMap.get(figure);
+        Transform viewToNode = null;
+        for (Node p = n; p != null; p = p.getParent()) {
+            try {
+                viewToNode = Transforms.concat(viewToNode, p.getLocalToParentTransform().createInverse());
+            } catch (NonInvertibleTransformException e) {
+                return null;
+            }
+            if (p == drawingPane) {
+                break;
+            }
+        }
+        Point2D pl = Transforms.transform(viewToNode, vx, vy);
+        return findFigureNodeRecursive(figure, n, pl.getX(), pl.getY());
+    }
+
+    private @Nullable Node findFigureNodeRecursive(@Nonnull Figure figure, Node n, double vx, double vy) {
+        if (n.contains(vx, vy)) {
+            if (n instanceof Shape) {
+                return n;
+            } else if (n instanceof Group) {
+                Point2D pl = n.parentToLocal(vx, vy);
+                Group group = (Group) n;
+                ObservableList<Node> children = group.getChildren();
+                for (int i = children.size() - 1; i >= 0; i--) {// front to back
+                    Node child = children.get(i);
+                    Node found = findFigureNodeRecursive(figure, child, pl.getX(), pl.getY());
+                    if (found != null) {
+                        return found;
+                    }
+                }
+
+            }
+        }
+        return null;
     }
 
     @Nonnull

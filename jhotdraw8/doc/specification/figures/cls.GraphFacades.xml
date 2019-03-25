@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
   <Layer id="frame" locked="true">
-    <MLDiagram bounds="1 1 557 557" diagramKind="cls" id="sysmldiagram1" modelElementName="Graph Facades"
+    <MLDiagram bounds="1 1 557 557" diagramKind="cls" id="sysmldiagram1" modelElementName="Graph Facade Interfaces"
                padding="4 14 4 6"/>
   </Layer>
   <Layer id="content">
-    <MLClassifier bounds="70 70 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier1"
-                  keyword="class" name="Name"/>
-    <MLClassifier bounds="270 70 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier2"
-                  keyword="class" name="Name"/>
-    <MLClassifier bounds="100 250 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier3"
-                  keyword="class" name="Name"/>
-    <MLClassifier bounds="310 260 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier4"
-                  keyword="class" name="Name"/>
+    <MLClassifier bounds="110 70 120 100" compartmentLabelFont="9 Arial" compartments="{attributes:[], operations:[]}"
+                  id="mlclassifier1" keyword="interface" keywordLabelFont="9 Arial" keywordLabelVisible="true"
+                  name="BareDirectedGraph" nameFont="12 Arial Bold Italic" padding="4"/>
+    <MLClassifier bounds="310 150 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier2"
+                  keyword="interface" keywordLabelVisible="true" name="BareBidiGraph" nameFont="12 Arial Bold Italic"/>
+    <MLClassifier bounds="110 240 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier3"
+                  keyword="interface" keywordLabelVisible="true" name="DirectedGraph"/>
+    <MLClassifier bounds="310 320 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier4"
+                  keyword="interface" keywordLabelVisible="true" name="BidiGraph"/>
+    <MLEdge end="230 120" endConnector="path relative(100%,50%)" endTarget="mlclassifier1" id="mledge1"
+            keyword="generalization" start="310 164.44444444444446"
+            startConnector="path relative(8.333333333333332%,20%)" startTarget="mlclassifier2"/>
+    <MLEdge end="370 250" endConnector="path relative(50%,90%)" endTarget="mlclassifier2" id="mledge2"
+            keyword="generalization" start="370 320" startConnector="path relative(50%,10%)"
+            startTarget="mlclassifier4"/>
+    <MLEdge end="170 170" endConnector="path relative(50%,80%)" endTarget="mlclassifier1" id="mledge3"
+            keyword="generalization" start="170 240" startConnector="path relative(50%,10%)"
+            startTarget="mlclassifier3"/>
+    <MLEdge end="230 286" endConnector="path relative(91.66666666666666%,40%)" endTarget="mlclassifier3" id="mledge4"
+            keyword="generalization" start="310 334" startConnector="path relative(8.333333333333332%,20%)"
+            startTarget="mlclassifier4"/>
   </Layer>
 </Drawing>

@@ -43,7 +43,7 @@ public class LabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    public TextEditorData getTextEditorDataFor(Point2D pointInLocal) {
+    public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getBoundsInLocal(), TEXT);
     }
 

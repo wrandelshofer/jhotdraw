@@ -26,6 +26,11 @@ MLClassifier[keyword="block"] {
 MLClassifier[keyword="class"] {
   compartment-labels-visible: false;
 }
+/** Class does not show compartment labels, because there are two compartments: attributes and operations. */
+MLClassifier[keyword="interface"] {
+  name-font: 12 Arial Bold Italic;
+  compartment-labels-visible: false;
+}
 /** Requirement does not show compartment labels, because there is only one compartment: text. */
 MLClassifier[keyword="requirement"] {
   compartment-labels-visible: false;

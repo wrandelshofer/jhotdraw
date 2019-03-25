@@ -1,5 +1,6 @@
 package org.jhotdraw8.samples.modeler.figure;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -15,6 +16,7 @@ import javafx.scene.text.TextAlignment;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
@@ -33,6 +35,7 @@ import org.jhotdraw8.draw.figure.ResizableFigure;
 import org.jhotdraw8.draw.figure.ShapeableFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.TextEditableFigure;
 import org.jhotdraw8.draw.figure.TextFillableFigure;
 import org.jhotdraw8.draw.figure.TextLayoutableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
@@ -97,7 +100,8 @@ public class MLClassifierFigure extends AbstractLeafFigure
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,
         BodyFontableFigure, TextFillableFigure, PaddableFigure,
-        NameFontableFigure, CompartmentLabelFontableFigure, KeywordLabelFontableFigure {
+        NameFontableFigure, CompartmentLabelFontableFigure, KeywordLabelFontableFigure,
+        TextEditableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -112,6 +116,10 @@ public class MLClassifierFigure extends AbstractLeafFigure
      * The line spacing. Default value: {@code 0.0}
      */
     public final static CssSizeStyleableFigureKey LINE_SPACING = TextLayoutableFigure.LINE_SPACING;
+    /**
+     * This key is used to tag editable nodes.
+     */
+    private static final String TEXT_NODE_TEXT_KEY = "text";
 
     private Path path;
 
@@ -129,9 +137,22 @@ public class MLClassifierFigure extends AbstractLeafFigure
     }
 
     @Override
+    public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
+        if (node == null) {
+            return null;
+        }
+        Key<?> key = (Key<?>) node.getProperties().get(TEXT_NODE_TEXT_KEY);
+        if (key != null && key.getValueType() == String.class) {
+            return new TextEditorData(this, node.getBoundsInLocal(), (Key<String>) key);
+        }
+        return null;
+    }
+
+    @Override
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Group g = (Group) node;
-        Path p = (Path) g.getChildren().get(0);
+        ObservableList<Node> children = g.getChildren();
+        Path p = (Path) children.get(0);
 
         applyShapeableProperties(ctx, p);
         applyStrokableFigureProperties(ctx, p);
@@ -140,8 +161,8 @@ public class MLClassifierFigure extends AbstractLeafFigure
         applyTransformableFigureProperties(ctx, node);
 
         List<Text> textNodes = new ArrayList<Text>();
-        for (int i = 1, n = g.getChildren().size(); i < n; i++) {
-            textNodes.add((Text) g.getChildren().get(i));
+        for (int i = 1, n = children.size(); i < n; i++) {
+            textNodes.add((Text) children.get(i));
         }
         UnitConverter converter = ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
         double lineSpacing = converter.convert(getNonnull(LINE_SPACING), UnitConverter.DEFAULT);
@@ -154,10 +175,10 @@ public class MLClassifierFigure extends AbstractLeafFigure
                 cpData,
                 bounds,
                 lineSpacing, padding);
-        if (g.getChildren().size() != textNodes.size() + 1) {
-            g.getChildren().clear();
-            g.getChildren().add(p);
-            g.getChildren().addAll(textNodes);
+        if (children.size() != textNodes.size() + 1) {
+            children.clear();
+            children.add(p);
+            children.addAll(textNodes);
         }
     }
 
@@ -185,8 +206,11 @@ public class MLClassifierFigure extends AbstractLeafFigure
         }
 
         // Ensure that we have enough text nodes.
+        boolean keywordLabelVisible = getStyledNonnull(KEYWORD_LABEL_VISIBLE);
         boolean compartmentNamesVisible = getStyledNonnull(COMPARTMENT_LABELS_VISIBLE);
-        ensureEnoughTextNodes(textNodes, keyword, cpData, compartmentNamesVisible);
+        ensureEnoughTextNodes(textNodes, keyword, cpData,
+                keywordLabelVisible,
+                compartmentNamesVisible);
 
         // Compute geometry
         double width = bounds.getWidth();
@@ -213,12 +237,14 @@ public class MLClassifierFigure extends AbstractLeafFigure
                 applyKeywordLabelStyle(ctx, node);
                 node.setText("«" + keyword + "»");
                 node.setWrappingWidth(wrappingWidth);
+                node.getProperties().put(TEXT_NODE_TEXT_KEY, KEYWORD);
                 node.setY(y);
                 y += node.getLayoutBounds().getHeight() + lineSpacing;
             }
             node = textNodes.get(i++);
             applyNameStyle(ctx, node);
             node.setText(name);
+            node.getProperties().put(TEXT_NODE_TEXT_KEY, NAME);
             node.setWrappingWidth(wrappingWidth);
             node.setY(y);
             y += node.getLayoutBounds().getHeight() + lineSpacing;
@@ -234,6 +260,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
                     // add compartment name
                     node = textNodes.get(i++);
                     node.setText(entry.getKey());
+                    node.getProperties().put(TEXT_NODE_TEXT_KEY, COMPARTMENTS);
                     node.setY(y);
                     applyCompartmentLabelStyle(ctx, node);
                     y += node.getLayoutBounds().getHeight() + lineSpacing;
@@ -250,6 +277,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
                     buf.append(item);
                 }
                 node.setText(buf.toString());
+                node.getProperties().put(TEXT_NODE_TEXT_KEY, COMPARTMENTS);
                 applyItemStyle(ctx, node);
                 y += node.getLayoutBounds().getHeight() + lineSpacing;
             }
@@ -284,9 +312,11 @@ public class MLClassifierFigure extends AbstractLeafFigure
         node.setTextAlignment(TextAlignment.LEFT);
     }
 
-    private void ensureEnoughTextNodes(List<Text> list, @Nullable String metaclass, MLCompartmentalizedData cpData, boolean compartmentLabelsVisible) {
-        // We need a text node for the metaclass if present and for the name
-        int n = (metaclass == null ? 0 : 1) + 1;
+    private void ensureEnoughTextNodes(List<Text> list, @Nullable String keyword, MLCompartmentalizedData cpData,
+                                       boolean keywordLabelVisible,
+                                       boolean compartmentLabelsVisible) {
+        // We need a text node for the keyword if present and for the name
+        int n = (keywordLabelVisible ? 1 : 0) + 1;
 
         // we need a text node for the compartment name
         if (compartmentLabelsVisible) {

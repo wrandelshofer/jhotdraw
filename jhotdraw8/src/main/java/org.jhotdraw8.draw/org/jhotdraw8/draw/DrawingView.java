@@ -296,6 +296,7 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @return A handle or null
      */
+    @Nullable
     Handle findHandle(double vx, double vy);
 
     /**
@@ -307,6 +308,7 @@ public interface DrawingView extends RenderContext {
      * @param figures Only searches in the provided list of figures
      * @return A figure or null
      */
+    @Nullable
     Figure findFigure(double vx, double vy, Set<Figure> figures);
 
     /**
@@ -317,7 +319,20 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @return A figure or null
      */
+    @Nullable
     Figure findFigure(double vx, double vy);
+
+    /**
+     * Finds the child node of the specified figure that contains the
+     * specified view coordianates.
+     *
+     * @param figure the figure
+     * @param vx     x in view coordinates
+     * @param vy     y in view coordinates
+     * @return A node or null
+     */
+    @Nullable
+    Node findFigureNode(@Nonnull Figure figure, double vx, double vy);
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
@@ -329,6 +344,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
+    @Nonnull
     List<Figure> findFigures(double vx, double vy, boolean decompose);
 
     /**

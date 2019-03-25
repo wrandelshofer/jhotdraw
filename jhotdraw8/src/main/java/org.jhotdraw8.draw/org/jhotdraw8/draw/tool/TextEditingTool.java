@@ -1,4 +1,4 @@
-/* @(#)CreationTool.java
+/* @(#)TextEditingTool.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.tool;
@@ -10,25 +10,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.constrain.Constrainer;
-import org.jhotdraw8.draw.figure.AnchorableFigure;
-import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.TextEditableFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.Resources;
 
-import java.util.function.Supplier;
-
-import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 /**
@@ -39,13 +28,14 @@ import static java.lang.Math.max;
  * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
  * abstract factories (Supplier) for creating new {@link Figure}s.
  */
-public class TextEditingTool extends AbstractCreationTool<Figure> {
+public class TextEditingTool extends AbstractTool {
 
 
     private double defaultWidth = 100;
     private double defaultHeight = 100;
     private TextArea textArea = new TextArea();
     private TextEditableFigure.TextEditorData editorData;
+
     /**
      * The rubber band.
      */
@@ -56,12 +46,8 @@ public class TextEditingTool extends AbstractCreationTool<Figure> {
      */
     private double minSize = 2;
 
-    public TextEditingTool(String name, Resources rsrc, Supplier<TextEditableFigure> factory) {
-        this(name, rsrc, factory, LayerFigure::new);
-    }
-
-    public TextEditingTool(String name, Resources rsrc, Supplier<TextEditableFigure> figureFactory, Supplier<Layer> layerFactory) {
-        super(name, rsrc, figureFactory, layerFactory);
+    public TextEditingTool(String id, Resources labels) {
+        super(id, labels);
         node.setCursor(Cursor.CROSSHAIR);
 
         textArea.setWrapText(true);
@@ -101,11 +87,11 @@ public class TextEditingTool extends AbstractCreationTool<Figure> {
             }
             editorData = null;
         }
-        createdFigure = null;
     }
 
     @Override
     protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+        event.consume();
         if (editorData != null) {
             stopEditing();
             return;
@@ -117,7 +103,7 @@ public class TextEditingTool extends AbstractCreationTool<Figure> {
         Figure figure = view.findFigure(x1, y1);
         if (figure instanceof TextEditableFigure) {
             TextEditableFigure f = (TextEditableFigure) figure;
-            TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.worldToLocal(new Point2D(x1, y1)));
+            TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.worldToLocal(new Point2D(x1, y1)), view.findFigureNode(f, x1, y1));
             if (data != null) {
                 startEditing(data, view);
                 return;
@@ -125,27 +111,6 @@ public class TextEditingTool extends AbstractCreationTool<Figure> {
         }
 
 
-        x2 = x1;
-        y2 = y1;
-        createdFigure = createFigure();
-
-        double anchorX = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
-
-
-        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
-        createdFigure.reshapeInLocal(
-                anchorX == 0 ? c.getX() : c.getX().subtract(new CssSize(defaultWidth).multiply(anchorX)),
-                anchorY == 0 ? c.getY() : c.getY().subtract(new CssSize(defaultHeight).multiply(anchorY)),
-                new CssSize(defaultWidth), new CssSize(defaultHeight));
-        DrawingModel dm = view.getModel();
-        Drawing drawing = dm.getDrawing();
-
-        Layer layer = getOrCreateLayer(view, createdFigure);
-        view.setActiveLayer(layer);
-
-        dm.addChildTo(createdFigure, layer);
-        event.consume();
     }
 
 
@@ -168,62 +133,14 @@ public class TextEditingTool extends AbstractCreationTool<Figure> {
         if (editorData != null) {
             return;
         }
-
-        if (createdFigure != null) {
-            event.consume();
-            if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
-                CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
-                CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1
-                        + defaultWidth, y1 + defaultHeight)), Constrainer.DIRECTION_NEAREST);
-                if (c2.equals(c1)) {
-                    c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(c1.getX().getConvertedValue() + defaultWidth, c1.getY().getConvertedValue() + defaultHeight));
-                }
-                DrawingModel dm = dv.getModel();
-                dm.reshapeInLocal(createdFigure, c1.getX(), c1.getY(),
-                        c2.getX().subtract(c1.getX()),
-                        c2.getY().subtract(c1.getY()));
-            }
-            dv.selectedFiguresProperty().clear();
-            dv.selectedFiguresProperty().add(createdFigure);
-            TextEditableFigure.TextEditorData data = ((TextEditableFigure) createdFigure).getTextEditorDataFor(null);
-            createdFigure = null;
-            if (data != null) {
-                startEditing(data, dv);
-            } else {
-                fireToolDone();
-            }
-            event.consume();
-        }
     }
 
     @Override
     protected void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+        event.consume();
         if (editorData != null) {
             return;
         }
-        if (createdFigure != null) {
-            x2 = event.getX();
-            y2 = event.getY();
-            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
-            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2)));
-            CssSize newWidth = c2.getX().subtract(c1.getX());
-            CssSize newHeight = c2.getY().subtract(c1.getY());
-            // shift keeps the aspect ratio
-            boolean keepAspect = event.isShiftDown();
-            if (keepAspect) {
-                double preferredAspectRatio = createdFigure.getPreferredAspectRatio();
-                double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
-                if (newRatio > preferredAspectRatio) {
-                    newHeight = new CssSize(newWidth.getConvertedValue() * preferredAspectRatio);
-                } else {
-                    newWidth = new CssSize(newHeight.getConvertedValue() / preferredAspectRatio);
-                }
-            }
-
-            DrawingModel dm = dv.getModel();
-            dm.reshapeInLocal(createdFigure, c1.getX(), c1.getY(), newWidth, newHeight);
-        }
-        event.consume();
     }
 
     @Override
@@ -234,7 +151,8 @@ public class TextEditingTool extends AbstractCreationTool<Figure> {
         Figure figure = view.findFigure(event.getX(), event.getY());
         if (figure instanceof TextEditableFigure) {
             TextEditableFigure f = (TextEditableFigure) figure;
-            TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.getWorldToLocal().transform(event.getX(), event.getY()));
+            TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.getWorldToLocal().transform(event.getX(), event.getY()),
+                    view.findFigureNode(f, event.getX(), event.getY()));
             if (data != null) {
                 node.setCursor(Cursor.TEXT);
                 return;

@@ -2,6 +2,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -28,5 +29,5 @@ public interface TextEditableFigure extends Figure {
      * @param pointInLocal a point in local, or null to return the default text editor data
      * @return text editor data or null if no text can be edited at the given point
      */
-    TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal);
+    TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node);
 }

@@ -3,19 +3,31 @@
  */
 package org.jhotdraw8.geom;
 
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.*;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan2;
+import static java.lang.Math.ceil;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * Some geometric utilities.
@@ -1147,11 +1159,18 @@ public class Geom {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
-    public static Bounds union(Bounds a, Bounds b) {
-        double minx = Math.min(a.getMinX(), b.getMinX());
-        double miny = Math.min(a.getMinY(), b.getMinY());
-        double maxx = Math.max(a.getMaxX(), b.getMaxX());
-        double maxy = Math.max(a.getMaxY(), b.getMaxY());
+    public static Bounds union(Bounds a, Bounds... bs) {
+        double minx = a.getMinX();
+        double miny = a.getMinY();
+        double maxx = a.getMaxX();
+        double maxy = a.getMaxY();
+
+        for (Bounds b : bs) {
+            minx = Math.min(minx, b.getMinX());
+            miny = Math.min(miny, b.getMinY());
+            maxx = Math.max(maxx, b.getMaxX());
+            maxy = Math.max(maxy, b.getMaxY());
+        }
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
