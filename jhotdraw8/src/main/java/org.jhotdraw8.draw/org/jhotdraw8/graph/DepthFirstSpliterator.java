@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
     @Nonnull
-    private final Function<V, Iterable<V>> nextNodesFunction;
+    private final Function<V, Iterable<V>> nextFunction;
     @Nonnull
     private final Deque<V> deque;
     @Nonnull
@@ -32,7 +32,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
     /**
      * Creates a new instance.
      *
-     * @param nextNodesFuncction the nextNodesFunction
+     * @param nextNodesFuncction the nextFunction
      * @param root               the root vertex
      */
     public DepthFirstSpliterator(Function<V, Iterable<V>> nextNodesFuncction, V root) {
@@ -42,16 +42,16 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
     /**
      * Creates a new instance.
      *
-     * @param nextNodesFunction the nextNodesFunction
+     * @param nextFunction the function that returns the next vertices of a given vertex
      * @param root              the root vertex
      * @param visited           a predicate with side effect. The predicate returns true
      *                          if the specified vertex has been visited, and marks the specified vertex
      *                          as visited.
      */
-    public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextNodesFunction, @Nullable V root, @Nullable Predicate<V> visited) {
+    public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextFunction, @Nullable V root, @Nullable Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        if (nextNodesFunction == null) {
-            throw new IllegalArgumentException("nextNodesFunction==null");
+        if (nextFunction == null) {
+            throw new IllegalArgumentException("nextFunction==null");
         }
         if (root == null) {
             throw new IllegalArgumentException("root==null");
@@ -59,7 +59,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
         if (visited == null) {
             throw new IllegalArgumentException("visited==null");
         }
-        this.nextNodesFunction = nextNodesFunction;
+        this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;
         deque.push(root);
@@ -73,7 +73,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
         if (current == null) {
             return false;
         }
-        for (V next : nextNodesFunction.apply(current)) {
+        for (V next : nextFunction.apply(current)) {
             if (visited.test(next)) {
                 deque.addLast(next);
             }

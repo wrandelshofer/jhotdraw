@@ -138,33 +138,37 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
         return arrowCount;
     }
 
+    @Nonnull
     @Override
-    public V getNext(V vertex, int i) {
+    public V getNext(@Nonnull V vertex, int i) {
         return getVertexDataNonnull(vertex).getNext(i);
     }
 
+    @Nonnull
     @Override
-    public A getNextArrow(V vertex, int index) {
+    public A getNextArrow(@Nonnull V vertex, int index) {
         return getVertexDataNonnull(vertex).getNextArrow(index);
     }
 
     @Override
-    public int getNextCount(V vertex) {
+    public int getNextCount(@Nonnull V vertex) {
         return getVertexDataNonnull(vertex).getNextCount();
     }
 
+    @Nonnull
     @Override
-    public V getPrev(V vertex, int i) {
+    public V getPrev(@Nonnull V vertex, int i) {
         return getVertexDataNonnull(vertex).getPrev(i);
     }
 
+    @Nonnull
     @Override
-    public A getPrevArrow(V vertex, int index) {
+    public A getPrevArrow(@Nonnull V vertex, int index) {
         return getVertexDataNonnull(vertex).getPrevArrow(index);
     }
 
     @Override
-    public int getPrevCount(V vertex) {
+    public int getPrevCount(@Nonnull V vertex) {
         return getVertexDataNonnull(vertex).getPrevCount();
     }
 
@@ -173,6 +177,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
         return vertices.size();
     }
 
+    @Nonnull
     @Override
     public Collection<V> getVertices() {
         return Collections.unmodifiableCollection(vertices);
@@ -528,6 +533,7 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
         }
     }
 
+    @Nonnull
     @Override
     public Collection<A> getArrows() {
         class ArrowIterator implements Iterator<A> {

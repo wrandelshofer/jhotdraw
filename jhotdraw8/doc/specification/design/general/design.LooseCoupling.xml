@@ -5,7 +5,8 @@
   <para>A set of loosely coupled classes is easier to maintain than a set of tightly coupled classes,
     because changes typically affect less classes.
   </para>
-  <para>We can achieve loose coupling by adhering to the following design principles:</para>
+
+  <para>We can achieve loose coupling by adhering to the following rules:</para>
   <itemizedlist>
     <listitem>
       <para>A class should hide its internal fields from other classes.</para>

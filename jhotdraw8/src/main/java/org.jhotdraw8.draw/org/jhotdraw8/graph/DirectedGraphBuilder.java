@@ -255,19 +255,21 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         arrows.clear();
     }
 
+    @Nonnull
     @Override
-    public A getNextArrow(V vertex, int index) {
+    public A getNextArrow(@Nonnull V vertex, int index) {
         int arrowId = getNextArrowIndex(getVertexIndex(vertex), index);
         return getArrow(arrowId);
     }
 
+    @Nonnull
     @Override
-    public V getNext(V v, int i) {
+    public V getNext(@Nonnull V v, int i) {
         return getVertex(getNext(getVertexIndex(v), i));
     }
 
     @Override
-    public int getNextCount(V v) {
+    public int getNextCount(@Nonnull V v) {
         return getNextCount(getVertexIndex(v));
     }
 
@@ -297,6 +299,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return arrows.get(arrowId);
     }
 
+    @Nonnull
     @Override
     public Collection<A> getArrows() {
         class ArrowIterator implements Iterator<A> {
@@ -335,6 +338,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         };
     }
 
+    @Nonnull
     @Override
     public Collection<V> getVertices() {
         class VertexIterator implements Iterator<V> {

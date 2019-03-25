@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
     @Nonnull
-    private final Function<V, Iterable<V>> nextNodesFunction;
+    private final Function<V, Iterable<V>> nextFunction;
     @Nonnull
     private final Deque<V> deque;
     @Nonnull
@@ -32,28 +32,28 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
     /**
      * Creates a new instance.
      *
-     * @param nextNodesFunction the nextNodesFunction
+     * @param nextFunction the nextFunction
      * @param root              the root vertex
      */
-    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextNodesFunction, @Nonnull V root) {
-        this(nextNodesFunction, root, new HashSet<>()::add);
+    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextFunction, @Nonnull V root) {
+        this(nextFunction, root, new HashSet<>()::add);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param nextNodesFunction the nextNodesFunction
+     * @param nextFunction the nextFunction
      * @param root              the root vertex
      * @param visited           a predicate with side effect. The predicate returns true
      *                          if the specified vertex has been visited, and marks the specified vertex
      *                          as visited.
      */
-    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextNodesFunction, @Nonnull V root, @Nonnull Predicate<V> visited) {
+    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextFunction, @Nonnull V root, @Nonnull Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        Objects.requireNonNull(nextNodesFunction, "nextNodesFunction");
+        Objects.requireNonNull(nextFunction, "nextFunction");
         Objects.requireNonNull(root, "root");
         Objects.requireNonNull(visited, "vistied");
-        this.nextNodesFunction = nextNodesFunction;
+        this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;
         deque.add(root);
@@ -67,7 +67,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
         if (current == null) {
             return false;
         }
-        for (V next : nextNodesFunction.apply(current)) {
+        for (V next : nextFunction.apply(current)) {
             if (visited.test(next)) {
                 deque.addLast(next);
             }

@@ -86,6 +86,7 @@
       <title>Principles</title>
       <xi:include href="design/general/design.HighCohesion.xml"/>
       <xi:include href="design/general/design.LooseCoupling.xml"/>
+      <xi:include href="design/general/design.FacadePattern.xml"/>
     </section>
     <section>
       <title>Application Framework</title>
@@ -96,15 +97,15 @@
       <xi:include href="design/draw/design.Layers.xml"/>
       <xi:include href="design/draw/design.DrawingDataStructure.xml"/>
       <xi:include href="design/draw/design.LayoutDependencies.xml"/>
-      <xi:include href="design/draw/design.TypeSafeMap.xml"/>
+      <xi:include href="design/draw/design.TypeSafePropertyMap.xml"/>
       <xi:include href="design/draw/design.StyleAttributesInspector.xml"/>
     </section>
     <section>
       <title>Graph Library</title>
-      <xi:include href="design/graph/design.GraphLibrary.xml"/>
-      <xi:include href="design/graph/design.Graph.xml"/>
-      <xi:include href="design/graph/design.DirectedGraph.xml"/>
-      <xi:include href="design/graph/design.GraphAsDirectedGraph.xml"/>
+      <xi:include href="design/graph/design.GraphLibraryForDrawingEditorFramework.xml"/>
+      <xi:include href="design/graph/design.GraphTheoryGraph.xml"/>
+      <xi:include href="design/graph/design.GraphTheoryDirectedGraph.xml"/>
+      <xi:include href="design/graph/design.GraphFacadeAPIs.xml"/>
     </section>
   </chapter>
 

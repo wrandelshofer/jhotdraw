@@ -32,7 +32,7 @@
   <para>The "Drawing Editor Framework" can be used to realize drawing
     editors for computer aided design and for artistic drawings.
     Drawings can be animated and interactive. It is possible to back a drawing with
-    a data model, allowing a structured drawing editor to be used as a user interface
+    a data model so that a drawing editor can be used as a user interface
     for the data model.</para>
 
   <para>The "Application Framework" can be used to create document-based

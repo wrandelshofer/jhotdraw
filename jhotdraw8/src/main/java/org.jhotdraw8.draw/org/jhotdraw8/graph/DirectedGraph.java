@@ -23,33 +23,14 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * This interface provides read access to a directed graph {@code G = (V, A) }.
- * <ul>
- * <li>{@code G} is a tuple {@code (V, A) }.</li>
- * <li>{@code V} is the set of vertices with elements
- * {@code v_i ∈ V. i ∈ {0, ..., vertexCount - 1} }.</li>
- * <li>{@code A} is the set of ordered pairs with elements
- * {@code  (v_i, v_j)_k ∈ A. i,j ∈ {0, ..., vertexCount - 1}. k ∈ {0, ..., arrowCount - 1}
- * }.</li>
- * </ul>
- * <p>
- * This interface provides access to the following data:
- * <ul>
- * <li>The vertex count {@code vertexCount}.</li>
- * <li>The arrow count {@code arrowCount}.</li>
- * <li>The vertex {@code v_i ∈ V} .</li>
- * <li>The arrow {@code a_k ∈ A}.</li>
- * <li>The next count {@code nextCount_i} of the vertex {@code v_i}.</li>
- * <li>The {@code k}-th next vertex of the vertex {@code v_i}, with
- * {@code k ∈ {0, ..., getNextCount(i) - 1}}.</li>
- * </ul>
+ * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DirectedGraph<V, A> {
+public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
 
     /**
      * Returns the arrow if b is successor of a.
@@ -79,40 +60,6 @@ public interface DirectedGraph<V, A> {
         }
         return -1;
     }
-
-    /**
-     * Returns the specified successor (next) arrow of the specified vertex.
-     *
-     * @param vertex a vertex
-     * @param index  index of next arrow
-     * @return the specified arrow
-     */
-    @Nullable
-    A getNextArrow(V vertex, int index);
-
-    /**
-     * Returns the number of arrows.
-     *
-     * @return arrow count
-     */
-    int getArrowCount();
-
-    /**
-     * Returns the i-th direct successor vertex of v.
-     *
-     * @param vertex a vertex
-     * @param index  index of next vertex
-     * @return the i-th next vertex
-     */
-    V getNext(V vertex, int index);
-
-    /**
-     * Returns the number of direct successor vertices of v.
-     *
-     * @param vertex a vertex
-     * @return the number of next vertices of v.
-     */
-    int getNextCount(V vertex);
 
     /**
      * Returns the direct successor vertices of the specified vertex.
@@ -256,22 +203,18 @@ public interface DirectedGraph<V, A> {
      *
      * @return vertex count
      */
-    int getVertexCount();
+    default int getVertexCount() {
+        return getVertices().size();
+    }
 
     /**
-     * Returns all vertices.
+     * Returns the number of arrows.
      *
-     * @return a collection view on all vertices
+     * @return arrow count
      */
-    Collection<V> getVertices();
-
-    /**
-     * Returns all arrows.
-     *
-     * @return a collection view on all arrows
-     */
-    @Nonnull
-    Collection<A> getArrows();
+    default int getArrowCount() {
+        return getArrows().size();
+    }
 
     /**
      * Returns all arrows between two vertices.

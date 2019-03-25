@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.GraphTheoryDirectedGraph">
+  <title>Directed Graph in Graph Theory</title>
+  <para>In graph theory a directed graph is an ordered pair
+    <inlineequation>
+      <mathphrase>G = (V, A)</mathphrase>
+    </inlineequation>
+    .
+  </para>
+  <para>Where</para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <inlineequation>
+          <mathphrase>V</mathphrase>
+        </inlineequation>
+        is a set of vertices
+        <inlineequation>
+          <mathphrase>V = (v_1, v_2, ...)</mathphrase>
+        </inlineequation>
+        .
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <inlineequation>
+          <mathphrase>E</mathphrase>
+        </inlineequation>
+        is a set or bag of arrows
+        <inlineequation>
+          <mathphrase>A = (a_1, a_2, ...)</mathphrase>
+        </inlineequation>
+        .
+      </para>
+    </listitem>
+    <listitem>
+      <para>An arrow
+        <inlineequation>
+          <mathphrase>a ∈ A</mathphrase>
+        </inlineequation>
+        is an ordered pair of vertices
+        <inlineequation>
+          <mathphrase>a = (v_i, v_j), v_i ∈ V, v_j ∈ V</mathphrase>
+        </inlineequation>
+        .
+      </para>
+    </listitem>
+  </itemizedlist>
+</section>

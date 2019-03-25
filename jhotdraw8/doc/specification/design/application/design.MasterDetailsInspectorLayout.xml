@@ -19,8 +19,8 @@
     </listitem>
     <listitem>
       <para>The inspector pane in the right area of the window</para>
-      <para>An inspector pane is a control that displays properties of the selected element
-        in the details pane.
+      <para>An inspector pane is a control that displays properties of the current
+        selection in the details pane.
       </para>
     </listitem>
   </itemizedlist>
@@ -29,7 +29,7 @@
     and understood by most users.
   </para>
 
-  <para>We can use the following design to implement this layout with JavaFX:</para>
+  <para>We can implement this layout JavaFX by following these steps:</para>
 
   <itemizedlist>
     <listitem>
@@ -39,47 +39,51 @@
       </para>
     </listitem>
     <listitem>
-      <para>The MasterPaneController has a JavaFX ObservableList for the collection
-        that it displays, and a JavaFX Property for the selected object
+      <para>We add a List control (or Table or Tree control) to the MasterPaneController.
       </para>
     </listitem>
     <listitem>
-      <para>The DetailsPaneController has a JavaFX Property for the object that it displays
-        and a JavaFX ObservableList for the selection of sub-objects.
+      <para>We expose the currently selected item in the master pane
+        with an ObjectProperty in the MasterPaneController.
       </para>
     </listitem>
     <listitem>
-      <para>The InspectorPaneController has a JavaFX property for the selection of objects
-        for which it can display properties.
+      <para>We expose the currently shown object in the details pane
+        with an ObjectProperty in the DetailsPaneController.
       </para>
     </listitem>
     <listitem>
-      <para>We can bind the properties of the panes with JavaFX bindings.</para>
+      <para>We expose the current selection in the details pane
+        with an ObservableList in the DetailsPaneController.
+      </para>
+    </listitem>
+    <listitem>
+      <para>We expose the currently inspected selection in the inspector pane
+        with an ObservableListProperty in the InspectorPaneController.
+      </para>
+    </listitem>
+    <listitem>
+      <para>We bind the exposed properties together.</para>
     </listitem>
   </itemizedlist>
 
 
-  <para>This layout can be altered in various ways:</para>
+  <para>We can alter this layout in various ways:</para>
 
   <itemizedlist>
     <listitem>
-      <para>The master pane can be omitted, which leaves us with a details-inspector layout.</para>
+      <para>We can omit the master pane, which leaves us with a details-inspector layout.</para>
     </listitem>
     <listitem>
-      <para>The inspector pane can be omitted, which leaves us with a master-details layout.</para>
+      <para>We can omit the inspector pane, which leaves us with a master-details layout.</para>
     </listitem>
     <listitem>
-      <para>the master pane can support multiple selection, which turns the object that is
+      <para>We can enable multiple selection in the master pane, which turns the object that is
         displayed in the details pane into a collection.
       </para>
     </listitem>
     <listitem>
-      <para>The inspector pane can only show the properties of the main object in the details
-        pane instead from the selected sub-objects.
-      </para>
-    </listitem>
-    <listitem>
-      <para>The inspector pane can show properties of the details pane itself.</para>
+      <para>We can show properties of other objects in the inspector pane.</para>
     </listitem>
     <listitem>
       <para>The window can contain more than one inspector pane.</para>

@@ -3,11 +3,12 @@
   <title>High Cohesion</title>
   <para>Cohesion is the degree to which a class has a single, focused purpose.</para>
   <para>A class with high cohesion is typically less complex than a class with low cohesion.</para>
-  <para>We can achieve high cohesion by adhering to the following design principles:</para>
+
+  <para>We can achieve high cohesion by adhering to the following rules:</para>
   <itemizedlist>
     <listitem>
-      <para>An interface should be split up into multiple interfaces, if not all clients
-        of the interface use all methods of the interface.
+      <para>If not all clients of an interface use all methods of the interface, we should
+        split the interface up.
       </para>
     </listitem>
   </itemizedlist>

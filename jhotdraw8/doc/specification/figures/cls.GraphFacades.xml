@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="cls" id="sysmldiagram1" modelElementName="Graph Facades"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <MLClassifier bounds="70 70 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier1"
+                  keyword="class" name="Name"/>
+    <MLClassifier bounds="270 70 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier2"
+                  keyword="class" name="Name"/>
+    <MLClassifier bounds="100 250 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier3"
+                  keyword="class" name="Name"/>
+    <MLClassifier bounds="310 260 120 100" compartments="{attributes:[], operations:[]}" id="mlclassifier4"
+                  keyword="class" name="Name"/>
+  </Layer>
+</Drawing>

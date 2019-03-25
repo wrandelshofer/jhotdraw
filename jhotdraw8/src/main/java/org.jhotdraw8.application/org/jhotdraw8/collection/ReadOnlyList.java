@@ -15,8 +15,9 @@ import java.util.Spliterator;
 /**
  * Provides a read-only API for a list collection.
  * <p>
- * Note: a ReadbleList is not equal to a non-readable {@link List}.
- * To compare a ReadbleList to a List, you have to wrap the List into a {@link ReadOnlyListWrapper}.
+ * Note: To compare a ReadOnlyList to a List, you must either
+ * wrap the ReadOnlyList into a List using {@link ListWrapper},
+ * or wrap the List into a ReadOnlyList using {@link ReadOnlyListWrapper}.
  *
  * @param <E> the element type
  */

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.GraphTheoryGraph">
+  <title>Graph in Graph Theory</title>
+  <para>In graph theory a graph is an ordered pair
+    <inlineequation>
+      <mathphrase>G = (V, E)</mathphrase>
+    </inlineequation>
+    .
+  </para>
+  <para>Where</para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <inlineequation>
+          <mathphrase>V</mathphrase>
+        </inlineequation>
+        is a set of vertices
+        <inlineequation>
+          <mathphrase>V = (v_1, v_2, ...)</mathphrase>
+        </inlineequation>
+        .
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <inlineequation>
+          <mathphrase>E</mathphrase>
+        </inlineequation>
+        is a set or bag of edges
+        <inlineequation>
+          <mathphrase>E = (e_1, e_2, ...)</mathphrase>
+        </inlineequation>
+        .
+      </para>
+    </listitem>
+    <listitem>
+      <para>An edge
+        <inlineequation>
+          <mathphrase>e ∈ E</mathphrase>
+        </inlineequation>
+        is an ordered or unordered pair of vertices
+        <inlineequation>
+          <mathphrase>e = (v_i, v_j), v_i ∈ V, v_j ∈ V</mathphrase>
+        </inlineequation>
+        .
+      </para>
+    </listitem>
+  </itemizedlist>
+</section>

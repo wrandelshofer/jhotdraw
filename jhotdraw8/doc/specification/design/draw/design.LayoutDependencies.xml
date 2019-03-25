@@ -4,9 +4,9 @@
   <title>Layout Dependencies</title>
   <para>The layout of a figure can depend on the layout of other figures.</para>
 
-  <para>In order to layout a drawing with such figures, we must layout first the figures
+  <para>In order to layout a drawing with such figures, we must first layout the figures
     that do not depend on other figures. Then we can continue to layout figures that depend on
-    figures that we have already laid out.
+    figures that we have already laid out until no more figures are left.
   </para>
 
   <para>The layout dependencies can be thought of as a directed graph.

@@ -154,7 +154,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
 
     @Nonnull
     @Override
-    public A getNextArrow(V v, int i) {
+    public A getNextArrow(@Nonnull V v, int i) {
         return getNextArrow(getVertexIndex(v), i);
     }
 
@@ -171,8 +171,9 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         return arrowHeads[vertices[vi] + i];
     }
 
+    @Nonnull
     @Override
-    public V getNext(V vertex, int i) {
+    public V getNext(@Nonnull V vertex, int i) {
         return vertexObjects[getNext(vertexToIndexMap.get(vertex), i)];
     }
 
@@ -209,10 +210,11 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
 
 
     @Override
-    public int getNextCount(V vertex) {
+    public int getNextCount(@Nonnull V vertex) {
         return getNextCount(vertexToIndexMap.get(vertex));
     }
 
+    @Nonnull
     @Override
     public Collection<V> getVertices() {
         return Arrays.asList(vertexObjects);

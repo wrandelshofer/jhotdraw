@@ -139,33 +139,37 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
         return arrows.size();
     }
 
+    @Nonnull
     @Override
-    public V getNext(V vertex, int i) {
+    public V getNext(@Nonnull V vertex, int i) {
         return getVertexDataNonnull(vertex).next.get(i).end;
     }
 
+    @Nonnull
     @Override
-    public A getNextArrow(V vertex, int index) {
+    public A getNextArrow(@Nonnull V vertex, int index) {
         return getVertexDataNonnull(vertex).next.get(index);
     }
 
     @Override
-    public int getNextCount(V vertex) {
+    public int getNextCount(@Nonnull V vertex) {
         return getVertexDataNonnull(vertex).next.size();
     }
 
+    @Nonnull
     @Override
-    public V getPrev(V vertex, int i) {
+    public V getPrev(@Nonnull V vertex, int i) {
         return getVertexDataNonnull(vertex).prev.get(i).start;
     }
 
+    @Nonnull
     @Override
-    public A getPrevArrow(V vertex, int index) {
+    public A getPrevArrow(@Nonnull V vertex, int index) {
         return getVertexDataNonnull(vertex).prev.get(index);
     }
 
     @Override
-    public int getPrevCount(V vertex) {
+    public int getPrevCount(@Nonnull V vertex) {
         return getVertexDataNonnull(vertex).prev.size();
     }
 
@@ -174,6 +178,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
         return vertices.size();
     }
 
+    @Nonnull
     @Override
     public Collection<V> getVertices() {
         return Collections.unmodifiableCollection(vertices);

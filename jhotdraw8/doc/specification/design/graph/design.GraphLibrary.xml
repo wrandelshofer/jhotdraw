@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.GraphLibrary">
-  <title>Graph Library</title>
-  <para>We design a small graph library, because we need some graph data
-    structures and algorithms for computing the layout of a drawing.</para>
-</section>
