@@ -63,13 +63,13 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
+import org.jhotdraw8.draw.figure.MarkerStrokableFigure;
 import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
 import org.jhotdraw8.draw.figure.RegionFigure;
-import org.jhotdraw8.draw.figure.SecondStrokableFigure;
 import org.jhotdraw8.draw.figure.SliceFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -209,7 +209,8 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));
         addConverter(PolylineFigure.POINTS, new CssListConverter<>(new Point2DConverter(false)));
         addConverter(BezierFigure.PATH, new XmlBezierNodeListConverter(true));
-        addConverter(SecondStrokableFigure.SECOND_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
+        addConverter(StrokableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
+        addConverter(MarkerStrokableFigure.MARKER_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
