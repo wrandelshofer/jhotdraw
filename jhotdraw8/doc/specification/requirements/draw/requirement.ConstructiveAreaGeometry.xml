@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xml:id="requirement.ConstructiveAreaGeometry">
+         xml:id="requirement.ConstructiveAreaGeometry" role="requirement">
   <title>Constructive Area Geometry</title>
   <para>The paths of multiple figures must be combinable into a new figures using constructive area geometry.
     The combined figures must behave like a single figure.

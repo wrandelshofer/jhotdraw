@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xml:id="requirement.CascadingStyleSheetsOrigin">
+         xml:id="requirement.CascadingStyleSheetsOrigin" role="requirement">
   <title>Cascading Style Sheets Style Origin</title>
   <para>The value of a styled property must origin from one of the 4 style origins defined in JavaFX class
     StyleOrigin:

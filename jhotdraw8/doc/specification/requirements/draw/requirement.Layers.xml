@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.Layers">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.Layers"
+         role="requirement">
   <title>Layers</title>
   <para>A drawing must be organizable into layers.</para>
 </section>

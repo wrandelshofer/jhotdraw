@@ -57,5 +57,24 @@
         </para>
       </glossdef>
     </glossentry>
+    <glossentry>
+      <glossterm>Project</glossterm>
+      <glossdef>
+        <para>A project is an editable dataset that can be stored in a directory structure.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>Project-based Activity</glossterm>
+      <glossdef>
+        <para>A project-based activity is an activity with actions that relate to a project.
+        </para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm>Project-based Application</glossterm>
+      <glossdef>
+        <para>A project-based application is an application that supports project-based activities.</para>
+      </glossdef>
+    </glossentry>
   </glossary>
 </section>

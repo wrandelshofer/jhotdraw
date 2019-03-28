@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xml:id="requirement.CascadingStyleSheets">
+         xml:id="requirement.CascadingStyleSheets" role="requirement">
   <title>Cascading Style Sheets</title>
   <para>A drawing must be styleable with cascading style sheets.</para>
 </section>

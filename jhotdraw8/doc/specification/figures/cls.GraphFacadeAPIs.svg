@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg baseProfile="tiny" height="14.8cm" version="1.2" width="14.8cm" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clipPath1">
+      <rect fill="#000000" height="559.3700787401575" stroke-linecap="square" stroke-miterlimit="10"
+            width="559.3700787401575"/>
+    </clipPath>
+  </defs>
+  <g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
+    <rect fill="#ffffff" height="559.3700787401575" id="background" stroke-linecap="square" stroke-miterlimit="10"
+          width="559.3700787401575"/>
+    <g class="Layer" id="frame">
+      <g>
+        <path d="M0.9999999999999999,1 155.068359375,1 155.068359375,12.40625 145.068359375,22.40625 1,22.40625 Z M1,1 558,1 558,558 1,558 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10" x="7" y="15.86328125">cls
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="29.681640625" y="15.86328125"/>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="35.681640625" y="15.86328125">Graph Facade APIs
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="29.681640625" y="15.86328125"/>
+      </g>
+    </g>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M110,70 230,70 230,170 110,170 Z M110,101.9609375 230,101.9609375 M110,124.3671875 230,124.3671875"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="147.73510742" y="82.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="115.37011719" y="95.65625">BareDirectedGraph</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="114" y="117.32421875"></tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="114" y="139.73046875"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M310,150 430,150 430,250 310,250 Z M310,181.9609375 430,181.9609375 M310,204.3671875 430,204.3671875"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="347.73510742" y="162.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="329.13671875" y="175.65625">BareBidiGraph</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="197.32421875"></tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="219.73046875"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M110,240 230,240 230,340 110,340 Z M110,271.9609375 230,271.9609375 M110,294.3671875 230,294.3671875"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="147.73510742" y="252.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="127.93261719" y="265.65625">DirectedGraph</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="114" y="287.32421875"></tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="114" y="309.73046875"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M310,320 430,320 430,420 310,420 Z M310,351.9609375 430,351.9609375 M310,374.3671875 430,374.3671875"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="347.73510742" y="332.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="341.69921875" y="345.65625">BidiGraph</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="367.32421875"></tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="389.73046875"></tspan>
+        </text>
+      </g>
+      <g class="MLEdge" id="mledge1">
+        <polyline fill="none" points="310,164.44444444444446 230,120" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-150.94539590092288, 230,120), matrix(1,0,0,1,0,0), translate(230,120)"/>
+      </g>
+      <g class="MLEdge" id="mledge2">
+        <polyline fill="none" points="370,320 370,250" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-90, 370,250), matrix(1,0,0,1,0,0), translate(370,250)"/>
+      </g>
+      <g class="MLEdge" id="mledge3">
+        <polyline fill="none" points="170,240 170,170" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-90, 170,170), matrix(1,0,0,1,0,0), translate(170,170)"/>
+      </g>
+      <g class="MLEdge" id="mledge4">
+        <polyline fill="none" points="310,334 230,286" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-149.03624346792648, 230,286), matrix(1,0,0,1,0,0), translate(230,286)"/>
+      </g>
+    </g>
+  </g>
+</svg>

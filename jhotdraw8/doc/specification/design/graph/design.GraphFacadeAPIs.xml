@@ -1,58 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.GraphFacadeAPIs">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="design.GraphFacadeAPIs" role="design">
   <title>Graph Facade APIs</title>
-  <para>We introduce a number of facade APIs for graphs.</para>
 
-  <para>We will use these facade APIs for passing a graph around
-    as a single object, and as a means for hiding its implementation from
-    clients.
+  <para>
+    We introduce a number of facade APIs for graphs.
   </para>
 
-  <para>The facade APIs are defined in the following interfaces.:</para>
+  <para>
+    We will use these facade APIs for passing a graph around as a single object, and as a means for
+    hiding its implementation from clients.
+  </para>
+
+  <para>
+    The facade APIs are defined in the following interfaces.:
+  </para>
+
   <variablelist>
     <varlistentry>
       <term>BareDirectedGraph</term>
       <listitem>
-        <para>Provides a minimal read-only API for directed graphs. The API
-          includes accessor-methods to the collections of vertices and arrows, and
-          methods for following arrows in forward direction.
+        <para>
+          Provides a minimal read-only API for directed graphs. The API includes accessor-methods to
+          the collections of vertices and arrows, and methods for following arrows in forward
+          direction.
         </para>
       </listitem>
     </varlistentry>
     <varlistentry>
       <term>DirectedGraph</term>
       <listitem>
-        <para>Extends DirectedGraphMinimalAPI with a set of convenience methods.</para>
+        <para>
+          Extends DirectedGraphMinimalAPI with a set of convenience methods.
+        </para>
       </listitem>
     </varlistentry>
     <varlistentry>
       <term>BareBidiGraph</term>
       <listitem>
-        <para>Extends BareDirectedGraph with a set of methods for following
-          arrows in backward direction.
+        <para>
+          Extends BareDirectedGraph with a set of methods for following arrows in backward
+          direction.
         </para>
       </listitem>
     </varlistentry>
     <varlistentry>
       <term>BidiGraph</term>
       <listitem>
-        <para>Extends DirectedGraph with a set of convenience methods
-          for following arrows in backward direction.
+        <para>
+          Extends DirectedGraph with a set of convenience methods for following arrows in backward
+          direction.
         </para>
       </listitem>
     </varlistentry>
   </variablelist>
 
-  <para>To keep the API definitions small,
-    we deliberately only define interfaces with read-only APIs.
+  <xi:include href="../../figures/figure.GraphFacadeAPIs.xml"/>
+
+  <para>
+    To keep the API definitions small, we deliberately only define interfaces with read-only APIs.
     We implement APIs for writing directly in classes that support writing.
   </para>
 
-  <section>
+  <section role="design">
     <title>Trade-off</title>
+
     <itemizedlist>
       <listitem>
-        <para>All trade-offs described in
+        <para>
+          All trade-offs described in
           <xref linkend="design.FacadePattern"/>
           apply.
         </para>

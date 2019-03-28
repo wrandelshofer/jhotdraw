@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mediaobject xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-             xml:id="figure.ApplicationFramework">
-  <imageobject>
-    <imagedata fileref="figures/req.ApplicationFramework.svg" format="SVG"/>
-  </imageobject>
-  <textobject>
-    <phrase>Application Framework Requirements Diagram</phrase>
-  </textobject>
-  <caption>
-    <para>This diagram shows the top-level requirements for the application framework.
-    </para>
-  </caption>
-</mediaobject>
+<figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+        xml:id="figure.ApplicationFramework">
+  <title>Application Framework Requirements Diagram</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/req.ApplicationFramework.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>This diagram shows the top-level requirements for the application framework.</phrase>
+    </textobject>
+  </mediaobject>
+</figure>

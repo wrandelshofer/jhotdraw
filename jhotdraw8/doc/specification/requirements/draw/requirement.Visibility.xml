@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.Visibility">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.Visibility"
+         role="requirement">
   <title>Visibility</title>
   <para>The drawing framework must support visibility of figures.
     An invisible figures must not be drawn.

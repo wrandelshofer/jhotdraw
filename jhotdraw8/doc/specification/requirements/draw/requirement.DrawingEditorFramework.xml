@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.DrawingFramework">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.DrawingFramework"
+         role="requirement">
     <title>Drawing Editor Framework</title>
     <para>The drawing editor framework</para>
     <itemizedlist>

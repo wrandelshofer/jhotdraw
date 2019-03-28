@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" role="requirement">
 <title>Communications Interfaces</title>
 <para>JHotDraw 8 does not provide any communications interface to other applications.</para>
 </section>

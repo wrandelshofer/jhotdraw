@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
-  <Layer id="frame" locked="true">
-    <MLDiagram bounds="1 1 557 557" diagramKind="cls" id="sysmldiagram1" modelElementName="Graph Facade Interfaces"
+  <Layer id="frame">
+    <MLDiagram bounds="1 1 557 557" diagramKind="cls" id="sysmldiagram1" modelElementName="Graph Facade APIs"
                padding="4 14 4 6"/>
   </Layer>
   <Layer id="content">

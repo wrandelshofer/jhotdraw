@@ -1,81 +1,110 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Drawing background="transparent" height="88" id="drawing1" width="128" xmlns="http://jhotdraw.org/samples/grapher">
-<Layer id="content">
-  <Rectangle bounds="90 46 19 16" fill="none" id="rectangle12" stroke="grey" stroke-type="inside"/>
-  <Rectangle bounds="68 72 14 10" fill="none" id="rectangle24" stroke="grey" stroke-type="inside"/>
-  <Rectangle bounds="90 46 14 11" fill="none" id="rectangle9" stroke="grey" stroke-type="inside" stroke-width="2"/>
-  <Ellipse center="55 11" id="ellipse2" radius="6.5 6.5" stroke-width="2"/>
-  <Rectangle bounds="5 5 12 12" fill="lightgreen" id="rectangle4" opacity="0.5" stroke="none" stroke-type="inside"/>
-  <Line end="20 5.5" id="line1" start="2 5.5" stroke="darkred"/>
-  <Line end="19.5 16.5" id="line2" start="2 16.5" stroke="darkred"/>
-  <Line end="5.5 20.5" id="line3" start="5.5 2" stroke="darkred"/>
-  <Line end="16.5 20" id="line4" start="16.5 2" stroke="darkred"/>
-  <Rectangle bounds="70 4 14 14" fill="linear-gradient(lightgray, white)" id="rectangle2" stroke="none" stroke-type="inside" stroke-width="2"/>
-  <Rectangle bounds="26 4 14 14" id="rectangle1" stroke-type="inside" stroke-width="2"/>
-  <Ellipse center="79.75 8.25" id="ellipse1" radius="1.75 1.75" stroke-type="inside"/>
-  <Line end="39 39" id="line6" start="27 27" stroke-linecap="square" stroke-width="2"/>
-  <Rectangle bounds="25 25 4 4" id="rectangle3" stroke="grey" stroke-type="inside"/>
-  <Polyline fill="none" id="polyline1" points="54,25 48,28 53,38 60,39 62,29 57,31" stroke-linecap="square" stroke-width="2"/>
-  <Polygon id="polygon1" points="76,25 70,28 75,38 82,39 84,29 78,31" stroke-linecap="square" stroke-width="2"/>
-  <Polyline id="polyline2" points="71,16 74,9 77,13 80,12 83,16"/>
-  <Rectangle bounds="70 4 14 14" fill="none" id="rectangle6" stroke-type="inside" stroke-width="2"/>
-  <Polygon id="polygon2" points="5,47 13,47 17,51.266666666666666 17,63 5,63" stroke="darkcyan" stroke-type="inside" stroke-width="2"/>
-  <Polyline id="polyline3" points="12.5,48 12.5,52 16.5,52" stroke="darkcyan"/>
-  <Label fill="none" font="normal normal 19 &quot;Futura Medium&quot;" id="label1" origin="25 63" stroke="none">A</Label>
-  <Line end="62.5 63" id="line7" start="62.5 48" stroke="darkcyan"/>
-  <Line end="17 39" id="line9" start="5 27" stroke-linecap="square" stroke-width="2"/>
-  <Label fill="none" font="normal normal 19 &quot;Futura Medium&quot;" id="label2" origin="49 63" stroke="none" textFill="darkcyan">#</Label>
-  <Line end="40.5 63" id="line11" start="40.5 48"/>
-  <Rectangle bounds="37 37 4 4" id="rectangle7" stroke="grey" stroke-type="inside"/>
-  <Polygon fill="black" id="polygon6" points="55,47 60,58 56.5,57 56.5,62 53.5,62 53.5,57 50,58" rotate="337.5" stroke="white" translate="-45 22"/>
-  <Polygon fill="black" id="polygon7" points="55,47 60,58 56.5,57 56.5,62 53.5,62 53.5,57 50,58" rotate="337.5" stroke="white" translate="-19 23"/>
-  <Line end="24 74" id="line5" start="28 74" stroke="grey" stroke-linecap="square" stroke-width="2"/>
-  <Line end="29 69" id="line8" start="29 72" stroke="grey" stroke-linecap="square" stroke-width="2"/>
-  <Group id="group1" rotate="22.5" translate="-1 0">
-    <Line end="50.5 73" id="line10" start="50.5 76" stroke="grey" stroke-width="2"/>
-    <Ellipse center="50.5 72.5" id="ellipse3" radius="2.5 2.5"/>
-    <Polyline fill="none" id="polyline4" points="47,77 54,77 54,83" stroke="grey" stroke-width="2"/>
-  </Group>
-  <Polygon fill="black" id="polygon3" points="55,47 60,58 56.5,57 56.5,62 53.5,62 53.5,57 50,58" rotate="337.5" stroke="white" translate="4 22"/>
-  <Group id="group2" rotate="22.5" translate="1 2">
-    <Rectangle bounds="68 68 14 10" fill="none" id="rectangle8" stroke="grey" stroke-type="inside" stroke-width="2" transform="translate(0,0)" translate="0 2"/>
-    <Line end="75 69" id="line12" start="75 70"/>
-    <Ellipse center="75 67" id="ellipse4" radius="2 2"/>
-  </Group>
-  <Polygon fill="black" id="polygon5" points="76.75,50 80.5,58.5 78,58 78,62 75.5,62 75.5,58 73,58.5" rotate="337.5" stroke="white" translate="6.5 26"/>
-  <Polygon fill="grey" id="polygon8" points="66,54 71,58 71,56 74,56 74,59 72,59 76,64 80,59 78,59 78,56 81,56 81,58 86,54 81,50 81,52 78,52 78,49 80,49 76,44 72,49 74,49 74,52 71,52 71,50" stroke="grey" stroke-type="inside"/>
-  <Polygon fill="black" id="polygon4" points="76.75,50 80.5,58.5 78,58 78,62 75.5,62 75.5,58 73,58.5" rotate="337.5" stroke="white" translate="6.5 4"/>
-  <Polygon id="polygon9" points="89,45 89,50 92,50 94,50 94,48 94,45" stroke-type="inside"/>
-  <Polygon id="polygon11" points="100,45 105,45 105,50 102,50 100,50 100,48" stroke-type="inside"/>
-  <Polygon id="polygon12" points="89,53 92,53 94,53 94,55 94,58 89,58" stroke-type="inside"/>
-  <Polygon id="polygon13" points="100,55 100,53 102,53 105,53 105,58 100,58" stroke-type="inside"/>
-  <Polygon fill="black" id="polygon10" points="76.75,50 80.5,58.5 78,58 78,62 75.5,62 75.5,58 73,58.5" rotate="337.5" stroke="white" translate="28.5 25"/>
-  <Polyline fill="none" id="polyline5" points="92,68 98.5,73.5 92.5,80.5 98,86" stroke="grey" stroke-width="2"/>
-  <Rectangle bounds="26 71 5 5" id="rectangle10" stroke-type="inside"/>
-  <Rectangle bounds="90 78 5 5" id="rectangle5" stroke-type="inside"/>
-  <Rectangle bounds="96 71 5 5" id="rectangle11" stroke-type="inside"/>
-  <Polygon fill="black" id="polygon14" points="76.75,50 80.5,58.5 78,58 78,62 75.5,62 75.5,58 73,58.5" rotate="337.5" stroke="white" translate="28.5 4"/>
-  <BezierPath fill="none" id="bezier1" path="M94,41 C92,39,89,26,92,25 C95.55756236768944,23.814145877436857,98,35,99,35 C100.34709693002728,35,103.15395010584848,25.05131670194949,106,26 C109,27,104.7426782909871,39.062578371337935,104,41" stroke-width="2"/>
-</Layer>
-<Layer id="slices" locked="true" visible="false">
-  <Slice bounds="0 0 22 22" id="createSlice"/>
-  <Slice bounds="22 0 22 22" id="createRectangle"/>
-  <Slice bounds="44 0 22 22" id="createEllipse"/>
-  <Slice bounds="44 22 22 22" id="createPolyline"/>
-  <Slice bounds="22 22 22 22" id="createLineConnection"/>
-  <Slice bounds="0 22 22 22" id="createLine"/>
-  <Slice bounds="66 0 22 22" id="createImage"/>
-  <Slice bounds="66 22 22 22" id="createPolygon"/>
-  <Slice bounds="0 44 22 22" id="createPage"/>
-  <Slice bounds="22 44 22 22" id="createText"/>
-  <Slice bounds="88 66 22 22" id="pointTool"/>
-  <Slice bounds="0 66 22 22" id="selectionTool"/>
-  <Slice bounds="66 66 22 22" id="transformationTool"/>
-  <Slice bounds="44 44 22 22" id="createPageLabel"/>
-  <Slice bounds="66 44 22 22" id="moveTool"/>
-  <Slice bounds="88 44 22 22" id="resizeTool"/>
-  <Slice bounds="88 22 22 22" id="createBezier"/>
-</Layer>
-<Layer id="pages" locked="true" visible="false">
-  <Page bounds="0 0 88 88" id="page1" num-pages="4 4" paper-size="40cm 40cm"/>
-</Layer>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing background="rgba(255,255,255,0)" height="88" id="drawing1" width="164"
+         xmlns="http://jhotdraw.org/samples/grapher">
+  <Layer id="content">
+    <Rectangle bounds="90 46 19 16" fill="none" id="rectangle12" stroke="grey" stroke-type="inside"/>
+    <Rectangle bounds="68 72 14 10" fill="none" id="rectangle24" stroke="grey" stroke-type="inside"/>
+    <Rectangle bounds="90 46 14 11" fill="none" id="rectangle9" stroke="grey" stroke-type="inside" stroke-width="2"/>
+    <Ellipse center="55 11" id="ellipse2" radius="6.5 6.5" stroke-width="2"/>
+    <Rectangle bounds="5 5 12 12" fill="lightgreen" id="rectangle4" opacity="0.5" stroke="none" stroke-type="inside"/>
+    <Line end="20 5.5" id="line1" start="2 5.5" stroke="darkred"/>
+    <Line end="19.5 16.5" id="line2" start="2 16.5" stroke="darkred"/>
+    <Line end="5.5 20.5" id="line3" start="5.5 2" stroke="darkred"/>
+    <Line end="16.5 20" id="line4" start="16.5 2" stroke="darkred"/>
+    <Rectangle bounds="70 4 14 14" fill="linear-gradient(lightgray, white)" id="rectangle2" stroke="none"
+               stroke-type="inside" stroke-width="2"/>
+    <Rectangle bounds="26 4 14 14" id="rectangle1" stroke-type="inside" stroke-width="2"/>
+    <Ellipse center="79.75 8.25" id="ellipse1" radius="1.75 1.75" stroke-type="inside"/>
+    <Line end="39 39" id="line6" start="27 27" stroke-linecap="square" stroke-width="2"/>
+    <Rectangle bounds="25 25 4 4" id="rectangle3" stroke="grey" stroke-type="inside"/>
+    <Polyline fill="none" id="polyline1" points="54, 25, 48, 28, 53, 38, 60, 39, 62, 29, 57, 31" stroke-linecap="square"
+              stroke-width="2"/>
+    <Polygon id="polygon1" points="76, 25, 70, 28, 75, 38, 82, 39, 84, 29, 78, 31" stroke-linecap="square"
+             stroke-width="2"/>
+    <Polyline fill="none" id="polyline2" points="71, 16, 74, 9, 77, 13, 80, 12, 83, 16"/>
+    <Rectangle bounds="70 4 14 14" fill="none" id="rectangle6" stroke-type="inside" stroke-width="2"/>
+    <Polygon id="polygon2" points="5, 47, 13, 47, 17, 51.266666666666666, 17, 63, 5, 63" stroke="darkcyan"
+             stroke-type="inside" stroke-width="2"/>
+    <Polyline fill="none" id="polyline3" points="12.5, 48, 12.5, 52, 16.5, 52" stroke="darkcyan"/>
+    <Label fill="none" font="19 Futura Medium" id="label1" origin="25 63" stroke="none">A</Label>
+    <Line end="62.5 63" id="line7" start="62.5 48" stroke="darkcyan"/>
+    <Line end="17 39" id="line9" start="5 27" stroke-linecap="square" stroke-width="2"/>
+    <Label fill="none" font="19 Futura Medium" id="label2" origin="49 63" stroke="none" textFill="darkcyan">#</Label>
+    <Line end="40.5 63" id="line11" start="40.5 48"/>
+    <Rectangle bounds="37 37 4 4" id="rectangle7" stroke="grey" stroke-type="inside"/>
+    <Polygon fill="black" id="polygon6" points="55, 47, 60, 58, 56.5, 57, 56.5, 62, 53.5, 62, 53.5, 57, 50, 58"
+             rotate="337.5" stroke="white" translate="-45 22"/>
+    <Polygon fill="black" id="polygon7" points="55, 47, 60, 58, 56.5, 57, 56.5, 62, 53.5, 62, 53.5, 57, 50, 58"
+             rotate="337.5" stroke="white" translate="-19 23"/>
+    <Line end="24 74" id="line5" start="28 74" stroke="grey" stroke-linecap="square" stroke-width="2"/>
+    <Line end="29 69" id="line8" start="29 72" stroke="grey" stroke-linecap="square" stroke-width="2"/>
+    <Group id="group1" rotate="22.5" translate="-1 0">
+      <Line end="50.5 73" id="line10" start="50.5 76" stroke="grey" stroke-width="2"/>
+      <Ellipse center="50.5 72.5" id="ellipse3" radius="2.5 2.5"/>
+      <Polyline fill="none" id="polyline4" points="47, 77, 54, 77, 54, 83" stroke="grey" stroke-width="2"/>
+    </Group>
+    <Polygon fill="black" id="polygon3" points="55, 47, 60, 58, 56.5, 57, 56.5, 62, 53.5, 62, 53.5, 57, 50, 58"
+             rotate="337.5" stroke="white" translate="4 22"/>
+    <Group id="group2" rotate="22.5" translate="1 2">
+      <Rectangle bounds="68 68 14 10" fill="none" id="rectangle8" stroke="grey" stroke-type="inside" stroke-width="2"
+                 transform="translate(0,0)" translate="0 2"/>
+      <Line end="75 69" id="line12" start="75 70"/>
+      <Ellipse center="75 67" id="ellipse4" radius="2 2"/>
+    </Group>
+    <Polygon fill="black" id="polygon5" points="76.75, 50, 80.5, 58.5, 78, 58, 78, 62, 75.5, 62, 75.5, 58, 73, 58.5"
+             rotate="337.5" stroke="white" translate="6.5 26"/>
+    <Polygon fill="grey" id="polygon8"
+             points="66, 54, 71, 58, 71, 56, 74, 56, 74, 59, 72, 59, 76, 64, 80, 59, 78, 59, 78, 56, 81, 56, 81, 58, 86, 54, 81, 50, 81, 52, 78, 52, 78, 49, 80, 49, 76, 44, 72, 49, 74, 49, 74, 52, 71, 52, 71, 50"
+             stroke="grey" stroke-type="inside"/>
+    <Polygon fill="black" id="polygon4" points="76.75, 50, 80.5, 58.5, 78, 58, 78, 62, 75.5, 62, 75.5, 58, 73, 58.5"
+             rotate="337.5" stroke="white" translate="6.5 4"/>
+    <Polygon id="polygon9" points="89, 45, 89, 50, 92, 50, 94, 50, 94, 48, 94, 45" stroke-type="inside"/>
+    <Polygon id="polygon11" points="100, 45, 105, 45, 105, 50, 102, 50, 100, 50, 100, 48" stroke-type="inside"/>
+    <Polygon id="polygon12" points="89, 53, 92, 53, 94, 53, 94, 55, 94, 58, 89, 58" stroke-type="inside"/>
+    <Polygon id="polygon13" points="100, 55, 100, 53, 102, 53, 105, 53, 105, 58, 100, 58" stroke-type="inside"/>
+    <Polygon fill="black" id="polygon10" points="76.75, 50, 80.5, 58.5, 78, 58, 78, 62, 75.5, 62, 75.5, 58, 73, 58.5"
+             rotate="337.5" stroke="white" translate="28.5 25"/>
+    <Polyline fill="none" id="polyline5" points="92, 68, 98.5, 73.5, 92.5, 80.5, 98, 86" stroke="grey"
+              stroke-width="2"/>
+    <Rectangle bounds="26 71 5 5" id="rectangle10" stroke-type="inside"/>
+    <Rectangle bounds="90 78 5 5" id="rectangle5" stroke-type="inside"/>
+    <Rectangle bounds="96 71 5 5" id="rectangle11" stroke-type="inside"/>
+    <Polygon fill="black" id="polygon14" points="76.75, 50, 80.5, 58.5, 78, 58, 78, 62, 75.5, 62, 75.5, 58, 73, 58.5"
+             rotate="337.5" stroke="white" translate="28.5 4"/>
+    <BezierPath fill="none" id="bezier1"
+                path="M94,41 C92,39,89,26,92,25 95.55756236768944,23.814145877436857,98,35,99,35 100.34709693002728,35,103.15395010584848,25.05131670194949,106,26 109,27,104.7426782909871,39.062578371337935,104,41"
+                stroke-width="2"/>
+    <Rectangle bounds="92 4 14 14" id="rectangle13" stroke-type="inside" stroke-width="2"/>
+    <Label fill="none" font="11 Futura Medium" id="label3" origin="95 15.15" stroke="none" stroke-linecap="square"
+           stroke-miterlimit="10">A
+    </Label>
+    <Label fill="none" font="19 Futura Medium" id="label4" origin="113 63" stroke="none" stroke-linecap="square"
+           stroke-miterlimit="10" textFill="grey">A
+    </Label>
+    <Rectangle bounds="128 48 1 15" fill="black" id="rectangle14" stroke="white" stroke-type="outside"/>
+  </Layer>
+  <Layer id="slices" locked="true">
+    <Slice bounds="0 0 22 22" id="createSlice"/>
+    <Slice bounds="22 0 22 22" id="createRectangle"/>
+    <Slice bounds="44 0 22 22" id="createEllipse"/>
+    <Slice bounds="44 22 22 22" id="createPolyline"/>
+    <Slice bounds="22 22 22 22" id="createLineConnection"/>
+    <Slice bounds="0 22 22 22" id="createLine"/>
+    <Slice bounds="66 0 22 22" id="createImage"/>
+    <Slice bounds="66 22 22 22" id="createPolygon"/>
+    <Slice bounds="0 44 22 22" id="createPage"/>
+    <Slice bounds="22 44 22 22" id="createText"/>
+    <Slice bounds="88 66 22 22" id="pointTool"/>
+    <Slice bounds="0 66 22 22" id="selectionTool"/>
+    <Slice bounds="66 66 22 22" id="transformationTool"/>
+    <Slice bounds="44 44 22 22" id="createPageLabel"/>
+    <Slice bounds="66 44 22 22" id="moveTool"/>
+    <Slice bounds="88 44 22 22" id="resizeTool"/>
+    <Slice bounds="88 22 22 22" id="createBezier"/>
+    <Slice bounds="88 0 22 22" id="createTextArea"/>
+    <Slice bounds="110 44 22 22" id="textTool"/>
+  </Layer>
+  <Layer id="pages" locked="true" visible="false">
+    <Page bounds="0 0 88 88" fill="transparent" id="page1" num-pages="4 4" paper-size="40cm 40cm"/>
+  </Layer>
 </Drawing>

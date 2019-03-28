@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.HighCohesion">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.HighCohesion" role="design">
   <title>High Cohesion</title>
   <para>Cohesion is the degree to which a class has a single, focused purpose.</para>
   <para>A class with high cohesion is typically less complex than a class with low cohesion.</para>

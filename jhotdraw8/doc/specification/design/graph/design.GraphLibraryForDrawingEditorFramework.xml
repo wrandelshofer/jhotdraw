@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xml:id="design.GraphLibraryForDrawingEditorFramework">
+         xml:id="design.GraphLibraryForDrawingEditorFramework" role="design">
   <title>Graph Library</title>
   <para>This design specifies a graph library that is tailored for the drawing editor framework.</para>
 </section>

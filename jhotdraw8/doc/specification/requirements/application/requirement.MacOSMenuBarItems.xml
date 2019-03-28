@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xml:id="requirement.macOSMenuBarItems">
+         xml:id="requirement.macOSMenuBarItems" role="requirement">
   <title>macOS-specific Menu Bar Items</title>
   <para>The application framework must support the following menu bar items on macOS.</para>
 

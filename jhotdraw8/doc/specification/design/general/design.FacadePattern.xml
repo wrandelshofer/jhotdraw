@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.FacadePattern">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.FacadePattern" role="design">
   <title>Facade Pattern</title>
   <para>A facade provides a unified interface to a set of interfaces in a subsystem.</para>
-  <section>
+  <section role="design">
     <title>Trade-off</title>
     <para>A facade allows to conveniently pass a subsystem around as a single object.</para>
     <para>A facade allows to hide the structure of the subsystem.</para>

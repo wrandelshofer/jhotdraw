@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.Layers">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.Layers" role="design">
   <title>Layers</title>
 
   <para>We can support layers in a drawing by treating layers as a special
@@ -19,7 +19,7 @@
     </listitem>
   </itemizedlist>
 
-  <section>
+  <section role="design">
     <title>Trade-off</title>
     <para>The trade-off with this design is that we always must add at least one layer to a drawing,
       even if we don't need layers in that specific drawing.

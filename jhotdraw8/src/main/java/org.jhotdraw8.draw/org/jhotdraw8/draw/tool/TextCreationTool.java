@@ -110,6 +110,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         event.consume();
         if (editorData != null) {
             stopEditing();
+            fireToolDone();
             return;
         }
 

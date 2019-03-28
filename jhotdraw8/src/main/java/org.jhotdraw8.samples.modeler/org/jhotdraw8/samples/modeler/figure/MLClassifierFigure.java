@@ -109,6 +109,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
 
     public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "compartments", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new MLCompartmentalizedData());
     public final static StringStyleableFigureKey KEYWORD = MLConstants.KEYWORD;
+    public final static StringStyleableFigureKey PACKAGE = MLConstants.PACKAGE;
     public final static StringStyleableFigureKey NAME = new StringStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "name", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, "unnamed", null);
     public final static BooleanStyleableFigureKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableFigureKey("compartmentLabelsVisible", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false);
     public final static BooleanStyleableFigureKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;

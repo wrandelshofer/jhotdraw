@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.GraphTheoryDirectedGraph">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.GraphTheoryDirectedGraph"
+         role="design">
   <title>Directed Graph in Graph Theory</title>
   <para>In graph theory a directed graph is an ordered pair
     <inlineequation>

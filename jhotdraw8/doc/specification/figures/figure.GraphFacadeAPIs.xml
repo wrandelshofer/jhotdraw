@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+        xml:id="figure.GraphFacadeAPIs">
+  <title>Graph Facade APIs Class Diagram</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/cls.GraphFacadeAPIs.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>This diagram shows the facade APIs for graphs.</phrase>
+    </textobject>
+  </mediaobject>
+</figure>
