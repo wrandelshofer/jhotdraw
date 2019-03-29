@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg baseProfile="tiny" height="14.8cm" version="1.2" width="14.8cm" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clipPath1">
+      <rect fill="#000000" height="559.3700787401575" stroke-linecap="square" stroke-miterlimit="10"
+            width="559.3700787401575"/>
+    </clipPath>
+  </defs>
+  <g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
+    <rect fill="#ffffff" height="559.3700787401575" id="background" stroke-linecap="square" stroke-miterlimit="10"
+          width="559.3700787401575"/>
+    <g class="Layer" id="frame">
+      <g>
+        <path d="M1,1 146.390625,1 146.390625,12.40625 136.390625,22.40625 1,22.40625 Z M1,1 558,1 558,558 1,558 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10" x="7" y="15.86328125">cd
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="24.00390625" y="15.86328125"/>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="27.00390625" y="15.86328125">Graph Facade APIs
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="24.00390625" y="15.86328125"/>
+      </g>
+    </g>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M50,70 230,70 230,220 50,220 Z M50,109.9609375 230,109.9609375 M50,118.9609375 230,118.9609375"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="117.73510742" y="82.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="65.87011719" y="99.65625">BareDirectedGraph&lt;V,A&gt;</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="54" y="135.0625">getVertices():Collection&lt;V&gt;</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="54" y="152.46875">getArrows():Collection&lt;V&gt;</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="54" y="169.875">getNextCount(V):int</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="54" y="187.28125">getNext(V,int):V</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="54" y="204.6875">getNextArrow(V,int):A</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M310,140 490,140 490,250 310,250 Z M310,179.9609375 490,179.9609375 M310,188.9609375 490,188.9609375"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="377.73510742" y="152.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="339.63671875" y="169.65625">BareBidiGraph&lt;V,A&gt;</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="205.0625">getPrevCount(V):int</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="222.46875">getPrev(V,int):V</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="239.875">getPrevArrow(V,int):A</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M50,290 230,290 230,370 50,370 Z M50,329.9609375 230,329.9609375 M50,338.9609375 230,338.9609375"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="117.73510742" y="302.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="78.43261719" y="319.65625">DirectedGraph&lt;V,A&gt;</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="54" y="354.32421875">{default} convenience methods</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M310,340 490,340 490,420 310,420 Z M310,379.9609375 490,379.9609375 M310,388.9609375 490,388.9609375"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="377.73510742" y="352.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="352.19921875" y="369.65625">BidiGraph&lt;V,A&gt;</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="314" y="404.32421875">{default} convenience methods</tspan>
+        </text>
+      </g>
+      <g class="MLEdge" id="mledge1">
+        <polyline fill="none" points="310,159.31578947368422 230,145" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-169.85445556610367, 230,145), matrix(1,0,0,1,0,0), translate(230,145)"/>
+      </g>
+      <g class="MLEdge" id="mledge2">
+        <polyline fill="none" points="400,340 400,250" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-90, 400,250), matrix(1,0,0,1,0,0), translate(400,250)"/>
+      </g>
+      <g class="MLEdge" id="mledge3">
+        <polyline fill="none" points="140,290 140,220" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-90, 140,220), matrix(1,0,0,1,0,0), translate(140,220)"/>
+      </g>
+      <g class="MLEdge" id="mledge4">
+        <polyline fill="none" points="310,352.60869565217394 230,334.5217391304348" stroke="#000000"/>
+        <path d="M-10,-5 0,0 -10,5 Z" fill="#ffffff" stroke="#000000" stroke-linecap="square" stroke-miterlimit="10"
+              transform="rotate(-167.2603532075179, 230,334.5217391304348), matrix(1,0,0,1,0,0), translate(230,334.5217391304348)"/>
+      </g>
+    </g>
+  </g>
+</svg>

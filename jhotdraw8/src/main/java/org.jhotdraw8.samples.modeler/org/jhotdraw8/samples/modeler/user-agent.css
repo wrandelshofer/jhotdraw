@@ -11,13 +11,18 @@ MLDiagram {
   shape-slice: 0 10 10 0;
 }
 MLClassifier {
-  keyword-visible: true;
+  keyword-label-visible: true;
   compartment-labels-visible: true;
   compartment-label-font: 9 Arial;
   keyword-label-font: 9 Arial;
   name-font: 12 Arial Bold;
   font: 12 Arial;
   padding: 4;
+  line-spacing: 4;
+  item-label-font: 12 Arial;
+  static-item-font: 12 Arial;
+  abstract-item-font: 12 Arial Italic;
+  static-item-underline: true;
 }
 /** Block shows compartment labels, because there are so many possible compartments. */
 MLClassifier[keyword="block"] {
@@ -25,6 +30,7 @@ MLClassifier[keyword="block"] {
 /** Class does not show compartment labels, because there are two compartments: attributes and operations. */
 MLClassifier[keyword="class"] {
   compartment-labels-visible: false;
+  keyword-label-visible: false;
 }
 /** Class does not show compartment labels, because there are two compartments: attributes and operations. */
 MLClassifier[keyword="interface"] {

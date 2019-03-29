@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="cd" id="sysmldiagram1" modelElementName="Graph Facade APIs"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <MLClassifier bounds="50 70 180 150" compartmentLabelFont="9 Arial"
+                  compartments="{attributes:[], operations:['getVertices():Collection&lt;V&gt;', 'getArrows():Collection&lt;V&gt;', 'getNextCount(V):int', 'getNext(V,int):V', 'getNextArrow(V,int):A']}"
+                  id="mlclassifier1" keyword="interface" keywordLabelFont="9 Arial" name="BareDirectedGraph&lt;V,A&gt;"
+                  nameFont="12 Arial Bold Italic" padding="4 4 4 4"/>
+    <MLClassifier bounds="310 140 180 110"
+                  compartments="{attributes:[], operations:['getPrevCount(V):int', 'getPrev(V,int):V', 'getPrevArrow(V,int):A']}"
+                  id="mlclassifier2" keyword="interface" keywordLabelVisible="true" name="BareBidiGraph&lt;V,A&gt;"
+                  nameFont="12 Arial Bold Italic"/>
+    <MLClassifier bounds="50 290 180 80" compartments="{attributes:[], operations:['{default} convenience methods']}"
+                  id="mlclassifier3" keyword="interface" keywordLabelVisible="true" name="DirectedGraph&lt;V,A&gt;"/>
+    <MLClassifier bounds="310 340 180 80" compartments="{attributes:[], operations:['{default} convenience methods']}"
+                  id="mlclassifier4" keyword="interface" keywordLabelVisible="true" name="BidiGraph&lt;V,A&gt;"/>
+    <MLEdge end="230 145" endConnector="path relative(100%,50%)" endTarget="mlclassifier1" id="mledge1"
+            keyword="generalization" start="310 159.31578947368422"
+            startConnector="path relative(8.333333333333332%,20%)" startTarget="mlclassifier2"/>
+    <MLEdge end="400 250" endConnector="path relative(50%,90%)" endTarget="mlclassifier2" id="mledge2"
+            keyword="generalization" start="400 340" startConnector="path relative(50%,10%)"
+            startTarget="mlclassifier4"/>
+    <MLEdge end="140 220" endConnector="path relative(50%,64.28571428571429%)" endTarget="mlclassifier1" id="mledge3"
+            keyword="generalization" start="140 290" startConnector="path relative(50%,10%)"
+            startTarget="mlclassifier3"/>
+    <MLEdge end="230 334.5217391304348" endConnector="path relative(88.88888888888889%,50%)" endTarget="mlclassifier3"
+            id="mledge4" keyword="generalization" start="310 352.60869565217394"
+            startConnector="path relative(8.333333333333332%,20%)" startTarget="mlclassifier4"/>
+  </Layer>
+</Drawing>

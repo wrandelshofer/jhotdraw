@@ -16,6 +16,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -25,23 +26,27 @@ import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
- * A figure which supports font attributes.
+ * A figure which supports font attributes for items.
  *
  * @author Werner Randelshofer
  * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
-public interface BodyFontableFigure extends Figure {
+public interface ItemFontableFigure extends Figure {
 
     // text properties
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableFigureKey BODY_FONT_FAMILY = new StringOrIdentStyleableFigureKey("bodyFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableFigureKey BODY_FONT_SIZE = new CssSizeStyleableFigureKey("bodyFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableFigureKey<FontPosture> BODY_FONT_STYLE = new EnumStyleableFigureKey<>("bodyFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableFigureKey<FontWeight> BODY_FONT_WEIGHT = new EnumStyleableFigureKey<>("bodyFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
-    FontStyleableMapAccessor BODY_FONT = new FontStyleableMapAccessor("bodyFont", BODY_FONT_FAMILY, BODY_FONT_WEIGHT, BODY_FONT_STYLE, BODY_FONT_SIZE);
+    StringOrIdentStyleableFigureKey ITEM_FONT_FAMILY = new StringOrIdentStyleableFigureKey("itemFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
+    CssSizeStyleableFigureKey ITEM_FONT_SIZE = new CssSizeStyleableFigureKey("itemFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
+    EnumStyleableFigureKey<FontPosture> ITEM_FONT_STYLE = new EnumStyleableFigureKey<>("itemFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
+    EnumStyleableFigureKey<FontWeight> ITEM_FONT_WEIGHT = new EnumStyleableFigureKey<>("itemFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    FontStyleableMapAccessor ITEM_FONT = new FontStyleableMapAccessor("itemFont", ITEM_FONT_FAMILY, ITEM_FONT_WEIGHT, ITEM_FONT_STYLE, ITEM_FONT_SIZE);
+    /**
+     * Whether to underline the text. Default value: {@code false}
+     */
+    BooleanStyleableFigureKey ITEM_UNDERLINE = new BooleanStyleableFigureKey("itemUnderline", DirtyMask.of(DirtyBits.NODE), false);
 
     /**
      * Updates a text node with fontable properties.
@@ -49,15 +54,17 @@ public interface BodyFontableFigure extends Figure {
      * @param ctx  RenderContext, can be null
      * @param text a text node
      */
-    default void applyBodyTextFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
-        String family = getStyledNonnull(BODY_FONT_FAMILY);
-        FontPosture style = getStyledNonnull(BODY_FONT_STYLE);
-        FontWeight weight = getStyledNonnull(BODY_FONT_WEIGHT);
+    default void applyItemTextFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
+        String family = getStyledNonnull(ITEM_FONT_FAMILY);
+        FontPosture style = getStyledNonnull(ITEM_FONT_STYLE);
+        FontWeight weight = getStyledNonnull(ITEM_FONT_WEIGHT);
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        CssSize cssSize = getStyledNonnull(BODY_FONT_SIZE);
+        CssSize cssSize = getStyledNonnull(ITEM_FONT_SIZE);
         double size = units.convert(cssSize, UnitConverter.DEFAULT);
         CssFont f = CssFont.font(family, weight, style, size);
+        Boolean underline = getStyledNonnull(ITEM_UNDERLINE);
 
+        text.setUnderline(underline);
         Font font = f.getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
@@ -71,14 +78,14 @@ public interface BodyFontableFigure extends Figure {
     }
 
     /**
-     * Updates a Laeled node with fontable properties.
+     * Updates a Labeled node with fontable properties.
      *
      * @param ctx  context
      * @param text a text node
      */
-    default void applyBodyTextFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
+    default void applyItemTextFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        Font font = getStyledNonnull(BODY_FONT).getFont();
+        Font font = getStyledNonnull(ITEM_FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }

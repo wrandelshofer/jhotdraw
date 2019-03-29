@@ -4,7 +4,7 @@
   <title>Graph Facade APIs Class Diagram</title>
   <mediaobject>
     <imageobject>
-      <imagedata fileref="figures/cls.GraphFacadeAPIs.svg" format="SVG"/>
+      <imagedata fileref="figures/cd.GraphFacadeAPIs.svg" format="SVG"/>
     </imageobject>
     <textobject>
       <phrase>This diagram shows the facade APIs for graphs.</phrase>
