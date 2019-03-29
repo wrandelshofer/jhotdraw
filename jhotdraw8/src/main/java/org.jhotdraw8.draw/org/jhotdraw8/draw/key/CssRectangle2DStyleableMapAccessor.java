@@ -124,8 +124,4 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableFigureM
         return oldValue;
     }
 
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
 }

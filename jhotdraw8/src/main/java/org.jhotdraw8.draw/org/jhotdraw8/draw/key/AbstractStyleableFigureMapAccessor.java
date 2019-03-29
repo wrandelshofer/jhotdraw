@@ -11,7 +11,12 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * AbstractStyleableFigureMapAccessor.
@@ -20,7 +25,7 @@ import java.util.*;
  * @author Werner Randelshofer
  */
 public abstract class AbstractStyleableFigureMapAccessor<T>
-        implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
+        implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
 
     @Nonnull
     private final String cssName;
@@ -51,9 +56,6 @@ public abstract class AbstractStyleableFigureMapAccessor<T>
 
     @Nonnull
     private final Set<MapAccessor<?>> subAccessors;
-
-    @Nonnull
-    private final DirtyMask dirtyMask;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -97,13 +99,6 @@ public abstract class AbstractStyleableFigureMapAccessor<T>
         this.defaultValue = defaultValue;
         this.subAccessors = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(subAccessors)));
 
-        DirtyMask m = DirtyMask.EMPTY;
-        for (MapAccessor<?> sub : subAccessors) {
-            if (sub instanceof FigureKey<?>) {
-                m = m.add(((FigureKey<?>) sub).getDirtyMask());
-            }
-        }
-        dirtyMask = m;
         cssName = ReadOnlyStyleableMapAccessor.toCssName(name);
     }
 
@@ -184,11 +179,6 @@ public abstract class AbstractStyleableFigureMapAccessor<T>
         return subAccessors;
     }
 
-    @Nonnull
-    @Override
-    public DirtyMask getDirtyMask() {
-        return dirtyMask;
-    }
 
     @Override
     public boolean isTransient() {

@@ -126,9 +126,4 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
         sizeKey.remove(a);
         return oldValue;
     }
-
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
 }

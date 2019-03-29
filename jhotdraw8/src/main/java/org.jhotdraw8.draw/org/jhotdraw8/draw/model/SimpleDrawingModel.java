@@ -19,7 +19,6 @@ import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.event.Listener;
@@ -560,28 +559,17 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Object oldValue = event.getOldValue();
                 Object newValue = event.getNewValue();
                 figure.propertyChangedNotify(key, oldValue, newValue);
-                if (key instanceof FigureKey) {
-                    FigureKey<?> fk = (FigureKey<?>) key;
-                    final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
+
+                //final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
+                final DirtyMask dm = DirtyMask.of(DirtyBits.STYLE,
+                        DirtyBits.LAYOUT, DirtyBits.NODE, DirtyBits.TRANSFORM,
+                        DirtyBits.LAYOUT_OBSERVERS
+                );
                     if (!dm.isEmpty()) {
                         markDirty(figure, dm);
                         invalidate();
                     }
 
-                    // This is sent if a layout subject has been added or removed.
-                    // - The event is sent on the observing figure (the layout observer).
-                    // - The observed figure (the layout subject) may change its appearance, hence we
-                    //   invoke a notify method on it, and we repaint it.
-                    if (((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)
-                            && Figure.class.isAssignableFrom(key.getValueType())) {
-                        if (oldValue != null) {
-                            markDirty((Figure) oldValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
-                        }
-                        if (newValue != null) {
-                            markDirty((Figure) newValue, DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED, DirtyBits.NODE);
-                        }
-                    }
-                }
                 break;
             }
             case LAYOUT_CHANGED:

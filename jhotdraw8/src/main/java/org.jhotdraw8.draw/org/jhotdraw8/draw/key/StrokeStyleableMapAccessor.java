@@ -162,11 +162,6 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccess
         return oldValue;
     }
 
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
-
     /**
      * This is a non-standard map composite map accessor and thus it is transient.
      * We only used in the GUI to get a more concise presentation of attributes.

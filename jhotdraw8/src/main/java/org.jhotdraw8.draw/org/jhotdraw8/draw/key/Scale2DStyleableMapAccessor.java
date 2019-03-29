@@ -104,9 +104,4 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         yKey.remove(a);
         return oldValue;
     }
-
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
 }

@@ -91,11 +91,6 @@ public class SymmetricCssPoint2DStyleableMapAccessor
 
     }
 
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
-
     @Nonnull
     @Override
     public CssPoint2D put(@Nonnull Map<? super Key<?>, Object> a, @Nullable CssPoint2D value) {

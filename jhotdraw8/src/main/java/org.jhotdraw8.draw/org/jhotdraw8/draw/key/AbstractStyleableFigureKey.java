@@ -14,7 +14,7 @@ import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class AbstractStyleableFigureKey<T> extends ObjectKey<T> implements FigureKey<T> {
+public class AbstractStyleableFigureKey<T> extends ObjectKey<T> {
 
     final static long serialVersionUID = 1L;
 

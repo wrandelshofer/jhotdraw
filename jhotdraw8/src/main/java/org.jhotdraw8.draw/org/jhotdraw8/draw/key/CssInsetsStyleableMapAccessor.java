@@ -136,9 +136,4 @@ public class CssInsetsStyleableMapAccessor
         leftKey.remove(a);
         return oldValue;
     }
-
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
 }

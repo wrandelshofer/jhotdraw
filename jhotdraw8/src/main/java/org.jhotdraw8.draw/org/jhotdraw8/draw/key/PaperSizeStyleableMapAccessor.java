@@ -88,11 +88,6 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAcc
 
     }
 
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
-
     @Nonnull
     @Override
     public CssPoint2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull CssPoint2D value) {

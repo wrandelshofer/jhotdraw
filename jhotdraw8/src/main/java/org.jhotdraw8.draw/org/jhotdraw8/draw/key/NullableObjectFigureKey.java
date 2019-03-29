@@ -13,7 +13,7 @@ import org.jhotdraw8.collection.ObjectKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class NullableObjectFigureKey<T> extends ObjectKey<T> implements FigureKey<T> {
+public class NullableObjectFigureKey<T> extends ObjectKey<T> {
 
     final static long serialVersionUID = 1L;
 

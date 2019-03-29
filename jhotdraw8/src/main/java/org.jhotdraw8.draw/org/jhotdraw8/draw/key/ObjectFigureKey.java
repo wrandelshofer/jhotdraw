@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.ObjectKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ObjectFigureKey<T> extends ObjectKey<T> implements FigureKey<T>,
+public class ObjectFigureKey<T> extends ObjectKey<T> implements
         NonnullMapAccessor<T> {
 
     final static long serialVersionUID = 1L;

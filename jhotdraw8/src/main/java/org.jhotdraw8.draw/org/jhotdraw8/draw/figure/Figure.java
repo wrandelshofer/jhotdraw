@@ -1095,8 +1095,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * This method typically changes property values in this figure with
      * {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
-     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
-     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
+     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM}.
+     * This method may also call
      * {@code reshapeInLocal} on child figures.
      *
      * @param transform the desired transformation in parent coordinates

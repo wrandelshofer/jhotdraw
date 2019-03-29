@@ -110,8 +110,4 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         return oldValue;
     }
 
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
 }
