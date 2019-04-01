@@ -29,7 +29,7 @@ import java.util.function.Function;
  * @version $Id$
  */
 public class CssInsetsStyleableMapAccessor
-        extends AbstractStyleableFigureMapAccessor<CssInsets>
+        extends AbstractStyleableMapAccessor<CssInsets>
         implements NonnullMapAccessor<CssInsets> {
 
     private final static long serialVersionUID = 1L;

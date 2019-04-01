@@ -18,7 +18,7 @@ import static java.lang.Double.max;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Rectangle2DMapAccessor extends AbstractFigureMapAccessor<Rectangle2D> {
+public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
 
     private final static long serialVersionUID = 1L;
 

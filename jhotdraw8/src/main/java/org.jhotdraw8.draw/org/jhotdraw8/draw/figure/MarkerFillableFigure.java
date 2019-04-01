@@ -13,8 +13,8 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableEnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 
 import java.util.Objects;
 
@@ -33,13 +33,13 @@ public interface MarkerFillableFigure extends Figure {
      * <p>
      * Default value: {@code Color.WHITE}.
      */
-    public static NullablePaintableStyleableFigureKey MARKER_FILL = new NullablePaintableStyleableFigureKey("marker-fill", new CssColor("white", Color.WHITE));
+    public static NullablePaintableStyleableKey MARKER_FILL = new NullablePaintableStyleableKey("marker-fill", new CssColor("white", Color.WHITE));
     /**
      * Defines the fill-rule used for filling the interior of the figure..
      * <p>
      * Default value: {@code StrokeType.NON_ZERO}.
      */
-    public static NullableEnumStyleableFigureKey<FillRule> MARKER_FILL_RULE = new NullableEnumStyleableFigureKey<>("marker-fill-rule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false, FillRule.NON_ZERO);
+    public static NullableEnumStyleableKey<FillRule> MARKER_FILL_RULE = new NullableEnumStyleableKey<>("marker-fill-rule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false, FillRule.NON_ZERO);
 
     /**
      * Updates a shape node.

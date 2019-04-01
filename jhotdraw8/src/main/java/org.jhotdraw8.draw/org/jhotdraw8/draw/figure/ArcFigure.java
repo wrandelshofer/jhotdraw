@@ -14,11 +14,11 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -34,13 +34,13 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
      */
     public final static String TYPE_SELECTOR = "Arc";
 
-    public final static CssSizeStyleableFigureKey CENTER_X = new CssSizeStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey CENTER_Y = new CssSizeStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    public final static CssSizeStyleableFigureKey RADIUS_X = new CssSizeStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
-    public final static CssSizeStyleableFigureKey RADIUS_Y = new CssSizeStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
-    public final static DoubleStyleableFigureKey START_ANGLE = new DoubleStyleableFigureKey("startAngle", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey ARC_LENGTH = new DoubleStyleableFigureKey("arcLength", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 360.0);
-    public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<>("arcType", ArcType.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), ArcType.ROUND);
+    public final static CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
+    public final static CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
+    public final static DoubleStyleableKey START_ANGLE = new DoubleStyleableKey("startAngle", 0.0);
+    public final static DoubleStyleableKey ARC_LENGTH = new DoubleStyleableKey("arcLength", 360.0);
+    public final static EnumStyleableKey<ArcType> ARC_TYPE = new EnumStyleableKey<>("arcType", ArcType.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), ArcType.ROUND);
     public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
     public final static CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 

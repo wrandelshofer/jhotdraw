@@ -18,8 +18,8 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
-import org.jhotdraw8.draw.key.UriStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.UriStyleableKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -47,15 +47,15 @@ public class ImageFigure extends AbstractLeafFigure
      * {@link org.jhotdraw8.draw.io.SvgExportOutputFormat} can pick it up.
      */
     @Nonnull
-    public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
+    public final static UriStyleableKey IMAGE_URI = new UriStyleableKey("src", null);
     @Nonnull
-    public final static CssSizeStyleableFigureKey X = RectangleFigure.X;
+    public final static CssSizeStyleableKey X = RectangleFigure.X;
     @Nonnull
-    public final static CssSizeStyleableFigureKey Y = RectangleFigure.Y;
+    public final static CssSizeStyleableKey Y = RectangleFigure.Y;
     @Nonnull
-    public final static CssSizeStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
+    public final static CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     @Nonnull
-    public final static CssSizeStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
+    public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
     @Nonnull
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     @Nullable

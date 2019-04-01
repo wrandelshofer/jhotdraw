@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
 import org.jhotdraw8.draw.handle.PolygonOutlineHandle;
-import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
+import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -48,7 +48,7 @@ public class PolygonFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Polygon";
 
-    public final static Point2DListStyleableFigureKey POINTS = PolylineFigure.POINTS;
+    public final static Point2DListStyleableKey POINTS = PolylineFigure.POINTS;
 
     public PolygonFigure() {
         this(0, 0, 1, 1);

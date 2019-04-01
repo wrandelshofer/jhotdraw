@@ -28,7 +28,7 @@ import java.util.function.Function;
  * @version $Id$
  */
 public class CssPoint2DStyleableMapAccessor
-        extends AbstractStyleableFigureMapAccessor<CssPoint2D>
+        extends AbstractStyleableMapAccessor<CssPoint2D>
         implements NonnullMapAccessor<CssPoint2D> {
 
     private final static long serialVersionUID = 1L;

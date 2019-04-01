@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.AbstractStyleableFigureKey;
+import org.jhotdraw8.draw.key.AbstractStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
@@ -20,7 +20,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.function.Function;
 
-public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableFigureKey<MLCompartmentalizedData>
+public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<MLCompartmentalizedData>
         implements WriteableStyleableMapAccessor<MLCompartmentalizedData>, NonnullMapAccessor<MLCompartmentalizedData> {
 
     final static long serialVersionUID = 1L;
@@ -71,7 +71,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableFigu
      * @param helpText     the help text
      */
     public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, DirtyMask mask, MLCompartmentalizedData defaultValue, String helpText) {
-        super(namespace, name, MLCompartmentalizedData.class, false, mask, defaultValue);
+        super(namespace, name, MLCompartmentalizedData.class, false, defaultValue);
         converter = new CssUmlCompartmentalizedDataConverter(true);
         Function<Styleable, StyleableProperty<MLCompartmentalizedData>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

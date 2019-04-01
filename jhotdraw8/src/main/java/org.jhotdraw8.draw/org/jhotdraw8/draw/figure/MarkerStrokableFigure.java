@@ -15,7 +15,13 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.draw.key.*;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.ListStyleableKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
+import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -42,7 +48,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableFigureKey MARKER_STROKE_DASH_OFFSET = new CssSizeStyleableFigureKey("marker-stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    CssSizeStyleableKey MARKER_STROKE_DASH_OFFSET = new CssSizeStyleableKey("marker-stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -51,7 +57,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineCap> MARKER_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("marker-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.BUTT);
+    EnumStyleableKey<StrokeLineCap> MARKER_STROKE_LINE_CAP = new EnumStyleableKey<>("marker-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -61,7 +67,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableFigureKey<StrokeLineJoin> MARKER_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("marker-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
+    EnumStyleableKey<StrokeLineJoin> MARKER_STROKE_LINE_JOIN = new EnumStyleableKey<>("marker-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style.
      * <p>
@@ -72,7 +78,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableFigureKey MARKER_STROKE_MITER_LIMIT = new CssSizeStyleableFigureKey("marker-stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(4.0));
+    CssSizeStyleableKey MARKER_STROKE_MITER_LIMIT = new CssSizeStyleableKey("marker-stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
@@ -83,13 +89,13 @@ public interface MarkerStrokableFigure extends Figure {
      * Stroke Properties</a>
      */
     @Nullable
-    NullablePaintableStyleableFigureKey MARKER_STROKE = new NullablePaintableStyleableFigureKey("marker-stroke", null);
+    NullablePaintableStyleableKey MARKER_STROKE = new NullablePaintableStyleableKey("marker-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    EnumStyleableFigureKey<StrokeType> MARKER_STROKE_TYPE = new EnumStyleableFigureKey<>("marker-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
+    EnumStyleableKey<StrokeType> MARKER_STROKE_TYPE = new EnumStyleableKey<>("marker-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -100,7 +106,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableFigureKey MARKER_STROKE_WIDTH = new CssSizeStyleableFigureKey("marker-stroke-width", DirtyMask.of(DirtyBits.NODE), CssSize.ONE);
+    CssSizeStyleableKey MARKER_STROKE_WIDTH = new CssSizeStyleableKey("marker-stroke-width", DirtyMask.of(DirtyBits.NODE), CssSize.ONE);
     /**
      * Defines the opacity of the outline of the figure.
      * <p>
@@ -111,8 +117,8 @@ public interface MarkerStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      * /
-     * public static NullableCssSizeStyleableFigureKey STROKE_OPACITY = new
-     * NullableCssSizeStyleableFigureKey("stroke-opacity", DirtyMask.of(DirtyBits.NODE),
+     * public static NullableCssSizeStyleableKey STROKE_OPACITY = new
+     * NullableCssSizeStyleableKey("stroke-opacity", DirtyMask.of(DirtyBits.NODE),
      * 1.0);
      */
     /**
@@ -123,7 +129,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    ListStyleableFigureKey<CssSize> MARKER_STROKE_DASH_ARRAY = new ListStyleableFigureKey<>("marker-stroke-dasharray", DirtyMask.of(DirtyBits.NODE),
+    ListStyleableKey<CssSize> MARKER_STROKE_DASH_ARRAY = new ListStyleableKey<>("marker-stroke-dasharray", DirtyMask.of(DirtyBits.NODE),
             CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**

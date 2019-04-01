@@ -16,13 +16,13 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.BooleanStyleableKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
-import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -38,15 +38,15 @@ public interface AbstractItemFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableFigureKey ABSTRACT_ITEM_FONT_FAMILY = new StringOrIdentStyleableFigureKey("abstractItemFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableFigureKey ABSTRACT_ITEM_FONT_SIZE = new CssSizeStyleableFigureKey("abstractItemFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableFigureKey<FontPosture> ABSTRACT_ITEM_FONT_STYLE = new EnumStyleableFigureKey<>("abstractItemFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableFigureKey<FontWeight> ABSTRACT_ITEM_FONT_WEIGHT = new EnumStyleableFigureKey<>("abstractItemFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey ABSTRACT_ITEM_FONT_FAMILY = new StringOrIdentStyleableKey("abstractItemFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
+    CssSizeStyleableKey ABSTRACT_ITEM_FONT_SIZE = new CssSizeStyleableKey("abstractItemFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
+    EnumStyleableKey<FontPosture> ABSTRACT_ITEM_FONT_STYLE = new EnumStyleableKey<>("abstractItemFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> ABSTRACT_ITEM_FONT_WEIGHT = new EnumStyleableKey<>("abstractItemFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
     FontStyleableMapAccessor ABSTRACT_ITEM_FONT = new FontStyleableMapAccessor("abstractItemFont", ABSTRACT_ITEM_FONT_FAMILY, ABSTRACT_ITEM_FONT_WEIGHT, ABSTRACT_ITEM_FONT_STYLE, ABSTRACT_ITEM_FONT_SIZE);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableFigureKey ABSTRACT_ITEM_UNDERLINE = new BooleanStyleableFigureKey("abstractItemUnderline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey ABSTRACT_ITEM_UNDERLINE = new BooleanStyleableKey("abstractItemUnderline", DirtyMask.of(DirtyBits.NODE), false);
 
     /**
      * Updates a text node with fontable properties.

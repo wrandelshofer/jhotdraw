@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBox> {
+public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
 
     private final static long serialVersionUID = 1L;
 

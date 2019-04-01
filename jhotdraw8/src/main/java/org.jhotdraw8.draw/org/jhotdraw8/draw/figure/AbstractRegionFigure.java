@@ -11,12 +11,12 @@ import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
+import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableSvgPathStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.Shapes;
@@ -37,17 +37,17 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Nonnull
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     @Nonnull
-    public final static CssSizeStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
+    public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
     @Nonnull
-    public final static NullableSvgPathStyleableFigureKey SHAPE = new NullableSvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "M 0,0 h 1 v -1 h -1 Z");
+    public final static NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "M 0,0 h 1 v -1 h -1 Z");
     @Nonnull
-    public final static CssSizeStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
+    public final static CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     @Nonnull
-    public final static CssSizeStyleableFigureKey X = RectangleFigure.X;
+    public final static CssSizeStyleableKey X = RectangleFigure.X;
     @Nonnull
-    public final static CssSizeStyleableFigureKey Y = RectangleFigure.Y;
+    public final static CssSizeStyleableKey Y = RectangleFigure.Y;
 
-    public final static BooleanStyleableFigureKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableFigureKey("ShapePreserveRatio", DirtyMask.of(DirtyBits.NODE), false);
+    public final static BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", DirtyMask.of(DirtyBits.NODE), false);
 
     private transient Path2D.Float pathElements;
 

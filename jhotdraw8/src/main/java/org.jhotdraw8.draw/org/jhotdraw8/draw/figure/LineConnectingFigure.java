@@ -9,10 +9,10 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.key.NullableObjectKey;
 
 /**
  * LineConnectingFigure.
@@ -30,22 +30,22 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * The end connector.
      */
     @Nonnull
-    NullableObjectFigureKey<Connector> END_CONNECTOR = new NullableObjectFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
+    NullableObjectKey<Connector> END_CONNECTOR = new NullableObjectKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The end target.
      */
     @Nonnull
-    NullableObjectFigureKey<Figure> END_TARGET = new NullableObjectFigureKey<>("endTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
+    NullableObjectKey<Figure> END_TARGET = new NullableObjectKey<>("endTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The end position of the line.
      */
     @Nonnull
-    CssSizeStyleableFigureKey END_X = LineFigure.END_X;
+    CssSizeStyleableKey END_X = LineFigure.END_X;
     /**
      * The end position of the line.
      */
     @Nonnull
-    CssSizeStyleableFigureKey END_Y = LineFigure.END_Y;
+    CssSizeStyleableKey END_Y = LineFigure.END_Y;
     /**
      * The start position of the line.
      */
@@ -55,20 +55,20 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * The start connector.
      */
     @Nonnull
-    NullableObjectFigureKey<Connector> START_CONNECTOR = new NullableObjectFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
+    NullableObjectKey<Connector> START_CONNECTOR = new NullableObjectKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The start target.
      */
     @Nonnull
-    NullableObjectFigureKey<Figure> START_TARGET = new NullableObjectFigureKey<>("startTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
+    NullableObjectKey<Figure> START_TARGET = new NullableObjectKey<>("startTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The start position of the line.
      */
-    CssSizeStyleableFigureKey START_X = LineFigure.START_X;
+    CssSizeStyleableKey START_X = LineFigure.START_X;
     /**
      * The start position of the line.
      */
-    CssSizeStyleableFigureKey START_Y = LineFigure.START_Y;
+    CssSizeStyleableKey START_Y = LineFigure.START_Y;
 
     default boolean isStartConnected() {
         return get(START_CONNECTOR) != null && get(START_TARGET) != null;

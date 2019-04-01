@@ -4,8 +4,7 @@
 
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
 
 /**
@@ -20,11 +19,11 @@ public interface AnchorableFigure extends Figure {
     /**
      * Relative position of the x-anchor. 0.0 = left, 0.5 = center, 1.0 = right.
      */
-    public final static DoubleStyleableFigureKey ANCHOR_X = new DoubleStyleableFigureKey("anchorX", DirtyMask.of(), 0.0);
+    public final static DoubleStyleableKey ANCHOR_X = new DoubleStyleableKey("anchorX", 0.0);
     /**
      * Relative position of the y-anchor. 0.0 = top, 0.5 = center, 1.0 = bottom.
      */
-    public final static DoubleStyleableFigureKey ANCHOR_Y = new DoubleStyleableFigureKey("anchorY", DirtyMask.of(), 0.0);
+    public final static DoubleStyleableKey ANCHOR_Y = new DoubleStyleableKey("anchorY", 0.0);
 
     /**
      * Combined anchor value.

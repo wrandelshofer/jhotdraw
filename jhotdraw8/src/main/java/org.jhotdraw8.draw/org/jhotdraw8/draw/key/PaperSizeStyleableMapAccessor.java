@@ -27,7 +27,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssPoint2D> {
+public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssPoint2D> {
 
     private final static long serialVersionUID = 1L;
     private Converter<CssPoint2D> converter;

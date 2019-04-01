@@ -27,7 +27,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssRectangle2D>
+public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<CssRectangle2D>
         implements NonnullMapAccessor<CssRectangle2D> {
 
     private final static long serialVersionUID = 1L;

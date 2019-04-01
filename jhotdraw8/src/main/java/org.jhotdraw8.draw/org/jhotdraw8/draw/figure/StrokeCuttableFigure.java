@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
@@ -20,11 +20,11 @@ public interface StrokeCuttableFigure extends Figure {
     /**
      * Cuts off the specified number of pixels from the start of the stroked path.
      */
-    CssSizeStyleableFigureKey STROKE_CUT_START = new CssSizeStyleableFigureKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    CssSizeStyleableKey STROKE_CUT_START = new CssSizeStyleableKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Cuts off the specified number of pixels from the end of the stroked path.
      */
-    CssSizeStyleableFigureKey STROKE_CUT_END = new CssSizeStyleableFigureKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    CssSizeStyleableKey STROKE_CUT_END = new CssSizeStyleableKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Cuts off the specified number of pixels from the start and the end of the stroked path.
      */

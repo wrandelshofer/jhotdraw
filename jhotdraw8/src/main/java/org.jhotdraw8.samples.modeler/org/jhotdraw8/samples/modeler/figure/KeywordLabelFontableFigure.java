@@ -16,12 +16,12 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
-import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -37,10 +37,10 @@ public interface KeywordLabelFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableFigureKey KEYWORD_LABEL_FONT_FAMILY = new StringOrIdentStyleableFigureKey("keywordLabelFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableFigureKey KEYWORD_LABEL_FONT_SIZE = new CssSizeStyleableFigureKey("keywordLabelFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableFigureKey<FontPosture> KEYWORD_LABEL_FONT_STYLE = new EnumStyleableFigureKey<>("keywordLabelFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableFigureKey<FontWeight> KEYWORD_LABEL_FONT_WEIGHT = new EnumStyleableFigureKey<>("keywordLabelFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey KEYWORD_LABEL_FONT_FAMILY = new StringOrIdentStyleableKey("keywordLabelFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
+    CssSizeStyleableKey KEYWORD_LABEL_FONT_SIZE = new CssSizeStyleableKey("keywordLabelFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
+    EnumStyleableKey<FontPosture> KEYWORD_LABEL_FONT_STYLE = new EnumStyleableKey<>("keywordLabelFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> KEYWORD_LABEL_FONT_WEIGHT = new EnumStyleableKey<>("keywordLabelFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
     FontStyleableMapAccessor KEYWORD_LABEL_FONT = new FontStyleableMapAccessor("keywordLabelFont", KEYWORD_LABEL_FONT_FAMILY, KEYWORD_LABEL_FONT_WEIGHT, KEYWORD_LABEL_FONT_STYLE, KEYWORD_LABEL_FONT_SIZE);
 
     /**

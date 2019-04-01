@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.StringStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.time.Instant;
@@ -34,7 +34,7 @@ public class PageLabelFigure extends AbstractLabelFigure
     /**
      * The text. Default value: {@code ""}.
      */
-    public final static StringStyleableFigureKey TEXT_WITH_PLACEHOLDERS = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "",
+    public final static StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "",
             "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER + ", " + DATE_PLACEHOLDER);
 
     public PageLabelFigure() {

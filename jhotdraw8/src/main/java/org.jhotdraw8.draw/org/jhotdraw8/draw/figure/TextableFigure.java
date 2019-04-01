@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.StringStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -24,7 +24,7 @@ public interface TextableFigure extends Figure {
     /**
      * The text. Default value: {@code ""}.
      */
-    StringStyleableFigureKey TEXT = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "");
+    StringStyleableKey TEXT = new StringStyleableKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "");
 
     /**
      * Updates a text node with textable properties.

@@ -26,7 +26,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Scale2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Point2D> {
+public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point2D> {
 
     private final static long serialVersionUID = 1L;
 

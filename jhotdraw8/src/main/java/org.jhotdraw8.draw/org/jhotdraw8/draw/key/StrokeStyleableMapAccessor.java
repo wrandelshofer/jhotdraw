@@ -33,7 +33,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StrokeStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssStroke> {
+public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStroke> {
 
     private final static long serialVersionUID = 1L;
 

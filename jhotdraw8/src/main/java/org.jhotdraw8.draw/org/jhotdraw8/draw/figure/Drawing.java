@@ -9,11 +9,11 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.StylesheetsManager;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableCssColorStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
+import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.net.URI;
@@ -52,7 +52,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<URI> DOCUMENT_HOME = new NullableObjectFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
+    Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
             Paths.get(System.getProperty("user.home")).toUri());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
@@ -67,7 +67,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<List<URI>> AUTHOR_STYLESHEETS = new NullableObjectFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<List<URI>> AUTHOR_STYLESHEETS = new NullableObjectKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -79,14 +79,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<List<URI>> USER_AGENT_STYLESHEETS = new NullableObjectFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<List<URI>> USER_AGENT_STYLESHEETS = new NullableObjectKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    Key<List<String>> INLINE_STYLESHEETS = new NullableObjectFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<List<String>> INLINE_STYLESHEETS = new NullableObjectKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Defines the canvas width.
      * <p>
@@ -98,7 +98,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    CssSizeStyleableFigureKey WIDTH = new CssSizeStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE), new CssSize(640.0));
+    CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", DirtyMask.of(DirtyBits.NODE), new CssSize(640.0));
     /**
      * Defines the canvas height.
      * <p>
@@ -107,7 +107,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    CssSizeStyleableFigureKey HEIGHT = new CssSizeStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE), new CssSize(480.0));
+    CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", DirtyMask.of(DirtyBits.NODE), new CssSize(480.0));
     /**
      * Defines the canvas color.
      * <p>
@@ -119,7 +119,7 @@ public interface Drawing extends Figure {
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    NullableCssColorStyleableFigureKey BACKGROUND = new NullableCssColorStyleableFigureKey("background", new CssColor("white", Color.WHITE));
+    NullableCssColorStyleableKey BACKGROUND = new NullableCssColorStyleableKey("background", new CssColor("white", Color.WHITE));
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.

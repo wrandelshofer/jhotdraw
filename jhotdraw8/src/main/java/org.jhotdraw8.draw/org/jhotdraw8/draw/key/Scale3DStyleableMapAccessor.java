@@ -27,7 +27,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Point3D>
+public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point3D>
         implements NonnullMapAccessor<Point3D> {
 
     private final static long serialVersionUID = 1L;

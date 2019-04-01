@@ -8,9 +8,9 @@ import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssPercentageConverter;
-import org.jhotdraw8.draw.key.BlendModeStyleableFigureKey;
-import org.jhotdraw8.draw.key.EffectStyleableFigureKey;
-import org.jhotdraw8.draw.key.NullableDoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.BlendModeStyleableKey;
+import org.jhotdraw8.draw.key.EffectStyleableKey;
+import org.jhotdraw8.draw.key.NullableDoubleStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -27,7 +27,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    public static BlendModeStyleableFigureKey BLEND_MODE = new BlendModeStyleableFigureKey("blendMode", BlendMode.SRC_OVER);
+    public static BlendModeStyleableKey BLEND_MODE = new BlendModeStyleableKey("blendMode", BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
@@ -35,7 +35,7 @@ public interface CompositableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nullable
-    public static EffectStyleableFigureKey EFFECT = new EffectStyleableFigureKey("effect", null);
+    public static EffectStyleableKey EFFECT = new EffectStyleableKey("effect", null);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
      * completely translucent. A figure with {@code 1} opacity is completely
@@ -46,7 +46,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code 1}.
      */
-    public static NullableDoubleStyleableFigureKey OPACITY = new NullableDoubleStyleableFigureKey("opacity", 1.0, new CssPercentageConverter(false));
+    public static NullableDoubleStyleableKey OPACITY = new NullableDoubleStyleableKey("opacity", 1.0, new CssPercentageConverter(false));
 
     /**
      * Updates a figure node with all effect properties defined in this

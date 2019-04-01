@@ -13,11 +13,11 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -32,19 +32,19 @@ public interface TextLayoutableFigure extends Figure {
     /**
      * The line spacing. Default value: {@code 0.0}
      */
-    CssSizeStyleableFigureKey LINE_SPACING = new CssSizeStyleableFigureKey("lineSpacing", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    CssSizeStyleableKey LINE_SPACING = new CssSizeStyleableKey("lineSpacing", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     /**
      * The text alignment. Default value: {@code left}
      */
-    EnumStyleableFigureKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableFigureKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), TextAlignment.LEFT);
+    EnumStyleableKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), TextAlignment.LEFT);
     /**
      * The vertical position of the text. Default value: {@code baseline}
      */
-    EnumStyleableFigureKey<VPos> TEXT_VPOS = new EnumStyleableFigureKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), VPos.BASELINE);
+    EnumStyleableKey<VPos> TEXT_VPOS = new EnumStyleableKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), VPos.BASELINE);
     /**
      * Text wrapping width. Default value: {@code 0.0} (no wrapping).
      */
-    DoubleStyleableFigureKey WRAPPING_WIDTH = new DoubleStyleableFigureKey("wrappingWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    DoubleStyleableKey WRAPPING_WIDTH = new DoubleStyleableKey("wrappingWidth", 0.0);
 
     /**
      * Updates a text node with fontable properties.

@@ -26,7 +26,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BoundingBoxStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<BoundingBox> {
+public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccessor<BoundingBox> {
 
     private final static long serialVersionUID = 1L;
 

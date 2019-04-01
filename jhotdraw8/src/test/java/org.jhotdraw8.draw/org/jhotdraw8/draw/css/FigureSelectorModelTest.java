@@ -11,11 +11,13 @@ import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
-import org.jhotdraw8.draw.key.NullablePaintableStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.text.Converter;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * FigureSelectorModelTest.
@@ -37,7 +39,7 @@ public class FigureSelectorModelTest {
         LabelFigure figure = new LabelFigure();
         FigureSelectorModel instance = new FigureSelectorModel();
 
-        final NullablePaintableStyleableFigureKey key = FillableFigure.FILL;
+        final NullablePaintableStyleableKey key = FillableFigure.FILL;
         final String attrName = key.getCssName();
         final String namespace = key.getCssNamespace();
         final Converter<Paintable> converter = key.getConverter();

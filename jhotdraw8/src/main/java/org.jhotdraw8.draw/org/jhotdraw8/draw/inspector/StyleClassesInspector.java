@@ -23,7 +23,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.key.ObservableWordListFigureKey;
+import org.jhotdraw8.draw.key.ObservableWordListKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.event.Listener;
@@ -32,7 +32,12 @@ import org.jhotdraw8.gui.PlatformUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -73,7 +78,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     @Nonnull
     @SuppressWarnings("unchecked")
-    private ObservableWordListFigureKey tagsKey = StyleableFigure.STYLE_CLASS;
+    private ObservableWordListKey tagsKey = StyleableFigure.STYLE_CLASS;
     @FXML
     private TextField textField;
     private boolean willUpdateList;

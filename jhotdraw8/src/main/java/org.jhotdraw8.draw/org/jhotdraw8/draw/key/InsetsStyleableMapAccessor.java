@@ -26,7 +26,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Insets> {
+public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Insets> {
 
     private final static long serialVersionUID = 1L;
 

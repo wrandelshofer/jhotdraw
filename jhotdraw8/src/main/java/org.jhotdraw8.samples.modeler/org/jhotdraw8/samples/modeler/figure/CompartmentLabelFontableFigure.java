@@ -16,12 +16,12 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
-import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -37,10 +37,10 @@ public interface CompartmentLabelFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableFigureKey COMPARTMENT_LABEL_FONT_FAMILY = new StringOrIdentStyleableFigureKey("compartmentLabelFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableFigureKey COMPARTMENT_LABEL_FONT_SIZE = new CssSizeStyleableFigureKey("compartmentLabelFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableFigureKey<FontPosture> COMPARTMENT_LABEL_FONT_STYLE = new EnumStyleableFigureKey<>("compartmentLabelFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableFigureKey<FontWeight> COMPARTMENT_LABEL_FONT_WEIGHT = new EnumStyleableFigureKey<>("compartmentLabelFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey COMPARTMENT_LABEL_FONT_FAMILY = new StringOrIdentStyleableKey("compartmentLabelFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
+    CssSizeStyleableKey COMPARTMENT_LABEL_FONT_SIZE = new CssSizeStyleableKey("compartmentLabelFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
+    EnumStyleableKey<FontPosture> COMPARTMENT_LABEL_FONT_STYLE = new EnumStyleableKey<>("compartmentLabelFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> COMPARTMENT_LABEL_FONT_WEIGHT = new EnumStyleableKey<>("compartmentLabelFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
     FontStyleableMapAccessor COMPARTMENT_LABEL_FONT = new FontStyleableMapAccessor("compartmentLabelFont", COMPARTMENT_LABEL_FONT_FAMILY, COMPARTMENT_LABEL_FONT_WEIGHT, COMPARTMENT_LABEL_FONT_STYLE, COMPARTMENT_LABEL_FONT_SIZE);
 
     /**

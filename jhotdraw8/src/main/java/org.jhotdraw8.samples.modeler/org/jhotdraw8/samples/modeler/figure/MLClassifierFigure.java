@@ -39,11 +39,11 @@ import org.jhotdraw8.draw.figure.TextEditableFigure;
 import org.jhotdraw8.draw.figure.TextFillableFigure;
 import org.jhotdraw8.draw.figure.TextLayoutableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.BooleanStyleableKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.StringStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -129,15 +129,15 @@ public class MLClassifierFigure extends AbstractLeafFigure
     public final static String TYPE_SELECTOR = "MLClassifier";
 
     public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "compartments", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new MLCompartmentalizedData());
-    public final static StringStyleableFigureKey KEYWORD = MLConstants.KEYWORD;
-    public final static StringStyleableFigureKey PACKAGE = MLConstants.PACKAGE;
-    public final static StringStyleableFigureKey NAME = new StringStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "name", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, "unnamed", null);
-    public final static BooleanStyleableFigureKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableFigureKey("compartmentLabelsVisible", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false);
-    public final static BooleanStyleableFigureKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
+    public final static StringStyleableKey KEYWORD = MLConstants.KEYWORD;
+    public final static StringStyleableKey PACKAGE = MLConstants.PACKAGE;
+    public final static StringStyleableKey NAME = new StringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "name", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, "unnamed", null);
+    public final static BooleanStyleableKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableKey("compartmentLabelsVisible", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false);
+    public final static BooleanStyleableKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
     /**
      * The line spacing. Default value: {@code 0.0}
      */
-    public final static CssSizeStyleableFigureKey LINE_SPACING = TextLayoutableFigure.LINE_SPACING;
+    public final static CssSizeStyleableKey LINE_SPACING = TextLayoutableFigure.LINE_SPACING;
     /**
      * This key is used to tag editable nodes.
      */

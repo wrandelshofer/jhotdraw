@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
+import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 
@@ -40,13 +40,13 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     @Nullable
     private ArrayList<Point2D> points;
 
-    private final Point2DListStyleableFigureKey key;
+    private final Point2DListStyleableKey key;
 
-    public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableFigureKey key, Supplier<Figure> factory) {
+    public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableKey key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);
     }
 
-    public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableFigureKey key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
+    public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableKey key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc, figureFactory, layerFactory);
         this.key = key;
         node.setCursor(Cursor.CROSSHAIR);

@@ -22,7 +22,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableObjectFigureKey;
+import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.UriResolver;
@@ -96,17 +96,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Comments which appear inside an XML element, that can not be associated
      * to as a head comment.
      */
-    public final static NullableObjectFigureKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectFigureKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     /**
      * Comments which can not be associated to a figure, or which appear in the
      * epilog of an XML file, are associated to the drawing.
      */
-    public final static NullableObjectFigureKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectFigureKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     /**
      * Comments which appear before an XML element of a figure are associated to
      * the figure as a comment.
      */
-    public final static NullableObjectFigureKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectFigureKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     @Nullable
     protected List<String> comments;

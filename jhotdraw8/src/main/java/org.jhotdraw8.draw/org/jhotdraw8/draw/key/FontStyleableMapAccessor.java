@@ -30,7 +30,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssFont>
+public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFont>
         implements NonnullMapAccessor<CssFont> {
 
     private final static long serialVersionUID = 1L;

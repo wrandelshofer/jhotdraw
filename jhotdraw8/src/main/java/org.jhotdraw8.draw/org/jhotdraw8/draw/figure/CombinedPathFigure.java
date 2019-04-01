@@ -16,7 +16,7 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.NullableEnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;
@@ -47,7 +47,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         ConnectableFigure, PathIterableFigure {
 
     @Nonnull
-    public final static NullableEnumStyleableFigureKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
+    public final static NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */

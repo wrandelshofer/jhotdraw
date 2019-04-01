@@ -16,13 +16,13 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw8.draw.key.CssSizeStyleableFigureKey;
+import org.jhotdraw8.draw.key.BooleanStyleableKey;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
-import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
+import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -38,15 +38,15 @@ public interface StaticItemFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableFigureKey STATIC_ITEM_FONT_FAMILY = new StringOrIdentStyleableFigureKey("staticItemFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableFigureKey STATIC_ITEM_FONT_SIZE = new CssSizeStyleableFigureKey("staticItemFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableFigureKey<FontPosture> STATIC_ITEM_FONT_STYLE = new EnumStyleableFigureKey<>("staticItemFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableFigureKey<FontWeight> STATIC_ITEM_FONT_WEIGHT = new EnumStyleableFigureKey<>("staticItemFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey STATIC_ITEM_FONT_FAMILY = new StringOrIdentStyleableKey("staticItemFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
+    CssSizeStyleableKey STATIC_ITEM_FONT_SIZE = new CssSizeStyleableKey("staticItemFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
+    EnumStyleableKey<FontPosture> STATIC_ITEM_FONT_STYLE = new EnumStyleableKey<>("staticItemFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> STATIC_ITEM_FONT_WEIGHT = new EnumStyleableKey<>("staticItemFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
     FontStyleableMapAccessor STATIC_ITEM_FONT = new FontStyleableMapAccessor("staticItemFont", STATIC_ITEM_FONT_FAMILY, STATIC_ITEM_FONT_WEIGHT, STATIC_ITEM_FONT_STYLE, STATIC_ITEM_FONT_SIZE);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableFigureKey STATIC_ITEM_UNDERLINE = new BooleanStyleableFigureKey("staticItemUnderline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey STATIC_ITEM_UNDERLINE = new BooleanStyleableKey("staticItemUnderline", DirtyMask.of(DirtyBits.NODE), false);
 
     /**
      * Updates a text node with fontable properties.
