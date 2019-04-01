@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+        xml:id="figure.GraphFacadeAPIs">
+  <title>Facade Pattern Class Diagram</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/cd.FacadePattern.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>This diagram shows the facade pattern.</phrase>
+    </textobject>
+  </mediaobject>
+</figure>

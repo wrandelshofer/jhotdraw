@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="cd" id="sysmldiagram1" modelElementName="Facade Pattern"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <TextArea bounds="30 205 500 305" id="textarea1" padding="4 6" stroke="lightgrey" stroke-width="2">subsystem
+      classes
+    </TextArea>
+    <MLClassifier bounds="220 190 120 30" id="mlclassifier1" keyword="class" name="Facade"/>
+    <MLClassifier bounds="400 385 90 30" id="mlclassifier2" keyword="class" name="null"/>
+    <MLClassifier bounds="240 445 90 30" id="mlclassifier3" keyword="class" name="null"/>
+    <MLClassifier bounds="130 270 90 30" id="mlclassifier4" keyword="class" name="null"/>
+    <MLClassifier bounds="80 400 90 30" id="mlclassifier5" name="null"/>
+    <MLClassifier bounds="390 280 90 30" id="mlclassifier6" keyword="class" name="null"/>
+    <MLEdge end="200.625 270" endConnector="path relative(55.55555555555556%,50%)" endTarget="mlclassifier4"
+            id="mledge1" start="269.375 220" startConnector="path relative(58.333333333333336%,50%)"
+            startTarget="mlclassifier1"/>
+    <MLEdge end="406.6666666666667 280" endConnector="path relative(44.44444444444444%,50%)" endTarget="mlclassifier6"
+            id="mledge2" start="313.3333333333333 220" startConnector="path relative(58.333333333333336%,50%)"
+            startTarget="mlclassifier1"/>
+    <MLEdge end="280 445" endConnector="path relative(44.44444444444444%,50%)" endTarget="mlclassifier3" id="mledge3"
+            start="280 220" startConnector="path relative(50%,50%)" startTarget="mlclassifier1"/>
+    <MLEdge end="126.92307692307692 400" endConnector="path relative(44.44444444444444%,50%)" endTarget="mlclassifier5"
+            id="mledge4" start="173.07692307692307 300" startConnector="path relative(55.55555555555556%,50%)"
+            startTarget="mlclassifier4"/>
+    <MLEdge end="330 451.07142857142856" endConnector="path relative(66.66666666666666%,66.66666666666666%)"
+            endTarget="mlclassifier3" id="mledge5" start="407.6923076923077 415"
+            startConnector="path relative(44.44444444444444%,50%)" startTarget="mlclassifier2"/>
+    <MLEdge end="170 406.1111111111111" endConnector="path relative(77.77777777777779%,50%)" endTarget="mlclassifier5"
+            id="mledge6" start="389.99999999999994 308.33333333333337"
+            startConnector="path relative(33.33333333333333%,50%)" startTarget="mlclassifier6"/>
+    <MLEdge end="408.69565217391306 385" endConnector="path relative(44.44444444444444%,50%)" endTarget="mlclassifier2"
+            id="mledge7" start="220 294.5833333333333" startConnector="path relative(77.77777777777779%,50%)"
+            startTarget="mlclassifier4"/>
+    <TextArea bounds="40 50 500 150" fill="none" id="textarea2" padding="4 6" stroke="none" stroke-linecap="square"
+              stroke-miterlimit="10">client classes
+    </TextArea>
+    <MLClassifier bounds="380 105 80 30" id="mlclassifier7" keyword="class" name="null"/>
+    <MLClassifier bounds="250 65 70 30" id="mlclassifier8" keyword="class" name="null"/>
+    <MLClassifier bounds="100 115 80 30" id="mlclassifier9" keyword="class" name="null"/>
+    <MLEdge end="280 190" endConnector="path relative(50%,50%)" endTarget="mlclassifier1" id="mledge8" start="280 95"
+            startConnector="path relative(42.857142857142854%,33.33333333333333%)" startTarget="mlclassifier8"/>
+    <MLEdge end="306.25 190" endConnector="path relative(50%,50%)" endTarget="mlclassifier1" id="mledge9"
+            start="402.5 135" startConnector="path relative(50%,66.66666666666666%)" startTarget="mlclassifier7"/>
+    <MLEdge end="255.625 190" endConnector="path relative(50%,50%)" endTarget="mlclassifier1" id="mledge10"
+            start="180 143.46153846153845" startConnector="path relative(62.5%,33.33333333333333%)"
+            startTarget="mlclassifier9"/>
+  </Layer>
+</Drawing>

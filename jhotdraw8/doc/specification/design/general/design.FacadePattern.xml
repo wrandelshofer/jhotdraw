@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.FacadePattern" role="design">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="design.FacadePattern" role="design">
   <title>Facade Pattern</title>
   <para>A facade provides a unified interface to a set of interfaces in a subsystem.</para>
   <section role="design">
@@ -10,4 +12,7 @@
     <para>A facade adds a level of indirection that may increase the program complexity.</para>
     <para>A facade adds a level of indirection that may impose a performance hit.</para>
   </section>
+  <xi:include href="../../figures/figure.FacadePattern.xml"/>
+
+
 </section>

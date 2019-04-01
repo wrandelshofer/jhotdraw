@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg baseProfile="tiny" height="14.8cm" version="1.2" width="14.8cm" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clipPath1">
+      <rect fill="#000000" height="559.3700787401575" stroke-linecap="square" stroke-miterlimit="10"
+            width="559.3700787401575"/>
+    </clipPath>
+  </defs>
+  <g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
+    <rect fill="#ffffff" height="559.3700787401575" id="background" stroke-linecap="square" stroke-miterlimit="10"
+          width="559.3700787401575"/>
+    <g class="Layer" id="frame">
+      <g>
+        <path d="M1,1 123.052734375,1 123.052734375,12.40625 113.052734375,22.40625 1,22.40625 Z M1,1 558,1 558,558 1,558 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10" x="7" y="15.86328125">cd
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="24.00390625" y="15.86328125"/>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="27.00390625" y="15.86328125">Facade Pattern
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="24.00390625" y="15.86328125"/>
+      </g>
+    </g>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M30,205 530,205 530,510 30,510 Z" fill="#ffffff" stroke="#d3d3d3" stroke-width="2"/>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="36" y="221">subsystem classes</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M220,190 340,190 340,220 220,220 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="259.96386719" y="205.6015625">Facade</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M400,385 490,385 490,415 400,415 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="445" y="400.6015625"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M240,445 330,445 330,475 240,475 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="285" y="460.6015625"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M130,270 220,270 220,300 130,300 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="175" y="285.6015625"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M80,400 170,400 170,430 80,430 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="125" y="415.6015625"></tspan>
+        </text>
+        <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" font-style="normal"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="84" y="12.56835938"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M389.99999999999994,280 479.99999999999994,280 479.99999999999994,310 389.99999999999994,310 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="435" y="295.6015625"></tspan>
+        </text>
+      </g>
+      <g class="MLEdge" id="mledge1">
+        <polyline fill="none" points="269.375,220 200.625,270" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge2">
+        <polyline fill="none" points="313.3333333333333,220 406.6666666666667,280" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge3">
+        <polyline fill="none" points="280,220 280,445" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge4">
+        <polyline fill="none" points="173.07692307692307,300 126.92307692307692,400" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge5">
+        <polyline fill="none" points="407.6923076923077,415 330,451.07142857142856" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge6">
+        <polyline fill="none" points="389.99999999999994,308.33333333333337 170,406.1111111111111" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge7">
+        <polyline fill="none" points="220,294.5833333333333 408.69565217391306,385" stroke="#000000"/>
+      </g>
+      <g>
+        <path d="M40,50 540,50 540,200 40,200 Z" fill="none" stroke-linecap="square" stroke-miterlimit="10"/>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="46" y="66">client classes</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M380,105 460,105 460,135 380,135 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="420" y="120.6015625"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M250,65 320,65 320,95 250,95 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="285" y="80.6015625"></tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M100,115 180,115 180,145 100,145 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="140" y="130.6015625"></tspan>
+        </text>
+      </g>
+      <g class="MLEdge" id="mledge8">
+        <polyline fill="none" points="280,95 280,190" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge9">
+        <polyline fill="none" points="402.5,135 306.25,190" stroke="#000000"/>
+      </g>
+      <g class="MLEdge" id="mledge10">
+        <polyline fill="none" points="180,143.46153846153845 255.625,190" stroke="#000000"/>
+      </g>
+    </g>
+  </g>
+</svg>
