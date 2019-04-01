@@ -11,9 +11,16 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.css.*;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.ListCssTokenizer;
+import org.jhotdraw8.css.QualifiedName;
+import org.jhotdraw8.css.SelectorModel;
+import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -23,7 +30,15 @@ import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -475,4 +490,16 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         return false;
     }
 
+    @Override
+    public void reset(Figure elem) {
+        for (MapAccessor<?> acc : Figure.getDeclaredAndInheritedMapAccessors(elem.getClass())) {
+            if (acc instanceof Key<?>) {
+                Key<?> key = (Key<?>) acc;
+                elem.remove(StyleOrigin.USER_AGENT, key);
+                elem.remove(StyleOrigin.AUTHOR, key);
+                elem.remove(StyleOrigin.INLINE, key);
+            }
+        }
+
+    }
 }

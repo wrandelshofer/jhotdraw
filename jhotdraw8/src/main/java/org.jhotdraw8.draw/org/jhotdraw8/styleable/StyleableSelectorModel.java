@@ -71,6 +71,11 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
+    public void reset(Styleable elem) {
+        // do nothing
+    }
+
+    @Override
     public String getType(@Nonnull Styleable element) {
         return element.getTypeSelector();
     }

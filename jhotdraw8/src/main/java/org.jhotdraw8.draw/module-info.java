@@ -14,6 +14,7 @@ module org.jhotdraw8.draw {
     opens org.jhotdraw8.draw.inspector;
     opens org.jhotdraw8.draw;
     opens org.jhotdraw8.draw.action.images;
+    opens org.jhotdraw8.draw.gui to javafx.fxml;
 
     exports org.jhotdraw8.css;
     exports org.jhotdraw8.css.ast;

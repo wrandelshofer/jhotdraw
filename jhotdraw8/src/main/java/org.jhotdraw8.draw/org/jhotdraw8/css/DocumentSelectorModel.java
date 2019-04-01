@@ -75,6 +75,11 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
+    public void reset(Element elem) {
+        // do nothing
+    }
+
+    @Override
     public String getType(@Nonnull Element elem) {
         return elem.getNodeName();
     }

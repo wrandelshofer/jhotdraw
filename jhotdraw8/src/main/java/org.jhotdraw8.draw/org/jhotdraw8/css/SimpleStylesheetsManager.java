@@ -212,6 +212,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     public void applyStylesheetsTo(E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
 
+        // Clear stylesheet values
+        selectorModel.reset(elem);
 
         // The stylesheet is a user-agent stylesheet
         Collection<ParsedStylesheetEntry> uaStylesheets = getUserAgentStylesheets();

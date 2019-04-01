@@ -262,6 +262,11 @@ public interface SelectorModel<T> {
     boolean hasType(@Nonnull T element, @Nullable String namespace, @Nonnull String type);
 
     /**
+     * Resets all values with non-{@link StyleOrigin#USER} origin.
+     */
+    void reset(T elem);
+
+    /**
      * Sets an attribute value.
      *
      * @param element The element

@@ -179,7 +179,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
         applyShapeableProperties(ctx, p);
         applyStrokableFigureProperties(ctx, p);
         applyFillableFigureProperties(ctx, p);
-        MLCompartmentalizedData cpData = getStyled(COMPARTMENTS);
+        MLCompartmentalizedData cpData = getStyledNonnull(COMPARTMENTS);
         applyTransformableFigureProperties(ctx, node);
 
         List<Text> textNodes = new ArrayList<Text>();
@@ -190,10 +190,11 @@ public class MLClassifierFigure extends AbstractLeafFigure
         double lineSpacing = converter.convert(getStyledNonnull(LINE_SPACING), UnitConverter.DEFAULT);
         Insets padding = getStyledNonnull(PADDING).getConvertedValue(converter);
         Bounds bounds = getBoundsInLocal();
+        String name = get(NAME);
         updateTextNodes(ctx, textNodes,
                 p.getElements(),
                 get(KEYWORD),
-                getNonnull(NAME),
+                name == null ? "" : name,
                 cpData,
                 bounds,
                 lineSpacing, padding);
@@ -223,10 +224,6 @@ public class MLClassifierFigure extends AbstractLeafFigure
                                  MLCompartmentalizedData cpData,
                                  Bounds bounds,
                                  double lineSpacing, Insets padding) {
-        if (cpData == null) {
-            textNodes.clear();
-            return;
-        }
 
         // Ensure that we have enough text nodes.
         boolean keywordLabelVisible = getStyledNonnull(KEYWORD_LABEL_VISIBLE);
@@ -382,7 +379,8 @@ public class MLClassifierFigure extends AbstractLeafFigure
         node.setTextAlignment(TextAlignment.LEFT);
     }
 
-    private void ensureEnoughTextNodes(List<Text> list, @Nullable String keyword, MLCompartmentalizedData cpData,
+    private void ensureEnoughTextNodes(List<Text> list, @Nullable String keyword,
+                                       MLCompartmentalizedData cpData,
                                        boolean keywordLabelVisible,
                                        boolean compartmentLabelsVisible) {
         // We need a text node for the keyword if present and for the name
