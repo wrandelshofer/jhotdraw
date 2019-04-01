@@ -94,9 +94,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
         @Override
         @SuppressWarnings("unchecked")
-        public Object put(Key<?> key, Object value) {
-            Object oldValue = target.put(key, value);
-            handlePropertyChanged(figure, (Key<Object>) key, oldValue, oldValue);
+        public Object put(Key<?> key, Object newValue) {
+            Object oldValue = target.put(key, newValue);
+            handlePropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
             return oldValue;
         }
 
