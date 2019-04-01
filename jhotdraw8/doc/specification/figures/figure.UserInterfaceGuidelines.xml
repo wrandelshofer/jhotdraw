@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
         xml:id="figure.UserInterfaceGuidelines">
-  <title>User Interface Guidelines Requirements Diagram.</title>
+  <title>SysML Requirements Diagram: User Interface Guidelines</title>
   <mediaobject>
-  <imageobject>
-    <imagedata fileref="figures/req.UserInterfaceGuidelines.svg" format="SVG"/>
-  </imageobject>
-  <textobject>
-    <phrase>This diagram shows the top-level requirements for "User Interface Guidelines" requirement.</phrase>
-  </textobject>
-</mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/req.UserInterfaceGuidelines.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>This diagram shows the top-level requirements for "User Interface Guidelines" requirement.</phrase>
+    </textobject>
+  </mediaobject>
 </figure>

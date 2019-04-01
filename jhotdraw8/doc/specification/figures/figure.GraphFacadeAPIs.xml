@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
         xml:id="figure.GraphFacadeAPIs">
-  <title>Graph Facade APIs Class Diagram</title>
+  <title>UML Class Diagram: Graph Facade APIs</title>
   <mediaobject>
     <imageobject>
       <imagedata fileref="figures/cd.GraphFacadeAPIs.svg" format="SVG"/>

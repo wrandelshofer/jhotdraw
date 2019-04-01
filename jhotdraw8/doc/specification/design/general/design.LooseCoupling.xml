@@ -1,45 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.LooseCoupling" role="design">
   <title>Loose Coupling</title>
-  <para>Coupling is the degree to which one class knows about another class.</para>
-  <para>A set of loosely coupled classes is easier to maintain than a set of tightly coupled classes,
-    because changes typically affect less classes.
+
+  <para>
+    Coupling is the degree to which one class knows about another class.
   </para>
 
-  <para>We can achieve loose coupling by adhering to the following rules:</para>
+  <para>
+    We can achieve loose coupling by adhering to the following rules:
+  </para>
+
   <itemizedlist>
     <listitem>
-      <para>A class should hide its internal fields from other classes.</para>
-      <para>This can be done by declaring fields private, package protected or protected.</para>
-    </listitem>
-    <listitem>
-      <para>A class should hide its internal structure from other classes.</para>
-      <para>This can be done by hiding the internal structure with a facade.</para>
-    </listitem>
-    <listitem>
-      <para>A class should hide its internal types from other classes.</para>
-      <para>This can be done by declaring internal types private, package protected or protected.</para>
-    </listitem>
-    <listitem>
-      <para>A class should reference a type only if it does use methods or fields specified
-        by that type.
+      <para>
+        A class should hide its internal fields from other classes.
       </para>
-      <para>This can be done by only importing types that are referenced, and by declaring
-        type parameters instead of concrete types.
+      <para>
+        This can be done by declaring fields private, package protected or protected.
       </para>
     </listitem>
     <listitem>
-      <para>A class should reference concrete classes only if they are part of
-        its internal structure, and are hidden from other classes.
+      <para>
+        A class should hide its internal structure from other classes.
+      </para>
+      <para>
+        This can be done by hiding the internal structure with a facade.
       </para>
     </listitem>
     <listitem>
-      <para>A class should reference only types from its domain and from the Java API.</para>
+      <para>
+        A class should hide its internal types from other classes.
+      </para>
+      <para>
+        This can be done by declaring internal types private, package protected or protected.
+      </para>
     </listitem>
     <listitem>
-      <para>A class should not require that types from another domain must reference other types from its
-        domain.
+      <para>
+        A class should reference a type only if it does use methods or fields specified by that
+        type.
+      </para>
+      <para>
+        This can be done by only importing types that are referenced, and by declaring type
+        parameters instead of concrete types.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        A class should reference concrete classes only if they are part of its internal structure,
+        and are hidden from other classes.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        A class should reference only types from its domain and from the Java API.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        A class should not require that types from another domain must reference other types from
+        its domain.
       </para>
     </listitem>
   </itemizedlist>
+
+  <section>
+    <title>Trade-off</title>
+
+    <para>
+      A set of loosely coupled classes is easier to maintain than a set of tightly coupled classes,
+      because changes typically affect less classes.
+    </para>
+  </section>
 </section>

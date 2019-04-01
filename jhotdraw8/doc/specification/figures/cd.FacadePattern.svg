@@ -102,10 +102,10 @@
         <polyline fill="none" points="220,294.5833333333333 408.69565217391306,385" stroke="#000000"/>
       </g>
       <g>
-        <path d="M40,50 540,50 540,200 40,200 Z" fill="none" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M30,50 530,50 530,200 30,200 Z" fill="none" stroke-linecap="square" stroke-miterlimit="10"/>
         <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
               stroke-linecap="square" stroke-miterlimit="10">
-          <tspan x="46" y="66">client classes</tspan>
+          <tspan x="36" y="66">client classes</tspan>
         </text>
       </g>
       <g>

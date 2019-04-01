@@ -3,16 +3,34 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xml:id="design.FacadePattern" role="design">
   <title>Facade Pattern</title>
-  <para>A facade provides a unified interface to a set of interfaces in a subsystem.</para>
-  <section role="design">
+
+  <para>
+    A facade provides a unified interface to a set of interfaces in a subsystem.
+  </para>
+
+  <section>
     <title>Trade-off</title>
-    <para>A facade allows to conveniently pass a subsystem around as a single object.</para>
-    <para>A facade allows to hide the structure of the subsystem.</para>
-    <para>A facade allows to make the subsystem easier to use.</para>
-    <para>A facade adds a level of indirection that may increase the program complexity.</para>
-    <para>A facade adds a level of indirection that may impose a performance hit.</para>
+
+    <para>
+      A facade allows to conveniently pass a subsystem around as a single object.
+    </para>
+
+    <para>
+      A facade allows to hide the structure of the subsystem.
+    </para>
+
+    <para>
+      A facade allows to make the subsystem easier to use.
+    </para>
+
+    <para>
+      A facade adds a level of indirection that may increase the program complexity.
+    </para>
+
+    <para>
+      A facade adds a level of indirection that may impose a performance hit.
+    </para>
   </section>
+
   <xi:include href="../../figures/figure.FacadePattern.xml"/>
-
-
 </section>
