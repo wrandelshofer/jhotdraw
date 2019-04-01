@@ -71,10 +71,10 @@ class CssStrokeConverterTest {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(
                         new CssStroke(CssColor.BLACK),
-                        "1 black")),
+                        "1 black butt miter miter-limit(4) dash-offset(0) dash-array()")),
                 dynamicTest("2", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK),
-                        "2 black")),
+                        "2 black butt miter miter-limit(4) dash-offset(0) dash-array()")),
                 dynamicTest("3", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
@@ -82,7 +82,7 @@ class CssStrokeConverterTest {
                 dynamicTest("4", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
-                        "2 black miter-limit(3) dash-offset(4) dash-array(5 6)")),
+                        "2 black butt miter miter-limit(3) dash-offset(4) dash-array(5 6)")),
                 dynamicTest("5", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
