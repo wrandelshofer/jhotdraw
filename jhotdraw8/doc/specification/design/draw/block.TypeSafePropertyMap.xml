@@ -20,8 +20,8 @@
     of the property key <code>Key&lt;V&gt;</code>.
   </para>
 
-  <para>The type parameter <code>&lt;V&gt;</code> can be used to create the following type-safe map
-    accessors:
+  <para>The type parameter <code>&lt;V&gt;</code> can be used to create type-safe map
+    accessors, such as the following:
   </para>
   <itemizedlist>
     <listitem>
@@ -30,6 +30,10 @@
     </listitem>
     <listitem>
       <para><code>&lt;V&gt; V put(Key&lt;V&gt; key, V value)</code>.
+      </para>
+    </listitem>
+    <listitem>
+      <para><code>&lt;V&gt; void set(Key&lt;V&gt; key, V value)</code>.
       </para>
     </listitem>
   </itemizedlist>
