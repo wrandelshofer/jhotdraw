@@ -25,6 +25,29 @@
               stroke-linecap="square" stroke-miterlimit="10" x="31.990234375" y="15.86328125"/>
       </g>
     </g>
-    <g class="Layer" id="content"/>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M110,130 280,130 280,180 110,180 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="179.48950195" y="142.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="152.38769531" y="159.65625">High Cohesion</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M300,130 470,130 470,180 300,180 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="369.48950195" y="142.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="339.859375" y="159.65625">Loose Coupling</tspan>
+        </text>
+      </g>
+    </g>
   </g>
 </svg>

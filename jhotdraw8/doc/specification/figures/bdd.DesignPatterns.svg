@@ -25,6 +25,18 @@
               stroke-linecap="square" stroke-miterlimit="10" x="31.990234375" y="15.86328125"/>
       </g>
     </g>
-    <g class="Layer" id="content"/>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M180.00000000000003,200 350,200 350,250 180.00000000000003,250 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="249.48950195" y="212.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="244.96386719" y="229.65625">Facade</tspan>
+        </text>
+      </g>
+    </g>
   </g>
 </svg>

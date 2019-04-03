@@ -45,34 +45,7 @@
     </treeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Improves documentation.">
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.ApplicationFramework.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.ApplicationFramework.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.DesignPatterns.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.DesignPatterns.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.DesignPrinciples.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.DesignPrinciples.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.DrawingEditorFramework.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/bdd.DrawingEditorFramework.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.bdd.ApplicationFramework.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.bdd.DesignPatterns.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.bdd.DesignPrinciples.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.bdd.DrawingEditorFramework.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.req.DrawingEditorFramework.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/req.DrawingEditorFramework.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/req.DrawingEditorFramework.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/Book.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/Book.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/design/draw/block.TypeSafePropertyMap.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/design/draw/block.TypeSafePropertyMap.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/design/general/block.FacadePattern.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/design/general/block.FacadePattern.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/design/graph/block.GraphFacadeAPIs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/design/graph/block.GraphFacadeAPIs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/figures/figure.ApplicationFramework.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/figures/figure.req.ApplicationFramework.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/figures/figure.FacadePattern.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/figures/figure.cd.FacadePattern.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/figures/figure.GraphFacadeAPIs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/figures/figure.cd.GraphFacadeAPIs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/figures/figure.TypeSafeMapAccessor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/figures/figure.cd.TypeSafeMapAccessor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/figures/figure.TypeSafePropertyMap.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/figures/figure.cd.TypeSafePropertyMap.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/figures/figure.UserInterfaceGuidelines.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/figures/figure.req.UserInterfaceGuidelines.xml" afterDir="false" />
-    </list>
+    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Adds documentation." />
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="2ff40a52-acbb-47ed-83d2-e973858521bd" name="New changelist" comment="Minor changes." />
     <ignored path="out/" />
@@ -136,7 +109,7 @@
         <entry file="file://$PROJECT_DIR$/doc/specification/figures/req.DrawingEditorFramework.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" column="10" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
+              <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -836,13 +809,6 @@
       <workItem from="1551863996220" duration="10715000" />
       <workItem from="1552909751411" duration="6035000" />
     </task>
-    <task id="LOCAL-00054" summary="CssSize units are now nonnull.">
-      <created>1545210432570</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1545210432570</updated>
-    </task>
     <task id="LOCAL-00055" summary="CssSize units are now nonnull.">
       <created>1545210799129</created>
       <option name="number" value="00055" />
@@ -1179,7 +1145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1554318466116</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="Adds documentation.">
+      <created>1554320506645</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1554320506645</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1228,9 +1201,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="454" y="23" width="1502" height="1129" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.27534246" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.27534246" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.42218542" side_tool="true" weight="0.21424745" />
@@ -1239,7 +1211,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="2" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.7719178" side_tool="true" weight="0.38954636" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="3" sideWeight="0.7719178" side_tool="true" visible="true" weight="0.38954636" />
       <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.7719178" side_tool="true" weight="0.38954636" />
       <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
       <window_info anchor="bottom" id="TODO" order="6" side_tool="true" weight="0.3298077" />
@@ -1337,7 +1309,6 @@
     <MESSAGE value="Updates IDE files." />
     <MESSAGE value="Implements support for exporting javafx Text nodes with line wrapping." />
     <MESSAGE value="Minor bug fixes in CSS support." />
-    <MESSAGE value="Adds documentation." />
     <MESSAGE value="Improves collections." />
     <MESSAGE value="Reformats code." />
     <MESSAGE value="Adds diagrammer sample and supporting classes." />
@@ -1354,7 +1325,8 @@
     <MESSAGE value="Improves documentation.&#10;&quot;Designs&quot; are now called &quot;Blocks&quot;." />
     <MESSAGE value="Adds diagrams.&#10;Improves SVG export of italic and bold text." />
     <MESSAGE value="Improves documentation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Improves documentation." />
+    <MESSAGE value="Adds documentation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds documentation." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1865,7 +1837,7 @@
     <entry file="file://$PROJECT_DIR$/doc/specification/figures/req.DrawingEditorFramework.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="6" column="10" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
+          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
         </state>
       </provider>
     </entry>
