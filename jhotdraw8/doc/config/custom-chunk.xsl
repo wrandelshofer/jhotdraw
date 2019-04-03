@@ -1,14 +1,11 @@
 <?xml version='1.0'?>
-<xsl:stylesheet  
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"> 
-
-<xsl:import href="xhtml5/chunk.xsl"/> 
-<xsl:import href="xhtml/highlight.xsl"/> 
-
-<xsl:param name="highlight.source" select="'1'"/> 
-<xsl:param name="callout.graphics" select="0"/>
-<xsl:param name="callout.unicode" select="1"/>
-
+<xsl:stylesheet
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:import href="xhtml5/chunk.xsl"/>
+  <xsl:import href="xhtml/highlight.xsl"/>
+  <xsl:param name="highlight.source" select="'1'"/>
+  <xsl:param name="callout.graphics" select="0"/>
+  <xsl:param name="callout.unicode" select="1"/>
   <xsl:param name="generate.toc">
     appendix toc,title
     article/appendix nop
@@ -28,4 +25,11 @@
     section toc
     set toc,title
   </xsl:param>
-</xsl:stylesheet> 
+  <xsl:param name="formal.title.placement">
+    figure after
+    example after
+    equation after
+    table after
+    procedure after
+  </xsl:param>
+</xsl:stylesheet>

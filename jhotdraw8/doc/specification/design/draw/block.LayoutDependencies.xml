@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-         xml:id="design.LayoutDependencies" role="design">
+         xml:id="block.LayoutDependencies" role="block">
   <title>Layout Dependencies</title>
   <para>The layout of a figure can depend on the layout of other figures.</para>
 

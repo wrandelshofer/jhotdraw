@@ -1,124 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" 
       xmlns:xi="http://www.w3.org/2001/XInclude">
-<info>
-  <!-- see IEEE 830 SRS -->
-  <title>JHotDraw 8: Software Specification</title>
-<author>
-    <personname>
+  <info>
+    <title>JHotDraw 8: Software Specification</title>
+    <author>
+      <personname>
         <firstname>Werner</firstname>
         <surname>Randelshofer</surname>
-    </personname>
-</author>
-  <copyright>
-    <year>2019</year>
-    <holder>The authors and contributors of JHotDraw</holder>
-  </copyright>
-</info>
-<chapter><title>Introduction</title>
-<xi:include href="introduction/Purpose.xml"/>
-  <!--
-<xi:include href="../general/introduction/Overview.xml"/>
--->
-<xi:include href="../general/introduction/Definitions.xml"/>
-<xi:include href="../general/introduction/License.xml"/>
-<xi:include href="../general/introduction/Resources.xml"/>
-<xi:include href="introduction/References.xml"/>
-</chapter>
-<chapter><title>Overall description</title>
-<xi:include href="overalldescription/ProductPerspective.xml"/>
-  <!--
-<xi:include href="overalldescription/ProductFunctions.xml"/>
-<xi:include href="overalldescription/UserCharacteristics.xml"/>
-<xi:include href="overalldescription/Constraints.xml"/>
-<xi:include href="overalldescription/AssumptionsAndDependencies.xml"/>
--->
-</chapter>
+      </personname>
+    </author>
+    <copyright>
+      <year>2019</year>
+      <holder>The authors and contributors of JHotDraw</holder>
+    </copyright>
+  </info>
+
+  <chapter>
+    <title>Introduction</title>
+
+    <xi:include href="introduction/Purpose.xml"/>
+
+    <xi:include href="../general/introduction/Definitions.xml"/>
+
+    <xi:include href="../general/introduction/License.xml"/>
+
+    <xi:include href="../general/introduction/Resources.xml"/>
+
+    <xi:include href="introduction/References.xml"/>
+  </chapter>
+
+  <chapter>
+    <title>Overall description</title>
+
+    <xi:include href="overalldescription/ProductPerspective.xml"/>
+  </chapter>
   <chapter>
     <title>Requirements</title>
-  <!--
-<section><title>External Interface Requirements</title>
-<xi:include href="requirements/external/UserInterfaces.xml"/>
-<xi:include href="requirements/external/HardwareInterfaces.xml"/>
-<xi:include href="requirements/external/SoftwareInterfaces.xml"/>
-<xi:include href="requirements/external/CommunicationsInterfaces.xml"/>
-</section>
--->
-<section><title>Application Framework</title>
-  <xi:include href="figures/figure.ApplicationFramework.xml"/>
-  <xi:include href="figures/figure.UserInterfaceGuidelines.xml"/>
-  <xi:include href="requirements/application/requirement.ApplicationFramework.xml"/>
-  <xi:include href="requirements/application/requirement.UserInterfaceGuidelines.xml"/>
-  <xi:include href="requirements/application/requirement.JavaSE8.xml"/>
-  <xi:include href="requirements/application/requirement.JavaFX.xml"/>
-  <xi:include href="requirements/application/requirement.MenuBarItems.xml"/>
-  <xi:include href="requirements/application/requirement.MacOSMenuBarItems.xml"/>
-  <xi:include href="requirements/application/requirement.WindowsMenuBarItems.xml"/>
-  <xi:include href="requirements/application/requirement.KeyboardShortcuts.xml"/>
-</section>
-<section><title>Drawing Editor Framework</title>
-  <xi:include href="requirements/draw/requirement.DrawingEditorFramework.xml"/>
-  <xi:include href="requirements/draw/requirement.AutomaticLayout.xml"/>
-  <xi:include href="requirements/draw/requirement.CascadingStyleSheets.xml"/>
-  <xi:include href="requirements/draw/requirement.CascadingStyleSheetsStyleOrigin.xml"/>
-  <xi:include href="requirements/draw/requirement.Layers.xml"/>
-  <xi:include href="requirements/draw/requirement.Locking.xml"/>
-  <xi:include href="requirements/draw/requirement.Visibility.xml"/>
-  <xi:include href="requirements/draw/requirement.ZOrder.xml"/>
-  <xi:include href="requirements/draw/requirement.Grouping.xml"/>
-  <xi:include href="requirements/draw/requirement.ConstructiveAreaGeometry.xml"/>
-</section>
 
-<!--
-3.2.1 System Feature 1
-3.2.1.1   Introduction/Purpose of feature
-3.2.1.2   Stimulus/Response sequence
-3.2.1.3   Associated functional requirements
-3.2.1.3.1   Functional requirement 1
-...
-3.2.1.3. n  Functional requirement  n
- -->
-</chapter>
+    <section>
+      <title>Application Framework</title>
 
+      <xi:include href="figures/figure.ApplicationFramework.xml"/>
+
+      <xi:include href="figures/figure.UserInterfaceGuidelines.xml"/>
+
+      <xi:include href="requirements/application/requirement.ApplicationFramework.xml"/>
+
+      <xi:include href="requirements/application/requirement.UserInterfaceGuidelines.xml"/>
+
+      <xi:include href="requirements/application/requirement.JavaSE8.xml"/>
+
+      <xi:include href="requirements/application/requirement.JavaFX.xml"/>
+
+      <xi:include href="requirements/application/requirement.MenuBarItems.xml"/>
+
+      <xi:include href="requirements/application/requirement.MacOSMenuBarItems.xml"/>
+
+      <xi:include href="requirements/application/requirement.WindowsMenuBarItems.xml"/>
+
+      <xi:include href="requirements/application/requirement.KeyboardShortcuts.xml"/>
+    </section>
+
+    <section>
+      <title>Drawing Editor Framework</title>
+
+      <xi:include href="requirements/draw/requirement.DrawingEditorFramework.xml"/>
+
+      <xi:include href="requirements/draw/requirement.AutomaticLayout.xml"/>
+
+      <xi:include href="requirements/draw/requirement.CascadingStyleSheets.xml"/>
+
+      <xi:include href="requirements/draw/requirement.CascadingStyleSheetsStyleOrigin.xml"/>
+
+      <xi:include href="requirements/draw/requirement.Layers.xml"/>
+
+      <xi:include href="requirements/draw/requirement.Locking.xml"/>
+
+      <xi:include href="requirements/draw/requirement.Visibility.xml"/>
+
+      <xi:include href="requirements/draw/requirement.ZOrder.xml"/>
+
+      <xi:include href="requirements/draw/requirement.Grouping.xml"/>
+
+      <xi:include href="requirements/draw/requirement.ConstructiveAreaGeometry.xml"/>
+    </section>
+  </chapter>
   <chapter>
     <title>Design</title>
+
     <section>
       <title>Principles</title>
-      <xi:include href="design/general/design.HighCohesion.xml"/>
-      <xi:include href="design/general/design.LooseCoupling.xml"/>
-      <xi:include href="design/general/design.FacadePattern.xml"/>
+
+      <xi:include href="design/general/block.HighCohesion.xml"/>
+
+      <xi:include href="design/general/block.LooseCoupling.xml"/>
+
+      <xi:include href="design/general/block.FacadePattern.xml"/>
     </section>
     <section>
       <title>Application Framework</title>
-      <xi:include href="design/application/design.MasterDetailsInspectorLayout.xml"/>
+
+      <xi:include href="design/application/block.MasterDetailsInspectorLayout.xml"/>
     </section>
+
     <section>
       <title>Drawing Editor Framework</title>
-      <xi:include href="design/draw/design.Layers.xml"/>
-      <xi:include href="design/draw/design.DrawingDataStructure.xml"/>
-      <xi:include href="design/draw/design.LayoutDependencies.xml"/>
-      <xi:include href="design/draw/design.TypeSafePropertyMap.xml"/>
-      <xi:include href="design/draw/design.StyleAttributesInspector.xml"/>
+
+      <xi:include href="design/draw/block.Layers.xml"/>
+
+      <xi:include href="design/draw/block.DrawingDataStructure.xml"/>
+
+      <xi:include href="design/draw/block.LayoutDependencies.xml"/>
+
+      <xi:include href="design/draw/block.TypeSafePropertyMap.xml"/>
+
+      <xi:include href="design/draw/block.StyleAttributesInspector.xml"/>
     </section>
+
     <section>
       <title>Graph Library</title>
-      <xi:include href="design/graph/design.GraphLibraryForDrawingEditorFramework.xml"/>
-      <xi:include href="design/graph/design.GraphTheoryGraph.xml"/>
-      <xi:include href="design/graph/design.GraphTheoryDirectedGraph.xml"/>
-      <xi:include href="design/graph/design.GraphFacadeAPIs.xml"/>
+
+      <xi:include href="design/graph/block.GraphLibraryForDrawingEditorFramework.xml"/>
+
+      <xi:include href="design/graph/block.GraphTheoryGraph.xml"/>
+
+      <xi:include href="design/graph/block.GraphTheoryDirectedGraph.xml"/>
+
+      <xi:include href="design/graph/block.GraphFacadeAPIs.xml"/>
     </section>
   </chapter>
-
-  <!--
-3.3 Performance requirements
-3.4 Design constraints
-3.5 Software system attributes
-3.5.1 Reliability
-3.5.2 Availability
-3.5.3 Security
-3.5.4 Maintainability
-3.5.5 Portability
-3.6 Other requirements
-</chapter>
-  -->
 </book>

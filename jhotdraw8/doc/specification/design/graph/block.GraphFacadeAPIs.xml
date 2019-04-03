@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
          xmlns:xi="http://www.w3.org/2001/XInclude"
-         xml:id="design.GraphFacadeAPIs" role="design">
+         xml:id="block.GraphFacadeAPIs" role="block">
   <title>Graph Facade APIs</title>
+
+  <xi:include href="../../figures/figure.GraphFacadeAPIs.xml"/>
 
   <para>
     We introduce a number of facade APIs for graphs.
@@ -56,21 +58,19 @@
     </varlistentry>
   </variablelist>
 
-  <xi:include href="../../figures/figure.GraphFacadeAPIs.xml"/>
-
   <para>
     To keep the API definitions small, we deliberately only define interfaces with read-only APIs.
     We implement APIs for writing directly in classes that support writing.
   </para>
 
-  <section role="design">
+  <section>
     <title>Trade-off</title>
 
     <itemizedlist>
       <listitem>
         <para>
           All trade-offs described in
-          <xref linkend="design.FacadePattern"/>
+          <xref linkend="block.FacadePattern"/>
           apply.
         </para>
       </listitem>

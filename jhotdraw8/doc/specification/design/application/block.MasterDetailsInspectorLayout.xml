@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.MasterDetailsInspectorLayout"
-         role="design">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="block.MasterDetailsInspectorLayout"
+         role="block">
   <title>Master-Details-Inspector Layout</title>
 
   <para>The master-details-inspector layout is a layout that consists of the following three panes:</para>

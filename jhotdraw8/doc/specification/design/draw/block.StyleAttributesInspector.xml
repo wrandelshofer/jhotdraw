@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.StyleAttributesInspector"
-         role="design">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="block.StyleAttributesInspector"
+         role="block">
   <title>Style Attributes Inspector</title>
   <para>The “Style Attributes Inspector” is a control that allows to edit style attributes of the
     currently selected figures in a drawing view.

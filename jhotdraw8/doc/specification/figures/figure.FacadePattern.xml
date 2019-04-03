@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
-        xml:id="figure.GraphFacadeAPIs">
+        xml:id="figure.FacadePattern">
   <title>UML Class Diagram: Facade Pattern</title>
   <mediaobject>
     <imageobject>
