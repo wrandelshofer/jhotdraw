@@ -4,7 +4,7 @@
          xml:id="block.FacadePattern" role="block">
   <title>Facade Pattern</title>
 
-  <xi:include href="../../figures/figure.FacadePattern.xml"/>
+  <xi:include href="../../figures/figure.cd.FacadePattern.xml"/>
 
   <para>
     A facade provides a unified interface to a set of interfaces in a subsystem.

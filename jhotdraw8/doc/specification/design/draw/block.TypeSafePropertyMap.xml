@@ -5,8 +5,8 @@
          role="block">
   <title>Type-Safe Property Map</title>
 
-  <xi:include href="../../figures/figure.TypeSafePropertyMap.xml"/>
-  <xi:include href="../../figures/figure.TypeSafeMapAccessor.xml"/>
+  <xi:include href="../../figures/figure.cd.TypeSafePropertyMap.xml"/>
+  <xi:include href="../../figures/figure.cd.TypeSafeMapAccessor.xml"/>
 
 
   <para>The figures in a drawing can support a large number of properties.

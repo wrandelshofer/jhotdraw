@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+        xml:id="figure.req.DrawingEditorFramework">
+  <title>SysML Requirements Diagram: Drawing Editor Framework</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/req.DrawingEditorFramework.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>This diagram shows the top-level requirements for the drawing editor framework.</phrase>
+    </textobject>
+  </mediaobject>
+</figure>

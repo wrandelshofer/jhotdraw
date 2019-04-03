@@ -40,9 +40,9 @@
     <section>
       <title>Application Framework</title>
 
-      <xi:include href="figures/figure.ApplicationFramework.xml"/>
+      <xi:include href="figures/figure.req.ApplicationFramework.xml"/>
 
-      <xi:include href="figures/figure.UserInterfaceGuidelines.xml"/>
+      <xi:include href="figures/figure.req.UserInterfaceGuidelines.xml"/>
 
       <xi:include href="requirements/application/requirement.ApplicationFramework.xml"/>
 
@@ -63,6 +63,8 @@
 
     <section>
       <title>Drawing Editor Framework</title>
+
+      <xi:include href="figures/figure.req.DrawingEditorFramework.xml"/>
 
       <xi:include href="requirements/draw/requirement.DrawingEditorFramework.xml"/>
 
@@ -90,6 +92,8 @@
 
     <section>
       <title>Principles</title>
+      <xi:include href="figures/figure.bdd.DesignPrinciples.xml"/>
+      <xi:include href="figures/figure.bdd.DesignPatterns.xml"/>
 
       <xi:include href="design/general/block.HighCohesion.xml"/>
 
@@ -100,11 +104,15 @@
     <section>
       <title>Application Framework</title>
 
+      <xi:include href="figures/figure.bdd.ApplicationFramework.xml"/>
+
       <xi:include href="design/application/block.MasterDetailsInspectorLayout.xml"/>
     </section>
 
     <section>
       <title>Drawing Editor Framework</title>
+
+      <xi:include href="figures/figure.bdd.DrawingEditorFramework.xml"/>
 
       <xi:include href="design/draw/block.Layers.xml"/>
 

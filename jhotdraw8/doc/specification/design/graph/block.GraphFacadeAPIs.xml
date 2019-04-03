@@ -4,7 +4,7 @@
          xml:id="block.GraphFacadeAPIs" role="block">
   <title>Graph Facade APIs</title>
 
-  <xi:include href="../../figures/figure.GraphFacadeAPIs.xml"/>
+  <xi:include href="../../figures/figure.cd.GraphFacadeAPIs.xml"/>
 
   <para>
     We introduce a number of facade APIs for graphs.

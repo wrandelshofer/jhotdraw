@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="bdd" id="sysmldiagram1" modelElementName="Application Framework"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <MLClassifier bounds="120 110 150 50" id="mlclassifier1" keyword="block" name="Application Life-Cycle"/>
+    <MLClassifier bounds="280 110 150 50" id="mlclassifier2" keyword="block" name="Commands"/>
+    <MLClassifier bounds="280 390 150 50" id="mlclassifier3" keyword="block" name="Docking Framework"/>
+    <MLClassifier bounds="120 270 150 50" id="mlclassifier4" keyword="block" name="Menus"/>
+    <MLClassifier bounds="120 330 150 50" id="mlclassifier5" keyword="block" name="Windows"/>
+    <MLClassifier bounds="120 390 150 50" id="mlclassifier6" keyword="block" name="Toolbars"/>
+    <MLClassifier bounds="280 170 150 50" id="mlclassifier7" keyword="block" name="Internationalization"/>
+    <MLClassifier bounds="280 330 150 50" id="mlclassifier8" keyword="block" name="Master-Details-Inspector"/>
+  </Layer>
+</Drawing>

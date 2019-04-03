@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+        xml:id="figure.bdd.Patterns">
+  <title>SysML Block Definition Diagram: Design Patterns</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/bdd.DesignPatterns.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>This diagram shows a set of patterns.</phrase>
+    </textobject>
+  </mediaobject>
+</figure>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+        xml:id="figure.bdd.ApplicationFramework">
+  <title>SysML Block Definition Diagram: Application Framework</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/bdd.ApplicationFramework.svg" format="SVG"/>
+    </imageobject>
+    <textobject>
+      <phrase>This diagram shows the top-level blocks of the application framework.</phrase>
+    </textobject>
+  </mediaobject>
+</figure>

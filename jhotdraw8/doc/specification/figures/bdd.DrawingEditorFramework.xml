@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="bdd" id="sysmldiagram1" modelElementName="Drawing Editor Framework"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <MLClassifier bounds="290 70 170 50" id="mlclassifier3" keyword="block" name="Drawing Tools"/>
+    <MLClassifier bounds="110 130 170 50" id="mlclassifier4" keyword="block" name="Drawing View"/>
+    <MLClassifier bounds="290 130 170 50" id="mlclassifier5" keyword="block" name="Drawing Editor"/>
+    <MLClassifier bounds="290 190 170 50" id="mlclassifier1" keyword="block" name="Drawing Inspectors"/>
+    <MLClassifier bounds="300 440 170 50" id="mlclassifier7" keyword="block" name="SVG Library"/>
+    <MLClassifier bounds="110 380 170 50" id="mlclassifier8" keyword="block" name="Shapes Library"/>
+    <MLClassifier bounds="300 380 170 50" id="mlclassifier6" keyword="block" name="CSS Library"/>
+    <MLClassifier bounds="110 440 170 50" id="mlclassifier2" keyword="block" name="Graph Library"/>
+    <MLClassifier bounds="110 70 170 50" id="mlclassifier9" keyword="block" name="Drawing (Data Structure)"/>
+  </Layer>
+</Drawing>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame">
+    <MLDiagram bounds="1 1 557 557" diagramKind="bdd" id="sysmldiagram1" modelElementName="Design Patterns"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content"/>
+</Drawing>

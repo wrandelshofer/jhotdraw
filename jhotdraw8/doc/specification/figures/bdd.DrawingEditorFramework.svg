@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg baseProfile="tiny" height="14.8cm" version="1.2" width="14.8cm" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clipPath1">
+      <rect fill="#000000" height="559.3700787401575" stroke-linecap="square" stroke-miterlimit="10"
+            width="559.3700787401575"/>
+    </clipPath>
+  </defs>
+  <g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
+    <rect fill="#ffffff" height="559.3700787401575" id="background" stroke-linecap="square" stroke-miterlimit="10"
+          width="559.3700787401575"/>
+    <g class="Layer" id="frame">
+      <g>
+        <path d="M1,1 191.02734375,1 191.02734375,12.40625 181.02734375,22.40625 1,22.40625 Z M1,1 558,1 558,558 1,558 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10" x="7" y="15.86328125">bdd
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="31.990234375" y="15.86328125"/>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="34.990234375" y="15.86328125">Drawing Editor Framework
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="31.990234375" y="15.86328125"/>
+      </g>
+    </g>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M290,70 460,70 460,120 290,120 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="359.48950195" y="82.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="333.05859375" y="99.65625">Drawing Tools</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M110,130 280,130 280,180 110,180 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="179.48950195" y="142.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="155.39355469" y="159.65625">Drawing View</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M290,130 460,130 460,180 290,180 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="359.48950195" y="142.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="331.86914062" y="159.65625">Drawing Editor</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M290,190 460,190 460,240 290,240 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="359.48950195" y="202.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="318.87011719" y="219.65625">Drawing Inspectors</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M300,439.99999999999994 470,439.99999999999994 470,489.99999999999994 300,489.99999999999994 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="369.48950195" y="452.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="351.54296875" y="469.65625">SVG Library</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M110,380 280,380 280,430 110,430 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="179.48950195" y="392.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="152.58691406" y="409.65625">Shapes Library</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M300,380 470,380 470,430 300,430 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="369.48950195" y="392.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="352.41894531" y="409.65625">CSS Library</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M110,439.99999999999994 280,439.99999999999994 280,489.99999999999994 110,489.99999999999994 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="179.48950195" y="452.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="155.42871094" y="469.65625">Graph Library</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M110,70 280,70 280,120 110,120 Z" fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="179.48950195" y="82.14746094">«block»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="123.35742188" y="99.65625">Drawing (Data Structure)</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>
