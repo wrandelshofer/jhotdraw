@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="block.TypeSafePropertyMap"
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="block.TypeSafePropertyMap"
          role="block">
   <title>Type-Safe Property Map</title>
+
+  <xi:include href="../../figures/figure.TypeSafePropertyMap.xml"/>
+  <xi:include href="../../figures/figure.TypeSafeMapAccessor.xml"/>
+
 
   <para>The figures in a drawing can support a large number of properties.
     We do not want to implement an accessor method for each property but we still want to
@@ -23,7 +29,7 @@
       </para>
     </listitem>
     <listitem>
-      <para><code>&lt;V&gt; void set(Key&lt;V&gt; key, V value)</code>.
+      <para><code>&lt;V&gt; V put(Key&lt;V&gt; key, V value)</code>.
       </para>
     </listitem>
   </itemizedlist>

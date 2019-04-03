@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg baseProfile="tiny" height="14.8cm" version="1.2" width="14.8cm" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clipPath1">
+      <rect fill="#000000" height="559.3700787401575" stroke-linecap="square" stroke-miterlimit="10"
+            width="559.3700787401575"/>
+    </clipPath>
+  </defs>
+  <g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
+    <rect fill="#ffffff" height="559.3700787401575" id="background" stroke-linecap="square" stroke-miterlimit="10"
+          width="559.3700787401575"/>
+    <g class="Layer" id="frame">
+      <g>
+        <path d="M1,1 171.7265625,1 171.7265625,12.40625 161.7265625,22.40625 1,22.40625 Z M1,1 558,1 558,558 1,558 Z"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial Bold', 'Arial'" font-size="12" font-style="normal" font-weight="bold"
+              stroke-linecap="square" stroke-miterlimit="10" x="7" y="15.86328125">cd
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="24.00390625" y="15.86328125"/>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="27.00390625" y="15.86328125">Type-Safe Property Map
+        </text>
+        <text fill="#000000" font-family="'Arial'" font-size="12" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10" x="24.00390625" y="15.86328125"/>
+      </g>
+    </g>
+    <g class="Layer" id="content">
+      <g>
+        <path d="M99.99999999999999,170 300,170 300,270 99.99999999999999,270 Z M100,209.9609375 300,209.9609375 M100,218.9609375 300,218.9609375"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="177.73510742" y="182.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="italic"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="137.19042969" y="199.65625">TypeSafePropertyMap</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="104" y="235.0625">get&lt;V&gt;(key:Key&lt;V&gt;):V</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
+              font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="104" y="252.46875">put&lt;V&gt;(key:Key&lt;V&gt;, V value):V</tspan>
+        </text>
+      </g>
+      <g>
+        <path d="M350,170 480,170 480,230 350,230 Z M350,209.9609375 480,209.9609375 M350,218.9609375 480,218.9609375"
+              fill="#ffffff" stroke="#000000"/>
+        <text fill="#000000" font-family="'Arial'" font-size="9" font-style="normal" font-weight="normal"
+              stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="392.73510742" y="182.14746094">«interface»</tspan>
+        </text>
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="italic"
+              font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
+          <tspan x="391.14355469" y="199.65625">Key&lt;V&gt;</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>

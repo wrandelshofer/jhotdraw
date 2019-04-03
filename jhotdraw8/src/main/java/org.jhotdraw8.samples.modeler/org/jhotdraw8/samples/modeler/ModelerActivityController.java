@@ -586,12 +586,20 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
                 IdFactory idFactory = new SimpleFigureIdFactory();
                 SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
                 io.write(uri, drawing, workState);
+
+                // automatically export to SVG
+                if (uri.getPath().endsWith(".xml")) {
+                    URI svgUri = new URI(uri.getScheme(),
+                            uri.getHost(),
+                            uri.getPath().substring(0, uri.getPath().length() - 4) + ".svg"
+                            , uri.getFragment());
+                    SvgExportOutputFormat io2 = new SvgExportOutputFormat();
+                    Map<? super Key<?>, Object> options2 = new HashMap<>();
+                    SvgExportOutputFormat.EXPORT_DRAWING_KEY.put(options2, true);
+                    io2.setOptions(options2);
+                    io2.write(svgUri, drawing, workState);
+                }
             }
-        }).handle((voidvalue, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-            }
-            return null;
         });
     }
 

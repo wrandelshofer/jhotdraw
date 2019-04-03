@@ -15,13 +15,13 @@ MLClassifier {
   compartment-labels-visible: true;
   compartment-label-font: 9 Arial;
   keyword-label-font: 9 Arial;
-  name-font: 12 Arial Bold;
+  name-font: bold 12 'Arial Bold';
   font: 12 Arial;
   padding: 4;
   line-spacing: 4;
   item-label-font: 12 Arial;
   static-item-font: 12 Arial;
-  abstract-item-font: 12 Arial Italic;
+  abstract-item-font: italic 12 'Arial Italic';
   static-item-underline: true;
 }
 /** Block shows compartment labels, because there are so many possible compartments. */
@@ -34,7 +34,7 @@ MLClassifier[keyword="class"] {
 }
 /** Class does not show compartment labels, because there are two compartments: attributes and operations. */
 MLClassifier[keyword="interface"] {
-  name-font: 12 Arial Bold Italic;
+  name-font: italic 12 'Arial Bold Italic';
   compartment-labels-visible: false;
 }
 /** Requirement does not show compartment labels, because there is only one compartment: text. */

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="cd" id="sysmldiagram1" modelElementName="Type-Safe Property Map"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <MLClassifier bounds="100 170 200 100" compartmentLabelFont="9 Arial"
+                  compartments="{attributes:[], operations:['get&lt;V&gt;(key:Key&lt;V&gt;):V', 'put&lt;V&gt;(key:Key&lt;V&gt;, V value):V']}"
+                  id="mlclassifier1" keyword="interface" keywordLabelFont="9 Arial" name="TypeSafePropertyMap"
+                  nameFont="12 Arial Bold Italic" padding="4 4 4 4"/>
+    <MLClassifier bounds="350 170 130 60" compartments="{attributes:[], operations:[]}" id="mlclassifier2"
+                  keyword="interface" name="Key&lt;V&gt;"/>
+  </Layer>
+</Drawing>

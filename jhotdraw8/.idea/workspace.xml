@@ -46,24 +46,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Updates AbouutAction and supporting API in ApplicationModel.">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_openjfx_javafx_controls_12.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/cd.FacadePattern.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/cd.FacadePattern.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.FacadePattern.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jhotdraw8.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jhotdraw8.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/specification/figures/cd.TypeSafeMapAccessor.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/specification/figures/cd.TypeSafeMapAccessor.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/specification/figures/cd.TypeSafePropertyMap.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/specification/figures/cd.TypeSafePropertyMap.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.TypeSafeMapAccessor.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/specification/figures/figure.TypeSafePropertyMap.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/design/general/design.FacadePattern.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/design/general/design.FacadePattern.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/specification/figures/cd.GraphFacadeAPIs.svg" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/figures/cd.GraphFacadeAPIs.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/DocumentSelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/DocumentSelectorModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SelectorModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleStylesheetsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleStylesheetsManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/css/FigureSelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/css/FigureSelectorModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/styleable/StyleableSelectorModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/styleable/StyleableSelectorModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/figure/MLClassifierFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/figure/MLClassifierFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/model/MLCompartmentedDataStyleableFigureKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/model/MLCompartmentedDataStyleableFigureKey.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/specification/design/draw/block.TypeSafePropertyMap.xml" beforeDir="false" afterPath="$PROJECT_DIR$/doc/specification/design/draw/block.TypeSafePropertyMap.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerActivityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerActivityController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/user-agent.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/user-agent.css" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="2ff40a52-acbb-47ed-83d2-e973858521bd" name="New changelist" comment="Minor changes." />
@@ -89,87 +82,83 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/doc/bibliography.xml">
+        <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.TypeSafeMapAccessor.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="17" lean-forward="true" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/block.TypeSafePropertyMap.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="339">
+              <caret line="29" column="15" lean-forward="true" selection-start-line="29" selection-start-column="15" selection-end-line="29" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/doc/specification/figures/cd.TypeSafeMapAccessor.svg">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="253">
+              <caret line="1255" column="66" selection-start-line="1255" selection-start-column="66" selection-end-line="1255" selection-end-column="66" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerActivityController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="355">
+              <caret line="600" column="17" lean-forward="true" selection-start-line="600" selection-start-column="17" selection-end-line="600" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/user-agent.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="145">
+              <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/block.DrawingDataStructure.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/doc/specification/figures/req.UserInterfaceGuidelines.xml">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build-jhotdraw.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/doc/config/catalog.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1170">
-              <caret line="78" column="9" selection-start-line="78" selection-start-column="9" selection-end-line="78" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/doc/specification/Book.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1200">
-              <caret line="80" selection-start-line="80" selection-end-line="80" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/geom/BezierPath.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5081">
-              <caret line="36" column="52" selection-start-line="36" selection-start-column="52" selection-end-line="36" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/text/Point3DConverterTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/module-info.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="16" column="48" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-12/lib/src.zip!/javafx.graphics/javafx/geometry/Point3D.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/doc/specification/requirements/draw/requirement.Layers.xml">
+        <entry file="file://$PROJECT_DIR$/doc/specification/design/graph/block.GraphFacadeAPIs.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
-              <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
+              <caret line="3" selection-start-line="2" selection-end-line="3" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/design.Layers.xml">
+        <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.TypeSafePropertyMap.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
+            <state relative-caret-position="30">
+              <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -190,10 +179,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&lt;/varname</find>
-      <find>Grapher</find>
-      <find>edit.createTextArea</find>
-      <find>&lt;CompartmentedData&gt;</find>
       <find>setCli</find>
       <find>-11</find>
       <find>@Nonnull</find>
@@ -220,11 +205,12 @@
       <find>processAtt</find>
       <find>parseDe</find>
       <find>$PROJECT_DIR$/../../../../../../../../../Shared</find>
+      <find>design.</find>
+      <find>role=&quot;design&quot;</find>
+      <find>role=&quot;block.</find>
+      <find>block.g</find>
     </findStrings>
     <replaceStrings>
-      <replace>&quot;\n&quot;, &quot;\n&quot;, &quot;&quot;</replace>
-      <replace>doTestString</replace>
-      <replace>ImmutableSet</replace>
       <replace>ImmutableList</replace>
       <replace>new ImmutableHash</replace>
       <replace>Immutable$2</replace>
@@ -252,6 +238,9 @@
       <replace>ApplicationLabels.getLabels()</replace>
       <replace>ApplicationLabels.getGuiLabels()</replace>
       <replace>applyBody</replace>
+      <replace>block.</replace>
+      <replace>role=&quot;block&quot;</replace>
+      <replace>design/g</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/main</dir>
@@ -265,6 +254,7 @@
       <dir>$PROJECT_DIR$/.idea</dir>
       <dir>$PROJECT_DIR$</dir>
       <dir>$PROJECT_DIR$/src</dir>
+      <dir>$PROJECT_DIR$/doc/specification</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -274,28 +264,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/module-info.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/module-info.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/figure/MLClassifierFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/figure/BodyFontableFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/figure/KindFontableFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/figure/LabelFontableFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/figure/NameFontableFigure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/module-info.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/DrawStylesheets.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/GrapherActivityController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/inspector/ZoomToolbar.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/inspector/ToolsToolbar.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerActivityController.java" />
-        <option value="$PROJECT_DIR$/.idea/workspace.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/spi/ApplicationLabelsProvider.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/spi/ApplicationResourceBundleProvider.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/spi/DrawLabelsProvider.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/spi/DrawResourceBundleProvider.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/spi/GrapherLabelsProvider.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/spi/GrapherResourceBundleProvider.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/spi/ModelerLabelsProvider.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/spi/ModelerResourceBundleProvider.java" />
         <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ClasspathResources.java" />
         <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ModulepathResources.java" />
         <option value="$PROJECT_DIR$/build.properties" />
@@ -323,8 +291,30 @@
         <option value="$PROJECT_DIR$/doc/specification/requirements/draw/requirement.Layers.xml" />
         <option value="$PROJECT_DIR$/doc/specification/design/draw/design.TypeSafeMap.xml" />
         <option value="$PROJECT_DIR$/doc/specification/design/draw/design.DrawingDataStructure.xml" />
-        <option value="$PROJECT_DIR$/doc/specification/Book.xml" />
         <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/module-info.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/key/AbstractFigureMapAccessor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/key/AbstractMapAccessor.java" />
+        <option value="$PROJECT_DIR$/doc/specification/design/application/block.MasterDetailsInspectorLayout.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/figures/figure.ApplicationFramework.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/design/general/block.FacadePattern.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/figures/figure.FacadePattern.xml" />
+        <option value="$PROJECT_DIR$/doc/config/custom-chunk.xsl" />
+        <option value="$PROJECT_DIR$/doc/config/custom-epub3.xsl" />
+        <option value="$PROJECT_DIR$/doc/config/custom-xhtml5.xsl" />
+        <option value="$PROJECT_DIR$/doc/specification/Book.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/introduction/Purpose.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/design/graph/block.GraphFacadeAPIs.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/design/graph/block.GraphLibraryForDrawingEditorFramework.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/design/draw/block.Layers.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/overalldescription/ProductPerspective.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/requirements/application/requirement.ApplicationFramework.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerActivityController.java" />
+        <option value="$PROJECT_DIR$/doc/specification/figures/figure.TypeSafeMapAccessor.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/figures/figure.TypeSafePropertyMap.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/design/draw/block.TypeSafePropertyMap.xml" />
+        <option value="$PROJECT_DIR$/doc/specification/figures/cd.TypeSafeMapAccessor.svg" />
+        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/user-agent.css" />
+        <option value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java" />
       </list>
     </option>
   </component>
@@ -343,7 +333,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -359,55 +348,76 @@
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
-              <item name="modulepath" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
-              <item name="modulepath" type="462c0819:PsiDirectoryNode" />
-              <item name="javafx-sdk-11.0.2" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="draw" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
-              <item name="modulepath" type="462c0819:PsiDirectoryNode" />
-              <item name="javafx-sdk-12" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="general" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
-              <item name="modulepath" type="462c0819:PsiDirectoryNode" />
-              <item name="javafx-sdk-12" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="graph" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="compile" type="462c0819:PsiDirectoryNode" />
-              <item name="modulepath" type="462c0819:PsiDirectoryNode" />
-              <item name="javafx-sdk-12" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="javafx.controls.jar" type="ab9368bb:PsiFileNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="figures" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="introduction" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="requirements" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
+              <item name="specification" type="462c0819:PsiDirectoryNode" />
+              <item name="requirements" type="462c0819:PsiDirectoryNode" />
+              <item name="draw" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
@@ -426,14 +436,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org.jhotdraw8.draw" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
@@ -447,36 +449,16 @@
               <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
               <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org.jhotdraw8.draw" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jhotdraw8" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jhotdraw8" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org.jhotdraw8.draw" type="462c0819:PsiDirectoryNode" />
-              <item name="text" type="462c0819:PsiDirectoryNode" />
+              <item name="org.jhotdraw8.samples.modeler" type="462c0819:PsiDirectoryNode" />
+              <item name="modeler" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope">
         <subPane subId="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope">
           <expand>
@@ -646,9 +628,6 @@
       <recent name="ch.systransis.arl.ferro.model.css" />
       <recent name="org.jhotdraw8.css.text" />
     </key>
-    <key name="IntroduceConstantDialog.RECENTS_KEY">
-      <recent name="ch.systransis.arl.ferro.io.TAFormatConstants" />
-    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
       <recent name="groovy.util.GroovyTestCase" />
@@ -657,12 +636,19 @@
       <recent name="org.jhotdraw8.css.text" />
       <recent name="org.jhotdraw8.css" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java" />
+      <recent name="$PROJECT_DIR$/lib/compile/modulepath-off" />
+      <recent name="$PROJECT_DIR$/lib/compile/modulepath" />
+      <recent name="$PROJECT_DIR$/ext/src/main/module-info" />
+      <recent name="$PROJECT_DIR$/ext/src/main" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/doc/specification/figures" />
       <recent name="$PROJECT_DIR$/doc/specification/design/draw" />
       <recent name="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/doc/specification/design/graph" />
-      <recent name="$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/inspector" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.jhotdraw8.samples.modeler.figure" />
@@ -671,12 +657,8 @@
       <recent name="org.jhotdraw8.samples.grapher" />
       <recent name="org.jhotdraw8.util" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java" />
-      <recent name="$PROJECT_DIR$/lib/compile/modulepath-off" />
-      <recent name="$PROJECT_DIR$/lib/compile/modulepath" />
-      <recent name="$PROJECT_DIR$/ext/src/main/module-info" />
-      <recent name="$PROJECT_DIR$/ext/src/main" />
+    <key name="IntroduceConstantDialog.RECENTS_KEY">
+      <recent name="ch.systransis.arl.ferro.io.TAFormatConstants" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -830,13 +812,6 @@
       <workItem from="1546867144891" duration="4148000" />
       <workItem from="1551863996220" duration="10715000" />
       <workItem from="1552909751411" duration="6035000" />
-    </task>
-    <task id="LOCAL-00051" summary="Refactors graph API.">
-      <created>1545207145927</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1545207145927</updated>
     </task>
     <task id="LOCAL-00052" summary="Refactors graph API.">
       <created>1545207158308</created>
@@ -1174,7 +1149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1552909960532</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="Improves documentation.&#10;&quot;Designs&quot; are now called &quot;Blocks&quot;.">
+      <created>1554314906506</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1554314906507</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1225,7 +1207,7 @@
     <frame x="454" y="23" width="1502" height="1129" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.2890411" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5778146" visible="true" weight="0.27534246" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.42218542" side_tool="true" weight="0.21424745" />
@@ -1234,11 +1216,11 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="2" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.7705811" side_tool="true" weight="0.4280079" />
-      <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.7719178" side_tool="true" weight="0.5443787" />
+      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.7719178" side_tool="true" weight="0.38954636" />
+      <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.7719178" side_tool="true" weight="0.38954636" />
       <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.8044794" side_tool="true" weight="0.36371237" />
       <window_info anchor="bottom" id="TODO" order="6" side_tool="true" weight="0.3298077" />
-      <window_info active="true" anchor="bottom" id="Debug" order="7" sideWeight="0.7719178" side_tool="true" visible="true" weight="0.5443787" />
+      <window_info active="true" anchor="bottom" id="Debug" order="7" sideWeight="0.7719178" side_tool="true" visible="true" weight="0.38954636" />
       <window_info anchor="bottom" id="Run" order="8" sideWeight="0.7712329" side_tool="true" weight="0.24654832" />
       <window_info anchor="bottom" id="Find" order="9" sideWeight="0.76937044" side_tool="true" weight="0.42842743" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.6869658" side_tool="true" weight="0.39307535" />
@@ -1249,10 +1231,10 @@
       <window_info anchor="bottom" id="Reviews" order="15" />
       <window_info anchor="bottom" id="Database Changes" order="16" show_stripe_button="false" />
       <window_info anchor="bottom" id="Inspection Results" order="17" sideWeight="0.49966556" weight="0.32934782" />
-      <window_info anchor="bottom" id="Structure" order="18" sideWeight="0.2280822" visible="true" weight="0.5443787" />
+      <window_info anchor="bottom" id="Structure" order="18" sideWeight="0.2280822" visible="true" weight="0.38954636" />
       <window_info anchor="bottom" id="Docker" order="19" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.22336562" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.22328767" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Maven Projects" order="4" />
@@ -1324,7 +1306,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Fixes unsave varargs warning." />
     <MESSAGE value="The default value of SHAPE must be a Rectangle." />
     <MESSAGE value="Formats code.&#10;Default value of SHAPE must be a rectangle." />
     <MESSAGE value="Fixes compiler warnings.&#10;Always copies input arrays." />
@@ -1349,7 +1330,8 @@
     <MESSAGE value="Temporarily does not build javadoc for dist." />
     <MESSAGE value="Fixes code that broke unit tests.&#10;Updates to JUnit 5.3.2." />
     <MESSAGE value="Updates AbouutAction and supporting API in ApplicationModel." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates AbouutAction and supporting API in ApplicationModel." />
+    <MESSAGE value="Improves documentation.&#10;&quot;Designs&quot; are now called &quot;Blocks&quot;." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improves documentation.&#10;&quot;Designs&quot; are now called &quot;Blocks&quot;." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1357,107 +1339,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/model/assoc/AbstractPathAssociation.java</url>
-          <line>102</line>
-          <properties />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/model/assoc/AbstractPathAssociation.java</url>
-          <line>104</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="unit==null" language="JAVA" />
-          <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/io/UnitConverter.java</url>
-          <line>86</line>
-          <properties />
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="inputUnit==null" language="JAVA" />
-          <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/io/UnitConverter.java</url>
-          <line>169</line>
+          <url>jar:///Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home/lib/src.zip!/java.base/java/util/concurrent/CompletableFuture.java</url>
+          <line>2156</line>
           <properties />
           <option name="timeStamp" value="5" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ext/src/main/java/ch/systransis/arl/ferro/inspector/ErrorReportInspector.java</url>
-          <line>63</line>
-          <properties />
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/SimpleCssFunctionProcessor.java</url>
-          <line>482</line>
-          <properties />
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/css/SimpleCssFunctionProcessor.java</url>
-          <line>472</line>
-          <properties />
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/org/jhotdraw8/beans/ClampedDoublePropertyTest.java</url>
-          <line>21</line>
-          <properties />
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="NONE" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/jhotdraw8/svg/SvgExporter.java</url>
-          <line>1370</line>
-          <log-expression expression="&quot;SvgExporter &quot;+paragraph.substring(textIndex,textIndex+characterCount)" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java</url>
+          <line>1254</line>
+          <log-expression expression="ft.getStyle()" language="JAVA" />
           <properties />
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
-          <url>jar:///Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home/lib/src.zip!/java.base/java/util/spi/AbstractResourceBundleProvider.java</url>
-          <line>234</line>
-          <log-expression expression="&quot;.loadPropertyResourceBundle &quot;+module+&quot; &quot;+bundleName" language="JAVA" />
-          <properties />
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ModulepathResources.java</url>
-          <line>106</line>
-          <log-expression expression="&quot;ModularResources &quot;+module+&quot; &quot;+baseName+&quot; &quot;+locale" language="JAVA" />
-          <properties />
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ModulepathResources.java</url>
-          <line>118</line>
-          <log-expression expression="&quot;---&gt;&quot;+moduleAndParentBaseName" language="JAVA" />
-          <properties />
-          <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessor.java</url>
-          <line>277</line>
-          <properties />
-          <option name="timeStamp" value="45" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssToken.java</url>
-          <line>77</line>
-          <properties />
-          <option name="timeStamp" value="48" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessor.java</url>
-          <line>314</line>
-          <properties />
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/xml/XmlUtil.java</url>
-          <line>257</line>
-          <log-expression expression="t" language="JAVA" />
-          <properties />
-          <option name="timeStamp" value="51" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1517,17 +1409,17 @@
   <component name="debuggerHistoryManager">
     <expressions id="breakpointCondition">
       <expression>
+        <expression-string>unit==null</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>units==null</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
         <expression-string>inputUnit==null</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>unit==null</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -1564,20 +1456,15 @@
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>size!=12</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
     <expressions id="breakpointLogExpression">
       <expression>
-        <expression-string>t</expression-string>
+        <expression-string>&quot;SvgExporter &quot;+paragraph.substring(textIndex,textIndex+characterCount)</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>&quot;---&gt;&quot;+moduleAndParentBaseName</expression-string>
+        <expression-string>&quot;.loadPropertyResourceBundle &quot;+module+&quot; &quot;+bundleName</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -1587,7 +1474,12 @@
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>&quot;.loadPropertyResourceBundle &quot;+module+&quot; &quot;+bundleName</expression-string>
+        <expression-string>t</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;---&gt;&quot;+moduleAndParentBaseName</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -1602,22 +1494,12 @@
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>&quot;SvgExporter &quot;+paragraph.substring(textIndex,textIndex+characterCount)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
         <expression-string>&quot;SvgExporter textIndex: &quot;+textIndex+&quot; &quot;+nextLayout.getTextLineForTesting()</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
         <expression-string>&quot;SvgExporter textIndex: &quot;+textIndex+&quot; &quot;+styledText.getBeginIndex()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;SvgExporter textIndex: &quot;+textIndex+&quot; &quot;+styledText</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -1671,212 +1553,10 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/spi/DrawResourceBundleProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="31" selection-start-line="6" selection-start-column="31" selection-end-line="6" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/spi/GrapherResourceBundleProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="34" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/spi/ModelerResourceBundleProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="34" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ClasspathResources.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="19" selection-start-line="18" selection-start-column="4" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ModulepathResources.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/module-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssFunctionProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssTokenType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="98" column="40" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssToken.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="85" column="41" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="96" column="82" selection-start-line="96" selection-start-column="76" selection-end-line="96" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="330" column="35" selection-start-line="330" selection-start-column="35" selection-end-line="330" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/src.zip!/java.xml.crypto/com/sun/org/apache/xml/internal/security/utils/XMLUtils.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/Figure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15735">
-          <caret line="1049" column="17" selection-start-line="1049" selection-start-column="17" selection-end-line="1049" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/TransformableFigure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6150">
-          <caret line="410" column="82" selection-start-line="410" selection-start-column="82" selection-end-line="410" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/xml/XmlUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-282">
-          <caret line="241" column="23" selection-start-line="241" selection-start-column="23" selection-end-line="241" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home/lib/src.zip!/java.base/java/lang/ClassLoader.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home/lib/src.zip!/java.base/jdk/internal/loader/ClassLoaders.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/RectangleFigure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1155">
-          <caret line="77" column="16" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/SimpleCssFunctionProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3825">
-          <caret line="255" selection-start-line="255" selection-end-line="255" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10170">
-          <caret line="678" selection-start-line="678" selection-end-line="678" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/FigureTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
-          <caret line="89" selection-start-line="89" selection-end-line="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/test/junit-5.3.2/apiguardian-api-1.0.0.jar!/META-INF/MANIFEST.MF">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/test/junit-5.3.2/opentest4j-1.1.1.jar!/META-INF/MANIFEST.MF">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="46" column="28" selection-start-line="46" selection-start-column="28" selection-end-line="46" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/AbstractLineConnectionFigure.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerApplicationModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="58" selection-start-line="58" selection-end-line="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/GrapherApplicationModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="26" column="53" selection-start-line="26" selection-start-column="53" selection-end-line="26" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/SimpleApplicationModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="36" column="49" selection-start-line="36" selection-start-column="49" selection-end-line="36" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/ApplicationModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/specification/design/graph/design.GraphLibrary.xml" />
-    <entry file="file://$PROJECT_DIR$/doc/specification/design/graph/design.GraphAsDirectedGraph.xml" />
-    <entry file="file://$PROJECT_DIR$/doc/specification/design/graph/design.Graph.xml" />
-    <entry file="file://$PROJECT_DIR$/doc/specification/requirements/draw/requirement.CascadingStyleSheetsStyleOrigin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="503">
-          <caret line="61" column="33" selection-start-line="61" selection-start-column="30" selection-end-line="61" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/specification/design/graph/design.DirectedGraph.xml" />
     <entry file="file://$PROJECT_DIR$/doc/general/introduction/Definitions.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="307">
           <caret line="55" column="29" lean-forward="true" selection-start-line="55" selection-start-column="29" selection-end-line="55" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/design.LayoutDependencies.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="93" selection-start-line="5" selection-start-column="93" selection-end-line="5" selection-end-column="93" />
         </state>
       </provider>
     </entry>
@@ -1888,13 +1568,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/design.TypeSafeMap.xml" />
-    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/design.DrawingDataStructure.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/doc/specification/requirements/draw/requirement.Grouping.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1919,38 +1592,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/doc/specification/Book.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="80" selection-start-line="80" selection-end-line="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/specification/requirements/draw/requirement.Layers.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/design.Layers.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/geom/BezierPath.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5081">
+        <state relative-caret-position="540">
           <caret line="36" column="52" selection-start-line="36" selection-start-column="52" selection-end-line="36" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-12/lib/src.zip!/javafx.graphics/javafx/geometry/Point3D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1963,8 +1608,261 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/module-info.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
+        <state relative-caret-position="240">
           <caret line="16" column="48" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/key/AbstractStyleableMapAccessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-12/lib/src.zip!/javafx.graphics/javafx/geometry/Point3D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/requirements/draw/requirement.Layers.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/key/AbstractMapAccessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/application/block.MasterDetailsInspectorLayout.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.UserInterfaceGuidelines.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.ApplicationFramework.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.GraphFacadeAPIs.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/general/block.FacadePattern.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/config/custom-chunk.xsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="27" selection-start-line="27" selection-end-line="33" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/config/custom-epub3.xsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="33" column="14" selection-start-line="33" selection-start-column="14" selection-end-line="33" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/config/custom-xhtml5.xsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="37" column="14" selection-start-line="37" selection-start-column="14" selection-end-line="37" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/Book.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="3" lean-forward="true" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/introduction/Purpose.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home/lib/src.zip!/java.base/java/net/URI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="773" column="58" selection-start-line="771" selection-start-column="11" selection-end-line="773" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/io/AbstractExportOutputFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="63" column="59" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/io/SvgExportOutputFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10">
+          <caret line="162" column="22" selection-start-line="162" selection-start-column="22" selection-end-line="162" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/action/file/SaveFileAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="76" column="25" lean-forward="true" selection-start-line="76" selection-start-column="25" selection-end-line="76" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-12/lib/src.zip!/javafx.graphics/javafx/application/Platform.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="150" selection-start-line="150" selection-end-line="150" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home/lib/src.zip!/java.base/java/lang/Object.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="49" selection-start-line="49" selection-end-line="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home/lib/src.zip!/java.base/java/lang/invoke/VarHandleGuards.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="75" selection-start-line="75" selection-end-line="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/concurrent/FXWorker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="48" column="16" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home/lib/src.zip!/java.base/java/util/concurrent/CompletableFuture.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="2156" selection-start-line="2156" selection-end-line="2156" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/action/file/AbstractSaveFileAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="184" column="47" lean-forward="true" selection-start-line="184" selection-start-column="47" selection-end-line="184" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/cd.KeyWithTypeSafeMapAccessors.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/cd.KeyWithTypeSafeMapAccessors.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/cd.TypeSafePropertyMap.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.FacadePattern.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/block.Layers.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/block.LayoutDependencies.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/block.StyleAttributesInspector.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/block.DrawingDataStructure.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/req.UserInterfaceGuidelines.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/graph/block.GraphFacadeAPIs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="2" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.TypeSafeMapAccessor.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="17" lean-forward="true" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/figure.TypeSafePropertyMap.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/ModelerActivityController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="600" column="17" lean-forward="true" selection-start-line="600" selection-start-column="17" selection-end-line="600" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org/jhotdraw8/samples/modeler/user-agent.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/design/draw/block.TypeSafePropertyMap.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="29" column="15" lean-forward="true" selection-start-line="29" selection-start-column="15" selection-end-line="29" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/specification/figures/cd.TypeSafeMapAccessor.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="1255" column="66" selection-start-line="1255" selection-start-column="66" selection-end-line="1255" selection-end-column="66" />
         </state>
       </provider>
     </entry>

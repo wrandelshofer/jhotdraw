@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
+  <Layer id="frame" locked="true">
+    <MLDiagram bounds="1 1 557 557" diagramKind="cd" id="sysmldiagram1" modelElementName="Type-safe Map Accessor"
+               padding="4 14 4 6"/>
+  </Layer>
+  <Layer id="content">
+    <MLClassifier bounds="123 178 330 100"
+                  compartments="{attributes:[], operations:['get&lt;V&gt;(map:Map&lt;Key&lt;?&gt;,Object&gt;):V', 'put&lt;V&gt;(map:Map&lt;Key&lt;?&gt;,Object&gt;, V value):V']}"
+                  id="mlclassifier2" keyword="interface" name="MapAccessor&lt;V&gt;"/>
+  </Layer>
+</Drawing>
