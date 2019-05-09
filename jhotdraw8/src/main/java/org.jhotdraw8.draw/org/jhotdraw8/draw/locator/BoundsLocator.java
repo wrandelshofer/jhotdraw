@@ -1,4 +1,4 @@
-/* @(#)RelativeLocator.java
+/* @(#)BoundsLocator.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.locator;
@@ -12,22 +12,34 @@ import org.jhotdraw8.geom.Geom;
 
 /**
  * A locator that specifies a point that is relative to the bounds of a figure.
+ * <p>
+ * The locator has the following parameters:
+ * <dl>
+ *     <dt>{@code relativeX}</dt><dd>Defines a position on the X-axis
+ *     of the figure, relative to its width.
+ *     Where {@code 0.0} lies at the left edge of the
+ *     figure and {@code 1.0} at the right edge.</dd>
+ *     <dt>{@code relativeY}</dt><dd>Defines a position on the Y-axis
+ *     of the figure, relative to its height.
+ *     Where {@code 0.0} lies at the top edge of the
+ *     figure and {@code 1.0} at the bottom edge.</dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RelativeLocator extends AbstractLocator {
+public class BoundsLocator extends AbstractLocator {
 
-    public static final RelativeLocator CENTER = new RelativeLocator(0.5, 0.5);
+    public static final BoundsLocator CENTER = new BoundsLocator(0.5, 0.5);
 
-    public static final RelativeLocator EAST = new RelativeLocator(1.0, 0.5);
-    public static final RelativeLocator NORTH = new RelativeLocator(0.5, 0.0);
-    public static final RelativeLocator NORTH_EAST = new RelativeLocator(1.0, 0.0);
-    public static final RelativeLocator NORTH_WEST = new RelativeLocator(0.0, 0.0);
-    public static final RelativeLocator SOUTH = new RelativeLocator(0.5, 1.0);
-    public static final RelativeLocator SOUTH_EAST = new RelativeLocator(1.0, 1.0);
-    public static final RelativeLocator SOUTH_WEST = new RelativeLocator(0.0, 1.0);
-    public static final RelativeLocator WEST = new RelativeLocator(0.0, 0.5);
+    public static final BoundsLocator EAST = new BoundsLocator(1.0, 0.5);
+    public static final BoundsLocator NORTH = new BoundsLocator(0.5, 0.0);
+    public static final BoundsLocator NORTH_EAST = new BoundsLocator(1.0, 0.0);
+    public static final BoundsLocator NORTH_WEST = new BoundsLocator(0.0, 0.0);
+    public static final BoundsLocator SOUTH = new BoundsLocator(0.5, 1.0);
+    public static final BoundsLocator SOUTH_EAST = new BoundsLocator(1.0, 1.0);
+    public static final BoundsLocator SOUTH_WEST = new BoundsLocator(0.0, 1.0);
+    public static final BoundsLocator WEST = new BoundsLocator(0.0, 0.5);
 
     private static final long serialVersionUID = 1L;
     /**
@@ -44,7 +56,7 @@ public class RelativeLocator extends AbstractLocator {
     /**
      * Creates a new instance.
      */
-    public RelativeLocator() {
+    public BoundsLocator() {
         this(0, 0);
     }
 
@@ -56,7 +68,7 @@ public class RelativeLocator extends AbstractLocator {
      * @param relativeY y-position relative to bounds expressed as a value
      *                  between 0 and 1.
      */
-    public RelativeLocator(double relativeX, double relativeY) {
+    public BoundsLocator(double relativeX, double relativeY) {
         this.relativeX = relativeX;
         this.relativeY = relativeY;
     }
@@ -67,7 +79,7 @@ public class RelativeLocator extends AbstractLocator {
      * @param bounds current local bounds of a figure
      * @param p      a local coordinate on the figure
      */
-    public RelativeLocator(@Nonnull Bounds bounds, Point2D p) {
+    public BoundsLocator(@Nonnull Bounds bounds, Point2D p) {
         this(bounds, p.getX(), p.getY());
     }
 
@@ -78,7 +90,7 @@ public class RelativeLocator extends AbstractLocator {
      * @param x      a local coordinate on the figure
      * @param y      a local coordinate on the figre
      */
-    public RelativeLocator(Bounds bounds, double x, double y) {
+    public BoundsLocator(Bounds bounds, double x, double y) {
         this(Geom.clamp((x - bounds.getMinX()) / bounds.getWidth(), 0, 1),
                 Geom.clamp((y - bounds.getMinY()) / bounds.getHeight(), 0, 1));
     }
@@ -111,7 +123,7 @@ public class RelativeLocator extends AbstractLocator {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final RelativeLocator other = (RelativeLocator) obj;
+        final BoundsLocator other = (BoundsLocator) obj;
         if (this.relativeX != other.relativeX) {
             return false;
         }
