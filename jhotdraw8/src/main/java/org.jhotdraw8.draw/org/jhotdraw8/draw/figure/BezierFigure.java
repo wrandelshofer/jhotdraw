@@ -30,7 +30,7 @@ import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
@@ -95,7 +95,7 @@ public class BezierFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
-        return new PathConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new PathConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
     @Nonnull

@@ -32,7 +32,7 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.NullableObjectKey;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
 
@@ -131,10 +131,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             if (get(LABEL_CONNECTOR) == null) {
-                list.add(new MoveHandle(this, RelativeLocator.NORTH_EAST));
-                list.add(new MoveHandle(this, RelativeLocator.NORTH_WEST));
-                list.add(new MoveHandle(this, RelativeLocator.SOUTH_EAST));
-                list.add(new MoveHandle(this, RelativeLocator.SOUTH_WEST));
+                list.add(new MoveHandle(this, BoundsLocator.NORTH_EAST));
+                list.add(new MoveHandle(this, BoundsLocator.NORTH_WEST));
+                list.add(new MoveHandle(this, BoundsLocator.SOUTH_EAST));
+                list.add(new MoveHandle(this, BoundsLocator.SOUTH_WEST));
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
