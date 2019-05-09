@@ -8,8 +8,8 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
@@ -27,7 +27,7 @@ import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;
 public class EllipseConnector extends LocatorConnector {
 
     public EllipseConnector() {
-        super(RelativeLocator.CENTER);
+        super(BoundsLocator.CENTER);
     }
 
     public EllipseConnector(Locator locator) {

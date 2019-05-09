@@ -8,8 +8,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -91,7 +91,7 @@ public class CssLocatorConverter implements Converter<Locator> {
                 x = tt.currentNumber().doubleValue() / 100.0;
                 break;
             default:
-                throw new ParseException("RelativeLocator: x-value expected but found " + tt.currentValue(), tt.getStartPosition());
+                throw new ParseException("BoundsLocator: x-value expected but found " + tt.currentValue(), tt.getStartPosition());
         }
         switch (tt.next()) {
             case ',':
@@ -108,27 +108,27 @@ public class CssLocatorConverter implements Converter<Locator> {
                 y = tt.currentNumber().doubleValue() / 100.0;
                 break;
             default:
-                throw new ParseException("RelativeLocator: y-value expected but found " + tt.currentValue(), tt.getStartPosition());
+                throw new ParseException("BoundsLocator: y-value expected but found " + tt.currentValue(), tt.getStartPosition());
         }
         if (tt.next() != ')') {
-            throw new ParseException("RelativeLocator: ')' expected but found " + tt.currentValue(), tt.getStartPosition());
+            throw new ParseException("BoundsLocator: ')' expected but found " + tt.currentValue(), tt.getStartPosition());
         }
 
-        return new RelativeLocator(x, y);
+        return new BoundsLocator(x, y);
     }
 
 
     @Override
     public void toString(@Nonnull Appendable out, IdFactory idFactory, Locator value) throws IOException {
-        if (value instanceof RelativeLocator) {
-            RelativeLocator rl = (RelativeLocator) value;
+        if (value instanceof BoundsLocator) {
+            BoundsLocator rl = (BoundsLocator) value;
             out.append("relative(");
             out.append(numberConverter.toString(rl.getRelativeX() * 100));
             out.append("%,");
             out.append(numberConverter.toString(rl.getRelativeY() * 100));
             out.append("%)");
         } else {
-            throw new UnsupportedOperationException("only RelativeLocator supported, value:" + value);
+            throw new UnsupportedOperationException("only BoundsLocator supported, value:" + value);
         }
     }
 }

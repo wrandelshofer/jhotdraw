@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
@@ -67,7 +67,7 @@ public class EllipseFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
-        return new EllipseConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new EllipseConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
     @Nonnull

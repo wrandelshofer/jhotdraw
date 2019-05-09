@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.UriStyleableKey;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.net.URI;
@@ -126,7 +126,7 @@ public class ImageFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
-        return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
     @Nonnull

@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -95,8 +96,12 @@ public class LineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
-        set(START, new CssPoint2D(x, y));
-        set(END, new CssPoint2D(x.add(width), y.add(height)));
+        reshapeInLocal(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
+    }
+
+    @Override
+    public void reshapeInLocal(double x, double y, double width, double height) {
+        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
     }
 
     @Nonnull
