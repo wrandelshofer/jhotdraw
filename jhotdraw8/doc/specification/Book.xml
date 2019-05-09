@@ -116,7 +116,7 @@
 
       <xi:include href="design/draw/block.Layers.xml"/>
 
-      <xi:include href="design/draw/block.DrawingDataStructure.xml"/>
+      <xi:include href="design/draw/block.DrawingTreeStructure.xml"/>
 
       <xi:include href="design/draw/block.LayoutDependencies.xml"/>
 

@@ -2,13 +2,24 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="block.GraphTheoryDirectedGraph"
          role="block">
   <title>Directed Graph in Graph Theory</title>
-  <para>In graph theory a directed graph is an ordered pair
+
+  <para>
+    In graph theory a directed graph is a specialization of a graph, in that it only supports edges
+    that are ordered pairs of vertices. These edges are named 'arrows'.
+  </para>
+
+  <para>
+    A directed graph is an ordered pair
     <inlineequation>
       <mathphrase>G = (V, A)</mathphrase>
     </inlineequation>
     .
   </para>
-  <para>Where</para>
+
+  <para>
+    Where
+  </para>
+
   <itemizedlist>
     <listitem>
       <para>
@@ -35,7 +46,8 @@
       </para>
     </listitem>
     <listitem>
-      <para>An arrow
+      <para>
+        An arrow
         <inlineequation>
           <mathphrase>a ∈ A</mathphrase>
         </inlineequation>

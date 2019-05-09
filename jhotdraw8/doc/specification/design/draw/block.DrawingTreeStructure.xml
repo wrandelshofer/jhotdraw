@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="block.DrawingTreeStructure"
+         role="block">
+  <title>Drawing Data Structure</title>
+  <para>The data structure of a drawing can be represented as a tree using the "Composite" design pattern.</para>
+  <variablelist>
+    <varlistentry>
+      <term>TreeNode&lt;Figure&gt;</term>
+      <listitem>
+        <para>
+          TreeNode is the interface type that realizes the "Composite" design pattern.
+        </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Figure</term>
+      <listitem>
+        <para>
+          Figure is the interface type for all elements in a drawing, including the drawing itself.
+        </para>
+        <para>
+          Figure extends the TreeNode&lt;Figure&gt; interface.
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <section>
+    <title>Trade-off</title>
+    <para>This design implements the "Composite" design pattern in a two interfaces.
+      This allows to separate the concern of representing a drawing element (by Figure) from
+      the concern of representing a tree structure (by TreeNode).
+    </para>
+  </section>
+</section>

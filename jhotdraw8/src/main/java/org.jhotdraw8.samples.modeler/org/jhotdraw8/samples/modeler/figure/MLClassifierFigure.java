@@ -44,7 +44,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.StringStyleableKey;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -421,7 +421,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
 
     @Override
     public @Nullable Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
-        return new PathConnector(new RelativeLocator(getBoundsInLocal(), pointInLocal));
+        return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
     }
 
     @Override

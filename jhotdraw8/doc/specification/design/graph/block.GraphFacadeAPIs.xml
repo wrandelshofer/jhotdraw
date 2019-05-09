@@ -28,13 +28,19 @@
           the collections of vertices and arrows, and methods for following arrows in forward
           direction.
         </para>
+        <para>A vertex V in the graph must have a unique identity or value.</para>
+        <para>An arrow A in the graph is not required to have a unique identity or value.</para>
+        <para>The API does not make any assumptions about the type or structure of an arrow A.
+          Users of the API are free to ignore arrow objects (and just specify Void for A), or to
+          use A for storing edge weights or other data associated to arrows.
+        </para>
       </listitem>
     </varlistentry>
     <varlistentry>
       <term>DirectedGraph</term>
       <listitem>
         <para>
-          Extends DirectedGraphMinimalAPI with a set of convenience methods.
+          Extends BareDirectedGraph with a set of convenience methods.
         </para>
       </listitem>
     </varlistentry>
@@ -51,8 +57,7 @@
       <term>BidiGraph</term>
       <listitem>
         <para>
-          Extends DirectedGraph with a set of convenience methods for following arrows in backward
-          direction.
+          Extends BareBidGraph and DirectedGraph with a set of convenience methods.
         </para>
       </listitem>
     </varlistentry>

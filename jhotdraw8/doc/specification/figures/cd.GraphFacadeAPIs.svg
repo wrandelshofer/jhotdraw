@@ -33,27 +33,27 @@
               stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="117.73510742" y="82.14746094">«interface»</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="65.87011719" y="99.65625">BareDirectedGraph&lt;V,A&gt;</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="54" y="135.0625">getVertices():Collection&lt;V&gt;</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="54" y="152.46875">getArrows():Collection&lt;V&gt;</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="54" y="169.875">getNextCount(V):int</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="54" y="187.28125">getNext(V,int):V</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="54" y="204.6875">getNextArrow(V,int):A</tspan>
         </text>
@@ -65,19 +65,19 @@
               stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="377.73510742" y="152.14746094">«interface»</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="339.63671875" y="169.65625">BareBidiGraph&lt;V,A&gt;</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="314" y="205.0625">getPrevCount(V):int</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="314" y="222.46875">getPrev(V,int):V</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="normal" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="314" y="239.875">getPrevArrow(V,int):A</tspan>
         </text>
@@ -89,7 +89,7 @@
               stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="117.73510742" y="302.14746094">«interface»</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="78.43261719" y="319.65625">DirectedGraph&lt;V,A&gt;</tspan>
         </text>
@@ -105,7 +105,7 @@
               stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="377.73510742" y="352.14746094">«interface»</tspan>
         </text>
-        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="normal"
+        <text fill="#000000" font-family="'Arial Bold Italic', 'Arial'" font-size="12" font-style="italic"
               font-weight="bold" stroke-linecap="square" stroke-miterlimit="10">
           <tspan x="352.19921875" y="369.65625">BidiGraph&lt;V,A&gt;</tspan>
         </text>
