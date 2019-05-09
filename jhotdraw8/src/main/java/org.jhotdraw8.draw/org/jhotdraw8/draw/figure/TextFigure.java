@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -130,7 +130,7 @@ public class TextFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
-        return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
     @Nonnull

@@ -22,7 +22,7 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
 import org.jhotdraw8.draw.handle.PolygonOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
@@ -137,7 +137,7 @@ public class PolygonFigure extends AbstractLeafFigure
     @Nonnull
     @Override
     public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
-        return new PathConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new PathConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
     @Override

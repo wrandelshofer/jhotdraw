@@ -8,8 +8,8 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
 
@@ -28,7 +28,7 @@ import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
 public class PathConnector extends LocatorConnector {
 
     public PathConnector() {
-        super(RelativeLocator.CENTER);
+        super(BoundsLocator.CENTER);
     }
 
     public PathConnector(Locator locator) {

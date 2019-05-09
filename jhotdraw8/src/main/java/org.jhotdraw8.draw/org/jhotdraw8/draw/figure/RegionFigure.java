@@ -7,7 +7,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 
 public class RegionFigure extends AbstractRegionFigure
@@ -23,7 +23,7 @@ public class RegionFigure extends AbstractRegionFigure
     @Nullable
     @Override
     public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
-        return new PathConnector(new RelativeLocator(getBoundsInLocal(), pointInLocal));
+        return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
     }
 
     @Override

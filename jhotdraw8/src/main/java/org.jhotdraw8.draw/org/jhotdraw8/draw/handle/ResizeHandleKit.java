@@ -17,7 +17,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 
 import java.util.Collection;
@@ -202,7 +202,7 @@ public class ResizeHandleKit {
     private static class NorthEastHandle extends AbstractResizeTransformHandle {
 
         NorthEastHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.NORTH_EAST, NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.NORTH_EAST, NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -232,7 +232,7 @@ public class ResizeHandleKit {
     private static class EastHandle extends AbstractResizeTransformHandle {
 
         EastHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.EAST, EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.EAST, EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -254,7 +254,7 @@ public class ResizeHandleKit {
     private static class NorthHandle extends AbstractResizeTransformHandle {
 
         NorthHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.NORTH, NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.NORTH, NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -277,7 +277,7 @@ public class ResizeHandleKit {
     private static class NorthWestHandle extends AbstractResizeTransformHandle {
 
         NorthWestHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.NORTH_WEST, NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.NORTH_WEST, NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -307,7 +307,7 @@ public class ResizeHandleKit {
     private static class SouthEastHandle extends AbstractResizeTransformHandle {
 
         SouthEastHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.SOUTH_EAST, SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.SOUTH_EAST, SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -336,7 +336,7 @@ public class ResizeHandleKit {
     private static class SouthHandle extends AbstractResizeTransformHandle {
 
         SouthHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.SOUTH, SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.SOUTH, SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -359,7 +359,7 @@ public class ResizeHandleKit {
     private static class SouthWestHandle extends AbstractResizeTransformHandle {
 
         SouthWestHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.SOUTH_WEST, SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.SOUTH_WEST, SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -388,7 +388,7 @@ public class ResizeHandleKit {
     private static class WestHandle extends AbstractResizeTransformHandle {
 
         WestHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, RelativeLocator.WEST, WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, styleclass, BoundsLocator.WEST, WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
