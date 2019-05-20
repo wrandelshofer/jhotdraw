@@ -39,9 +39,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TextEditableFigure;
 import org.jhotdraw8.draw.figure.TextFillableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.StringStyleableKey;
+import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -77,10 +75,10 @@ public class MLDiagramFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "MLDiagram";
 
-    public final static StringStyleableKey DIAGRAM_KIND = new StringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "diagramKind", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), true, null, null);
-    public final static StringStyleableKey MODEL_ELEMENT_TYPE = new StringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "modelElementType", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), true, null, null);
-    public final static StringStyleableKey MODEL_ELEMENT_NAME = new StringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "modelElementName", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), true, null, null);
-    public final static StringStyleableKey DIAGRAM_NAME = new StringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "diagramName", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), true, null, null);
+    public final static NullableStringStyleableKey DIAGRAM_KIND = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "diagramKind");
+    public final static NullableStringStyleableKey MODEL_ELEMENT_TYPE = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "modelElementType");
+    public final static NullableStringStyleableKey MODEL_ELEMENT_NAME = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "modelElementName");
+    public final static NullableStringStyleableKey DIAGRAM_NAME = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "diagramName");
     /**
      * This key is used to tag editable nodes.
      */

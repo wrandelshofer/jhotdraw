@@ -96,13 +96,15 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
         int start = tt.getStartPosition();
 
         String str = evalString(element, tt, REPLACE_FUNCTION_NAME);
-        if (tt.next() != CssTokenType.TT_COMMA) {
-            tt.pushBack();
+        if (tt.next() == CssTokenType.TT_COMMA) {
+            tt.next();
         }
+            tt.pushBack();
         String regex = evalString(element, tt, REPLACE_FUNCTION_NAME);
-        if (tt.next() != CssTokenType.TT_COMMA) {
-            tt.pushBack();
+        if (tt.next() == CssTokenType.TT_COMMA) {
+            tt.next();
         }
+            tt.pushBack();
         String repl = evalString(element, tt, REPLACE_FUNCTION_NAME);
         if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
             throw new ParseException("〈replace〉: right bracket ')' expected.", tt.getStartPosition());

@@ -1,4 +1,4 @@
-/* @(#)StringStyleableKey.java
+/* @(#)NullableStringStyleableKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -19,12 +19,12 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 import java.util.function.Function;
 
 /**
- * StringStyleableKey.
+ * NullableStringStyleableKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringStyleableKey extends AbstractStyleableKey<String>
+public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
@@ -32,13 +32,13 @@ public class StringStyleableKey extends AbstractStyleableKey<String>
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
-     * Creates a new instance with the specified name and with an empty String
+     * Creates a new instance with the specified name and with a null String
      * as the default value.
      *
      * @param name The name of the key.
      */
-    public StringStyleableKey(String name) {
-        this(name, "");
+    public NullableStringStyleableKey(String name) {
+        this(name, null);
     }
 
     /**
@@ -47,7 +47,7 @@ public class StringStyleableKey extends AbstractStyleableKey<String>
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public StringStyleableKey(String name, String defaultValue) {
+    public NullableStringStyleableKey(String name, String defaultValue) {
         this(name, defaultValue, null);
     }
 
@@ -59,13 +59,13 @@ public class StringStyleableKey extends AbstractStyleableKey<String>
      * @param defaultValue The default value.
      * @param helpText     the help text
      */
-    public StringStyleableKey(String name, String defaultValue, String helpText) {
+    public NullableStringStyleableKey(String name, String defaultValue, String helpText) {
         this(null, name, defaultValue, helpText);
     }
 
-    public StringStyleableKey(String namespace, String name, String defaultValue, String helpText) {
-        super(namespace, name, String.class, false, defaultValue);
-        converter = new CssStringConverter(false, '\'', helpText);
+    public NullableStringStyleableKey(String namespace, String name, String defaultValue, String helpText) {
+        super(namespace, name, String.class, true, defaultValue);
+        converter = new CssStringConverter(true, '\'', helpText);
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);

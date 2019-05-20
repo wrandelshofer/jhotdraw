@@ -7,9 +7,7 @@ import javafx.scene.control.Labeled;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.StringStyleableKey;
+import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -24,7 +22,7 @@ public interface TextableFigure extends Figure {
     /**
      * The text. Default value: {@code ""}.
      */
-    StringStyleableKey TEXT = new StringStyleableKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "");
+    NullableStringStyleableKey TEXT = new NullableStringStyleableKey("text");
 
     /**
      * Updates a text node with textable properties.

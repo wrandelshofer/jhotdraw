@@ -15,9 +15,9 @@ import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableObjectKey;
+import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.ObjectFigureKey;
 import org.jhotdraw8.draw.key.ObservableWordListKey;
-import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 
@@ -37,7 +37,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nonnull
-    StringStyleableKey ID = new StringStyleableKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), true, null);
+    NullableStringStyleableKey ID = new NullableStringStyleableKey("id");
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
