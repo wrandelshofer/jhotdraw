@@ -46,7 +46,7 @@ public interface ItemFontableFigure extends Figure {
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableKey ITEM_UNDERLINE = new BooleanStyleableKey("itemUnderline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey ITEM_UNDERLINE = new BooleanStyleableKey("itemUnderline", false);
 
     /**
      * Updates a text node with fontable properties.

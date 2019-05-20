@@ -133,7 +133,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
     public final static NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
     public final static NullableStringStyleableKey PACKAGE = MLConstants.PACKAGE;
     public final static StringStyleableKey NAME = new StringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "name", "unnamed", null);
-    public final static BooleanStyleableKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableKey("compartmentLabelsVisible", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false);
+    public final static BooleanStyleableKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableKey("compartmentLabelsVisible", false);
     public final static BooleanStyleableKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
     /**
      * The line spacing. Default value: {@code 0.0}

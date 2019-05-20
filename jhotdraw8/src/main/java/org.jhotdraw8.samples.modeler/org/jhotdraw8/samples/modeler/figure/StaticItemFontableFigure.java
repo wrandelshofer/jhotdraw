@@ -46,7 +46,7 @@ public interface StaticItemFontableFigure extends Figure {
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableKey STATIC_ITEM_UNDERLINE = new BooleanStyleableKey("staticItemUnderline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey STATIC_ITEM_UNDERLINE = new BooleanStyleableKey("staticItemUnderline", false);
 
     /**
      * Updates a text node with fontable properties.

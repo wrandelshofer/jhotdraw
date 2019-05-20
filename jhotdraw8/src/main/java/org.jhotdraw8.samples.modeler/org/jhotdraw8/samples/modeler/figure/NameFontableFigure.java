@@ -46,7 +46,7 @@ public interface NameFontableFigure extends Figure {
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableKey NAME_UNDERLINE = new BooleanStyleableKey("nameUnderline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey NAME_UNDERLINE = new BooleanStyleableKey("nameUnderline", false);
 
     /**
      * Updates a text node with fontable properties.

@@ -7,8 +7,6 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -23,7 +21,7 @@ public interface HideableFigure extends Figure {
     /**
      * Defines the visibility of the figure. Default value: {@code true}.
      */
-    BooleanStyleableKey VISIBLE = new BooleanStyleableKey("visible", DirtyMask.of(DirtyBits.NODE), true);
+    BooleanStyleableKey VISIBLE = new BooleanStyleableKey("visible", true);
 
     /**
      * Updates a figure node with all style and effect properties defined in

@@ -46,7 +46,7 @@ public interface AbstractItemFontableFigure extends Figure {
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableKey ABSTRACT_ITEM_UNDERLINE = new BooleanStyleableKey("abstractItemUnderline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey ABSTRACT_ITEM_UNDERLINE = new BooleanStyleableKey("abstractItemUnderline", false);
 
     /**
      * Updates a text node with fontable properties.

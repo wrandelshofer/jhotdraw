@@ -45,11 +45,11 @@ public interface TextFontableFigure extends Figure {
     /**
      * Whether to strike through the text. Default value: {@code false}
      */
-    BooleanStyleableKey STRIKETHROUGH = new BooleanStyleableKey("strikethrough", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey STRIKETHROUGH = new BooleanStyleableKey("strikethrough", false);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableKey UNDERLINE = new BooleanStyleableKey("underline", DirtyMask.of(DirtyBits.NODE), false);
+    BooleanStyleableKey UNDERLINE = new BooleanStyleableKey("underline", false);
 
     /**
      * Updates a text node with fontable properties.

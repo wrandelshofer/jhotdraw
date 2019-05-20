@@ -53,7 +53,7 @@ public class BezierFigure extends AbstractLeafFigure
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
-    public final static BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), false);
+    public final static BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", false);
     public final static BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.

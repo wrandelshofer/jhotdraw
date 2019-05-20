@@ -47,7 +47,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Nonnull
     public final static CssSizeStyleableKey Y = RectangleFigure.Y;
 
-    public final static BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", DirtyMask.of(DirtyBits.NODE), false);
+    public final static BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
 
     private transient Path2D.Float pathElements;
 
