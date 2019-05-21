@@ -1259,4 +1259,15 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         final Transform wtp = getWorldToParent();
         return Transforms.isIdentityOrNull(wtp) ? pointInWorld : wtp.transform(pointInWorld);
     }
+
+    /**
+     * Provides an alternative class name for styling.
+     *
+     * @return an alternative class name for styling - null if unused
+     */
+    @Nullable
+    default String getAlternativeStyleClass() {
+        String name = getClass().getName();
+        return name.substring(name.lastIndexOf('.') + 1);
+    }
 }
