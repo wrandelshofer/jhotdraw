@@ -15,6 +15,7 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
+import org.jhotdraw8.draw.render.RenderContext;
 
 import java.util.Objects;
 
@@ -44,9 +45,10 @@ public interface MarkerFillableFigure extends Figure {
     /**
      * Updates a shape node.
      *
+     * @param ctx
      * @param shape a shape node
      */
-    default void applyMarkerFillableFigureProperties(@Nonnull Shape shape) {
+    default void applyMarkerFillableFigureProperties(RenderContext ctx, @Nonnull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(MARKER_FILL));
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);
