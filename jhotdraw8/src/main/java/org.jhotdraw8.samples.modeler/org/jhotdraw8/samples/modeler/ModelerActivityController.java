@@ -7,7 +7,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
-import javafx.css.StyleOrigin;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
@@ -132,6 +131,7 @@ import org.jhotdraw8.util.Resources;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -186,9 +186,9 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
     private void applyUserAgentStylesheet(Drawing d) {
         try {
-            d.getStyleManager().clearStylesheets(StyleOrigin.USER_AGENT);
-            d.getStyleManager().addStylesheet(StyleOrigin.USER_AGENT,
-                    ModelerActivityController.class.getResource("user-agent.css").toURI());
+            d.set(Drawing.USER_AGENT_STYLESHEETS,
+                    Collections.singletonList(
+                            ModelerActivityController.class.getResource("user-agent.css").toURI()));
             SimpleRenderContext ctx = new SimpleRenderContext();
             for (Figure f : d.preorderIterable()) {
                 f.updateCss();

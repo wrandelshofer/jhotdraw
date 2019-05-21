@@ -182,6 +182,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             return;
         }
         drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, new ArrayList<>(listView.getItems()));
+        getDrawing().updateStyleManager();
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);
         }
@@ -206,6 +207,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     }
 
     private void onRefreshAction(ActionEvent event) {
+        getDrawing().updateStyleManager();
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);
         }

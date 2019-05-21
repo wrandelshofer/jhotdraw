@@ -15,6 +15,8 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.graph.DirectedGraphBuilder;
+import org.jhotdraw8.graph.GraphSearch;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -137,8 +139,12 @@ public interface Drawing extends Figure {
      *
      * @return the style manager
      */
-
     StylesheetsManager<Figure> getStyleManager();
+
+    /**
+     * Updates the stylesheets in the style manager.
+     */
+    void updateStyleManager();
 
     /**
      * Performs one layout pass over the entire drawing.
@@ -146,8 +152,28 @@ public interface Drawing extends Figure {
      * @param ctx the render context
      */
     default void layoutAll(RenderContext ctx) {
-        for (Figure f : postorderIterable()) {
+        for (Figure f : layoutDependenciesIterable()) {
             f.layout(ctx);
         }
+    }
+
+    /**
+     * Returns all figures in topological order according to their layout dependencies.
+     * Independent figures come first.
+     *
+     * @return figures in topological order according to layout dependencies
+     */
+    default Iterable<Figure> layoutDependenciesIterable() {
+        // build a graph which includes all figures that must be laid out and all their observers
+        // transitively
+        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>();
+        for (Figure f : postorderIterable()) {
+            graphBuilder.addVertex(f);
+            for (Figure obs : f.getLayoutObservers()) {
+                graphBuilder.addVertex(obs);
+                graphBuilder.addArrow(f, obs, f);
+            }
+        }
+        return GraphSearch.sortTopologically(graphBuilder);
     }
 }

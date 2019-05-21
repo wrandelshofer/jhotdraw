@@ -94,11 +94,18 @@ public class DrawingFigure extends AbstractCompositeFigure
     public StylesheetsManager<Figure> getStyleManager() {
         if (styleManager == null) {
             styleManager = createStyleManager();
+            updateStyleManager();
+        }
+        return styleManager;
+    }
+
+    @Override
+    public void updateStyleManager() {
+        if (styleManager != null) {
             styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
             styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
             styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
         }
-        return styleManager;
     }
 
     @Override
