@@ -5,8 +5,7 @@ package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -17,13 +16,22 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
-        implements WriteableStyleableMapAccessor<T>, NonnullMapAccessor<T> {
+public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> implements WriteableStyleableMapAccessor<T> {
 
     private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, T> cssMetaData;
 
+    /**
+     * Creates a new instance with the specified name, enum class, mask and with
+     * null as the default value.
+     *
+     * @param name  The name of the key.
+     * @param clazz The enum class.
+     */
+    public NullableEnumStyleableKey(String name, Class<T> clazz) {
+        this(name, clazz, null);
+    }
 
     /**
      * Creates a new instance with the specified name, enum class, mask and
@@ -33,10 +41,11 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public EnumStyleableKey(String name, Class<T> clazz, @Nonnull T defaultValue) {
+    public NullableEnumStyleableKey(String name, Class<T> clazz, @Nullable T defaultValue) {
         super(name, clazz, null, null, defaultValue);
 
-        converter = new CssEnumConverter<>(getValueType(), false);
+
+        converter = new CssEnumConverter<>(getValueType(), true);
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
