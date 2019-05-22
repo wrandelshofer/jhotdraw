@@ -41,7 +41,7 @@ public class UriResolver implements Function<URI, URI> {
             // Paths is better at resolving URIs than URI.relativize().
             if ("file".equals(internal.getScheme()) &&
                     ("file".equals(resolved.getScheme()) || resolved.getScheme() == null)) {
-                resolved = Paths.get(internal).resolve(Paths.get(resolved.getPath())).toUri();
+                resolved = Paths.get(internal).resolve(Paths.get(resolved.getPath())).normalize().toUri();
             } else {
                 resolved = internal.resolve(resolved);
             }
