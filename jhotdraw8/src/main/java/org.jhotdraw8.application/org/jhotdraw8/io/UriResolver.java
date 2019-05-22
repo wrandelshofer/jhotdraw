@@ -6,6 +6,7 @@ package org.jhotdraw8.io;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.function.Function;
 
 /**
@@ -35,13 +36,26 @@ public class UriResolver implements Function<URI, URI> {
 
     @Override
     public URI apply(URI uri) {
+        URI resolved = uri;
         if (internal != null) {
-            uri = internal.resolve(uri);
+            // Paths is better at resolving URIs than URI.relativize().
+            if ("file".equals(internal.getScheme()) &&
+                    ("file".equals(resolved.getScheme()) || resolved.getScheme() == null)) {
+                resolved = Paths.get(internal).resolve(Paths.get(resolved.getPath())).toUri();
+            } else {
+                resolved = internal.resolve(resolved);
+            }
         }
         if (external != null) {
-            uri = external.relativize(uri);
+            // Paths is better at relativizing URIs than URI.relativize().
+            if ("file".equals(external.getScheme()) &&
+                    ("file".equals(resolved.getScheme()) || resolved.getScheme() == null)) {
+                resolved = Paths.get(external).relativize(Paths.get(resolved.getPath())).toUri();
+            } else {
+                resolved = external.relativize(resolved);
+            }
         }
-        return uri;
+        return resolved;
     }
 
 }

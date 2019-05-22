@@ -40,6 +40,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -151,7 +152,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     }
 
     @Override
-    public void write(@Nonnull OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
+    public void write(URI documentHome, @Nonnull OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
         WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), drawingDpi);
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
         writeImage(out, writableImage, drawingDpi);

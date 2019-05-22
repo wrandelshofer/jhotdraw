@@ -49,6 +49,7 @@ public interface OutputFormat {
      * Writes the drawing to the specified file. This method ensures that all
      * figures of the drawing are visible on the image.
      *
+     *
      * @param file      the file
      * @param drawing   the drawing
      * @param workState for progress monitoring and cancelling the operation
@@ -56,18 +57,20 @@ public interface OutputFormat {
      */
     default void write(@Nonnull Path file, Drawing drawing, WorkState workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
-            write(out, drawing, workState);
+            write(file.toUri(), out, drawing, workState);
         }
     }
 
     /**
      * Writes a Drawing into an output stream.
      *
+     *
+     * @param documentHome
      * @param out       The output stream.
      * @param drawing   The drawing.
      * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
-    void write(OutputStream out, Drawing drawing, WorkState workState) throws IOException;
+    void write(URI documentHome, OutputStream out, Drawing drawing, WorkState workState) throws IOException;
 
 }

@@ -48,6 +48,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
@@ -128,11 +129,11 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         }
     }
 
-    public Document toDocument(@Nonnull Drawing external) throws IOException {
-        return toDocument(external, Collections.singleton(external));
+    public Document toDocument(URI documentHome, @Nonnull Drawing external) throws IOException {
+        return toDocument(documentHome, external, Collections.singleton(external));
     }
 
-    public Document toDocument(@Nonnull Drawing external, Collection<Figure> selection) throws IOException {
+    public Document toDocument(URI documentHome, @Nonnull Drawing external, Collection<Figure> selection) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
@@ -147,7 +148,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     public void write(@Nonnull Map<DataFormat, Object> clipboard, @Nonnull Drawing drawing, Collection<Figure> selection) throws IOException {
         setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), null));
         StringWriter out = new StringWriter();
-        Document doc = toDocument(drawing, selection);
+        Document doc = toDocument(null, drawing, selection);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(doc);

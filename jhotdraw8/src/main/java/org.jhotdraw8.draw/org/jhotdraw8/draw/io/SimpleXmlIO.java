@@ -148,7 +148,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Nullable
     public Figure fromDocument(@Nonnull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
-        setUriResolver(new UriResolver(documentHome, documentHome));
+        setUriResolver(new UriResolver(documentHome, null));
         idFactory.reset();
         if (oldDrawing != null) {
             if (isClipping(doc.getDocumentElement())) {
@@ -648,9 +648,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    public Document toDocument(@Nonnull Drawing internal, @Nonnull Collection<Figure> selection) throws IOException {
+    public Document toDocument(URI documentHome, @Nonnull Drawing internal, @Nonnull Collection<Figure> selection) throws IOException {
+        setUriResolver(new UriResolver(null, documentHome));
         if (selection.isEmpty() || selection.contains(internal)) {
-            return toDocument(internal);
+            return toDocument(documentHome, internal);
         }
 
         // bring selection in z-order
@@ -675,7 +676,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return doc;
     }
 
-    public Document toDocument(Drawing internal) throws IOException {
+    public Document toDocument(URI documentHome, Drawing internal) throws IOException {
+        setUriResolver(new UriResolver(null, documentHome));
         Drawing external = figureFactory.toExternalDrawing(internal);
 
         idFactory.reset();
@@ -705,15 +707,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     @Override
     public void write(@Nonnull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
-        write(sw, drawing, selection);
+        write(null, sw, drawing, selection);
         out.put(getDataFormat(), sw.toString());
     }
 
     protected void writeElementAttributes(@Nonnull Element elem, @Nonnull Figure figure) throws IOException {
         String id = idFactory.createId(figure);
         setAttribute(elem, figureFactory.getObjectIdAttribute(), id);
-
-
         Set<MapAccessor<?>> todo = new LinkedHashSet<>(figureFactory.figureAttributeKeys(figure));
 
         // First write all non-transient composite attributes, then write the remaining non-transient non-composite attributes
