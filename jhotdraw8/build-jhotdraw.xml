@@ -51,7 +51,7 @@
   <property name="src" value="src"/>
   <property name="doc" location="doc"/>
   <property name="build.main.classes" value="${build}/classes"/>
-  <property name="classes" value="${build}/module-classes"/>
+  <property name="module.classes" value="${build}/module-classes"/>
   <property name="build.main.modules" value="${build}/modules"/>
   <property name="build.doc.classes" value="${build}/doc/classes"/>
   <property name="builddoc" value="builddoc"/>
@@ -80,7 +80,7 @@
 
   <target name="do-clean.compile" depends="init">
     <delete dir="${build.main.classes}"/>
-    <delete dir="${classes}"/>
+    <delete dir="${module.classes}"/>
   </target>
   <target name="do-clean.jar" depends="init">
     <delete dir="${build.main.jars}"/>
@@ -173,12 +173,13 @@
     </copy>
   </target>
   <target name="do-compile-modules.main" depends="init">
-    <mkdir dir="${classes}"/>
+    <mkdir dir="${module.classes}"/>
     <javac executable="${jdk.modular}/bin/javac" fork="yes"
            source="${jdk.modular.version}" target="${jdk.modular.version}"
-           encoding="UTF-8" destdir="${classes}"
-           debug="true"
-           verbose="true"
+           encoding="UTF-8" destdir="${module.classes}"
+           debug="false"
+           verbose="false"
+           createmissingpackageinfoclass="false"
     >
       <compilerarg value="-Xlint"/>
       <compilerarg value="-XprintRounds"/>
@@ -192,7 +193,7 @@
       </classpath>
       <compilerarg value="-version"/>
     </javac>
-    <copy todir="${classes}">
+    <copy todir="${module.classes}">
       <fileset dir="${src.main.java}">
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
@@ -935,7 +936,6 @@
       <arg value="--update"/>
       <arg value="--file=${ant.project.name}.jar"/>
       <arg value="--main-class=${manifest.main-class}"/>
-      <arg value="--module-version=${manifest.implementation-version}"/>
     </exec>
     <!--
     <jar destfile="${build.main.jars}/${ant.project.name}-javadoc.jar">
@@ -952,7 +952,7 @@
     <sequential>
       <mkdir dir="${build}/modules"/>
       <jar destfile="${build}/modules/@{module}.jar"
-           basedir="${classes}/@{module}"
+           basedir="${module.classes}/@{module}"
       >
 
         <manifest>
@@ -980,7 +980,15 @@
   </macrodef>
 
   <target name="do-jar-modules.main" depends="init">
-    <modular-jar module="org.jhotdraw8"/>
+    <modular-jar module="org.jhotdraw8.application"/>
+    <modular-jar module="org.jhotdraw8.draw"/>
+    <modular-jar module="org.jhotdraw8.samples.grapher"/>
+    <modular-jar module="org.jhotdraw8.samples.misc"/>
+    <modular-jar module="org.jhotdraw8.samples.modeler"/>
+    <modular-jar module="org.jhotdraw8.samples.net"/>
+    <modular-jar module="org.jhotdraw8.samples.pert"/>
+    <modular-jar module="org.jhotdraw8.samples.svg"/>
+    <modular-jar module="org.jhotdraw8.samples.teddy"/>
   </target>
 
   <target name="do-dist" depends="init">
@@ -1024,7 +1032,7 @@
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
   </target>
-  <target name="compile" depends="clean,do-compile-classes.main"
+  <target name="compile" depends="clean,do-compile-classes.main,do-compile-modules.main"
           description="compiles the java sources and copies resource files">
   </target>
   <target name="jar" depends="compile,do-jar.main" description="bundles the class files into a jar file">

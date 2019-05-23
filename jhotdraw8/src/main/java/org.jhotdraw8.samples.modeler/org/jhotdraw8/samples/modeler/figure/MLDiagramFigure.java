@@ -121,7 +121,8 @@ public class MLDiagramFigure extends AbstractLeafFigure
         }
         Key<?> key = (Key<?>) node.getProperties().get(TEXT_NODE_TEXT_KEY);
         if (key != null && key.getValueType() == String.class) {
-            return new TextEditorData(this, node.getBoundsInLocal(), (Key<String>) key);
+            @SuppressWarnings("unchecked") Key<String> stringKey = (Key<String>) key;
+            return new TextEditorData(this, node.getBoundsInLocal(), stringKey);
         }
         return null;
     }
