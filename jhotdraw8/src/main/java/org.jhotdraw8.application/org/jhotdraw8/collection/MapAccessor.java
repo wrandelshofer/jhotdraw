@@ -71,10 +71,22 @@ public interface MapAccessor<T> extends Serializable {
 
     /**
      * Returns the value type.
+     * If this is a {@code {@literal List<String>}} then the value type
+     * is {@code List}.
      *
      * @return the value type
      */
     Class<T> getValueType();
+
+    /**
+     * Returns the component type of the value type.
+     * <p>
+     * If this is a {@code {@literal List<String>}} then the component value type
+     * is {@code String}.
+     *
+     * @return the component value type
+     */
+    Class<?> getComponentValueType();
 
     /**
      * Returns the type parameters of the value type.

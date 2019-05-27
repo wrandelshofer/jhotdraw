@@ -110,6 +110,12 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
         return ret;
     }
 
+
+    @Override
+    public Class<?> getComponentValueType() {
+        return typeParameters.size() == 0 ? getValueType() : typeParameters.get(0);
+    }
+
     @Nonnull
     @Override
     public List<Class<?>> getValueTypeParameters() {
