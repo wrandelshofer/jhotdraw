@@ -44,7 +44,7 @@ public class NullableBooleanKey extends NullableObjectKey<Boolean> {
      * @param defaultValue The default value.
      */
     public NullableBooleanKey(String key, DirtyMask mask, Boolean defaultValue) {
-        super(key, Boolean.class, mask, defaultValue);
+        super(key, Boolean.class, defaultValue);
 
     }
 

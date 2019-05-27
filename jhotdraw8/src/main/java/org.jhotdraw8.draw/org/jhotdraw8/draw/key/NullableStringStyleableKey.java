@@ -8,7 +8,6 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -25,7 +24,7 @@ import java.util.function.Function;
  * @version $Id$
  */
 public class NullableStringStyleableKey extends AbstractStyleableKey<String>
-        implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {
+        implements WriteableStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
     @Nonnull
@@ -38,33 +37,20 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
      * @param name The name of the key.
      */
     public NullableStringStyleableKey(String name) {
-        this(name, null);
+        this(null, name, null);
     }
-
-    /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public NullableStringStyleableKey(String name, String defaultValue) {
-        this(name, defaultValue, null);
-    }
-
 
     /**
      * Creates a new instance with the specified name, mask and default value.
      *
      * @param name         The name of the key.
-     * @param defaultValue The default value.
-     * @param helpText     the help text
      */
-    public NullableStringStyleableKey(String name, String defaultValue, String helpText) {
-        this(null, name, defaultValue, helpText);
+    public NullableStringStyleableKey(String namespace, String name) {
+        this(namespace, name, null);
     }
 
-    public NullableStringStyleableKey(String namespace, String name, String defaultValue, String helpText) {
-        super(namespace, name, String.class, true, defaultValue);
+    public NullableStringStyleableKey(String namespace, String name, String helpText) {
+        super(namespace, name, String.class, true, null);
         converter = new CssStringConverter(true, '\'', helpText);
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -75,7 +61,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         final StyleConverter<String, String> converter = new StyleConverterAdapter<>(this.converter);
         CssMetaData<Styleable, String> md
                 = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
+                converter, null, inherits);
         cssMetaData = md;
     }
 

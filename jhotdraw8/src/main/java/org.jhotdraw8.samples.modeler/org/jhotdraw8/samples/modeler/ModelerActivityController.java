@@ -131,7 +131,6 @@ import org.jhotdraw8.util.Resources;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -187,7 +186,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     private void applyUserAgentStylesheet(Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
-                    Collections.singletonList(
+                    ImmutableLists.of(
                             ModelerActivityController.class.getResource("user-agent.css").toURI()));
             SimpleRenderContext ctx = new SimpleRenderContext();
             for (Figure f : d.preorderIterable()) {

@@ -5,13 +5,17 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.css.text.CssStringConverter;
+import org.jhotdraw8.css.text.CssUriConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -20,8 +24,6 @@ import org.jhotdraw8.graph.GraphSearch;
 
 import java.net.URI;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -54,7 +56,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),
+    Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
             Paths.get(System.getProperty("user.home")).toUri());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
@@ -69,7 +71,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<List<URI>> AUTHOR_STYLESHEETS = new NullableObjectKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListStyleableKey<URI>("authorStylesheets", URI.class, new CssUriConverter(false));
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -81,14 +83,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<List<URI>> USER_AGENT_STYLESHEETS = new NullableObjectKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListStyleableKey<URI>("userAgentStylesheets", URI.class, new CssUriConverter(false));
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    Key<List<String>> INLINE_STYLESHEETS = new NullableObjectKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
+    Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListStyleableKey<String>("inlineStylesheets", String.class, new CssStringConverter(false));
     /**
      * Defines the canvas width.
      * <p>

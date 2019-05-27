@@ -102,9 +102,9 @@ public class DrawingFigure extends AbstractCompositeFigure
     @Override
     public void updateStyleManager() {
         if (styleManager != null) {
-            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS).asList());
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS).asList());
+            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS).asList());
         }
     }
 
@@ -125,9 +125,9 @@ public class DrawingFigure extends AbstractCompositeFigure
     @Override
     public void stylesheetNotify(@Nonnull RenderContext ctx) {
         if (styleManager != null) {
-            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS).asList());
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS).asList());
+            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS).asList());
         }
         super.stylesheetNotify(ctx);
     }

@@ -20,6 +20,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
@@ -165,11 +167,11 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         }
         if (newValue != null) {
             // FIXME should listen to property changes of the Drawing object
-            List<URI> stylesheets = newValue.get(Drawing.AUTHOR_STYLESHEETS);
+            ImmutableList<URI> stylesheets = newValue.get(Drawing.AUTHOR_STYLESHEETS);
             if (stylesheets == null) {
                 listView.getItems().clear();
             } else {
-                listView.getItems().setAll(stylesheets);
+                listView.getItems().setAll(stylesheets.asList());
             }
         }
         counter = 0;
@@ -181,7 +183,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             // The drawing is currently being replaced by a new one. Don't fire events.
             return;
         }
-        drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, new ArrayList<>(listView.getItems()));
+        drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.ofCollection(listView.getItems()));
         getDrawing().updateStyleManager();
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);

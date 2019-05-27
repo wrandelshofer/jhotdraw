@@ -57,7 +57,7 @@ public class TextAreaFigure extends AbstractLeafFigure
         applyShapeableProperties(ctx, p);
         applyStrokableFigureProperties(ctx, p);
         applyFillableFigureProperties(ctx, p);
-        text.setText(getStyledNonnull(TEXT));
+        text.setText(getStyled(TEXT));
         applyTextFontableFigureProperties(ctx, text);
         applyTextLayoutableFigureProperties(ctx, text);
         applyTextFillableFigureProperties(ctx, text);

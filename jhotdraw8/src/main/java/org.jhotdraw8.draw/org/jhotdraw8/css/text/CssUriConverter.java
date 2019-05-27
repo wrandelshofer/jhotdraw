@@ -5,16 +5,15 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.io.CharBufferReader;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.net.URI;
-import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.function.Consumer;
 
 /**
  * Converts an {@code URI} to a CSS {@code URI}.
@@ -28,34 +27,51 @@ import java.text.ParseException;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssUriConverter implements Converter<URI> {
+public class CssUriConverter extends AbstractCssConverter<URI> {
+    private final String helpText;
 
-    @Nullable
+    public CssUriConverter() {
+        this(false, null);
+    }
+
+    public CssUriConverter(boolean nullable) {
+        this(nullable, null);
+    }
+
+    public CssUriConverter(boolean nullable, String helpText) {
+        super(nullable);
+        this.helpText = helpText;
+    }
+
+
     @Override
-    public URI fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
-        if (tt.next() == CssTokenType.TT_IDENT //
-                && "none".equals(tt.currentString())) {
-            return null;
+    public String getHelpText() {
+        return helpText;
+    }
+
+    @Nonnull
+    @Override
+    public URI parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_URL) {
+            throw new ParseException("Css URL expected. " + new CssToken(tt.current(), tt.currentString()), tt.getStartPosition());
         }
-        if (tt.current() != CssTokenType.TT_URL) {
-            throw new ParseException("Css URI expected. " + tt.current(), buf.position());
+        try {
+            return URI.create(tt.currentStringNonnull());
+        } catch (IllegalArgumentException e) {
+            throw new ParseException("Bad URL. " + new CssToken(tt.current(), tt.currentString()), tt.getStartPosition());
         }
-        return URI.create(tt.currentString());
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable URI value) throws IOException {
-        out.append("url(");
-        if (value != null) {
-            out.append(value.toASCIIString());
-        }
-        out.append(')');
+    protected <TT extends URI> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_URL, value.toString()));
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public URI getDefaultValue() {
         return null;
     }
+
+
 }

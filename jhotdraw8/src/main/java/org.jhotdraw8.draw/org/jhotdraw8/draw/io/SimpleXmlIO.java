@@ -9,6 +9,8 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.concurrent.WorkState;
@@ -21,7 +23,6 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.io.IdFactory;
@@ -96,17 +97,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Comments which appear inside an XML element, that can not be associated
      * to as a head comment.
      */
-    public final static NullableObjectKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     /**
      * Comments which can not be associated to a figure, or which appear in the
      * epilog of an XML file, are associated to the drawing.
      */
-    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     /**
      * Comments which appear before an XML element of a figure are associated to
      * the figure as a comment.
      */
-    public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     @Nullable
     protected List<String> comments;
@@ -204,7 +205,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return uriResolver;
     }
 
-    private void setUriResolver(Function<URI, URI> uriResolver) {
+    protected void setUriResolver(Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 
@@ -627,10 +628,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     URI uri = URI.create(href);
                     uri = uriResolver.apply(uri);
 
-                    List<URI> listOrNull = external.get(figureFactory.getStylesheetsKey());
-                    List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull);
+                    ImmutableList<URI> listOrNull = external.get(figureFactory.getStylesheetsKey());
+                    List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                     stylesheets.add(uri);
-                    external.set(figureFactory.getStylesheetsKey(), stylesheets);
+                    external.set(figureFactory.getStylesheetsKey(), ImmutableLists.ofCollection(stylesheets));
                 }
             }
         }
