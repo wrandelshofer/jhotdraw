@@ -7,9 +7,24 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -59,6 +74,8 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         elements.add(new LineTo(0, 4));
         elements.add(new LineTo(0, 2));
         elements.add(new ClosePath());
+        elements.add(new MoveTo(3, 0));
+        elements.add(new LineTo(3, 6));
     }
 
     static {
@@ -132,7 +149,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
-        double size = view.getHandleSize();
+        double size = view.getHandleSize() * 0.8;
         if (node.getWidth() != size) {
             node.resize(size, size);
         }
@@ -153,8 +170,18 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     ImmutableList<BezierNode> list = owner.get(pointKey);
                     BezierNode bn = list.get(pointIndex);
 
+                    BezierNode newbn;
+                    if (bn.isColinear()) {
+                        if (bn.isEquidistant()) {
+                            newbn = bn.setColinear(false).setEquidistant(false);
+                        } else {
+                            newbn = bn.setColinear(true).setEquidistant(true);
+                        }
+                    } else {
+                        newbn = bn.setColinear(true).setEquidistant(false);
+                    }
                     dv.getModel().set(owner, pointKey,
-                            ImmutableLists.set(list, pointIndex, bn.setColinear(!bn.isColinear())));
+                            ImmutableLists.set(list, pointIndex, newbn));
                 }
             }
         }
@@ -195,8 +222,14 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 p2 = bn.getC1();
             }
 
-            double r = Math.sqrt((p2.getX() - c0.getX()) * (p2.getX() - c0.getX())
-                    + (p2.getY() - c0.getY()) * (p2.getY() - c0.getY()));
+            double r;
+            if (bn.isEquidistant()) {
+                r = Math.sqrt((p.getX() - c0.getX()) * (p.getX() - c0.getX())
+                        + (p.getY() - c0.getY()) * (p.getY() - c0.getY()));
+            } else {
+                r = Math.sqrt((p2.getX() - c0.getX()) * (p2.getX() - c0.getX())
+                        + (p2.getY() - c0.getY()) * (p2.getY() - c0.getY()));
+            }
             double sina = Math.sin(a);
             double cosa = Math.cos(a);
 

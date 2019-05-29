@@ -7,9 +7,20 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -44,13 +55,20 @@ public class BezierNodeEditHandle extends AbstractHandle {
     private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
     private static final Path REGION_SHAPE_QUADRATIC = new Path();
 
+
     static {
         final ObservableList<PathElement> elements = REGION_SHAPE_QUADRATIC.getElements();
-        elements.add(new MoveTo(0, 0));
-        elements.add(new LineTo(4, -4));
-        elements.add(new LineTo(8, 0));
-        elements.add(new LineTo(4, 4));
+        elements.add(new MoveTo(2, 0));
+        elements.add(new LineTo(4, 0));
+        elements.add(new LineTo(6, 2));
+        elements.add(new LineTo(6, 4));
+        elements.add(new LineTo(4, 6));
+        elements.add(new LineTo(2, 6));
+        elements.add(new LineTo(0, 4));
+        elements.add(new LineTo(0, 2));
         elements.add(new ClosePath());
+        elements.add(new MoveTo(3, 0));
+        elements.add(new LineTo(3, 6));
     }
 
     @Nonnull
@@ -216,7 +234,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         BezierNode bn = getBezierNode();
         if (bn.isC1() && bn.isC2()) {
             node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
-        } else if (bn.isC1()) {
+        } else if (bn.isC1() || bn.isC2()) {
             node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
         } else {
             node.setShape(REGION_SHAPE_LINEAR);
