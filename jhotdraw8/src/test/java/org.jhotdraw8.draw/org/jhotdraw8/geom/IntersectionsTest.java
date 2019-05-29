@@ -123,4 +123,31 @@ public class IntersectionsTest {
         }
     }
 
+    @TestFactory
+    public List<DynamicTest> testIntersectLineLine() {
+        return Arrays.asList(
+                dynamicTest("1", () -> testIntersectLineLine(new Line(0, 0.0, 10.0, 0), new Line(5.0, -5.0, 5.0, 5.0), new double[]{0.5})),
+                dynamicTest("2", () -> testIntersectLineLine(new Line(0, 0.0, 10.0, 0), new Line(50.0, -5.0, 5.0, 50.0), new double[]{}))
+        );
+    }
+
+    /**
+     * Test of intersectLineBezier2 method, of class Intersection.
+     */
+    public static void testIntersectLineLine(Line a, Line b, double[] expected) {
+        Intersection isec = Intersections.intersectLineLine(a.getStartX(), a.getStartY(),
+                a.getEndX(), a.getEndY(),
+                b.getStartX(), b.getStartY(), b.getEndX(), b.getEndY());
+        double[] actual = new double[isec.size()];
+        for (int i = 0; i < actual.length; i++) {
+            actual[i] = isec.getTs().get(i);
+        }
+        Arrays.sort(actual);
+        Arrays.sort(expected);
+        System.out.println("  expected: " + Arrays.toString(expected));
+        System.out.println("  actual: " + Arrays.toString(actual));
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], actual[i], 1e-6, "root #" + i);
+        }
+    }
 }

@@ -2277,7 +2277,7 @@ public class Intersections {
     }
 
     /**
-     * Computes the intersection of ray 'a' with line 'b'.
+     * Computes the intersection of line 'a' with line 'b'.
      *
      * @param a0 start of line 'a'
      * @param a1 end of line 'a'
@@ -2290,7 +2290,7 @@ public class Intersections {
                 a0.getX(), a0.getY(),
                 a1.getX(), a1.getY(),
                 b0.getX(), b0.getY(),
-                b1.getX(), b1.getY(), Double.MAX_VALUE);
+                b1.getX(), b1.getY(), 1.0);
     }
 
     /**
