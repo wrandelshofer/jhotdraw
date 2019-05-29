@@ -63,8 +63,10 @@ public class LineOutlineHandle extends AbstractHandle {
     public Node getNode(DrawingView view) {
         CssColor color = view.getHandleColor();
         polyline1.setStroke(Color.WHITE);
-        polyline1.setStrokeWidth(3);
         polyline2.setStroke(Paintable.getPaint(color));
+        int strokeWidth = view.getHandleStrokeWidth();
+        polyline1.setStrokeWidth(strokeWidth + 2);
+        polyline2.setStrokeWidth(strokeWidth);
         return node;
     }
 

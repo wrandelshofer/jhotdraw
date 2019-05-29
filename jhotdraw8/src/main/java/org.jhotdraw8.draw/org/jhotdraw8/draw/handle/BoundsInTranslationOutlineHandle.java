@@ -72,6 +72,7 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     public Node getNode(DrawingView view) {
         CssColor color = view.getHandleColor();
         poly2.setStroke(Paintable.getPaint(color));
+        poly2.setStrokeWidth(view.getHandleStrokeWidth());
         return node;
     }
 
