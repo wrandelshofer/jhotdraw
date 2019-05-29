@@ -86,6 +86,7 @@ import org.jhotdraw8.draw.inspector.HierarchyInspector;
 import org.jhotdraw8.draw.inspector.Inspector;
 import org.jhotdraw8.draw.inspector.InspectorLabels;
 import org.jhotdraw8.draw.inspector.LayersInspector;
+import org.jhotdraw8.draw.inspector.MessagesInspector;
 import org.jhotdraw8.draw.inspector.StyleAttributesInspector;
 import org.jhotdraw8.draw.inspector.StyleClassesInspector;
 import org.jhotdraw8.draw.inspector.StylesheetsInspector;
@@ -379,6 +380,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             dock.getItems().add(addInspector(new GridInspector(), "grid", Priority.NEVER));
             dock.getItems().add(addInspector(new HandlesInspector(), "handles", Priority.NEVER));
             dock.getItems().add(addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
+            dock.getItems().add(addInspector(new MessagesInspector(this), "messages", Priority.NEVER));
             d.add(dock);
             return d;
         }).whenComplete((list, e) -> {
@@ -400,6 +402,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             } else {
                 e.printStackTrace();
             }
+        }).exceptionally((e) -> {
+            e.printStackTrace();
+            return null;
         });
     }
 

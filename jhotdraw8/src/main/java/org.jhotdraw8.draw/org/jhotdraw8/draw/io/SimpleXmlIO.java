@@ -27,6 +27,7 @@ import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.UriResolver;
+import org.jhotdraw8.util.Exceptions;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
@@ -228,7 +229,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             newDrawing = (Drawing) read(new InputSource(file.toUri().toASCIIString()), drawing, documentHome);
             return newDrawing;
         } catch (IOException e) {
-            throw new IOException("Error reading " + file + ".", e);
+            String message = "Error reading file \"" + file + "\".";
+            workState.updateMessage(message + " " + Exceptions.getLocalizedMessage(e) + ".");
+            throw new IOException("Error reading file \"" + file + "\".", e);
         }
     }
 
