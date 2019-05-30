@@ -41,7 +41,7 @@ public interface XmlOutputFormatMixin extends OutputFormat {
 
     @Override
     default void write(@Nonnull Path file, @Nonnull Drawing drawing, WorkState workState) throws IOException {
-        Document doc = toDocument(file.toUri(), drawing);
+        Document doc = toDocument(file.getParent().toUri(), drawing);
         XmlUtil.write(file, doc);
     }
 
