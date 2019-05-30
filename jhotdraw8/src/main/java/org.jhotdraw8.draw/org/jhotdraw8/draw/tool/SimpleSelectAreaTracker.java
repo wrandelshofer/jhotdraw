@@ -102,11 +102,20 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
         double w = x - event.getX();
         double h = y - event.getY();
         List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false);
-        if (!event.isShiftDown()) {
+        if (event.isShiftDown()) {
+            if (dv.getSelectedFigures().containsAll(f)) {
+                if (event.isMetaDown()) {
+                    dv.getSelectedFigures().retainAll(f);
+                } else {
+                    dv.getSelectedFigures().removeAll(f);
+                }
+            } else {
+                dv.selectedFiguresProperty().addAll(f);
+            }
+        } else {
             dv.selectedFiguresProperty().clear();
+            dv.selectedFiguresProperty().addAll(f);
         }
-        dv.selectedFiguresProperty().addAll(f);
-        //fireToolDone();
     }
 
     @Override

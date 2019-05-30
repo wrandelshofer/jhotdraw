@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="requirement.SelectionTool"
+         role="requirement">
+  <title>Selection Tool</title>
+  <para>The drawing editor must provide a selection tool, that supports the following functions:
+  </para>
+  <itemizedlist>
+    <listitem>
+      <para>Select a single figure.</para>
+      <para>Interaction: Press the mouse button on a figure which is not in the current selection.</para>
+    </listitem>
+
+    <listitem>
+      <para>Add a figure to the current selection.</para>
+      <para>Interaction: Hold the Shift key and press the mouse button over a figure which is not in the current
+        selection.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>Remove a figure from the current selection.</para>
+      <para>Interaction: Hold the Shift key and press the mouse button over a figure which is in the current
+        selection.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>Reduce the selection to a single figure.</para>
+      <para>Interaction: Hold the Meta and the Shift keys and press the mouse button over a figure which is in the
+        current selection.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>Select a single figure, which is behind the current selection.</para>
+      <para>Interaction: Hold the Alt key and press the mouse button over a figure which is behind the the current
+        selection.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>Add a figure, which is behind the current selection, to the current selection.</para>
+      <para>Interaction: Hold the Shift and the Alt keys and press the mouse button over a figure which is behind the
+        current selection.
+      </para>
+    </listitem>
+  </itemizedlist>
+</section>
