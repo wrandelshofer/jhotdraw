@@ -136,7 +136,8 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                         URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
                         for (File f : clipboard.getFiles()) {
                             URI dragboardUri = f.toURI();
-                            URI stylesheetUri = documentHome.relativize(dragboardUri);
+                            //URI stylesheetUri = documentHome.relativize(dragboardUri);
+                            URI stylesheetUri = dragboardUri;
                             list.add(stylesheetUri);
                         }
                     } else {
@@ -205,7 +206,16 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     }
 
     private void onAddAction(ActionEvent event) {
-        listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css"));
+        Drawing drawing = getDrawing();
+        if (drawing == null) {
+            return;
+        }
+        URI documentHome = drawing.get(Drawing.DOCUMENT_HOME);
+        URI uri = URI.create("stylesheet" + (++counter) + ".css");
+        if (documentHome != null) {
+            uri = documentHome.resolve(uri);
+        }
+        listView.getItems().add(uri);
     }
 
     private void onRefreshAction(ActionEvent event) {

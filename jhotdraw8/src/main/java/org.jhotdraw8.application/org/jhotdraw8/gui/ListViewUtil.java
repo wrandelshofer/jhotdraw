@@ -125,7 +125,7 @@ public class ListViewUtil {
                         success = items != null;
                         if (success) {
                             for (T item : items) {
-                                listViewItems.add(droppedCellIndex, item);
+                                listViewItems.add(min(droppedCellIndex, listViewItems.size()), item);
                                 if (droppedCellIndex <= draggedCellIndex) {
                                     draggedCellIndex++;
                                 }
