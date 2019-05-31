@@ -201,7 +201,7 @@ public interface CssTokenizer {
      */
     default void requireNextToken(int ttype, String message) throws ParseException, IOException {
         if (next() != ttype) {
-            throw new ParseException(message, getStartPosition());
+            throw new ParseException(message + " Found: '" + getToken() + "'.", getStartPosition());
         }
     }
 

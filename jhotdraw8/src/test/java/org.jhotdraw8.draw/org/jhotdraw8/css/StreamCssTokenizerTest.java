@@ -70,6 +70,8 @@ public class StreamCssTokenizerTest {
                 dynamicTest("7", () -> testTokenizer("<!--", "-14:<!--")),
                 dynamicTest("8", () -> testTokenizer("-->", "-15:-->")),
                 dynamicTest("9", () -> testTokenizer("->", "-:- >:>")),
+                dynamicTest("9heavy", () -> testTokenizer("=>", "=:= >:>")),
+                dynamicTest("9heavy+ident", () -> testTokenizer("=>hallo", "=:= >:> -2:hallo")),
                 dynamicTest("10", () -> testTokenizer("--", "-:- -:-")),
                 dynamicTest("11", () -> testTokenizer(">", ">:>")),
                 dynamicTest("12", () -> testTokenizer("<!--a", "-14:<!-- -2:a")),

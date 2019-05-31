@@ -78,7 +78,7 @@ import java.util.List;
  * round_block  = '(' , { component_value } , ')' ;
  * square_block = '[' , { component_value } , ']' ;
  * function_block
- *              = FUNCTION , { component_value } , ')' ;
+ *              = ROUND_BLOCK , { component_value } , ')' ;
  *
  * </pre> This parser parses the following syntax:
  * <pre>
@@ -134,7 +134,7 @@ import java.util.List;
  *                | "[", {term} "]";
  *
  *
- * function     = FUNCTION , { S } , expr , ')' , { S } ;
+ * function     = ROUND_BLOCK , { S } , expr , ')' , { S } ;
  * expr         = term , { [ operator ] , term } ;
  *
  * hexcolor     = HASH , { S } ;

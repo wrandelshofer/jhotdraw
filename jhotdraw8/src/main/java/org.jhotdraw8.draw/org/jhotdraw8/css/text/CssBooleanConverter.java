@@ -57,7 +57,11 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
     @Nonnull
     @Override
     public String getHelpText() {
-        return "Format of ⟨Boolean⟩: true｜false";
+        if (isNullable()) {
+            return "Format of ⟨NullableBoolean⟩: none｜true｜false";
+        } else {
+            return "Format of ⟨Boolean⟩: true｜false";
+        }
     }
 
 }

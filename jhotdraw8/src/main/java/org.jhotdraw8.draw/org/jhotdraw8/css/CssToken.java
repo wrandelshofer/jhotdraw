@@ -96,6 +96,13 @@ public class CssToken /*extends AST*/ {
         this.preferredQuoteChar = preferredQuoteChar;
     }
 
+    public String getStringValueNonnull() {
+        if (stringValue == null) {
+            throw new NullPointerException();
+        }
+        return stringValue;
+    }
+
     @Override
     public String toString() {
         return fromToken();

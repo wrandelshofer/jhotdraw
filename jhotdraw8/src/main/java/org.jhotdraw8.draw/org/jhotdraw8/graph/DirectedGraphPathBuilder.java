@@ -168,12 +168,11 @@ public class DirectedGraphPathBuilder<V, A> {
      * Builds a VertexPath through the graph which traverses the specified
      * waypoints.
      * <p>
-     * This method uses breadth first search. It returns the first path that it
-     * finds with this search strategy.
+     * This method uses a shortest path search between waypoints.
      *
      * @param waypoints waypoints, the iteration sequence of this collection
      *                  determines how the waypoints are traversed
-     * @param maxLength the maximal path length
+     * @param maxLength the maximal path length between two waypoints
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable

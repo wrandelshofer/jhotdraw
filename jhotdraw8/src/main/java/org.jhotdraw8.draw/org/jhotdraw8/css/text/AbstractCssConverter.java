@@ -51,4 +51,8 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
     public T getDefaultValue() {
         return null;
     }
+
+    public boolean isNullable() {
+        return nullable;
+    }
 }
