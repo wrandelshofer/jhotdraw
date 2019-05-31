@@ -26,6 +26,7 @@ import javafx.scene.control.ToggleGroup;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssParser;
+import org.jhotdraw8.css.CssPrettyPrinter;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.QualifiedName;
@@ -308,22 +309,23 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
         StringBuilder buf = new StringBuilder();
+        CssPrettyPrinter pp = new CssPrettyPrinter(buf);
         if (type != null && type.length() > 0) {
-            buf.append(cssIdentConverter.toString(type));
+            pp.append(cssIdentConverter.toString(type));
         }
         if (id != null && id.length() > 0) {
-            buf.append('#').append(cssIdentConverter.toString(id));
+            pp.append('#').append(cssIdentConverter.toString(id));
         }
         for (String clazz : styleClasses) {
-            buf.append('.').append(cssIdentConverter.toString(clazz));
+            pp.append('.').append(cssIdentConverter.toString(clazz));
         }
-        buf.append(":selected {");
+        pp.append(":selected {");
         for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
-            buf.append("\n  ").append(a.getKey().getName()).append(": ");
-            buf.append(a.getValue());
-            buf.append(";");
+            pp.append("\n  ").append(a.getKey().getName()).append(": ");
+            pp.append(a.getValue());
+            pp.append(";");
         }
-        buf.append("\n}");
+        pp.append("\n}");
 
         textArea.setText(buf.toString());
         int rows = 1;
