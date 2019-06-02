@@ -7,6 +7,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.ReadOnlyCollection;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -25,6 +26,10 @@ public class VertexPath<V> {
     private final ImmutableList<V> vertices;
 
     public VertexPath(@Nonnull Collection<V> elements) {
+        this.vertices = ImmutableLists.ofCollection(elements);
+    }
+
+    public VertexPath(@Nonnull ReadOnlyCollection<V> elements) {
         this.vertices = ImmutableLists.ofCollection(elements);
     }
 
