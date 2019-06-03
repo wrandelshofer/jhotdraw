@@ -232,7 +232,7 @@ public class DirectedGraphPathBuilder<V, A> {
             backlinks.add(current);
             return;
         }
-
+        // FIXME stack may overflow! should use explicit stack!
         if (current.depth < maxDepth) {
             for (V v : nextNodesFunction.apply(current.vertex)) {
                 BackLink<V> newPath = new BackLink<>(v, current, current.depth + 1);
