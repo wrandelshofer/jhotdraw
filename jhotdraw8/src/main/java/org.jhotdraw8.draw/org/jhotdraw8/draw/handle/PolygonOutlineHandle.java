@@ -130,7 +130,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
                 break;
             }
         }
-        if (insertAt != -1 && insertLocation != null) {
+        if (insertAt != -1) {
             dv.getModel().set(owner, key, ImmutableLists.add(owner.get(key), insertAt, insertLocation));
             dv.recreateHandles();
         }
