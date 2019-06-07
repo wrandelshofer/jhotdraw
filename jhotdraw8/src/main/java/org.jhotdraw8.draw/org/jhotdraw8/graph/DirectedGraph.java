@@ -314,7 +314,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     }
 
     /**
-     * Returns an {@link Iterable} which performs a breadth first search
+     * Returns an {@link Iterable} which performs a depth first search
      * starting at the given vertex.
      *
      * @param start the start vertex
