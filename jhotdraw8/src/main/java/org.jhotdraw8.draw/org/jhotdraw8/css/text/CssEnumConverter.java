@@ -68,7 +68,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
         buf.append(name).append("⟩: ");
         boolean first = true;
         if (nullable) {
-            buf.append("none");
+            buf.append(CssTokenType.IDENT_NONE);
             first = false;
         }
         for (Field f : enumClass.getDeclaredFields()) {

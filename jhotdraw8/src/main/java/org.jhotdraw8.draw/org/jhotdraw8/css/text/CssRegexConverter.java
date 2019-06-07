@@ -56,7 +56,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
     public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable RegexReplace value) throws IOException {
         if (value == null) {
             if (nullable) {
-                out.append("none");
+                out.append(CssTokenType.IDENT_NONE);
                 return;
             } else {
                 throw new IllegalArgumentException("value is null");
@@ -64,7 +64,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         }
         String find = value.getFind();
         if (find == null) {
-            out.append("none");
+            out.append(CssTokenType.IDENT_NONE);
             return;
         }
         out.append("replace(");

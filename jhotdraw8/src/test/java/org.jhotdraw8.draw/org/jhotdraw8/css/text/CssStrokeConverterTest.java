@@ -7,6 +7,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStroke;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -24,13 +25,16 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * @author Werner Randelshofer
  */
 class CssStrokeConverterTest {
+
+    private static final String IDENT_NONE = CssTokenType.IDENT_NONE;
+
     /**
      * Test of fromString method, of class CssStrokeStyleConverter.
      */
     static
     public void doTestFromString(CssStroke expected, String string) throws Exception {
         System.out.println("fromString " + string);
-        if (string.equals("none")) {
+        if (string.equals(IDENT_NONE)) {
             expected = null;
         }
 
@@ -90,7 +94,7 @@ class CssStrokeConverterTest {
                 dynamicTest("6", () -> doTest(
                         new CssStroke(new CssSize(1), null, StrokeType.CENTERED, StrokeLineCap.SQUARE, StrokeLineJoin.MITER, new CssSize(10)
                                 , new CssSize(0), ImmutableLists.emptyList()),
-                        "none"))
+                        IDENT_NONE))
         );
     }
 

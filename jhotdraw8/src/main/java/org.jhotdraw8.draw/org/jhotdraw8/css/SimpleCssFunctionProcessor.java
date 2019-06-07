@@ -8,6 +8,7 @@ import org.jhotdraw8.collection.ReadOnlyList;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -161,6 +162,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
      *
      *     qualified-name = [ [ ident-token ], "|" ] , ident-token ;
      * </pre>
+     * If attr-fallback is not given, then ident "none" is assumed.
      *
      * @param tt  the tokenizer
      * @param out the consumer
@@ -179,7 +181,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
 
         List<CssToken> attrFallback = new ArrayList<>();
         if (tt.next() == CssTokenType.TT_PERCENT_DELIM) {
-                typeOrUnit = UnitConverter.PERCENTAGE;
+            typeOrUnit = UnitConverter.PERCENTAGE;
         } else if (tt.current() == CssTokenType.TT_IDENT) {
             typeOrUnit = tt.currentString();
         } else {
@@ -205,8 +207,14 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                     while (t2.next() != CssTokenType.TT_EOF) {
                         switch (t2.current()) {
                             case CssTokenType.TT_STRING:
-                            case CssTokenType.TT_IDENT:
                                 out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonnull(), null, line, start, end));
+                                break;
+                            case CssTokenType.TT_IDENT:
+                                if (t2.currentStringNonnull().equals(CssTokenType.IDENT_NONE)) {
+                                    out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+                                } else {
+                                    out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonnull(), null, line, start, end));
+                                }
                                 break;
                             case CssTokenType.TT_NUMBER:
                             case CssTokenType.TT_PERCENTAGE:
@@ -333,7 +341,9 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
             }
 
         }
-        processToken(element, new ListCssTokenizer(attrFallback), out);
+        processToken(element, new ListCssTokenizer(
+                        attrFallback.isEmpty() ? Collections.singletonList(new CssToken(CssTokenType.TT_IDENT, "none")) : attrFallback),
+                out);
 
     }
 
