@@ -25,7 +25,8 @@ import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
 /**
- * DirectedGraphCostPathBuilder.
+ * This path builder can be used to find the unique shortest path between
+ * to vertices in a directed.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type

@@ -25,7 +25,8 @@ import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
 /**
- * DirectedGraphCostPathBuilder.
+ * This path builder can be used to find any shortest path between
+ * to vertices in a directed.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
@@ -62,13 +63,12 @@ public class DirectedGraphCostPathBuilder<V, A> {
     }
 
 
-
-    private NodeWithCost<V, A> findShortestPath(@Nonnull V start,
-                                                @Nonnull PriorityQueue<NodeWithCost<V, A>> frontier,
-                                                @Nonnull Map<V, NodeWithCost<V, A>> frontierMap,
-                                                @Nonnull Predicate<V> goalPredicate,
-                                                @Nonnull Set<V> explored,
-                                                double maxCost) {
+    private NodeWithCost<V, A> findAnyShortestPath(@Nonnull V start,
+                                                   @Nonnull PriorityQueue<NodeWithCost<V, A>> frontier,
+                                                   @Nonnull Map<V, NodeWithCost<V, A>> frontierMap,
+                                                   @Nonnull Predicate<V> goalPredicate,
+                                                   @Nonnull Set<V> explored,
+                                                   double maxCost) {
         NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
@@ -127,9 +127,9 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(@Nonnull V start,
-                                                                   @Nonnull V goal) {
-        return findShortestVertexPath(start, goal::equals, Double.POSITIVE_INFINITY);
+    public Map.Entry<VertexPath<V>, Double> findAnyShortestVertexPath(@Nonnull V start,
+                                                                      @Nonnull V goal) {
+        return findAnyShortestVertexPath(start, goal::equals, Double.POSITIVE_INFINITY);
     }
 
     /**
@@ -148,10 +148,10 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(@Nonnull V start,
-                                                                   @Nonnull Predicate<V> goalPredicate, double maxCost) {
+    public Map.Entry<VertexPath<V>, Double> findAnyShortestVertexPath(@Nonnull V start,
+                                                                      @Nonnull Predicate<V> goalPredicate, double maxCost) {
 
-        NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
+        NodeWithCost<V, A> node = findAnyShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
         }
@@ -178,8 +178,8 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(@Nonnull V start, @Nonnull V goal) {
-        return findShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
+    public Map.Entry<EdgePath<A>, Double> findAnyShortestEdgePath(@Nonnull V start, @Nonnull V goal) {
+        return findAnyShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
     }
 
     /**
@@ -198,8 +198,8 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, double maxCost) {
-        NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
+    public Map.Entry<EdgePath<A>, Double> findAnyShortestEdgePath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, double maxCost) {
+        NodeWithCost<V, A> node = findAnyShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
         }
@@ -219,13 +219,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
     private Set<V> explored = new HashSet<>(61);
 
     @Nullable
-    private NodeWithCost<V, A> findShortestPath(@Nonnull V start,
-                                                @Nonnull Predicate<V> goalPredicate,
-                                                double maxCost) {
+    private NodeWithCost<V, A> findAnyShortestPath(@Nonnull V start,
+                                                   @Nonnull Predicate<V> goalPredicate,
+                                                   double maxCost) {
         frontier.clear();
         frontierMap.clear();
         explored.clear();
-        return findShortestPath(start, frontier, frontierMap, goalPredicate, explored, maxCost);
+        return findAnyShortestPath(start, frontier, frontierMap, goalPredicate, explored, maxCost);
     }
 
     /**
@@ -236,13 +236,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findShortestVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<VertexPath<V>, Double> findAnyShortestVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints, double maxCost) {
         List<V> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<VertexPath<V>, Double> pathWithCost = findShortestVertexPath(start, via::equals, maxCost);
+                Map.Entry<VertexPath<V>, Double> pathWithCost = findAnyShortestVertexPath(start, via::equals, maxCost);
                 if (pathWithCost == null) {
                     return null;
                 }
@@ -266,13 +266,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePathOverWaypoints(Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<EdgePath<A>, Double> findAnyShortestEdgePathOverWaypoints(Collection<? extends V> waypoints, double maxCost) {
         List<A> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<EdgePath<A>, Double> pathWithCost = findShortestEdgePath(start, via::equals, maxCost);
+                Map.Entry<EdgePath<A>, Double> pathWithCost = findAnyShortestEdgePath(start, via::equals, maxCost);
                 if (pathWithCost == null) {
                     return null;
                 }

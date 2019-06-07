@@ -91,7 +91,7 @@ public class DirectedGraphPathBuilderTest {
         System.out.println("doFindVertexPath_3args start:" + start + " goal:" + goal + " expResult:" + expected);
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph);
-        VertexPath<Integer> actual = instance.findVertexPath(start, goal::equals, Integer.MAX_VALUE);
+        VertexPath<Integer> actual = instance.findAnyVertexPath(start, goal::equals, Integer.MAX_VALUE);
         assertEquals(expected, actual);
     }
 
@@ -112,7 +112,7 @@ public class DirectedGraphPathBuilderTest {
         System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraphPathBuilder<Integer, Double> instance = new DirectedGraphPathBuilder<>(graph);
-        VertexPath<Integer> actual = instance.findVertexPathOverWaypoints(waypoints, Integer.MAX_VALUE);
+        VertexPath<Integer> actual = instance.findAnyVertexPathOverWaypoints(waypoints, Integer.MAX_VALUE);
         assertEquals(expResult, actual);
     }
 
@@ -149,15 +149,15 @@ public class DirectedGraphPathBuilderTest {
 
         return Arrays.asList(
                 dynamicTest("1", () -> doFindAllPaths(graph, 1, 5, 5, Arrays.asList(
-                        new VertexPath<>(Arrays.asList(1, 2, 3, 4, 5)),
-                        new VertexPath<>(Arrays.asList(1, 2, 3, 5)),
+                        new VertexPath<>(Arrays.asList(1, 3, 5)),
                         new VertexPath<>(Arrays.asList(1, 3, 4, 5)),
-                        new VertexPath<>(Arrays.asList(1, 3, 5))
+                        new VertexPath<>(Arrays.asList(1, 2, 3, 5)),
+                        new VertexPath<>(Arrays.asList(1, 2, 3, 4, 5))
                 ))),
                 dynamicTest("2", () -> doFindAllPaths(graph, 1, 5, 4, Arrays.asList(
-                        new VertexPath<>(Arrays.asList(1, 2, 3, 5)),
+                        new VertexPath<>(Arrays.asList(1, 3, 5)),
                         new VertexPath<>(Arrays.asList(1, 3, 4, 5)),
-                        new VertexPath<>(Arrays.asList(1, 3, 5))
+                        new VertexPath<>(Arrays.asList(1, 2, 3, 5))
                 )))
         );
     }
