@@ -5,8 +5,15 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
@@ -20,6 +27,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
@@ -99,14 +107,19 @@ public class PolyPointEditHandle extends AbstractHandle {
         return node;
     }
 
+
     @Override
     public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
-                dv.getModel().set(owner, pointKey, ImmutableLists.remove(owner.get(pointKey), pointIndex));
-                dv.recreateHandles();
+                removePoint(dv);
             }
         }
+    }
+
+    private void removePoint(@Nonnull DrawingView dv) {
+        dv.getModel().set(owner, pointKey, ImmutableLists.remove(owner.get(pointKey), pointIndex));
+        dv.recreateHandles();
     }
 
     @Override
@@ -123,9 +136,16 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    public void handleMousePressed(MouseEvent event, DrawingView dv) {
+        if (event.isSecondaryButtonDown()) {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
+            addPoint.setOnAction(actionEvent -> removePoint(dv));
+            contextMenu.getItems().add(addPoint);
+            contextMenu.show(node, event.getX(), event.getScreenY());
+            event.consume();
+        }
     }
-
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
     }
