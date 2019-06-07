@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.handle;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -29,6 +31,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
@@ -172,14 +175,18 @@ public class BezierNodeEditHandle extends AbstractHandle {
                 }
             } else if (event.getClickCount() == 2) {
                 if (!event.isControlDown() && !event.isMetaDown() && !event.isAltDown()) {
-                    if (owner.get(pointKey).size() > 2) {
-                        BezierNodePath path = new BezierNodePath(owner.get(pointKey));
-                        path.join(pointIndex, 1.0);
-                        dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
-                        dv.recreateHandles();
-                    }
+                    removePoint(dv);
                 }
             }
+        }
+    }
+
+    private void removePoint(@Nonnull DrawingView dv) {
+        if (owner.get(pointKey).size() > 2) {
+            BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+            path.join(pointIndex, 1.0);
+            dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            dv.recreateHandles();
         }
     }
 
@@ -203,6 +210,14 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     @Override
     public void handleMousePressed(MouseEvent event, DrawingView view) {
+        if (event.isSecondaryButtonDown()) {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
+            addPoint.setOnAction(actionEvent -> removePoint(view));
+            contextMenu.getItems().add(addPoint);
+            contextMenu.show(node, event.getX(), event.getScreenY());
+            event.consume();
+        }
     }
 
     @Override
