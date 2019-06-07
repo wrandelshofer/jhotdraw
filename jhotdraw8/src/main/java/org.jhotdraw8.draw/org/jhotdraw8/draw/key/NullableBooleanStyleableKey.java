@@ -7,7 +7,6 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssBooleanConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -15,14 +14,13 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
- * BooleanStyleableKey (not nullable).
+ * BooleanStyleableKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
-        implements WriteableStyleableMapAccessor<Boolean>,
-        NonnullMapAccessor<Boolean> {
+public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
+        implements WriteableStyleableMapAccessor<Boolean> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Boolean> cssMetaData;
@@ -33,8 +31,8 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *
      * @param name The name of the key.
      */
-    public BooleanStyleableKey(String name) {
-        this(name, false);
+    public NullableBooleanStyleableKey(String name) {
+        this(name, null);
     }
 
 
@@ -46,7 +44,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public BooleanStyleableKey(String key, boolean defaultValue) {
+    public NullableBooleanStyleableKey(String key, Boolean defaultValue) {
         this(null, key, defaultValue);
     }
 
@@ -58,8 +56,8 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public BooleanStyleableKey(@Nullable String namespace, String key, boolean defaultValue) {
-        super(namespace, key, Boolean.class, false, defaultValue);
+    public NullableBooleanStyleableKey(@Nullable String namespace, String key, Boolean defaultValue) {
+        super(namespace, key, Boolean.class, true, defaultValue);
 
         StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createBooleanCssMetaData(
