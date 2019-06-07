@@ -1,7 +1,7 @@
 /**
  * Provides UML and SysML diagram elements.
  * <p>
- * Element names are prefixed with "ML_NAMESPACE_PREFIX" instead of "UML" or "SysML" because
+ * Element names are prefixed with "model" instead of "UML" or "SysML" because
  * we want to support both modelling languages.
  * <p>
  * References:

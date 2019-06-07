@@ -75,10 +75,10 @@ public class MLDiagramFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "MLDiagram";
 
-    public final static NullableStringStyleableKey DIAGRAM_KIND = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "diagramKind");
-    public final static NullableStringStyleableKey MODEL_ELEMENT_TYPE = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "modelElementType");
-    public final static NullableStringStyleableKey MODEL_ELEMENT_NAME = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "modelElementName");
-    public final static NullableStringStyleableKey DIAGRAM_NAME = new NullableStringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "diagramName");
+    public final static NullableStringStyleableKey DIAGRAM_KIND = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "diagramKind");
+    public final static NullableStringStyleableKey MODEL_ELEMENT_TYPE = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "modelElementType");
+    public final static NullableStringStyleableKey MODEL_ELEMENT_NAME = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "modelElementName");
+    public final static NullableStringStyleableKey DIAGRAM_NAME = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "diagramName");
     /**
      * This key is used to tag editable nodes.
      */

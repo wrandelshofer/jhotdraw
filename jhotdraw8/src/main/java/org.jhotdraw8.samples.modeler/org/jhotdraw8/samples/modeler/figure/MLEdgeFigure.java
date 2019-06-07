@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StrokeCuttableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
+import org.jhotdraw8.draw.key.NullableBooleanStyleableKey;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -49,6 +50,8 @@ public class MLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
      */
     public final static String TYPE_SELECTOR = "MLEdge";
     public final static NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
+    public final static NullableBooleanStyleableKey SOURCE_OWNED = MLConstants.SOURCE_OWNED;
+    public final static NullableBooleanStyleableKey TARGET_OWNED = MLConstants.TARGET_OWNED;
     public final static BooleanStyleableKey KEYWORD_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
 
     public MLEdgeFigure() {

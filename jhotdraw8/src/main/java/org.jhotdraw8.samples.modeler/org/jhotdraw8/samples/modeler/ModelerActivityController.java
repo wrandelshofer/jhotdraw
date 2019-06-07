@@ -480,12 +480,12 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
             StyleAttributesInspector modelAttrInspector = new StyleAttributesInspector();
             modelAttrInspector.setAttributeFilter(k ->
-                    "id".equals(k.getName()) || MLConstants.ML_NAMESPACE_PREFIX.equals(k.getNamespace())
+                    "id".equals(k.getName()) || MLConstants.MODEL_NAMESPACE_PREFIX.equals(k.getNamespace())
             );
             dock.getItems().add(addInspector(modelAttrInspector, "modelAttributes", Priority.ALWAYS));
             StyleAttributesInspector styleAttrInspector = new StyleAttributesInspector();
             styleAttrInspector.setAttributeFilter(k ->
-                    !MLConstants.ML_NAMESPACE_PREFIX.equals(k.getNamespace())
+                    !MLConstants.MODEL_NAMESPACE_PREFIX.equals(k.getNamespace())
             );
             dock.getItems().add(addInspector(styleAttrInspector, "styleAttributes", Priority.ALWAYS));
             dock.getItems().add(addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER));
