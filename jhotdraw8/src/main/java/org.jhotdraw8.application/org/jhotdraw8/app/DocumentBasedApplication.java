@@ -49,6 +49,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -600,5 +601,9 @@ public class DocumentBasedApplication extends AbstractApplication {
                 }
             }
         }
+    }
+
+    public static URL getDocumentOrientedMenu() {
+        return DocumentBasedApplication.class.getResource("DocumentOrientedMenu.fxml");
     }
 }
