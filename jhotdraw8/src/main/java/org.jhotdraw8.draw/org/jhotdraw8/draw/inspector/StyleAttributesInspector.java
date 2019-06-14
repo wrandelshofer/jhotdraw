@@ -274,9 +274,12 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             selectorModel.getAttributeNames(f);
 
             if (first) {
-                first = false;
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
+                if (type == null) {
+                    continue;
+                }
+                first = false;
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
                     if (!filter.test(qname)) {
@@ -289,6 +292,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
                 id = null;
                 type = selectorModel.getType(f).equals(type) ? type : null;
+                if (type == null) {
+                    continue;
+                }
                 styleClasses.retainAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : attr.keySet()) {
                     if (!filter.test(qname)) {
