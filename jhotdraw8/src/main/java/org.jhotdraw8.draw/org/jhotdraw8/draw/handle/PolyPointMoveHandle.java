@@ -15,9 +15,6 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -45,7 +42,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @version $Id$
  */
 public class PolyPointMoveHandle extends AbstractHandle {
-    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
     private static final Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
@@ -105,9 +101,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     @Override
     public Region getNode(DrawingView view) {
         double size = view.getHandleSize();
-        if (node.getWidth() != size) {
             node.resize(size, size);
-        }
         CssColor color = view.getHandleColor();
         node.setBorder(REGION_BORDER.apply(Color.WHITE));
         node.setBackground(REGION_BACKGROUND.apply(color.getColor()));

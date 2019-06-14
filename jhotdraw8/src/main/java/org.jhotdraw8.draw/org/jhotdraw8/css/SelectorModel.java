@@ -210,8 +210,10 @@ public interface SelectorModel<T> {
      * Returns the style type of the element.
      *
      * @param element the element
-     * @return the style type of the element.
+     * @return the style type of the element,
+     * return null if the element is not styleable by type.
      */
+    @Nullable
     String getType(@Nonnull T element);
 
     /**

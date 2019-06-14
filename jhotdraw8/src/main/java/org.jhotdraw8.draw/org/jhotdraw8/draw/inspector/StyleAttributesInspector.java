@@ -55,6 +55,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -276,9 +277,6 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             if (first) {
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
-                if (type == null) {
-                    continue;
-                }
                 first = false;
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
@@ -291,10 +289,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
                 id = null;
-                type = selectorModel.getType(f).equals(type) ? type : null;
-                if (type == null) {
-                    continue;
-                }
+                type = Objects.equals(selectorModel.getType(f), type) ? type : null;
                 styleClasses.retainAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : attr.keySet()) {
                     if (!filter.test(qname)) {
@@ -316,7 +311,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
         StringBuilder buf = new StringBuilder();
         CssPrettyPrinter pp = new CssPrettyPrinter(buf);
-        if (type != null && type.length() > 0) {
+        if (type != null && !type.isEmpty()) {
             pp.append(cssIdentConverter.toString(type));
         }
         if (id != null && id.length() > 0) {

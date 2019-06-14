@@ -12,13 +12,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -32,6 +28,7 @@ import org.jhotdraw8.geom.Transforms;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -44,7 +41,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  */
 public class MoveHandle extends LocatorHandle {
 
-    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
     private Point2D pickLocation;
     private CssPoint2D oldPoint;
     @Nonnull
@@ -52,12 +48,9 @@ public class MoveHandle extends LocatorHandle {
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    public static final BorderWidths WIDTH_2 = new BorderWidths(2, 2, 2, 2, false, false, false, false);
+    private static final Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
     @Nullable
-    private static final Border REGION_BORDER = new Border(
-            new BorderStroke(Color.BLUE, INSIDE_STROKE, null, null)
-    );
+    private static final Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
     private boolean pressed;
 
@@ -75,10 +68,6 @@ public class MoveHandle extends LocatorHandle {
         node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
-
-        // node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
-        node.setBorder(REGION_BORDER);
-        node.setBackground(REGION_BACKGROUND);
     }
 
     @Override
@@ -90,17 +79,10 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public Region getNode(DrawingView view) {
         double size = view.getHandleSize();
-        if (node.getWidth() != size) {
-            node.resize(size, size);
-        }
+        node.resize(size, size);
         CssColor color = view.getHandleColor();
-        BorderStroke borderStroke = node.getBorder().getStrokes().get(0);
-        if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
-            node.setBorder(new Border(
-                    new BorderStroke(color.getColor(), INSIDE_STROKE, null, null)
-            ));
-        }
-
+        node.setBorder(REGION_BORDER.apply(Color.WHITE));
+        node.setBackground(REGION_BACKGROUND.apply(color.getColor()));
         return node;
     }
 
