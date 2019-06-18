@@ -19,7 +19,7 @@ public class TeddyApplication extends DocumentBasedApplication {
         setModel(new SimpleApplicationModel(
                 "Teddy",
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
-                DocumentBasedApplication.class.getResource("DocumentOrientedMenu.fxml"),
+                DocumentBasedApplication.getDocumentOrientedMenu(),
                 "Text Files", null, "*.txt"));
     }
 

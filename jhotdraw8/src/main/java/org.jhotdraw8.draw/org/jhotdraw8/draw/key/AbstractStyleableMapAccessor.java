@@ -126,6 +126,11 @@ public abstract class AbstractStyleableMapAccessor<T>
         return ret;
     }
 
+    @Override
+    public Class<?> getComponentValueType() {
+        return getValueType();
+    }
+
     @Nonnull
     @Override
     public List<Class<?>> getValueTypeParameters() {

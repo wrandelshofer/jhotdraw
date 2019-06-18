@@ -81,8 +81,8 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
                     //segments.set(i + 1, p);
                     segments.set(j, p);
                     // delete all points between i and j
-                    for (int k = i + 1; k < j; k++) {
-                        segments.remove(i + 1);
+                    if (j > i + 1) {
+                        segments.subList(i + 1, j).clear();
                     }
                     n -= j - 1 - i;
                     j -= j - 1 - i;

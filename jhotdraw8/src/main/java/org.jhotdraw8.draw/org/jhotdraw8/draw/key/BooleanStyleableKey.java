@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.text.CssBooleanConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -14,7 +15,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
- * BooleanStyleableKey.
+ * BooleanStyleableKey (not nullable).
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -33,7 +34,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      * @param name The name of the key.
      */
     public BooleanStyleableKey(String name) {
-        this(name, null);
+        this(name, false);
     }
 
 
@@ -45,8 +46,20 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public BooleanStyleableKey(String key, Boolean defaultValue) {
-        super(key, Boolean.class, defaultValue);
+    public BooleanStyleableKey(String key, boolean defaultValue) {
+        this(null, key, defaultValue);
+    }
+
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value, and allowing or disallowing null values.
+     *
+     * @param key          The name of the name. type parameters are given. Otherwise
+     *                     specify them in arrow brackets.
+     * @param defaultValue The default value.
+     */
+    public BooleanStyleableKey(@Nullable String namespace, String key, boolean defaultValue) {
+        super(namespace, key, Boolean.class, false, defaultValue);
 
         StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createBooleanCssMetaData(
@@ -67,7 +80,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
     @Override
     public Converter<Boolean> getConverter() {
         if (converter == null) {
-            converter = new CssBooleanConverter(false);
+            converter = new CssBooleanConverter(isNullable());
         }
         return converter;
     }

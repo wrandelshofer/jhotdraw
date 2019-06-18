@@ -162,7 +162,7 @@ public class SelectionTool extends AbstractTool {
                 setTracker(t);
             } else {
 
-                // "alt" modifier selects figure behind.
+                // "alt" modifier finds a figure behind the current selection.
                 if (isSelectBehindEnabled() && (event.isAltDown())) {
                     // Select a figure behind the current selection
                     pressedFigure = null;
@@ -196,31 +196,29 @@ public class SelectionTool extends AbstractTool {
                     }
                 }
 
-                // "shift" without "meta" adds the pressed figure to the selection and makes it the lead of the selection
                 if (event.isShiftDown() && !event.isMetaDown()) {
                     if (pressedFigure != null) {
-                        view.getSelectedFigures().remove(pressedFigure);
-                        view.getSelectedFigures().add(pressedFigure);
-                        return;
-                    }
-                } else if (!event.isShiftDown() && event.isMetaDown()) {
-                    // "meta" without "shift"  toggles the selection for the pressed figure
-                    if (pressedFigure != null) {
-                        if (view.selectedFiguresProperty().contains(pressedFigure)) {
-                            view.selectedFiguresProperty().remove(pressedFigure);
+                        if (view.getSelectedFigures().contains(pressedFigure)) {
+                            // "shift"+mouse down on selected figure => remove from selection
+                            view.getSelectedFigures().remove(pressedFigure);
                         } else {
-                            view.selectedFiguresProperty().add(pressedFigure);
+                            // "shift"+mouse down on unselected figure => add to selection
+                            view.getSelectedFigures().add(pressedFigure);
                         }
                         return;
                     }
+                } else if (!event.isShiftDown() && event.isMetaDown()) {
+                    System.out.println("no-op");
+                    return;
+                    // no-op
                 } else if (event.isShiftDown() && event.isMetaDown()) {
-                    //  "meta" and "shift" selects the pressed figure and deselects all other figures
+                    // "meta"+"shift"+mouse down on selected figure => reduce selection to a single figure
                     if (pressedFigure != null) {
                         view.selectedFiguresProperty().clear();
                         view.selectedFiguresProperty().add(pressedFigure);
                     }
                 } else if (!event.isShiftDown() && !event.isMetaDown()) {
-                    // neither "meta" nor "shift" sets the selection to the pressed figure, unless it is already selected
+                    // mouse down without modifier keys sets the selection to the pressed figure, unless it is already selected
                     if (pressedFigure != null && !view.selectedFiguresProperty().contains(pressedFigure)) {
                         view.selectedFiguresProperty().clear();
                         view.selectedFiguresProperty().add(pressedFigure);
@@ -428,9 +426,7 @@ public class SelectionTool extends AbstractTool {
                 + "\nOr:"
                 + "\n  Alt+Click on the drawing view. The tool will select the figure behind the currently selected figure at that location."
                 + "\nOr:"
-                + "\n  Shift+Click on the drawing view. The tool will add the figure at that location to the selection."
-                + "\nOr:"
-                + "\n  Command+Click on the drawing view. The tool will toggle the selection of the figure at that location."
+                + "\n  Shift+Click on the drawing view. The tool will toggle the figure at that location to/from the selection."
                 + "\nOr:"
                 + "\n  Shift+Command+Click on the drawing view. The tool will deselect all figures except the is at that location."
                 + "\nOr:"

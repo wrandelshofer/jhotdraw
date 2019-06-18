@@ -6,6 +6,7 @@ package org.jhotdraw8.text;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
@@ -49,7 +50,7 @@ public class CssColorConverterTest {
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> testFromString(null, "none")),
+                dynamicTest("1", () -> testFromString(null, CssTokenType.IDENT_NONE)),
                 dynamicTest("2", () -> testFromString(new CssColor("white", Color.WHITE), "white")),
                 dynamicTest("3", () -> testFromString(new CssColor("#abc", Color.web("#abc")), "#abc")),
                 dynamicTest("4", () -> testFromString(new CssColor("#abcdef", Color.web("#abcdef")), "#abcdef")),

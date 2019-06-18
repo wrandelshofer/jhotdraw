@@ -48,13 +48,42 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     private Slider handleSizeSlider; // Value injected by FXMLLoader
 
     @FXML
+    private TextField handleStrokeWidthField;
+
+    @FXML
+    private Slider handleStrokeWidthSlider;
+    @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert handleColorField != null : "fx:id=\"handleColorField\" was not injected.";
         assert handleColorPicker != null : "fx:id=\"handleColorPicker\" was not injected.";
         assert handleSizeField != null : "fx:id=\"handleSizeField\" was not injected.";
         assert handleSizeSlider != null : "fx:id=\"handleSizeSlider\" was not injected.";
+        assert handleStrokeWidthField != null : "fx:id=\"handleStrokeWidthField\" was not injected: check your FXML file 'HandlesInspector.fxml'.";
+        assert handleStrokeWidthSlider != null : "fx:id=\"handleStrokeWidthSlider\" was not injected: check your FXML file 'HandlesInspector.fxml'.";
 
+        handleColorPicker.setValue(handleColorProperty.getValue().getColor());
+        CustomBinding.bindBidirectionalAndConvert(//
+                handleColorPicker.valueProperty(),//
+                handleColorProperty,//
+                CssColor::new,//
+                (CssColor c) -> c == null ? null : c.getColor() //
+        );
+        handleColorField.textProperty().bindBidirectional(handleColorProperty, new StringConverterAdapter<>(
+                new CssColorConverter(false)));
+
+
+        handleSizeSlider.valueProperty().bindBidirectional(handleSizeProperty);
+        Bindings.bindBidirectional(
+                handleSizeField.textProperty(),
+                handleSizeProperty,
+                new NumberStringConverter());
+
+        handleStrokeWidthSlider.valueProperty().bindBidirectional(handleStrokeWidthProperty);
+        Bindings.bindBidirectional(
+                handleStrokeWidthField.textProperty(),
+                handleStrokeWidthProperty,
+                new NumberStringConverter());
     }
 
     @Nonnull
@@ -62,6 +91,9 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
 
     @Nonnull
     private IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
+
+    @Nonnull
+    private IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
 
     private Node node;
 
@@ -88,25 +120,6 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 throw new InternalError(ex);
             }
         });
-
-        handleColorPicker.setValue(handleColorProperty.getValue().getColor());
-        CustomBinding.bindBidirectionalAndConvert(//
-                handleColorPicker.valueProperty(),//
-                handleColorProperty,//
-                CssColor::new,//
-                (CssColor c) -> c == null ? null : c.getColor() //
-        );
-        handleColorField.textProperty().bindBidirectional(handleColorProperty, new StringConverterAdapter<>(
-                new CssColorConverter(false)));
-
-
-        handleSizeSlider.valueProperty().bindBidirectional(handleSizeProperty);
-        Bindings.bindBidirectional(
-                handleSizeField.textProperty(),
-                handleSizeProperty,
-                new NumberStringConverter());
-
-
     }
 
     @Override
@@ -119,11 +132,13 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
         if (oldValue != null) {
             handleColorProperty.unbindBidirectional(oldValue.handleColorProperty());
             handleSizeProperty.unbindBidirectional(oldValue.handleSizeProperty());
+            handleStrokeWidthProperty.unbindBidirectional(oldValue.handleStrokeWidthProperty());
         }
         try {
             if (newValue != null) {
                 handleColorProperty.bindBidirectional(newValue.handleColorProperty());
                 handleSizeProperty.bindBidirectional(newValue.handleSizeProperty());
+                handleStrokeWidthProperty.bindBidirectional(newValue.handleStrokeWidthProperty());
             }
         } catch (Throwable t) {
             t.printStackTrace();

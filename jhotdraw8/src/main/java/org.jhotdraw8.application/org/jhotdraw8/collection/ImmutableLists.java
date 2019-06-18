@@ -45,7 +45,7 @@ public class ImmutableLists {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> add(@Nonnull ReadOnlyCollection<T> collection, int index, T item) {
+    public static <T> ImmutableList<T> add(@Nullable ReadOnlyCollection<T> collection, int index, T item) {
         if (collection == null || collection.isEmpty() && index == 0) {
             return of(item);
         }
@@ -59,7 +59,10 @@ public class ImmutableLists {
     }
 
     @Nonnull
-    public static <T> ImmutableList<T> addAll(@Nonnull ReadOnlyCollection<T> first, @Nonnull ReadOnlyCollection<T> second) {
+    public static <T> ImmutableList<T> addAll(@Nullable ReadOnlyCollection<T> first, @Nonnull ReadOnlyCollection<T> second) {
+        if (first == null || first.isEmpty()) {
+            return ofCollection(second);
+        }
         Object[] a = new Object[first.size() + second.size()];
         int i = 0;
         for (T t : first) {

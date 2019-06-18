@@ -50,7 +50,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     @Override
     protected void updateEndMarkerNode(RenderContext ctx, @Nonnull Path node) {
         super.updateEndMarkerNode(ctx, node);
-        applyMarkerFillableFigureProperties(node);
+        applyMarkerFillableFigureProperties(ctx, node);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     @Override
     protected void updateStartMarkerNode(RenderContext ctx, @Nonnull Path node) {
         super.updateStartMarkerNode(ctx, node);
-        applyMarkerFillableFigureProperties(node);
+        applyMarkerFillableFigureProperties(ctx, node);
     }
 
     @Override

@@ -555,7 +555,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 invalidate();
                 break;
             case PROPERTY_VALUE_CHANGED: {
-                Key<Object> key = (Key<Object>) event.getKey();
+                Key<Object> key = event.getKey();
                 Object oldValue = event.getOldValue();
                 Object newValue = event.getNewValue();
                 figure.propertyChangedNotify(key, oldValue, newValue);

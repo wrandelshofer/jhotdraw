@@ -9,6 +9,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.BoundingBox;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.text.CssBoundingBoxConverter;
@@ -97,7 +98,10 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
 
     @Nonnull
     @Override
-    public BoundingBox put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull BoundingBox value) {
+    public BoundingBox put(@Nonnull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
+        if (value == null) {
+            throw new IllegalArgumentException("value must not be null.");
+        }
         BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());

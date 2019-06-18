@@ -9,6 +9,8 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.concurrent.WorkState;
@@ -21,11 +23,11 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.UriResolver;
+import org.jhotdraw8.util.Exceptions;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
@@ -96,17 +98,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Comments which appear inside an XML element, that can not be associated
      * to as a head comment.
      */
-    public final static NullableObjectKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     /**
      * Comments which can not be associated to a figure, or which appear in the
      * epilog of an XML file, are associated to the drawing.
      */
-    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     /**
      * Comments which appear before an XML element of a figure are associated to
      * the figure as a comment.
      */
-    public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     @Nullable
     protected List<String> comments;
@@ -148,7 +150,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Nullable
     public Figure fromDocument(@Nonnull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
-        setUriResolver(new UriResolver(documentHome, documentHome));
+        setUriResolver(new UriResolver(documentHome, null));
         idFactory.reset();
         if (oldDrawing != null) {
             if (isClipping(doc.getDocumentElement())) {
@@ -204,7 +206,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return uriResolver;
     }
 
-    private void setUriResolver(Function<URI, URI> uriResolver) {
+    protected void setUriResolver(Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 
@@ -227,7 +229,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             newDrawing = (Drawing) read(new InputSource(file.toUri().toASCIIString()), drawing, documentHome);
             return newDrawing;
         } catch (IOException e) {
-            throw new IOException("Error reading " + file + ".", e);
+            String message = "Error reading file \"" + file + "\".";
+            workState.updateMessage(message + " " + Exceptions.getLocalizedMessage(e) + ".");
+            throw new IOException("Error reading file \"" + file + "\".", e);
         }
     }
 
@@ -627,10 +631,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     URI uri = URI.create(href);
                     uri = uriResolver.apply(uri);
 
-                    List<URI> listOrNull = external.get(figureFactory.getStylesheetsKey());
-                    List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull);
+                    ImmutableList<URI> listOrNull = external.get(figureFactory.getStylesheetsKey());
+                    List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                     stylesheets.add(uri);
-                    external.set(figureFactory.getStylesheetsKey(), stylesheets);
+                    external.set(figureFactory.getStylesheetsKey(), ImmutableLists.ofCollection(stylesheets));
                 }
             }
         }
@@ -648,9 +652,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    public Document toDocument(@Nonnull Drawing internal, @Nonnull Collection<Figure> selection) throws IOException {
+    public Document toDocument(URI documentHome, @Nonnull Drawing internal, @Nonnull Collection<Figure> selection) throws IOException {
+        setUriResolver(new UriResolver(null, documentHome));
         if (selection.isEmpty() || selection.contains(internal)) {
-            return toDocument(internal);
+            return toDocument(documentHome, internal);
         }
 
         // bring selection in z-order
@@ -675,7 +680,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return doc;
     }
 
-    public Document toDocument(Drawing internal) throws IOException {
+    public Document toDocument(URI documentHome, Drawing internal) throws IOException {
+        setUriResolver(new UriResolver(null, documentHome));
         Drawing external = figureFactory.toExternalDrawing(internal);
 
         idFactory.reset();
@@ -705,15 +711,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     @Override
     public void write(@Nonnull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
-        write(sw, drawing, selection);
+        write(null, sw, drawing, selection);
         out.put(getDataFormat(), sw.toString());
     }
 
     protected void writeElementAttributes(@Nonnull Element elem, @Nonnull Figure figure) throws IOException {
         String id = idFactory.createId(figure);
         setAttribute(elem, figureFactory.getObjectIdAttribute(), id);
-
-
         Set<MapAccessor<?>> todo = new LinkedHashSet<>(figureFactory.figureAttributeKeys(figure));
 
         // First write all non-transient composite attributes, then write the remaining non-transient non-composite attributes

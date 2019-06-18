@@ -43,7 +43,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
     @Override
     public CssSize parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (nullable) {
-            if (tt.next() == CssTokenType.TT_IDENT && "none".equals(tt.currentString())) {
+            if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
                 //tt.skipWhitespace();
                 return nullable ? null : CssSize.ZERO;
             } else {

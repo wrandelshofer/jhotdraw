@@ -29,8 +29,17 @@
           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
       <children>
         <TextField fx:id="handleSizeField" prefColumnCount="4"/>
-        <Slider fx:id="handleSizeSlider" majorTickUnit="10.0" max="20.0" min="5.0" maxWidth="1.7976931348623157E308"
+        <Slider fx:id="handleSizeSlider" majorTickUnit="10.0" max="20.0" maxWidth="1.7976931348623157E308" min="5.0"
                 minorTickCount="10" showTickMarks="true" HBox.hgrow="ALWAYS"/>
+      </children>
+    </HBox>
+    <Label text="%handle.strokeWidth.shortLabelText" GridPane.rowIndex="3"/>
+    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="8.0" GridPane.columnIndex="1"
+          GridPane.rowIndex="3">
+      <children>
+        <TextField fx:id="handleStrokeWidthField" prefColumnCount="4"/>
+        <Slider fx:id="handleStrokeWidthSlider" majorTickUnit="10.0" max="20.0" maxWidth="1.7976931348623157E308"
+                min="1.0" minorTickCount="10" showTickMarks="true" value="1.0" HBox.hgrow="ALWAYS"/>
       </children>
     </HBox>
   </children>
@@ -47,5 +56,6 @@
     <RowConstraints vgrow="NEVER"/>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
     <RowConstraints vgrow="NEVER"/>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
   </rowConstraints>
 </GridPane>

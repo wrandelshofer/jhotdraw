@@ -186,6 +186,16 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     }
 
     /**
+     * Create a tokenizer that parses the given character stream.
+     *
+     * @param r the reader
+     */
+    public StreamPosTokenizer(CharSequence r) {
+        this();
+        reader = new CharSequenceReader(r);
+    }
+
+    /**
      * Sets the reader for the tokenizer.
      *
      * @param r The reader

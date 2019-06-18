@@ -9,6 +9,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -20,6 +22,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
@@ -78,41 +81,58 @@ public class PolygonOutlineHandle extends AbstractHandle {
     public Node getNode(DrawingView view) {
         CssColor color = view.getHandleColor();
         poly1.setStroke(Color.WHITE);
-        poly1.setStrokeWidth(3);
         poly2.setStroke(Paintable.getPaint(color));
+        int strokeWidth = view.getHandleStrokeWidth();
+        poly1.setStrokeWidth(strokeWidth + 2);
+        poly2.setStrokeWidth(strokeWidth);
         return node;
     }
 
     @Override
+    public void handleMousePressed(MouseEvent event, DrawingView dv) {
+        if (event.isSecondaryButtonDown()) {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
+            addPoint.setOnAction(actionEvent -> addPoint(event, dv));
+            contextMenu.getItems().add(addPoint);
+            contextMenu.show(node, event.getX(), event.getScreenY());
+            event.consume();
+        }
+    }
+    @Override
     public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
 
         if (editable && key != null && event.getClickCount() == 2) {
-            ImmutableList<Point2D> points = owner.get(key);
 
-            Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
-            Point2D pInLocal = owner.worldToLocal(pInDrawing);
+            addPoint(event, dv);
+        }
+    }
 
-            double tolerance = Transforms.deltaTransform(owner.getWorldToLocal(), Transforms.deltaTransform(dv.getViewToWorld(), dv.getTolerance(), dv.getTolerance())).getX();
-            double px = pInLocal.getX();
-            double py = pInLocal.getY();
+    private void addPoint(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+        ImmutableList<Point2D> points = owner.get(key);
+        Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
+        Point2D pInLocal = owner.worldToLocal(pInDrawing);
 
-            int insertAt = -1;
-            Point2D insertLocation = null;
-            for (int i = 0, n = points.size(); i < n; i++) {
-                Point2D p1 = points.get((n + i - 1) % n);
-                Point2D p2 = points.get(i);
+        double tolerance = Transforms.deltaTransform(owner.getWorldToLocal(), Transforms.deltaTransform(dv.getViewToWorld(), dv.getTolerance(), dv.getTolerance())).getX();
+        double px = pInLocal.getX();
+        double py = pInLocal.getY();
 
-                Intersection result = Intersections.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
-                if (result.getTs().size() == 2) {
-                    insertLocation = Geom.lerp(p1, p2, (result.getFirstT() + result.getLastT()) / 2);
-                    insertAt = i;
-                    break;
-                }
+        int insertAt = -1;
+        Point2D insertLocation = null;
+        for (int i = 0, n = points.size(); i < n; i++) {
+            Point2D p1 = points.get((n + i - 1) % n);
+            Point2D p2 = points.get(i);
+
+            Intersection result = Intersections.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
+            if (result.getTs().size() == 2) {
+                insertLocation = Geom.lerp(p1, p2, (result.getFirstT() + result.getLastT()) / 2);
+                insertAt = i;
+                break;
             }
-            if (insertAt != -1 && insertLocation != null) {
-                dv.getModel().set(owner, key, ImmutableLists.add(owner.get(key), insertAt, insertLocation));
-                dv.recreateHandles();
-            }
+        }
+        if (insertAt != -1) {
+            dv.getModel().set(owner, key, ImmutableLists.add(owner.get(key), insertAt, insertLocation));
+            dv.recreateHandles();
         }
     }
 

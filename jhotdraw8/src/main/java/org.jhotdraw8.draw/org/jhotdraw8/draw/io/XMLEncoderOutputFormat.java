@@ -13,6 +13,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import java.beans.XMLEncoder;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     }
 
     @Override
-    public void write(@Nonnull OutputStream out, Drawing drawing, WorkState workState) throws IOException {
+    public void write(URI documentHome, @Nonnull OutputStream out, Drawing drawing, WorkState workState) throws IOException {
         try (XMLEncoder o = new XMLEncoder(out)) {
            /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
             o.setPersistenceDelegate(Figure.class, delegate);

@@ -14,11 +14,15 @@ import org.jhotdraw8.io.IdFactory;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
  * Parses a list with items separated by commas or whitespace.
+ * <p>
+ * Stops parsing at EOF, semicolon and closing bracket.
  *
  * @param <T> the element type
  */
@@ -28,6 +32,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     private final ImmutableList<CssToken> delimiter;
     private final ImmutableList<CssToken> prefix;
     private final ImmutableList<CssToken> suffix;
+    private final Set<Integer> delimiterChars;
 
     public CssListConverter(CssConverter<T> elementConverter) {
         this(elementConverter, ", ");
@@ -59,6 +64,13 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         this.delimiter = ImmutableLists.ofCollection(delimiter);
         this.prefix = ImmutableLists.ofCollection(prefix);
         this.suffix = ImmutableLists.ofCollection(suffix);
+        delimiterChars = new HashSet<>();
+        for (CssToken cssToken : delimiter) {
+            if (cssToken.getType() >= 0) {
+                delimiterChars.add(cssToken.getType());
+            }
+        }
+
     }
 
     public CssListConverter(CssConverter<T> elementConverter,
@@ -70,6 +82,12 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         this.delimiter = ImmutableLists.ofCollection(delimiter);
         this.prefix = ImmutableLists.ofCollection(prefix);
         this.suffix = ImmutableLists.ofCollection(suffix);
+        delimiterChars = new HashSet<>();
+        for (CssToken cssToken : delimiter) {
+            if (cssToken.getType() >= 0) {
+                delimiterChars.add(cssToken.getType());
+            }
+        }
     }
 
 
@@ -84,8 +102,11 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         ArrayList<T> list = new ArrayList<>();
         Loop:
         for (; ; ) {
-            switch (tt.nextNoSkip()) {
-                case CssTokenType.TT_COMMA:
+            int ttype = tt.nextNoSkip();
+            if (delimiterChars.contains(ttype)) {
+                continue Loop;
+            }
+            switch (ttype) {
                 case CssTokenType.TT_S:
                     continue Loop;
                 case CssTokenType.TT_EOF:

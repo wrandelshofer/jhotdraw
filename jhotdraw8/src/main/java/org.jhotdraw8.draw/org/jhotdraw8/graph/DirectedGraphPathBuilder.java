@@ -131,8 +131,8 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull V goal) {
-        return findVertexPath(start, goal::equals, Integer.MAX_VALUE);
+    public VertexPath<V> findAnyVertexPath(@Nonnull V start, @Nonnull V goal) {
+        return findAnyVertexPath(start, goal::equals, Integer.MAX_VALUE);
     }
 
     /**
@@ -152,7 +152,7 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, int maxLength) {
+    public VertexPath<V> findAnyVertexPath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, int maxLength) {
         Deque<V> vertices = new ArrayDeque<>();
         BackLink<V> current = bfs(start, goalPredicate, maxLength);
         if (current == null) {
@@ -168,17 +168,16 @@ public class DirectedGraphPathBuilder<V, A> {
      * Builds a VertexPath through the graph which traverses the specified
      * waypoints.
      * <p>
-     * This method uses breadth first search. It returns the first path that it
-     * finds with this search strategy.
+     * This method uses a breadth first path search between waypoints.
      *
      * @param waypoints waypoints, the iteration sequence of this collection
      *                  determines how the waypoints are traversed
-     * @param maxLength the maximal path length
+     * @param maxLength the maximal path length between two waypoints
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints,
-                                                     int maxLength) {
+    public VertexPath<V> findAnyVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints,
+                                                        int maxLength) {
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -227,17 +226,21 @@ public class DirectedGraphPathBuilder<V, A> {
         return vertexPaths;
     }
 
-    private void dfsFindAllPaths(@Nonnull BackLink<V> current, @Nonnull Predicate<V> goal,
+    private void dfsFindAllPaths(@Nonnull BackLink<V> start, @Nonnull Predicate<V> goal,
                                  @Nonnull List<BackLink<V>> backlinks, int maxDepth) {
-        if (goal.test(current.vertex)) {
-            backlinks.add(current);
-            return;
-        }
+        Deque<BackLink<V>> stack = new ArrayDeque<>();
+        stack.push(start);
 
-        if (current.depth < maxDepth) {
-            for (V v : nextNodesFunction.apply(current.vertex)) {
-                BackLink<V> newPath = new BackLink<>(v, current, current.depth + 1);
-                dfsFindAllPaths(newPath, goal, backlinks, maxDepth);
+        while (!stack.isEmpty()) {
+            BackLink<V> current = stack.pop();
+            if (goal.test(current.vertex)) {
+                backlinks.add(current);
+            }
+            if (current.depth < maxDepth) {
+                for (V v : nextNodesFunction.apply(current.vertex)) {
+                    BackLink<V> newPath = new BackLink<>(v, current, current.depth + 1);
+                    stack.push(newPath);
+                }
             }
         }
     }

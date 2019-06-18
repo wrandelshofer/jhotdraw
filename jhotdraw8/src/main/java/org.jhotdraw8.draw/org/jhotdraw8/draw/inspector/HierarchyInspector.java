@@ -11,7 +11,12 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
@@ -44,7 +49,11 @@ import org.jhotdraw8.tree.TreePresentationModel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * FXML Controller class
@@ -116,29 +125,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
                 cell.getValue().getValue() == null ? null : cell.getValue().getValue().getTypeSelector())
         );
-        /*
-        idColumn.setCellValueFactory(
-                cell -> cell.getValue().getValue().getPropertyName(StyleableFigure.ID));
-*/
+
         idColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.ID));
-        /*
-            idColumn.setCellValueFactory(
-                    cell -> new DrawingModelFigureProperty<String>((DrawingModel) model.getTreeModel(),
-                            cell.getValue().getValue(), StyleableFigure.ID) {
-            @Nullable
-            @Override
-            public String getValue() {
-                return figure == null ? null : figure.get(StyleableFigure.ID);
-            }
 
-            @Override
-            protected void updateValue() {
-                setValue(figure.getId());
-            }
-        }
-        );*/
         visibleColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), HideableFigure.VISIBLE)
@@ -151,7 +142,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
                     @Nullable
                     @Override
-                    @SuppressWarnings("unchecked")
                     public ImmutableList<String> getValue() {
                         return figure == null ? null : ImmutableLists.ofCollection(figure.getStyleClass());
                     }
@@ -161,7 +151,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
                     @Nullable
                     @Override
-                    @SuppressWarnings("unchecked")
                     public ImmutableSet<PseudoClass> getValue() {
                         return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClassStates());
                     }

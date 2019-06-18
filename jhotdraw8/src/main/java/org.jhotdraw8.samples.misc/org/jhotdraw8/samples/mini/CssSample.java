@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -88,7 +89,7 @@ public class CssSample extends Application {
 
         ArrayList<URI> stylesheets = new ArrayList<>();
         stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());
-        drawing.set(Drawing.USER_AGENT_STYLESHEETS, stylesheets);
+        drawing.set(Drawing.USER_AGENT_STYLESHEETS, ImmutableLists.ofCollection(stylesheets));
         drawing.updateCss();
 
         SimpleRenderContext ctx = new SimpleRenderContext();

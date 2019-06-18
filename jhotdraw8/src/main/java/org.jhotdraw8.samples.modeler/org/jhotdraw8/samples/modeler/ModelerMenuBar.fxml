@@ -5,7 +5,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <menus>
     <Menu id="file" mnemonicParsing="false" text="%file.text">
       <items>
@@ -15,6 +15,7 @@
         <MenuItem id="file.save" mnemonicParsing="false" text="Save"/>
         <MenuItem id="file.saveAs" mnemonicParsing="false" text="Save as..."/>
         <MenuItem id="file.revert" mnemonicParsing="false" text="Revert to Saved"/>
+        <MenuItem id="file.browseFileDirectory" mnemonicParsing="false" text="Browse File Directory"/>
         <MenuItem id="file.print" mnemonicParsing="false" text="Print..."/>
         <MenuItem id="file.export" mnemonicParsing="false" text="%file.export.text"/>
         <MenuItem id="file.close" mnemonicParsing="false" text="Close"/>

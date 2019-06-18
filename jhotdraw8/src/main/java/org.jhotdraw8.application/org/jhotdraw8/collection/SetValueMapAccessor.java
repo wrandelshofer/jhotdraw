@@ -73,6 +73,11 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         return Boolean.class;
     }
 
+    @Override
+    public Class<?> getComponentValueType() {
+        return Boolean.class;
+    }
+
     @Nonnull
     @Override
     public List<Class<?>> getValueTypeParameters() {

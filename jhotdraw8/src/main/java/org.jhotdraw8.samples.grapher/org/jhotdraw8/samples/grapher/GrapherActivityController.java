@@ -21,6 +21,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.AbstractDocumentBasedActivity;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
@@ -86,6 +87,7 @@ import org.jhotdraw8.draw.inspector.HierarchyInspector;
 import org.jhotdraw8.draw.inspector.Inspector;
 import org.jhotdraw8.draw.inspector.InspectorLabels;
 import org.jhotdraw8.draw.inspector.LayersInspector;
+import org.jhotdraw8.draw.inspector.MessagesInspector;
 import org.jhotdraw8.draw.inspector.StyleAttributesInspector;
 import org.jhotdraw8.draw.inspector.StyleClassesInspector;
 import org.jhotdraw8.draw.inspector.StylesheetsInspector;
@@ -103,9 +105,11 @@ import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.draw.tool.ConnectionTool;
 import org.jhotdraw8.draw.tool.CreationTool;
 import org.jhotdraw8.draw.tool.ImageCreationTool;
+import org.jhotdraw8.draw.tool.LineCreationTool;
 import org.jhotdraw8.draw.tool.PolyCreationTool;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.TextCreationTool;
+import org.jhotdraw8.draw.tool.TextEditingTool;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.gui.dock.Dock;
 import org.jhotdraw8.gui.dock.DockItem;
@@ -225,6 +229,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     @Override
     protected void initActionMap(@Nonnull HierarchicalMap<String, Action> map) {
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
+        map.put(BrowseFileDirectoryAction.ID, new BrowseFileDirectoryAction(getApplication()));
         map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));
         map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
         map.put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
@@ -260,28 +265,30 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         ttbar.addTool(new SelectionTool("tool.moveFigure", HandleType.MOVE, null, HandleType.LEAD, labels), 1, 0);
         ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, labels), 0, 1);
         ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, labels), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0, 16);
-        ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
-        ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
-        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1, 16);
+        ttbar.addTool(new TextEditingTool("tool.editText", labels), 2, 1);
+
+        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 13, 0, 16);
+        ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 14, 0);
+        ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionWithMarkersFigure::new), layerFactory), 14, 1);
+        ttbar.addTool(new LineCreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 13, 1, 16);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory),
-                4, 1);
+                15, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels,
                         PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory),
-                4, 0, 0);
+                15, 0, 0);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels,
                         BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory),
-                5, 1);
+                16, 1);
         ttbar.addTool(new TextCreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 6, 1);
+                layerFactory), 17, 1);
         ttbar.addTool(new TextCreationTool("edit.createTextArea", labels,
                         () -> createFigure(TextAreaFigure::new), layerFactory),
-                6, 0);
+                17, 0);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels,
-                () -> createFigure(ImageFigure::new), layerFactory), 5, 0, 0);
+                () -> createFigure(ImageFigure::new), layerFactory), 16, 0, 0);
         ttbar.addTool(new CreationTool("edit.createSlice", labels,
-                () -> createFigure(SliceFigure::new), layerFactory), 10, 0, 0);
+                () -> createFigure(SliceFigure::new), layerFactory), 21, 0, 0);
         ttbar.addTool(new CreationTool("edit.createPage", labels,
                 () -> createFigure(() -> {
                     PageFigure pf = new PageFigure();
@@ -292,12 +299,12 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                             FillableFigure.FILL, null, StrokableFigure.STROKE, null);
                     pf.addChild(pl);
                     return pf;
-                }), layerFactory), 9, 0, 16);
+                }), layerFactory), 20, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new PageLabelFigure(0, 0,
                         labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
                         FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 9, 1, 16);
+                layerFactory), 20, 1, 16);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -379,6 +386,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             dock.getItems().add(addInspector(new GridInspector(), "grid", Priority.NEVER));
             dock.getItems().add(addInspector(new HandlesInspector(), "handles", Priority.NEVER));
             dock.getItems().add(addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
+            dock.getItems().add(addInspector(new MessagesInspector(this), "messages", Priority.NEVER));
             d.add(dock);
             return d;
         }).whenComplete((list, e) -> {
@@ -400,6 +408,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             } else {
                 e.printStackTrace();
             }
+        }).exceptionally((e) -> {
+            e.printStackTrace();
+            return null;
         });
     }
 

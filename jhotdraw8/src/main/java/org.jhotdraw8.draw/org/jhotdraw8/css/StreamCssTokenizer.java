@@ -77,7 +77,7 @@ import static org.jhotdraw8.css.CssTokenType.TT_URL;
  * ]             = ']' ;
  * S             = { w }- ;
  * COMMENT       = '/', '*' , { ? anything but '*' followed by '/' ? } , '*', '/' ;
- * FUNCTION      = ident , '(' ;
+ * ROUND_BLOCK      = ident , '(' ;
  * INCLUDE_MATCH = '~', '=' ;
  * DASH_MATCH    = '|', '=' ;
  * PREFIX_MATCH  = '^', '=' ;

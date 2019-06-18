@@ -62,7 +62,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @Nonnull
-    NullableObjectKey<String> STYLE = new NullableObjectKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
+    NullableObjectKey<String> STYLE = new NullableObjectKey<>("style", String.class, null);
 
     /**
      * Updates a figure node with all style and effect properties defined in

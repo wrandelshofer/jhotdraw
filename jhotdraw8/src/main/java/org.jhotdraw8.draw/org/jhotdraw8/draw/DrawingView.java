@@ -129,6 +129,8 @@ public interface DrawingView extends RenderContext {
 
     String HANDLE_SIZE_PROPERTY = "handleSize";
 
+    String HANDLE_STROKE_WDITH_PROPERTY = "handleStrokeWidth";
+
     String HANDLE_COLOR_PROPERTY = "handleColor";
 
     // ---
@@ -722,6 +724,13 @@ public interface DrawingView extends RenderContext {
      */
     IntegerProperty handleSizeProperty();
 
+    /**
+     * Holds the stroke width of a handle.
+     *
+     * @return size of handle
+     */
+    IntegerProperty handleStrokeWidthProperty();
+
     default int getHandleSize() {
         return handleSizeProperty().get();
     }
@@ -743,5 +752,14 @@ public interface DrawingView extends RenderContext {
 
     default void setHandleColor(CssColor newValue) {
         handleColorProperty().set(newValue);
+    }
+
+
+    default int getHandleStrokeWidth() {
+        return handleStrokeWidthProperty().get();
+    }
+
+    default void setHandleStrokeWidth(int newValue) {
+        handleStrokeWidthProperty().set(newValue);
     }
 }

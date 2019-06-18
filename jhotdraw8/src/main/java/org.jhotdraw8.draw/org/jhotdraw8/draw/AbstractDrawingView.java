@@ -59,25 +59,34 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
 
     private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
     private NonnullProperty<CssColor> handleColor = new NonnullProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
-            CssColor.valueOf(Preferences.userNodeForPackage(AbstractDrawingView.class).get("handleColor", "blue"))) {
+            CssColor.valueOf(Preferences.userNodeForPackage(AbstractDrawingView.class).get(HANDLE_COLOR_PROPERTY, "blue"))) {
         @Override
         public void set(CssColor newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(AbstractDrawingView.class).put("handleColor", newValue.getName());
+            Preferences.userNodeForPackage(AbstractDrawingView.class).put(HANDLE_COLOR_PROPERTY, newValue.getName());
             recreateHandles();
         }
     };
     private IntegerProperty handleSize = new SimpleIntegerProperty(
             this, HANDLE_SIZE_PROPERTY,
-            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt("handleSize", 5)) {
+            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_SIZE_PROPERTY, 5)) {
         @Override
         public void set(int newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(AbstractDrawingView.class).putInt("handleSize", newValue);
+            Preferences.userNodeForPackage(AbstractDrawingView.class).putInt(HANDLE_SIZE_PROPERTY, newValue);
             recreateHandles();
         }
     };
-
+    private IntegerProperty handleStrokeWidth = new SimpleIntegerProperty(
+            this, HANDLE_STROKE_WDITH_PROPERTY,
+            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_STROKE_WDITH_PROPERTY, 1)) {
+        @Override
+        public void set(int newValue) {
+            super.set(newValue);
+            Preferences.userNodeForPackage(AbstractDrawingView.class).putInt(HANDLE_STROKE_WDITH_PROPERTY, newValue);
+            recreateHandles();
+        }
+    };
     {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
@@ -244,6 +253,11 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
     @Override
     public IntegerProperty handleSizeProperty() {
         return handleSize;
+    }
+
+    @Override
+    public IntegerProperty handleStrokeWidthProperty() {
+        return handleStrokeWidth;
     }
 
     @Override

@@ -82,6 +82,11 @@ public class CssToken /*extends AST*/ {
                 if (numericValue == null)
                     throw new IllegalArgumentException("numeric value must not be null for ttype=" + ttype);
                 break;
+            case CssTokenType.TT_IDENT:
+                if (stringValue == null || stringValue.isEmpty()) {
+                    throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
+                }
+                break;
             default:
                 if (ttype < 0 && ttype != CssTokenType.TT_EOF && stringValue == null)
                     throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
@@ -94,6 +99,13 @@ public class CssToken /*extends AST*/ {
         this.startPos = startPos;
         this.endPos = endPos;
         this.preferredQuoteChar = preferredQuoteChar;
+    }
+
+    public String getStringValueNonnull() {
+        if (stringValue == null) {
+            throw new NullPointerException();
+        }
+        return stringValue;
     }
 
     @Override
@@ -182,7 +194,7 @@ public class CssToken /*extends AST*/ {
             }
 
             if (ch == -1) {
-                throw new IllegalArgumentException("nmstart missing! " + value);
+                throw new IllegalArgumentException("nmstart missing! value=\"" + value + "\".");
             }
 
             // escape nmstart if necessary

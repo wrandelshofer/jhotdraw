@@ -12,7 +12,6 @@ import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +25,8 @@ import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
 /**
- * DirectedGraphCostPathBuilder.
+ * This path builder can be used to find any shortest path between
+ * to vertices in a directed.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
@@ -63,78 +63,12 @@ public class DirectedGraphCostPathBuilder<V, A> {
     }
 
 
-    /**
-     * Breadth-first-search.
-     *
-     * @param root    the starting point of the search
-     * @param goal    the goal of the search
-     * @param visited a predicate with side effect. The predicate returns true
-     *                if the specified vertex has been visited, and marks the specified vertex
-     *                as visited.
-     * @return a back link on success, null on failure
-     */
-    private BackLinkWithArrow<V, A> bfs(@Nonnull V root,
-                                        @Nonnull Predicate<V> goal,
-                                        @Nonnull Predicate<V> visited,
-                                        double maxCost) {
-        if (queue == null) {
-            queue = new ArrayDeque<>(16);
-        }
-        BackLinkWithArrow<V, A> rootBackLink = new BackLinkWithArrow<>(root, null, null, 0.0);
-        visited.test(root);
-        queue.add(rootBackLink);
-        BackLinkWithArrow<V, A> current = null;
-        while (!queue.isEmpty()) {
-            current = queue.remove();
-            if (goal.test(current.vertex)) {
-                break;
-            }
-            if (current.cost < maxCost) {
-                for (Map.Entry<V, A> entry : nextNodesFunction.apply(current.vertex)) {
-                    V next = entry.getKey();
-                    if (visited.test(next)) {
-                        A arrow = entry.getValue();
-                        BackLinkWithArrow<V, A> backLink = new BackLinkWithArrow<>(next, current, arrow,
-                                current.cost + costf.applyAsDouble(current.vertex, next, arrow));
-                        queue.add(backLink);
-                    }
-                }
-            }
-        }
-        queue.clear();
-        if (current == null || !goal.test(current.vertex)) {
-            return null;
-        }
-        return current;
-    }
-
-    /**
-     * Breadth-first-search.
-     *
-     * @param root the starting point of the search
-     * @param goal the goal of the search
-     * @return the path elements. Returns an empty list if there is no path. The
-     * list is mutable.
-     */
-    @Nullable
-    private BackLinkWithArrow<V, A> bfs(@Nonnull V root,
-                                        @Nonnull Predicate<V> goal,
-                                        double maxCost) {
-        if (visitedSet == null) {
-            visitedSet = new HashSet<>();
-        }
-        BackLinkWithArrow<V, A> result = bfs(root, goal, visitedSet::add, maxCost);
-        visitedSet.clear();
-        return result;
-    }
-
-
-    private NodeWithCost<V, A> findShortestPath(@Nonnull V start,
-                                                @Nonnull PriorityQueue<NodeWithCost<V, A>> frontier,
-                                                @Nonnull Map<V, NodeWithCost<V, A>> frontierMap,
-                                                @Nonnull Predicate<V> goalPredicate,
-                                                @Nonnull Set<V> explored,
-                                                double maxCost) {
+    private NodeWithCost<V, A> findAnyShortestPath(@Nonnull V start,
+                                                   @Nonnull PriorityQueue<NodeWithCost<V, A>> frontier,
+                                                   @Nonnull Map<V, NodeWithCost<V, A>> frontierMap,
+                                                   @Nonnull Predicate<V> goalPredicate,
+                                                   @Nonnull Set<V> explored,
+                                                   double maxCost) {
         NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
         while (true) {
@@ -162,7 +96,7 @@ public class DirectedGraphCostPathBuilder<V, A> {
                         frontierMap.put(next, nwc);
                     } else if (isInFrontier) {
                         NodeWithCost<V, A> nwcInFrontier = frontierMap.get(next);
-                        if (nwcInFrontier.cost > cost) {
+                        if (cost < nwcInFrontier.cost) {
                             frontier.remove(nwcInFrontier);
                             nwcInFrontier.cost = cost;
                             nwcInFrontier.parent = node;
@@ -179,64 +113,6 @@ public class DirectedGraphCostPathBuilder<V, A> {
 
 
     /**
-     * Builds an EdgePath through the graph which goes from the specified start
-     * vertex to the specified goal vertex.
-     * <p>
-     * This method uses a breadth first search and returns the first result that
-     * it finds.
-     * <p>
-     * References:<br>
-     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
-     * Wikipedia</a>
-     *
-     * @param start   the start vertex
-     * @param goal    the goal predicate
-     * @param maxCost the maximal cost of a path
-     * @return a path if traversal is possible, null otherwise
-     */
-    @Nullable
-    public EdgePath<A> findEdgePath(@Nonnull V start, @Nonnull Predicate<V> goal, double maxCost) {
-        Deque<A> arrows = new ArrayDeque<>();
-        BackLinkWithArrow<V, A> current = bfs(start, goal, maxCost);
-        if (current == null) {
-            return null;
-        }
-        for (BackLinkWithArrow<V, A> i = current; i.arrow != null; i = i.parent) {
-            arrows.addFirst(i.arrow);
-        }
-        return new EdgePath<>(arrows);
-    }
-
-    /**
-     * Builds an EdgePath through the graph which goes from the specified start
-     * vertex to the specified goal vertex.
-     * <p>
-     * This method uses a breadth first search and returns the first result that
-     * it finds.
-     * <p>
-     * References:<br>
-     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
-     * Wikipedia</a>
-     *
-     * @param start   the start vertex
-     * @param goal    the goal predicate
-     * @param maxCost the maximal cost of a path
-     * @return a path if traversal is possible, null otherwise
-     */
-    @Nullable
-    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull Predicate<V> goal, double maxCost) {
-        Deque<V> vertices = new ArrayDeque<>();
-        BackLinkWithArrow<V, A> current = bfs(start, goal, maxCost);
-        if (current == null) {
-            return null;
-        }
-        for (BackLinkWithArrow<V, A> i = current; i != null; i = i.parent) {
-            vertices.addFirst(i.vertex);
-        }
-        return new VertexPath<>(vertices);
-    }
-
-    /**
      * Builds a VertexPath through the graph which goes from the specified start
      * vertex to the specified goal vertex at the lowest cost.
      * <p>
@@ -251,9 +127,9 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(@Nonnull V start,
-                                                                   @Nonnull V goal) {
-        return findShortestVertexPath(start, goal::equals, Double.POSITIVE_INFINITY);
+    public Map.Entry<VertexPath<V>, Double> findAnyShortestVertexPath(@Nonnull V start,
+                                                                      @Nonnull V goal) {
+        return findAnyShortestVertexPath(start, goal::equals, Double.POSITIVE_INFINITY);
     }
 
     /**
@@ -272,10 +148,10 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(@Nonnull V start,
-                                                                   @Nonnull Predicate<V> goalPredicate, double maxCost) {
+    public Map.Entry<VertexPath<V>, Double> findAnyShortestVertexPath(@Nonnull V start,
+                                                                      @Nonnull Predicate<V> goalPredicate, double maxCost) {
 
-        NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
+        NodeWithCost<V, A> node = findAnyShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
         }
@@ -302,8 +178,8 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(@Nonnull V start, @Nonnull V goal) {
-        return findShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
+    public Map.Entry<EdgePath<A>, Double> findAnyShortestEdgePath(@Nonnull V start, @Nonnull V goal) {
+        return findAnyShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
     }
 
     /**
@@ -322,8 +198,8 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, double maxCost) {
-        NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
+    public Map.Entry<EdgePath<A>, Double> findAnyShortestEdgePath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate, double maxCost) {
+        NodeWithCost<V, A> node = findAnyShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
         }
@@ -343,13 +219,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
     private Set<V> explored = new HashSet<>(61);
 
     @Nullable
-    private NodeWithCost<V, A> findShortestPath(@Nonnull V start,
-                                                @Nonnull Predicate<V> goalPredicate,
-                                                double maxCost) {
+    private NodeWithCost<V, A> findAnyShortestPath(@Nonnull V start,
+                                                   @Nonnull Predicate<V> goalPredicate,
+                                                   double maxCost) {
         frontier.clear();
         frontierMap.clear();
         explored.clear();
-        return findShortestPath(start, frontier, frontierMap, goalPredicate, explored, maxCost);
+        return findAnyShortestPath(start, frontier, frontierMap, goalPredicate, explored, maxCost);
     }
 
     /**
@@ -360,13 +236,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findShortestVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<VertexPath<V>, Double> findAnyShortestVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints, double maxCost) {
         List<V> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<VertexPath<V>, Double> pathWithCost = findShortestVertexPath(start, via::equals, maxCost);
+                Map.Entry<VertexPath<V>, Double> pathWithCost = findAnyShortestVertexPath(start, via::equals, maxCost);
                 if (pathWithCost == null) {
                     return null;
                 }
@@ -390,13 +266,13 @@ public class DirectedGraphCostPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePathOverWaypoints(Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<EdgePath<A>, Double> findAnyShortestEdgePathOverWaypoints(Collection<? extends V> waypoints, double maxCost) {
         List<A> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<EdgePath<A>, Double> pathWithCost = findShortestEdgePath(start, via::equals, maxCost);
+                Map.Entry<EdgePath<A>, Double> pathWithCost = findAnyShortestEdgePath(start, via::equals, maxCost);
                 if (pathWithCost == null) {
                     return null;
                 }
@@ -412,31 +288,6 @@ public class DirectedGraphCostPathBuilder<V, A> {
         return new AbstractMap.SimpleEntry<>(new EdgePath<>(combinedPath), cost);
     }
 
-
-    /**
-     * Enumerates all vertex paths from start to goal up to the specified maximal path cost.
-     *
-     * @param start   the start vertex
-     * @param goal    the goal predicate
-     * @param maxCost the maximal cost of a path
-     * @return the enumerated paths
-     */
-    public List<VertexPath<V>> findAllVertexPaths(@Nonnull V start,
-                                                  @Nonnull Predicate<V> goal,
-                                                  double maxCost) {
-        List<BackLinkWithArrow<V, A>> backlinks = new ArrayList<>();
-        dfsFindAllPaths(new BackLinkWithArrow<>(start, null, null, maxCost), goal, backlinks);
-        List<VertexPath<V>> vertexPaths = new ArrayList<>(backlinks.size());
-        Deque<V> path = new ArrayDeque<>();
-        for (BackLinkWithArrow<V, A> list : backlinks) {
-            path.clear();
-            for (BackLinkWithArrow<V, A> backlink = list; backlink != null; backlink = backlink.parent) {
-                path.addFirst(backlink.vertex);
-            }
-            vertexPaths.add(new VertexPath<>(path));
-        }
-        return vertexPaths;
-    }
 
     private void dfsFindAllPaths(BackLinkWithArrow<V, A> current, Predicate<V> goal,
                                  List<BackLinkWithArrow<V, A>> backlinks) {
@@ -474,11 +325,11 @@ public class DirectedGraphCostPathBuilder<V, A> {
 
     private static class NodeWithCost<V, E> implements Comparable<NodeWithCost<V, E>> {
 
-        private final V vertex;
+        protected final V vertex;
         @Nullable
-        private NodeWithCost<V, E> parent;
-        private E arrow;
-        private double cost;
+        protected NodeWithCost<V, E> parent;
+        protected E arrow;
+        protected double cost;
 
         public NodeWithCost(V node, double cost, NodeWithCost<V, E> parent, E arrow) {
             this.vertex = node;

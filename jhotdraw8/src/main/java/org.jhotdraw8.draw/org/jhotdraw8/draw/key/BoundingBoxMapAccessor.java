@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.BoundingBox;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
@@ -55,7 +56,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
 
     @Nonnull
     @Override
-    public BoundingBox put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull BoundingBox value) {
+    public BoundingBox put(@Nonnull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
         BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());

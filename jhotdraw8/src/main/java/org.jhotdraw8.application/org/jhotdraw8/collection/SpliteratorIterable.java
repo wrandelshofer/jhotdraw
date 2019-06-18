@@ -13,7 +13,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * SpliteratorIterable.
+ * An Iterable which takes a Spliterator supplier to implement the
+ * Iterable methods.
  *
  * @author Werner Randelshofer
  * @version $$Id$$

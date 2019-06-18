@@ -18,6 +18,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.Collection;
 
@@ -32,31 +33,31 @@ import java.util.Collection;
 public interface XmlOutputFormatMixin extends OutputFormat {
 
 
-    default Document toDocument(@Nonnull Drawing drawing) throws IOException {
-        return toDocument(drawing, drawing.getChildren());
+    default Document toDocument(URI documentHome, @Nonnull Drawing drawing) throws IOException {
+        return toDocument(documentHome, drawing, drawing.getChildren());
     }
 
-    Document toDocument(Drawing drawing, Collection<Figure> selection) throws IOException;
+    Document toDocument(URI documentHome, Drawing drawing, Collection<Figure> selection) throws IOException;
 
     @Override
     default void write(@Nonnull Path file, @Nonnull Drawing drawing, WorkState workState) throws IOException {
-        Document doc = toDocument(drawing);
+        Document doc = toDocument(file.getParent().toUri(), drawing);
         XmlUtil.write(file, doc);
     }
 
     @Override
-    default void write(OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
-        write(out, drawing, drawing.getChildren());
+    default void write(URI documentHome, OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
+        write(documentHome, out, drawing, drawing.getChildren());
     }
 
-    default void write(OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        Document doc = toDocument(drawing, selection);
+    default void write(URI documentHome, OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
+        Document doc = toDocument(documentHome, drawing, selection);
         XmlUtil.write(out, doc);
     }
 
 
-    default void write(Writer out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        Document doc = toDocument(drawing, selection);
+    default void write(URI documentHome, Writer out, Drawing drawing, Collection<Figure> selection) throws IOException {
+        Document doc = toDocument(documentHome, drawing, selection);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(doc);

@@ -97,7 +97,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean hasStyleClass(@Nonnull Figure element, @Nonnull String clazz) {
-        return element.getStyleClass().contains(clazz);
+        return element.getStyleClass().contains(clazz)
+                || Objects.equals(element.getAlternativeStyleClass(), clazz);
     }
 
     @Nonnull

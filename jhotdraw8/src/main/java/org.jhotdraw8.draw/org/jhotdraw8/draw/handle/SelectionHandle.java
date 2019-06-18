@@ -45,9 +45,9 @@ public class SelectionHandle extends LocatorHandle {
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, null));
 
 
     public SelectionHandle(Figure figure, Locator locator) {

@@ -12,6 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="org.junit.jupiter:junit-jupiter-api:5.3.2" level="project" />
-    <orderEntry type="library" exported="" name="org.openjfx:javafx-controls:12" level="project" />
+    <orderEntry type="library" exported="" name="org.openjfx:javafx-controls:13-ea+8" level="project" />
   </component>
 </module>

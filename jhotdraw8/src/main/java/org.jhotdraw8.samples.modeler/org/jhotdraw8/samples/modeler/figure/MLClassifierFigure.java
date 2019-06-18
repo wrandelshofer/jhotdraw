@@ -41,8 +41,6 @@ import org.jhotdraw8.draw.figure.TextLayoutableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
@@ -129,10 +127,9 @@ public class MLClassifierFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "MLClassifier";
 
-    public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.ML_NAMESPACE_PREFIX, "compartments", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new MLCompartmentalizedData());
+    public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = MLConstants.COMPARTMENTS;
     public final static NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
-    public final static NullableStringStyleableKey PACKAGE = MLConstants.PACKAGE;
-    public final static StringStyleableKey NAME = new StringStyleableKey(MLConstants.ML_NAMESPACE_PREFIX, "name", "unnamed", null);
+    public final static StringStyleableKey NAME = MLConstants.NAME;
     public final static BooleanStyleableKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableKey("compartmentLabelsVisible", false);
     public final static BooleanStyleableKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
     /**
@@ -166,7 +163,8 @@ public class MLClassifierFigure extends AbstractLeafFigure
         }
         Key<?> key = (Key<?>) node.getProperties().get(TEXT_NODE_TEXT_KEY);
         if (key != null && key.getValueType() == String.class) {
-            return new TextEditorData(this, node.getBoundsInLocal(), (Key<String>) key);
+            @SuppressWarnings("unchecked") Key<String> stringKey = (Key<String>) key;
+            return new TextEditorData(this, node.getBoundsInLocal(), stringKey);
         }
         return null;
     }

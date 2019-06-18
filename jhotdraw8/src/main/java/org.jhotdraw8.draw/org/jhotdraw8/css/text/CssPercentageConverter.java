@@ -73,7 +73,11 @@ public class CssPercentageConverter extends AbstractCssConverter<Double> {
     @Nonnull
     @Override
     public String getHelpText() {
-        return "Format of ⟨Double⟩: ⟨double⟩";
+        if (isNullable()) {
+            return "Format of ⟨NullablePercentage⟩: none｜⟨fraction⟩｜⟨percentage⟩%";
+        } else {
+            return "Format of ⟨Percentage⟩: ⟨fraction⟩｜⟨percentage⟩%";
+        }
     }
 
 }

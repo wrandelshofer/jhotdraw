@@ -20,6 +20,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
@@ -134,7 +136,8 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                         URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
                         for (File f : clipboard.getFiles()) {
                             URI dragboardUri = f.toURI();
-                            URI stylesheetUri = documentHome.relativize(dragboardUri);
+                            //URI stylesheetUri = documentHome.relativize(dragboardUri);
+                            URI stylesheetUri = dragboardUri;
                             list.add(stylesheetUri);
                         }
                     } else {
@@ -165,11 +168,11 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         }
         if (newValue != null) {
             // FIXME should listen to property changes of the Drawing object
-            List<URI> stylesheets = newValue.get(Drawing.AUTHOR_STYLESHEETS);
+            ImmutableList<URI> stylesheets = newValue.get(Drawing.AUTHOR_STYLESHEETS);
             if (stylesheets == null) {
                 listView.getItems().clear();
             } else {
-                listView.getItems().setAll(stylesheets);
+                listView.getItems().setAll(stylesheets.asList());
             }
         }
         counter = 0;
@@ -181,7 +184,8 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             // The drawing is currently being replaced by a new one. Don't fire events.
             return;
         }
-        drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, new ArrayList<>(listView.getItems()));
+        drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.ofCollection(listView.getItems()));
+        getDrawing().updateStyleManager();
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);
         }
@@ -202,10 +206,20 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     }
 
     private void onAddAction(ActionEvent event) {
-        listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css"));
+        Drawing drawing = getDrawing();
+        if (drawing == null) {
+            return;
+        }
+        URI documentHome = drawing.get(Drawing.DOCUMENT_HOME);
+        URI uri = URI.create("stylesheet" + (++counter) + ".css");
+        if (documentHome != null) {
+            uri = documentHome.resolve(uri);
+        }
+        listView.getItems().add(uri);
     }
 
     private void onRefreshAction(ActionEvent event) {
+        getDrawing().updateStyleManager();
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);
         }

@@ -26,6 +26,7 @@ import javafx.scene.control.ToggleGroup;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssParser;
+import org.jhotdraw8.css.CssPrettyPrinter;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.QualifiedName;
@@ -54,6 +55,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -273,9 +275,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             selectorModel.getAttributeNames(f);
 
             if (first) {
-                first = false;
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
+                first = false;
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
                     if (!filter.test(qname)) {
@@ -287,7 +289,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
                 id = null;
-                type = selectorModel.getType(f).equals(type) ? type : null;
+                type = Objects.equals(selectorModel.getType(f), type) ? type : null;
                 styleClasses.retainAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : attr.keySet()) {
                     if (!filter.test(qname)) {
@@ -308,22 +310,23 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
         StringBuilder buf = new StringBuilder();
-        if (type != null && type.length() > 0) {
-            buf.append(cssIdentConverter.toString(type));
+        CssPrettyPrinter pp = new CssPrettyPrinter(buf);
+        if (type != null && !type.isEmpty()) {
+            pp.append(cssIdentConverter.toString(type));
         }
         if (id != null && id.length() > 0) {
-            buf.append('#').append(cssIdentConverter.toString(id));
+            pp.append('#').append(cssIdentConverter.toString(id));
         }
         for (String clazz : styleClasses) {
-            buf.append('.').append(cssIdentConverter.toString(clazz));
+            pp.append('.').append(cssIdentConverter.toString(clazz));
         }
-        buf.append(":selected {");
+        pp.append(":selected {");
         for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
-            buf.append("\n  ").append(a.getKey().getName()).append(": ");
-            buf.append(a.getValue());
-            buf.append(";");
+            pp.append("\n  ").append(a.getKey().getName()).append(": ");
+            pp.append(a.getValue());
+            pp.append(";");
         }
-        buf.append("\n}");
+        pp.append("\n}");
 
         textArea.setText(buf.toString());
         int rows = 1;

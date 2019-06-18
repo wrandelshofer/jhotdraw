@@ -42,6 +42,23 @@ MLClassifier[keyword="requirement"] {
   compartment-labels-visible: false;
 }
 
+/** Ownership of an association is shown as a small filled circle
+ * at the other end of the association.
+ * See OMG UML 2.5.1 formal-17-12-05, chapter 11.5.4 Associations.
+ */
+MLEdge[source-owned="true"] {
+  marker-end-shape: "M -6,0 A 3,3 0 0 0 0,0 A 3,3 0 0 0 -6,0 Z";
+  marker-fill: black;
+}
+/** Ownership of an association is shown as a small filled circle
+ * at the other end of the association.
+ * See OMG UML 2.5.1 formal-17-12-05, chapter 11.5.4 Associations.
+ */
+MLEdge[target-owned="true"] {
+  marker-start-shape: "M -6,0 A 3,3 0 0 0 0,0 A 3,3 0 0 0 -6,0 Z";
+  marker-fill: black;
+}
+
 /** Dependency is shown as a dashed line with arrow head. */
 MLEdge[keyword="dependency"] {
   stroke-dasharray: 5;
@@ -60,11 +77,15 @@ MLEdge[keyword="containment"] {
 }
 /** Aggregation is shown as a solid line with white diamond tail. */
 MLEdge[keyword="aggregation"] {
-  marker-end-shape: "M -12,0 -6,-12 0,0 -6,12 -12,0 0,0";
+  marker-start-shape: "M -18,0 -9,-5 0,0 -9,5 Z";
+  marker-fill: white;
+}
+MLEdge[keyword="aggregation"][target-owned="true"] {
+  marker-start-shape: "M -24,0 -15,-5 -6,0 -15,5 Z M -6,0 A 3,3 0 0 0 0,0 A 3,3 0 0 0 -6,0 Z";
   marker-fill: white;
 }
 /** Compositon is shown as a solid line with black diamond tail. */
 MLEdge[keyword="composition"] {
   marker-end-shape: "M -12,0 -6,-12 0,0 -6,12 -12,0 0,0";
-   marker-fill: black;
+  marker-fill: black;
 }

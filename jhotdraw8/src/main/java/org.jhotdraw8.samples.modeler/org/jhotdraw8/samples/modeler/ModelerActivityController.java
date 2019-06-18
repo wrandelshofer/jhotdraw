@@ -7,7 +7,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
-import javafx.css.StyleOrigin;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
@@ -23,6 +22,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.app.AbstractDocumentBasedActivity;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -186,9 +186,9 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
     private void applyUserAgentStylesheet(Drawing d) {
         try {
-            d.getStyleManager().clearStylesheets(StyleOrigin.USER_AGENT);
-            d.getStyleManager().addStylesheet(StyleOrigin.USER_AGENT,
-                    ModelerActivityController.class.getResource("user-agent.css").toURI());
+            d.set(Drawing.USER_AGENT_STYLESHEETS,
+                    ImmutableLists.of(
+                            ModelerActivityController.class.getResource("user-agent.css").toURI()));
             SimpleRenderContext ctx = new SimpleRenderContext();
             for (Figure f : d.preorderIterable()) {
                 f.updateCss();
@@ -258,6 +258,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
         map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));
         map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
+        map.put(BrowseFileDirectoryAction.ID, new BrowseFileDirectoryAction(getApplication()));
         map.put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         map.put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
         map.put(BringForwardAction.ID, new BringForwardAction(getApplication(), editor));
@@ -481,12 +482,12 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
             StyleAttributesInspector modelAttrInspector = new StyleAttributesInspector();
             modelAttrInspector.setAttributeFilter(k ->
-                    "id".equals(k.getName()) || MLConstants.ML_NAMESPACE_PREFIX.equals(k.getNamespace())
+                    "id".equals(k.getName()) || MLConstants.MODEL_NAMESPACE_PREFIX.equals(k.getNamespace())
             );
             dock.getItems().add(addInspector(modelAttrInspector, "modelAttributes", Priority.ALWAYS));
             StyleAttributesInspector styleAttrInspector = new StyleAttributesInspector();
             styleAttrInspector.setAttributeFilter(k ->
-                    !MLConstants.ML_NAMESPACE_PREFIX.equals(k.getNamespace())
+                    !MLConstants.MODEL_NAMESPACE_PREFIX.equals(k.getNamespace())
             );
             dock.getItems().add(addInspector(styleAttrInspector, "styleAttributes", Priority.ALWAYS));
             dock.getItems().add(addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER));

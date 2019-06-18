@@ -6,10 +6,23 @@ package org.jhotdraw8.draw.handle;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -18,6 +31,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
@@ -44,13 +58,20 @@ public class BezierNodeEditHandle extends AbstractHandle {
     private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
     private static final Path REGION_SHAPE_QUADRATIC = new Path();
 
+
     static {
         final ObservableList<PathElement> elements = REGION_SHAPE_QUADRATIC.getElements();
-        elements.add(new MoveTo(0, 0));
-        elements.add(new LineTo(4, -4));
-        elements.add(new LineTo(8, 0));
-        elements.add(new LineTo(4, 4));
+        elements.add(new MoveTo(2, 0));
+        elements.add(new LineTo(4, 0));
+        elements.add(new LineTo(6, 2));
+        elements.add(new LineTo(6, 4));
+        elements.add(new LineTo(4, 6));
+        elements.add(new LineTo(2, 6));
+        elements.add(new LineTo(0, 4));
+        elements.add(new LineTo(0, 2));
         elements.add(new ClosePath());
+        elements.add(new MoveTo(3, 0));
+        elements.add(new LineTo(3, 6));
     }
 
     @Nonnull
@@ -154,14 +175,18 @@ public class BezierNodeEditHandle extends AbstractHandle {
                 }
             } else if (event.getClickCount() == 2) {
                 if (!event.isControlDown() && !event.isMetaDown() && !event.isAltDown()) {
-                    if (owner.get(pointKey).size() > 2) {
-                        BezierNodePath path = new BezierNodePath(owner.get(pointKey));
-                        path.join(pointIndex, 1.0);
-                        dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
-                        dv.recreateHandles();
-                    }
+                    removePoint(dv);
                 }
             }
+        }
+    }
+
+    private void removePoint(@Nonnull DrawingView dv) {
+        if (owner.get(pointKey).size() > 2) {
+            BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+            path.join(pointIndex, 1.0);
+            dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            dv.recreateHandles();
         }
     }
 
@@ -185,6 +210,14 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     @Override
     public void handleMousePressed(MouseEvent event, DrawingView view) {
+        if (event.isSecondaryButtonDown()) {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
+            addPoint.setOnAction(actionEvent -> removePoint(view));
+            contextMenu.getItems().add(addPoint);
+            contextMenu.show(node, event.getX(), event.getScreenY());
+            event.consume();
+        }
     }
 
     @Override
@@ -216,7 +249,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         BezierNode bn = getBezierNode();
         if (bn.isC1() && bn.isC2()) {
             node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
-        } else if (bn.isC1()) {
+        } else if (bn.isC1() || bn.isC2()) {
             node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
         } else {
             node.setShape(REGION_SHAPE_LINEAR);

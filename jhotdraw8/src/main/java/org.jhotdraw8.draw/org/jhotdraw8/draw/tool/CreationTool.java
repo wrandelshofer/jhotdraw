@@ -41,7 +41,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     /**
      * The rubber band.
      */
-    private double x1, y1, x2, y2;
+    protected double x1, y1, x2, y2;
 
     /**
      * The minimum size of a created figure (in view coordinates.
@@ -52,7 +52,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         this(name, rsrc, factory, LayerFigure::new);
     }
 
-    public CreationTool(String name, Resources rsrc, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
+    public CreationTool(String name, Resources rsrc, Supplier<? extends Figure> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc, figureFactory, layerFactory);
         node.setCursor(Cursor.CROSSHAIR);
     }
@@ -116,9 +116,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
                     c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(c1.getX().getConvertedValue() + defaultWidth, c1.getY().getConvertedValue() + defaultHeight));
                 }
                 DrawingModel dm = dv.getModel();
-                dm.reshapeInLocal(createdFigure, c1.getX(), c1.getY(),
-                        c2.getX().subtract(c1.getX()),
-                        c2.getY().subtract(c1.getY()));
+                reshapeInLocal(createdFigure, c1, c2, dm);
             }
             dv.selectedFiguresProperty().clear();
             dv.selectedFiguresProperty().add(createdFigure);
@@ -126,6 +124,12 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         }
         event.consume();
         fireToolDone();
+    }
+
+    protected void reshapeInLocal(Figure figure, CssPoint2D c1, CssPoint2D c2, DrawingModel dm) {
+        dm.reshapeInLocal(figure, c1.getX(), c1.getY(),
+                c2.getX().subtract(c1.getX()),
+                c2.getY().subtract(c1.getY()));
     }
 
     @Override
