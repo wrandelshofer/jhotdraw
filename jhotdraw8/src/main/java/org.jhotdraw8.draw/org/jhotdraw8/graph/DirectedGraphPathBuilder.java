@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -91,6 +92,66 @@ public class DirectedGraphPathBuilder<V, A> {
             return null;
         }
         return current;
+    }
+
+    @Nullable
+    private BackLink<V> bfsUnique(@Nonnull V root,
+                                  @Nonnull Predicate<V> goal,
+                                  int maxLength) {
+        if (visitedSet == null) {
+            visitedSet = new HashSet<>();
+        }
+        BackLink<V> result = bfsUnique(root, goal, visitedSet::add, maxLength);
+        visitedSet.clear();
+        return result;
+    }
+
+    private BackLink<V> bfsUnique(@Nonnull V root,
+                                  @Nonnull Predicate<V> goal,
+                                  @Nonnull Predicate<V> visited,
+                                  int maxLength) {
+
+        ArrayDeque<BackLink<V>> queue = new ArrayDeque<>(16);
+
+        BackLink<V> rootBackLink = new BackLink<>(root, null, maxLength);
+        visited.test(root);
+        queue.add(rootBackLink);
+        BackLink<V> current = null;
+        BackLink<V> found = null;
+        Set<V> nonUnique = new LinkedHashSet<>();
+        while (!queue.isEmpty()) {
+            current = queue.remove();
+            if (goal.test(current.vertex)) {
+                if (found != null) {
+                    // path is not unique!
+                    return null;
+                }
+                found = current;
+            }
+            if (current.depth > 0) {
+                for (V next : nextNodesFunction.apply(current.vertex)) {
+                    if (visited.test(next)) {
+                        BackLink<V> backLink = new BackLink<V>(next, current, current.depth - 1);
+                        queue.add(backLink);
+                    } else {
+                        nonUnique.add(next);
+                    }
+                }
+            }
+        }
+        queue.clear();
+        if (found == null) {
+            return null;
+        }
+        current = found;
+        while (current != null) {
+            if (nonUnique.contains(current.vertex)) {
+                // path is not unique!
+                return null;
+            }
+            current = current.parent;
+        }
+        return found;
     }
 
 
@@ -188,6 +249,32 @@ public class DirectedGraphPathBuilder<V, A> {
         while (i.hasNext()) {
             V goal = i.next();
             BackLink<V> back = bfs(start, goal::equals, maxLength);
+            if (back == null) {
+                return null;
+            } else {
+                int index = pathElements.size();
+                for (; back.parent != null; back = back.parent) {
+                    pathElements.add(index, back.vertex);
+                }
+            }
+            start = goal;
+        }
+        return new VertexPath<>(pathElements);
+    }
+
+    @Nullable
+    public VertexPath<V> findUniqueVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints,
+                                                           int maxLength) {
+        Iterator<? extends V> i = waypoints.iterator();
+        List<V> pathElements = new ArrayList<>(16);
+        if (!i.hasNext()) {
+            return null;
+        }
+        V start = i.next();
+        pathElements.add(start); // root element
+        while (i.hasNext()) {
+            V goal = i.next();
+            BackLink<V> back = bfsUnique(start, goal::equals, maxLength);
             if (back == null) {
                 return null;
             } else {
