@@ -1,15 +1,19 @@
 package org.jhotdraw8.draw.tool;
 
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.figure.AnchorableFigure;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.Resources;
 
 import java.util.function.Supplier;
@@ -35,6 +39,31 @@ public class LineCreationTool extends CreationTool {
         super(name, rsrc, figureFactory, layerFactory);
         this.p1 = p1;
         this.p2 = p2;
+    }
+
+    @Override
+    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+        x1 = event.getX();
+        y1 = event.getY();
+        x2 = x1;
+        y2 = y1;
+        createdFigure = createFigure();
+
+        double anchorX = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
+        double anchorY = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
+
+
+        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
+        DrawingModel dm = view.getModel();
+        createdFigure.set(p1, c);
+        createdFigure.set(p2, c);
+        Drawing drawing = dm.getDrawing();
+
+        Layer layer = getOrCreateLayer(view, createdFigure);
+        view.setActiveLayer(layer);
+
+        dm.addChildTo(createdFigure, layer);
+        event.consume();
     }
 
     @Override
