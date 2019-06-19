@@ -18,6 +18,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -147,23 +148,23 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     default void clearTransforms() {
-        set(SCALE_X, 1.0);
-        set(SCALE_Y, 1.0);
-        set(ROTATE, 0.0);
-        set(TRANSLATE_X, 0.0);
-        set(TRANSLATE_Y, 0.0);
-        set(TRANSFORMS, ImmutableLists.of());
+        remove(SCALE_X);
+        remove(SCALE_Y);
+        remove(ROTATE);
+        remove(TRANSLATE_X);
+        remove(TRANSLATE_Y);
+        remove(TRANSFORMS);
     }
 
     default void flattenTransforms() {
         Transform p2l = getLocalToParent(false);
-        set(SCALE_X, 1.0);
-        set(SCALE_Y, 1.0);
-        set(ROTATE, 0.0);
-        set(TRANSLATE_X, 0.0);
-        set(TRANSLATE_Y, 0.0);
+        remove(SCALE_X);
+        remove(SCALE_Y);
+        remove(ROTATE);
+        remove(TRANSLATE_X);
+        remove(TRANSLATE_Y);
         if (p2l == null || p2l.isIdentity()) {
-            set(TRANSFORMS, ImmutableLists.emptyList());
+            remove(TRANSFORMS);
         } else {
             set(TRANSFORMS, ImmutableLists.of(p2l));
         }
@@ -444,8 +445,14 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
         if (t instanceof Translate) {
             Translate tr = (Translate) t;
-            set(TRANSLATE_X, getNonnull(TRANSLATE_X) + tr.getTx());
-            set(TRANSLATE_Y, getNonnull(TRANSLATE_Y) + tr.getTy());
+            flattenTransforms();
+            ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);
+            if (transforms.isEmpty()) {
+                translateInLocal(new CssPoint2D(tr.getTx(), tr.getTy()));
+            } else {
+                set(TRANSLATE_X, getNonnull(TRANSLATE_X) + tr.getTx());
+                set(TRANSLATE_Y, getNonnull(TRANSLATE_Y) + tr.getTy());
+            }
         } else {
             flattenTransforms();
             ImmutableList<Transform> transforms = getNonnull(TRANSFORMS);

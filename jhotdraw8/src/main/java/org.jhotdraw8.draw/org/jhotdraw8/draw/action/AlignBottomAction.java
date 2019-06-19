@@ -40,10 +40,10 @@ public class AlignBottomAction extends AbstractSelectedAction {
         }
         final Set<Figure> figures = drawingView.getSelectedFigures();
         Figure lead = drawingView.getSelectionLead();
-        alignTop(drawingView, figures, lead);
+        alignBottom(drawingView, figures, lead);
     }
 
-    private void alignTop(DrawingView view, Set<Figure> figures, Figure lead) {
+    private void alignBottom(DrawingView view, Set<Figure> figures, Figure lead) {
         if (figures.size() < 2) {
             return;
         }
