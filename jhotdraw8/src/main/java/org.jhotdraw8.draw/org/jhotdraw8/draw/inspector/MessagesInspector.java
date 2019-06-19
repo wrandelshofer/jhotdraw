@@ -42,7 +42,7 @@ public class MessagesInspector implements Inspector {
 
         ChangeListener<String> changeListener = (o, oldv, newv) -> {
             String text = messagesField.getText();
-            if (text.length() > MAX_LENGTH) {
+            if (text != null && text.length() > MAX_LENGTH) {
                 int p = text.indexOf('\n', text.length() - MAX_LENGTH);
                 text = text.substring(p + 1);
                 messagesField.setText(text);
@@ -111,7 +111,7 @@ public class MessagesInspector implements Inspector {
 
     @FXML
     void onClear(ActionEvent event) {
-
+        messagesField.setText(null);
     }
 
     /**
