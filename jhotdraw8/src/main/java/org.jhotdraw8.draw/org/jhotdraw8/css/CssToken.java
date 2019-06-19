@@ -403,7 +403,7 @@ public class CssToken /*extends AST*/ {
     }
 
     private String fromCOMMENT() {
-        return '/' + '*' + stringValue.replace("*" + '/', "* /") + '*' + '/';
+        return "/" + "*" + stringValue.replace("*" + '/', "* /") + '*' + '/';
     }
 
     private String fromINCLUDE_MATCH() {
