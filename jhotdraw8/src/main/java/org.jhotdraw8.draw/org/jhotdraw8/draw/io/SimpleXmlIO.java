@@ -601,7 +601,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 NodeList list = node.getChildNodes();
                 for (int i = 0; i < list.getLength(); i++) {
                     Figure child = readNodesRecursively(list.item(i));
-                    if (child instanceof Figure) {
+                    if (child != null) {
                         if (!child.isSuitableParent(figure)) {
                             throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
                         }
