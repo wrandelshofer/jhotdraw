@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -237,7 +236,7 @@ public class DirectedGraphPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findAnyVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints,
+    public VertexPath<V> findAnyVertexPathOverWaypoints(@Nonnull Iterable<? extends V> waypoints,
                                                         int maxLength) {
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
@@ -263,7 +262,7 @@ public class DirectedGraphPathBuilder<V, A> {
     }
 
     @Nullable
-    public VertexPath<V> findUniqueVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints,
+    public VertexPath<V> findUniqueVertexPathOverWaypoints(@Nonnull Iterable<? extends V> waypoints,
                                                            int maxLength) {
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
