@@ -52,6 +52,8 @@
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem id="edit.alignHorizontal" mnemonicParsing="false" text="Align Horizontal"/>
             <MenuItem id="edit.alignVertical" mnemonicParsing="false" text="Align Vertical"/>
+            <MenuItem id="edit.distributeHorizontally" mnemonicParsing="false" text="Distribute Horizontally"/>
+            <MenuItem id="edit.distributeVertically" mnemonicParsing="false" text="Distribute Vertically"/>
           </items>
         </Menu>
         <SeparatorMenuItem mnemonicParsing="false"/>

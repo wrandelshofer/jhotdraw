@@ -44,6 +44,8 @@ import org.jhotdraw8.draw.action.AlignTopAction;
 import org.jhotdraw8.draw.action.AlignVerticalAction;
 import org.jhotdraw8.draw.action.BringForwardAction;
 import org.jhotdraw8.draw.action.BringToFrontAction;
+import org.jhotdraw8.draw.action.DistributeHorizontallyAction;
+import org.jhotdraw8.draw.action.DistributeVerticallyAction;
 import org.jhotdraw8.draw.action.GroupAction;
 import org.jhotdraw8.draw.action.RemoveFromGroupAction;
 import org.jhotdraw8.draw.action.RemoveTransformationsAction;
@@ -181,6 +183,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     public CompletionStage<Void> clear() {
         Drawing d = new DrawingFigure();
         d.set(StyleableFigure.ID, "drawing1");
+        LayerFigure layer = new LayerFigure();
+        layer.set(StyleableFigure.ID, "layer1");
+        d.addChild(layer);
         drawingView.setDrawing(d);
         return CompletableFuture.completedFuture(null);
     }
@@ -251,7 +256,8 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         map.put(AlignLeftAction.ID, new AlignLeftAction(getApplication(), editor));
         map.put(AlignHorizontalAction.ID, new AlignHorizontalAction(getApplication(), editor));
         map.put(AlignVerticalAction.ID, new AlignVerticalAction(getApplication(), editor));
-
+        map.put(DistributeHorizontallyAction.ID, new DistributeHorizontallyAction(getApplication(), editor));
+        map.put(DistributeVerticallyAction.ID, new DistributeVerticallyAction(getApplication(), editor));
     }
 
     @Nonnull

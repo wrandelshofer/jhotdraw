@@ -184,7 +184,7 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
                 }
             }
             if (layer == null) {
-                return;
+                return;// FIXME should create a layer with the editor
             }
         }
         Clipboard cb = Clipboard.getSystemClipboard();
