@@ -4,7 +4,6 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -14,6 +13,7 @@ import org.jhotdraw8.io.IdFactory;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +27,11 @@ import java.util.function.Consumer;
  * @param <T> the element type
  */
 public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
+    /**
+     * When nonnull this comparator is used to sort the list.
+     */
+    @Nullable
+    private final Comparator<T> comparator;
 
     private final CssConverter<T> elementConverter;
     private final ImmutableList<CssToken> delimiter;
@@ -46,6 +51,10 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix));
     }
 
+    public CssListConverter(CssConverter<T> elementConverter, String delimiter, String prefix, String suffix, Comparator<T> comparator) {
+        this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix), comparator);
+    }
+
     private static List<CssToken> parseDelim(String delim) {
         try {
             return new StreamCssTokenizer(delim).toTokenList();
@@ -56,38 +65,30 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     public CssListConverter(CssConverter<T> elementConverter,
-                            ReadOnlyList<CssToken> delimiter,
-                            ReadOnlyList<CssToken> prefix,
-                            ReadOnlyList<CssToken> suffix
+                            Iterable<CssToken> delimiter,
+                            Iterable<CssToken> prefix,
+                            Iterable<CssToken> suffix
     ) {
-        this.elementConverter = elementConverter;
-        this.delimiter = ImmutableLists.ofCollection(delimiter);
-        this.prefix = ImmutableLists.ofCollection(prefix);
-        this.suffix = ImmutableLists.ofCollection(suffix);
-        delimiterChars = new HashSet<>();
-        for (CssToken cssToken : delimiter) {
-            if (cssToken.getType() >= 0) {
-                delimiterChars.add(cssToken.getType());
-            }
-        }
-
+        this(elementConverter, delimiter, prefix, suffix, null);
     }
 
     public CssListConverter(CssConverter<T> elementConverter,
-                            List<? extends CssToken> delimiter,
-                            List<? extends CssToken> prefix,
-                            List<? extends CssToken> suffix
+                            Iterable<CssToken> delimiter,
+                            Iterable<CssToken> prefix,
+                            Iterable<CssToken> suffix,
+                            @Nullable Comparator<T> comparator
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = ImmutableLists.ofCollection(delimiter);
-        this.prefix = ImmutableLists.ofCollection(prefix);
-        this.suffix = ImmutableLists.ofCollection(suffix);
+        this.delimiter = ImmutableLists.ofIterable(delimiter);
+        this.prefix = ImmutableLists.ofIterable(prefix);
+        this.suffix = ImmutableLists.ofIterable(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {
                 delimiterChars.add(cssToken.getType());
             }
         }
+        this.comparator = comparator;
     }
 
 
@@ -127,6 +128,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
         }
         tt.pushBack();
+        if (comparator != null) {
+            list.sort(comparator);
+        }
         return ImmutableLists.ofCollection(list);
     }
 
@@ -139,7 +143,15 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                 out.accept(t);
             }
             boolean first = true;
-            for (T elem : value) {
+            Iterable<T> ordered;
+            if (comparator != null) {
+                ArrayList<T> ts = value.toArrayList();
+                ts.sort(comparator);
+                ordered = ts;
+            } else {
+                ordered = value;
+            }
+            for (T elem : ordered) {
                 if (elem == null) {
                     continue;
                 }
