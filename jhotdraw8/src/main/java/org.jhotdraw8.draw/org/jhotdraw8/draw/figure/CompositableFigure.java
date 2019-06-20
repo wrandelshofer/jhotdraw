@@ -15,6 +15,16 @@ import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * Provides properties for compositing a figure.
+ * <p>
+ * Usage:
+ * <pre>
+ * class MyFigureClass implements CompositableFigure {
+ *     public void updateNode(RenderContext ctx, Node n) {
+ *         applyCompositableFigureProperties(ctx, n);
+ *     }
+ * }
+ * </pre>
+ *
  *
  * @author Werner Randelshofer
  * @version $Id$
