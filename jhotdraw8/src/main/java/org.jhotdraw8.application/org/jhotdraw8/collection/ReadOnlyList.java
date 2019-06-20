@@ -83,4 +83,14 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
     default ObservableList<E> asObservableList() {
         return new ObservableListWrapper<>(this);
     }
+
+    /**
+     * Returns a view of the portion of this list between the specified
+     * * <tt>fromIndex</tt>, inclusive, and <tt>toIndex</tt>, exclusive.
+     *
+     * @param fromIndex the from index
+     * @param toIndex   the to index (exclusive)
+     * @return the sub list
+     */
+    ReadOnlyList<E> subList(int fromIndex, int toIndex);
 }

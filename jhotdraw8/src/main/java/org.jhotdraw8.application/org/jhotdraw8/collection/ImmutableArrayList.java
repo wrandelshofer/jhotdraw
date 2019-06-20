@@ -12,7 +12,7 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 
 /**
- * An immutable observable list.
+ * An immutable list.
  *
  * @param <E> element type
  * @author Werner Randelshofer
@@ -37,6 +37,12 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
     }
 
     ImmutableArrayList(@Nonnull Object[] a, int offset, int length) {
+        if (offset < 0) {
+            throw new IndexOutOfBoundsException("offset = " + offset);
+        }
+        if (length > a.length) {
+            throw new IndexOutOfBoundsException("length = " + length);
+        }
         this.array = new Object[length];
         System.arraycopy(a, offset, array, 0, length);
     }
@@ -90,4 +96,13 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
         return Spliterators.spliterator(array, 0, array.length, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
+    @Override
+    public ImmutableList<E> subList(int fromIndex, int toIndex) {
+        return new ImmutableArraySubList<E>(true, this.array, fromIndex, toIndex);
+    }
+
+    @Override
+    public Object[] toArray() {
+        return array.clone();
+    }
 }

@@ -190,7 +190,7 @@ public class ImmutableLists {
         return new ImmutableArrayList<>(a, 0, j);
     }
 
-    public static <E> ReadOnlyCollection<E> reverse(ReadOnlyCollection<E> list) {
+    public static <E> ImmutableList<E> reverse(ReadOnlyCollection<E> list) {
         int n = list.size();
         Object[] a = new Object[n];
         int j = n - 1;
@@ -200,7 +200,7 @@ public class ImmutableLists {
         return new ImmutableArrayList<>(a, 0, n);
     }
 
-    public static <E> ReadOnlyCollection<E> reverse(Collection<E> list) {
+    public static <E> ImmutableList<E> reverse(Collection<E> list) {
         int n = list.size();
         Object[] a = new Object[n];
         int j = n - 1;
@@ -208,5 +208,13 @@ public class ImmutableLists {
             a[j--] = e;
         }
         return new ImmutableArrayList<>(a, 0, n);
+    }
+
+    public static <E> ImmutableList<E> subList(List<E> list, int fromIndex, int toIndex) {
+        return new ImmutableArrayList<>(true, list.subList(fromIndex, toIndex).toArray());
+    }
+
+    public static <E> ImmutableList<E> subList(ReadOnlyList<E> list, int fromIndex, int toIndex) {
+        return new ImmutableArrayList<>(true, list.subList(fromIndex, toIndex).toArray());
     }
 }
