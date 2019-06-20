@@ -93,6 +93,20 @@ public class ImmutableLists {
     }
 
     @Nonnull
+    public static <T> ImmutableList<T> ofIterable(Iterable<? extends T> iterable) {
+        if (iterable instanceof ImmutableList) {
+            @SuppressWarnings("unchecked")
+            ImmutableList<T> unchecked = (ImmutableList<T>) iterable;
+            return unchecked;
+        }
+        ArrayList<T> list = new ArrayList<>();
+        for (T t : iterable) {
+            list.add(t);
+        }
+        return new ImmutableArrayList<>(list);
+    }
+
+    @Nonnull
     public static <T> ImmutableList<T> ofCollection(ReadOnlyCollection<? extends T> collection) {
         if (collection instanceof ImmutableList) {
             @SuppressWarnings("unchecked")
@@ -174,5 +188,25 @@ public class ImmutableLists {
         }
 
         return new ImmutableArrayList<>(a, 0, j);
+    }
+
+    public static <E> ReadOnlyCollection<E> reverse(ReadOnlyCollection<E> list) {
+        int n = list.size();
+        Object[] a = new Object[n];
+        int j = n - 1;
+        for (E e : list) {
+            a[j--] = e;
+        }
+        return new ImmutableArrayList<>(a, 0, n);
+    }
+
+    public static <E> ReadOnlyCollection<E> reverse(Collection<E> list) {
+        int n = list.size();
+        Object[] a = new Object[n];
+        int j = n - 1;
+        for (E e : list) {
+            a[j--] = e;
+        }
+        return new ImmutableArrayList<>(a, 0, n);
     }
 }
