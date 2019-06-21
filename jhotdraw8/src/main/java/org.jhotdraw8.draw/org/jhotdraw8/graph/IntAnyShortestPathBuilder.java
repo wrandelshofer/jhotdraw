@@ -1,4 +1,4 @@
-/* @(#)DirectedGraphCostPathBuilder.java
+/* @(#)AnyShortestPathBuilder.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -27,14 +27,14 @@ import java.util.function.IntPredicate;
 import java.util.function.ToDoubleFunction;
 
 /**
- * DirectedGraphCostPathBuilder.
+ * AnyShortestPathBuilder.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphCostPathBuilder<V, A> {
+public class IntAnyShortestPathBuilder<V, A> {
     @Nonnull
     private final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction;
     @Nonnull
@@ -44,23 +44,23 @@ public class IntDirectedGraphCostPathBuilder<V, A> {
     private final int vertexCount;
 
 
-    public IntDirectedGraphCostPathBuilder(@Nonnull final AttributedIntDirectedGraph<V, A> graph,
-                                           @Nonnull final ToDoubleFunction<A> costf) {
+    public IntAnyShortestPathBuilder(@Nonnull final AttributedIntDirectedGraph<V, A> graph,
+                                     @Nonnull final ToDoubleFunction<A> costf) {
         this(graph.getVertexCount(), graph::getNextIntEntries, costf);
     }
 
-    public IntDirectedGraphCostPathBuilder(int vertexCount, @Nonnull final AttributedIntDirectedGraph<V, A> graph,
-                                           @Nonnull final IntIntVToDoubleTriFunction<A> costf) {
+    public IntAnyShortestPathBuilder(int vertexCount, @Nonnull final AttributedIntDirectedGraph<V, A> graph,
+                                     @Nonnull final IntIntVToDoubleTriFunction<A> costf) {
         this(vertexCount, graph::getNextIntEntries, costf);
     }
 
-    public IntDirectedGraphCostPathBuilder(int vertexCount, @Nonnull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
-                                           @Nonnull final ToDoubleFunction<A> costf) {
+    public IntAnyShortestPathBuilder(int vertexCount, @Nonnull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
+                                     @Nonnull final ToDoubleFunction<A> costf) {
         this(vertexCount, nextNodesFunction, (v1, v2, a) -> costf.applyAsDouble(a));
     }
 
-    public IntDirectedGraphCostPathBuilder(int vertexCount, @Nonnull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
-                                           @Nonnull final IntIntVToDoubleTriFunction<A> costf) {
+    public IntAnyShortestPathBuilder(int vertexCount, @Nonnull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
+                                     @Nonnull final IntIntVToDoubleTriFunction<A> costf) {
         this.vertexCount = vertexCount;
         this.nextNodesFunction = nextNodesFunction;
         this.costf = costf;

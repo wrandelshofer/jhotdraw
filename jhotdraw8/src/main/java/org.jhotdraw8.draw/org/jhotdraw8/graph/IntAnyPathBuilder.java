@@ -1,4 +1,4 @@
-/* @(#)IntDirectedGraphPathBuilder.java
+/* @(#)IntAnyPathBuilder.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -17,14 +17,14 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
- * IntDirectedGraphPathBuilder.
+ * IntAnyPathBuilder.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphPathBuilder {
+public class IntAnyPathBuilder {
 
-    public IntDirectedGraphPathBuilder() {
+    public IntAnyPathBuilder() {
 
     }
 
@@ -45,7 +45,7 @@ public class IntDirectedGraphPathBuilder {
     @Nullable
     public VertexPath<Integer> buildAnyVertexPath(@Nonnull IntDirectedGraph graph,
                                                   int start, int goal) throws PathBuilderException {
-        VertexPath<Integer> pathElements = IntDirectedGraphPathBuilder.this.findAnyVertexPath(graph, start, goal);
+        VertexPath<Integer> pathElements = IntAnyPathBuilder.this.findAnyVertexPath(graph, start, goal);
         if (pathElements == null) {
             throw new PathBuilderException("Breadh first search stalled at vertex: " + start + ".");
         }

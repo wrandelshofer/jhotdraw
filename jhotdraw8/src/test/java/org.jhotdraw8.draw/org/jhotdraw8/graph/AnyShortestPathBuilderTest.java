@@ -1,4 +1,4 @@
-/* @(#)DirectedGraphPathBuilderTest.java
+/* @(#)AnyPathBuilderTest.java
  * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -18,14 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * DirectedGraphCostPathBuilderTest.
+ * AnyShortestPathBuilderTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DirectedGraphCostPathBuilderTest {
+public class AnyShortestPathBuilderTest {
 
-    public DirectedGraphCostPathBuilderTest() {
+    public AnyShortestPathBuilderTest() {
     }
 
     private DirectedGraph<Integer, Double> createGraph() {
@@ -89,14 +89,14 @@ public class DirectedGraphCostPathBuilderTest {
     }
 
     /**
-     * Test of findAnyPath method, of class DirectedGraphCostPathBuilder.
+     * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
     public void doFindShortestVertexPath(Integer start, Integer goal, VertexPath<Integer> expPath, double expCost) throws Exception {
         System.out.println("doFindShortestVertexPath start:" + start + " goal:" + goal + " expResult:" + expPath + " expCost: " + expCost);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
-        DirectedGraphCostPathBuilder<Integer, Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries, costf);
-        Map.Entry<VertexPath<Integer>, Double> result = instance.findAnyShortestVertexPath(start, goal::equals, Double.MAX_VALUE);
+        AnyShortestPathBuilder<Integer, Double> instance = new AnyShortestPathBuilder<>(graph::getNextEntries, costf);
+        Map.Entry<VertexPath<Integer>, Double> result = instance.findVertexPath(start, goal::equals);
         if (result == null) {
             assertNull(expPath);
         } else {
@@ -118,19 +118,19 @@ public class DirectedGraphCostPathBuilderTest {
     }
 
     /**
-     * Test of findAnyPath method, of class DirectedGraphCostPathBuilder.
+     * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
     public void doFindShortestEdgeMultiGoalPath(Integer start, List<Integer> multiGoal, EdgePath<Double> expResult) throws Exception {
         System.out.println("doFindShortestEdgeMultiGoalPath start:" + start + " goal:" + multiGoal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
-        DirectedGraphCostPathBuilder<Integer, Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries, costf);
+        AnyShortestPathBuilder<Integer, Double> instance = new AnyShortestPathBuilder<>(graph::getNextEntries, costf);
 
         // Find a path for each individual goal, and remember the shortest path
         EdgePath<Double> individualShortestPath = null;
         double individualShortestLength = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
-            Map.Entry<EdgePath<Double>, Double> resultEntry = instance.findAnyShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
+            Map.Entry<EdgePath<Double>, Double> resultEntry = instance.findEdgePath(start, goal::equals);
             EdgePath<Double> result = resultEntry.getKey();
             double resultLength = result.getEdges().stream().mapToDouble(Double::doubleValue).sum();
             if (resultLength < individualShortestLength) {
@@ -140,7 +140,7 @@ public class DirectedGraphCostPathBuilderTest {
         }
 
         // Find shortest path to any of the goals
-        Map.Entry<EdgePath<Double>, Double> actualShortestPath = instance.findAnyShortestEdgePath(start, multiGoal::contains, Double.POSITIVE_INFINITY);
+        Map.Entry<EdgePath<Double>, Double> actualShortestPath = instance.findEdgePath(start, multiGoal::contains);
         double actualLength = actualShortestPath.getValue();
 
         System.out.println("  individual shortest path: " + individualShortestPath);
@@ -160,14 +160,14 @@ public class DirectedGraphCostPathBuilderTest {
     }
 
     /**
-     * Test of findAnyPath method, of class DirectedGraphCostPathBuilder.
+     * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
     private void doFindShortestEdgePath(Integer start, Integer goal, EdgePath<Double> expResult) throws Exception {
         System.out.println("doFindShortestEdgePath start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
-        DirectedGraphCostPathBuilder<Integer, Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries, costf);
-        Map.Entry<EdgePath<Double>, Double> result = instance.findAnyShortestEdgePath(start, goal::equals, Double.POSITIVE_INFINITY);
+        AnyShortestPathBuilder<Integer, Double> instance = new AnyShortestPathBuilder<>(graph::getNextEntries, costf);
+        Map.Entry<EdgePath<Double>, Double> result = instance.findEdgePath(start, goal::equals);
         assertEquals(expResult, result.getKey());
     }
 
@@ -200,14 +200,14 @@ public class DirectedGraphCostPathBuilderTest {
     }
 
     /**
-     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilder.
+     * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void doFindShortestVertexPathOverWaypoints(List<Integer> waypoints, VertexPath<Integer> expResult, double expCost) throws Exception {
         System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult + " expCost:" + expCost);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        DirectedGraphCostPathBuilder<Integer, Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries, costf);
-        Map.Entry<VertexPath<Integer>, Double> actual = instance.findAnyShortestVertexPathOverWaypoints(waypoints, Integer.MAX_VALUE);
+        AnyShortestPathBuilder<Integer, Double> instance = new AnyShortestPathBuilder<>(graph::getNextEntries, costf);
+        Map.Entry<VertexPath<Integer>, Double> actual = instance.findVertexPathOverWaypoints(waypoints);
         assertEquals(expResult, actual.getKey());
         assertEquals(expCost, actual.getValue().doubleValue());
     }
@@ -223,14 +223,14 @@ public class DirectedGraphCostPathBuilderTest {
     }
 
     /**
-     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilder.
+     * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void doFindEdgePathOverWaypoints(List<Integer> waypoints, EdgePath<Double> expResult, double expCost) throws Exception {
         System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        DirectedGraphCostPathBuilder<Integer, Double> instance = new DirectedGraphCostPathBuilder<>(graph::getNextEntries, costf);
-        Map.Entry<EdgePath<Double>, Double> actual = instance.findAnyShortestEdgePathOverWaypoints(waypoints, Integer.MAX_VALUE);
+        AnyShortestPathBuilder<Integer, Double> instance = new AnyShortestPathBuilder<>(graph::getNextEntries, costf);
+        Map.Entry<EdgePath<Double>, Double> actual = instance.findEdgePathOverWaypoints(waypoints, Integer.MAX_VALUE);
         assertEquals(expResult, actual.getKey());
         assertEquals(expCost, actual.getValue().doubleValue());
     }

@@ -1,4 +1,4 @@
-/* @(#)IntDirectedGraphPathBuilderTest.java
+/* @(#)IntAnyPathBuilderTest.java
  * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * IntDirectedGraphPathBuilderTest.
+ * IntAnyPathBuilderTest.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class IntDirectedGraphPathBuilderTest {
+public class IntAnyPathBuilderTest {
 
-    public IntDirectedGraphPathBuilderTest() {
+    public IntAnyPathBuilderTest() {
     }
 
     private IntDirectedGraph createGraph() {
@@ -73,7 +73,7 @@ public class IntDirectedGraphPathBuilderTest {
     public void testFindAnyVertexPath_3args(Integer start, Integer goal, VertexPath<Integer> expResult) throws Exception {
         System.out.println("findAnyVertexPath start:" + start + " goal:" + goal + " expResult:" + expResult);
         IntDirectedGraph graph = createGraph();
-        IntDirectedGraphPathBuilder instance = new IntDirectedGraphPathBuilder();
+        IntAnyPathBuilder instance = new IntAnyPathBuilder();
         VertexPath<Integer> result = instance.findAnyVertexPath(graph, start, goal);
         assertEquals(result, expResult);
     }

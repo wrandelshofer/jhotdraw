@@ -65,6 +65,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
+import static java.lang.Math.min;
+
 /**
  * An {@link DocumentBasedApplication} handles the life-cycle of {@link DocumentBasedActivity} objects and
  * provides windows to present them on screen.
@@ -346,9 +348,9 @@ public class DocumentBasedApplication extends AbstractApplication {
                 Window w = activeView.get().getNode().getScene().getWindow();
                 //stage.setWidth(w.getWidth());
                 //stage.setHeight(w.getHeight());
-                stage.setX(Math.min(w.getX() + 22, bounds.getMaxX()
+                stage.setX(min(w.getX() + 22, bounds.getMaxX()
                         - stage.getWidth()));
-                stage.setY(Math.min(w.getY() + 22, bounds.getMaxY()
+                stage.setY(min(w.getY() + 22, bounds.getMaxY()
                         - stage.getHeight()));
             } else {
                 //stage.setWidth(bounds.getWidth() / 4);
@@ -364,9 +366,9 @@ public class DocumentBasedApplication extends AbstractApplication {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
                                 || Math.abs(w.getY() - stage.getY()) < 10) {
-                            stage.setX(Math.min(w.getX() + 20, bounds.getMaxX()
+                            stage.setX(min(w.getX() + 20, bounds.getMaxX()
                                     - stage.getWidth()));
-                            stage.setY(Math.min(w.getY() + 20, bounds.getMaxY()
+                            stage.setY(min(w.getY() + 20, bounds.getMaxY()
                                     - stage.getHeight()));
                             continue Outer;
                         }

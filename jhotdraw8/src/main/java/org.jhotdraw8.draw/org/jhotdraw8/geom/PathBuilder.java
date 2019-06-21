@@ -1,4 +1,4 @@
-/* @(#)PathBuilder.java
+/* @(#)AnyPathBuilder.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
@@ -11,7 +11,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.PathIterator;
 
 /**
- * PathBuilder.
+ * AnyPathBuilder.
  *
  * @author Werner Randelshofer
  * @version $Id$

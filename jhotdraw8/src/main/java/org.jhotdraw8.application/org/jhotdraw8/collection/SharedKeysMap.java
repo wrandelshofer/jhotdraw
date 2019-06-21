@@ -15,8 +15,8 @@ import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -42,11 +42,11 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private final ArrayList<Object> values;
 
     /**
-     * Creates a new instance with a synchronized hash map for its
+     * Creates a new instance with a synchronized linked hash map for its
      * keys.
      */
     public SharedKeysMap() {
-        this(Collections.synchronizedMap(new HashMap<>()));
+        this(Collections.synchronizedMap(new LinkedHashMap<>()));
     }
 
     /**
@@ -56,7 +56,8 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
      *               in the range {@code [0,keyMap.size()-1]}. This map will add new keys to
      *               the keyMap if necessary, and assign {@code keyMap.size()} to each new
      *               key. Keys may be added to this map, but may never be removed.
-     *               This map must be synchronized if key map
+     *               <p>
+     *               This map must be immutable or synchronized if the key map
      *               is shared between instances of SharedKeysMap on different threads.
      */
     public SharedKeysMap(Map<K, Integer> keyMap) {
