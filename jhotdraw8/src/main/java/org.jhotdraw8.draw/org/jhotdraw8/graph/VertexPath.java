@@ -61,6 +61,14 @@ public class VertexPath<V> {
         return vertices;
     }
 
+    public V getFirstVertex() {
+        return vertices.get(0);
+    }
+
+    public V getLastVertex() {
+        return vertices.get(vertices.size() - 1);
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 import java.util.Spliterator;
 
 /**
@@ -58,6 +59,16 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
     }
 
     /**
+     * Returns a list iterator over elements of type {@code E}.
+     *
+     * @return a list iterator.
+     */
+    @Nonnull
+    default ListIterator<E> listIterator(int index) {
+        return new ReadOnlyListIterator<>(this, index, size());
+    }
+
+    /**
      * Copies this list into an ArrayList.
      *
      * @return a new ArrayList.
@@ -93,4 +104,31 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      * @return the sub list
      */
     ReadOnlyList<E> subList(int fromIndex, int toIndex);
+
+    /**
+     * Returns the index of the first occurrence of the specified element
+     * in this list, or -1 if this list does not contain the element.
+     */
+    default int indexOf(E o) {
+        for (int i = 0, n = size(); i < n; i++) {
+            if (Objects.equals(get(i), o)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Returns the index of the last occurrence of the specified element
+     * in this list, or -1 if this list does not contain the element.
+     */
+    default int lastIndexOf(E o) {
+        for (int i = size() - 1; i >= 0; i--) {
+            if (Objects.equals(get(i), o)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }
