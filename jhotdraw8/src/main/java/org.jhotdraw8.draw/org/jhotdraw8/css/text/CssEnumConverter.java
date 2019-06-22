@@ -43,7 +43,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
     @Nullable
     public E parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
-            throw new ParseException("identifier expected", tt.getStartPosition());
+            throw new ParseException(name + ": identifier expected", tt.getStartPosition());
         }
 
         String identifier = tt.currentString();
@@ -53,7 +53,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
         try {
             return Enum.valueOf(enumClass, identifier.toUpperCase().replace('-', '_'));
         } catch (IllegalArgumentException e) {
-            throw new ParseException("illegal identifier:" + identifier, tt.getStartPosition());
+            throw new ParseException(name + ": illegal identifier:" + identifier, tt.getStartPosition());
         }
     }
 
