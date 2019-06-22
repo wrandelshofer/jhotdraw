@@ -26,7 +26,7 @@ import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.ImmutableMap;
+import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
@@ -303,7 +303,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             f.set(MLClassifierFigure.KEYWORD, MLKeyword.REQUIREMENT.getName());
             f.set(MLClassifierFigure.NAME, "Name");
             f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMap.of(MLKeyword.TEXT.getName(), ImmutableLists.emptyList())
+                    ImmutableMaps.of(MLKeyword.TEXT.getName(), ImmutableLists.emptyList())
             ));
             return f;
         }), layerFactory);
@@ -315,11 +315,11 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             f.set(MLClassifierFigure.KEYWORD, MLKeyword.BLOCK.getName());
             f.set(MLClassifierFigure.NAME, "Name");
             f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMap.ofEntries(ImmutableMap.entry(MLKeyword.PARTS.getName(), ImmutableLists.emptyList()),
-                            ImmutableMap.entry(MLKeyword.REFERENCES.getName(), ImmutableLists.emptyList()),
-                            ImmutableMap.entry(MLKeyword.VALUES.getName(), ImmutableLists.emptyList()),
-                            ImmutableMap.entry(MLKeyword.CONSTRAINTS.getName(), ImmutableLists.emptyList()),
-                            ImmutableMap.entry(MLKeyword.PORTS.getName(), ImmutableLists.emptyList()))
+                    ImmutableMaps.ofEntries(ImmutableMaps.entry(MLKeyword.PARTS.getName(), ImmutableLists.emptyList()),
+                            ImmutableMaps.entry(MLKeyword.REFERENCES.getName(), ImmutableLists.emptyList()),
+                            ImmutableMaps.entry(MLKeyword.VALUES.getName(), ImmutableLists.emptyList()),
+                            ImmutableMaps.entry(MLKeyword.CONSTRAINTS.getName(), ImmutableLists.emptyList()),
+                            ImmutableMaps.entry(MLKeyword.PORTS.getName(), ImmutableLists.emptyList()))
             ));
             return f;
         }), layerFactory);
@@ -331,8 +331,8 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             f.set(MLClassifierFigure.KEYWORD, MLKeyword.CLASS.getName());
             f.set(MLClassifierFigure.NAME, "Name");
             f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMap.ofEntries(ImmutableMap.entry(MLKeyword.ATTRIBUTES.getName(), ImmutableLists.emptyList()),
-                            ImmutableMap.entry(MLKeyword.OPERATIONS.getName(), ImmutableLists.emptyList()))
+                    ImmutableMaps.ofEntries(ImmutableMaps.entry(MLKeyword.ATTRIBUTES.getName(), ImmutableLists.emptyList()),
+                            ImmutableMaps.entry(MLKeyword.OPERATIONS.getName(), ImmutableLists.emptyList()))
             ));
             return f;
         }), layerFactory);

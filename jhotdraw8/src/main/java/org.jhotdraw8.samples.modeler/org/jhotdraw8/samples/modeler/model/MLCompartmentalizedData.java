@@ -3,6 +3,7 @@ package org.jhotdraw8.samples.modeler.model;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableMap;
+import org.jhotdraw8.collection.ImmutableMaps;
 
 import java.util.Map;
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class MLCompartmentalizedData {
     private final ImmutableMap<String, ImmutableList<String>> map;
 
     public MLCompartmentalizedData() {
-        this.map = ImmutableMap.emptyMap();
+        this.map = ImmutableMaps.emptyMap();
     }
 
     public MLCompartmentalizedData(ImmutableMap<String, ImmutableList<String>> map) {
@@ -27,7 +28,7 @@ public class MLCompartmentalizedData {
     }
 
     public MLCompartmentalizedData(Map<String, ? extends ImmutableList<String>> map) {
-        this.map = ImmutableMap.ofMap(map);
+        this.map = ImmutableMaps.ofMap(map);
     }
 
     @Nonnull

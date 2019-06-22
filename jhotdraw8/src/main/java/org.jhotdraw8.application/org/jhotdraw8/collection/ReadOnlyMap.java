@@ -72,4 +72,13 @@ public interface ReadOnlyMap<K, V> {
             }
         };
     }
+
+    /**
+     * Wraps this map in the Map API - without copying.
+     *
+     * @return the wrapped map
+     */
+    default Map<K, V> asMap() {
+        return new MapWrapper<>(this);
+    }
 }

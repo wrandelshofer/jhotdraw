@@ -40,7 +40,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.xml.text;
     exports org.jhotdraw8.xml;
     exports org.jhotdraw8.styleable;
-    exports org.jhotdraw8.text;
+    exports org.jhotdraw8.text.text;
     exports org.jhotdraw8.draw.gui;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;

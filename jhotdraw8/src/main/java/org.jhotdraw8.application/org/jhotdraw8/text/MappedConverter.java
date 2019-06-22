@@ -2,6 +2,7 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableMap;
+import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.ReadOnlyCollection;
 import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.io.IdFactory;
@@ -22,13 +23,13 @@ public class MappedConverter<T> implements Converter<T> {
     private final ImmutableMap<T, String> valueToStr;
 
     private MappedConverter(Map<String, T> strToValue, Map<T, String> valueToStr) {
-        this.strToValue = ImmutableMap.of(strToValue);
-        this.valueToStr = ImmutableMap.of(valueToStr);
+        this.strToValue = ImmutableMaps.of(strToValue);
+        this.valueToStr = ImmutableMaps.of(valueToStr);
     }
 
     private MappedConverter(ReadOnlyMap<String, T> strToValue, ReadOnlyMap<T, String> valueToStr) {
-        this.strToValue = ImmutableMap.of(strToValue);
-        this.valueToStr = ImmutableMap.of(valueToStr);
+        this.strToValue = ImmutableMaps.of(strToValue);
+        this.valueToStr = ImmutableMaps.of(valueToStr);
     }
 
     /**
@@ -70,7 +71,7 @@ public class MappedConverter<T> implements Converter<T> {
     }
 
     private static <K, V> ImmutableMap<V, K> inverseMap(ReadOnlyCollection<Map.Entry<K, V>> entrySet) {
-        return ImmutableMap.inverseOf(entrySet);
+        return ImmutableMaps.inverseOf(entrySet);
     }
 
     @Nullable
