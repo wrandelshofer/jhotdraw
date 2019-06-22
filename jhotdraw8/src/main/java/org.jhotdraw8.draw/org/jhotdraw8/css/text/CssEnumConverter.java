@@ -17,9 +17,6 @@ import java.util.function.Consumer;
 
 /**
  * CssEnumConverter. Converts all enum names to lower-case.
- * <p>
- * FIXME change this class, so that it can map internal enum names to external names using
- * a hash-map.
  *
  * @author Werner Randelshofer
  * @version $Id$

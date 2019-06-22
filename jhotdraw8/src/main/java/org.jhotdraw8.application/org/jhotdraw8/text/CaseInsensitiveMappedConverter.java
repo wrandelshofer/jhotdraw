@@ -9,16 +9,16 @@ import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class EnumConverter<E extends Enum<E>> implements Converter<E> {
+public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
     private final Map<String, E> fromStringMap;
     private final Map<E, String> toStringMap;
 
-    public EnumConverter(Map<String, E> fromStringMap) {
+    public CaseInsensitiveMappedConverter(Map<String, E> fromStringMap) {
         this.fromStringMap = new LinkedHashMap<>();
         this.toStringMap = new LinkedHashMap<>();
         for (Map.Entry<String, E> entry : fromStringMap.entrySet()) {
-            fromStringMap.putIfAbsent(entry.getKey(), entry.getValue());
-            toStringMap.putIfAbsent(entry.getValue(), entry.getKey());
+            this.fromStringMap.putIfAbsent(entry.getKey().toLowerCase(), entry.getValue());
+            this.toStringMap.putIfAbsent(entry.getValue(), entry.getKey());
         }
     }
 
@@ -30,7 +30,7 @@ public class EnumConverter<E extends Enum<E>> implements Converter<E> {
         }
         String str = in.toString();
         in.position(in.length());
-        E e = fromStringMap.get(str);
+        E e = fromStringMap.get(str.toLowerCase());
         if (e == null) {
             throw new ParseException("Illegal value=\"" + str + "\"", 0);
         }
