@@ -9,6 +9,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -81,6 +82,26 @@ public abstract class AbstractPathBuilder<V, A> {
      */
     @Nullable
     public VertexPath<V> findVertexPathOverWaypoints(@Nonnull Iterable<? extends V> waypoints) {
+        try {
+            return findVertexPathOverWaypointsNonnull(waypoints);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Builds a VertexPath through the graph which traverses the specified
+     * waypoints.
+     * <p>
+     * This method uses a breadth first path search between waypoints.
+     *
+     * @param waypoints waypoints, the iteration sequence of this collection
+     *                  determines how the waypoints are traversed
+     * @return a VertexPath
+     * @throws NoSuchElementException if the path cannot be constructed
+     */
+    @Nullable
+    public VertexPath<V> findVertexPathOverWaypointsNonnull(@Nonnull Iterable<? extends V> waypoints) throws NoSuchElementException {
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -93,7 +114,7 @@ public abstract class AbstractPathBuilder<V, A> {
             BackLink<V, A> back = search(start, goal::equals,
                     new LinkedHashSet<>()::add);
             if (back == null) {
-                return null;
+                throw new NoSuchElementException("Search stalled at vertex " + goal + ".");
             } else {
                 int index = pathElements.size();
                 for (; back.getParent() != null; back = back.getParent()) {
