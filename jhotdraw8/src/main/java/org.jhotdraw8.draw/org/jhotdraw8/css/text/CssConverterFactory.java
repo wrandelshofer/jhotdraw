@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.ConverterFactory;
 import org.jhotdraw8.text.DefaultConverter;
-import org.jhotdraw8.xml.text.XmlWordConverter;
 
 /**
  * CssConverterFactory.
@@ -30,7 +29,7 @@ public class CssConverterFactory implements ConverterFactory {
             case "size":
                 return new CssSizeConverter(false);
             case "word":
-                return new XmlWordConverter();
+                return new CssWordConverter();
             case "paint":
                 return new CssPaintableConverter(false);
             case "font":

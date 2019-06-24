@@ -1,15 +1,11 @@
-/* @(#)Rectangle2DConverter.java
+/* @(#)CssRectangle2DConverter.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.io.IdFactory;
 
 import java.io.IOException;

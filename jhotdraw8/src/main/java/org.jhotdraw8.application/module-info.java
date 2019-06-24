@@ -28,6 +28,7 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.app.action.file;
     exports org.jhotdraw8.gui.dock;
     exports org.jhotdraw8.gui.fontchooser;
+    exports org.jhotdraw8.text;
 
     uses java.util.spi.ResourceBundleProvider;
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;

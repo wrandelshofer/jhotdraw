@@ -83,11 +83,11 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      * @param maxLength the maximal path length
      * @return a back link on success, null on failure
      */
-    protected MyBackLink<V, A> search(@Nonnull V root,
-                                      @Nonnull Predicate<V> goal,
-                                      Function<V, Iterable<V>> nextNodesFunction,
-                                      @Nonnull Predicate<V> visited,
-                                      int maxLength) {
+    public BackLink<V, A> search(@Nonnull V root,
+                                 @Nonnull Predicate<V> goal,
+                                 Function<V, Iterable<V>> nextNodesFunction,
+                                 @Nonnull Predicate<V> visited,
+                                 int maxLength) {
         Deque<MyBackLink<V, A>> queue = new ArrayDeque<>(16);
         MyBackLink<V, A> rootBackLink = new MyBackLink<>(root, null, maxLength);
         visited.test(root);

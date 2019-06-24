@@ -1,12 +1,11 @@
 /* @(#)XmlWordConverter.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.xml.text;
+package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
