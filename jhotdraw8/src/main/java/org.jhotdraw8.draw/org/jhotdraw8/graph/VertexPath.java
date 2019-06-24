@@ -56,6 +56,10 @@ public class VertexPath<V> {
         return true;
     }
 
+    public V getSecondToLastVertex() {
+        return vertices.get(vertices.size() - 2);
+    }
+
     @Nonnull
     public ImmutableList<V> getVertices() {
         return vertices;
@@ -76,11 +80,15 @@ public class VertexPath<V> {
         return hash;
     }
 
+    public int indexOf(V v) {
+        return vertices.indexOf(v);
+    }
+
     public boolean isEmpty() {
         return vertices.isEmpty();
     }
 
-    public int size() {
+    public int numOfVertices() {
         return vertices.size();
     }
 
@@ -101,6 +109,13 @@ public class VertexPath<V> {
     @SuppressWarnings("varargs")
     public static <VV> VertexPath<VV> of(VV... vertices) {
         return new VertexPath<>(vertices);
+    }
+
+    public VertexPath<V> joinedPath(VertexPath<V> nextPath) {
+        if (isEmpty()) {
+            return nextPath;
+        }
+        return new VertexPath<V>(ImmutableLists.addAll(this.vertices.subList(0, numOfVertices() - 1), nextPath.vertices));
     }
 
 }

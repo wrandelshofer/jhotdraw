@@ -84,7 +84,7 @@ public abstract class AbstractPathBuilder<V, A> {
     public VertexPath<V> findVertexPathOverWaypoints(@Nonnull Iterable<? extends V> waypoints) {
         try {
             return findVertexPathOverWaypointsNonnull(waypoints);
-        } catch (NoSuchElementException e) {
+        } catch (PathBuilderException e) {
             return null;
         }
     }
@@ -98,10 +98,10 @@ public abstract class AbstractPathBuilder<V, A> {
      * @param waypoints waypoints, the iteration sequence of this collection
      *                  determines how the waypoints are traversed
      * @return a VertexPath
-     * @throws NoSuchElementException if the path cannot be constructed
+     * @throws PathBuilderException if the path cannot be constructed
      */
     @Nullable
-    public VertexPath<V> findVertexPathOverWaypointsNonnull(@Nonnull Iterable<? extends V> waypoints) throws NoSuchElementException {
+    public VertexPath<V> findVertexPathOverWaypointsNonnull(@Nonnull Iterable<? extends V> waypoints) throws PathBuilderException {
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {

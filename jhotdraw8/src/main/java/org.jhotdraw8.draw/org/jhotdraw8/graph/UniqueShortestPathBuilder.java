@@ -112,6 +112,10 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
         @Nullable
         protected MyBackLink<VV, AA> parent;
         protected AA arrow;
+        /**
+         * Accumulated cost up to this node.
+         * Must increase monotonically.
+         */
         protected double cost;
 
         public MyBackLink(VV node, double cost, MyBackLink<VV, AA> parent, AA arrow) {

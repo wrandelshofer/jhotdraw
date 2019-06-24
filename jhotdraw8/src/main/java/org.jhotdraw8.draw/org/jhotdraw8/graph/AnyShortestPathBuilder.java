@@ -19,6 +19,11 @@ import java.util.function.ToDoubleFunction;
 /**
  * This path builder can be used to find any shortest path between
  * to vertices in a directed.
+ * <p>
+ * Uses Dijkstra's alorithm for finding the shortest path.
+ * <p>
+ * The provided cost function must return a value greater than zero
+ * for every edge in the graph.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
@@ -26,6 +31,9 @@ import java.util.function.ToDoubleFunction;
  * @version $Id$
  */
 public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V, A> {
+    public AnyShortestPathBuilder() {
+    }
+
     public AnyShortestPathBuilder(@Nonnull DirectedGraph<V, A> graph, @Nonnull ToDoubleFunction<A> costf) {
         super(graph, costf);
     }

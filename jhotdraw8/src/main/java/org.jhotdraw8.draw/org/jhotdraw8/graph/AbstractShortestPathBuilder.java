@@ -18,11 +18,13 @@ import java.util.function.ToDoubleFunction;
 
 public abstract class AbstractShortestPathBuilder<V, A> {
     @Nonnull
-    private final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction;
+    private Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction;
     @Nonnull
-    private final ToDoubleTriFunction<V, V, A> costf;
+    private ToDoubleTriFunction<V, V, A> costf;
     private double maxCost = Double.MAX_VALUE;
 
+    public AbstractShortestPathBuilder() {
+    }
     public AbstractShortestPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
                                        @Nonnull final ToDoubleFunction<A> costf) {
         this(graph::getNextEntries, costf);
@@ -190,7 +192,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
                                              @Nonnull Predicate<V> goalPredicate,
                                              double maxCost, Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction, ToDoubleTriFunction<V, V, A> costf);
 
-    protected static abstract class BackLink<VV, AA> implements Comparable<BackLink<VV, AA>> {
+    public static abstract class BackLink<VV, AA> implements Comparable<BackLink<VV, AA>> {
         @Override
         public int compareTo(BackLink<VV, AA> that) {
             return Double.compare(this.getCost(), that.getCost());
@@ -214,13 +216,13 @@ public abstract class AbstractShortestPathBuilder<V, A> {
             return true;
         }
 
-        abstract AA getArrow();
+        public abstract AA getArrow();
 
-        abstract double getCost();
+        public abstract double getCost();
 
-        abstract BackLink<VV, AA> getParent();
+        public abstract BackLink<VV, AA> getParent();
 
-        abstract VV getVertex();
+        public abstract VV getVertex();
 
         @Override
         public int hashCode() {
@@ -231,4 +233,19 @@ public abstract class AbstractShortestPathBuilder<V, A> {
 
     }
 
+    public void setCostFunction(ToDoubleTriFunction<V, V, A> costf) {
+        this.costf = costf;
+    }
+
+    public ToDoubleTriFunction<V, V, A> getCostFunction() {
+        return costf;
+    }
+
+    public Function<V, Iterable<Map.Entry<V, A>>> getNextNodesFunction() {
+        return nextNodesFunction;
+    }
+
+    public void setNextNodesFunction(Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction) {
+        this.nextNodesFunction = nextNodesFunction;
+    }
 }

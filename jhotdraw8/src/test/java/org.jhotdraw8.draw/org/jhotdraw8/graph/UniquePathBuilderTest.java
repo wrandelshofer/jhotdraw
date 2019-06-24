@@ -154,7 +154,7 @@ public class UniquePathBuilderTest {
 
         // Find unique path to any of the goals
         VertexPath<Integer> actualPath = instance.findVertexPath(start, multiGoal::contains);
-        double actualLength = actualPath == null ? 0.0 : actualPath.size();
+        double actualLength = actualPath == null ? 0.0 : actualPath.numOfVertices();
 
         System.out.println("  actual path: " + actualPath);
 
