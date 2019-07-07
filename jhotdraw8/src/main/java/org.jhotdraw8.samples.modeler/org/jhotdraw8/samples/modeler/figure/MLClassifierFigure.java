@@ -282,9 +282,10 @@ public class MLClassifierFigure extends AbstractLeafFigure
                 if (compartmentNamesVisible) {
                     // add compartment name labels
                     node = textNodes.get(i++);
-                    node.setText(entry.getKey());
                     node.getProperties().put(TEXT_NODE_TEXT_KEY, COMPARTMENTS);
+                    node.setWrappingWidth(wrappingWidth);
                     node.setLineSpacing(lineSpacing);
+                    node.setText(entry.getKey());
                     node.setY(y);
                     applyCompartmentLabelStyle(ctx, node);
                     y += node.getLayoutBounds().getHeight() + lineSpacing;
@@ -296,9 +297,10 @@ public class MLClassifierFigure extends AbstractLeafFigure
                     node.setY(y);
                     buf.setLength(0);
                     buf.append(item);
-                    node.setText(buf.toString());
+                    node.setWrappingWidth(wrappingWidth);
                     node.getProperties().put(TEXT_NODE_TEXT_KEY, COMPARTMENTS);
                     node.setLineSpacing(lineSpacing);
+                    node.setText(buf.toString());
                     applyItemStyle(ctx, classifierModifiers, buf.toString(), node);
                     y += node.getLayoutBounds().getHeight() + lineSpacing;
                 }
