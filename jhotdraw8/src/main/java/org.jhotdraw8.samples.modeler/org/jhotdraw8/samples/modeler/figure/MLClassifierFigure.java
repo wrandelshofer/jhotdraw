@@ -247,6 +247,14 @@ public class MLClassifierFigure extends AbstractLeafFigure
 
         EnumSet<MLModifier> classifierModifiers = computeClassifierModifiers(keyword);
 
+        // Apply common styles to text nodes
+        for (Text node : textNodes) {
+            node.setWrappingWidth(wrappingWidth);
+            node.setX(x + left);
+            node.setTextOrigin(VPos.TOP);
+            node.setLineSpacing(lineSpacing);
+        }
+
 
         {
             StringBuilder buf = new StringBuilder();
@@ -258,9 +266,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
                 node = textNodes.get(i++);
                 applyKeywordLabelStyle(ctx, node);
                 node.setText("«" + keyword + "»");
-                node.setWrappingWidth(wrappingWidth);
                 node.getProperties().put(TEXT_NODE_TEXT_KEY, KEYWORD);
-                node.setLineSpacing(lineSpacing);
                 node.setY(y);
                 y += node.getLayoutBounds().getHeight() + lineSpacing;
             }
@@ -268,7 +274,6 @@ public class MLClassifierFigure extends AbstractLeafFigure
             applyNameStyle(ctx, node);
             node.setText(name);
             node.getProperties().put(TEXT_NODE_TEXT_KEY, NAME);
-            node.setWrappingWidth(wrappingWidth);
             node.setY(y);
             y += node.getLayoutBounds().getHeight() + lineSpacing;
 
@@ -284,7 +289,6 @@ public class MLClassifierFigure extends AbstractLeafFigure
                     node = textNodes.get(i++);
                     node.getProperties().put(TEXT_NODE_TEXT_KEY, COMPARTMENTS);
                     node.setWrappingWidth(wrappingWidth);
-                    node.setLineSpacing(lineSpacing);
                     node.setText(entry.getKey());
                     node.setY(y);
                     applyCompartmentLabelStyle(ctx, node);
@@ -297,9 +301,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
                     node.setY(y);
                     buf.setLength(0);
                     buf.append(item);
-                    node.setWrappingWidth(wrappingWidth);
                     node.getProperties().put(TEXT_NODE_TEXT_KEY, COMPARTMENTS);
-                    node.setLineSpacing(lineSpacing);
                     node.setText(buf.toString());
                     applyItemStyle(ctx, classifierModifiers, buf.toString(), node);
                     y += node.getLayoutBounds().getHeight() + lineSpacing;
@@ -307,13 +309,6 @@ public class MLClassifierFigure extends AbstractLeafFigure
             }
         }
 
-        // apply common styles
-        for (Text node : textNodes) {
-            node.setWrappingWidth(wrappingWidth);
-            node.setX(x + left);
-            node.setTextOrigin(VPos.TOP);
-            node.setLineSpacing(lineSpacing);
-        }
     }
 
     @Nonnull
