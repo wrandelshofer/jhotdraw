@@ -65,6 +65,13 @@ MLEdge[keyword="dependency"] {
   marker-end-shape: "M-10,-5 0,0 -10,5 M-10,0 0,0";
   marker-fill: none;
 }
+
+/** Satisfies is shown as a dashed line with arrow head. */
+MLEdge[keyword="satisfies"] {
+  stroke-dasharray: 5;
+  marker-end-shape: "M-10,-5 0,0 -10,5 M-10,0 0,0";
+  marker-fill: none;
+}
 /** Generalization is shown as a solid line with white triangle head. */
 MLEdge[keyword="generalization"] {
   marker-end-shape: "M-10,-5 0,0 -10,5 Z";
@@ -86,6 +93,6 @@ MLEdge[keyword="aggregation"][target-owned="true"] {
 }
 /** Compositon is shown as a solid line with black diamond tail. */
 MLEdge[keyword="composition"] {
-  marker-end-shape: "M -12,0 -6,-12 0,0 -6,12 -12,0 0,0";
+  marker-end-shape: "M -18,0 -9,-5 0,0 -9,5 Z";
   marker-fill: black;
 }
