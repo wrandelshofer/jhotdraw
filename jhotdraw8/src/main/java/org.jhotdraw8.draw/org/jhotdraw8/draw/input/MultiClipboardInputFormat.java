@@ -4,6 +4,7 @@
 package org.jhotdraw8.draw.input;
 
 import javafx.scene.input.Clipboard;
+import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -11,6 +12,7 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.model.DrawingModel;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -22,12 +24,12 @@ import java.util.function.Supplier;
  */
 public class MultiClipboardInputFormat implements ClipboardInputFormat {
     @Nullable
-    private Supplier<ClipboardInputFormat>[] formatSuppliers;
+    private List<Supplier<ClipboardInputFormat>> formatSuppliers;
 
     private ClipboardInputFormat[] formats;
 
     @SuppressWarnings("unchecked")
-    public MultiClipboardInputFormat(@Nullable Supplier<ClipboardInputFormat>... formatSuppliers) {
+    public MultiClipboardInputFormat(@Nonnull List<Supplier<ClipboardInputFormat>> formatSuppliers) {
         this.formatSuppliers = formatSuppliers;
     }
 
@@ -37,10 +39,10 @@ public class MultiClipboardInputFormat implements ClipboardInputFormat {
 
     private void createFormats() {
         if (formatSuppliers != null) {
-            int n = formatSuppliers.length;
+            int n = formatSuppliers.size();
             formats = new ClipboardInputFormat[n];
             for (int i = 0; i < n; i++) {
-                formats[i] = formatSuppliers[i].get();
+                formats[i] = formatSuppliers.get(i).get();
             }
             formatSuppliers = null;
         }
