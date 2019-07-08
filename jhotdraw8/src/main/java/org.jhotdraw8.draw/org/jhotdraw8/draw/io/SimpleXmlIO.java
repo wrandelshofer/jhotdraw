@@ -810,9 +810,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     stylesheet = uriResolver.apply((URI) stylesheet);
 
                     String stylesheetString = stylesheet.toString();
-                    String type = "org/jhotdraw8/text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
-                    if ("org/jhotdraw8/text/".equals(type)) {
-                        type = "org/jhotdraw8/text/css";
+                    String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
+                    if ("text/".equals(type)) {
+                        type = "text/css";
                     }
                     ProcessingInstruction pi = doc.createProcessingInstruction("xml-stylesheet", //
                             "type=\"" + type + "\" href=\"" + stylesheet + "\"");
