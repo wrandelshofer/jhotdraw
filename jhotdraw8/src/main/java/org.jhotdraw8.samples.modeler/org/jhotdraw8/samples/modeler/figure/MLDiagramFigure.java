@@ -165,12 +165,12 @@ public class MLDiagramFigure extends AbstractLeafFigure
         diagramKindText.setX(bounds.getMinX() + padding.getLeft());
         diagramKindText.setY(y);
         double margin = size / 4;
-        diagramNameText.setX(diagramKindText.getLayoutBounds().getMaxX() + (diagramKind == null || diagramKind.isEmpty() ? 0 : margin));
-        diagramNameText.setY(y);
-        modelElementTypeText.setX(diagramNameText.getLayoutBounds().getMaxX() + (modelElementType == null || modelElementType.isEmpty() ? 0 : margin));
+        modelElementTypeText.setX(diagramKindText.getLayoutBounds().getMaxX() + (diagramKind == null || diagramKind.isEmpty() ? 0 : margin));
         modelElementTypeText.setY(y);
-        modelElementNameText.setX(modelElementTypeText.getLayoutBounds().getMaxX() + (modelElementName == null || modelElementName.isEmpty() ? 0 : margin));
+        modelElementNameText.setX(modelElementTypeText.getLayoutBounds().getMaxX() + (modelElementType == null || modelElementType.isEmpty() ? 0 : margin));
         modelElementNameText.setY(y);
+        diagramNameText.setX(modelElementNameText.getLayoutBounds().getMaxX() + (modelElementName == null || modelElementName.isEmpty() ? 0 : margin));
+        diagramNameText.setY(y);
 
         Bounds textBounds = Geom.union(
                 diagramKindText.getLayoutBounds(),
