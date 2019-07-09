@@ -148,23 +148,19 @@ public class CssPrettyPrinter implements Appendable {
                 stack.push(Syntax.SQUARE_BLOCK);
                 break;
             case CssTokenType.TT_RIGHT_BRACKET:
-                if (stack.peek() == Syntax.ROUND_BLOCK) {
-                    stack.pop();
+                while (stack.size() > 1 && stack.pop() != Syntax.ROUND_BLOCK) {
                 }
                 break;
             case CssTokenType.TT_RIGHT_CURLY_BRACKET:
-                if (stack.peek() == Syntax.CURLY_BLOCK) {
-                    stack.pop();
+                while (stack.size() > 1 && stack.pop() != Syntax.CURLY_BLOCK) {
                 }
                 break;
             case CssTokenType.TT_RIGHT_SQUARE_BRACKET:
-                if (stack.peek() == Syntax.SQUARE_BLOCK) {
-                    stack.pop();
+                while (stack.size() > 1 && stack.pop() == Syntax.SQUARE_BLOCK) {
                 }
                 break;
             case CssTokenType.TT_SEMICOLON:
-                if (stack.peek() == Syntax.DECLARATION_VALUE) {
-                    stack.pop();
+                while (stack.size() > 1 && stack.pop() != Syntax.DECLARATION_VALUE) {
                 }
                 break;
             case CssTokenType.TT_COLON:
