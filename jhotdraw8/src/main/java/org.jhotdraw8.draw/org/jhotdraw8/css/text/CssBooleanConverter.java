@@ -35,10 +35,7 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
     @Override
     public Boolean parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨Boolean⟩ identifier expected.");
-        String s = tt.currentString();
-        if (s == null) {
-            s = CssTokenType.IDENT_NONE;
-        }
+        String s = tt.currentStringNonnull();
         switch (s) {
             case trueString:
                 return Boolean.TRUE;

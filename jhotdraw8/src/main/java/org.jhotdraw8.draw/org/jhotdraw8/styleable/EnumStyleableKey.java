@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 
 /**
- * NullableEnumStyleableKey.
+ * Nullable EnumStyleableKey.
  *
  * @author Werner Randelshofer
  * @version $Id$

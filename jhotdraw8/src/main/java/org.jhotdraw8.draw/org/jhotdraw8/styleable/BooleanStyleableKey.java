@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.css.text.CssBooleanConverter;
 
 /**
- * BooleanStyleableKey.
+ * Nullable BooleanStyleableKey.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -30,7 +30,7 @@ public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> implements 
     }
 
     public BooleanStyleableKey(String key, @Nonnull String cssName, Boolean defaultValue) {
-        super(key, Boolean.class, null, new CssBooleanConverter(false), defaultValue);
+        super(key, Boolean.class, null, new CssBooleanConverter(true), defaultValue);
         setCssMetaData(
                 new StyleablePropertyFactory<>(null).createBooleanCssMetaData(
                         cssName, s -> {
