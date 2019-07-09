@@ -189,13 +189,12 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             d.set(Drawing.USER_AGENT_STYLESHEETS,
                     ImmutableLists.of(
                             ModelerActivityController.class.getResource("user-agent.css").toURI()));
+            d.updateStyleManager();
             SimpleRenderContext ctx = new SimpleRenderContext();
             for (Figure f : d.preorderIterable()) {
                 f.updateCss();
             }
-            for (Figure f : d.preorderIterable()) {
-                f.layout(ctx);
-            }
+            d.layoutAll(ctx);
 
         } catch (URISyntaxException e) {
             throw new RuntimeException("can't load my own resources", e);
