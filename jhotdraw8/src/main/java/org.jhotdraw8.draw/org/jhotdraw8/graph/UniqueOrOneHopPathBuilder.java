@@ -13,19 +13,20 @@ import java.util.function.Predicate;
  * Builder for creating unique paths from a directed graph.
  * <p>
  * The builder searches for unique paths using a breadth-first search.<br>
- * Returns only a path if it is unique.
+ * Returns only a path if it is unique or if there is only one hop
+ * from start to goal.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
  */
-public class UniquePathBuilder<V, A> extends AbstractPathBuilder<V, A> {
+public class UniqueOrOneHopPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
 
-    public UniquePathBuilder(@Nonnull DirectedGraph<V, A> g) {
+    public UniqueOrOneHopPathBuilder(@Nonnull DirectedGraph<V, A> g) {
         this(g::getNextVertices);
     }
 
-    public UniquePathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {
+    public UniqueOrOneHopPathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {
         super(nextNodesFunction);
     }
 
@@ -72,6 +73,9 @@ public class UniquePathBuilder<V, A> extends AbstractPathBuilder<V, A> {
                 if (found != null) {
                     return null;// path is not unique!
                 }
+                if (node.getParent() == rootBackLink) {
+                    return node; // One hop is considered unique.
+                }
                 found = node;
             }
             if (node.depth > 0) {
@@ -87,7 +91,8 @@ public class UniquePathBuilder<V, A> extends AbstractPathBuilder<V, A> {
         }
         for (MyBackLink<V, A> node = found; node != null; node = node.parent) {
             if (nonUnique.contains(node.vertex)) {
-                return null;// path is not unique!
+                // path is not unique!
+                return null;
             }
         }
         return found;

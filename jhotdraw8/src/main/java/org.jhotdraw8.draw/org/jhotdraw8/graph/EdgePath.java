@@ -69,6 +69,11 @@ public class EdgePath<E> {
         return edges;
     }
 
+    public int size() {
+        return edges.size();
+    }
+
+
     @Nonnull
     @Override
     public String toString() {

@@ -82,6 +82,7 @@ public class AnyShortestPathBuilderTest {
     @TestFactory
     public List<DynamicTest> testFindShortestVertexPath() {
         return Arrays.asList(
+                dynamicTest("0", () -> doFindShortestVertexPath(1, 1, VertexPath.of(1), 0.0)),
                 dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VertexPath.of(1, 3, 6, 5), 20.0)),
                 dynamicTest("2", () -> doFindShortestVertexPath(1, 4, VertexPath.of(1, 3, 4), 20.0)),
                 dynamicTest("3", () -> doFindShortestVertexPath(2, 6, VertexPath.of(2, 3, 6), 12.0))
@@ -108,6 +109,7 @@ public class AnyShortestPathBuilderTest {
     @TestFactory
     public List<DynamicTest> testFindShortestEdgeMultiGoalPath() throws Exception {
         return Arrays.asList(
+                dynamicTest("0", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(1, 6), EdgePath.of())),
                 dynamicTest("1", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 6), EdgePath.of(9.0, 2.0))),
                 dynamicTest("2", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(4, 5), EdgePath.of(9.0, 11.0))),
                 dynamicTest("3", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(3, 6), EdgePath.of(10.0))),
@@ -128,25 +130,27 @@ public class AnyShortestPathBuilderTest {
 
         // Find a path for each individual goal, and remember the shortest path
         EdgePath<Double> individualShortestPath = null;
-        double individualShortestLength = Double.POSITIVE_INFINITY;
+        double individualShortestCost = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
             Map.Entry<EdgePath<Double>, Double> resultEntry = instance.findEdgePath(start, goal::equals);
             EdgePath<Double> result = resultEntry.getKey();
             double resultLength = result.getEdges().stream().mapToDouble(Double::doubleValue).sum();
-            if (resultLength < individualShortestLength) {
-                individualShortestLength = resultLength;
+            if (resultLength < individualShortestCost
+                    || resultLength == individualShortestCost && result.size() < individualShortestPath.size()
+            ) {
+                individualShortestCost = resultLength;
                 individualShortestPath = result;
             }
         }
 
         // Find shortest path to any of the goals
         Map.Entry<EdgePath<Double>, Double> actualShortestPath = instance.findEdgePath(start, multiGoal::contains);
-        double actualLength = actualShortestPath.getValue();
+        double actualCost = actualShortestPath.getValue();
 
-        System.out.println("  individual shortest path: " + individualShortestPath);
+        System.out.println("  individual shortest path: " + individualShortestPath + "=" + individualShortestCost);
         System.out.println("  actual shortest path: " + actualShortestPath);
 
-        assertEquals(individualShortestLength, actualLength);
+        assertEquals(individualShortestCost, actualCost);
         assertEquals(expResult, actualShortestPath.getKey());
     }
 

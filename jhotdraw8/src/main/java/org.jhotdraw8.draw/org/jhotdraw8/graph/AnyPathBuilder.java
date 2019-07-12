@@ -9,6 +9,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Queue;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -88,28 +89,28 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
                                  Function<V, Iterable<V>> nextNodesFunction,
                                  @Nonnull Predicate<V> visited,
                                  int maxLength) {
-        Deque<MyBackLink<V, A>> queue = new ArrayDeque<>(16);
+        Queue<MyBackLink<V, A>> queue = new ArrayDeque<>(16);
         MyBackLink<V, A> rootBackLink = new MyBackLink<>(root, null, maxLength);
         visited.test(root);
         queue.add(rootBackLink);
-        MyBackLink<V, A> current = null;
-        MyBackLink<V, A> found = null;
+
         while (!queue.isEmpty()) {
-            current = queue.removeFirst();
-            if (goal.test(current.vertex)) {
-                found = current;
-                break;
+            MyBackLink<V, A> node = queue.remove();
+            if (goal.test(node.vertex)) {
+                return node;
             }
-            if (current.depth > 0) {
-                for (V next : nextNodesFunction.apply(current.vertex)) {
+
+            if (node.maxRemaining > 0) {
+                for (V next : nextNodesFunction.apply(node.vertex)) {
                     if (visited.test(next)) {
-                        MyBackLink<V, A> backLink = new MyBackLink<>(next, current, current.depth - 1);
-                        queue.addLast(backLink);
+                        MyBackLink<V, A> backLink = new MyBackLink<>(next, node, node.maxRemaining - 1);
+                        queue.add(backLink);
                     }
                 }
             }
         }
-        return found;
+
+        return null;
     }
 
     private void searchAll(@Nonnull MyBackLink<V, A> start, @Nonnull Predicate<V> goal,
@@ -123,9 +124,9 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
             if (goal.test(current.vertex)) {
                 backlinks.add(current);
             }
-            if (current.depth < maxDepth) {
+            if (current.maxRemaining < maxDepth) {
                 for (V v : nextNodesFunction.apply(current.vertex)) {
-                    MyBackLink<V, A> newPath = new MyBackLink<>(v, current, current.depth + 1);
+                    MyBackLink<V, A> newPath = new MyBackLink<>(v, current, current.maxRemaining + 1);
                     stack.push(newPath);
                 }
             }
@@ -136,12 +137,12 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
 
         final MyBackLink<VV, AA> parent;
         final VV vertex;
-        final int depth;
+        final int maxRemaining;
 
         public MyBackLink(VV vertex, MyBackLink<VV, AA> parent, int depth) {
             this.vertex = vertex;
             this.parent = parent;
-            this.depth = depth;
+            this.maxRemaining = depth;
         }
 
         @Override

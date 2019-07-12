@@ -9,7 +9,6 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -114,7 +113,7 @@ public abstract class AbstractPathBuilder<V, A> {
             BackLink<V, A> back = search(start, goal::equals,
                     new LinkedHashSet<>()::add);
             if (back == null) {
-                throw new NoSuchElementException("Search stalled at vertex " + goal + ".");
+                throw new PathBuilderException("Could not find path from " + start + " to " + goal + ".");
             } else {
                 int index = pathElements.size();
                 for (; back.getParent() != null; back = back.getParent()) {

@@ -8,10 +8,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.ToDoubleTriFunction;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
@@ -50,55 +48,61 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         super(nextNodesFunction, costf);
     }
 
+    /**
+     * Searches shortest path using Dijkstra.
+     * <p>
+     * This algorithm does not update an entry in the priority queue.
+     * Whenever a distance of a vertex is reduced, we add one more
+     * entry to the priority queue. Even if there are multiple entries
+     * in the priority queue, we only consider the one with the minimum
+     * distance.
+     * <p>
+     * References: <a href="https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/"
+     * geeksforgeeks.org</a>
+     */
     protected BackLink<V, A> search(@Nonnull V start,
                                     @Nonnull Predicate<V> goalPredicate,
                                     double maxCost,
                                     Function<V, Iterable<Map.Entry<V, A>>> nextf,
                                     ToDoubleTriFunction<V, V, A> costf) {
-        PriorityQueue<MyBackLink<V, A>> frontier = new PriorityQueue<>(61);
-        Map<V, MyBackLink<V, A>> frontierMap = new HashMap<>(61);
-        Set<V> explored = new HashSet<>(61);
 
-        MyBackLink<V, A> node = new MyBackLink<>(start, 0.0, null, null);
-        frontier.add(node);
-        while (true) {
-            if (frontier.isEmpty()) {
-                return null;
+        // Priority queue: back-links with shortest distance from start come first.
+        PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
+
+        // Map with known costs from start. If an entry is missing, we assume infinity.
+        Map<V, Double> cost = new HashMap<>();
+        Function<V, Double> getCost = v -> cost.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
+
+        // Insert start itself in priority queue and initialize its cost as 0.
+        queue.add(new MyBackLink<>(start, 0.0, null, null));
+        cost.put(start, 0.0);
+
+        // Loop until we have reached the goal, or frontier is exhausted.
+        while (!queue.isEmpty()) {
+            MyBackLink<V, A> node = queue.remove();
+            final V u = node.vertex;
+            if (goalPredicate.test(u)) {
+                return node;
             }
-            node = frontier.poll();
-            final V vertex = node.vertex;
-            frontierMap.remove(vertex);
-            if (goalPredicate.test(vertex)) {
-                break;
-            }
-            explored.add(node.getVertex());
+            double ucost = node.cost;
 
-            if (node.cost < maxCost) {
-                for (Map.Entry<V, A> entry : nextf.apply(vertex)) {
-                    V next = entry.getKey();
-                    A arrow = entry.getValue();
-                    double cost = node.cost + costf.applyAsDouble(vertex, next, arrow);
+            for (Map.Entry<V, A> entry : nextf.apply(u)) {
+                V v = entry.getKey();
+                A a = entry.getValue();
+                double weight = costf.applyAsDouble(u, v, a);
+                double oldvcost = getCost.apply(v);
+                double newvcost = ucost + weight;
 
-                    boolean isInFrontier = frontierMap.containsKey(next);
-                    if (!explored.contains(next) && !isInFrontier) {
-                        MyBackLink<V, A> lnk = new MyBackLink<>(next, cost, node, arrow);
-                        frontier.add(lnk);
-                        frontierMap.put(next, lnk);
-                    } else if (isInFrontier) {
-                        MyBackLink<V, A> lnk = frontierMap.get(next);
-                        if (cost < lnk.cost) {
-                            frontier.remove(lnk);
-                            lnk.cost = cost;
-                            lnk.parent = node;
-                            lnk.arrow = arrow;
-                            frontier.add(lnk);
-                        }
-                    }
+                // If there is a shorter path to v through u.
+                if (newvcost < oldvcost && newvcost <= maxCost) {
+                    // Updating cost of v.
+                    cost.put(v, newvcost);
+                    queue.add(new MyBackLink<>(v, newvcost, node, a));
                 }
             }
         }
 
-        return node;
+        return null;
     }
 
 
@@ -106,15 +110,17 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
 
         protected final VV vertex;
         @Nullable
-        protected MyBackLink<VV, AA> parent;
-        protected AA arrow;
-        protected double cost;
+        protected final MyBackLink<VV, AA> parent;
+        protected final AA arrow;
+        protected final double cost;
+        protected final int length;
 
         public MyBackLink(VV node, double cost, MyBackLink<VV, AA> parent, AA arrow) {
             this.vertex = node;
             this.cost = cost;
             this.parent = parent;
             this.arrow = arrow;
+            this.length = parent == null ? 0 : parent.length + 1;
         }
 
 
@@ -122,17 +128,9 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
             return cost;
         }
 
-        public void setCost(double cost) {
-            this.cost = cost;
-        }
-
         @Nullable
         public MyBackLink<VV, AA> getParent() {
             return parent;
-        }
-
-        public void setParent(MyBackLink<VV, AA> parent) {
-            this.parent = parent;
         }
 
         public VV getVertex() {
@@ -142,6 +140,19 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         @Override
         public AA getArrow() {
             return arrow;
+        }
+
+        @Override
+        public int getLength() {
+            return length;
+        }
+
+        @Override
+        public int compareTo(BackLink<VV, AA> that) {
+            int result = Double.compare(this.getCost(), that.getCost());
+            return result == 0
+                    ? Integer.compare(this.length, that.getLength())
+                    : result;
         }
     }
 

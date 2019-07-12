@@ -188,9 +188,22 @@ public abstract class AbstractShortestPathBuilder<V, A> {
         return search(start, goalPredicate, maxCost, nextNodesFunction, costf);
     }
 
+    /**
+     * Search algorithm.
+     *
+     * @param start             the start vertex
+     * @param goalPredicate     the predicate for the goal vertex
+     * @param maxCost           abort if cost exceeds max cost - this prevents searching the entire graph
+     * @param nextNodesFunction returns the next node entrys, key=vertex, value=arrow pointing to vertex
+     * @param costf             the cost function. Given a vertex pair and the arrow connecting the pair as input,
+     *                          returns the cost &gt; 0.
+     * @return the back links that were found from goal to start
+     */
     protected abstract BackLink<V, A> search(@Nonnull V start,
                                              @Nonnull Predicate<V> goalPredicate,
-                                             double maxCost, Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction, ToDoubleTriFunction<V, V, A> costf);
+                                             double maxCost,
+                                             Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
+                                             ToDoubleTriFunction<V, V, A> costf);
 
     public static abstract class BackLink<VV, AA> implements Comparable<BackLink<VV, AA>> {
         @Override
@@ -219,6 +232,17 @@ public abstract class AbstractShortestPathBuilder<V, A> {
         public abstract AA getArrow();
 
         public abstract double getCost();
+
+        /**
+         * Return the path length up to this back link.
+         */
+        protected int getLength() {
+            int length = 0;
+            for (BackLink<VV, AA> node = getParent(); node != null; node = node.getParent()) {
+                length++;
+            }
+            return length;
+        }
 
         public abstract BackLink<VV, AA> getParent();
 
