@@ -18,7 +18,7 @@ import java.util.function.ToDoubleFunction;
 
 public abstract class AbstractShortestPathBuilder<V, A> {
     @Nonnull
-    private Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction;
+    private Function<V, Iterable<Arc<V, A>>> nextNodesFunction;
     @Nonnull
     private ToDoubleTriFunction<V, V, A> costf;
     private double maxCost = Double.MAX_VALUE;
@@ -27,20 +27,20 @@ public abstract class AbstractShortestPathBuilder<V, A> {
     }
     public AbstractShortestPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
                                        @Nonnull final ToDoubleFunction<A> costf) {
-        this(graph::getNextEntries, costf);
+        this(graph::getNextArcs, costf);
     }
 
     public AbstractShortestPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
                                        @Nonnull final ToDoubleTriFunction<V, V, A> costf) {
-        this(graph::getNextEntries, costf);
+        this(graph::getNextArcs, costf);
     }
 
-    public AbstractShortestPathBuilder(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
+    public AbstractShortestPathBuilder(@Nonnull final Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                        @Nonnull final ToDoubleFunction<A> costf) {
         this(nextNodesFunction, (v1, v2, a) -> costf.applyAsDouble(a));
     }
 
-    public AbstractShortestPathBuilder(@Nonnull final Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
+    public AbstractShortestPathBuilder(@Nonnull final Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                        @Nonnull final ToDoubleTriFunction<V, V, A> costf) {
         this.nextNodesFunction = nextNodesFunction;
         this.costf = costf;
@@ -202,7 +202,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
     protected abstract BackLink<V, A> search(@Nonnull V start,
                                              @Nonnull Predicate<V> goalPredicate,
                                              double maxCost,
-                                             Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction,
+                                             Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                              ToDoubleTriFunction<V, V, A> costf);
 
     public static abstract class BackLink<VV, AA> implements Comparable<BackLink<VV, AA>> {
@@ -265,11 +265,11 @@ public abstract class AbstractShortestPathBuilder<V, A> {
         return costf;
     }
 
-    public Function<V, Iterable<Map.Entry<V, A>>> getNextNodesFunction() {
+    public Function<V, Iterable<Arc<V, A>>> getNextNodesFunction() {
         return nextNodesFunction;
     }
 
-    public void setNextNodesFunction(Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction) {
+    public void setNextNodesFunction(Function<V, Iterable<Arc<V, A>>> nextNodesFunction) {
         this.nextNodesFunction = nextNodesFunction;
     }
 }

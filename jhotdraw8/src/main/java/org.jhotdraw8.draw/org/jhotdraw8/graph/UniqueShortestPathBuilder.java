@@ -34,18 +34,18 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
         super(graph, costf);
     }
 
-    public UniqueShortestPathBuilder(@Nonnull Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction, @Nonnull ToDoubleFunction<A> costf) {
+    public UniqueShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleFunction<A> costf) {
         super(nextNodesFunction, costf);
     }
 
-    public UniqueShortestPathBuilder(@Nonnull Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+    public UniqueShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         super(nextNodesFunction, costf);
     }
 
     protected BackLink<V, A> search(@Nonnull V start,
                                     @Nonnull Predicate<V> goalPredicate,
                                     double maxCost,
-                                    Function<V, Iterable<Map.Entry<V, A>>> nextf,
+                                    Function<V, Iterable<Arc<V, A>>> nextf,
                                     ToDoubleTriFunction<V, V, A> costf) {
         PriorityQueue<MyBackLink<V, A>> frontier = new PriorityQueue<>(61);
         Map<V, MyBackLink<V, A>> frontierMap = new HashMap<>(61);
@@ -70,9 +70,9 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
             explored.add(node.getVertex());
 
             if (node.cost < maxCost) {
-                for (Map.Entry<V, A> entry : nextf.apply(vertex)) {
-                    V next = entry.getKey();
-                    A arrow = entry.getValue();
+                for (Arc<V, A> entry : nextf.apply(vertex)) {
+                    V next = entry.getEnd();
+                    A arrow = entry.getArrow();
                     double cost = node.cost + costf.applyAsDouble(vertex, next, arrow);
 
                     boolean isInFrontier = frontierMap.containsKey(next);

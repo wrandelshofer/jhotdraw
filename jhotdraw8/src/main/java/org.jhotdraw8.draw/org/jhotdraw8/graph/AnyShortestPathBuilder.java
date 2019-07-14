@@ -40,11 +40,11 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         super(graph, costf);
     }
 
-    public AnyShortestPathBuilder(@Nonnull Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction, @Nonnull ToDoubleFunction<A> costf) {
+    public AnyShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleFunction<A> costf) {
         super(nextNodesFunction, costf);
     }
 
-    public AnyShortestPathBuilder(@Nonnull Function<V, Iterable<Map.Entry<V, A>>> nextNodesFunction, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+    public AnyShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
         super(nextNodesFunction, costf);
     }
 
@@ -63,7 +63,7 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
     protected BackLink<V, A> search(@Nonnull V start,
                                     @Nonnull Predicate<V> goalPredicate,
                                     double maxCost,
-                                    Function<V, Iterable<Map.Entry<V, A>>> nextf,
+                                    Function<V, Iterable<Arc<V, A>>> nextf,
                                     ToDoubleTriFunction<V, V, A> costf) {
 
         // Priority queue: back-links with shortest distance from start come first.
@@ -86,9 +86,9 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
             }
             double ucost = node.cost;
 
-            for (Map.Entry<V, A> entry : nextf.apply(u)) {
-                V v = entry.getKey();
-                A a = entry.getValue();
+            for (Arc<V, A> entry : nextf.apply(u)) {
+                V v = entry.getEnd();
+                A a = entry.getArrow();
                 double weight = costf.applyAsDouble(u, v, a);
                 double oldvcost = getCost.apply(v);
                 double newvcost = ucost + weight;

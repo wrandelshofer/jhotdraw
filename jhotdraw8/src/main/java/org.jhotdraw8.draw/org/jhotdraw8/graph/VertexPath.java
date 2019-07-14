@@ -69,6 +69,10 @@ public class VertexPath<V> {
         return vertices.get(0);
     }
 
+    public V getSecondVertex() {
+        return vertices.get(1);
+    }
+
     public V getLastVertex() {
         return vertices.get(vertices.size() - 1);
     }

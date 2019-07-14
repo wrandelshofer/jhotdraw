@@ -147,9 +147,9 @@ public class GraphSearch {
         List<Edge<V, A>> edges = new ArrayList<>();
         for (V start : vertices) {
             done.add(start);
-            for (Map.Entry<V, A> entry : graph.getNextEntries(start)) {
-                V end = entry.getKey();
-                A arrow = entry.getValue();
+            for (Arc<V, A> entry : graph.getNextArcs(start)) {
+                V end = entry.getEnd();
+                A arrow = entry.getArrow();
                 if (!done.contains(end)) {
                     edges.add(new Edge<>(start, end, arrow, costf.applyAsDouble(start, end, arrow)));
                 }
