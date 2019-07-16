@@ -8,10 +8,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.ToDoubleTriFunction;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
@@ -47,19 +45,28 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
                                     double maxCost,
                                     Function<V, Iterable<Arc<V, A>>> nextf,
                                     ToDoubleTriFunction<V, V, A> costf) {
-        PriorityQueue<MyBackLink<V, A>> frontier = new PriorityQueue<>(61);
-        Map<V, MyBackLink<V, A>> frontierMap = new HashMap<>(61);
-        Set<V> explored = new HashSet<>(61);
 
-        MyBackLink<V, A> node = new MyBackLink<>(start, 0.0, null, null);
-        node.numPaths = 1;
-        frontier.add(node);
+        // Priority queue: back-links with shortest distance from start come first.
+        PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
+
+        // Map with numbers of paths to a vertex
+        Map<V, Integer> numPathsMap = new HashMap<>();
+
+        // Map with known costs from start. If an entry is missing, we assume infinity.
+        Map<V, Double> cost = new HashMap<>();
+        ToDoubleFunction<V> getCost = v -> cost.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
+
+        // Insert start itself in priority queue and initialize its cost as 0 and numpaths with 1.
+        queue.add(new MyBackLink<>(start, 0.0, null, null));
+        numPathsMap.put(start, 1);
+        cost.put(start, 0.0);
+
+        // Loop until we have reached the goal, or queue is exhausted.
         MyBackLink<V, A> found = null;
-        while (!frontier.isEmpty()) {
-            node = frontier.poll();
-            final V vertex = node.vertex;
-            frontierMap.remove(vertex);
-            if (goalPredicate.test(vertex)) {
+        while (!queue.isEmpty()) {
+            MyBackLink<V, A> node = queue.remove();
+            final V u = node.vertex;
+            if (goalPredicate.test(u)) {
                 if (found == null) {
                     found = node;
                     maxCost = node.cost;
@@ -67,46 +74,35 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
                     return null;
                 }
             }
-            explored.add(node.getVertex());
+            double ucost = node.cost;
 
-            if (node.cost < maxCost) {
-                for (Arc<V, A> entry : nextf.apply(vertex)) {
-                    V next = entry.getEnd();
-                    A arrow = entry.getArrow();
-                    double cost = node.cost + costf.applyAsDouble(vertex, next, arrow);
+            for (Arc<V, A> entry : nextf.apply(u)) {
+                V v = entry.getEnd();
+                A a = entry.getArrow();
+                double weight = costf.applyAsDouble(u, v, a);
+                double oldvcost = getCost.applyAsDouble(v);
+                double newvcost = ucost + weight;
 
-                    boolean isInFrontier = frontierMap.containsKey(next);
-                    if (!explored.contains(next) && !isInFrontier) {
-                        MyBackLink<V, A> lnk = new MyBackLink<>(next, cost, node, arrow);
-                        lnk.numPaths = node.numPaths;
-                        frontier.add(lnk);
-                        frontierMap.put(next, lnk);
-                    } else if (isInFrontier) {
-                        MyBackLink<V, A> lnk = frontierMap.get(next);
-                        if (cost < lnk.cost) {
-                            frontier.remove(lnk);
-                            lnk.cost = cost;
-                            lnk.parent = node;
-                            lnk.arrow = arrow;
-                            lnk.numPaths = node.numPaths;
-                            frontier.add(lnk);
-                        } else if (cost == lnk.cost) {
-                            lnk.numPaths++;
-                        }
-                    }
+                // If there is a shorter path to v through u.
+                if (newvcost < oldvcost && newvcost <= maxCost) {
+                    // Update cost of v.
+                    cost.put(v, newvcost);
+                    MyBackLink<V, A> e = new MyBackLink<>(v, newvcost, node, a);
+                    queue.add(e);
+                    // Update num paths to v
+                    numPathsMap.computeIfAbsent(v, k -> numPathsMap.get(u));
+                } else if (newvcost == oldvcost) {
+                    // Path to v is not unique
+                    numPathsMap.merge(v, 1, Integer::sum);
                 }
             }
         }
 
-        return found != null && found.numPaths == 1 ? found : null;
+        return found != null && numPathsMap.get(found.vertex) == 1 ? found : null;
     }
 
 
     protected static class MyBackLink<VV, AA> extends BackLink<VV, AA> {
-        /**
-         * Counts the number of paths to this node.
-         */
-        private int numPaths;
 
         protected final VV vertex;
         @Nullable
@@ -156,7 +152,7 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
             return "BackLink{" +
                     "vertex=" + vertex +
                     ", cost=" + cost +
-                    ", numPaths=" + numPaths +
+
                     '}';
         }
     }

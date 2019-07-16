@@ -133,6 +133,9 @@ public class IntAnyShortestPathBuilder<V, A> {
     }
 
 
+    /**
+     * XXX Replace algorithm with the one from {@link AnyShortestPathBuilder}.
+     */
     private NodeWithCost<V, A> findShortestPath(int start,
                                                 @Nonnull PriorityQueue<NodeWithCost<V, A>> frontier,
                                                 NodeWithCost<V, A>[] frontierMap,

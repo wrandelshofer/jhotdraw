@@ -71,13 +71,13 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
 
         // Map with known costs from start. If an entry is missing, we assume infinity.
         Map<V, Double> cost = new HashMap<>();
-        Function<V, Double> getCost = v -> cost.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
+        ToDoubleFunction<V> getCost = v -> cost.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
 
         // Insert start itself in priority queue and initialize its cost as 0.
         queue.add(new MyBackLink<>(start, 0.0, null, null));
         cost.put(start, 0.0);
 
-        // Loop until we have reached the goal, or frontier is exhausted.
+        // Loop until we have reached the goal, or queue is exhausted.
         while (!queue.isEmpty()) {
             MyBackLink<V, A> node = queue.remove();
             final V u = node.vertex;
@@ -90,12 +90,12 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
                 V v = entry.getEnd();
                 A a = entry.getArrow();
                 double weight = costf.applyAsDouble(u, v, a);
-                double oldvcost = getCost.apply(v);
+                double oldvcost = getCost.applyAsDouble(v);
                 double newvcost = ucost + weight;
 
                 // If there is a shorter path to v through u.
                 if (newvcost < oldvcost && newvcost <= maxCost) {
-                    // Updating cost of v.
+                    // Update cost of v.
                     cost.put(v, newvcost);
                     queue.add(new MyBackLink<>(v, newvcost, node, a));
                 }
