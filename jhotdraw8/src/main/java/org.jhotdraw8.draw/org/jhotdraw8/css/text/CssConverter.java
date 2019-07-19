@@ -137,4 +137,5 @@ public interface CssConverter<T> extends Converter<T> {
      */
     String getHelpText();
 
+    boolean isNullable();
 }

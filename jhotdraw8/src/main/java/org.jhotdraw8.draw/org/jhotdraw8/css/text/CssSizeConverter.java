@@ -113,6 +113,11 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         return null;
     }
 
+    @Override
+    public boolean isNullable() {
+        return nullable;
+    }
+
     @Nonnull
     @Override
     public String getHelpText() {

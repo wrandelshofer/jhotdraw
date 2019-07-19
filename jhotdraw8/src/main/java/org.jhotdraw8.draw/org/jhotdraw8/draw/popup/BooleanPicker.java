@@ -9,15 +9,21 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.util.Resources;
 
 public class BooleanPicker {
     private ContextMenu contextMenu;
+    MenuItem initialItem;
+    MenuItem noneItem;
+    MenuItem trueItem;
+    MenuItem falseItemm;
     private final SetProperty<Figure> figures = new SimpleSetProperty<>();
     private final ObjectProperty<WriteableStyleableMapAccessor<Boolean>> mapAccessor = new SimpleObjectProperty<>();
     private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>();
@@ -66,10 +72,10 @@ public class BooleanPicker {
     private void init() {
         Resources labels = DrawLabels.getResources();
         contextMenu = new ContextMenu();
-        MenuItem initialItem = new MenuItem();
-        MenuItem noneItem = new MenuItem();
-        MenuItem trueItem = new MenuItem();
-        MenuItem falseItemm = new MenuItem();
+        initialItem = new MenuItem();
+        noneItem = new MenuItem();
+        trueItem = new MenuItem();
+        falseItemm = new MenuItem();
         initialItem.setOnAction(this::setToInitialize);
         noneItem.setOnAction(this::setToNone);
         trueItem.setOnAction(this::setToTrue);
@@ -81,6 +87,13 @@ public class BooleanPicker {
         contextMenu.getItems().addAll(initialItem, noneItem, trueItem, falseItemm);
     }
 
+    private void update() {
+        Converter<Boolean> converter = getMapAccessor().getConverter();
+        if (converter instanceof CssConverter<?>) {
+            CssConverter<?> cssConverter = (CssConverter<?>) converter;
+            noneItem.setVisible(cssConverter.isNullable());
+        }
+    }
 
     private void setToNone(ActionEvent actionEvent) {
         DrawingModel m = getModel();
@@ -126,6 +139,7 @@ public class BooleanPicker {
 
 
     public void show(Node anchor, double screenX, double screenY) {
+        update();
         contextMenu.show(anchor, screenX, screenY);
     }
 }

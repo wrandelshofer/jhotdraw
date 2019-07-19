@@ -99,4 +99,9 @@ public class CssMappedConverter<E> implements CssConverter<E> {
         return null;
     }
 
+    @Override
+    public boolean isNullable() {
+        return nullable;
+    }
+
 }

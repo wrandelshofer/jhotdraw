@@ -80,6 +80,11 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
     }
 
     @Override
+    public boolean isNullable() {
+        return true;
+    }
+
+    @Override
     public String getHelpText() {
         return "Format of ⟨Set⟩: none | ⟨Item⟩, ⟨Item⟩, ...\n"
                 + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();

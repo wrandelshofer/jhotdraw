@@ -634,6 +634,11 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return null;
     }
 
+    @Override
+    public boolean isNullable() {
+        return true;
+    }
+
     @Nonnull
     @Override
     public String getHelpText() {

@@ -78,6 +78,11 @@ public class CssColorConverter implements CssConverter<CssColor> {
         return "Format of ⟨Color⟩: " + "⟨name⟩｜#⟨hex⟩｜rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)";
     }
 
+    @Override
+    public boolean isNullable() {
+        return nullable;
+    }
+
 
     @Nullable
     @Override

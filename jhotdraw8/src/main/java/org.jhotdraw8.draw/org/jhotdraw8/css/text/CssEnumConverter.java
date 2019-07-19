@@ -112,4 +112,9 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
         return null;
     }
 
+    @Override
+    public boolean isNullable() {
+        return nullable;
+    }
+
 }

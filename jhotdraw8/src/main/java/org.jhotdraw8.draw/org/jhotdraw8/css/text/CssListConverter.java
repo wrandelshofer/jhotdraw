@@ -177,6 +177,11 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
+    public boolean isNullable() {
+        return false;
+    }
+
+    @Override
     public String getHelpText() {
         return "Format of ⟨List⟩: ⟨Item⟩, ⟨Item⟩, ...\n"
                 + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
