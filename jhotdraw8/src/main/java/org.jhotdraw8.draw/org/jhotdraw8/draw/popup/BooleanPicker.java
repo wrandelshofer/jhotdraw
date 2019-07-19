@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
@@ -84,7 +85,11 @@ public class BooleanPicker {
         labels.configureMenuItem(noneItem, "value.none");
         labels.configureMenuItem(trueItem, "value.true");
         labels.configureMenuItem(falseItemm, "value.false");
-        contextMenu.getItems().addAll(initialItem, noneItem, trueItem, falseItemm);
+        contextMenu.getItems().addAll(
+                trueItem, falseItemm,
+                new SeparatorMenuItem(),
+                initialItem, noneItem
+        );
     }
 
     private void update() {
