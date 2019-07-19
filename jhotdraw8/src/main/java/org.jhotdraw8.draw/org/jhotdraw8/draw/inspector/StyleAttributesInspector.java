@@ -51,6 +51,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.popup.BooleanPicker;
 import org.jhotdraw8.draw.popup.CssColorPicker;
 import org.jhotdraw8.draw.popup.CssFontPicker;
+import org.jhotdraw8.draw.popup.EnumPicker;
 import org.jhotdraw8.draw.popup.FontFamilyPicker;
 import org.jhotdraw8.draw.popup.PaintablePicker;
 import org.jhotdraw8.draw.popup.Picker;
@@ -275,8 +276,14 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 @SuppressWarnings("unchecked") Picker<Object> picker
                         = (Picker<Object>) getAccessorPickerMap().get(selectedAccessor);
                 if (picker == null) {
-                    @SuppressWarnings("unchecked") Picker<Object> suppress = picker
-                            = (Picker<Object>) getValueTypePickerMap().get(selectedAccessor.getValueType());
+                    @SuppressWarnings("unchecked") Picker<Object> suppress =
+                            picker = (Picker<Object>) getValueTypePickerMap().get(selectedAccessor.getValueType());
+                }
+                if (picker == null && (selectedAccessor.getValueType().isEnum())) {
+                    EnumPicker<?> enumPicker = new EnumPicker<>();
+                    valueTypePickerMap.put(selectedAccessor.getValueType(), enumPicker);
+                    @SuppressWarnings("unchecked") Picker<Object> suppress =
+                            picker = (Picker<Object>) enumPicker;
                 }
                 if (picker != null) {
                     picker.setFigures(FXCollections.observableSet(selected));

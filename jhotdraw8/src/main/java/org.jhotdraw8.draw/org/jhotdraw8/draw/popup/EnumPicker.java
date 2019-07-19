@@ -12,11 +12,11 @@ import org.jhotdraw8.util.Resources;
 /**
  * Picker for boolean values.
  */
-public class BooleanPicker extends AbstractPicker<Boolean> {
+public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
 
-    public BooleanPicker() {
+    public EnumPicker() {
 
     }
 
@@ -24,23 +24,21 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
     private void init() {
         Resources labels = DrawLabels.getResources();
         contextMenu = new ContextMenu();
-        MenuItem initialItem;
-        MenuItem trueItem;
-        MenuItem falseItem;
-        initialItem = new MenuItem();
-        noneItem = new MenuItem();
-        trueItem = new MenuItem();
-        falseItem = new MenuItem();
+        Converter<T> converter = getMapAccessor().getConverter();
+        for (T enumConstant : getMapAccessor().getValueType().getEnumConstants()) {
+            String s = converter.toString(enumConstant);
+            MenuItem valueItem = new MenuItem(s);
+            valueItem.setOnAction(e -> applyValue(enumConstant));
+            contextMenu.getItems().add(valueItem);
+        }
+
+        MenuItem initialItem = new MenuItem();
         initialItem.setOnAction(e -> applyInitialValue());
+        noneItem = new MenuItem();
         noneItem.setOnAction(e -> applyValue(null));
-        trueItem.setOnAction(e -> applyValue(true));
-        falseItem.setOnAction(e -> applyValue(false));
         labels.configureMenuItem(initialItem, "value.initial");
         labels.configureMenuItem(noneItem, "value.none");
-        labels.configureMenuItem(trueItem, "value.true");
-        labels.configureMenuItem(falseItem, "value.false");
         contextMenu.getItems().addAll(
-                trueItem, falseItem,
                 new SeparatorMenuItem(),
                 initialItem, noneItem
         );
@@ -50,7 +48,7 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
         if (contextMenu == null) {
             init();
         }
-        Converter<Boolean> converter = getMapAccessor().getConverter();
+        Converter<T> converter = getMapAccessor().getConverter();
         if (converter instanceof CssConverter<?>) {
             CssConverter<?> cssConverter = (CssConverter<?>) converter;
             noneItem.setVisible(cssConverter.isNullable());
