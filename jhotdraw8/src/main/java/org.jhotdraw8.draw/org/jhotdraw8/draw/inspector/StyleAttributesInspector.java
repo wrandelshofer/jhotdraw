@@ -8,6 +8,8 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,10 +28,13 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.CssPrettyPrinter;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.StylesheetsManager;
@@ -41,8 +46,14 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.TextFontableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.popup.BooleanPicker;
+import org.jhotdraw8.draw.popup.CssColorPicker;
+import org.jhotdraw8.draw.popup.CssFontPicker;
+import org.jhotdraw8.draw.popup.FontFamilyPicker;
+import org.jhotdraw8.draw.popup.PaintablePicker;
+import org.jhotdraw8.draw.popup.Picker;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -55,6 +66,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -119,6 +131,17 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
     };
+
+    private final ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
+    private final ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
+
+    public ObservableMap<WriteableStyleableMapAccessor<?>, Picker<?>> getAccessorPickerMap() {
+        return accessorPickerMap.get();
+    }
+
+    public ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMapProperty() {
+        return accessorPickerMap;
+    }
 
     @Nullable
     private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
@@ -191,52 +214,79 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
         shownValues.selectedToggleProperty().addListener(this::updateShownValues);
+        initPickerMap();
+    }
+
+    public ObservableMap<Class<?>, Picker<?>> getValueTypePickerMap() {
+        return valueTypePickerMap.get();
+    }
+
+    public ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMapProperty() {
+        return valueTypePickerMap;
+    }
+
+    private void initPickerMap() {
+        ObservableMap<Class<?>, Picker<?>> tmap = getValueTypePickerMap();
+        tmap.put(Boolean.class, new BooleanPicker());
+        tmap.put(CssColor.class, new CssColorPicker());
+        tmap.put(Paintable.class, new PaintablePicker());
+        tmap.put(CssFont.class, new CssFontPicker());
+
+        ObservableMap<WriteableStyleableMapAccessor<?>, Picker<?>> amap = getAccessorPickerMap();
+        amap.put(TextFontableFigure.FONT_FAMILY, new FontFamilyPicker());
     }
 
     private void handleTextAreaClicked(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
             mouseEvent.consume();
             int caretPosition = textArea.getCaretPosition();
-            LookupEntry entry = getLookupEntryAt(caretPosition);
-            Declaration declaration = entry == null ? null : entry.declaration;
-            StyleRule styleRule = entry == null ? null : entry.styleRule;
-            System.out.println("declaration double clicked: " + declaration);
+            showPicker(caretPosition, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        }
+    }
 
-            if (drawingView != null && styleRule != null && declaration != null) {
-                Drawing d = drawingView.getDrawing();
-                drawingView.getSelectedFigures();
-                System.out.println("style rule: " + styleRule);
-                ObservableMap<String, Set<Figure>> pseudoStyles = createPseudoStyles(d);
+    private void showPicker(int caretPosition, double screenX, double screenY) {
+        LookupEntry entry = getLookupEntryAt(caretPosition);
+        Declaration declaration = entry == null ? null : entry.declaration;
+        StyleRule styleRule = entry == null ? null : entry.styleRule;
 
-                StylesheetsManager<Figure> sm = d.getStyleManager();
-                FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
-                fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-                Set<Figure> selected = new LinkedHashSet<>();
-                WriteableStyleableMapAccessor<?> selectedAccessor = null;
-                boolean multipleAccessorTypes = false;
-                for (Figure f : d.breadthFirstIterable()) {
-                    if (null != styleRule.getSelectorGroup().match(fsm, f)) {
-                        System.out.println("matches " + f);
-                        WriteableStyleableMapAccessor<?> accessor = fsm.getAccessor(f, declaration.getPropertyNamespace(), declaration.getPropertyName());
-                        if (selectedAccessor == null || selectedAccessor == accessor) {
-                            selectedAccessor = accessor;
-                            selected.add(f);
-                        } else {
-                            multipleAccessorTypes = true;
-                        }
-                    }
-                }
-                if (!multipleAccessorTypes && selectedAccessor != null && !selected.isEmpty()) {
-                    if (selectedAccessor.getValueType() == Boolean.class) {
-                        BooleanPicker cp = new BooleanPicker();
-                        cp.setFigures(FXCollections.observableSet(selected));
-                        cp.setMapAccessor((WriteableStyleableMapAccessor<Boolean>) selectedAccessor);
-                        cp.setDrawingView(drawingView);
-                        cp.show(textArea, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        if (drawingView != null && styleRule != null && declaration != null) {
+            Drawing d = drawingView.getDrawing();
+            drawingView.getSelectedFigures();
+            ObservableMap<String, Set<Figure>> pseudoStyles = createPseudoStyles(d);
+
+            StylesheetsManager<Figure> sm = d.getStyleManager();
+            FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
+            fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
+            Set<Figure> selected = new LinkedHashSet<>();
+            WriteableStyleableMapAccessor<?> selectedAccessor = null;
+            boolean multipleAccessorTypes = false;
+            for (Figure f : d.breadthFirstIterable()) {
+                if (null != styleRule.getSelectorGroup().match(fsm, f)) {
+                    WriteableStyleableMapAccessor<?> accessor = fsm.getAccessor(f, declaration.getPropertyNamespace(), declaration.getPropertyName());
+                    if (selectedAccessor == null || selectedAccessor == accessor) {
+                        selectedAccessor = accessor;
+                        selected.add(f);
+                    } else {
+                        multipleAccessorTypes = true;
                     }
                 }
             }
+            if (!multipleAccessorTypes && selectedAccessor != null && !selected.isEmpty()) {
+                @SuppressWarnings("unchecked") Picker<Object> picker
+                        = (Picker<Object>) getAccessorPickerMap().get(selectedAccessor);
+                if (picker == null) {
+                    @SuppressWarnings("unchecked") Picker<Object> suppress = picker
+                            = (Picker<Object>) getValueTypePickerMap().get(selectedAccessor.getValueType());
+                }
+                if (picker != null) {
+                    picker.setFigures(FXCollections.observableSet(selected));
+                    picker.setMapAccessor((WriteableStyleableMapAccessor<Object>) selectedAccessor);
+                    picker.setDrawingView(drawingView);
+                    picker.show(textArea, screenX, screenY);
+                }
+            }
         }
+
     }
 
 

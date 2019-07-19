@@ -33,8 +33,6 @@ import java.util.function.Consumer;
  * FontFamily := Word|Quoted;
  * </pre>
  * <p>
- * FIXME currently only parses the Color production
- * </p>
  *
  * @author Werner Randelshofer
  * @version $Id$
