@@ -63,9 +63,11 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     private final NonnullProperty<HandleType> multiHandleType = new NonnullProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
 
     {
-        multiHandleType.addListener((observable, oldValue, newValue) -> {
+        ChangeListener<Object> recreateHandles = (observable, oldValue, newValue) -> {
             recreateHandles();
-        });
+        };
+        multiHandleType.addListener(recreateHandles);
+        handleType.addListener(recreateHandles);
     }
 
     private final SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
