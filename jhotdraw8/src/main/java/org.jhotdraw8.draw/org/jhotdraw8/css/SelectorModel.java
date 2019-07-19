@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.css;
 
+import javafx.beans.property.MapProperty;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -21,6 +22,8 @@ import java.util.Set;
  * @version $Id$
  */
 public interface SelectorModel<T> {
+    @Nonnull
+    MapProperty<String, Set<T>> additionalPseudoClassStatesProperty();
 
     /**
      * Returns true if the element has an attribute with the specified name and

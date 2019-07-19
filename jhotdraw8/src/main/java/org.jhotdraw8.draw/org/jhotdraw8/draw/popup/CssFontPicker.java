@@ -8,6 +8,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.gui.fontchooser.FontDialog;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public class CssFontPicker extends AbstractPicker<CssFont> {
     private FontDialog dialog;
@@ -19,14 +20,14 @@ public class CssFontPicker extends AbstractPicker<CssFont> {
     }
 
     @Override
-    public void show(Node anchor, double screenX, double screenY) {
+    public void show(Node anchor, double screenX, double screenY,
+                     CssFont initialValue, BiConsumer<Boolean, CssFont> callback) {
         update(anchor);
-        CssFont currentValue = getCurrentValue();
-        Optional<String> s = dialog.showAndWait(currentValue == null ? null : currentValue.getFamily());
-        if (currentValue == null) {
-            s.ifPresent(v -> applyValue(new CssFont(v, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(13))));
+        Optional<String> s = dialog.showAndWait(initialValue == null ? null : initialValue.getFamily());
+        if (initialValue == null) {
+            s.ifPresent(v -> callback.accept(true, new CssFont(v, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(13))));
         } else {
-            s.ifPresent(v -> applyValue(new CssFont(v, FontWeight.NORMAL, FontPosture.REGULAR, currentValue.getSize())));
+            s.ifPresent(v -> callback.accept(true, new CssFont(v, FontWeight.NORMAL, FontPosture.REGULAR, initialValue.getSize())));
         }
     }
 }

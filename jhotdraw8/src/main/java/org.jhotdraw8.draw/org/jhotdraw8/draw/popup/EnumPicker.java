@@ -9,33 +9,38 @@ import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.util.Resources;
 
+import java.util.function.BiConsumer;
+
 /**
  * Picker for boolean values.
  */
 public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
+    private BiConsumer<Boolean, T> callback;
+    private Converter<T> converter;
+    private Class<T> enumClazz;
 
-    public EnumPicker() {
-
+    public EnumPicker(Class<T> enumClazz, Converter<?> converter) {
+        this.enumClazz = enumClazz;
+        this.converter = (Converter<T>) converter;
     }
 
 
     private void init() {
         Resources labels = DrawLabels.getResources();
         contextMenu = new ContextMenu();
-        Converter<T> converter = getMapAccessor().getConverter();
-        for (T enumConstant : getMapAccessor().getValueType().getEnumConstants()) {
+        for (T enumConstant : enumClazz.getEnumConstants()) {
             String s = converter.toString(enumConstant);
             MenuItem valueItem = new MenuItem(s);
-            valueItem.setOnAction(e -> applyValue(enumConstant));
+            valueItem.setOnAction(e -> callback.accept(true, enumConstant));
             contextMenu.getItems().add(valueItem);
         }
 
         MenuItem initialItem = new MenuItem();
-        initialItem.setOnAction(e -> applyInitialValue());
+        initialItem.setOnAction(e -> callback.accept(false, null));
         noneItem = new MenuItem();
-        noneItem.setOnAction(e -> applyValue(null));
+        noneItem.setOnAction(e -> callback.accept(true, null));
         labels.configureMenuItem(initialItem, "value.initial");
         labels.configureMenuItem(noneItem, "value.none");
         contextMenu.getItems().addAll(
@@ -44,19 +49,20 @@ public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
         );
     }
 
-    private void update() {
+    private void update(T initialValue) {
         if (contextMenu == null) {
             init();
         }
-        Converter<T> converter = getMapAccessor().getConverter();
         if (converter instanceof CssConverter<?>) {
             CssConverter<?> cssConverter = (CssConverter<?>) converter;
             noneItem.setVisible(cssConverter.isNullable());
         }
     }
 
-    public void show(Node anchor, double screenX, double screenY) {
-        update();
+    public void show(Node anchor, double screenX, double screenY,
+                     T initialValue, BiConsumer<Boolean, T> callback) {
+        update(initialValue);
+        this.callback = callback;
         contextMenu.show(anchor, screenX, screenY);
     }
 }

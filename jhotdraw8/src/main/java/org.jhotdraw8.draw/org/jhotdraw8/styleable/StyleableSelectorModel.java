@@ -19,7 +19,6 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.StreamCssTokenizer;
-import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -37,10 +36,10 @@ import java.util.stream.Collectors;
  */
 public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
-    private final MapProperty<String, Set<Element>> additionalPseudoClassStates = new SimpleMapProperty<>();
+    private final MapProperty<String, Set<Styleable>> additionalPseudoClassStates = new SimpleMapProperty<>();
 
     @Nonnull
-    public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
+    public MapProperty<String, Set<Styleable>> additionalPseudoClassStatesProperty() {
         return additionalPseudoClassStates;
     }
 

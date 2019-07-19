@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import org.jhotdraw8.gui.fontchooser.FontDialog;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public class FontFamilyPicker extends AbstractPicker<String> {
     private FontDialog dialog;
@@ -15,10 +16,11 @@ public class FontFamilyPicker extends AbstractPicker<String> {
     }
 
     @Override
-    public void show(Node anchor, double screenX, double screenY) {
+    public void show(Node anchor, double screenX, double screenY,
+                     String initialValue, BiConsumer<Boolean, String> callback) {
         update(anchor);
-        Optional<String> s = dialog.showAndWait(getCurrentValue());
-        s.ifPresent(this::applyValue);
+        Optional<String> s = dialog.showAndWait(initialValue);
+        s.ifPresent(v -> callback.accept(true, v));
     }
 
 

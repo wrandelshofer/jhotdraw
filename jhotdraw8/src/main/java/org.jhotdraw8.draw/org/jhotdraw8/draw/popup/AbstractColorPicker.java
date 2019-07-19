@@ -4,25 +4,27 @@ import com.sun.javafx.scene.control.skin.CustomColorDialog;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 
+import java.util.function.BiConsumer;
+
 public abstract class AbstractColorPicker<T> extends AbstractPicker<T> {
     private CustomColorDialog dialog;
 
-    private void update(Node anchor) {
+    private void update(Node anchor, Color initialValue, BiConsumer<Boolean, Color> callback) {
         if (dialog == null) {
             dialog = new CustomColorDialog(anchor.getScene().getWindow());
-            dialog.setOnUse(() -> applyColor(dialog.getCustomColor()));
-            dialog.setOnSave(() -> applyColor(dialog.getCustomColor()));
+            dialog.setOnUse(() -> callback.accept(true, dialog.getCustomColor()));
+            dialog.setOnSave(() -> callback.accept(true, dialog.getCustomColor()));
         }
-        dialog.setCurrentColor(getCurrentColor());
+        dialog.setCurrentColor(initialValue);
     }
 
-    @Override
-    public void show(Node anchor, double screenX, double screenY) {
-        update(anchor);
+
+    protected void abstractShow(Node anchor, double screenX, double screenY,
+                                Color initialValue, BiConsumer<Boolean, Color> callback) {
+        update(anchor, initialValue, callback);
         dialog.show();
+
     }
 
-    protected abstract Color getCurrentColor();
 
-    protected abstract void applyColor(Color customColor);
 }

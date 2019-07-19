@@ -41,6 +41,7 @@ import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
+import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
@@ -215,26 +216,48 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
         shownValues.selectedToggleProperty().addListener(this::updateShownValues);
-        initPickerMap();
     }
 
-    public ObservableMap<Class<?>, Picker<?>> getValueTypePickerMap() {
-        return valueTypePickerMap.get();
-    }
 
-    public ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMapProperty() {
-        return valueTypePickerMap;
-    }
-
-    private void initPickerMap() {
-        ObservableMap<Class<?>, Picker<?>> tmap = getValueTypePickerMap();
-        tmap.put(Boolean.class, new BooleanPicker());
-        tmap.put(CssColor.class, new CssColorPicker());
-        tmap.put(Paintable.class, new PaintablePicker());
-        tmap.put(CssFont.class, new CssFontPicker());
-
+    private <T> Picker<T> createAndCachePicker(WriteableStyleableMapAccessor<T> acc) {
         ObservableMap<WriteableStyleableMapAccessor<?>, Picker<?>> amap = getAccessorPickerMap();
-        amap.put(TextFontableFigure.FONT_FAMILY, new FontFamilyPicker());
+        @SuppressWarnings("unchecked") Picker<T> picker = (Picker<T>) amap.get(acc);
+        if (picker == null) {
+            picker = createPicker(acc);
+            amap.put(acc, picker);
+        }
+        return picker;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> Picker<T> createPicker(WriteableStyleableMapAccessor<T> acc) {
+        Class<T> type = acc.getValueType();
+        boolean nullable = true;
+        if (acc.getConverter() instanceof CssConverter) {
+            CssConverter converter = (CssConverter) acc.getConverter();
+            nullable = converter.isNullable();
+        }
+        Picker<?> p = null;
+        if (type == Boolean.class) {
+            p = new BooleanPicker(nullable);
+        } else if (type == CssColor.class) {
+            p = new CssColorPicker();
+        } else if (type == Paintable.class) {
+            p = new PaintablePicker();
+        } else if (type == CssFont.class) {
+            p = new CssFontPicker();
+        } else if (acc == TextFontableFigure.FONT_FAMILY) {
+            p = new FontFamilyPicker();
+        } else if (type.isEnum()) {
+            Class<? extends Enum> enumClazz = (Class<? extends Enum>) type;
+            p = new EnumPicker<>(enumClazz, acc.getConverter());
+
+
+        }
+
+        return (Picker<T>) p;
+
+
     }
 
     private void handleTextAreaClicked(MouseEvent mouseEvent) {
@@ -273,23 +296,31 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 }
             }
             if (!multipleAccessorTypes && selectedAccessor != null && !selected.isEmpty()) {
-                @SuppressWarnings("unchecked") Picker<Object> picker
-                        = (Picker<Object>) getAccessorPickerMap().get(selectedAccessor);
-                if (picker == null) {
-                    @SuppressWarnings("unchecked") Picker<Object> suppress =
-                            picker = (Picker<Object>) getValueTypePickerMap().get(selectedAccessor.getValueType());
-                }
-                if (picker == null && (selectedAccessor.getValueType().isEnum())) {
-                    EnumPicker<?> enumPicker = new EnumPicker<>();
-                    valueTypePickerMap.put(selectedAccessor.getValueType(), enumPicker);
-                    @SuppressWarnings("unchecked") Picker<Object> suppress =
-                            picker = (Picker<Object>) enumPicker;
-                }
+                @SuppressWarnings("unchecked")
+                Picker<Object> picker = (Picker<Object>) createAndCachePicker(selectedAccessor);
+
                 if (picker != null) {
-                    picker.setFigures(FXCollections.observableSet(selected));
-                    picker.setMapAccessor((WriteableStyleableMapAccessor<Object>) selectedAccessor);
-                    picker.setDrawingView(drawingView);
-                    picker.show(textArea, screenX, screenY);
+                    ArrayList<Figure> figures = new ArrayList<>(selected);
+                    Object initialValue = null;
+                    WriteableStyleableMapAccessor<Object> finalSelectedAccessor = (WriteableStyleableMapAccessor<Object>) selectedAccessor;
+                    for (Figure f : figures) {
+                        initialValue = f.get(finalSelectedAccessor);
+                        break;
+                    }
+                    DrawingModel model = drawingView.getModel();
+                    picker.show(textArea, screenX, screenY,
+                            initialValue, (b, o) -> {
+                                if (b) {
+                                    for (Figure f : figures) {
+                                        model.set(f, finalSelectedAccessor, o);
+                                    }
+                                } else {
+                                    for (Figure f : figures) {
+                                        model.remove(f, finalSelectedAccessor);
+                                    }
+                                }
+
+                            });
                 }
             }
         }

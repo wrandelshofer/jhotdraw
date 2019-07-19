@@ -1,18 +1,17 @@
 package org.jhotdraw8.draw.popup;
 
-import javafx.scene.paint.Color;
+import javafx.scene.Node;
 import org.jhotdraw8.css.CssColor;
+
+import java.util.function.BiConsumer;
 
 public class CssColorPicker extends AbstractColorPicker<CssColor> {
 
-
     @Override
-    protected Color getCurrentColor() {
-        CssColor currentValue = getCurrentValue();
-        return currentValue == null ? null : currentValue.getColor();
-    }
-
-    protected void applyColor(Color customColor) {
-        applyValue(new CssColor(customColor));
+    public void show(Node anchor, double screenX, double screenY, CssColor initialValue, BiConsumer<Boolean, CssColor> callback) {
+        abstractShow(anchor, screenX, screenY,
+                initialValue == null ? null : initialValue.getColor(),
+                (b, v) -> callback.accept(b, v == null ? null : new CssColor(v))
+        );
     }
 }

@@ -4,10 +4,10 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.util.Resources;
+
+import java.util.function.BiConsumer;
 
 /**
  * Picker for boolean values.
@@ -15,13 +15,14 @@ import org.jhotdraw8.util.Resources;
 public class BooleanPicker extends AbstractPicker<Boolean> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
+    private boolean nullable;
 
-    public BooleanPicker() {
-
+    public BooleanPicker(boolean nullable) {
+        this.nullable = nullable;
     }
 
 
-    private void init() {
+    private void init(BiConsumer<Boolean, Boolean> callback) {
         Resources labels = DrawLabels.getResources();
         contextMenu = new ContextMenu();
         MenuItem initialItem;
@@ -31,10 +32,10 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
         noneItem = new MenuItem();
         trueItem = new MenuItem();
         falseItem = new MenuItem();
-        initialItem.setOnAction(e -> applyInitialValue());
-        noneItem.setOnAction(e -> applyValue(null));
-        trueItem.setOnAction(e -> applyValue(true));
-        falseItem.setOnAction(e -> applyValue(false));
+        initialItem.setOnAction(e -> callback.accept(false, null));
+        noneItem.setOnAction(e -> callback.accept(true, null));
+        trueItem.setOnAction(e -> callback.accept(true, true));
+        falseItem.setOnAction(e -> callback.accept(true, false));
         labels.configureMenuItem(initialItem, "value.initial");
         labels.configureMenuItem(noneItem, "value.none");
         labels.configureMenuItem(trueItem, "value.true");
@@ -46,19 +47,15 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
         );
     }
 
-    private void update() {
-        if (contextMenu == null) {
-            init();
-        }
-        Converter<Boolean> converter = getMapAccessor().getConverter();
-        if (converter instanceof CssConverter<?>) {
-            CssConverter<?> cssConverter = (CssConverter<?>) converter;
-            noneItem.setVisible(cssConverter.isNullable());
-        }
+    private void update(BiConsumer<Boolean, Boolean> callback) {
+        init(callback);
+        noneItem.setVisible(nullable);
     }
 
-    public void show(Node anchor, double screenX, double screenY) {
-        update();
+    @Override
+    public void show(Node anchor, double screenX, double screenY,
+                     Boolean initialValue, BiConsumer<Boolean, Boolean> callback) {
+        update(callback);
         contextMenu.show(anchor, screenX, screenY);
     }
 }
