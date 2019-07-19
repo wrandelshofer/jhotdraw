@@ -64,10 +64,10 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(DrawingView view) {
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         poly1.setStroke(Color.WHITE);
         poly2.setStroke(Paintable.getPaint(color));
-        int strokeWidth = view.getHandleStrokeWidth();
+        int strokeWidth = view.getEditor().getHandleStrokeWidth();
         poly1.setStrokeWidth(strokeWidth + 2);
         poly2.setStrokeWidth(strokeWidth);
         return node;

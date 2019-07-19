@@ -115,7 +115,7 @@ import java.util.Map;
  * <dt>{static}</dt><dd>Item is shown with static item font.</dd>
  * </dl>
  */
-public class MLClassifierFigure extends AbstractLeafFigure
+public class UMLClassifierShapeFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,
@@ -143,7 +143,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
 
     private Path path;
 
-    public MLClassifierFigure() {
+    public UMLClassifierShapeFigure() {
     }
 
     @Override
@@ -175,6 +175,7 @@ public class MLClassifierFigure extends AbstractLeafFigure
         ObservableList<Node> children = g.getChildren();
         Path p = (Path) children.get(0);
 
+        applyHideableFigureProperties(ctx, node);
         applyShapeableProperties(ctx, p);
         applyStrokableFigureProperties(ctx, p);
         applyFillableFigureProperties(ctx, p);

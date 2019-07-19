@@ -211,6 +211,8 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      */
     @Nullable <T> T set(@Nonnull Figure figure, MapAccessor<T> key, @Nullable T newValue);
 
+    @Nullable <T> T remove(@Nonnull Figure figure, MapAccessor<T> key);
+
     /**
      * Sets the specified property on the figure and fires appropriate
      * {@code DrawingModelEvent}s.

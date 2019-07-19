@@ -157,7 +157,7 @@ public class ConnectionTool extends AbstractTool {
         requestFocus();
         figure = figureFactory.get();
         if (handleType != null) {
-            view.setHandleType(handleType);
+            view.getEditor().setHandleType(handleType);
         }
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);

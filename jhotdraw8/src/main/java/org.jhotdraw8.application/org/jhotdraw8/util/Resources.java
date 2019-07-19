@@ -3,6 +3,7 @@ package org.jhotdraw8.util;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.annotation.Nonnull;
@@ -143,6 +144,20 @@ public interface Resources {
      * @param argument the argument
      */
     default void configureMenu(@Nonnull Menu menu, String argument) {
+        menu.setText(getTextProperty(argument));
+        menu.setText(getTextProperty(argument));
+        menu.setAccelerator(getAcceleratorProperty(argument));
+        menu.setGraphic(getSmallIconProperty(argument, getBaseClass()));
+    }
+
+    /**
+     * Configures a menu item with a text, an accelerator, a mnemonic and a menu
+     * icon.
+     *
+     * @param menu     the menu item
+     * @param argument the argument
+     */
+    default void configureMenuItem(@Nonnull MenuItem menu, String argument) {
         menu.setText(getTextProperty(argument));
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));

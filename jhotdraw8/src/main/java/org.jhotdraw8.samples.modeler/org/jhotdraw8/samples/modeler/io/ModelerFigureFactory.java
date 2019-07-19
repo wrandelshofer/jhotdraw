@@ -80,9 +80,9 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.io.AbstractFigureFactory;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.modeler.figure.MLClassifierFigure;
 import org.jhotdraw8.samples.modeler.figure.MLDiagramFigure;
-import org.jhotdraw8.samples.modeler.figure.MLEdgeFigure;
+import org.jhotdraw8.samples.modeler.figure.UMLClassifierShapeFigure;
+import org.jhotdraw8.samples.modeler.figure.UMLEdgeFigure;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 import org.jhotdraw8.samples.modeler.text.XmlUmlCompartmentalizedDataConverter;
 import org.jhotdraw8.text.DefaultConverter;
@@ -132,8 +132,8 @@ public class ModelerFigureFactory extends AbstractFigureFactory {
         addFigureKeysAndNames("Polygon", PolygonFigure.class);
         addFigureKeysAndNames("Page", PageFigure.class);
         addFigureKeysAndNames("CombinedPath", CombinedPathFigure.class);
-        addFigureKeysAndNames("MLClassifier", MLClassifierFigure.class);
-        addFigureKeysAndNames("MLEdge", MLEdgeFigure.class);
+        addFigureKeysAndNames("MLClassifier", UMLClassifierShapeFigure.class);
+        addFigureKeysAndNames("MLEdge", UMLEdgeFigure.class);
         addFigureKeysAndNames("MLDiagram", MLDiagramFigure.class);
 
         {

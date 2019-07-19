@@ -280,6 +280,27 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
+    public <T> T remove(@Nonnull Figure figure, @Nonnull MapAccessor<T> key) {
+        if (key instanceof Key<?>) {
+            T oldValue = figure.remove((Key<T>) key);
+            // event will be fired by method handlePropertyChanged if newValue differs from oldValue
+            @SuppressWarnings("unchecked")
+            Key<Object> keyObject = (Key<Object>) key;
+            handlePropertyChanged(figure, keyObject, oldValue, null);
+            return oldValue;
+        } else {
+            mapProxy.setFigure(figure);
+            mapProxy.setTarget(figure.getProperties());
+            T oldValue = key.remove(mapProxy);
+            // event will be fired by mapProxy
+            mapProxy.setFigure(null);
+            mapProxy.setTarget(null);
+            return oldValue;
+        }
+
+    }
+
+    @Override
     public <T> T remove(@Nonnull Figure figure, @Nonnull Key<T> key) {
         T oldValue = figure.remove(key);
         // event will be fired by method handlePropertyChanged

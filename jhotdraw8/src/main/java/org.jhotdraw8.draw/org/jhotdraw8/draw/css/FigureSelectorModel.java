@@ -398,6 +398,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         return k == null ? null : k.getConverter();
     }
 
+    @Nullable
+    public WriteableStyleableMapAccessor<?> getAccessor(@Nonnull Figure element, @Nullable String namespace, String attributeName) {
+        @SuppressWarnings("unchecked")
+        WriteableStyleableMapAccessor<Object> k = (WriteableStyleableMapAccessor<Object>) findKey(element, namespace, attributeName);
+        return k;
+    }
+
     private Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> getMetaMap(Figure elem) {
 
         Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = figureToMetaMap.get(elem.getClass());

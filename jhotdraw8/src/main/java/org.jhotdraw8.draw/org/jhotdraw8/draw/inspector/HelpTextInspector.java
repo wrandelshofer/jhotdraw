@@ -61,7 +61,7 @@ public class HelpTextInspector implements Inspector {
         }
         view = newValue;
         if (view != null) {
-            textArea.textProperty().bind(view.helpTextProperty());
+            textArea.textProperty().bind(view.getEditor().helpTextProperty());
         }
     }
 

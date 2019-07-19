@@ -39,7 +39,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class MLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
+public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, MarkerFillableFigure, MarkerStrokableFigure, StrokableFigure,
         MarkerStartableFigure, MarkerEndableFigure, MarkerSegmentableFigure, StrokeCuttableFigure,
@@ -54,15 +54,15 @@ public class MLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
     public final static NullableBooleanStyleableKey TARGET_OWNED = MLConstants.TARGET_OWNED;
     public final static BooleanStyleableKey KEYWORD_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
 
-    public MLEdgeFigure() {
+    public UMLEdgeFigure() {
         this(0, 0, 1, 1);
     }
 
-    public MLEdgeFigure(Point2D start, Point2D end) {
+    public UMLEdgeFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
-    public MLEdgeFigure(double startX, double startY, double endX, double endY) {
+    public UMLEdgeFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
     }
 

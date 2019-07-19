@@ -130,15 +130,15 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     @Override
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         if (oldValue != null) {
-            handleColorProperty.unbindBidirectional(oldValue.handleColorProperty());
-            handleSizeProperty.unbindBidirectional(oldValue.handleSizeProperty());
-            handleStrokeWidthProperty.unbindBidirectional(oldValue.handleStrokeWidthProperty());
+            handleColorProperty.unbindBidirectional(oldValue.getEditor().handleColorProperty());
+            handleSizeProperty.unbindBidirectional(oldValue.getEditor().handleSizeProperty());
+            handleStrokeWidthProperty.unbindBidirectional(oldValue.getEditor().handleStrokeWidthProperty());
         }
         try {
             if (newValue != null) {
-                handleColorProperty.bindBidirectional(newValue.handleColorProperty());
-                handleSizeProperty.bindBidirectional(newValue.handleSizeProperty());
-                handleStrokeWidthProperty.bindBidirectional(newValue.handleStrokeWidthProperty());
+                handleColorProperty.bindBidirectional(newValue.getEditor().handleColorProperty());
+                handleSizeProperty.bindBidirectional(newValue.getEditor().handleSizeProperty());
+                handleStrokeWidthProperty.bindBidirectional(newValue.getEditor().handleStrokeWidthProperty());
             }
         } catch (Throwable t) {
             t.printStackTrace();

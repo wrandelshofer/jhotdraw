@@ -372,10 +372,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      */
     @Override
     public void activate(DrawingEditor editor) {
-        DrawingView v = editor.getActiveDrawingView();
-        if (v != null) {
-            v.setHelpText(getHelpText());
-        }
+        editor.setHelpText(getHelpText());
     }
 
     /**

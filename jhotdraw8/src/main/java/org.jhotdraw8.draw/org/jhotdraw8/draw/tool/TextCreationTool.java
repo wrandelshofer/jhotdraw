@@ -142,7 +142,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
 
     private void startEditing(@Nonnull TextEditableFigure.TextEditorData data, @Nonnull DrawingView dv) {
         dv.getSelectedFigures().clear();
-        dv.setHandleType(HandleType.SELECT);
+        dv.getEditor().setHandleType(HandleType.SELECT);
         dv.getSelectedFigures().add(data.figure);
         editorData = data;
         textArea.setManaged(false);

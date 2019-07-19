@@ -74,11 +74,11 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
-        double size = view.getHandleSize();
+        double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
         }
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         node.setBorder(borderFactory.apply(color.getColor()));
         return node;
     }

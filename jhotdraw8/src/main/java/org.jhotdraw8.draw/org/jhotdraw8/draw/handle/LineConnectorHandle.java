@@ -87,11 +87,11 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
-        double size = view.getHandleSize();
+        double size = view.getEditor().getHandleSize();
         if (targetNode.getWidth() != size) {
             targetNode.resize(size, size);
         }
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         Color color1 = (Color) Paintable.getPaint(color);
         targetNode.setBorder(REGION_BORDER.apply(color.getColor()));
         REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(color1, null, null));

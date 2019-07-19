@@ -65,10 +65,10 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Node getNode(DrawingView view) {
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         path1.setStroke(Color.WHITE);
         path2.setStroke(Paintable.getPaint(color));
-        int strokeWidth = view.getHandleStrokeWidth();
+        int strokeWidth = view.getEditor().getHandleStrokeWidth();
         path1.setStrokeWidth(strokeWidth + 2);
         path2.setStrokeWidth(strokeWidth);
         return node;

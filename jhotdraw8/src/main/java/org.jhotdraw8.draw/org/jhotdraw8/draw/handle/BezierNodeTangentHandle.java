@@ -92,7 +92,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Polyline getNode(DrawingView view) {
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         node.setStroke(color.getColor());
         return node;
     }

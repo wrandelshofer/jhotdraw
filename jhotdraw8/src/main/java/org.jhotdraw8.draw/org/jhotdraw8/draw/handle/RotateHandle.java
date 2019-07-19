@@ -134,12 +134,12 @@ public class RotateHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Group getNode(DrawingView view) {
-        double size = view.getHandleSize();
+        double size = view.getEditor().getHandleSize();
         lineLength = size * 1.5;
         if (pickNode.getWidth() != size) {
             pickNode.resize(size, size);
         }
-        Paint color = Paintable.getPaint(view.getHandleColor());
+        Paint color = Paintable.getPaint(view.getEditor().getHandleColor());
         line.setStroke(color);
         BorderStroke borderStroke = pickNode.getBorder().getStrokes().get(0);
         if (borderStroke == null || !borderStroke.getTopStroke().equals(color)) {

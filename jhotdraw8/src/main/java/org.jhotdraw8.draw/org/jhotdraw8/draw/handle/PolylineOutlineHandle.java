@@ -77,10 +77,10 @@ public class PolylineOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(DrawingView view) {
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         poly1.setStroke(Color.WHITE);
         poly2.setStroke(Paintable.getPaint(color));
-        int strokeWidth = view.getHandleStrokeWidth();
+        int strokeWidth = view.getEditor().getHandleStrokeWidth();
         poly1.setStrokeWidth(strokeWidth + 2);
         poly2.setStrokeWidth(strokeWidth);
         return node;
@@ -111,7 +111,8 @@ public class PolylineOutlineHandle extends AbstractHandle {
         Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
         Point2D pInLocal = owner.worldToLocal(pInDrawing);
 
-        double tolerance = Transforms.deltaTransform(owner.getWorldToLocal(), Transforms.deltaTransform(dv.getViewToWorld(), dv.getTolerance(), dv.getTolerance())).getX();
+        double tolerance = Transforms.deltaTransform(owner.getWorldToLocal(), Transforms.deltaTransform(dv.getViewToWorld(),
+                dv.getEditor().getTolerance(), dv.getEditor().getTolerance())).getX();
         double px = pInLocal.getX();
         double py = pInLocal.getY();
 

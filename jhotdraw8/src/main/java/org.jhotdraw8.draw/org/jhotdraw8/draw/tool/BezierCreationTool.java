@@ -100,7 +100,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
                 } else {
                     dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
                     dv.getSelectedFigures().clear();
-                    dv.setHandleType(HandleType.POINT);
+                    dv.getEditor().setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);
                 }
                 createdFigure = null;

@@ -386,18 +386,18 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     protected void createHandles(@Nonnull Map<Figure, List<Handle>> handles) {
         ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size() > 1) {
-            if (getAnchorHandleType() != null) {
+            if (getEditor().getAnchorHandleType() != null) {
                 Figure anchor = selection.get(0);
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
-                anchor.createHandles(getAnchorHandleType(), list);
+                anchor.createHandles(getEditor().getAnchorHandleType(), list);
             }
-            if (getLeadHandleType() != null) {
+            if (getEditor().getLeadHandleType() != null) {
                 Figure anchor = selection.get(selection.size() - 1);
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
-                anchor.createHandles(getLeadHandleType(), list);
+                anchor.createHandles(getEditor().getLeadHandleType(), list);
             }
         }
-        HandleType handleType = getHandleType();
+        HandleType handleType = getEditor().getHandleType();
         ArrayList<Handle> list = new ArrayList<>();
         for (Figure figure : selection) {
             figure.createHandles(handleType, list);
@@ -456,7 +456,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
         Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy),
-                getViewToWorld().deltaTransform(getTolerance(), getTolerance()).getX());
+                getViewToWorld().deltaTransform(getEditor().getTolerance(), getEditor().getTolerance()).getX());
         return f;
     }
 
@@ -475,7 +475,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Nullable
     @Override
     public Figure findFigure(double vx, double vy, @Nonnull Set<Figure> figures) {
-        return findFigure(vx, vy, figures, getTolerance());
+        return findFigure(vx, vy, figures, getEditor().getTolerance());
     }
 
     /**
@@ -659,7 +659,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void findFiguresRecursive(Parent p, @Nonnull Point2D pp, @Nonnull List<Figure> found, boolean decompose) {
-        double tolerance = getTolerance();
+        double tolerance = getEditor().getTolerance();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -700,10 +700,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             if (!handle.isSelectable()) {
                 continue;
             }
-            if (handle.contains(this, vx, vy, getTolerance(), getTolerance() * getTolerance())) {
+            if (handle.contains(this, vx, vy, getEditor().getTolerance(), getEditor().getTolerance() * getEditor().getTolerance())) {
                 return handle;
             } else {
-                if (contains(node, new Point2D(vx, vy), getTolerance())) {
+                if (contains(node, new Point2D(vx, vy), getEditor().getTolerance())) {
                     return handle;
                 }
             }

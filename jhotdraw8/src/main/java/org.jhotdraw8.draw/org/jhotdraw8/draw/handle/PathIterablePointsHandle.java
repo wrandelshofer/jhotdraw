@@ -63,7 +63,7 @@ public class PathIterablePointsHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Node getNode(DrawingView view) {
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         node.setStroke(Paintable.getPaint(color));
         return node;
     }

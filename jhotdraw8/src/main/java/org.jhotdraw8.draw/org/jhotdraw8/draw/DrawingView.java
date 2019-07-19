@@ -4,7 +4,6 @@
 package org.jhotdraw8.draw;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -18,14 +17,12 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.NonnullProperty;
-import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Figures;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -111,27 +108,14 @@ public interface DrawingView extends RenderContext {
      */
     String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
     /**
-     * The name of the helpText property.
-     */
-    String HELP_TEXT_PROPERTY = "helpText";
-    /**
      * The name of the drawing property.
      */
     String DRAWING_PROPERTY = "drawing";
     /**
-     * The name of the handle type property for single selection.
+     * The name of the editor property.
      */
-    String HANDLE_TYPE_PROPERTY = "handleType";
-    /**
-     * The name of the handle type property for multiple selection.
-     */
-    String MULTI_HANDLE_TYPE_PROPERTY = "multiHandleType";
+    String EDITOR_PROPERTY = "editor";
 
-    String HANDLE_SIZE_PROPERTY = "handleSize";
-
-    String HANDLE_STROKE_WDITH_PROPERTY = "handleStrokeWidth";
-
-    String HANDLE_COLOR_PROPERTY = "handleColor";
 
     // ---
     // properties
@@ -148,11 +132,16 @@ public interface DrawingView extends RenderContext {
     /**
      * The drawing model.
      *
-     * @return the drawing model property, with {@code getBean()} returning this
-     * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
+     * @return the drawing model property
      */
     ReadOnlyObjectProperty<Drawing> drawingProperty();
 
+    /**
+     * The drawing editor.
+     *
+     * @return the editor property
+     */
+    ObjectProperty<DrawingEditor> editorProperty();
     /**
      * The active layer of the drawing.
      *
@@ -228,33 +217,7 @@ public interface DrawingView extends RenderContext {
      */
     ObjectProperty<Handle> activeHandleProperty();
 
-    /**
-     * The handle type for single selection.
-     *
-     * @return the handle key
-     */
-    NonnullProperty<HandleType> handleTypeProperty();
 
-    /**
-     * The handle type used for marking the anchor of a selection.
-     *
-     * @return the handle key
-     */
-    ObjectProperty<HandleType> anchorHandleTypeProperty();
-
-    /**
-     * The handle type used for marking the lead of a selection.
-     *
-     * @return the handle key
-     */
-    ObjectProperty<HandleType> leadHandleTypeProperty();
-
-    /**
-     * The handle type for multiple selection.
-     *
-     * @return the handle key
-     */
-    NonnullProperty<HandleType> multiHandleTypeProperty();
 
     /**
      * The clipboard output format.
@@ -467,6 +430,14 @@ public interface DrawingView extends RenderContext {
         return modelProperty().get().getDrawing();
     }
 
+    default void setEditor(DrawingEditor newValue) {
+        editorProperty().set(newValue);
+    }
+
+    default DrawingEditor getEditor() {
+        return editorProperty().get();
+    }
+
     default void setConstrainer(Constrainer newValue) {
         constrainerProperty().set(newValue);
     }
@@ -492,34 +463,6 @@ public interface DrawingView extends RenderContext {
     default Handle getActiveHandle() {
         return activeHandleProperty().get();
     }
-
-    default void setHandleType(@Nullable HandleType newValue) {
-        handleTypeProperty().set(newValue);
-    }
-
-    @Nullable
-    default HandleType getHandleType() {
-        return handleTypeProperty().get();
-    }
-
-    default void setAnchorHandleType(@Nullable HandleType newValue) {
-        anchorHandleTypeProperty().set(newValue);
-    }
-
-    @Nullable
-    default HandleType getAnchorHandleType() {
-        return anchorHandleTypeProperty().get();
-    }
-
-    default void setLeadHandleType(@Nullable HandleType newValue) {
-        leadHandleTypeProperty().set(newValue);
-    }
-
-    @Nullable
-    default HandleType getLeadHandleType() {
-        return leadHandleTypeProperty().get();
-    }
-
     @Nullable
     default Figure getSelectionLead() {
         ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
@@ -532,14 +475,6 @@ public interface DrawingView extends RenderContext {
         return selection.isEmpty() ? null : selection.iterator().next();
     }
 
-    default void setMultiHandleType(@Nullable HandleType newValue) {
-        multiHandleTypeProperty().set(newValue);
-    }
-
-    @Nullable
-    default HandleType getMultiHandleType() {
-        return multiHandleTypeProperty().get();
-    }
 
     default void setActiveLayer(@Nullable Layer newValue) {
         activeLayerProperty().set(newValue);
@@ -556,16 +491,6 @@ public interface DrawingView extends RenderContext {
 
     default double getZoomFactor() {
         return zoomFactorProperty().get();
-    }
-
-    /**
-     * Tolerance (radius) in view coordinates.
-     *
-     * @return the tolerance radius
-     */
-    default double getTolerance() {
-        // handle size * 0.5 * sqrt(2).
-        return getHandleSize() * 0.71;
     }
 
     default ObservableSet<Figure> getSelectedFigures() {
@@ -701,65 +626,5 @@ public interface DrawingView extends RenderContext {
      */
     Bounds getVisibleRect();
 
-    /**
-     * Holds the curent help text associated with this drawing view.
-     *
-     * @return the help text property.
-     */
-    @Nonnull
-    ObjectProperty<String> helpTextProperty();
 
-    default String getHelpText() {
-        return helpTextProperty().get();
-    }
-
-    default void setHelpText(String newValue) {
-        helpTextProperty().set(newValue);
-    }
-
-    /**
-     * Holds the size (width and height) of a handle.
-     *
-     * @return size of handle
-     */
-    IntegerProperty handleSizeProperty();
-
-    /**
-     * Holds the stroke width of a handle.
-     *
-     * @return size of handle
-     */
-    IntegerProperty handleStrokeWidthProperty();
-
-    default int getHandleSize() {
-        return handleSizeProperty().get();
-    }
-
-    default void setHandleSize(int newValue) {
-        handleSizeProperty().set(newValue);
-    }
-
-    /**
-     * Holds the color of the handles.
-     *
-     * @return color of handle
-     */
-    NonnullProperty<CssColor> handleColorProperty();
-
-    default CssColor getHandleColor() {
-        return handleColorProperty().get();
-    }
-
-    default void setHandleColor(CssColor newValue) {
-        handleColorProperty().set(newValue);
-    }
-
-
-    default int getHandleStrokeWidth() {
-        return handleStrokeWidthProperty().get();
-    }
-
-    default void setHandleStrokeWidth(int newValue) {
-        handleStrokeWidthProperty().set(newValue);
-    }
 }

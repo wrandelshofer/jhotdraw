@@ -23,6 +23,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssParser;
@@ -41,7 +42,9 @@ import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.popup.BooleanPicker;
 import org.jhotdraw8.gui.PlatformUtil;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -168,7 +171,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         });
 
         textArea.textProperty().addListener(this::updateLookupTable);
-        textArea.caretPositionProperty().addListener(this::updateHelpText);
+        textArea.caretPositionProperty().addListener(this::handleCaretPositionChanged);
+        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleTextAreaClicked);
 
         switch (prefs.get("shownValues", "user")) {
             case "author":
@@ -188,6 +192,53 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
         shownValues.selectedToggleProperty().addListener(this::updateShownValues);
     }
+
+    private void handleTextAreaClicked(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() == 2) {
+            mouseEvent.consume();
+            int caretPosition = textArea.getCaretPosition();
+            LookupEntry entry = getLookupEntryAt(caretPosition);
+            Declaration declaration = entry == null ? null : entry.declaration;
+            StyleRule styleRule = entry == null ? null : entry.styleRule;
+            System.out.println("declaration double clicked: " + declaration);
+
+            if (drawingView != null && styleRule != null && declaration != null) {
+                Drawing d = drawingView.getDrawing();
+                drawingView.getSelectedFigures();
+                System.out.println("style rule: " + styleRule);
+                ObservableMap<String, Set<Figure>> pseudoStyles = createPseudoStyles(d);
+
+                StylesheetsManager<Figure> sm = d.getStyleManager();
+                FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
+                fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
+                Set<Figure> selected = new LinkedHashSet<>();
+                WriteableStyleableMapAccessor<?> selectedAccessor = null;
+                boolean multipleAccessorTypes = false;
+                for (Figure f : d.breadthFirstIterable()) {
+                    if (null != styleRule.getSelectorGroup().match(fsm, f)) {
+                        System.out.println("matches " + f);
+                        WriteableStyleableMapAccessor<?> accessor = fsm.getAccessor(f, declaration.getPropertyNamespace(), declaration.getPropertyName());
+                        if (selectedAccessor == null || selectedAccessor == accessor) {
+                            selectedAccessor = accessor;
+                            selected.add(f);
+                        } else {
+                            multipleAccessorTypes = true;
+                        }
+                    }
+                }
+                if (!multipleAccessorTypes && selectedAccessor != null && !selected.isEmpty()) {
+                    if (selectedAccessor.getValueType() == Boolean.class) {
+                        BooleanPicker cp = new BooleanPicker();
+                        cp.setFigures(FXCollections.observableSet(selected));
+                        cp.setMapAccessor((WriteableStyleableMapAccessor<Boolean>) selectedAccessor);
+                        cp.setDrawingView(drawingView);
+                        cp.show(textArea, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                    }
+                }
+            }
+        }
+    }
+
 
     protected void updateShownValues(Observable o) {
         Preferences prefs = Preferences.userNodeForPackage(StyleAttributesInspector.class);
@@ -402,16 +453,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
             Drawing d = drawingView.getDrawing();
             DrawingModel m = drawingView.getModel();
-            ObservableMap<String, Set<Figure>> pseudoStyles = FXCollections.observableHashMap();
-            Set<Figure> fs = new LinkedHashSet<>(drawingView.getSelectedFigures());
-
-            // handling of emptyness must be consistent with code in
-            // handleSelectionChanged() method
-            if (fs.isEmpty()) {
-                fs.add(d);
-            }
-
-            pseudoStyles.put("selected", fs);
+            ObservableMap<String, Set<Figure>> pseudoStyles = createPseudoStyles(d);
 
             StylesheetsManager<Figure> sm = d.getStyleManager();
             FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
@@ -433,6 +475,21 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
     }
 
+    @Nonnull
+    private ObservableMap<String, Set<Figure>> createPseudoStyles(Drawing d) {
+        ObservableMap<String, Set<Figure>> pseudoStyles = FXCollections.observableHashMap();
+        Set<Figure> fs = new LinkedHashSet<>(drawingView.getSelectedFigures());
+
+        // handling of emptyness must be consistent with code in
+        // handleSelectionChanged() method
+        if (fs.isEmpty()) {
+            fs.add(d);
+        }
+
+        pseudoStyles.put("selected", fs);
+        return pseudoStyles;
+    }
+
     private void invalidateTextArea() {
         if (textAreaValid) {
             textAreaValid = false;
@@ -440,34 +497,36 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
     }
 
-    private static class HelptextLookupEntry implements Comparable<HelptextLookupEntry> {
+    private static class LookupEntry implements Comparable<LookupEntry> {
 
         final int position;
+        final StyleRule styleRule;
         final Declaration declaration;
 
-        public HelptextLookupEntry(int position, Declaration declaration) {
+        public LookupEntry(int position, StyleRule styleRule, Declaration declaration) {
             this.position = position;
+            this.styleRule = styleRule;
             this.declaration = declaration;
         }
 
         @Override
-        public int compareTo(HelptextLookupEntry o) {
+        public int compareTo(LookupEntry o) {
             return this.position - o.position;
         }
 
     }
 
     @Nonnull
-    private List<HelptextLookupEntry> helptextLookupTable = new ArrayList<>();
+    private List<LookupEntry> lookupTable = new ArrayList<>();
 
     protected void updateLookupTable(Observable o) {
-        helptextLookupTable.clear();
+        lookupTable.clear();
         CssParser parser = new CssParser();
         try {
             Stylesheet s = parser.parseStylesheet(textArea.getText());
             for (StyleRule r : s.getStyleRules()) {
                 for (Declaration d : r.getDeclarations()) {
-                    helptextLookupTable.add(new HelptextLookupEntry(d.getStartPos(), d));
+                    lookupTable.add(new LookupEntry(d.getStartPos(), r, d));
                 }
             }
         } catch (IOException ex) {
@@ -475,18 +534,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
     }
 
-    protected void updateHelpText(Observable o, Number oldv, @Nonnull Number newv) {
-        int insertionPoint = Collections.binarySearch(helptextLookupTable, new HelptextLookupEntry(newv.intValue(), null));
-        if (insertionPoint < 0) {
-            insertionPoint = (-(insertionPoint) - 1) - 1;
-        }
-        Declaration d = null;
-        if (0 <= insertionPoint && insertionPoint < helptextLookupTable.size()) {
-            HelptextLookupEntry entry = helptextLookupTable.get(insertionPoint);
-            if (newv.intValue() <= entry.declaration.getEndPos()) {
-                d = entry.declaration;
-            }
-        }
+    protected void handleCaretPositionChanged(Observable o, Number oldv, @Nonnull Number newv) {
+        LookupEntry entry = getLookupEntryAt(newv.intValue());
+        Declaration d = entry == null ? null : entry.declaration;
         String helpText = null;
         if (d != null) {
             helpText = helpTexts.get(new QualifiedName(d.getPropertyNamespace(), d.getPropertyName()));
@@ -504,8 +554,24 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             }
 
 
-            drawingView.setHelpText(helpText);
+            drawingView.getEditor().setHelpText(helpText);
         }
+    }
+
+    @Nullable
+    private LookupEntry getLookupEntryAt(@Nonnull int caretPosition) {
+        int insertionPoint = Collections.binarySearch(lookupTable, new LookupEntry(caretPosition, null, null));
+        if (insertionPoint < 0) {
+            insertionPoint = (-(insertionPoint) - 1) - 1;
+        }
+        LookupEntry d = null;
+        if (0 <= insertionPoint && insertionPoint < lookupTable.size()) {
+            LookupEntry entry = lookupTable.get(insertionPoint);
+            if (caretPosition <= entry.declaration.getEndPos()) {
+                d = entry;
+            }
+        }
+        return d;
     }
 
     protected void collectHelpTexts(@Nonnull Collection<Figure> figures) {

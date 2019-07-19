@@ -391,9 +391,9 @@ public class SelectionTool extends AbstractTool {
     @Override
     public void activate(@Nonnull DrawingEditor editor) {
         for (DrawingView view : editor.getDrawingViews()) {
-            view.setHandleType(handleType);
-            view.setAnchorHandleType(anchorHandleType);
-            view.setLeadHandleType(leadHandleType);
+            view.getEditor().setHandleType(handleType);
+            view.getEditor().setAnchorHandleType(anchorHandleType);
+            view.getEditor().setLeadHandleType(leadHandleType);
         }
         requestFocus();
         super.activate(editor);

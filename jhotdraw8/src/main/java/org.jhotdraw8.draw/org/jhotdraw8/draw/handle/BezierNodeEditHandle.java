@@ -130,11 +130,11 @@ public class BezierNodeEditHandle extends AbstractHandle {
     @Nonnull
     @Override
     public Region getNode(DrawingView view) {
-        double size = view.getHandleSize();
+        double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
         }
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         BorderStroke borderStroke = node.getBorder().getStrokes().get(0);
         if (!borderStroke.getTopStroke().equals(color.getColor())) {
             node.setBorder(new Border(

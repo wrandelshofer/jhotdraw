@@ -62,9 +62,9 @@ public class AnchorOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(DrawingView view) {
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         node.setStroke(Paintable.getPaint(color));
-        node.setStrokeWidth(view.getHandleStrokeWidth());
+        node.setStrokeWidth(view.getEditor().getHandleStrokeWidth());
         return node;
     }
 

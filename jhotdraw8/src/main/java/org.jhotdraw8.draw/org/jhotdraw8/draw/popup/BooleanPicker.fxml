@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.VBox?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <RadioButton mnemonicParsing="false" text="%value.initial.text">
+      <toggleGroup>
+        <ToggleGroup fx:id="values"/>
+      </toggleGroup>
+    </RadioButton>
+    <Separator prefWidth="200.0"/>
+    <RadioButton mnemonicParsing="false" text="%value.none.text" toggleGroup="$values"/>
+    <Separator prefWidth="200.0"/>
+    <RadioButton mnemonicParsing="false" text="%value.true.text" toggleGroup="$values"/>
+    <RadioButton mnemonicParsing="false" text="%value.false.text" toggleGroup="$values"/>
+  </children>
+</VBox>

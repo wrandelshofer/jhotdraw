@@ -119,11 +119,11 @@ import org.jhotdraw8.gui.dock.SingleItemDock;
 import org.jhotdraw8.gui.dock.SplitPaneTrack;
 import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.modeler.figure.MLClassifierFigure;
 import org.jhotdraw8.samples.modeler.figure.MLConstants;
 import org.jhotdraw8.samples.modeler.figure.MLDiagramFigure;
-import org.jhotdraw8.samples.modeler.figure.MLEdgeFigure;
 import org.jhotdraw8.samples.modeler.figure.MLKeyword;
+import org.jhotdraw8.samples.modeler.figure.UMLClassifierShapeFigure;
+import org.jhotdraw8.samples.modeler.figure.UMLEdgeFigure;
 import org.jhotdraw8.samples.modeler.io.ModelerFigureFactory;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 import org.jhotdraw8.svg.SvgExporter;
@@ -298,10 +298,10 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
         // modeling shape creation tools -----------
         CreationTool createSysMLRequirementTool = new CreationTool("edit.createSysMLRequirementClassifier", labels, () -> createFigure(() -> {
-            MLClassifierFigure f = new MLClassifierFigure();
-            f.set(MLClassifierFigure.KEYWORD, MLKeyword.REQUIREMENT.getName());
-            f.set(MLClassifierFigure.NAME, "Name");
-            f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
+            UMLClassifierShapeFigure f = new UMLClassifierShapeFigure();
+            f.set(UMLClassifierShapeFigure.KEYWORD, MLKeyword.REQUIREMENT.getName());
+            f.set(UMLClassifierShapeFigure.NAME, "Name");
+            f.set(UMLClassifierShapeFigure.COMPARTMENTS, new MLCompartmentalizedData(
                     ImmutableMaps.of(MLKeyword.TEXT.getName(), ImmutableLists.emptyList())
             ));
             return f;
@@ -310,10 +310,10 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         createSysMLRequirementTool.setDefaultHeight(100);
         ttbar.addTool(createSysMLRequirementTool, 10, 0, 16);
         CreationTool createSysMLBlockTool = new CreationTool("edit.createSysMLBlockClassifier", labels, () -> createFigure(() -> {
-            MLClassifierFigure f = new MLClassifierFigure();
-            f.set(MLClassifierFigure.KEYWORD, MLKeyword.BLOCK.getName());
-            f.set(MLClassifierFigure.NAME, "Name");
-            f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
+            UMLClassifierShapeFigure f = new UMLClassifierShapeFigure();
+            f.set(UMLClassifierShapeFigure.KEYWORD, MLKeyword.BLOCK.getName());
+            f.set(UMLClassifierShapeFigure.NAME, "Name");
+            f.set(UMLClassifierShapeFigure.COMPARTMENTS, new MLCompartmentalizedData(
                     ImmutableMaps.ofEntries(ImmutableMaps.entry(MLKeyword.PARTS.getName(), ImmutableLists.emptyList()),
                             ImmutableMaps.entry(MLKeyword.REFERENCES.getName(), ImmutableLists.emptyList()),
                             ImmutableMaps.entry(MLKeyword.VALUES.getName(), ImmutableLists.emptyList()),
@@ -326,10 +326,10 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         createSysMLBlockTool.setDefaultHeight(200);
         ttbar.addTool(createSysMLBlockTool, 11, 0, 0);
         CreationTool createUmlClassifierTool = new CreationTool("edit.createUmlClassClassifier", labels, () -> createFigure(() -> {
-            MLClassifierFigure f = new MLClassifierFigure();
-            f.set(MLClassifierFigure.KEYWORD, MLKeyword.CLASS.getName());
-            f.set(MLClassifierFigure.NAME, "Name");
-            f.set(MLClassifierFigure.COMPARTMENTS, new MLCompartmentalizedData(
+            UMLClassifierShapeFigure f = new UMLClassifierShapeFigure();
+            f.set(UMLClassifierShapeFigure.KEYWORD, MLKeyword.CLASS.getName());
+            f.set(UMLClassifierShapeFigure.NAME, "Name");
+            f.set(UMLClassifierShapeFigure.COMPARTMENTS, new MLCompartmentalizedData(
                     ImmutableMaps.ofEntries(ImmutableMaps.entry(MLKeyword.ATTRIBUTES.getName(), ImmutableLists.emptyList()),
                             ImmutableMaps.entry(MLKeyword.OPERATIONS.getName(), ImmutableLists.emptyList()))
             ));
@@ -341,18 +341,18 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
         // modeling edge creation tools --------
         ttbar.addTool(new ConnectionTool("edit.createUmlDependencyEdge", labels, () -> createFigure(() -> {
-            MLEdgeFigure f = new MLEdgeFigure();
-            f.set(MLEdgeFigure.KEYWORD, MLKeyword.DEPENDENCY.getName());
+            UMLEdgeFigure f = new UMLEdgeFigure();
+            f.set(UMLEdgeFigure.KEYWORD, MLKeyword.DEPENDENCY.getName());
             return f;
         }), layerFactory), 20, 1, 16);
         ttbar.addTool(new ConnectionTool("edit.createSysMLContainmentEdge", labels, () -> createFigure(() -> {
-            MLEdgeFigure f = new MLEdgeFigure();
-            f.set(MLEdgeFigure.KEYWORD, MLKeyword.CONTAINMENT.getName());
+            UMLEdgeFigure f = new UMLEdgeFigure();
+            f.set(UMLEdgeFigure.KEYWORD, MLKeyword.CONTAINMENT.getName());
             return f;
         }), layerFactory), 20, 0, 16);
         ttbar.addTool(new ConnectionTool("edit.createUmlGeneralizationEdge", labels, () -> createFigure(() -> {
-            MLEdgeFigure f = new MLEdgeFigure();
-            f.set(MLEdgeFigure.KEYWORD, MLKeyword.GENERALIZATION.getName());
+            UMLEdgeFigure f = new UMLEdgeFigure();
+            f.set(UMLEdgeFigure.KEYWORD, MLKeyword.GENERALIZATION.getName());
             return f;
         }), layerFactory), 21, 0, 0);
 

@@ -97,11 +97,11 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     @Nonnull
     @Override
     public Group getNode(DrawingView view) {
-        double size = view.getHandleSize();
+        double size = view.getEditor().getHandleSize();
         if (targetNode.getWidth() != size) {
             targetNode.resize(size, size);
         }
-        CssColor color = view.getHandleColor();
+        CssColor color = view.getEditor().getHandleColor();
         BorderStroke borderStroke = targetNode.getBorder().getStrokes().get(0);
         if (borderStroke == null || !borderStroke.getTopStroke().equals(color.getColor())) {
             targetNode.setBorder(new Border(
