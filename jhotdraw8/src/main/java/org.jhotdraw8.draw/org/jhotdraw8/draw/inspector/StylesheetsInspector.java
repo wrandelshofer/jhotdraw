@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.inspector;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -114,7 +115,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                     }
                     ClipboardContent content = new ClipboardContent();
                     URI stylesheetUri = items.get(0);
-                    URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                    URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
                     stylesheetUri = documentHome.resolve(stylesheetUri);
 
                     content.putUrl(stylesheetUri.toString());
@@ -127,13 +128,13 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                     List<URI> list;
                     if (clipboard.hasUrl()) {
                         list = new ArrayList<>();
-                        URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                        URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
                         URI dragboardUri = URI.create(clipboard.getUrl());
                         URI stylesheetUri = documentHome.relativize(dragboardUri);
                         list.add(stylesheetUri);
                     } else if (clipboard.hasFiles()) {
                         list = new ArrayList<>();
-                        URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                        URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
                         for (File f : clipboard.getFiles()) {
                             URI dragboardUri = f.toURI();
                             //URI stylesheetUri = documentHome.relativize(dragboardUri);
@@ -161,7 +162,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private int isReplacingDrawing;
 
     @Override
-    protected void onDrawingChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void handleDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         isReplacingDrawing++;
         if (oldValue != null) {
             listView.getItems().clear();
@@ -184,7 +185,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             // The drawing is currently being replaced by a new one. Don't fire events.
             return;
         }
-        drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.ofCollection(listView.getItems()));
+        getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.ofCollection(listView.getItems()));
         getDrawing().updateStyleManager();
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);

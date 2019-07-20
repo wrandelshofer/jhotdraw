@@ -14,9 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Disableable;
-import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.gui.PlatformUtil;
 
 import java.io.IOException;
@@ -24,7 +22,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MessagesInspector implements Inspector {
+public class MessagesInspector extends AbstractDrawingViewInspector {
     private final static int MAX_LENGTH = 100 * 1024;
     @FXML
     private TextArea messagesField;
@@ -91,11 +89,6 @@ public class MessagesInspector implements Inspector {
                 throw new InternalError(ex);
             }
         });
-    }
-
-    @Override
-    public void setDrawingView(@Nullable DrawingView view) {
-        //throw new UnsupportedOperationException();
     }
 
     @Override

@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.inspector;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -128,7 +129,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) {
         if (oldValue != null) {
             handleColorProperty.unbindBidirectional(oldValue.getEditor().handleColorProperty());
             handleSizeProperty.unbindBidirectional(oldValue.getEditor().handleSizeProperty());

@@ -3,11 +3,15 @@
  */
 package org.jhotdraw8.draw.inspector;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 
@@ -20,45 +24,45 @@ import java.util.Set;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSelectionInspector implements Inspector {
+public abstract class AbstractSelectionInspector implements Inspector<DrawingView> {
+    final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
 
-    @Nullable
-    protected DrawingView drawingView;
+    {
+        subject.addListener(this::handleDrawingViewChanged);
+    }
+
+    public ObjectProperty<DrawingView> subjectProperty() {
+        return subject;
+    }
+
+    protected Drawing getDrawing() {
+        return getSubject().getDrawing();
+    }
+
+    protected DrawingModel getModel() {
+        return getSubject().getModel();
+    }
+
 
     private final SetChangeListener<Figure> selectionListener = change -> {
+        DrawingView drawingView = getSubject();
         handleSelectionChanged(drawingView == null ? FXCollections.emptyObservableSet() : drawingView.getSelectedFigures());
     };
 
-    protected DrawingModel getDrawingModel() {
-        return drawingView.getModel();
-    }
 
-    @Override
-    public void setDrawingView(@Nullable DrawingView newValue) {
-        DrawingView oldValue = drawingView;
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.selectedFiguresProperty().removeListener(selectionListener);
         }
-        this.drawingView = newValue;
         if (newValue != null) {
             newValue.selectedFiguresProperty().addListener(selectionListener);
         }
-        handleDrawingViewChanged(oldValue, newValue);
     }
 
     @Nonnull
     protected Set<Figure> getSelectedFigures() {
+        DrawingView drawingView = getSubject();
         return drawingView == null ? Collections.emptySet() : drawingView.getSelectedFigures();
-    }
-
-    /**
-     * Can be implemented by subclasses.
-     *
-     * @param oldValue the old selection
-     * @param newValue the new selection
-     */
-    protected void handleDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
-
     }
 
     /**

@@ -3,6 +3,9 @@
  */
 package org.jhotdraw8.draw.inspector;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -13,28 +16,30 @@ import org.jhotdraw8.draw.model.DrawingModel;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractDrawingViewInspector implements Inspector {
+public abstract class AbstractDrawingViewInspector implements Inspector<DrawingView> {
 
-    protected DrawingView drawingView;
+    final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
 
-    @Override
-    public void setDrawingView(DrawingView newValue) {
-        DrawingView oldValue = drawingView;
-        this.drawingView = newValue;
-        onDrawingViewChanged(oldValue, newValue);
+    {
+        subject.addListener(this::handleDrawingViewChanged);
+    }
+
+    public ObjectProperty<DrawingView> subjectProperty() {
+        return subject;
     }
 
     protected DrawingModel getDrawingModel() {
-        return drawingView.getModel();
+        return getSubject().getModel();
     }
 
     /**
      * Can be overridden by subclasses. This implementation is empty.
      *
-     * @param oldValue the old drawing view
-     * @param newValue the new drawing view
+     * @param observable
+     * @param oldValue   the old drawing view
+     * @param newValue   the new drawing view
      */
-    protected void onDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
     }
 }

@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.inspector;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -118,7 +119,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void onDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
         ChangeListener<CssSize> prefsGridX = (o, oldv, newv) -> {
             prefs.putDouble("gridX", newv.getValue());

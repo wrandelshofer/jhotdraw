@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.inspector;
 
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -21,7 +22,7 @@ import java.net.URL;
  *
  * @author werni
  */
-public class HelpTextInspector implements Inspector {
+public class HelpTextInspector extends AbstractDrawingViewInspector {
 
     @FXML
     private TextArea textArea;
@@ -52,16 +53,13 @@ public class HelpTextInspector implements Inspector {
         });
     }
 
-    private DrawingView view;
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
-    @Override
-    public void setDrawingView(@Nullable DrawingView newValue) {
-        if (view != null) {
+        if (oldValue != null) {
             textArea.textProperty().unbind();
         }
-        view = newValue;
-        if (view != null) {
-            textArea.textProperty().bind(view.getEditor().helpTextProperty());
+        if (newValue != null) {
+            textArea.textProperty().bind(newValue.getEditor().helpTextProperty());
         }
     }
 

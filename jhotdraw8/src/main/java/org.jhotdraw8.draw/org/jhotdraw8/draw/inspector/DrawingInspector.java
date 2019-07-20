@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.inspector;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,6 +19,7 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.StringConverterAdapter;
@@ -68,7 +70,8 @@ public class DrawingInspector extends AbstractDrawingInspector {
     }
 
     private void commitEdits() {
-        drawingView.getModel().fireTreeModelEvent(TreeModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
+        DrawingView subject = getSubject();
+        subject.getModel().fireTreeModelEvent(TreeModelEvent.nodeInvalidated(subject.getModel(), subject.getDrawing()));
     }
 
     @Override
@@ -106,7 +109,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void onDrawingChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void handleDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (widthProperty != null) {
             widthField.textProperty().unbindBidirectional(widthProperty);
             widthProperty.removeListener(commitHandler);

@@ -6,13 +6,12 @@ import java.util.function.BiConsumer;
 
 public interface Picker<T> {
     /**
-     * @param anchor       anchore node will be blocked by the picker
+     * @param anchor       anchor node will be blocked by the picker
      * @param screenX      desired screen coordinate
-     * @param screenY      desired screen cordinate
+     * @param screenY      desired screen coordinate
      * @param initialValue initial value
-     * @param callback     selected value, the boolean indicates if
-     *                     the selected value should be set (true) or
-     *                     of the "initial" value should be set (false)
+     * @param callback     callback when a value was selected (true), or
+     *                     reset to the initial value (false).
      */
     void show(Node anchor, double screenX, double screenY,
               T initialValue,

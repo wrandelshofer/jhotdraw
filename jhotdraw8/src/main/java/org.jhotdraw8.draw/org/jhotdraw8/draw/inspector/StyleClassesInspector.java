@@ -5,6 +5,7 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,6 +52,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     @FXML
     private Button addButton;
     private final Listener<DrawingModelEvent> drawingModelEventListener = change -> {
+        DrawingView drawingView = getSubject();
         if (change.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED) {
             if ((Key<?>) change.getKey() == StyleableFigure.STYLE_CLASS) {
                 if (drawingView != null && drawingView.getSelectedFigures().contains(change.getNode())) {
@@ -108,7 +110,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getDrawingModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
+                        getModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
                     }
                 }
                 updateList();
@@ -117,19 +119,16 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     }
 
     @Override
-    public void setDrawingView(@Nullable DrawingView newValue) {
-        DrawingView oldValue = drawingView;
-        super.setDrawingView(newValue);
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+        super.handleDrawingViewChanged(observable, oldValue, newValue);
         if (oldValue != null) {
             oldValue.modelProperty().removeListener(modelListener);
             modelListener.changed(oldValue.modelProperty(), oldValue.getModel(), null);
         }
-        this.drawingView = newValue;
         if (newValue != null) {
             newValue.modelProperty().removeListener(modelListener);
             modelListener.changed(newValue.modelProperty(), null, newValue.getModel());
         }
-        handleDrawingViewChanged(oldValue, newValue);
     }
 
     @Override
@@ -190,7 +189,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getDrawingModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
+                        getModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
                     }
                 }
                 updateList();

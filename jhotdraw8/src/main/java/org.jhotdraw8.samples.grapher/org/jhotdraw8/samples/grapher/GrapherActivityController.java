@@ -402,8 +402,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                 for (Dock dock : list) {
                     for (DockItem n : dock.getItems()) {
                         items.add(n);
-                        Inspector i = (Inspector) n.getProperties().get("inspector");
-                        i.setDrawingView(drawingView);
+                        @SuppressWarnings("unchecked")
+                        Inspector<DrawingView> i = (Inspector<DrawingView>) n.getProperties().get("inspector");
+                        i.setSubject(drawingView);
                     }
                     vtrack.getItems().add(dock.getNode());
                 }

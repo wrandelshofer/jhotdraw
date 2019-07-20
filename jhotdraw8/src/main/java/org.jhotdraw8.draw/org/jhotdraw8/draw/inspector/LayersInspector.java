@@ -119,8 +119,8 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             // FIXME why do we call fireNodeInvalidated? The model should do this for us???
             // FIXME must perform change via the model so that undo/redo will work
-            if (fire && drawingView != null) {
-                drawingView.getModel().fireNodeInvalidated(drawingView.getDrawing());
+            if (fire && subject != null) {
+                getModel().fireNodeInvalidated(getDrawing());
             }
         }
     };
@@ -199,8 +199,8 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private void updateSelection() {
         isUpdateSelection = false;
-        Drawing d = drawingView.getDrawing();
-        Set<Figure> selection = drawingView.getSelectedFigures();
+        Drawing d = getDrawing();
+        Set<Figure> selection = getSubject().getSelectedFigures();
         HashMap<Figure, Integer> layerToIndex = new HashMap<>();
         List<Figure> children = d.getChildren();
         int[] count = new int[children.size()];
@@ -241,15 +241,15 @@ public class LayersInspector extends AbstractDrawingInspector {
                 if (index < 0) {
                     index = 0;
                 }
-                Drawing drawing = drawingView.getDrawing();
-                DrawingModel model = drawingView.getModel();
+                Drawing drawing = getDrawing();
+                DrawingModel model = getModel();
                 int size = drawing.getChildren().size();
                 model.insertChildAt(layer, drawing, size - index);
             });
             removeButton.addEventHandler(ActionEvent.ACTION, o -> {
                 ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
-                Drawing drawing = drawingView.getDrawing();
-                DrawingModel model = drawingView.getModel();
+                Drawing drawing = getDrawing();
+                DrawingModel model = getModel();
                 for (int i = indices.size() - 1; i >= 0; i--) {
                     model.removeFromParent(layers.get(indices.get(i)));
                 }
@@ -259,7 +259,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Figure>) c -> {
                 Layer selected = (Layer) listView.getSelectionModel().getSelectedItem();
                 if (selected != null) {
-                    drawingView.setActiveLayer(selected);
+                    getSubject().setActiveLayer(selected);
                 }
 
             });
@@ -307,11 +307,11 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     @Nonnull
     public LayerCell createCell(ListView<Figure> listView) {
-        return new LayerCell(drawingView.getModel(), this);
+        return new LayerCell(getModel(), this);
     }
 
-    @Override
-    protected void onDrawingViewChanged(@Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+        super.handleDrawingViewChanged(observable, oldValue, newValue);
         if (oldValue != null) {
             oldValue.activeLayerProperty().removeListener(selectedLayerHandler);
             oldValue.selectedFiguresProperty().removeListener(selectionInvalidationListener);
@@ -324,7 +324,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
+    protected void handleDrawingChanged(ObservableValue<? extends Drawing> observable, Drawing oldValue, Drawing newValue) {
         if (oldValue != null) {
             listView.setItems(FXCollections.observableArrayList());
             if (layers != null) {
@@ -340,7 +340,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void onDrawingModelChanged(@Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    protected void handleDrawingModelChanged(ObservableValue<? extends DrawingModel> observable, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(listInvalidationListener);
         }
@@ -480,8 +480,9 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     protected void moveSelectedFiguresFromToLayer(Layer from, @Nonnull Layer to) {
-        DrawingModel model = drawingView.getModel();
-        LinkedHashSet<Figure> selection = new LinkedHashSet<>(drawingView.getSelectedFigures());
+        DrawingModel model = getModel();
+        DrawingView view = getSubject();
+        LinkedHashSet<Figure> selection = new LinkedHashSet<>(view.getSelectedFigures());
         for (Figure f : selection) {
             if (f instanceof Layer) {
                 continue;
@@ -495,8 +496,8 @@ public class LayersInspector extends AbstractDrawingInspector {
 
         // Update the selection. The selection still contains the
         // same figures but they have now a different ancestor.
-        drawingView.getSelectedFigures().clear();
-        drawingView.getSelectedFigures().addAll(selection);
+        view.getSelectedFigures().clear();
+        view.getSelectedFigures().addAll(selection);
     }
 
     @Override

@@ -3,9 +3,9 @@
  */
 package org.jhotdraw8.draw.inspector;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.DrawingView;
 
 /**
  * API for inspectors.
@@ -13,9 +13,17 @@ import org.jhotdraw8.draw.DrawingView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Inspector {
+public interface Inspector<S> {
+    ObjectProperty<S> subjectProperty();
 
-    void setDrawingView(@Nullable DrawingView view);
+    default void setSubject(@Nullable S s) {
+        subjectProperty().set(s);
+    }
+
+    @Nullable
+    default S getSubject() {
+        return subjectProperty().get();
+    }
 
     Node getNode();
 }
