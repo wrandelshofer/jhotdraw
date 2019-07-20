@@ -12,8 +12,10 @@ import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 import javafx.css.StyleOrigin;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -22,6 +24,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -29,6 +33,7 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.CssPrettyPrinter;
+import org.jhotdraw8.css.CssStroke;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.Paintable;
@@ -44,6 +49,7 @@ import org.jhotdraw8.draw.figure.TextFontableFigure;
 import org.jhotdraw8.draw.popup.BooleanPicker;
 import org.jhotdraw8.draw.popup.CssColorPicker;
 import org.jhotdraw8.draw.popup.CssFontPicker;
+import org.jhotdraw8.draw.popup.CssStrokePicker;
 import org.jhotdraw8.draw.popup.EnumPicker;
 import org.jhotdraw8.draw.popup.FontFamilyPicker;
 import org.jhotdraw8.draw.popup.PaintablePicker;
@@ -67,15 +73,39 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.prefs.Preferences;
 
+/**
+ * Intentionally does not implement the inspector interface, so
+ * that subclasses can use this inspector on different subject
+ * types.
+ *
+ * @param <E>
+ */
 public abstract class AbstractStyleAttributesInspector<E> {
     private final ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
     private final ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
     private final ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
     private SetProperty<E> selection = new SimpleSetProperty<>();
+
+    {
+        SetChangeListener<E> listener = change -> {
+            textAreaInvalidated(selection);
+        };
+        selection.addListener((o, oldv, newv) -> {
+            if (oldv != null) {
+                oldv.removeListener(listener);
+            }
+            if (newv != null) {
+                newv.addListener(listener);
+                textAreaInvalidated(selection);
+            }
+        });
+    }
+
     private Node node;
     @Nonnull
     private Map<QualifiedName, String> helpTexts = new HashMap<>();
@@ -116,6 +146,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     private void apply(ActionEvent event) {
+        isApplying = true;
         CssParser parser = new CssParser();
         TextArea textArea = getTextArea();
         try {
@@ -129,7 +160,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             StylesheetsManager<E> sm = getStyleManager();
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-            for (E f : breadthFirstIterable()) {
+            for (E f : getEntities()) {
                 if (sm.applyStylesheetTo(StyleOrigin.USER, s, f, true)) {
                     fireInvalidated(f);
                 }
@@ -140,6 +171,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
+        isApplying = false;
     }
 
     /**
@@ -152,7 +184,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return attributeFilter;
     }
 
-    protected abstract Iterable<E> breadthFirstIterable();
+    protected abstract Iterable<E> getEntities();
 
     @Nullable
     private String buildString(@Nullable List<CssToken> attribute) {
@@ -173,8 +205,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
         for (E f : figures) {
             for (QualifiedName qname : selectorModel.getAttributeNames(f)) {
                 Converter<?> c = getConverter(selectorModel, f, qname.getNamespace(), qname.getName());
-                if (c != null && c.getHelpText() != null) {
-                    helpTexts.put(qname, c.getHelpText());
+                String helpText = c == null ? null : c.getHelpText();
+                if (helpText != null) {
+                    helpTexts.put(qname, helpText);
                 }
             }
         }
@@ -203,6 +236,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
             p = new BooleanPicker(nullable);
         } else if (type == CssColor.class) {
             p = new CssColorPicker();
+        } else if (type == CssStroke.class) {
+            p = new CssStrokePicker();
         } else if (type == Paintable.class) {
             p = new PaintablePicker();
         } else if (type == CssFont.class) {
@@ -267,13 +302,22 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return d;
     }
 
+    public Node getNode() {
+        return node;
+    }
+
+    protected abstract E getRoot();
+
     public ObservableSet<E> getSelection() {
-        return selection.get();
+        ObservableSet<E> es = selection.get();
+        return es == null ? FXCollections.emptyObservableSet() : es;
     }
 
     protected abstract StylesheetsManager<E> getStyleManager();
 
-    protected abstract TextArea getTextArea();
+    protected TextArea getTextArea() {
+        return textArea;
+    }
 
     protected void handleCaretPositionChanged(Observable o, Number oldv, @Nonnull Number newv) {
         LookupEntry entry = getLookupEntryAt(newv.intValue());
@@ -304,15 +348,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
     }
 
-    protected void init() {
-        Preferences prefs = Preferences.userNodeForPackage(AbstractStyleAttributesInspector.class);
-        TextArea textArea = getTextArea();
-        textArea.textProperty().addListener(this::updateLookupTable);
-        textArea.caretPositionProperty().addListener(this::handleCaretPositionChanged);
-        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleTextAreaClicked);
-    }
-
-    private void init(@Nonnull URL fxmlUrl) {
+    protected void init(@Nonnull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
@@ -337,15 +373,23 @@ public abstract class AbstractStyleAttributesInspector<E> {
         applyButton.setOnAction(this::apply);
         selectButton.setOnAction(this::select);
         composeAttributesCheckBox.setOnAction(event -> updateTextArea());
-        node.visibleProperty().addListener((o, oldValue, newValue) -> {
-            if (newValue) {
-                invalidateTextArea();
-            }
-        });
+        node.visibleProperty().addListener(this::textAreaInvalidated);
 
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::handleCaretPositionChanged);
         textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleTextAreaClicked);
+        EventHandler<? super KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER &&
+                        (event.isAltDown() || event.isControlDown())) {
+                    event.consume();
+                    apply(null);
+                }
+            }
+        };
+        textArea.addEventHandler(KeyEvent.KEY_PRESSED, eventHandler);
+
 
         switch (prefs.get("shownValues", "user")) {
             case "author":
@@ -364,13 +408,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
 
         shownValues.selectedToggleProperty().addListener(this::updateShownValues);
-    }
-
-    private void invalidateTextArea() {
-        if (textAreaValid) {
-            textAreaValid = false;
-            Platform.runLater((Runnable) this::updateTextArea);
-        }
+        TextArea textArea = getTextArea();
+        textArea.textProperty().addListener(this::updateLookupTable);
+        textArea.caretPositionProperty().addListener(this::handleCaretPositionChanged);
+        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleTextAreaClicked);
     }
 
     protected abstract void remove(E f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor);
@@ -392,7 +433,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             StylesheetsManager<E> sm = getStyleManager();
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-            for (E f : breadthFirstIterable()) {
+            for (E f : getEntities()) {
                 if (sm.matchesElement(s, f)) {
                     matchedFigures.add(f);
                 }
@@ -428,54 +469,65 @@ public abstract class AbstractStyleAttributesInspector<E> {
             StylesheetsManager<E> sm = getStyleManager();
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-            Set<E> selected = new LinkedHashSet<>();
+            Set<E> selectedF = new LinkedHashSet<>();
             WriteableStyleableMapAccessor<?> selectedAccessor = null;
             boolean multipleAccessorTypes = false;
-            for (E f : breadthFirstIterable()) {
+            for (E f : getEntities()) {
                 if (null != styleRule.getSelectorGroup().match(fsm, f)) {
                     WriteableStyleableMapAccessor<?> accessor = getAccessor(fsm, f, declaration.getPropertyNamespace(), declaration.getPropertyName());
                     if (selectedAccessor == null || selectedAccessor == accessor) {
                         selectedAccessor = accessor;
-                        selected.add(f);
+                        selectedF.add(f);
                     } else {
                         multipleAccessorTypes = true;
                     }
                 }
             }
-            if (!multipleAccessorTypes && selectedAccessor != null && !selected.isEmpty()) {
+            if (!multipleAccessorTypes && selectedAccessor != null && !selectedF.isEmpty()) {
                 @SuppressWarnings("unchecked")
                 Picker<Object> picker = (Picker<Object>) createAndCachePicker(selectedAccessor);
 
                 if (picker != null) {
-                    ArrayList<E> figures = new ArrayList<>(selected);
                     Object initialValue = null;
                     @SuppressWarnings("unchecked")
                     WriteableStyleableMapAccessor<Object> finalSelectedAccessor
                             = (WriteableStyleableMapAccessor<Object>) selectedAccessor;
-                    for (E f : figures) {
+                    for (E f : selectedF) {
                         initialValue = get(f, finalSelectedAccessor);
                         break;
                     }
-                    picker.show(getTextArea(), screenX, screenY,
-                            initialValue, (b, o) -> {
-                                if (b) {
-                                    for (E f : figures) {
-                                        set(f, finalSelectedAccessor, o);
-                                    }
-                                } else {
-                                    for (E f : figures) {
-                                        remove(f, finalSelectedAccessor);
-                                    }
-                                }
+                    BiConsumer<Boolean, Object> lambda = (b, o) -> {
+                        if (b) {
+                            for (E f : selectedF) {
+                                AbstractStyleAttributesInspector.this.set(f, finalSelectedAccessor, o);
+                            }
+                        } else {
+                            for (E f : selectedF) {
+                                AbstractStyleAttributesInspector.this.remove(f, finalSelectedAccessor);
+                            }
+                        }
 
-                            });
+                    };
+                    picker.show(getTextArea(), screenX, screenY,
+                            initialValue, lambda);
                 }
             }
         }
 
     }
 
+    private boolean isApplying;
+
     protected abstract void showSelection();
+
+    protected void textAreaInvalidated(Observable observable) {
+        if (!isApplying && textAreaValid) {
+            textAreaValid = false;
+            if (updateContentsCheckBox.isSelected()) {
+                Platform.runLater((Runnable) this::updateTextArea);
+            }
+        }
+    }
 
     protected void updateLookupTable(Observable o) {
         lookupTable.clear();
@@ -610,8 +662,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
         textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
     }
 
-    protected abstract E getRoot();
-
     private static class LookupEntry implements Comparable<LookupEntry> {
 
         final int position;
@@ -630,5 +680,4 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
 
     }
-
 }

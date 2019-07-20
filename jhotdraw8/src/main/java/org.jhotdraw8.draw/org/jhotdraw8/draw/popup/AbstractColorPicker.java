@@ -12,9 +12,9 @@ public abstract class AbstractColorPicker<T> extends AbstractPicker<T> {
     private void update(Node anchor, Color initialValue, BiConsumer<Boolean, Color> callback) {
         if (dialog == null) {
             dialog = new CustomColorDialog(anchor.getScene().getWindow());
-            dialog.setOnUse(() -> callback.accept(true, dialog.getCustomColor()));
-            dialog.setOnSave(() -> callback.accept(true, dialog.getCustomColor()));
         }
+        dialog.setOnUse(() -> callback.accept(true, dialog.getCustomColor()));
+        dialog.setOnSave(() -> callback.accept(true, dialog.getCustomColor()));
         dialog.setCurrentColor(initialValue);
     }
 

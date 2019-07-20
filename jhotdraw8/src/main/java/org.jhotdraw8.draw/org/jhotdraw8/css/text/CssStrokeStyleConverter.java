@@ -7,6 +7,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStroke;
 import org.jhotdraw8.css.CssToken;
@@ -45,6 +46,11 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
     @Override
     public CssStroke parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         CssSize width = parseSize("width", new CssSize(1.0), tt, idFactory);
+        if (tt.next() == CssTokenType.TT_EOF) {
+            return new CssStroke(width, CssColor.BLACK);
+        } else {
+            tt.pushBack();
+        }
         Paintable paint = new CssPaintableConverter(true).parse(tt, idFactory);
 
         StrokeType type;
