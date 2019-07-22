@@ -19,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
@@ -161,7 +162,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             for (E f : getEntities()) {
-                if (sm.applyStylesheetTo(StyleOrigin.USER, s, f, true)) {
+                if (sm.applyStylesheetTo(StyleOrigin.USER, s, f, false)) {
                     fireInvalidated(f);
                 }
             }
@@ -170,6 +171,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
             return;
         } catch (java.text.ParseException e) {
             e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+            textArea.positionCaret(e.getErrorOffset());
+            textArea.requestFocus();
         }
         isApplying = false;
     }
@@ -341,7 +345,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     private void handleTextAreaClicked(MouseEvent mouseEvent) {
-        if (mouseEvent.getClickCount() == 2) {
+        if (mouseEvent.getClickCount() == 2 && mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
             mouseEvent.consume();
             int caretPosition = getTextArea().getCaretPosition();
             showPicker(caretPosition, mouseEvent.getScreenX(), mouseEvent.getScreenY());
@@ -377,7 +381,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::handleCaretPositionChanged);
-        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleTextAreaClicked);
         EventHandler<? super KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {

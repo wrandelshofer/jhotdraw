@@ -28,7 +28,7 @@ import java.util.List;
  * @version $Id$
  */
 public class LayerFigure extends AbstractCompositeFigure
-        implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure {
+        implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {
 
     @Override
     public void reshapeInLocal(Transform transform) {
@@ -50,6 +50,7 @@ public class LayerFigure extends AbstractCompositeFigure
             return;
         }
         applyStyleableFigureProperties(ctx, n);
+        applyCompositableFigureProperties(ctx, n);
 
         List<Node> childNodes = new ArrayList<>(getChildren().size());
 

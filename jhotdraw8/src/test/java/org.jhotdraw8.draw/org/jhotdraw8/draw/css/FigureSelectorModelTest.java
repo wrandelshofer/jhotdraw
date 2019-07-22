@@ -15,6 +15,8 @@ import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.text.Converter;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -34,7 +36,7 @@ public class FigureSelectorModelTest {
      * Test of getProperties method, of class SimplePropertyBean.
      */
     @Test
-    public void testNullValueIsNotSameAsDefaultPropertyValue() {
+    public void testNullValueIsNotSameAsDefaultPropertyValue() throws ParseException {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         LabelFigure figure = new LabelFigure();
         FigureSelectorModel instance = new FigureSelectorModel();

@@ -175,6 +175,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         ObservableList<Node> children = g.getChildren();
         Path p = (Path) children.get(0);
 
+        applyCompositableFigureProperties(ctx, node);
         applyHideableFigureProperties(ctx, node);
         applyShapeableProperties(ctx, p);
         applyStrokableFigureProperties(ctx, p);

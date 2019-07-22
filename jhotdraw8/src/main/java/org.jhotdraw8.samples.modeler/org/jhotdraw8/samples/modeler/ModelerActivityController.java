@@ -302,7 +302,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             f.set(UMLClassifierShapeFigure.KEYWORD, MLKeyword.REQUIREMENT.getName());
             f.set(UMLClassifierShapeFigure.NAME, "Name");
             f.set(UMLClassifierShapeFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMaps.of(MLKeyword.TEXT.getName(), ImmutableLists.emptyList())
+                    ImmutableMaps.of(MLKeyword.PROPERTIES.getName(), ImmutableLists.emptyList())
             ));
             return f;
         }), layerFactory);
@@ -314,11 +314,14 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             f.set(UMLClassifierShapeFigure.KEYWORD, MLKeyword.BLOCK.getName());
             f.set(UMLClassifierShapeFigure.NAME, "Name");
             f.set(UMLClassifierShapeFigure.COMPARTMENTS, new MLCompartmentalizedData(
-                    ImmutableMaps.ofEntries(ImmutableMaps.entry(MLKeyword.PARTS.getName(), ImmutableLists.emptyList()),
+                    ImmutableMaps.ofEntries(
+                            ImmutableMaps.entry(MLKeyword.PARTS.getName(), ImmutableLists.emptyList()),
                             ImmutableMaps.entry(MLKeyword.REFERENCES.getName(), ImmutableLists.emptyList()),
                             ImmutableMaps.entry(MLKeyword.VALUES.getName(), ImmutableLists.emptyList()),
                             ImmutableMaps.entry(MLKeyword.CONSTRAINTS.getName(), ImmutableLists.emptyList()),
-                            ImmutableMaps.entry(MLKeyword.PORTS.getName(), ImmutableLists.emptyList()))
+                            ImmutableMaps.entry(MLKeyword.OPERATIONS.getName(), ImmutableLists.emptyList()),
+                            ImmutableMaps.entry(MLKeyword.PORTS.getName(), ImmutableLists.emptyList())
+                    )
             ));
             return f;
         }), layerFactory);

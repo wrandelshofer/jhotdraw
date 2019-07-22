@@ -428,7 +428,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadOnlyList<CssToken> value) {
+    public void setAttribute(@Nonnull Figure elem, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadOnlyList<CssToken> value)
+            throws ParseException {
         Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = getMetaMap(elem);
 
         List<WriteableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
@@ -460,7 +461,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                             convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
                         }
                         elem.setStyled(origin, k, convertedValue);
-                    } catch (@Nonnull ParseException | IOException ex) {
+                    } catch (IOException ex) {
                         LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
                     }
                 }

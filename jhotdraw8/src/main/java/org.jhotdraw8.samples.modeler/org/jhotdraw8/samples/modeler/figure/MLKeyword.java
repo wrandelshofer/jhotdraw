@@ -81,7 +81,7 @@ public enum MLKeyword {
     SHARED("shared"),//~SySML, start-white-diamond line label
     GENERALIZATION("generalization"),//~UML, end-white-triangle line label
     DEPENDENCY("dependency"),//~UML, end-arrow line label
-    TEXT("text"),//~SysML, compartment header
+    PROPERTIES("properties"),//~SysML, compartment header
     PARTS("parts"),//~SysML, compartment header
     REFERENCES("references"),//~SysML, compartment header
     CONSTRAINTS("constraints"),//~SysML, compartment header
