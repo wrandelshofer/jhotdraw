@@ -24,6 +24,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw.figure;
     exports org.jhotdraw8.draw.handle;
     exports org.jhotdraw8.draw.inspector;
+    exports org.jhotdraw8.draw.popup;
     exports org.jhotdraw8.draw.input;
     exports org.jhotdraw8.draw.io;
     exports org.jhotdraw8.draw.tool;
