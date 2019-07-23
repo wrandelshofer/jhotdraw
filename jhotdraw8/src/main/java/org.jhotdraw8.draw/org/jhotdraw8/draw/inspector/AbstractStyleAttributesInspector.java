@@ -232,7 +232,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         Class<T> type = acc.getValueType();
         boolean nullable = true;
         if (acc.getConverter() instanceof CssConverter) {
-            CssConverter converter = (CssConverter) acc.getConverter();
+            CssConverter<T> converter = (CssConverter) acc.getConverter();
             nullable = converter.isNullable();
         }
         Picker<?> p = null;
@@ -249,8 +249,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
         } else if (acc == TextFontableFigure.FONT_FAMILY) {
             p = new FontFamilyPicker();
         } else if (type.isEnum()) {
-            Class<? extends Enum> enumClazz = (Class<? extends Enum>) type;
-            p = new EnumPicker<>(enumClazz, acc.getConverter());
+            Class<? extends Enum<?>> enumClazz = (Class<? extends Enum<?>>) type;
+            @SuppressWarnings("rawtypes")
+            EnumPicker suppress = new EnumPicker(enumClazz, acc.getConverter());
+            p = suppress;
         }
 
         return (Picker<T>) p;

@@ -21,9 +21,9 @@ public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
     private Converter<T> converter;
     private Class<T> enumClazz;
 
-    public EnumPicker(Class<T> enumClazz, Converter<?> converter) {
+    public EnumPicker(Class<T> enumClazz, Converter<T> converter) {
         this.enumClazz = enumClazz;
-        this.converter = (Converter<T>) converter;
+        this.converter = converter;
     }
 
 

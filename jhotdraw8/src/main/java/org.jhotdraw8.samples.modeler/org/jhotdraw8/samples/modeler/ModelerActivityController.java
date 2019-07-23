@@ -175,7 +175,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     private DockRoot dockRoot;
 
     @Nonnull
-    private DockItem addInspector(Inspector inspector, String id, Priority grow) {
+    private DockItem addInspector(Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = ModelerLabels.getInspectorResources();
         DockItem dockItem = new DockItem();
         dockItem.setText(r.getString(id + ".toolbar"));
@@ -513,6 +513,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
                 for (Dock dock : list) {
                     for (DockItem n : dock.getItems()) {
                         items.add(n);
+                        @SuppressWarnings("unchecked")
                         Inspector<DrawingView> i = (Inspector<DrawingView>) n.getProperties().get("inspector");
                         i.setSubject(drawingView);
                     }

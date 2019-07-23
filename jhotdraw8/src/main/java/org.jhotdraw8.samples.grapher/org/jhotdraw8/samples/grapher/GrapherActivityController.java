@@ -169,7 +169,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     private DockRoot dockRoot;
 
     @Nonnull
-    private DockItem addInspector(Inspector inspector, String id, Priority grow) {
+    private DockItem addInspector(Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
         DockItem dockItem = new DockItem();
         dockItem.setText(r.getString(id + ".toolbar"));
