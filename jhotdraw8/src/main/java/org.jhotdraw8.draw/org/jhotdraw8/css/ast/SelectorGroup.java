@@ -7,9 +7,12 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * A "selector group" matches an element if one of its selectors matches the
@@ -80,5 +83,20 @@ public class SelectorGroup extends AST {
             }
         }
         return null;
+    }
+
+    @Override
+    public void produceTokens(Consumer<CssToken> consumer) {
+        boolean first = true;
+        for (Selector s : selectors) {
+            if (first) {
+                first = false;
+            } else {
+                consumer.accept(new CssToken(CssTokenType.TT_COMMA));
+                consumer.accept(new CssToken(CssTokenType.TT_S, "\n"));
+            }
+            s.produceTokens(consumer);
+
+        }
     }
 }

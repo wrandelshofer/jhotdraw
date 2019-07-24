@@ -5,7 +5,11 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
+
+import java.util.function.Consumer;
 
 /**
  * A "simple class selector" matches an element based on the value of its
@@ -34,4 +38,11 @@ public class SimplePseudoClassSelector extends PseudoClassSelector {
         return (element != null && model.hasPseudoClass(element, pseudoClass)) //
                 ? element : null;
     }
+
+    @Override
+    public void produceTokens(Consumer<CssToken> consumer) {
+        consumer.accept(new CssToken(CssTokenType.TT_COLON));
+        consumer.accept(new CssToken(CssTokenType.TT_IDENT, pseudoClass));
+    }
+
 }

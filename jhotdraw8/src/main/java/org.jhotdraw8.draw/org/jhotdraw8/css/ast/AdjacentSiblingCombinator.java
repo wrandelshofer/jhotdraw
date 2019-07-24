@@ -4,7 +4,11 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
+
+import java.util.function.Consumer;
 
 /**
  * An "adjacent sibling combinator" matches an element if its first selector
@@ -38,5 +42,12 @@ public class AdjacentSiblingCombinator extends Combinator {
     @Override
     public int getSpecificity() {
         return firstSelector.getSpecificity() + secondSelector.getSpecificity();
+    }
+
+    @Override
+    public void produceTokens(Consumer<CssToken> consumer) {
+        firstSelector.produceTokens(consumer);
+        consumer.accept(new CssToken(CssTokenType.TT_PLUS));
+        secondSelector.produceTokens(consumer);
     }
 }

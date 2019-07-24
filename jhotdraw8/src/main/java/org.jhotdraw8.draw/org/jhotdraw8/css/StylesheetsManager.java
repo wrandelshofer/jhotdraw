@@ -113,7 +113,7 @@ public interface StylesheetsManager<E> {
     default boolean matchesElement(@Nonnull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
-            if (null != r.getSelectorGroup().match(selectorModel, elem)) {
+            if (r.getSelectorGroup().matches(selectorModel, elem)) {
                 return true;
             }
         }
