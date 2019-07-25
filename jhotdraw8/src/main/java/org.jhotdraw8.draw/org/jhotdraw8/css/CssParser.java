@@ -447,13 +447,13 @@ public class CssParser {
                 break;
             }
             switch (tt.current()) {
-                case '>':
+                case CssTokenType.TT_GREATER_THAN:
                     selector = new ChildCombinator(simpleSelector, parseSelector(tt));
                     break;
-                case '+':
+                case CssTokenType.TT_PLUS:
                     selector = new AdjacentSiblingCombinator(simpleSelector, parseSelector(tt));
                     break;
-                case '~':
+                case CssTokenType.TT_TILDE:
                     selector = new GeneralSiblingCombinator(simpleSelector, parseSelector(tt));
                     break;
                 default:

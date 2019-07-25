@@ -4,7 +4,11 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
+
+import java.util.function.Consumer;
 
 /**
  * A "universal selector" matches an element if the element exists.
@@ -28,5 +32,10 @@ public class UniversalSelector extends SimpleSelector {
     @Override
     public int getSpecificity() {
         return 0;
+    }
+
+    @Override
+    public void produceTokens(Consumer<CssToken> consumer) {
+        consumer.accept(new CssToken(CssTokenType.TT_ASTERISK));
     }
 }

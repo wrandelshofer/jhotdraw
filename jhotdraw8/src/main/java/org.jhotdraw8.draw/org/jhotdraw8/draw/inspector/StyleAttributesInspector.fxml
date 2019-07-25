@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import java.lang.String?>
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1"
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0"
@@ -34,6 +34,11 @@
                           text="%updateContents.checkBox.text"/>
               </graphic>
             </MenuItem>
+            <MenuItem mnemonicParsing="false">
+              <graphic>
+                <CheckBox fx:id="updateSelectorCheckBox" mnemonicParsing="false" text="%updateSelector.checkBox.text"/>
+              </graphic>
+            </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem mnemonicParsing="false">
               <graphic>
@@ -52,8 +57,8 @@
             </MenuItem>
             <MenuItem mnemonicParsing="false">
               <graphic>
-                <RadioButton fx:id="showStylesheetValues" mnemonicParsing="false"
-                             text="%shownValues.stylesheetValues" toggleGroup="$shownValues"/>
+                <RadioButton fx:id="showStylesheetValues" mnemonicParsing="false" text="%shownValues.stylesheetValues"
+                             toggleGroup="$shownValues"/>
               </graphic>
             </MenuItem>
             <MenuItem mnemonicParsing="false">

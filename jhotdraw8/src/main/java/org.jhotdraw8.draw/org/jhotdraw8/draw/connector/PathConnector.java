@@ -50,7 +50,7 @@ public class PathConnector extends LocatorConnector {
         // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {
             double grow;
-            switch (target.getStyled(STROKE_TYPE)) {
+            switch (target.getStyledNonnull(STROKE_TYPE)) {
                 case CENTERED:
                 default:
                     // FIXME must stroke the path

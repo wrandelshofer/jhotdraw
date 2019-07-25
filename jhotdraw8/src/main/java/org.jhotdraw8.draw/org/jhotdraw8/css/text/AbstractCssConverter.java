@@ -25,10 +25,12 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
     @Nullable
     @Override
     public final T parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        if (tt.nextIsIdentNone()) {
-            return null;
+        if (isNullable()) {
+            if (tt.nextIsIdentNone()) {
+                return null;
+            }
+            tt.pushBack();
         }
-        tt.pushBack();
         return parseNonnull(tt, idFactory);
     }
 

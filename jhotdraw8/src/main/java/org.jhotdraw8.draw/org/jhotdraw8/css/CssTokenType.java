@@ -278,9 +278,19 @@ public class CssTokenType {
     public final static int TT_SEMICOLON = ';';
 
     /**
+     * Defines the point "." delim-token.
+     */
+    public final static int TT_POINT = '.';
+
+    /**
      * Defines the colon ":" delim-token.
      */
     public final static int TT_COLON = ':';
+
+    /**
+     * Defines the asterisk "*" delim-token.
+     */
+    public final static int TT_ASTERISK = '*';
 
     /**
      * Defines the left bracket ")" delim-token.
@@ -307,6 +317,10 @@ public class CssTokenType {
      */
     public final static int TT_LEFT_SQUARE_BRACKET = '[';
     /**
+     * Defines the equals "=" delim-token.
+     */
+    public final static int TT_EQUALS = '=';
+    /**
      * Defines the slash "/" delim-token.
      */
     public final static int TT_SLASH = '/';
@@ -325,5 +339,9 @@ public class CssTokenType {
      */
     public final static int TT_VERTICAL_LINE = '|';
 
-
+    /**
+     * Defines the greater than ">" delim-token.
+     */
+    public static final int TT_GREATER_THAN = '>';
+    public static final int TT_TILDE = '~';
 }

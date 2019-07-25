@@ -3,6 +3,10 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.css.CssToken;
+
+import java.util.function.Consumer;
+
 /**
  * Abstract syntax tree for cascading style sheets.
  *
@@ -10,5 +14,6 @@ package org.jhotdraw8.css.ast;
  * @version $Id$
  */
 public abstract class AST {
-
+    public void produceTokens(Consumer<CssToken> consumer) {
+    }
 }

@@ -28,6 +28,7 @@ import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.PreciseRotate;
 import org.jhotdraw8.geom.Transforms;
 
 import java.util.ArrayList;
@@ -213,7 +214,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 l2p = Transforms.concat(l2p, tt);
             }
             if (r != 0) {
-                Rotate tr = new Rotate(r, center.getX(), center.getY());
+                Rotate tr = new PreciseRotate(r, center.getX(), center.getY());
                 l2p = Transforms.concat(l2p, tr);
             }
             if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
@@ -299,7 +300,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 p2l = Transforms.concat(p2l, ts);
             }
             if (r != 0) {
-                Rotate tr = new Rotate(-r, center.getX(), center.getY());
+                Rotate tr = new PreciseRotate(-r, center.getX(), center.getY());
                 p2l = Transforms.concat(p2l, tr);
             }
             if (tx != 0.0 || ty != 0.0) {

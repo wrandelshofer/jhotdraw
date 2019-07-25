@@ -41,9 +41,17 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.css.ast.AndCombinator;
+import org.jhotdraw8.css.ast.ClassSelector;
 import org.jhotdraw8.css.ast.Declaration;
+import org.jhotdraw8.css.ast.IdSelector;
+import org.jhotdraw8.css.ast.Selector;
+import org.jhotdraw8.css.ast.SelectorGroup;
+import org.jhotdraw8.css.ast.SimplePseudoClassSelector;
+import org.jhotdraw8.css.ast.SimpleSelector;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
+import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.draw.figure.TextFontableFigure;
@@ -63,6 +71,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -118,6 +127,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private Button selectButton;
     @FXML
     private CheckBox updateContentsCheckBox;
+    @FXML
+    private CheckBox updateSelectorCheckBox;
     @FXML
     private CheckBox composeAttributesCheckBox;
     @FXML
@@ -372,6 +383,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
         updateContentsCheckBox.setSelected(prefs.getBoolean("updateContents", true));
         updateContentsCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("updateContents", newValue));
+        updateSelectorCheckBox.setSelected(prefs.getBoolean("updateSelector", true));
+        updateSelectorCheckBox.selectedProperty().addListener((o, oldValue, newValue)
+                -> prefs.putBoolean("updateSelector", newValue));
         composeAttributesCheckBox.setSelected(prefs.getBoolean("composeAttributes", true));
         composeAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("composeAttributes", newValue));
@@ -431,7 +445,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
             ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
             Set<E> fs = new LinkedHashSet<>(getSelection());
-
             pseudoStyles.put("selected", fs);
 
             List<E> matchedFigures = new ArrayList<>();
@@ -572,18 +585,29 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
 
         // handling of emptyness must be consistent with code in apply() method
-        Set<E> newValue = getSelection();
+        Set<E> newValue = new LinkedHashSet<>(getSelection());
         if (newValue.isEmpty()) {
-            newValue = new LinkedHashSet<>();
             newValue.add(getRoot());
         }
 
-        collectHelpTexts(newValue);
         StylesheetsManager<E> styleManager = getStyleManager();
-        SelectorModel<E> selectorModel = styleManager.getSelectorModel();
-        String id = null;
-        String type = null;
-        Set<String> styleClasses = new TreeSet<>();
+        ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
+        Set<E> fs = new LinkedHashSet<>(newValue);
+        pseudoStyles.put("selected", fs);
+        List<E> matchedFigures = new ArrayList<>();
+        StylesheetsManager<E> sm = getStyleManager();
+        SelectorModel<E> selectorModel = sm.getSelectorModel();
+        selectorModel.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
+        SelectorGroup selector = updateSelector(selection, selectorModel);
+
+        for (E entity : getEntities()) {
+            if (selector.matches(selectorModel, entity)) {
+                matchedFigures.add(entity);
+            }
+        }
+
+
+        collectHelpTexts(newValue);
         Map<QualifiedName, String> attr = new TreeMap<>();
         Map<QualifiedName, String> description = new TreeMap<>();
 
@@ -600,14 +624,11 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         Predicate<QualifiedName> filter = getAttributeFilter();
         boolean first = true;
-        for (E f : newValue) {
+        for (E f : matchedFigures) {
             selectorModel.getAttributeNames(f);
 
             if (first) {
-                id = selectorModel.getId(f);
-                type = selectorModel.getType(f);
                 first = false;
-                styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
                     if (!filter.test(qname)) {
                         continue;
@@ -617,9 +638,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 }
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
-                id = null;
-                type = Objects.equals(selectorModel.getType(f), type) ? type : null;
-                styleClasses.retainAll(selectorModel.getStyleClasses(f));
                 for (QualifiedName qname : attr.keySet()) {
                     if (!filter.test(qname)) {
                         continue;
@@ -640,16 +658,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         StringBuilder buf = new StringBuilder();
         CssPrettyPrinter pp = new CssPrettyPrinter(buf);
-        if (type != null && !type.isEmpty()) {
-            pp.append(cssIdentConverter.toString(type));
-        }
-        if (id != null && id.length() > 0) {
-            pp.append('#').append(cssIdentConverter.toString(id));
-        }
-        for (String clazz : styleClasses) {
-            pp.append('.').append(cssIdentConverter.toString(clazz));
-        }
-        pp.append(":selected {");
+        selector.produceTokens(t -> pp.append(t.fromToken()));
+        pp.append(" {");
         for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
             pp.append("\n  ").append(a.getKey().getName()).append(": ");
             pp.append(a.getValue());
@@ -665,6 +675,77 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
         }
         textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
+    }
+
+    private SelectorGroup updateSelector(Set<E> selection, SelectorModel<E> selectorModel) {
+        if (updateSelectorCheckBox.isSelected()) {
+            return createSelector(selection, selectorModel);
+        } else {
+            return parseSelector();
+        }
+    }
+
+    private SelectorGroup parseSelector() {
+        CssParser parser = new CssParser();
+        try {
+            Stylesheet s = parser.parseStylesheet(textArea.getText());
+            if (!parser.getParseExceptions().isEmpty()) {
+                System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
+                return new SelectorGroup(Collections.emptyList());
+            }
+            for (StyleRule styleRule : s.getStyleRules()) {
+                return styleRule.getSelectorGroup();
+            }
+
+            return new SelectorGroup(Collections.emptyList());
+        } catch (IOException e) {
+            return new SelectorGroup(Collections.emptyList());
+        }
+    }
+
+    @Nonnull
+    private SelectorGroup createSelector(Set<E> selection, SelectorModel<E> selectorModel) {
+        String id = null;
+        String type = null;
+        Set<String> styleClasses = new TreeSet<>();
+        boolean first = true;
+        for (E f : selection) {
+            selectorModel.getAttributeNames(f);
+
+            if (first) {
+                id = selectorModel.getId(f);
+                type = selectorModel.getType(f);
+                first = false;
+                styleClasses.addAll(selectorModel.getStyleClasses(f));
+            } else {
+                id = null;
+                type = Objects.equals(selectorModel.getType(f), type) ? type : null;
+                styleClasses.retainAll(selectorModel.getStyleClasses(f));
+            }
+        }
+
+        List<SimpleSelector> selectors = new ArrayList<>();
+        if (type != null && !type.isEmpty()) {
+            selectors.add(new TypeSelector(null, type));
+        }
+        if (id != null && id.length() > 0) {
+            selectors.add(new IdSelector(id));
+        }
+        for (String clazz : styleClasses) {
+            selectors.add(new ClassSelector(clazz));
+        }
+        selectors.add(new SimplePseudoClassSelector("selected"));
+
+        Selector prev = null;
+        Collections.reverse(selectors);
+        for (SimpleSelector s : selectors) {
+            if (prev != null) {
+                prev = new AndCombinator(s, prev);
+            } else {
+                prev = s;
+            }
+        }
+        return new SelectorGroup(Arrays.asList(prev));
     }
 
     private static class LookupEntry implements Comparable<LookupEntry> {

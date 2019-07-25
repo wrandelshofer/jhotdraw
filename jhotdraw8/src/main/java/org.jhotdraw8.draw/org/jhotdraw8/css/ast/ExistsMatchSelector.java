@@ -5,7 +5,11 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
+
+import java.util.function.Consumer;
 
 /**
  * An "exists match" matches an element if the element has an attribute with the
@@ -35,5 +39,16 @@ public class ExistsMatchSelector extends AbstractAttributeSelector {
     @Override
     public String toString() {
         return "[" + attributeNamespace + ":" + attributeName + ']';
+    }
+
+    @Override
+    public void produceTokens(Consumer<CssToken> consumer) {
+        consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
+        if (attributeNamespace != null) {
+            consumer.accept(new CssToken(CssTokenType.TT_IDENT, attributeNamespace));
+            consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
+        }
+        consumer.accept(new CssToken(CssTokenType.TT_IDENT, attributeName));
+        consumer.accept(new CssToken(CssTokenType.TT_RIGHT_SQUARE_BRACKET));
     }
 }
