@@ -1,4 +1,5 @@
-/* @(#)Rectangle2DConverter.java
+/*
+ * @(#)Rectangle2DConverter.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;

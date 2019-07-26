@@ -1,4 +1,5 @@
-/* @(#)SimpleApplicationModel.java
+/*
+ * @(#)SimpleApplicationModel.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
@@ -12,8 +13,19 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.app.AboutAction;
 import org.jhotdraw8.app.action.app.ExitAction;
-import org.jhotdraw8.app.action.edit.*;
-import org.jhotdraw8.app.action.file.*;
+import org.jhotdraw8.app.action.edit.ClearSelectionAction;
+import org.jhotdraw8.app.action.edit.CopyAction;
+import org.jhotdraw8.app.action.edit.CutAction;
+import org.jhotdraw8.app.action.edit.DeleteAction;
+import org.jhotdraw8.app.action.edit.PasteAction;
+import org.jhotdraw8.app.action.edit.SelectAllAction;
+import org.jhotdraw8.app.action.file.CloseFileAction;
+import org.jhotdraw8.app.action.file.ExportFileAction;
+import org.jhotdraw8.app.action.file.NewFileAction;
+import org.jhotdraw8.app.action.file.OpenFileAction;
+import org.jhotdraw8.app.action.file.RevertFileAction;
+import org.jhotdraw8.app.action.file.SaveFileAction;
+import org.jhotdraw8.app.action.file.SaveFileAsAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;

@@ -1,5 +1,6 @@
-/* @(#)BezierNodeEditHandle.java
- * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
+/*
+ * @(#)BezierNodeTangentHandle.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.handle;
 

@@ -1,3 +1,7 @@
+/*
+ * @(#)AbstractPathBuilder.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.Nonnull;

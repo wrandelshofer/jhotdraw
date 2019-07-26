@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" 
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://docbook.org/ns/docbook http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbook.xsd"
+<!--
+  ~ @(#)Book.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://docbook.org/ns/docbook http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbook.xsd"
 >
    
     <info>

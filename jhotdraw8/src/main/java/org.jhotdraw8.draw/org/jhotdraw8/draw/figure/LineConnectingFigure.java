@@ -1,4 +1,5 @@
-/* @(#)LineConnectingFigure.java
+/*
+ * @(#)LineConnectingFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 

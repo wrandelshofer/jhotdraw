@@ -1,5 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- You may freely edit this file. See commented blocks below for --><!-- some examples of how to customize the build. --><!-- (If you delete it and reopen the project it will be recreated.) --><!-- By default, only the Clean and Build commands use this build script. -->
-<project name="jhotdraw8" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ @(#)build.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
+<!-- You may freely edit this file. See commented blocks below for --><!-- some examples of how to customize the build. --><!-- (If you delete it and reopen the project it will be recreated.) --><!-- By default, only the Clean and Build commands use this build script. -->
+<project name="jhotdraw8" default="default" basedir=".">
     <description>Builds, tests, and runs the project jhotdraw8.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--

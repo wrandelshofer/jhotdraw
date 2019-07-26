@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ @(#)collectbiblio.xsl
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                        xmlns="http://docbook.org/ns/docbook"
                        xmlns:db="http://docbook.org/ns/docbook">

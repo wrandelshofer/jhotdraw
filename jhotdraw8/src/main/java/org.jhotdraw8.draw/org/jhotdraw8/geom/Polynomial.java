@@ -1,13 +1,6 @@
-/* @(#)Polynomial.java
+/*
+ * @(#)Polynomial.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
- *
- * This class is a based on:
- *
- *   Polynomial.js by Kevin Lindsey.
- * Copyright (C) 2002, Kevin Lindsey.
- *
- * MgcPolynomial.cpp by David Eberly.
- * Copyright (c) 2000-2003 Magic Software, Inc.
  */
 package org.jhotdraw8.geom;
 
@@ -28,25 +21,6 @@ import static java.lang.Math.max;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
-/**
- * Polynomial encapsulates root finding functions needed by curve intersection
- * methods which are based on numerical calculations.
- * <p>
- * This class is a port of Polynomial.js by Kevin Lindsey. Parts of
- * Polynomial.js are based on MgcPolynomial.cpp written by David Eberly, Magic
- * Software. Inc.
- * <p>
- * References:
- * <p>
- * <a href="http://www.kevlindev.com/gui/index.htm">Polynomial.js</a>, Copyright
- * (c) 2002, Kevin Lindsey.
- * <p>
- * <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright
- * 2000-2003 (c) David Eberly. Magic Software, Inc.
- *
- * @author Werner Randelshofer
- * @version $Id$
- */
 public class Polynomial implements ToDoubleFunction<Double> {
 
     private final static double ACCURACY = 6;

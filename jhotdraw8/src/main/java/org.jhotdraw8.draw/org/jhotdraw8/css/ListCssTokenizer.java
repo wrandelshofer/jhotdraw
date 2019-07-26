@@ -1,3 +1,7 @@
+/*
+ * @(#)ListCssTokenizer.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.Nullable;
@@ -8,7 +12,11 @@ import org.jhotdraw8.collection.ReadOnlyList;
 import java.io.IOException;
 import java.util.List;
 
-import static org.jhotdraw8.css.CssTokenType.*;
+import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;
+import static org.jhotdraw8.css.CssTokenType.TT_CDC;
+import static org.jhotdraw8.css.CssTokenType.TT_CDO;
+import static org.jhotdraw8.css.CssTokenType.TT_COMMENT;
+import static org.jhotdraw8.css.CssTokenType.TT_S;
 
 public class ListCssTokenizer implements CssTokenizer {
     private final ImmutableList<CssToken> in;

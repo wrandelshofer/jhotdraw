@@ -1,5 +1,6 @@
-/* @(#)BezierNodeList.java
- * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
+/*
+ * @(#)XmlBezierNodeListConverter.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.xml.text;
 

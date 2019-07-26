@@ -1,4 +1,5 @@
-/* @(#)CharBufferReader.java
+/*
+ * @(#)CharBufferReader.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.io;

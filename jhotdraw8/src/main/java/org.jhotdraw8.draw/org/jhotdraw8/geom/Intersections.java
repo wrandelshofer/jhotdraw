@@ -1,13 +1,6 @@
-/* @(#)Intersection.java
+/*
+ * @(#)Intersections.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
- *
- * This class is a based on:
- *
- *  Polynomial.js by Kevin Lindsey.
- * Copyright (C) 2002, Kevin Lindsey.
- *
- * MgcPolynomial.cpp by David Eberly.
- * Copyright (c) 2000-2003 Magic Software, Inc.
  */
 package org.jhotdraw8.geom;
 
@@ -27,27 +20,6 @@ import static java.lang.Math.min;
 import static org.jhotdraw8.geom.Geom.argumentOnLine;
 import static org.jhotdraw8.geom.Geom.lerp;
 
-/**
- * Provides a collection of intersection tests.
- * <p>
- * This class is a port of Intersection.js by Kevin Lindsey. Part of
- * Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic
- * Software. Inc.
- * <p>
- * References:
- * <p>
- * <a href="http://www.kevlindev.com/gui/index.htm">Intersection.js</a>,
- * Copyright (c) 2002, Kevin Lindsey.
- * <p>
- * <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright
- * 2000-2003 (c) David Eberly. Magic Software, Inc.
- * <p>
- * <a href="http://pomax.github.io/bezierinfo/">A Primer on Bézier Curves</a>,
- * Copyright ©-2016 Mike "Pomax" Kamermansy.
- *
- * @author Werner Randelshofer
- * @version $Id$
- */
 public class Intersections {
 
     /**

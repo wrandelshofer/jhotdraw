@@ -1,4 +1,5 @@
-/* @(#)MessageFormatConverterFactory.java
+/*
+ * @(#)MessageFormatConverterFactory.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
@@ -6,7 +7,11 @@ package org.jhotdraw8.text;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.text.*;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**

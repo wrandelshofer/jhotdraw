@@ -1,4 +1,5 @@
-/* @(#)AnchorableFigure.java
+/*
+ * @(#)AnchorableFigure.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 

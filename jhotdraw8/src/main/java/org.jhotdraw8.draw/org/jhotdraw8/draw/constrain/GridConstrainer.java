@@ -1,9 +1,18 @@
-/* @(#)GridConstrainer.java
+/*
+ * @(#)GridConstrainer.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.constrain;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -17,12 +26,20 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.css.*;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 
-import static java.lang.Math.*;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.round;
 
 /**
  * GridConstrainer.

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @(#)figure.bdd.ApplicationFramework.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
         xml:id="figure.bdd.ApplicationFramework">
   <title>SysML Block Definition Diagram: Application Framework</title>

@@ -1,3 +1,7 @@
+/*
+ * @(#)AbstractShortestPathBuilder.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.Nonnull;
@@ -25,6 +29,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
 
     public AbstractShortestPathBuilder() {
     }
+
     public AbstractShortestPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
                                        @Nonnull final ToDoubleFunction<A> costf) {
         this(graph::getNextArcs, costf);

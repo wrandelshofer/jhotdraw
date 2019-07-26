@@ -1,4 +1,5 @@
-/* @(#)AbstractCreationTool.java
+/*
+ * @(#)AbstractCreationTool.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 

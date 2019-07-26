@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @(#)bibliography.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <bibliography xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
 xmlns:xlink="http://www.w3.org/1999/xlink">
   

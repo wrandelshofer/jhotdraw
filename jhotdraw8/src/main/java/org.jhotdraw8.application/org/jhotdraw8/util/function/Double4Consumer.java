@@ -1,5 +1,6 @@
-/* @(#)Double4Consumer.java
- * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
+/*
+ * @(#)Double4Consumer.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.util.function;

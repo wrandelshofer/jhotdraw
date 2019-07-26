@@ -1,8 +1,16 @@
+/*
+ * @(#)ImmutableSets.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.Nonnull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class ImmutableSets {
     public static <T> ImmutableSet<T> add(Collection<T> collection, T item) {

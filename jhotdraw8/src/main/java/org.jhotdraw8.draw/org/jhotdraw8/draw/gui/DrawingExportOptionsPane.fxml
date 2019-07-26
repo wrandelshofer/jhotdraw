@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+<!--
+  ~ @(#)DrawingExportOptionsPane.fxml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>

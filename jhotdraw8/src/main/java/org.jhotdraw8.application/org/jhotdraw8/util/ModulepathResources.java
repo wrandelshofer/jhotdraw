@@ -1,4 +1,5 @@
-/* @(#)ModulepathResources.java
+/*
+ * @(#)ModulepathResources.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.util;
@@ -8,7 +9,11 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import java.util.spi.ResourceBundleProvider;
 

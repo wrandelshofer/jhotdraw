@@ -1,3 +1,7 @@
+/*
+ * @(#)module-info.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 import org.jhotdraw8.app.spi.ApplicationResourceBundleProvider;
 
 module org.jhotdraw8.application {

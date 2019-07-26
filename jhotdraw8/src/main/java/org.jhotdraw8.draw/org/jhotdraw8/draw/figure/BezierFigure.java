@@ -1,5 +1,6 @@
-/* @(#)BezierFigure.java
- * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
+/*
+ * @(#)BezierFigure.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 

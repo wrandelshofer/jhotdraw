@@ -1,3 +1,7 @@
+/*
+ * @(#)MLCompartmentalizedData.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.samples.modeler.model;
 
 import org.jhotdraw8.annotation.Nonnull;

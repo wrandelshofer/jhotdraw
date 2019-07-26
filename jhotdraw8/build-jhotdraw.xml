@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * @(#)build-jhotdraw8.xml
- * Copyright (c) 2015-2017 The authors and contributors of JHotDraw. MIT License.
--->
+  ~ @(#)build-jhotdraw.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
 <project name="jhotdraw8" basedir="." default="all"
          xmlns:unless="ant:unless"
 >

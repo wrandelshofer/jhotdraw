@@ -1,9 +1,6 @@
-/* @(#)package-info.java
- * Copyright ©-2017 The authors and contributors of JHotDraw.
- * MIT License, CC-by License, or LGPL License.
- *
- * @author Werner Randelshofer
- * @version $Id$
+/*
+ * @(#)package-info.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 
 /**

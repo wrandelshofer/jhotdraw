@@ -1,3 +1,7 @@
+/*
+ * @(#)CssStroke.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css;
 
 import javafx.scene.shape.StrokeLineCap;

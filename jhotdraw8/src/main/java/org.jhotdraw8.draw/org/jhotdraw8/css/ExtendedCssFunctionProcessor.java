@@ -1,3 +1,7 @@
+/*
+ * @(#)ExtendedCssFunctionProcessor.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ImmutableList;
@@ -99,12 +103,12 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
         if (tt.next() == CssTokenType.TT_COMMA) {
             tt.next();
         }
-            tt.pushBack();
+        tt.pushBack();
         String regex = evalString(element, tt, REPLACE_FUNCTION_NAME);
         if (tt.next() == CssTokenType.TT_COMMA) {
             tt.next();
         }
-            tt.pushBack();
+        tt.pushBack();
         String repl = evalString(element, tt, REPLACE_FUNCTION_NAME);
         if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
             throw new ParseException("〈replace〉: right bracket ')' expected.", tt.getStartPosition());

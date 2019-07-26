@@ -1,5 +1,6 @@
-/* @(#)BreadthFirstSpliterator.java
- * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
+/*
+ * @(#)BreadthFirstSpliterator.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
 

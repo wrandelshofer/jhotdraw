@@ -1,5 +1,6 @@
-/* @(#)MarkerMidableFigure.java
- * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
+/*
+ * @(#)MarkerMidableFigure.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 

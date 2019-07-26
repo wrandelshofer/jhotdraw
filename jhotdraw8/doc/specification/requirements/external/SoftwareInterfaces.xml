@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @(#)SoftwareInterfaces.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" role="requirement">
 <title>Software Interfaces</title>
 <para>JHotDraw 8 provides example code which demonstrate how to read and write a drawing to and from a file and to/from the clipboard.</para>

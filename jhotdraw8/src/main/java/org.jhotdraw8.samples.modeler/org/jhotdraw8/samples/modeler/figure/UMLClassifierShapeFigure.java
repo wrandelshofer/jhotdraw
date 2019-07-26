@@ -1,3 +1,7 @@
+/*
+ * @(#)UMLClassifierShapeFigure.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.samples.modeler.figure;
 
 import javafx.collections.ObservableList;

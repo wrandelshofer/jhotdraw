@@ -1,3 +1,8 @@
+<!--
+  ~ @(#)https _www.w3.org_2001_xml.xsd.xml
+  ~ Copyright Â© The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta name="viewport" content="width=device-width" /><title>https://www.w3.org/2001/xml.xsd</title><link rel="stylesheet" type="text/css" href="resource://content-accessible/viewsource.css" /></head><body id="viewsource" class="highlight" style="-moz-tab-size: 4" contextmenu="actions"><pre id="line1"><span></span><span class="pi">&lt;?xml version='1.0'?&gt;</span><span>
 <span id="line2"></span></span><span class="pi">&lt;?xml-stylesheet href="../2008/09/xsd.xsl" type="text/xsl"?&gt;</span><span>
@@ -286,4 +291,4 @@
 <span id="line285"></span>
 <span id="line286"></span></span><span>&lt;/<span class="end-tag">xs:schema</span>&gt;</span><span>
 <span id="line287"></span>
-<span id="line288"></span></span></pre><menu type="context" id="actions"><menuitem id="goToLine" label="Zu Zeile springen…" accesskey="L"></menuitem><menuitem id="wrapLongLines" label="Lange Zeilen umbrechen" type="checkbox"></menuitem><menuitem id="highlightSyntax" label="Syntax-Hervorhebung" type="checkbox" checked="true"></menuitem></menu></body></html>
+<span id="line288"></span></span></pre><menu type="context" id="actions"><menuitem id="goToLine" label="Zu Zeile springenï¿½" accesskey="L"></menuitem><menuitem id="wrapLongLines" label="Lange Zeilen umbrechen" type="checkbox"></menuitem><menuitem id="highlightSyntax" label="Syntax-Hervorhebung" type="checkbox" checked="true"></menuitem></menu></body></html>

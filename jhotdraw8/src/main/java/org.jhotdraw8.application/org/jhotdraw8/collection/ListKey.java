@@ -1,5 +1,6 @@
-/* @(#)DoubleKey.java
- * Copyright © by the authors and contributors ofCollection JHotDraw. MIT License.
+/*
+ * @(#)ListKey.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 

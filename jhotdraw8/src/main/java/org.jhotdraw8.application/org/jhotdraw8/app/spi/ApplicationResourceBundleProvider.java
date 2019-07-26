@@ -1,3 +1,7 @@
+/*
+ * @(#)ApplicationResourceBundleProvider.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.app.spi;
 
 import java.util.Locale;

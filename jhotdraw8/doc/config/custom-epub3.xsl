@@ -1,4 +1,9 @@
 <?xml version='1.0'?>
+<!--
+  ~ @(#)custom-epub3.xsl
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <xsl:stylesheet
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:import href="epub3/chunk.xsl"/>

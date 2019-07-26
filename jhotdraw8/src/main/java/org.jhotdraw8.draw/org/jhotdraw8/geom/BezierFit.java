@@ -1,4 +1,5 @@
-/* @(#)BezierFit.java
+/*
+ * @(#)BezierFit.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
@@ -11,22 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Provides algorithms for fitting BezierFit curves to a set of digitized
- * points.
- * <p>
- * Source:<br>
- * Phoenix: An Interactive Curve Design System Based on the Automatic Fitting of
- * Hand-Sketched Curves.<br>
- * © Copyright by Philip J. Schneider 1988.<br>
- * A thesis submitted in partial fulfillment of the requirements for the degree
- * of Master of Science, University of Washington.
- * <p>
- * http://autotrace.sourceforge.net/Interactive_Curve_Design.ps.gz
- *
- * @author Werner Randelshofer
- * @version $Id$
- */
 public class BezierFit {
 
     /**

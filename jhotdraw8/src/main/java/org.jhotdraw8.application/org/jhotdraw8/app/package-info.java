@@ -1,8 +1,6 @@
-/* @(#)package-info.java
+/*
+ * @(#)package-info.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
- *
- * @author Werner Randelshofer
- * @version $Id$
  */
 /**
  * Defines a programming model for document oriented applications and provides default

@@ -1,4 +1,5 @@
-/* @(#)TreeModelEvent.java
+/*
+ * @(#)TreeModelEvent.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 

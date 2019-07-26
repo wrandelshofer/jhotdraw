@@ -1,5 +1,6 @@
-/* @(#)LabelAutorotate.java
- * Copyright (c) systransis Ltd.
+/*
+ * @(#)LabelAutorotate.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.draw.figure;

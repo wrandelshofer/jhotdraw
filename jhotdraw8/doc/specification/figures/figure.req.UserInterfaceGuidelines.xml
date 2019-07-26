@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @(#)figure.req.UserInterfaceGuidelines.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <figure xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
         xml:id="figure.UserInterfaceGuidelines">
   <title>SysML Requirements Diagram: User Interface Guidelines</title>

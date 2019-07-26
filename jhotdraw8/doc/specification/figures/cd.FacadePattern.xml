@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ @(#)cd.FacadePattern.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <Drawing height="14.8cm" id="drawing1" width="14.8cm" xmlns="http://jhotdraw.org/samples/modeler">
   <Layer id="frame" locked="true">
     <MLDiagram bounds="1 1 557 557" diagramKind="cd" id="sysmldiagram1" modelElementName="Facade Pattern"

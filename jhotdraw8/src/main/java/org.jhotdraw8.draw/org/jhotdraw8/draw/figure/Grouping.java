@@ -1,4 +1,5 @@
-/* @(#)Grouping.java
+/*
+ * @(#)Grouping.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 

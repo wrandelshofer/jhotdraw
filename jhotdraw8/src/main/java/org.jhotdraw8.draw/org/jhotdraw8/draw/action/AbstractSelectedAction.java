@@ -1,3 +1,7 @@
+/*
+ * @(#)AbstractSelectedAction.java
+ * Copyright © The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.draw.action;
 
 import org.jhotdraw8.annotation.Nonnull;
@@ -8,10 +12,6 @@ import org.jhotdraw8.app.action.AbstractViewControllerAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
-
-/* @(#)AbstractSelectedAction.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
- */
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
