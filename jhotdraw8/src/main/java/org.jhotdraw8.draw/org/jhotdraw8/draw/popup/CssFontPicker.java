@@ -10,6 +10,7 @@ import javafx.scene.text.FontWeight;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.gui.fontchooser.FontDialog;
+import org.jhotdraw8.gui.fontchooser.FontFamilySize;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -26,12 +27,10 @@ public class CssFontPicker extends AbstractPicker<CssFont> {
     @Override
     public void show(Node anchor, double screenX, double screenY,
                      CssFont initialValue, BiConsumer<Boolean, CssFont> callback) {
+        CssFont initial = initialValue == null ? new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(13)) : initialValue;
         update(anchor);
-        Optional<String> s = dialog.showAndWait(initialValue == null ? null : initialValue.getFamily());
-        if (initialValue == null) {
-            s.ifPresent(v -> callback.accept(true, new CssFont(v, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(13))));
-        } else {
-            s.ifPresent(v -> callback.accept(true, new CssFont(v, FontWeight.NORMAL, FontPosture.REGULAR, initialValue.getSize())));
-        }
+        Optional<FontFamilySize> s = dialog.showAndWait(new FontFamilySize(initial.getFamily(), initial.getSize().getConvertedValue()));
+        s.ifPresent(v -> callback.accept(true, new CssFont(v.getFamily(), initial.getWeight(), initial.getPosture(),
+                new CssSize(v.getSize()))));
     }
 }

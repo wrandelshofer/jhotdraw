@@ -24,7 +24,7 @@ import java.util.Optional;
  *
  * @author Werner Randelshofer
  */
-public class FontDialog extends Dialog<String> {
+public class FontDialog extends Dialog<FontFamilySize> {
 
     private FontChooserController controller;
 
@@ -74,21 +74,26 @@ public class FontDialog extends Dialog<String> {
         return model;
     }
 
-    private String handleButton(@Nullable ButtonType buttonType) {
+    private FontFamilySize handleButton(@Nullable ButtonType buttonType) {
         new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType != null && buttonType.getButtonData() == ButtonData.OK_DONE) {
-            return controller == null ? null : controller.getSelectedFontName();
+            String selectedFontName = controller.getSelectedFontName();
+            double fontSize = controller.getFontSize();
+            return new FontFamilySize(selectedFontName, fontSize);
         } else {
             return null;
         }
     }
 
     public void selectFontName(String fontName) {
-        controller.selectFontName(fontName);
+        controller.setFontName(fontName);
     }
 
-    public final Optional<String> showAndWait(String fontName) {
-        selectFontName(fontName);
+    public final Optional<FontFamilySize> showAndWait(FontFamilySize font) {
+        if (font != null) {
+            selectFontName(font.getFamily());
+            controller.setFontSize(font.getSize());
+        }
         return showAndWait();
     }
 

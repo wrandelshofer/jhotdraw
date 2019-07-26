@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.gui.fontchooser.FontDialog;
+import org.jhotdraw8.gui.fontchooser.FontFamilySize;
 
 /**
  * FontChooserMain.
@@ -31,9 +32,10 @@ public class FontChooserMain extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                String fontName = fd.showAndWait().orElse(null);
+                FontFamilySize fontName = fd.showAndWait().orElse(null);
                 if (fontName != null) {
-                    btn.setFont(new Font(fontName, 13));
+                    btn.setText(fontName.getFamily() + " " + fontName.getSize());
+                    btn.setFont(new Font(fontName.getFamily(), fontName.getSize()));
                 }
             }
         });

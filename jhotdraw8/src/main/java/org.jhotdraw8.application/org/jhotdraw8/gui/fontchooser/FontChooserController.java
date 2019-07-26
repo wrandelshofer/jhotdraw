@@ -6,7 +6,9 @@ package org.jhotdraw8.gui.fontchooser;
 
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,7 +17,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -25,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -48,6 +53,12 @@ public class FontChooserController {
     @FXML
     private ListView<FontFamily> familyList;
     @FXML
+    private ListView<Integer> fontSizeList;
+    @FXML
+    private Slider fontSizeSlider;
+    @FXML
+    private TextField fontSizeField;
+    @FXML
     private Label fontNameLabel;
     @FXML
     private URL location;
@@ -55,6 +66,8 @@ public class FontChooserController {
     private final ObjectProperty<FontChooserModel> model = new SimpleObjectProperty<>();
 
     private final ObjectProperty<EventHandler<ActionEvent>> onAction = new SimpleObjectProperty<>();
+
+    private final DoubleProperty fontSize = new SimpleDoubleProperty(12.0);
 
     @FXML
     private TextArea previewTextArea;
@@ -95,8 +108,16 @@ public class FontChooserController {
         return collection;
     }
 
+    public double getFontSize() {
+        return fontSize.get();
+    }
+
     public FontChooserModel getModel() {
         return model.get();
+    }
+
+    public void setFontSize(double size) {
+        fontSize.set(size);
     }
 
     public void setModel(FontChooserModel value) {
@@ -257,13 +278,21 @@ public class FontChooserController {
         typefaceList.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> {
             if (newv == null) {
                 fontNameLabel.setText(labels.getString("FontChooser.nothingSelected"));
-                previewTextArea.setFont(new Font("System Regular", 24));
-
             } else {
                 fontNameLabel.setText(newv.getName());
-                previewTextArea.setFont(new Font(newv.getName(), 24));
             }
+            updatePreviewTextArea();
         });
+    }
+
+    private void updatePreviewTextArea() {
+        String text = fontNameLabel.getText();
+        final Resources labels = ApplicationLabels.getGuiResources();
+        if (text == null || text.equals(labels.getString("FontChooser.nothingSelected"))) {
+            previewTextArea.setFont(new Font("System Regular", getFontSize()));
+        } else {
+            previewTextArea.setFont(new Font(text, getFontSize()));
+        }
     }
 
     private void initPreferencesBehavior() {
@@ -292,7 +321,11 @@ public class FontChooserController {
         assert collectionList != null : "fx:id=\"collectionList\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert familyList != null : "fx:id=\"familyList\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert typefaceList != null : "fx:id=\"typefaceList\" was not injected: check your FXML file 'FontChooser.fxml'.";
+        assert fontSizeField != null : "fx:id=\"fontSizeField\" was not injected: check your FXML file 'FontChooser.fxml'.";
+        assert fontSizeList != null : "fx:id=\"fontSizeList\" was not injected: check your FXML file 'FontChooser.fxml'.";
+        assert fontSizeSlider != null : "fx:id=\"fontSizeSlider\" was not injected: check your FXML file 'FontChooser.fxml'.";
 
+        initFontSizeControls();
         initUpdateViewFromModelBehavior();
         initListSelectionBehavior();
         initButtonDisableBehavior();
@@ -302,6 +335,21 @@ public class FontChooserController {
 
         initDeleteKeyBehavior();
 
+    }
+
+    private void initFontSizeControls() {
+        fontSizeList.getItems().addAll(9, 10, 11, 12, 13, 14, 18, 24, 36, 48, 64, 72, 96, 144, 288);
+        fontSizeSlider.valueProperty().bindBidirectional(fontSize);
+        StringConverter<Number> converter = new NumberStringConverter();
+        Bindings.bindBidirectional(fontSizeField.textProperty(), fontSize, converter);
+        fontSizeList.setOnMouseClicked(event -> {
+            Integer selectedItem = fontSizeList.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                setFontSize(selectedItem.doubleValue());
+            }
+            fontSizeList.getSelectionModel().clearSelection();
+        });
+        fontSize.addListener(o -> updatePreviewTextArea());
     }
 
     @Nonnull
@@ -339,7 +387,7 @@ public class FontChooserController {
 
     }
 
-    public void selectFontName(String fontName) {
+    public void setFontName(String fontName) {
         final ObservableList<FontCollection> collections = collectionList.getItems();
         for (int i = 0, n = collections.size(); i < n; i++) {
             final FontCollection fontCollection = collections.get(i);
