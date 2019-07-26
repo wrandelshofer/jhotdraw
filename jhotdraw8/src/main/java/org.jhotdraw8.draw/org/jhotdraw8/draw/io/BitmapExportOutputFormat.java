@@ -105,7 +105,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
             CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds, drawingDpi), Platform::runLater);
             try {
                 return future.get();
-            } catch (@Nonnull InterruptedException | ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
@@ -118,7 +118,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
             CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds, dpi), Platform::runLater);
             try {
                 return future.get();
-            } catch (@Nonnull InterruptedException | ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {

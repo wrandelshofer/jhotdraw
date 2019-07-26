@@ -6,7 +6,6 @@ package org.jhotdraw8.text;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.scene.text.Font;
-import org.jhotdraw8.annotation.Nonnull;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -31,7 +30,7 @@ public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
     public T convert(ParsedValue<String, T> value, Font font) {
         try {
             return converter.fromString(value.getValue());
-        } catch (@Nonnull ParseException | IOException ex) {
+        } catch (ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

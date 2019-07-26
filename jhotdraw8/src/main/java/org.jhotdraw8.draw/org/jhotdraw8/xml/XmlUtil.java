@@ -137,7 +137,7 @@ public class XmlUtil {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(inputSource);
             return doc;
-        } catch (@Nonnull SAXException | ParserConfigurationException ex) {
+        } catch (SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }
@@ -175,7 +175,7 @@ public class XmlUtil {
             transformer.transform(saxSource, domResult);
             Node root = domResult.getNode();
             return (Document) root;
-        } catch (@Nonnull TransformerException | SAXException | ParserConfigurationException ex) {
+        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }

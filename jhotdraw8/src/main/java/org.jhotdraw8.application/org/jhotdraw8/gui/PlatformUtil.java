@@ -25,7 +25,7 @@ public class PlatformUtil {
             Platform.runLater(task);
             try {
                 task.get();
-            } catch (@Nonnull InterruptedException | ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 throw new InternalError(ex);
             }
         }

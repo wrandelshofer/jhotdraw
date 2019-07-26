@@ -16,7 +16,6 @@ import java.text.ParseException;
  * @param <T> the value type
  * @author Werner Randelshofer
  * @version $Id$
- * rawcoder $
  */
 public class StringConverterAdapter<T> extends StringConverter<T> {
 
@@ -35,7 +34,7 @@ public class StringConverterAdapter<T> extends StringConverter<T> {
     public T fromString(@Nonnull String string) {
         try {
             return converter.fromString(string);
-        } catch (@Nonnull ParseException | IOException ex) {
+        } catch (ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

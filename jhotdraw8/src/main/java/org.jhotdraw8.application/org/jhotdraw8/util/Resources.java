@@ -260,7 +260,7 @@ public interface Resources {
         String s = getString(key);
         try {
             ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
-        } catch (@Nonnull NoSuchElementException | StringIndexOutOfBoundsException e) {
+        } catch (NoSuchElementException | StringIndexOutOfBoundsException e) {
             throw new InternalError(key + "=" + s, e);
         }
         return ks;

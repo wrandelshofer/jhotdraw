@@ -205,7 +205,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     keys.add(k);
                 }
             }
-        } catch (@Nonnull IllegalArgumentException | IllegalAccessException ex) {
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new RuntimeException("class can not read its own keys", ex);
         }
     }
@@ -218,7 +218,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     keys.add(k);
                 }
             }
-        } catch (@Nonnull IllegalArgumentException | IllegalAccessException ex) {
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new RuntimeException("class can not read its own keys");
         }
     }
