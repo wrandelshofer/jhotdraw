@@ -158,7 +158,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 }
         );
 
-        // This cell factory ensures that only styleable figures support editing ofCollection ids.
+        // This cell factory ensures that only styleable figures support editing of ids.
         // And it ensures, that the users sees the computed id, and not the one that he entered. 
         idColumn.setCellFactory(
                 new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
@@ -202,7 +202,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                 });
-        // This cell factory ensures that only styleable figures support editing ofCollection style classes.
+        // This cell factory ensures that only styleable figures support editing of style classes.
         // And it ensures, that the users sees the computed style classes, and not the ones that he entered. 
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
         styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
@@ -282,7 +282,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         });
 
-        final Comparator<String> comparator = (a, b) -> collator.compare(a, b);
+        final Comparator<String> comparator = collator::compare;
         typeColumn.setComparator(comparator);
         idColumn.setComparator(comparator);
         //classesColumn.setComparator(comparator);

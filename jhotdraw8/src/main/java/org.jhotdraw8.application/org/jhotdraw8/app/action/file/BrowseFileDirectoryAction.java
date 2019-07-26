@@ -65,7 +65,6 @@ public class BrowseFileDirectoryAction extends AbstractViewControllerAction<Docu
             if (path != null) {
                 //Desktop.getDesktop().browseFileDirectory(path.toFile());
                 try {
-
                     try {
                         Desktop.class.getMethod("browseFileDirectory", File.class).invoke(Desktop.getDesktop(), path.toFile());
                     } catch (IllegalAccessException | InvocationTargetException e) {
