@@ -33,6 +33,7 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
             setText(null);
             setGraphic(null);
         } else {
+            setText(" ");// must be non-empty to make indentation work
             setGraphic(checkBox);
             checkBox.setSelected(item);
         }
