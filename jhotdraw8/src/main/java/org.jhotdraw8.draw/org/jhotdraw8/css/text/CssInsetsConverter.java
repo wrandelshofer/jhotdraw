@@ -23,7 +23,6 @@ import java.util.function.Consumer;
  * Converts a {@link CssInsets} into a {@code String} and vice versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
     public CssInsetsConverter(boolean nullable) {

@@ -61,7 +61,6 @@ import java.util.Set;
  * FXML Controller class
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 

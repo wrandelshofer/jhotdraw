@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
  * A figure which supports end markers.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface MarkerEndableFigure extends Figure {
 

@@ -27,8 +27,7 @@ import java.util.Set;
  * and a list of all participating types and their roles in the design pattern.
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class DesignOverviewTaglet implements Taglet {
     @Override
     public Set<Location> getAllowedLocations() {

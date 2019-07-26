@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * SvgDoublePathBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SvgDoublePathBuilder implements PathBuilder {
 

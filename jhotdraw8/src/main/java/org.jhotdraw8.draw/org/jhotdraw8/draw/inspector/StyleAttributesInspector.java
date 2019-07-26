@@ -27,7 +27,6 @@ import org.jhotdraw8.text.Converter;
  * FXML Controller class
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StyleAttributesInspector extends AbstractStyleAttributesInspector<Figure>
         implements Inspector<DrawingView> {

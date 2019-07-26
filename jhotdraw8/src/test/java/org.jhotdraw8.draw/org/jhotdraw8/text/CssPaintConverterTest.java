@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * CssPaintConverterTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPaintConverterTest {
 

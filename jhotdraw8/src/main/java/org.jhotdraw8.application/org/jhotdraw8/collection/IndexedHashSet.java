@@ -29,7 +29,6 @@ import static java.lang.Math.min;
  * The set is backed by a list and a set.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IndexedHashSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E>, ReadOnlySet<E> {
 

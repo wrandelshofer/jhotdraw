@@ -20,7 +20,6 @@ import java.text.ParseException;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlRectangle2DConverter implements Converter<Rectangle2D> {
 

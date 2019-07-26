@@ -26,7 +26,6 @@ import java.util.function.Function;
  * CssSize2DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssPoint2D> {
 

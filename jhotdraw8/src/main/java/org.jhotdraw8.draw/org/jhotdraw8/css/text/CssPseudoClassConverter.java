@@ -37,7 +37,6 @@ import java.util.function.Consumer;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPseudoClassConverter extends AbstractCssConverter<PseudoClass> {
 

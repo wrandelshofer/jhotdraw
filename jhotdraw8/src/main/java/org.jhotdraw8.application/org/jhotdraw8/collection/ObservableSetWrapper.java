@@ -15,7 +15,6 @@ import javafx.collections.SetChangeListener;
  * ReadOnlySet to a client who does not understand the ReadOnlySet APi.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ObservableSetWrapper<E> extends SetWrapper<E> implements ObservableSet<E> {
     public ObservableSetWrapper(ReadOnlySet<E> backingSet) {

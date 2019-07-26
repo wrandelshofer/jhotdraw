@@ -13,7 +13,6 @@ import java.util.function.IntFunction;
  * IntDirectedGraphs.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntDirectedGraphs {
     /**

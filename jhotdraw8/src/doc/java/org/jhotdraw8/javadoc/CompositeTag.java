@@ -13,8 +13,7 @@ import com.sun.javadoc.Tag;
  * CompositeTag.
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class CompositeTag implements Tag {
 
     private final Doc holder;

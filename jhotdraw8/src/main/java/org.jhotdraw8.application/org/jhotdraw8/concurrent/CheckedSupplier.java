@@ -12,7 +12,6 @@ import org.jhotdraw8.annotation.Nullable;
  *
  * @param <T> the result type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface CheckedSupplier<T> {
     @Nonnull

@@ -10,7 +10,6 @@ package org.jhotdraw8.graph;
  *
  * @param <V> the type of the objects which form a pair
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Pair<V> {
 

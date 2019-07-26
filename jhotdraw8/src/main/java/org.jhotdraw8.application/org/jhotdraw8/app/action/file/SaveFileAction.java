@@ -19,7 +19,6 @@ import java.net.URI;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SaveFileAction extends AbstractSaveFileAction {
 

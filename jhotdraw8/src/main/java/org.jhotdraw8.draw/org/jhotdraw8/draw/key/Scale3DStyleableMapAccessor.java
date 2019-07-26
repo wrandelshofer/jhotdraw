@@ -26,7 +26,6 @@ import java.util.function.Function;
  * Scale3DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point3D>
         implements NonnullMapAccessor<Point3D> {

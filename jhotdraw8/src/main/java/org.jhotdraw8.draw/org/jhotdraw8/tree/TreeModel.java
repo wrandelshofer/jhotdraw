@@ -19,7 +19,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @param <N> the node type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface TreeModel<N> extends ObservableMixin {
     /**

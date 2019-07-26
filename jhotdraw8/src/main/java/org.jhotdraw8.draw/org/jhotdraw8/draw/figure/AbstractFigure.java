@@ -33,7 +33,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * AbstractFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 

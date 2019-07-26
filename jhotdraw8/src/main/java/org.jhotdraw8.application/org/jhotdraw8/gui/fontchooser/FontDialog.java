@@ -23,7 +23,6 @@ import java.util.Optional;
  * FontDialog for selecting a font name.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontDialog extends Dialog<String> {
 

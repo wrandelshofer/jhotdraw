@@ -8,7 +8,6 @@ package org.jhotdraw8.collection;
  * StringKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StringKey extends ObjectKey<String> {
 

@@ -14,7 +14,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * FontFamily.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontFamily {
     private final StringProperty name = new SimpleStringProperty();

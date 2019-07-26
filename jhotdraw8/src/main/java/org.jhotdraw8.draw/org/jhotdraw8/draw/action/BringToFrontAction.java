@@ -22,7 +22,6 @@ import java.util.List;
  * BringToFrontAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BringToFrontAction extends AbstractSelectedAction {
 

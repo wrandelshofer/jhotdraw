@@ -18,7 +18,6 @@ import java.util.concurrent.CompletionStage;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
 

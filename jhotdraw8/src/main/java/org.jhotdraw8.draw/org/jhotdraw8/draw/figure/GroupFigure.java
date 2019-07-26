@@ -20,7 +20,6 @@ import java.util.List;
  * as a unit.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GroupFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {

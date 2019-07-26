@@ -32,7 +32,6 @@ import static java.lang.Math.min;
  * Provides search algorithms for directed graphs.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GraphSearch {
 

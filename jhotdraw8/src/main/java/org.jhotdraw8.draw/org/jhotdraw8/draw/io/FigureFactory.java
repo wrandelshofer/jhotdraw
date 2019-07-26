@@ -23,7 +23,6 @@ import java.util.Set;
  * FigureFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface FigureFactory {
 

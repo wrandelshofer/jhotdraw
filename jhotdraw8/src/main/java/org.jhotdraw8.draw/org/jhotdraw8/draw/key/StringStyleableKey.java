@@ -23,7 +23,6 @@ import java.util.function.Function;
  * StringStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StringStyleableKey extends AbstractStyleableKey<String>
         implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {

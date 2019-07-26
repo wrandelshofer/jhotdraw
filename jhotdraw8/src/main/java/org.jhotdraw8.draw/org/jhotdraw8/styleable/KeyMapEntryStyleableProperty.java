@@ -18,7 +18,6 @@ import org.jhotdraw8.collection.KeyMapEntryProperty;
  * KeyMapEntryStyleableProperty.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 

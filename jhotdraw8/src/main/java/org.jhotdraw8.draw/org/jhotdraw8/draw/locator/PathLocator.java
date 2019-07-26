@@ -21,7 +21,6 @@ package org.jhotdraw8.draw.locator;
  * </dl>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PathLocator {
 }

@@ -18,7 +18,6 @@ import java.util.Set;
  * InputFormat for clipboard.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Drawing Strategy, Strategy.
  */
 public interface ClipboardInputFormat {

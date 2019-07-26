@@ -25,7 +25,6 @@ import org.jhotdraw8.concurrent.WorkState;
  * interface.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PrintFileAction extends AbstractViewControllerAction<DocumentBasedActivity> {
 

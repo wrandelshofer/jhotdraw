@@ -30,7 +30,6 @@ import java.util.function.Function;
  * {@code reshapeInLocal} method, if the Figure is transformable.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ResizeHandleKit {
 

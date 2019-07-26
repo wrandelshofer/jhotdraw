@@ -16,7 +16,6 @@ import java.util.prefs.Preferences;
  * PrefsURIListKey. The words are separated by tab character.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PrefsURIListKey {
     private final String key;

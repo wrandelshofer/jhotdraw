@@ -56,7 +56,6 @@ import java.util.Set;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Drawing Framework, KeyAbstraction.
  * @design.pattern DrawingModel MVC, View.
  * @design.pattern DrawingEditor Mediator, Colleague.

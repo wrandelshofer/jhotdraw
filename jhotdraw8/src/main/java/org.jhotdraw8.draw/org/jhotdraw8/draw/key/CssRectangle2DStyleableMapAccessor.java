@@ -26,7 +26,6 @@ import java.util.function.Function;
  * Rectangle2DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<CssRectangle2D>
         implements NonnullMapAccessor<CssRectangle2D> {

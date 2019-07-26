@@ -13,7 +13,6 @@ import org.jhotdraw8.collection.HierarchicalMap;
  * GrapherApplication.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GrapherApplication extends DocumentBasedApplication {
 

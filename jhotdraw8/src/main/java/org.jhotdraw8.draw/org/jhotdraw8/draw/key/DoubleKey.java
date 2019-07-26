@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.key;
  * DoubleKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DoubleKey extends ObjectFigureKey<Double> {
 

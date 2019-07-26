@@ -37,7 +37,6 @@ import java.util.function.Function;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlConnectorConverter implements Converter<Connector> {
 

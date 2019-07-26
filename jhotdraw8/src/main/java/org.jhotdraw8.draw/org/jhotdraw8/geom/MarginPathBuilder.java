@@ -13,7 +13,6 @@ import org.jhotdraw8.annotation.Nullable;
  * FIXME this implementation currently only works with straight line segments.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class MarginPathBuilder extends AbstractPathBuilder {
 

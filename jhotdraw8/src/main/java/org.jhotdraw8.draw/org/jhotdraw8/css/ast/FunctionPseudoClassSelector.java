@@ -19,7 +19,6 @@ import java.util.function.Consumer;
  * class" attribute.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FunctionPseudoClassSelector extends PseudoClassSelector {
 

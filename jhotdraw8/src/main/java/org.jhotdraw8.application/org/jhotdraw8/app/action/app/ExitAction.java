@@ -37,7 +37,6 @@ import java.util.concurrent.CancellationException;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ExitAction extends AbstractApplicationAction {
 

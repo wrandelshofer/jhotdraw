@@ -18,7 +18,6 @@ import java.text.ParseException;
  * XmlUrlConverter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlUrlConverter implements Converter<URL> {
 

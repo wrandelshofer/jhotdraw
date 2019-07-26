@@ -48,7 +48,6 @@ import java.util.stream.Collectors;
  * FigureSelectorModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FigureSelectorModel implements SelectorModel<Figure> {
 

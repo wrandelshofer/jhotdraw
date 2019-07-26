@@ -29,7 +29,6 @@ import java.util.Collection;
  * FIXME delete me
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface XmlOutputFormatMixin extends OutputFormat {
 

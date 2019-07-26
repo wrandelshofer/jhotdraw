@@ -15,7 +15,6 @@ import java.awt.geom.PathIterator;
  * AnyPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface PathBuilder {
 

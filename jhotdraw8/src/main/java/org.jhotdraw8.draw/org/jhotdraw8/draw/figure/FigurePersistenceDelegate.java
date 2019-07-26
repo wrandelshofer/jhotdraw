@@ -19,7 +19,6 @@ import java.util.Objects;
  * FigurePersistenceDelegate.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 

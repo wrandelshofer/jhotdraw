@@ -16,7 +16,6 @@ import org.jhotdraw8.geom.Geom;
  * Locator object.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @see Locator
  */
 public abstract class LocatorHandle extends AbstractHandle {

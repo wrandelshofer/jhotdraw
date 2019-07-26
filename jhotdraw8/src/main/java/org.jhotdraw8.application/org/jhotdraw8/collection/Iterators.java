@@ -13,7 +13,6 @@ import java.util.List;
  * Collections.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Iterators {
 

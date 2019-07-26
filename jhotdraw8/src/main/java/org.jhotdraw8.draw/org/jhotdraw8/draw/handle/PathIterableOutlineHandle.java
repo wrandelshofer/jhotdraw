@@ -28,7 +28,6 @@ import java.util.List;
  * Draws an outline of the path of a {@link PathIterableFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PathIterableOutlineHandle extends AbstractHandle {
 

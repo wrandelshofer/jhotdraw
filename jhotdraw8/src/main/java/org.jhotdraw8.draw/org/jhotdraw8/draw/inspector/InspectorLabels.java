@@ -10,7 +10,6 @@ import org.jhotdraw8.util.Resources;
  * InspectorLabels.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class InspectorLabels {
 

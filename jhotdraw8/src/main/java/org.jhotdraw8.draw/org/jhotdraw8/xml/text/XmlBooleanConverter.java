@@ -22,7 +22,6 @@ import java.text.ParseException;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlBooleanConverter implements Converter<Boolean> {
 

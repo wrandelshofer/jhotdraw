@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * IntImmutableDirectedGraphTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntImmutableDirectedGraphTest {
 

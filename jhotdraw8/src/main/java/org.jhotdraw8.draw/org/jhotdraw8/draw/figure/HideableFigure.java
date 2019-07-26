@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * HideableFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface HideableFigure extends Figure {

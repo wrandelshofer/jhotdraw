@@ -18,7 +18,6 @@ import java.util.List;
  * the list of preserved tokens is empty, the declaration must be ignored.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Declaration extends AST {
     @Nullable

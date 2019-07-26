@@ -25,7 +25,6 @@ import java.net.URL;
  * XXX all keys must be customizable
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StyleClassCell extends ListCell<StyleClassItem> {
 

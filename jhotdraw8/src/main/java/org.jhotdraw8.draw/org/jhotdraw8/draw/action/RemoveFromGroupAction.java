@@ -26,7 +26,6 @@ import java.util.List;
  * AddToGroupAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RemoveFromGroupAction extends AbstractSelectedAction {
 

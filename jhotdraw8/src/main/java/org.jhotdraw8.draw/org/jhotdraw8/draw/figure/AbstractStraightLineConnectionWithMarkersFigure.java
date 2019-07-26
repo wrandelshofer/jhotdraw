@@ -37,7 +37,6 @@ import java.util.List;
  * {@link MarkerSegmentableFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractStraightLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {

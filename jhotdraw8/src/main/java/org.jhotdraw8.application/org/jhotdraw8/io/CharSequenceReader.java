@@ -11,7 +11,6 @@ import java.io.Reader;
  * CharSequenceReader.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CharSequenceReader extends Reader {
 

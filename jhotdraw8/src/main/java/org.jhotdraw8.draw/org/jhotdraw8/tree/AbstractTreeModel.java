@@ -14,7 +14,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * AbstractTreeModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractTreeModel<E> implements TreeModel<E> {
 

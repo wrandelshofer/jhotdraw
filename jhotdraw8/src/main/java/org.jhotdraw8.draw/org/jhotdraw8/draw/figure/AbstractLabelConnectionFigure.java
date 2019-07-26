@@ -46,7 +46,6 @@ import java.util.Set;
  * LABEL_TARGET.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure {

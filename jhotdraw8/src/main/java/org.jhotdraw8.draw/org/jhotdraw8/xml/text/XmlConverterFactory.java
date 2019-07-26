@@ -21,7 +21,6 @@ import org.jhotdraw8.text.XmlWordConverter;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlConverterFactory implements ConverterFactory {
 

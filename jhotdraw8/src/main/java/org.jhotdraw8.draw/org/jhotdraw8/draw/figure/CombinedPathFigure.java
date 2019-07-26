@@ -39,7 +39,6 @@ import java.util.List;
  * Only children which are PathIterableFigures are considered.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CombinedPathFigure extends AbstractCompositeFigure
         implements StrokableFigure, FillableFigure, Grouping,

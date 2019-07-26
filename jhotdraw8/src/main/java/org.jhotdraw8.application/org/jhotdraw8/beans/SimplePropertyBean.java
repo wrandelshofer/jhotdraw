@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
  * A simple implementation of the {@link PropertyBean} interface.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimplePropertyBean implements PropertyBean {
 

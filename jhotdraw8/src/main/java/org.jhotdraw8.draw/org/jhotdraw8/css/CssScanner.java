@@ -40,7 +40,6 @@ import java.io.Reader;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssScanner {
 

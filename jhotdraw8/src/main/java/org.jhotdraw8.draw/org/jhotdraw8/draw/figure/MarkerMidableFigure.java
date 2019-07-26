@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
  * A figure which supports markers at the nodes of a path.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface MarkerMidableFigure extends Figure {
     /**

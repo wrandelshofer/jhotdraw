@@ -17,7 +17,6 @@ import java.util.Spliterators;
  *
  * @param <E> element type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
 

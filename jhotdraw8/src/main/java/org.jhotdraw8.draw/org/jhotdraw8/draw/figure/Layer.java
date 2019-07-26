@@ -16,7 +16,6 @@ import org.jhotdraw8.annotation.Nullable;
  * A layer does not have handles and is not selectable.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Layer extends Figure {
 

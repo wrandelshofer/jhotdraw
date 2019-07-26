@@ -23,7 +23,6 @@ import java.util.List;
  * value using a choice: {@code {0,choice,0#false|1#true} }
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class MessageStringFormatter extends StringBinding {
 

@@ -29,7 +29,6 @@ import java.util.stream.Collector;
  * }</pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BoundsCalculator {
     private double minX = Double.POSITIVE_INFINITY;

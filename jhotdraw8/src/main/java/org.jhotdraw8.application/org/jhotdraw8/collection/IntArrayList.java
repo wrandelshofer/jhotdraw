@@ -22,7 +22,6 @@ import static java.lang.Integer.max;
  * A lightweight int array list implementation for performance critical code.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntArrayList implements Iterable<Integer> {
 

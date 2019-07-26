@@ -17,7 +17,6 @@ import java.text.ParseException;
  * CssWordConverter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssWordConverter implements Converter<String> {
 

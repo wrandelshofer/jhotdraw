@@ -23,7 +23,6 @@ import java.util.concurrent.CompletionStage;
  * oriented applications.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface DocumentBasedActivity extends Activity {
     String MODIFIED_PROPERTY = "modified";

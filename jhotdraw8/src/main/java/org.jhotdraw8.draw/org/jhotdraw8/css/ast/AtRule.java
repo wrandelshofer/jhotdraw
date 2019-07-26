@@ -16,7 +16,6 @@ import java.util.List;
  * A "at-rule" consists of an "at-keyword", a list of header tokens and a list of body tokens.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AtRule extends Rule {
     @Nonnull

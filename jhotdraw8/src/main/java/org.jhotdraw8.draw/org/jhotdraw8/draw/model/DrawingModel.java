@@ -49,7 +49,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern DrawingModel Facade, Facade. {@code DrawingModel} acts as a
  * facade for the internal structure of a {@code Drawing} (a Drawing is composed
  * of a tree of {@code Figure} objects). DrawingModel provides methods for

@@ -23,7 +23,6 @@ import java.util.Map;
  * XMLEncoderOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XMLEncoderOutputFormat implements OutputFormat {
     /**

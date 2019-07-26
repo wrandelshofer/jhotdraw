@@ -15,7 +15,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * LabelFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure,

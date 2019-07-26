@@ -17,7 +17,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * isSuitableParent(parent) for all parents except null.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Clipping extends Figure {
 

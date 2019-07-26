@@ -23,7 +23,6 @@ import java.util.function.Function;
  * URIStyleableFigureKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UriStyleableKey extends AbstractStyleableKey<URI> implements WriteableStyleableMapAccessor<URI> {
 

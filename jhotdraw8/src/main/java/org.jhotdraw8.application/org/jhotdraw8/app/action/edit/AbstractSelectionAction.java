@@ -22,7 +22,6 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  * {@code AbstractSelectionAction} acts on the selection of a target component.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 

@@ -30,7 +30,6 @@ import org.jhotdraw8.collection.NonnullMapAccessor;
  * {@code INLINE, AUTHOR, USER, USER_AGENT}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface StyleablePropertyBean extends PropertyBean, Styleable {
 

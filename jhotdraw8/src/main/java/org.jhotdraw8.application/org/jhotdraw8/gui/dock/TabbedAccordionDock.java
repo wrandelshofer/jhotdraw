@@ -27,7 +27,6 @@ import static java.lang.Double.max;
  * TabbedAccordionDock.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TabbedAccordionDock extends Control implements Dock {
 

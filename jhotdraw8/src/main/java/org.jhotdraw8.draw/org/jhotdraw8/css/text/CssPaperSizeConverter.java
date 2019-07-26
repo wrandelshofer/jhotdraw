@@ -24,7 +24,6 @@ import java.util.Map;
  * Converts a {@code CssPoint2D} into a {@code String} and vice versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPaperSizeConverter implements Converter<CssPoint2D> {
 

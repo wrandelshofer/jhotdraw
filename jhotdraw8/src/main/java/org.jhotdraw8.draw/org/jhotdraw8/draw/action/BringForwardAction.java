@@ -22,7 +22,6 @@ import java.util.List;
  * BringForwardAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BringForwardAction extends AbstractSelectedAction {
 

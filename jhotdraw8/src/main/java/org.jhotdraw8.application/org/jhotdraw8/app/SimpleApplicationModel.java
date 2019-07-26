@@ -44,7 +44,6 @@ import java.util.prefs.Preferences;
  * SimpleApplicationModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleApplicationModel implements ApplicationModel {
 

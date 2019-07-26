@@ -20,7 +20,6 @@ import java.util.function.Consumer;
  * element.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SelectorGroup extends AST {
 

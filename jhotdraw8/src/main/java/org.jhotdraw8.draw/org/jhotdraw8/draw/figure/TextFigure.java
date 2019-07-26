@@ -33,7 +33,6 @@ import java.awt.geom.PathIterator;
  * filling of the text.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TextFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure, TextFontableFigure, TextLayoutableFigure,

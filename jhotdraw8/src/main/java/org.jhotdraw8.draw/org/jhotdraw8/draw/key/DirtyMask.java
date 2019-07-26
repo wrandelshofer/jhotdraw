@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * Represents a bitmask of {@code DirtyBits}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DirtyMask {
 

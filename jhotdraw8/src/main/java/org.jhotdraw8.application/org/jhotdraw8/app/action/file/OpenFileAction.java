@@ -29,7 +29,6 @@ import java.util.concurrent.CancellationException;
  * If no empty view is available, a new view is created.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class OpenFileAction extends AbstractApplicationAction {
 

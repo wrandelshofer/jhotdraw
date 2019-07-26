@@ -12,7 +12,6 @@ import org.jhotdraw8.css.text.CssBooleanConverter;
  * Nullable BooleanStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NulllableBooleanStyleableKey extends SimpleStyleableKey<Boolean> implements WriteableStyleableMapAccessor<Boolean> {
 

@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * specified in a separate attribute.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SvgPaintConverter extends CssPaintConverter {
 

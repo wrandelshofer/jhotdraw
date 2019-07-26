@@ -10,7 +10,6 @@ import java.awt.geom.Path2D;
  * Builds an AWT {@code Path2D}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AWTPathBuilder extends AbstractPathBuilder {
 

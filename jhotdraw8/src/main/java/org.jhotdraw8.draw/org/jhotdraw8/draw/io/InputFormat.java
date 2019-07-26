@@ -25,7 +25,6 @@ import java.util.Map;
  * InputFormat.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Drawing Strategy, Strategy.
  */
 public interface InputFormat {

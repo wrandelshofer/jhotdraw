@@ -53,8 +53,7 @@ import java.util.Set;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class DesignPatternTaglet implements Taglet {
     @Override
     public Set<Location> getAllowedLocations() {

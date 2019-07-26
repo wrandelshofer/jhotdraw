@@ -15,7 +15,6 @@ import java.util.Set;
  * ReadOnlySet to a client who does not understand the ReadOnlySet APi.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SetWrapper<E> extends AbstractSet<E> {
     private final ReadOnlySet<E> backingSet;

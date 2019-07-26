@@ -15,7 +15,6 @@ import org.jhotdraw8.event.Event;
  * DrawingModelEvent.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DrawingModelEvent extends Event<DrawingModel> {
 

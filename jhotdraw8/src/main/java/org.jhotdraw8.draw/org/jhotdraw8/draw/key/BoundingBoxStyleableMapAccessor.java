@@ -26,7 +26,6 @@ import java.util.function.Function;
  * BoundingBoxStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccessor<BoundingBox> {
 

@@ -8,7 +8,6 @@ package org.jhotdraw8.draw;
  * SimpleDrawingEditor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleDrawingEditor extends AbstractDrawingEditor {
 

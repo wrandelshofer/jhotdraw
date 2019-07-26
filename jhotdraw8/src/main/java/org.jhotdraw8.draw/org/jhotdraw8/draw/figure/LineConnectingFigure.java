@@ -17,7 +17,6 @@ import org.jhotdraw8.draw.key.NullableObjectKey;
  * LineConnectingFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface LineConnectingFigure extends ConnectingFigure {
     /**

@@ -13,7 +13,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * to the {@link SelectionTool}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern SelectionTool Strategy, Strategy.
  */
 public interface DragTracker extends Tracker {

@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * Parses an attribute value of type integer.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssIntegerConverter extends AbstractCssConverter<Integer> {
 

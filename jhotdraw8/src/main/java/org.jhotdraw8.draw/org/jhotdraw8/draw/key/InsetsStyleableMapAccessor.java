@@ -25,7 +25,6 @@ import java.util.function.Function;
  * InsetsStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Insets> {
 

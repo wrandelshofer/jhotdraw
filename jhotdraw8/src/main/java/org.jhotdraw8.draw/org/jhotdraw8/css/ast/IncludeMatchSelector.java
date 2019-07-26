@@ -18,7 +18,6 @@ import java.util.function.Consumer;
  * list with the specified word.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IncludeMatchSelector extends AbstractAttributeSelector {
     @Nullable

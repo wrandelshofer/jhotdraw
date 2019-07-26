@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.render;
  * RenderingIntent.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public enum RenderingIntent {
     EDITOR,

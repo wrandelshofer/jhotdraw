@@ -21,7 +21,6 @@ import java.util.Map;
  * AbstractStyleablePropertyBean.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
     // FIXME should be one instance per class. The instance should be unmodifiable.

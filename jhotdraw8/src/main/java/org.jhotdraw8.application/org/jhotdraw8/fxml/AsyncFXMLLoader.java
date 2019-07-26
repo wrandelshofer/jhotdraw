@@ -21,7 +21,6 @@ import java.util.concurrent.ForkJoinPool;
  * FXML files with Tooltips can't be loaded).
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AsyncFXMLLoader {
 

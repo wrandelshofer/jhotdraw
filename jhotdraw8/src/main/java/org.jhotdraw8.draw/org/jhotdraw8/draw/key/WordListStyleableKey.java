@@ -23,7 +23,6 @@ import java.util.function.Function;
  * WordListStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<String>> implements WriteableStyleableMapAccessor<ImmutableList<String>> {
 

@@ -16,7 +16,6 @@ import java.text.ParseException;
  * API.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * rawcoder $
  */
 public class StyleConverterAdapter<T> extends StyleConverter<String, T> {

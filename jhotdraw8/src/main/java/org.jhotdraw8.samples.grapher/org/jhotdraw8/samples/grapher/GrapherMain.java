@@ -11,7 +11,6 @@ import javafx.stage.Stage;
  * GrapherMain.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GrapherMain extends Application {
 

@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
  * A figure which supports markers in the middle of a path segment.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface MarkerSegmentableFigure extends Figure {
     /**

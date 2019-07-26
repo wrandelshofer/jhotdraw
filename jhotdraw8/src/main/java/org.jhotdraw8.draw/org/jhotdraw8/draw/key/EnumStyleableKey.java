@@ -18,7 +18,6 @@ import org.jhotdraw8.text.Converter;
  * NullableEnumStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class EnumStyleableKey<T extends Enum<T>> extends AbstractStyleableKey<T>
         implements WriteableStyleableMapAccessor<T>, NonnullMapAccessor<T> {

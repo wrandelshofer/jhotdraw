@@ -35,7 +35,6 @@ import java.util.Objects;
  * text.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface TextStrokeableFigure extends Figure {

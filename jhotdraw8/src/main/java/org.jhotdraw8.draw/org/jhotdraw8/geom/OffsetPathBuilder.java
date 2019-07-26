@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * OffsetPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class OffsetPathBuilder extends AbstractPathBuilder {
 

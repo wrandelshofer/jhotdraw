@@ -38,7 +38,6 @@ import org.jhotdraw8.geom.Transforms;
  * The user can insert a new point by double clicking the line.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PolygonOutlineHandle extends AbstractHandle {
 

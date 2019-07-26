@@ -29,7 +29,6 @@ import java.util.function.Consumer;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSizeConverter implements CssConverter<CssSize> {
 

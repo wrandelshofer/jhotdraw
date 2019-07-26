@@ -11,7 +11,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * This abstract class can be extended to implement a {@link Locator}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractLocator implements Locator {
 

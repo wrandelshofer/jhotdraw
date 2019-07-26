@@ -17,7 +17,6 @@ import org.jhotdraw8.beans.NonnullProperty;
  *
  * @param <N> the node type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractTreePresentationModel<N> implements TreePresentationModel<N> {
     /**

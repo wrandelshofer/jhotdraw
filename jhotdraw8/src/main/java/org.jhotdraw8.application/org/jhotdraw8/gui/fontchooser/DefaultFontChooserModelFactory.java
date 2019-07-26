@@ -25,7 +25,6 @@ import java.util.concurrent.ForkJoinPool;
  * DefaultFontChooserModelFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DefaultFontChooserModelFactory {
 

@@ -14,7 +14,6 @@ import org.jhotdraw8.app.action.AbstractViewControllerAction;
  * active view.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractFindAction<V extends Activity> extends AbstractViewControllerAction<V> {
 

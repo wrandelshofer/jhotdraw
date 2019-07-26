@@ -13,7 +13,6 @@ import org.jhotdraw8.draw.DrawingView;
  * Tracker.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Tracker {
 

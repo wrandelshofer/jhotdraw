@@ -25,7 +25,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * A figure which supports font attributes.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface TextLayoutableFigure extends Figure {

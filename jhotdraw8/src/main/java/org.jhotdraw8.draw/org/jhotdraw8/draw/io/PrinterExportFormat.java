@@ -37,7 +37,6 @@ import static java.lang.Math.abs;
  * PrinterExportFormat.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PrinterExportFormat extends AbstractExportOutputFormat {
 

@@ -14,7 +14,6 @@ import java.util.List;
  * URIExtensionFilter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class URIExtensionFilter {
 

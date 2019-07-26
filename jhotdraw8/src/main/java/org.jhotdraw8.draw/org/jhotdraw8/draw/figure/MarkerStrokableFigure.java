@@ -33,7 +33,6 @@ import java.util.Objects;
  * FIXME move out of JHotDraw.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  * <p>
  * FIXME most doubles should be CSS sizes!

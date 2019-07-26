@@ -18,7 +18,6 @@ import org.jhotdraw8.text.Converter;
  * BlendModeStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> implements WriteableStyleableMapAccessor<BlendMode> {
 

@@ -22,7 +22,6 @@ import org.jhotdraw8.css.text.CssFontConverter;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlCssFontConverter extends CssFontConverter {
 

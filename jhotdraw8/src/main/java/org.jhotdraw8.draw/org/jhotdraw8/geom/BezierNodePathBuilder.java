@@ -16,7 +16,6 @@ import java.util.List;
  * BezierNodePathBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BezierNodePathBuilder extends AbstractPathBuilder implements Builder<ImmutableList<BezierNode>> {
 

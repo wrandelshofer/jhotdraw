@@ -22,7 +22,6 @@ import java.util.List;
  * MoveUpAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SendBackwardAction extends AbstractSelectedAction {
 

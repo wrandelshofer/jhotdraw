@@ -28,7 +28,6 @@ import java.util.function.Supplier;
  * GroupAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GroupAction extends AbstractSelectedAction {
 

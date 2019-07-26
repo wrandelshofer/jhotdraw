@@ -13,8 +13,7 @@ import com.sun.javadoc.Tag;
  * TextTag.
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class TextTag implements Tag {
 
     private final Doc holder;

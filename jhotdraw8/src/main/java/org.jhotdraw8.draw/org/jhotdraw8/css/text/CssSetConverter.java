@@ -22,7 +22,6 @@ import java.util.function.Consumer;
  * CssSetConverter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
     private final CssConverter<T> elementConverter;

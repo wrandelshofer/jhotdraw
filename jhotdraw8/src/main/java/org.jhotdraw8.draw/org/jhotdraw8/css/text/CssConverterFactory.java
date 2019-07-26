@@ -14,7 +14,6 @@ import org.jhotdraw8.text.DefaultConverter;
  * CssConverterFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssConverterFactory implements ConverterFactory {
 

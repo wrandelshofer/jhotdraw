@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.inspector;
  * StyleClassItem.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StyleClassItem {
 

@@ -26,7 +26,6 @@ import java.util.function.Function;
  * TransformListStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableList<Transform>>
         implements WriteableStyleableMapAccessor<ImmutableList<Transform>>, NonnullMapAccessor<ImmutableList<Transform>> {

@@ -25,7 +25,6 @@ import static java.lang.Math.min;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface UnitConverter {
 

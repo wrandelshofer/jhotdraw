@@ -29,7 +29,6 @@ import java.util.List;
  * DrawingFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DrawingFigure extends AbstractCompositeFigure
         implements Drawing, StyleableFigure, LockableFigure, NonTransformableFigure {

@@ -16,7 +16,6 @@ import java.util.Objects;
  * set of units.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSize {
 

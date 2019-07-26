@@ -26,8 +26,7 @@ import java.util.stream.Collectors;
  * JavaFragmentCollector.
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class JavaFragmentCollector {
 
     private final List<Path> srcdirs;

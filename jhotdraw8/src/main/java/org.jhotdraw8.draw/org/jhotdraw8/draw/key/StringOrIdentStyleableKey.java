@@ -24,7 +24,6 @@ import java.util.function.Function;
  * as a CSS "STRING"-token.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
         implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {

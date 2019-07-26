@@ -37,7 +37,6 @@ import static org.jhotdraw8.geom.Geom.clamp;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssColorConverter implements CssConverter<CssColor> {
     boolean nullable;

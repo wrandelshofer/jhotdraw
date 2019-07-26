@@ -17,7 +17,6 @@ import java.awt.geom.PathIterator;
  * iterator the path only once. Subsequent iterations require a new iterator.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 @Deprecated
 public class BezierPathIterator implements PathIterator {

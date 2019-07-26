@@ -14,7 +14,6 @@ import java.util.concurrent.FutureTask;
  * PlatformUtil.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PlatformUtil {
 

@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * versa. If the X and the Y-value are identical, then only one value is output.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSymmetricPoint2DConverterOLD extends AbstractCssConverter<Point2D> {
 

@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * CssListConverterTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssListConverterTest {
 

@@ -38,7 +38,6 @@ import java.util.Objects;
  * A Label that can be placed anywhere on a drawing.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure
         implements TextFillableFigure, FillableFigure, StrokableFigure,

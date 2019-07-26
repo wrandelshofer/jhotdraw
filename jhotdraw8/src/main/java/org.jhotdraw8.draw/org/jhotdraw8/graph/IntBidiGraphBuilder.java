@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * IntBidiGraphBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
 

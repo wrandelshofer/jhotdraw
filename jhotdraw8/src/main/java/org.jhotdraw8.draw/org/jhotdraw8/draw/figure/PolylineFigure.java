@@ -38,7 +38,6 @@ import java.util.List;
  * A figure which draws a connected line segments.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PolylineFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, HideableFigure, StyleableFigure,

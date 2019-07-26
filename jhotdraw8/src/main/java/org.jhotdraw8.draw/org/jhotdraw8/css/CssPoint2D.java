@@ -13,7 +13,6 @@ import java.util.Objects;
  * Represents a point with x, y values specified as {@link CssSize}s.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPoint2D {
 

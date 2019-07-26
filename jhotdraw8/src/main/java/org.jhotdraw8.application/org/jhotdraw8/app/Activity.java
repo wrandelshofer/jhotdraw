@@ -58,7 +58,6 @@ import org.jhotdraw8.collection.HierarchicalMap;
  * This facility is provided by extending the interface {@link PropertyBean}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Activity extends Disableable, PropertyBean {
     String APPLICATION_PROPERTY = "application";

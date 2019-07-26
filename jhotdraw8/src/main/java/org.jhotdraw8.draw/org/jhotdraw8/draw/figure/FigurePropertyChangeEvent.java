@@ -11,7 +11,6 @@ import org.jhotdraw8.event.Event;
  * FigurePropertyChangeEvent.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FigurePropertyChangeEvent extends Event<Figure> {
 

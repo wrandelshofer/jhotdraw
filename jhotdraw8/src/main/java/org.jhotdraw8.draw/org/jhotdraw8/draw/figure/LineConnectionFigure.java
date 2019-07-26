@@ -18,7 +18,6 @@ import java.awt.geom.PathIterator;
  * A figure which draws a line connection between two figures.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LineConnectionFigure extends AbstractLineConnectionFigure
         implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,

@@ -60,7 +60,6 @@ import java.util.logging.Logger;
  * Shapes.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Shapes {
 

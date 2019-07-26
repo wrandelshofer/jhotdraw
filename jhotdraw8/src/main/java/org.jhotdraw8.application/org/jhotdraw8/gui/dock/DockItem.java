@@ -25,7 +25,6 @@ import java.util.prefs.Preferences;
  * Represents an item which can be added to a {@code Dock}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DockItem extends Tab {
 

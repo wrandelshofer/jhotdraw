@@ -18,7 +18,6 @@ import java.util.function.Predicate;
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A> {
 

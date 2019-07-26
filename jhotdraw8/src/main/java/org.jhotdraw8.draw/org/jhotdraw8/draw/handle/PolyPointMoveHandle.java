@@ -40,7 +40,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * Handle for moving (translating) a figure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PolyPointMoveHandle extends AbstractHandle {
 

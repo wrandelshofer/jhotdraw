@@ -21,7 +21,6 @@ import java.util.Set;
  * Provides search algorithms for directed graphs.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntGraphSearch {
 

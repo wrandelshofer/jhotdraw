@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
     private final boolean withSpace;

@@ -14,7 +14,6 @@ import java.util.Set;
  * set to a client while preventing that the client can modify the set directly.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public final class ReadOnlySetWrapper<E> extends AbstractReadOnlySet<E> {
 

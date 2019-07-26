@@ -10,7 +10,6 @@ import org.jhotdraw8.css.SelectorModel;
  * A "selector" is a tree of "combinator"s.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class Selector extends AST {
 

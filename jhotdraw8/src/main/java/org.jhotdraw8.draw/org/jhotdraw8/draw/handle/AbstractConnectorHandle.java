@@ -33,7 +33,6 @@ import java.util.List;
  * constructor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractConnectorHandle extends AbstractHandle {
 

@@ -22,7 +22,6 @@ import java.util.function.Function;
  * InsetsStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements WriteableStyleableMapAccessor<Insets> {
 

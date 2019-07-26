@@ -25,7 +25,6 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface CssConverter<T> extends Converter<T> {
     /**

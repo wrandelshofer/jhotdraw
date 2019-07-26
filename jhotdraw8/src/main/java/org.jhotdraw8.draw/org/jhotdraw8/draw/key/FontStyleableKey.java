@@ -22,7 +22,6 @@ import java.util.function.Function;
  * FontStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements WriteableStyleableMapAccessor<CssFont> {
 

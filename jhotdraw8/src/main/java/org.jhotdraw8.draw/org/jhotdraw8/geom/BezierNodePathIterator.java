@@ -15,7 +15,6 @@ import java.util.List;
  * BezierNodePathIterator.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BezierNodePathIterator implements PathIterator {
 

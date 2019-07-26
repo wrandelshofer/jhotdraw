@@ -29,7 +29,6 @@ import java.text.ParseException;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DefaultConverter implements Converter<Object> {
 

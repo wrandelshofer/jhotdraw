@@ -25,7 +25,6 @@ import java.util.Set;
  * RemoveTransformationsAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RemoveTransformationsAction extends AbstractSelectedAction {
 

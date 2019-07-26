@@ -31,7 +31,6 @@ import java.io.IOException;
  * Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {

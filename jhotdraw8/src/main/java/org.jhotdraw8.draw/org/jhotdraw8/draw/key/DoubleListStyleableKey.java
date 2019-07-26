@@ -23,7 +23,6 @@ import java.util.function.Function;
  * DoubleListStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WriteableStyleableMapAccessor<ImmutableList<Double>> {
 

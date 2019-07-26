@@ -18,7 +18,6 @@ import java.util.Map;
  *
  * @param <T> The value type.
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern MapAccessor Strategy, Strategy. Encapsulates a strategy for
  * accessing property values of a map.
  */

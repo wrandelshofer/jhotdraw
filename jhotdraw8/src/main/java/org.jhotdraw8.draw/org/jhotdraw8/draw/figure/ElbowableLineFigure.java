@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.key.NullableCssSizeStyleableKey;
  * A figure which supports drawing an elbow.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface ElbowableLineFigure extends Figure {
 

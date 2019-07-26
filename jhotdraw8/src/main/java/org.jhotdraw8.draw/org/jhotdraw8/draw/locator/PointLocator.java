@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * A {@link Locator} which locates a node on a point of a Figure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PointLocator extends AbstractLocator {
 

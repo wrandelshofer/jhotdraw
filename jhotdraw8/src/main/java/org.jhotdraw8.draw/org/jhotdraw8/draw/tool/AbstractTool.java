@@ -35,7 +35,6 @@ import java.util.LinkedList;
  * AbstractAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractTool extends AbstractDisableable implements Tool {
 

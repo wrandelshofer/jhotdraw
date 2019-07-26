@@ -23,7 +23,6 @@ import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;
  * EllipseConnector.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class EllipseConnector extends LocatorConnector {
 

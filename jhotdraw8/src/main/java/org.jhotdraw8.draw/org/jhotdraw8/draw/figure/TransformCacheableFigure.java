@@ -22,7 +22,6 @@ import static org.jhotdraw8.draw.figure.FigureImplementationDetails.WORLD_TO_PAR
  * values in a map.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface TransformCacheableFigure extends CacheableFigure {

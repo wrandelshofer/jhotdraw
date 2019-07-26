@@ -9,7 +9,6 @@ package org.jhotdraw8.css.ast;
  * RoundBlock, SquareBlock and FunctionBlock.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class ComponentValue extends AST {
 

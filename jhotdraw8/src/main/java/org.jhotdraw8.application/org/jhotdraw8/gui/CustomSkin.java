@@ -12,7 +12,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * A custom skin without behavior.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CustomSkin<C extends Control> extends SkinBase<C> {
 

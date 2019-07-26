@@ -16,7 +16,6 @@ import java.text.ParseException;
  *
  * @param <T> the value type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StringConverterAdapter<T> extends StringConverter<T> {
 

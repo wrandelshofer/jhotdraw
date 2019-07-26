@@ -41,7 +41,6 @@ import static org.jhotdraw8.css.CssTokenType.TT_URL;
  * Defines the API of a CSS Tokenizer.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface CssTokenizer {
 

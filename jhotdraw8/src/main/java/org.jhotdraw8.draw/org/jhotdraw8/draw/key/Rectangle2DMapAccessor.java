@@ -17,7 +17,6 @@ import static java.lang.Double.max;
  * Rectangle2DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
 

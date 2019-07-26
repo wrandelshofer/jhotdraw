@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontIconDecoder implements ResourceDecoder {
 

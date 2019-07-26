@@ -39,7 +39,6 @@ import java.util.prefs.Preferences;
  * FXML Controller class
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GridInspector extends AbstractDrawingViewInspector {
 

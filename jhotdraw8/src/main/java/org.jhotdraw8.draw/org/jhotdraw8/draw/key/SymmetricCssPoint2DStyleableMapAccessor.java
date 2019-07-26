@@ -27,7 +27,6 @@ import java.util.function.Function;
  * SymmetricCssPoint2DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SymmetricCssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssPoint2D>

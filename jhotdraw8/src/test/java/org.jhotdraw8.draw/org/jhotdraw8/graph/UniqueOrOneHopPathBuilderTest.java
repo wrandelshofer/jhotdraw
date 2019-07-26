@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * UniqueShortestPathBuilderTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UniqueOrOneHopPathBuilderTest {
 

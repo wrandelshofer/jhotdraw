@@ -21,7 +21,6 @@ import java.io.StringReader;
  * FIXME delete me
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface XmlInputFormatMixin {
 

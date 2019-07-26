@@ -19,7 +19,6 @@ import org.jhotdraw8.geom.Transforms;
  * for a connection figure on a target figure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Connector Strategy, Strategy. {@link Connector} encapsulates
  * a strategy for locating a connection point on a {@link Figure}.
  */

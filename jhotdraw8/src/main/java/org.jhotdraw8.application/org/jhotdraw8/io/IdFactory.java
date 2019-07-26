@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nullable;
  * IdFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface IdFactory {
 

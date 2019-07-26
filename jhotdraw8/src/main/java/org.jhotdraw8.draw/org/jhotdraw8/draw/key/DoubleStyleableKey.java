@@ -23,7 +23,6 @@ import java.util.function.Function;
  * DoubleStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DoubleStyleableKey
         extends AbstractStyleableKey<Double>

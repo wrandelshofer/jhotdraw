@@ -13,7 +13,6 @@ import static java.lang.Math.min;
  * ClampedDoubleProperty.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ClampedDoubleProperty extends SimpleDoubleProperty {
 

@@ -15,7 +15,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * A figure which holds text in an attribute.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface TextableFigure extends Figure {

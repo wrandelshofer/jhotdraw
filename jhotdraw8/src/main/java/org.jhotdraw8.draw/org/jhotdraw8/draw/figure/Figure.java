@@ -117,7 +117,6 @@ import static java.lang.Math.min;
  * determine which dependent figures need to be updated.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Drawing Framework, KeyAbstraction.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel Facade, Subsystem.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel Strategy, Context.

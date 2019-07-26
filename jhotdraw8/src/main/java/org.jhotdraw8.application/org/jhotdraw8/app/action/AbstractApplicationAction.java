@@ -23,7 +23,6 @@ import java.util.concurrent.CompletionException;
  * {@link org.jhotdraw8.app.Disableable} or when its application is disabled.
  *
  * @author Werner Randelshofer.
- * @version $Id$
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 

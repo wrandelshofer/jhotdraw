@@ -28,7 +28,6 @@ import java.text.ParseException;
  * The null value will be converted to the CSS identifier "none".
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlBezierNodeListConverter implements Converter<ImmutableList<BezierNode>> {
 

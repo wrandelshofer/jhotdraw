@@ -11,7 +11,6 @@ import javafx.scene.transform.Transform;
  * TransformPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TransformPathBuilder extends AbstractPathBuilder {
 

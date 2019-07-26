@@ -14,7 +14,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * FontTypeface.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontTypeface {
 

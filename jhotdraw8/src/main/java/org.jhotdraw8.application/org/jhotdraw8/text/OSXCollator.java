@@ -34,7 +34,6 @@ import java.util.Locale;
  * sequences of digits are changed to match the collation rules of Mac OS X.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class OSXCollator extends Collator {
 

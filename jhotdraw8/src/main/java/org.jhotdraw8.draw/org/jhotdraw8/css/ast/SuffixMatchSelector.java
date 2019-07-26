@@ -18,7 +18,6 @@ import java.util.function.Consumer;
  * substring.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SuffixMatchSelector extends AbstractAttributeSelector {
     @Nullable

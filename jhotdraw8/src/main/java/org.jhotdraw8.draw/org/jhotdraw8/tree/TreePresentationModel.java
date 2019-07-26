@@ -17,7 +17,6 @@ import org.jhotdraw8.beans.NonnullProperty;
  * Note: for performance reasons we do not expand the tree nodes by default.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface TreePresentationModel<N> {
 

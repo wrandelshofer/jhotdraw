@@ -38,7 +38,6 @@ import java.util.Objects;
  * keys have the same name.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Key<T> extends MapAccessor<T> {
 

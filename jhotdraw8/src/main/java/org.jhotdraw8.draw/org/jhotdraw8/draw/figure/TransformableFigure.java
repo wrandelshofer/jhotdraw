@@ -59,7 +59,6 @@ import static org.jhotdraw8.draw.figure.FigureImplementationDetails.IDENTITY_TRA
  * change.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface TransformableFigure extends TransformCacheableFigure {

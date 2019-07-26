@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * IntDirectedGraphBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
 

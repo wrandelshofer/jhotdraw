@@ -22,7 +22,6 @@ import java.util.function.Function;
  * NullableSvgPathStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> implements WriteableStyleableMapAccessor<String> {
 

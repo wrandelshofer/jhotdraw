@@ -45,7 +45,6 @@ import static java.lang.Math.round;
  * GridConstrainer.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GridConstrainer extends AbstractConstrainer {
 

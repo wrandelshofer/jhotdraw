@@ -26,7 +26,6 @@ import java.util.function.Function;
  * Point2DListStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<Point2D>>
         implements WriteableStyleableMapAccessor<ImmutableList<Point2D>>, NonnullMapAccessor<ImmutableList<Point2D>> {

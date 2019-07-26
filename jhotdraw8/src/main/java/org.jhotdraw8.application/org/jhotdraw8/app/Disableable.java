@@ -26,7 +26,6 @@ import org.jhotdraw8.app.action.Action;
  * its internal state permits the invocation of actions.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Disableable {
 

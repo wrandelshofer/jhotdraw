@@ -18,7 +18,6 @@ import org.jhotdraw8.gui.CustomSkin;
  * A TabPaneDock.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TabPaneDock extends Control implements Dock {
 

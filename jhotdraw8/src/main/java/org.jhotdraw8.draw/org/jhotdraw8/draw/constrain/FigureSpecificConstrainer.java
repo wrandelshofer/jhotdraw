@@ -27,7 +27,6 @@ import java.util.Map;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FigureSpecificConstrainer extends AbstractConstrainer implements Constrainer {
 

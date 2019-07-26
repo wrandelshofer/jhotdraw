@@ -21,7 +21,6 @@ import org.jhotdraw8.app.Application;
  * AbstractViewControllerAction is disabled as well.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractViewControllerAction<V extends Activity> extends AbstractApplicationAction {
 

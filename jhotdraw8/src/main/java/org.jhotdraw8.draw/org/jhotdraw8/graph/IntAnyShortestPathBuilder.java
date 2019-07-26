@@ -33,7 +33,6 @@ import java.util.function.ToDoubleFunction;
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntAnyShortestPathBuilder<V, A> {
     @Nonnull

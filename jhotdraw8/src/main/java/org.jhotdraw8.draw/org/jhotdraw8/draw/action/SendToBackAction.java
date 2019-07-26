@@ -21,7 +21,6 @@ import java.util.LinkedList;
  * SendToBackAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SendToBackAction extends AbstractSelectedAction {
 

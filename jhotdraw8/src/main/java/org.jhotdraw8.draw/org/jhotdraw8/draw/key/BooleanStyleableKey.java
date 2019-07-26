@@ -19,7 +19,6 @@ import org.jhotdraw8.text.Converter;
  * BooleanStyleableKey (not nullable).
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
         implements WriteableStyleableMapAccessor<Boolean>,

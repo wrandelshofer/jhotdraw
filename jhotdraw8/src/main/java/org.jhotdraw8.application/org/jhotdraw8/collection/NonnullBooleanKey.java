@@ -8,7 +8,6 @@ package org.jhotdraw8.collection;
  * NonnullBooleanKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NonnullBooleanKey extends ObjectKey<Boolean> implements NonnullMapAccessor<Boolean> {
 

@@ -62,7 +62,6 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  * Exports a JavaFX scene graph to SVG.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
 

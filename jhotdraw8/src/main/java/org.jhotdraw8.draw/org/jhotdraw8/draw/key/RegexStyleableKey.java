@@ -23,7 +23,6 @@ import java.util.function.Function;
  * RegexStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
 

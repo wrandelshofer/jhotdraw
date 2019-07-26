@@ -26,7 +26,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * Renders a {@code javafx.scene.shape.Arc}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 

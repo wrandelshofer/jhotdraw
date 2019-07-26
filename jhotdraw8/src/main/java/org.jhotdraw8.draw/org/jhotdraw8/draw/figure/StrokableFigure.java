@@ -37,7 +37,6 @@ import java.util.Objects;
  * be stroked.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  * <p>
  * FIXME most doubles should be CSS sizes!

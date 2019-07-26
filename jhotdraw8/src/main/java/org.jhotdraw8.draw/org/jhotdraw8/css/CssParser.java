@@ -154,7 +154,6 @@ import java.util.List;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssParser {
 

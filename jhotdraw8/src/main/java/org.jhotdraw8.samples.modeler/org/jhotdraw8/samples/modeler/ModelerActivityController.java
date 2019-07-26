@@ -148,7 +148,6 @@ import java.util.prefs.Preferences;
  * ModelerActivityController.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ModelerActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
 

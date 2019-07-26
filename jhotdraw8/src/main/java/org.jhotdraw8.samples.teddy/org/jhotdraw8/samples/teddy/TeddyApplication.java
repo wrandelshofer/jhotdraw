@@ -11,7 +11,6 @@ import org.jhotdraw8.app.SimpleApplicationModel;
  * TeddyApplication.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TeddyApplication extends DocumentBasedApplication {
 

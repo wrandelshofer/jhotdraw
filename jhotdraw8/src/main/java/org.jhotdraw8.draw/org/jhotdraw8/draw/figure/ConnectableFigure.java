@@ -12,7 +12,6 @@ import org.jhotdraw8.draw.connector.Connector;
  * ConnectableFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface ConnectableFigure extends Figure {
 

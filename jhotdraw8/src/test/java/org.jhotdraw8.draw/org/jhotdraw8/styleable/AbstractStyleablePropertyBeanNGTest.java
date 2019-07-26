@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * AbstractStyleablePropertyBeanNGTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AbstractStyleablePropertyBeanNGTest {
 

@@ -36,7 +36,6 @@ import java.util.function.Consumer;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
 

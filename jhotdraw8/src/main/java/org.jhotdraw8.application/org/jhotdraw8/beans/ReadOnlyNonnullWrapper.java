@@ -10,7 +10,6 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
  * ReadOnlyNonnullWrapper.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ReadOnlyNonnullWrapper<T> extends ReadOnlyObjectWrapper<T> {
 

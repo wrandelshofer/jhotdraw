@@ -25,7 +25,6 @@ import java.util.function.Function;
  * Scale2DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point2D> {
 

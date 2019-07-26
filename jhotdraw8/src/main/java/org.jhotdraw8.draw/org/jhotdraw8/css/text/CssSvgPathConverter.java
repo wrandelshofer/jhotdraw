@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * The null value will be converted to the CSS identifier "none".
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSvgPathConverter extends AbstractCssConverter<String> {
 

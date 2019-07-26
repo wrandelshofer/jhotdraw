@@ -14,7 +14,6 @@ import java.util.NoSuchElementException;
  * IntArrayDeque.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntArrayDeque {
     /**

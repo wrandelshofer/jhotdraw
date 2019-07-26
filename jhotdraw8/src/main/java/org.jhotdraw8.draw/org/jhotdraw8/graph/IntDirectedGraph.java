@@ -33,7 +33,6 @@ import java.util.function.IntConsumer;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface IntDirectedGraph {
 

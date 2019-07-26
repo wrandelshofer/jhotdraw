@@ -37,7 +37,6 @@ import java.util.List;
  * A figure which draws a closed polygon.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PolygonFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, HideableFigure, StyleableFigure,

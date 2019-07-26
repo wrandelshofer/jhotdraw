@@ -12,7 +12,6 @@ import org.jhotdraw8.collection.ObjectKey;
  * NullableObjectKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullableObjectKey<T> extends ObjectKey<T> {
 

@@ -32,7 +32,6 @@ import java.util.function.Consumer;
  * </pre> *
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssInsetsConverterOLD extends AbstractCssConverter<Insets> {
     public CssInsetsConverterOLD(boolean nullable) {

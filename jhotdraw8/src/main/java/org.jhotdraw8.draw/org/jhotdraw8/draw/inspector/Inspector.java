@@ -12,7 +12,6 @@ import org.jhotdraw8.annotation.Nullable;
  * API for inspectors.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Inspector<S> {
     ObjectProperty<S> subjectProperty();

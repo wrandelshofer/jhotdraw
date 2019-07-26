@@ -12,7 +12,6 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * SimpleFigureIdFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleFigureIdFactory extends SimpleIdFactory {
     @Override

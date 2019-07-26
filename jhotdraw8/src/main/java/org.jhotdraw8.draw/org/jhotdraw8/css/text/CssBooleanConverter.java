@@ -19,7 +19,6 @@ import java.util.function.Consumer;
  * Converts a {@code Boolean} into the CSS String representation.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
 

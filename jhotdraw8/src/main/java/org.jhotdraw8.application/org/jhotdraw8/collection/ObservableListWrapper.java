@@ -17,7 +17,6 @@ import java.util.Collection;
  * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ObservableListWrapper<E> extends ListWrapper<E> implements ObservableList<E> {
     public ObservableListWrapper(ReadOnlyList<E> backingList) {

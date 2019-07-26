@@ -20,7 +20,6 @@ import java.util.function.Consumer;
  * allow language subcode matches.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DashMatchSelector extends AbstractAttributeSelector {
     @Nullable

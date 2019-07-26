@@ -14,7 +14,6 @@ import java.util.Map;
  * SimpleIdFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleIdFactory implements IdFactory {
 

@@ -31,7 +31,6 @@ import java.util.List;
  * keys have the same name.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ObjectKey<T> implements Key<T> {
 

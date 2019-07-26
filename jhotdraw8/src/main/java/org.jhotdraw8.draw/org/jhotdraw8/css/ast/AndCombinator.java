@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * second selector match the element.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AndCombinator extends Combinator {
 

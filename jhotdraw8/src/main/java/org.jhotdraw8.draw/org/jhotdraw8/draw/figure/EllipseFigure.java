@@ -30,7 +30,6 @@ import java.awt.geom.PathIterator;
  * Renders a {@code javafx.scene.shape.Ellipse}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class EllipseFigure extends AbstractLeafFigure
         implements StrokableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,

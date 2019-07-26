@@ -114,7 +114,6 @@ import java.util.List;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PatternConverter implements Converter<Object[]> {
 

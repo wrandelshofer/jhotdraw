@@ -13,7 +13,6 @@ import org.jhotdraw8.app.AbstractDisableable;
  * AbstractAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractTracker extends AbstractDisableable implements Tracker {
 

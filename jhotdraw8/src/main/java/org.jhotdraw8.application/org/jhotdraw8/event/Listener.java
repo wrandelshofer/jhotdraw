@@ -10,7 +10,6 @@ import java.util.EventObject;
  * Functional listener interface.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 @FunctionalInterface
 public interface Listener<E extends EventObject> {

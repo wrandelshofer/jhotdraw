@@ -20,7 +20,6 @@ import java.io.Reader;
  * dot '-.' are not treated as numbers.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StreamPosTokenizer /*extends StreamTokenizer*/ {
 

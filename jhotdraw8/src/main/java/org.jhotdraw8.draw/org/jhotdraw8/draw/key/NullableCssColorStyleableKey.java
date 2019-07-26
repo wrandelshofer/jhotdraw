@@ -22,7 +22,6 @@ import java.util.function.Function;
  * NullableCssColorStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         implements WriteableStyleableMapAccessor<CssColor> {

@@ -46,7 +46,6 @@ import static java.lang.Math.signum;
  * {@link MarkerSegmentableFigure}, {@link MarkerMidableFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractElbowLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {

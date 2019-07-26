@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * specified name.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
     @Nullable

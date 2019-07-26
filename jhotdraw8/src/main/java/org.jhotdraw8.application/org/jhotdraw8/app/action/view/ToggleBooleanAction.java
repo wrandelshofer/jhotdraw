@@ -16,7 +16,6 @@ import org.jhotdraw8.util.Resources;
  * This action toggles the state of its boolean property.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ToggleBooleanAction extends AbstractViewControllerAction<Activity> {
     private BooleanProperty value;

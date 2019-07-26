@@ -31,8 +31,7 @@ import java.util.List;
  *
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class SysdocMain {
 
     private final static String USAGE = " -destdir dir -docdir dir {-docdir dir} {-srcdir dir} {-tstdir dir}";

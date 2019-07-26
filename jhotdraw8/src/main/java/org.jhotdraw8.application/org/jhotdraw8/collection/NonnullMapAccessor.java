@@ -12,7 +12,6 @@ import java.util.Map;
  * NonnullMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface NonnullMapAccessor<T> extends MapAccessor<T> {
     final static long serialVersionUID = 1L;

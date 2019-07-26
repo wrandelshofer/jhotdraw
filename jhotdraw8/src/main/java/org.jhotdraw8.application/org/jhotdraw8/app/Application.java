@@ -29,7 +29,6 @@ import java.util.concurrent.CompletionStage;
  * provides windows to present them on screen.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Application Framework, KeyAbstraction. The application
  * framework supports the creation of document-based applications which can
  * support platform-specific guidelines. The application framework consists of

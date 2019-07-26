@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.figure;
  * Interface for figures which are always locked.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface LockedFigure extends Figure {

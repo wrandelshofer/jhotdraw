@@ -23,7 +23,6 @@ import java.util.Map;
  * SimpleDrawingRenderer.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleDrawingRenderer extends SimplePropertyBean implements RenderContext {
 

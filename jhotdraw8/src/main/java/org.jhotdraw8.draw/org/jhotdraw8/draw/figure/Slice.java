@@ -16,7 +16,6 @@ import org.jhotdraw8.annotation.Nullable;
  * A slice may not have children.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Slice extends Figure {
 

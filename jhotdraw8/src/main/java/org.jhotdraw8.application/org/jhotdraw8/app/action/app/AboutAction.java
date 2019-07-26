@@ -17,7 +17,6 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AboutAction extends AbstractApplicationAction {
 

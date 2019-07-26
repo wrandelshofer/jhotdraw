@@ -58,7 +58,6 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  * BitmapExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 

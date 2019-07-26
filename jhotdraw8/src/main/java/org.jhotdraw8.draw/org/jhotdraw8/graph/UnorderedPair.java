@@ -16,7 +16,6 @@ import java.util.Objects;
  *
  * @param <V> the type of the items that form the pair
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UnorderedPair<V> implements Pair<V> {
 

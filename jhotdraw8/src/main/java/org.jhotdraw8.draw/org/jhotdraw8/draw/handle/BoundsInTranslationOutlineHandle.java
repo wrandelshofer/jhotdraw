@@ -30,7 +30,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
  * but does not provide any interactions.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     private Group node;

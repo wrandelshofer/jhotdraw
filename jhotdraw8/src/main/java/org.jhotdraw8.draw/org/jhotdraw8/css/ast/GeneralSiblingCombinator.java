@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * matches the element.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GeneralSiblingCombinator extends Combinator {
 

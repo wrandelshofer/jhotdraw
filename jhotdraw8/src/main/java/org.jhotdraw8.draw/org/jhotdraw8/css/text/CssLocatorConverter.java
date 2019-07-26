@@ -28,7 +28,6 @@ import java.text.ParseException;
  * FIXME should implement CssConverter instead of Converter
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssLocatorConverter implements Converter<Locator> {
 

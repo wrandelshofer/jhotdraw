@@ -15,7 +15,6 @@ import org.jhotdraw8.text.NumberConverter;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlNumberConverter extends NumberConverter {
 

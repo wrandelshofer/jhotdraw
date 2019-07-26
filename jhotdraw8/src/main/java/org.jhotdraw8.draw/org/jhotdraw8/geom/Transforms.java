@@ -32,7 +32,6 @@ import static java.lang.Math.sqrt;
  * Transforms.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Transforms {
     /**

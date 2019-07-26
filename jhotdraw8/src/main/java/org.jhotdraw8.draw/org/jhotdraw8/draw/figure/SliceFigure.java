@@ -39,7 +39,6 @@ import java.util.List;
  * {@link RenderingIntent#EDITOR}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SliceFigure extends AbstractLeafFigure implements Slice, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 

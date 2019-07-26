@@ -86,7 +86,6 @@ import static java.lang.Math.max;
  * FXML Controller class
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleDrawingView extends AbstractDrawingView implements EditableComponent {
 

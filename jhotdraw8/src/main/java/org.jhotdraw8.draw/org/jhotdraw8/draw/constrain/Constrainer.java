@@ -23,7 +23,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * constraints that they impose. Typically by drawing a grid of some kind.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Constrainer extends Observable {
 

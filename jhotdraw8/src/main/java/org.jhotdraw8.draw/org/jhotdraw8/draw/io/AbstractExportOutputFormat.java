@@ -39,7 +39,6 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  * AbstractExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 

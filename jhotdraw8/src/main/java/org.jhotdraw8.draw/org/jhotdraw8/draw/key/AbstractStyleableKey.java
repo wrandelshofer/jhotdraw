@@ -13,7 +13,6 @@ import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
  * AbstractStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AbstractStyleableKey<T> extends ObjectKey<T> {
 

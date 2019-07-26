@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * BreadthFirstSpliteratorTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BreadthFirstSpliteratorTest {
 

@@ -13,7 +13,6 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractPreferencesAction extends AbstractApplicationAction {
 

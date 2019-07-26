@@ -11,7 +11,6 @@ import org.jhotdraw8.event.Event;
  * HandleEvent.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class HandleEvent extends Event<Handle> {
 

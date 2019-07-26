@@ -10,7 +10,6 @@ import org.jhotdraw8.styleable.BooleanStyleableKey;
  * LockableFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface LockableFigure extends Figure {

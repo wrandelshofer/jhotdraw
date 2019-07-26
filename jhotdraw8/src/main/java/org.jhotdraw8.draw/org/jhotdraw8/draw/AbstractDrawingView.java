@@ -36,7 +36,6 @@ import java.util.Map;
  * AbstractDrawingView.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
 

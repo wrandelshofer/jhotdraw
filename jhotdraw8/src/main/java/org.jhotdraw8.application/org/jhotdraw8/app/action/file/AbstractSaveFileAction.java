@@ -36,7 +36,6 @@ import java.util.concurrent.CancellationException;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractSaveFileAction extends AbstractViewControllerAction<DocumentBasedActivity> {
 

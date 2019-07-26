@@ -18,7 +18,6 @@ import java.util.Map;
  * UriUtil.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UriUtil {
 

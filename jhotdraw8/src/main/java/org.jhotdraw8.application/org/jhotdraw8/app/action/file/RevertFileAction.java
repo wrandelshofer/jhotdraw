@@ -27,7 +27,6 @@ import java.util.function.BiFunction;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RevertFileAction extends AbstractViewControllerAction<DocumentBasedActivity> {
 

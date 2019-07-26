@@ -25,7 +25,6 @@ import static java.lang.Math.pow;
  * FXML Controller class
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ZoomToolbar extends BorderPane {
 

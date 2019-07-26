@@ -25,7 +25,6 @@ import org.jhotdraw8.geom.Transforms;
  * interactions.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BoundsInLocalOutlineHandle extends AbstractHandle {
 

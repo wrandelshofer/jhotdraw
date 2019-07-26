@@ -37,7 +37,6 @@ import java.util.function.Consumer;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPaintConverter extends AbstractCssConverter<Paint> {
 

@@ -10,8 +10,7 @@ import java.nio.file.Path;
  * Identifies a text fragment in a file.
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class Fragment {
 
     private final Path file;

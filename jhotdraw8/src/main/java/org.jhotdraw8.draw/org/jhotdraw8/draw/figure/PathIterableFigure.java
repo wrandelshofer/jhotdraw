@@ -14,7 +14,6 @@ import java.awt.geom.PathIterator;
  * PathIterableFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface PathIterableFigure extends Figure {
     PathIterator getPathIterator(@Nullable AffineTransform tx);

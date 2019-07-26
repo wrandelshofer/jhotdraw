@@ -21,7 +21,6 @@ import java.util.List;
  * FXPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FXPathBuilder extends AbstractPathBuilder {
     public final static ClosePath CLOSE_PATH = new ClosePath();

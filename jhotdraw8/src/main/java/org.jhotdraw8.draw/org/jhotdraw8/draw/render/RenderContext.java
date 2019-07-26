@@ -22,7 +22,6 @@ import java.time.Instant;
  * RenderContext.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern RenderContext Builder, Client. The builder pattern is used
  * for the creation of a JavaFX scene graph from a Figure. The creation of the
  * scene graph is delegated to the methods Figure.createNode and

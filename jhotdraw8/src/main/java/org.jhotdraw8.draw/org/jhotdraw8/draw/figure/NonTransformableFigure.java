@@ -14,7 +14,6 @@ import org.jhotdraw8.geom.Transforms;
  * Provides default implementations for figures which can not be transformed.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface NonTransformableFigure extends TransformCacheableFigure {

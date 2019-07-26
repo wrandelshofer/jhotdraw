@@ -15,7 +15,6 @@ import static javafx.geometry.Orientation.VERTICAL;
  * SplitPaneTrack.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SplitPaneTrack extends SplitPane implements Track {
 

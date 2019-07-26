@@ -22,7 +22,6 @@ import java.util.function.Consumer;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
     private final boolean withSpace;

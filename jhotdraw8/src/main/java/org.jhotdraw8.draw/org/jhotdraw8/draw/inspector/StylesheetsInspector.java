@@ -45,7 +45,6 @@ import java.util.List;
  * FXML Controller class
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StylesheetsInspector extends AbstractDrawingInspector {
 

@@ -28,7 +28,6 @@ import java.util.function.Supplier;
  * DockingFrameworkSample.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DockingFrameworkSample extends Application {
 

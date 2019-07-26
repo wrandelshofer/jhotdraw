@@ -14,7 +14,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * ResizePane.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ResizePane extends BorderPane {
 

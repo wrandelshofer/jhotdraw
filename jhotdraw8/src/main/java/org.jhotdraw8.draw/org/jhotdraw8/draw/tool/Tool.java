@@ -22,7 +22,6 @@ import org.jhotdraw8.event.Listener;
  * Tool.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern org.jhotdraw8.draw.figure.Drawing Framework, KeyAbstraction.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel MVC, Controller.
  * @design.pattern org.jhotdraw8.draw.DrawingEditor Mediator, Colleague.

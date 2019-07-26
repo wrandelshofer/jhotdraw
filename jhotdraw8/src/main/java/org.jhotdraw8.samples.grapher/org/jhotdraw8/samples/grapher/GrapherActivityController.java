@@ -142,7 +142,6 @@ import java.util.prefs.Preferences;
  * GrapherActivityController.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GrapherActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
 

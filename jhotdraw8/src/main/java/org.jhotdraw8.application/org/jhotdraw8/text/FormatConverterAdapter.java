@@ -18,7 +18,6 @@ import java.text.ParsePosition;
  * Allows to use a {@code Converter} with the {@code java.text.Format} API.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FormatConverterAdapter extends Format {
 

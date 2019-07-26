@@ -29,7 +29,6 @@ import java.util.function.Function;
  * FontStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFont>
         implements NonnullMapAccessor<CssFont> {

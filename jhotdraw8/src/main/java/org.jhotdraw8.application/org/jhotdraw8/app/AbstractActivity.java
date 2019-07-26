@@ -21,7 +21,6 @@ import org.jhotdraw8.collection.Key;
  * AbstractActivity.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 

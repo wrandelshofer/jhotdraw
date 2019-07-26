@@ -18,7 +18,6 @@ import java.util.concurrent.CompletionStage;
  * Closes the active view after letting the user save unsaved changes.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 

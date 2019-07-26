@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * AnyShortestPathBuilderTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AnyShortestPathBuilderTest {
 

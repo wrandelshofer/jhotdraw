@@ -112,7 +112,6 @@ import java.util.Set;
  * FIXME rename to GrapherFigureFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ModelerFigureFactory extends AbstractFigureFactory {
 

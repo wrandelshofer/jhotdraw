@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.key;
  * NullableBooleanKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullableBooleanKey extends NullableObjectKey<Boolean> {
 

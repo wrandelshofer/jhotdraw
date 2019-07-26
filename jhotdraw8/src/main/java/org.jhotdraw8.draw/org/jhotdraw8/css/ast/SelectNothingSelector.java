@@ -12,7 +12,6 @@ import org.jhotdraw8.css.SelectorModel;
  * A "select nothing selector" matches nothing.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SelectNothingSelector extends SimpleSelector {
 

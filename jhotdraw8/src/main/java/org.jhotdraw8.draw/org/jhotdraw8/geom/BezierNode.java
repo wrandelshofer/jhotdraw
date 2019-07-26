@@ -18,7 +18,6 @@ import org.jhotdraw8.annotation.Nullable;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BezierNode {
 

@@ -17,7 +17,6 @@ import org.jhotdraw8.geom.Intersection;
  * LocatorConnector uses a {@link Locator} to compute its position.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LocatorConnector extends AbstractConnector {
 

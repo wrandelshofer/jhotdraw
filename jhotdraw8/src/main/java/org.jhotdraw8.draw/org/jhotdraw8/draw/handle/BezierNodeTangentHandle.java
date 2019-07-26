@@ -31,7 +31,6 @@ import java.util.List;
  * Handle for the point ofCollection a figure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BezierNodeTangentHandle extends AbstractHandle {
 

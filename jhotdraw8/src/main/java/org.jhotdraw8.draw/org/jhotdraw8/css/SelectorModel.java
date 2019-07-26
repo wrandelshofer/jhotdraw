@@ -20,7 +20,6 @@ import java.util.Set;
  *
  * @param <T> the element type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface SelectorModel<T> {
     @Nonnull

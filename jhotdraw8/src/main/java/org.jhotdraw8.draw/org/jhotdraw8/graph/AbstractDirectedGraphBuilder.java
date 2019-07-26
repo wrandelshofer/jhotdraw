@@ -47,7 +47,6 @@ import java.util.Arrays;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 

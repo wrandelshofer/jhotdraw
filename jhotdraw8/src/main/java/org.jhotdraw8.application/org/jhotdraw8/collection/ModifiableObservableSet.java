@@ -25,7 +25,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @param <E> the element type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 

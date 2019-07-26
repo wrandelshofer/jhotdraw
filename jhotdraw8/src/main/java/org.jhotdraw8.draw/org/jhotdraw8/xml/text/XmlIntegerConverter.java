@@ -17,7 +17,6 @@ import java.text.ParseException;
  * XmlIntegerConverter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlIntegerConverter implements Converter<Integer> {
 

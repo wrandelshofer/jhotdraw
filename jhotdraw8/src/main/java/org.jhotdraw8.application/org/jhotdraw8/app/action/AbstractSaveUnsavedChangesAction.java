@@ -47,7 +47,6 @@ import java.util.concurrent.CompletionStage;
  * only invoked after the view was successfully saved.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewControllerAction<DocumentBasedActivity> {
 

@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  * A stylesheet is a list of rules.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Stylesheet extends AST {
 

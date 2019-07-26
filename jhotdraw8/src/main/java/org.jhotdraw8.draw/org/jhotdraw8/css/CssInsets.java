@@ -14,7 +14,6 @@ import java.util.Objects;
  * Represents a set of inside offsets specified as {@link CssSize}s.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssInsets {
 

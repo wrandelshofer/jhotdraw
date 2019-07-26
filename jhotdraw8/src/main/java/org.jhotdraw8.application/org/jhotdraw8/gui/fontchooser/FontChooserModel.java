@@ -14,7 +14,6 @@ import org.jhotdraw8.annotation.Nullable;
  * FontChooserModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontChooserModel {
 

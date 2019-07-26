@@ -20,7 +20,6 @@ import java.text.ParseException;
  *
  * @param <T> the data type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Converter<T> {
 

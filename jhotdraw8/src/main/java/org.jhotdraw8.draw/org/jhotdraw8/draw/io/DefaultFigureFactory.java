@@ -103,7 +103,6 @@ import java.util.Set;
  * DefaultFigureFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DefaultFigureFactory extends AbstractFigureFactory {
 

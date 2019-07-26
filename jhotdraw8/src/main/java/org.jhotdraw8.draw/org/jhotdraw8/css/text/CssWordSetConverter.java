@@ -41,7 +41,6 @@ import java.util.TreeSet;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
 

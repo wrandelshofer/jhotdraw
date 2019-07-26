@@ -25,7 +25,6 @@ import java.util.List;
  * The parent of a page must be a {@link Layer}. A page may have children.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Page extends Figure {
 

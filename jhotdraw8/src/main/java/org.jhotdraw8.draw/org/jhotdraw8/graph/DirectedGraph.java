@@ -27,7 +27,6 @@ import java.util.stream.StreamSupport;
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
 

@@ -64,7 +64,6 @@ import static javafx.geometry.Orientation.VERTICAL;
  * tracks which only have one child from its hierarchy.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DockRoot extends Control {
 

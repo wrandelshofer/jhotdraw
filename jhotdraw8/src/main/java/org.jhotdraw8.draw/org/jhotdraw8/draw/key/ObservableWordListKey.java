@@ -10,7 +10,6 @@ import org.jhotdraw8.collection.ImmutableList;
  * ObservableWordListKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ObservableWordListKey extends ObjectFigureKey<ImmutableList<String>> {
 

@@ -27,7 +27,6 @@ import org.jhotdraw8.geom.Geom;
  * </dl>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BoundsLocator extends AbstractLocator {
 

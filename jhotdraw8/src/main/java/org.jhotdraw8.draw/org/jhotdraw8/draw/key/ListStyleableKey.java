@@ -25,7 +25,6 @@ import java.util.function.Function;
  * TListStyleableFigureKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ListStyleableKey<T> extends AbstractStyleableKey<ImmutableList<T>>
         implements WriteableStyleableMapAccessor<ImmutableList<T>>,

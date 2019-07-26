@@ -8,8 +8,7 @@ package org.jhotdraw8.sysdoc;
  * Identifies a reference in a text fragment.
  *
  * @author Werner Randelshofer
- * @version $Id$
- */
+*/
 public class Reference {
 
     private final Fragment fragment;

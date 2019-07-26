@@ -13,7 +13,6 @@ import java.util.Map;
  * IntImmutableBidiGraph.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntImmutableBidiGraph implements IntBidiGraph {
 

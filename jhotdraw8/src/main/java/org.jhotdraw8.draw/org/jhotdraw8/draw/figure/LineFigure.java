@@ -35,7 +35,6 @@ import java.util.List;
  * A figure which draws a straight line from a start point to an end point.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LineFigure extends AbstractLeafFigure
         implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure,

@@ -19,7 +19,6 @@ import java.util.function.Supplier;
  * AbstractCreationTool.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractCreationTool<F extends Figure> extends AbstractTool {
     protected Supplier<Layer> layerFactory;

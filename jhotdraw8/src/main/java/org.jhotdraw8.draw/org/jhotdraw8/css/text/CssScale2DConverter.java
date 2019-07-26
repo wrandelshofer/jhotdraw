@@ -20,7 +20,6 @@ import java.text.ParseException;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssScale2DConverter implements Converter<Point2D> {
 

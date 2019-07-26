@@ -44,7 +44,6 @@ import java.util.Map;
  * }</code></pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface PropertyBean {
 

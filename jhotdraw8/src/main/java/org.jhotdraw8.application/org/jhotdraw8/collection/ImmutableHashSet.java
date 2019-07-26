@@ -16,7 +16,6 @@ import java.util.Set;
  * ImmutableHashSet preserves insertion order of items.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements ImmutableSet<E> {
 

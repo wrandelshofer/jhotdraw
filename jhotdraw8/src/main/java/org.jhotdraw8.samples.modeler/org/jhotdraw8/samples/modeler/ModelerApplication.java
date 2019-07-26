@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets;
  * ModelerApplication.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ModelerApplication extends DocumentBasedApplication {
 

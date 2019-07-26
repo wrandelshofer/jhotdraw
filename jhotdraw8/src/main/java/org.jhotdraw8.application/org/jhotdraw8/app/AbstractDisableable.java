@@ -20,7 +20,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * unbind {@code disabled} first.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class AbstractDisableable implements Disableable {
 

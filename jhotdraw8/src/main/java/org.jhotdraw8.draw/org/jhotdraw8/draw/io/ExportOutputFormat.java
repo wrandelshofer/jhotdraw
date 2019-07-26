@@ -14,7 +14,6 @@ import java.util.Map;
  * ExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface ExportOutputFormat {
 

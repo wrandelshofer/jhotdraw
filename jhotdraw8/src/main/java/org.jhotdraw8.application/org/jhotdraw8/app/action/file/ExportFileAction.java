@@ -22,7 +22,6 @@ import java.util.function.Function;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ExportFileAction extends AbstractSaveFileAction {
 

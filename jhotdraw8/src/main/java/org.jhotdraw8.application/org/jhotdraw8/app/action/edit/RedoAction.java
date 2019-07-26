@@ -16,7 +16,6 @@ import org.jhotdraw8.util.Resources;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RedoAction extends AbstractViewControllerAction<Activity> {
 

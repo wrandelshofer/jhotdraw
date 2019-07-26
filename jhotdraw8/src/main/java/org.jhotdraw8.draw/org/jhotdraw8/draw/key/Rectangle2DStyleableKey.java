@@ -23,7 +23,6 @@ import java.util.function.Function;
  * Rectangle2DStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> implements WriteableStyleableMapAccessor<Rectangle2D> {
 

@@ -17,7 +17,6 @@ import java.text.ParseException;
  * XmlDoubleConverter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlDoubleConverter implements Converter<Double> {
 

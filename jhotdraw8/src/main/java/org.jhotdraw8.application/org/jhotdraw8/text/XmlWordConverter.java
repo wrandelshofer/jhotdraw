@@ -16,7 +16,6 @@ import java.text.ParseException;
  * XmlWordConverter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlWordConverter implements Converter<String> {
 

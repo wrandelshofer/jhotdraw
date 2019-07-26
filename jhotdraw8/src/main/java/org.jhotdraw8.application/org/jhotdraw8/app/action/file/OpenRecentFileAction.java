@@ -48,7 +48,6 @@ import java.util.concurrent.CancellationException;
  * </p>
  *
  * @author Werner Randelshofer.
- * @version $Id$
  */
 public class OpenRecentFileAction extends AbstractApplicationAction {
 

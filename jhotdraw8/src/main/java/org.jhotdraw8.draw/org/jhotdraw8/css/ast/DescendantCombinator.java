@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * itself.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DescendantCombinator extends Combinator {
 

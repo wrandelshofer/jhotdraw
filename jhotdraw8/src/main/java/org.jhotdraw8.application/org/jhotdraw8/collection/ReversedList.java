@@ -19,7 +19,6 @@ import static java.lang.Math.min;
  * reverse.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ReversedList<E> extends TransformationList<E, E> {
 

@@ -34,7 +34,6 @@ import java.util.concurrent.CompletionStage;
  * TeddyActivityController.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TeddyActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, Initializable {
 

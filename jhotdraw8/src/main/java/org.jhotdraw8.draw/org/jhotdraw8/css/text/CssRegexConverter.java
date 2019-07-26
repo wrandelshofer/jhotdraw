@@ -29,7 +29,6 @@ import java.text.ParseException;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssRegexConverter implements Converter<RegexReplace> {
 

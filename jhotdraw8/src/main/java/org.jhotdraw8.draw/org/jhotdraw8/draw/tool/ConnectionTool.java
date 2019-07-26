@@ -30,7 +30,6 @@ import java.util.function.Supplier;
  * ConnectionTool.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern CreationTool AbstractFactory, Client.
  */
 public class ConnectionTool extends AbstractTool {

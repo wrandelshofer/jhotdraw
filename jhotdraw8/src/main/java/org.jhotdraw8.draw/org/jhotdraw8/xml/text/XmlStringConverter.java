@@ -30,7 +30,6 @@ import java.text.ParseException;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlStringConverter implements Converter<String> {
 

@@ -33,7 +33,6 @@ import java.util.prefs.Preferences;
  * AbstractApplication.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.app.Application {
 

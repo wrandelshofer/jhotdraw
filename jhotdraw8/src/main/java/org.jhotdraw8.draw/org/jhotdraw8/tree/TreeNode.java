@@ -33,7 +33,6 @@ import java.util.List;
  *
  * @param <T> the type of the tree node
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern TreeNode Composite, Component. The composite pattern is used
  * to model a tree structure.
  * @design.pattern TreeNode Iterator, Aggregate. The iterator pattern is used to

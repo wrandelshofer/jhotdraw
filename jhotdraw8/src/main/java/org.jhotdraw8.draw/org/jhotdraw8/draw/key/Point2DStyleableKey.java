@@ -22,7 +22,6 @@ import java.util.function.Function;
  * Point2DStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WriteableStyleableMapAccessor<Point2D> {
 

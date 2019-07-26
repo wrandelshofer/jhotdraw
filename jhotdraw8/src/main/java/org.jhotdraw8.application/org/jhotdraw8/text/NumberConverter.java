@@ -31,7 +31,6 @@ import java.util.Locale;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NumberConverter implements Converter<Number> {
 

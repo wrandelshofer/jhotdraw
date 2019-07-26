@@ -20,7 +20,6 @@ import java.util.prefs.Preferences;
  * an {@link Application}.
  *
  * @author Werner Randelshofer.
- * @version $Id$
  * @design.pattern Application Framework, KeyAbstraction.
  */
 public interface ApplicationModel {

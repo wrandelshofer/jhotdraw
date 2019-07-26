@@ -17,7 +17,6 @@ import java.net.URI;
  * AbstractDocumentBasedActivity.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * $$
  */
 public abstract class AbstractDocumentBasedActivity extends AbstractActivity implements DocumentBasedActivity {

@@ -44,7 +44,6 @@ import java.util.function.BiFunction;
  * layout observing figures, like {@code LineConnectionFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleDrawingModel extends AbstractDrawingModel {
 

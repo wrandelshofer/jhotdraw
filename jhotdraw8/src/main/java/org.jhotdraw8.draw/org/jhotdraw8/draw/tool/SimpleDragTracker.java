@@ -43,7 +43,6 @@ import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
  * Context, {@link HandleTracker} as State.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @see SelectionTool
  */
 public class SimpleDragTracker extends AbstractTracker implements DragTracker {

@@ -23,7 +23,6 @@ import java.util.List;
  * SelectChildrenAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SelectChildrenAction extends AbstractSelectedAction {
 

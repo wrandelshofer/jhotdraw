@@ -25,7 +25,6 @@ import java.util.Set;
  * Base class for line connection figure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         implements NonTransformableFigure, LineConnectingFigure {

@@ -38,7 +38,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * metaclass and direction of the edge.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,

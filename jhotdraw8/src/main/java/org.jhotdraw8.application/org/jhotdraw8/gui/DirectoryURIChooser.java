@@ -16,7 +16,6 @@ import java.net.URI;
  * FileURIChooser.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DirectoryURIChooser implements URIChooser {
 

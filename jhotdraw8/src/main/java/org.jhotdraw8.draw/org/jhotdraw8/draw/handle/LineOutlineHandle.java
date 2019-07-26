@@ -26,7 +26,6 @@ import org.jhotdraw8.geom.Transforms;
  * interactions.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LineOutlineHandle extends AbstractHandle {
     private Group node;

@@ -24,7 +24,6 @@ import java.util.function.Predicate;
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         implements DirectedGraph<V, A>, AttributedIntDirectedGraph<V, A> {

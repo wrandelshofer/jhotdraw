@@ -19,7 +19,6 @@ import org.jhotdraw8.text.Converter;
  * EffectStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements WriteableStyleableMapAccessor<Effect> {
 

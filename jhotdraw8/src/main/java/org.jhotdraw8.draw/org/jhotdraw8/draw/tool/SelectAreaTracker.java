@@ -9,7 +9,6 @@ package org.jhotdraw8.draw.tool;
  * a drawing area to the {@link SelectionTool}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern SelectionTool Strategy, Strategy.
  */
 public interface SelectAreaTracker extends Tracker {

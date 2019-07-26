@@ -37,7 +37,6 @@ import java.net.URL;
  * mess
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LayerCell extends ListCell<Figure> {
 

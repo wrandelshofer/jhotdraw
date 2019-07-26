@@ -30,7 +30,6 @@ import static java.lang.Math.abs;
  * CreationTool.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
  * abstract factories (Supplier) for creating new {@link Figure}s.
  */

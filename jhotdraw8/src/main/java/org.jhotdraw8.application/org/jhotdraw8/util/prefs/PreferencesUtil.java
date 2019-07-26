@@ -30,7 +30,6 @@ import java.util.prefs.Preferences;
  * preferences are not available due to security restrictions.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PreferencesUtil
         extends Preferences {

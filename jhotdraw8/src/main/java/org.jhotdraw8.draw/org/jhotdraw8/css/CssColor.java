@@ -18,7 +18,6 @@ import java.util.Objects;
  * FIXME - make this class abstract and implement subclasses for each color system
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssColor implements Paintable {
 

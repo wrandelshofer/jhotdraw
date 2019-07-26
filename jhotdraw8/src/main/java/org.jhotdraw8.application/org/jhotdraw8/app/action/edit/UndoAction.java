@@ -15,7 +15,6 @@ import org.jhotdraw8.util.Resources;
  * Undoes the last user action.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UndoAction extends AbstractViewControllerAction<Activity> {
 

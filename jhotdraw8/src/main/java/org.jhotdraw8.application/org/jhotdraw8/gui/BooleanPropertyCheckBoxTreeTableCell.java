@@ -17,7 +17,6 @@ import org.jhotdraw8.annotation.Nullable;
  *
  * @param <S> the row type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Boolean> {
 

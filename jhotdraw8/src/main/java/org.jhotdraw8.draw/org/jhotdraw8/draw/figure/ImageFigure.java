@@ -30,7 +30,6 @@ import java.net.URI;
  * ImageFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ImageFigure extends AbstractLeafFigure
         implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure,

@@ -20,7 +20,6 @@ import java.util.Spliterators;
  *
  * @param <E> element type
  * @author Werner Randelshofer
- * @version $Id$
  */
 final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
 

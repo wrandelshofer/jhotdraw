@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
  * with the grid constrainer.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface AnchorableFigure extends Figure {
     /**

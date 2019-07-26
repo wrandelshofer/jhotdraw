@@ -20,7 +20,6 @@ import java.util.function.Consumer;
  * CssEnumConverter. Converts all enum names to lower-case.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
 

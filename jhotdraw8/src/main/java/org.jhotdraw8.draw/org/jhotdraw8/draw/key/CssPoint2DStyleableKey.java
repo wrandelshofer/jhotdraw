@@ -25,7 +25,6 @@ import java.util.function.Function;
  * NullableCssPoint2DStyleableFigureKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
         implements WriteableStyleableMapAccessor<CssPoint2D>, NonnullMapAccessor<CssPoint2D> {

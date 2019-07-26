@@ -22,7 +22,6 @@ import java.util.function.Function;
  * PaintStyleableFigureKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WriteableStyleableMapAccessor<Paintable> {
 

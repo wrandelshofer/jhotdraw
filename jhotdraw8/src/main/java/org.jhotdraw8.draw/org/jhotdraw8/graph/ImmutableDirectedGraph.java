@@ -17,7 +17,6 @@ import java.util.Map;
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<V, A>, DirectedGraph<V, A> {
 

@@ -17,7 +17,6 @@ import java.util.Spliterator;
  * list to a client while preventing that the client can modify the list directly.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
 

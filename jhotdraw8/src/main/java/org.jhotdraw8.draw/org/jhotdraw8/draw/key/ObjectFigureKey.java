@@ -13,7 +13,6 @@ import org.jhotdraw8.collection.ObjectKey;
  * ObjectFigureKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ObjectFigureKey<T> extends ObjectKey<T> implements
         NonnullMapAccessor<T> {

@@ -22,7 +22,6 @@ import java.util.function.Function;
  * NullableDoubleStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> implements WriteableStyleableMapAccessor<Double> {
     final static long serialVersionUID = 1L;

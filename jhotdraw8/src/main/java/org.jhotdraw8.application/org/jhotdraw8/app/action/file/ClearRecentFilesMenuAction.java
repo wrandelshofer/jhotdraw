@@ -21,7 +21,6 @@ import java.beans.PropertyChangeListener;
  * provides a {@code LoadFileAction} or a {@code OpenFileAction}.
  *
  * @author Werner Randelshofer.
- * @version $Id$
  */
 public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 

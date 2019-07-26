@@ -18,7 +18,6 @@ import org.jhotdraw8.app.Application;
  * AbstractFocusOwnerAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 

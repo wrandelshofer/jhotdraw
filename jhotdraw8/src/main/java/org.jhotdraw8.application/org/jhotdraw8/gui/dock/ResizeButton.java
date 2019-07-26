@@ -20,7 +20,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * ResizeButton.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ResizeButton extends Region {
 

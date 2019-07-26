@@ -58,7 +58,6 @@ import java.util.stream.StreamSupport;
  * XmlUtil.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlUtil {
 

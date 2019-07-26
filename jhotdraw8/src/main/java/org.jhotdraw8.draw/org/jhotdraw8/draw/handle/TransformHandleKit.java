@@ -46,7 +46,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
  * FIXME implement me
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TransformHandleKit {
 

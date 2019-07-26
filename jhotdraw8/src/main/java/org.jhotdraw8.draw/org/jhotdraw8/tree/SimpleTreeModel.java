@@ -17,7 +17,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * SimpleTreeModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleTreeModel<E> implements TreeModel<E> {
 

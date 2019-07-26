@@ -11,7 +11,6 @@ import org.jhotdraw8.text.Converter;
  * SimpleStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
 

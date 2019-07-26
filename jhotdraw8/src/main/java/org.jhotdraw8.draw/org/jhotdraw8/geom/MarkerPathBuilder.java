@@ -14,7 +14,6 @@ import java.awt.geom.Path2D;
  * The path itself is not included by the builder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class MarkerPathBuilder extends AbstractPathBuilder {
 

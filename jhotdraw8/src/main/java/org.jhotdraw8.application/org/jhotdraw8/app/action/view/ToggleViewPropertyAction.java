@@ -20,7 +20,6 @@ import java.util.function.Function;
  * ToggleViewPropertyAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ToggleViewPropertyAction extends AbstractViewControllerAction<Activity> {
 

@@ -33,7 +33,6 @@ import java.util.Collection;
  * {@link SelectionTool} as Context.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @see SelectionTool
  */
 public class SimpleHandleTracker extends AbstractTracker implements HandleTracker {

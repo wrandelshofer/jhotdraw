@@ -21,7 +21,6 @@ import static java.lang.Math.min;
  * IntAnyPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntAnyPathBuilder {
 

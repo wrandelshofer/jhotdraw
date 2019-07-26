@@ -81,7 +81,6 @@ import static java.lang.Math.min;
  * </dl>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DocumentBasedApplication extends AbstractApplication {
 

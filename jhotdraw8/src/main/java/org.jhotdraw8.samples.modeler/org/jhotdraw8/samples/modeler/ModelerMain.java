@@ -11,7 +11,6 @@ import javafx.stage.Stage;
  * ModelerMain.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ModelerMain extends Application {
 

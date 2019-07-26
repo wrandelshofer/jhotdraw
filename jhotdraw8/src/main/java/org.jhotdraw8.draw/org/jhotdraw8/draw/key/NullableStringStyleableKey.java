@@ -22,7 +22,6 @@ import java.util.function.Function;
  * NullableStringStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WriteableStyleableMapAccessor<String> {

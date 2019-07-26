@@ -13,7 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * SimpleObservable.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern SimpleObservable Observer, ConcreteSubject.
  * {@link SimpleObservable} is a concrete subject implementation of the Observer
  * pattern.

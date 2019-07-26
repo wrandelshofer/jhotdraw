@@ -11,7 +11,6 @@ import org.jhotdraw8.collection.Key;
  * Provides a cache for computed values.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Mixin, Traits.
  */
 public interface CacheableFigure extends Figure {

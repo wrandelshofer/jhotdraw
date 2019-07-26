@@ -42,7 +42,6 @@ import org.jhotdraw8.util.Resources;
  * function.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern SelectionTool Strategy, Context. The different behavior
  * states of the selection tool are implemented by trackers.
  * @design.pattern HandleTracker Chain of Responsibility, Handler.

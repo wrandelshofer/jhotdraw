@@ -102,7 +102,6 @@ import java.util.function.Function;
  * Exports a JavaFX scene graph to SVG.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SvgExporter {
 

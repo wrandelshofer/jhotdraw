@@ -15,7 +15,6 @@ import java.util.concurrent.ForkJoinPool;
  * FXWorker.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FXWorker {
 

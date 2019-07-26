@@ -18,7 +18,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * {@link DockRoot}s.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Track {
 

@@ -17,7 +17,6 @@ import java.util.function.Function;
  * relativizes it against the specified external URI.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UriResolver implements Function<URI, URI> {
 

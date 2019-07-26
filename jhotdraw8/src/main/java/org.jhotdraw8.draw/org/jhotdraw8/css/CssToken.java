@@ -17,7 +17,6 @@ import java.io.StringReader;
  * CssToken.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssToken /*extends AST*/ {
 

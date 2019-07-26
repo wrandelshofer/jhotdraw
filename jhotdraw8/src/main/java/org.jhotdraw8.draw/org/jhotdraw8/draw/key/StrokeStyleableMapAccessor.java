@@ -32,7 +32,6 @@ import java.util.function.Function;
  * StrokeStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStroke> {
 

@@ -16,7 +16,6 @@ import java.util.Iterator;
  *
  * @param <T> The type of the value property within TreeItem.
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ExpandedTreeItemIterator<T> implements Iterator<TreeItem<T>> {
 

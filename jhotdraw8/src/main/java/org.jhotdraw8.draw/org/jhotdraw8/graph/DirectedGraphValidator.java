@@ -14,7 +14,6 @@ import java.util.Set;
  * DirectedGraphValidator.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DirectedGraphValidator<V, A> {
 

@@ -37,7 +37,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * The coordinates of the control point are relative to the point.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RelativeControlPointHandle extends AbstractHandle {
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);

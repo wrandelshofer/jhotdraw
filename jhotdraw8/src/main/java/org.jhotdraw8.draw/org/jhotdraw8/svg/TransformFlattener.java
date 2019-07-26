@@ -29,7 +29,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * TransformFlattener.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class TransformFlattener {
 

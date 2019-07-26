@@ -26,7 +26,6 @@ import java.util.List;
  * LayerFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {

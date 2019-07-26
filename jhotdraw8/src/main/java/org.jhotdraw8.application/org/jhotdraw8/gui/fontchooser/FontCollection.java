@@ -18,7 +18,6 @@ import java.util.List;
  * FontCollection.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FontCollection {
 

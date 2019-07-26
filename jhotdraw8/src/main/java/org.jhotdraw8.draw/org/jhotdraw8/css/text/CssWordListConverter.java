@@ -38,7 +38,6 @@ import java.util.Comparator;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssWordListConverter implements Converter<ImmutableList<String>> {
 

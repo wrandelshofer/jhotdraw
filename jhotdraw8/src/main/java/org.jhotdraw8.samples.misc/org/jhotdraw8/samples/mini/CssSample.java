@@ -37,7 +37,6 @@ import java.util.ArrayList;
  * CssSample..
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSample extends Application {
 

@@ -19,7 +19,6 @@ import java.util.Objects;
  * Path elements are directed edges (edges) or undirected edges (arcs).
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class EdgePath<E> {
 

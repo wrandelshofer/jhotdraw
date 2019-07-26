@@ -24,7 +24,6 @@ import java.util.function.Function;
  * CssSizeStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implements WriteableStyleableMapAccessor<CssSize>,
         NonnullMapAccessor<CssSize> {

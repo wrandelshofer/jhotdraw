@@ -12,7 +12,6 @@ import java.util.List;
  * ClipboardIO.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface ClipboardIO<T> {
 

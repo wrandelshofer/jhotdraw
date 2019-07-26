@@ -8,7 +8,6 @@ package org.jhotdraw8.gui.dock;
  * Defines a drop zone for the drag and drop operation of a DockItem.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public enum DropZone {
     /**

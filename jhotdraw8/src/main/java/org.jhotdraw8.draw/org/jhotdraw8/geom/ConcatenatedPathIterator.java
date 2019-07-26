@@ -17,7 +17,6 @@ import java.util.List;
  * Concatenates multiple path iterators.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ConcatenatedPathIterator implements PathIterator {
 

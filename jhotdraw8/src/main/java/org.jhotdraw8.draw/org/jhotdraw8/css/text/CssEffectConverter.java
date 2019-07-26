@@ -81,7 +81,6 @@ import java.util.function.Consumer;
  * CSS Reference Guide</a>.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssEffectConverter implements CssConverter<Effect> {
 

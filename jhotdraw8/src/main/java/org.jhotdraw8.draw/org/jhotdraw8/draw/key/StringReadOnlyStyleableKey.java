@@ -24,7 +24,6 @@ import java.util.function.Function;
  * XXX - A key should not define whether the user can edit the property in an inspector or not.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 

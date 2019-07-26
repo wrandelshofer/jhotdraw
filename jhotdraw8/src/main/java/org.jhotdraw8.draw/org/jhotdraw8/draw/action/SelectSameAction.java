@@ -25,7 +25,6 @@ import java.util.Objects;
  * SelectSameAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SelectSameAction extends AbstractSelectedAction {
 

@@ -15,7 +15,6 @@ import org.jhotdraw8.app.EditableComponent;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DeleteAction extends AbstractSelectionAction {
 

@@ -24,7 +24,6 @@ import java.util.function.Function;
  * BezierNodeListStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BezierNodeListStyleableKey
         extends AbstractStyleableKey<ImmutableList<BezierNode>>

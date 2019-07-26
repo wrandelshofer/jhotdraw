@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
  * figures.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Composite, Leaf.
  */
 public abstract class AbstractLeafFigure extends AbstractFigure {

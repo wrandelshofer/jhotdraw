@@ -12,7 +12,6 @@ import java.util.EventObject;
  * Event.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Event<E> extends EventObject {
 

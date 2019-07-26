@@ -29,7 +29,6 @@ import java.util.Collection;
  * curve going away from C0.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 @Deprecated
 public class BezierPath extends ArrayList<BezierPath.Node>

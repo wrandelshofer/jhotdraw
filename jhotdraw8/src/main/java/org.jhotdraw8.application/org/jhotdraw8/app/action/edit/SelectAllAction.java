@@ -15,7 +15,6 @@ import org.jhotdraw8.app.EditableComponent;
  * Selects all items.
  *
  * @author Werner Randelshofer.
- * @version $Id$
  */
 public class SelectAllAction extends AbstractSelectionAction {
 

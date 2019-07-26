@@ -11,7 +11,6 @@ import org.jhotdraw8.app.Application;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NewWindowAction extends NewFileAction {
 

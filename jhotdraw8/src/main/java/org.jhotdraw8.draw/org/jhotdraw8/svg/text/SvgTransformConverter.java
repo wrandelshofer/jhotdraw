@@ -48,7 +48,6 @@ import static java.lang.Math.tan;
  * </a>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SvgTransformConverter extends AbstractCssConverter<Transform> {
 

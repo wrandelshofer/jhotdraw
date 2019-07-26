@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
     private final boolean withSpace;

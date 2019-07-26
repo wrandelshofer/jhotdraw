@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * specified value.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IdSelector extends SimpleSelector {
 

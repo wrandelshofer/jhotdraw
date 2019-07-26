@@ -21,7 +21,6 @@ import java.util.Map;
  * Note: for performance reasons we do not expand the tree nodes by default.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleTreePresentationModel<N> extends AbstractTreePresentationModel<N> {
 

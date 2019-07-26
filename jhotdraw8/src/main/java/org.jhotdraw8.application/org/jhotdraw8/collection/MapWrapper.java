@@ -16,7 +16,6 @@ import java.util.Set;
  * ReadOnlyMap to a client who does not understand the ReadOnlyMap APi.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class MapWrapper<K, V> extends AbstractMap<K, V> {
     private final ReadOnlyMap<K, V> backingMap;

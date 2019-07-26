@@ -17,7 +17,6 @@ import java.util.List;
  * ObservableListProxy.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ObservableListProxy<E> extends TransformationList<E, E> {
 

@@ -13,7 +13,6 @@ import java.util.List;
  * A style rule associates a selector list to a list of declarations.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StyleRule extends Rule {
 

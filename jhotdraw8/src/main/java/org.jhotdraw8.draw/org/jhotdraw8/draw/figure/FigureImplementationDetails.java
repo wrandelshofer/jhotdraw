@@ -13,7 +13,6 @@ import org.jhotdraw8.collection.ObjectKey;
  * Hides implementation details from other packages.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 class FigureImplementationDetails {
 

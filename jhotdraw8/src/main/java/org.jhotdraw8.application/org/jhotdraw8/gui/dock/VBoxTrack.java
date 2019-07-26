@@ -15,7 +15,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * VBoxTrack.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class VBoxTrack extends VBox implements Track {
 

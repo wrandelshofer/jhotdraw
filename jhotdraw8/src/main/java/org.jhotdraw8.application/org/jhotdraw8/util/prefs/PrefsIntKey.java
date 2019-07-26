@@ -12,7 +12,6 @@ import java.util.prefs.Preferences;
  * PrefsIntKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PrefsIntKey {
 

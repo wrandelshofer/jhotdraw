@@ -23,7 +23,6 @@ import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
  * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * $$
  */
 public class PathConnector extends LocatorConnector {

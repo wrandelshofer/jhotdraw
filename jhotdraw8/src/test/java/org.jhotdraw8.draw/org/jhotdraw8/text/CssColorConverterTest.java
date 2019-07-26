@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * CssColorConverterTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssColorConverterTest {
 

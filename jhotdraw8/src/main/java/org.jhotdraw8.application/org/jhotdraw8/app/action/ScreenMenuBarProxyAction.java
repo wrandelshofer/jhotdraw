@@ -13,7 +13,6 @@ import org.jhotdraw8.app.Application;
  * ScreenMenuBarProxyAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ScreenMenuBarProxyAction extends AbstractAction {
 

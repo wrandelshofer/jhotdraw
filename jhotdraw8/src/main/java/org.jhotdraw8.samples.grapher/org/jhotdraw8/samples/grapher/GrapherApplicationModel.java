@@ -23,7 +23,6 @@ import java.util.ResourceBundle;
  * GrapherApplicationModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class GrapherApplicationModel extends SimpleApplicationModel {
     public final static DataFormat GRAPHER_FORMAT;

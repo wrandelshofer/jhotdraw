@@ -24,7 +24,6 @@ import static java.lang.Math.min;
  * Builds a bounding box path.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BoundingBoxBuilder extends AbstractPathBuilder
         implements Builder<BoundingBox> {

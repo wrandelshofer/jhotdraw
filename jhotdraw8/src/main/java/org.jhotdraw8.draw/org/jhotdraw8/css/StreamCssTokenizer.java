@@ -136,7 +136,6 @@ import static org.jhotdraw8.css.CssTokenType.TT_URL;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StreamCssTokenizer implements CssTokenizer {
 

@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * LabelConnectionFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LabelConnectionFigure extends AbstractLabelConnectionFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {

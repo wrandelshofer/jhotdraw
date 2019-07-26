@@ -23,7 +23,6 @@ import org.jhotdraw8.draw.EditorView;
  * disabled.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractSelectedAction extends AbstractViewControllerAction<Activity> {
 

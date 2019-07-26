@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * Decodes a resource value.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface ResourceDecoder {
 

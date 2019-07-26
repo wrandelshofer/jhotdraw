@@ -11,7 +11,6 @@ import org.jhotdraw8.event.Event;
  * ToolEvent.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ToolEvent extends Event<Tool> {
 

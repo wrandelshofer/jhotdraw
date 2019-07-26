@@ -23,7 +23,6 @@ import static java.lang.Math.min;
  * This base class can be used to implement figures which support child figures.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Figure Composite, Composite.
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {

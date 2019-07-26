@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * OSXCollatorTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class OSXCollatorTest {
 

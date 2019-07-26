@@ -23,7 +23,6 @@ import java.util.function.Supplier;
  * ImageCreationTool.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern CreationTool AbstractFactory, Client.
  */
 public class ImageCreationTool extends CreationTool {

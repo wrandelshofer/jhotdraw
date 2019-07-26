@@ -10,7 +10,6 @@ import org.jhotdraw8.css.text.CssRegexConverter;
  * XmlRegexConverter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class XmlRegexConverter extends CssRegexConverter {
 

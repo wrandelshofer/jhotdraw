@@ -21,7 +21,6 @@ import java.util.List;
  * BezierNodePath.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BezierNodePath implements Shape {
 

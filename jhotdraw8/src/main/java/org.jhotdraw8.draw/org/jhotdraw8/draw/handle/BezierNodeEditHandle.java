@@ -47,7 +47,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * Handle for the point ofCollection a figure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class BezierNodeEditHandle extends AbstractHandle {
 

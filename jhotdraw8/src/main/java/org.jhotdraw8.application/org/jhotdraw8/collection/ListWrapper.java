@@ -14,7 +14,6 @@ import java.util.List;
  * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ListWrapper<E> extends AbstractList<E> {
     private final ReadOnlyList<E> backingList;

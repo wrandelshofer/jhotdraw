@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * FigureSelectorModelTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FigureSelectorModelTest {
 

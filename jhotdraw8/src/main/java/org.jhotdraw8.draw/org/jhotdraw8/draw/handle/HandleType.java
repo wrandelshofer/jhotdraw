@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.handle;
  * {@code HandleType} is used by tools to request specific handles from figures.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class HandleType {
 

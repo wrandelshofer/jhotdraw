@@ -6,6 +6,5 @@
  * Provides abstract actions for document oriented applications.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 package org.jhotdraw8.app.action;

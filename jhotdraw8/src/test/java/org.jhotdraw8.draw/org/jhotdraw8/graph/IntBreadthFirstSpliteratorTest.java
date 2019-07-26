@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * IntBreadthFirstSpliteratorTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntBreadthFirstSpliteratorTest {
 

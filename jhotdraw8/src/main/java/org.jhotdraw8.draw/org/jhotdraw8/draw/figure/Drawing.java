@@ -36,7 +36,6 @@ import java.nio.file.Paths;
  * {@link Layer}s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.</p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern Drawing Framework, KeyAbstraction. The drawing framework
  * supports the creation of editors for structured drawings. The key
  * abstractions of the framework are: null {@link Drawing}, {@link Figure}, {@link org.jhotdraw8.draw.handle.Handle},

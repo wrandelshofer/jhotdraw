@@ -28,7 +28,6 @@ import java.util.Set;
  * {@link org.jhotdraw8.css.ast.SelectorGroup}'s.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class DocumentSelectorModel implements SelectorModel<Element> {
 

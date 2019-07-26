@@ -26,7 +26,6 @@ import java.util.function.Consumer;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssUriConverter extends AbstractCssConverter<URI> {
     private final String helpText;

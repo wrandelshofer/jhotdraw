@@ -12,7 +12,6 @@ import java.util.Locale;
  * their own locale.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LocaleUtil {
 

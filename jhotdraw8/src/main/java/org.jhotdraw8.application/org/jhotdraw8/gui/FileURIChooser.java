@@ -20,7 +20,6 @@ import java.util.List;
  * FileURIChooser.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FileURIChooser implements URIChooser {
 

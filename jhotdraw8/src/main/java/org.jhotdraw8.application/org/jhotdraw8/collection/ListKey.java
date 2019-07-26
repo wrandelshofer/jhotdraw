@@ -8,7 +8,6 @@ package org.jhotdraw8.collection;
  * DoubleKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ListKey<E> extends ObjectKey<ImmutableList<E>> {
 

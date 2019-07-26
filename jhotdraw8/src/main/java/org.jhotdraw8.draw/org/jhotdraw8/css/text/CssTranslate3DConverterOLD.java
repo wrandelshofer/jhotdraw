@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssTranslate3DConverterOLD extends AbstractCssConverter<Point3D> {
 

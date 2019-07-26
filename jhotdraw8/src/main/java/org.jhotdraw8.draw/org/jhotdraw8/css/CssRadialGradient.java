@@ -20,7 +20,6 @@ import java.util.Objects;
  * Represents a radial gradient.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssRadialGradient implements Paintable {
 

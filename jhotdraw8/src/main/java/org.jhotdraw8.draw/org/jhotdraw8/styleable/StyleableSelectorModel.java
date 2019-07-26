@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
  * StyleableSelectorModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StyleableSelectorModel implements SelectorModel<Styleable> {
 

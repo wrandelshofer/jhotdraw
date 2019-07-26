@@ -33,7 +33,6 @@ import static java.lang.Math.sqrt;
 /**
  * Some geometric utilities.
  *
- * @version $Id$
  */
 public class Geom {
 

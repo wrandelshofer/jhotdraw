@@ -24,7 +24,6 @@ import java.util.function.Function;
  * ObservableWordListStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ObservableWordListStyleableKey extends AbstractStyleableKey<ImmutableList<String>> implements WriteableStyleableMapAccessor<ImmutableList<String>> {
 

@@ -14,7 +14,6 @@ import java.util.prefs.Preferences;
  * PreferencesFontChooserModelFactory.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelFactory {
 

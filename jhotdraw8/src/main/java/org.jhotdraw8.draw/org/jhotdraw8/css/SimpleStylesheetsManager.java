@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
  *
  * @param <E> the element type that can be styled by this style manager
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 

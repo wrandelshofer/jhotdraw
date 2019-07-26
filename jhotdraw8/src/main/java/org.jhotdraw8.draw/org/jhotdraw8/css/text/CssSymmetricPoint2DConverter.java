@@ -21,7 +21,6 @@ import java.text.ParseException;
  * versa. If the X and the Y-value are identical, then only one value is output.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssSymmetricPoint2DConverter implements Converter<CssPoint2D> {
 

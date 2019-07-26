@@ -13,7 +13,6 @@ import java.util.Map;
  * IntImmutableDirectedGraph.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntImmutableDirectedGraph implements IntDirectedGraph {
 

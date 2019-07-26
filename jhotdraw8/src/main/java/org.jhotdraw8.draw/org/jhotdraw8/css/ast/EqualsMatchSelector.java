@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * attribute with the specified name and value.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class EqualsMatchSelector extends AbstractAttributeSelector {
     @Nullable

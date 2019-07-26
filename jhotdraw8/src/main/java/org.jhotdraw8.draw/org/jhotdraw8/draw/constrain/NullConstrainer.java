@@ -18,7 +18,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * NullConstrainer does not constrain anything.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NullConstrainer extends AbstractConstrainer {
 

@@ -81,7 +81,6 @@ import java.util.regex.Pattern;
  * SimpleXmlIO does not preserve whitespace in the XML file.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMixin, ClipboardOutputFormat, ClipboardInputFormat {
     /**

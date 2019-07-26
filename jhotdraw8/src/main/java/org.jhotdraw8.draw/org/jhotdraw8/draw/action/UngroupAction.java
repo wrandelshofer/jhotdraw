@@ -28,7 +28,6 @@ import java.util.LinkedList;
  * UngroupAction.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class UngroupAction extends AbstractSelectedAction {
 

@@ -41,7 +41,6 @@ import java.util.function.Predicate;
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.Vertex<V, A>, A extends FlatExposedBidiGraphBuilder.Arrow<V, A>> implements BidiGraph<V, A> {
     private int arrowCount;

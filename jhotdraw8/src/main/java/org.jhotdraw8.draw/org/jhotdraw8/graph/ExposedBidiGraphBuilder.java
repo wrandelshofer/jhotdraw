@@ -38,7 +38,6 @@ import java.util.function.Predicate;
  * @param <V> the vertex type
  * @param <A> the arrow type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V, A>, A extends ExposedBidiGraphBuilder.Arrow<V, A>> implements BidiGraph<V, A> {
 

@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * IntImmutableBidiGraphTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntImmutableBidiGraphTest {
 

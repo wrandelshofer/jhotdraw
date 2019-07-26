@@ -15,7 +15,6 @@ import org.jhotdraw8.annotation.Nullable;
  * of Key.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
     @Nonnull

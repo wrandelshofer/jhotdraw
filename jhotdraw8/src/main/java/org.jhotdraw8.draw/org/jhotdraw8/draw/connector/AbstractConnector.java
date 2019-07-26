@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.connector;
  * AbstractConnector.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractConnector implements Connector {
 

@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
  * A figure which supports start markers.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface MarkerStartableFigure extends Figure {
     /**

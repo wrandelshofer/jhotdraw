@@ -16,7 +16,6 @@ import java.util.Map;
  * CachingCollator.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CachingCollator implements Comparator<String> {
 

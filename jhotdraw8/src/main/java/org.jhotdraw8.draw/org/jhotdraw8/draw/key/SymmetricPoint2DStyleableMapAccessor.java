@@ -13,7 +13,6 @@ import org.jhotdraw8.css.text.CssSymmetricPoint2DConverterOLD;
  * SymmetricPoint2DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SymmetricPoint2DStyleableMapAccessor extends Point2DStyleableMapAccessor
         implements NonnullMapAccessor<Point2D> {

@@ -51,7 +51,6 @@ import static java.lang.Double.max;
  * Defines a page layout for printing.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PageFigure extends AbstractCompositeFigure
         implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,

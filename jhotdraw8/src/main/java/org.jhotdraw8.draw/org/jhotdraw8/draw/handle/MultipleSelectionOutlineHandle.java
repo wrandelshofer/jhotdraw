@@ -22,7 +22,6 @@ import org.jhotdraw8.geom.Geom;
  * any interactions.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class MultipleSelectionOutlineHandle extends AbstractHandle {
 

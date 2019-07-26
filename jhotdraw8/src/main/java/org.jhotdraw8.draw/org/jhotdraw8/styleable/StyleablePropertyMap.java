@@ -37,7 +37,6 @@ import java.util.HashMap;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class StyleablePropertyMap {
 

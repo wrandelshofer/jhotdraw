@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.Nullable;
  * Paintable.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Paintable {
 

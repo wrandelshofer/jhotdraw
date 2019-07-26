@@ -23,7 +23,6 @@ import java.util.ResourceBundle;
  * ModelerApplicationModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ModelerApplicationModel extends SimpleApplicationModel {
     public final static DataFormat GRAPHER_FORMAT;

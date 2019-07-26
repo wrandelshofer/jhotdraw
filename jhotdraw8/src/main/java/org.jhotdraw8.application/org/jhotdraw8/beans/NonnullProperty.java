@@ -12,7 +12,6 @@ import javafx.beans.property.SimpleObjectProperty;
  *
  * @param <T> the value type
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class NonnullProperty<T> extends SimpleObjectProperty<T> {
 

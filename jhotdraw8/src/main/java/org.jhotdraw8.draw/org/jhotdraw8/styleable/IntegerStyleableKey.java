@@ -18,7 +18,6 @@ import java.util.function.Function;
  * IntegerStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class IntegerStyleableKey extends SimpleStyleableKey<Integer> implements WriteableStyleableMapAccessor<Integer> {
 

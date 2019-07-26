@@ -13,7 +13,6 @@ import org.jhotdraw8.app.DocumentBasedActivity;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class SaveFileAsAction extends SaveFileAction {
 

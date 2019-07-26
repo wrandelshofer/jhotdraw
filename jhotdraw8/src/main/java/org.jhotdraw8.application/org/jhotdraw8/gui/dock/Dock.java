@@ -13,7 +13,6 @@ import org.jhotdraw8.annotation.Nonnull;
  * A {@code Dock} contains one or more {@link DockItem}s.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface Dock {
 

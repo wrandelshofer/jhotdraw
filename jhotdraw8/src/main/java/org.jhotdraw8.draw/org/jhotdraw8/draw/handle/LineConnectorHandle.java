@@ -47,7 +47,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * constructor.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LineConnectorHandle extends AbstractConnectorHandle {
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);

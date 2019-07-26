@@ -20,7 +20,6 @@ import org.jhotdraw8.collection.StringKey;
  * Action.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern org.jhotdraw8.app.Application Framework, KeyAbstraction.
  * @design.pattern Action Command, Command. The command pattern is used to treat
  * commands like objects inside of an application.

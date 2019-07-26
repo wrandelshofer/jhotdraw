@@ -15,7 +15,6 @@ import java.util.function.Consumer;
  * WeakListener.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public final class WeakListener<E extends EventObject> implements Listener<E>, javafx.beans.WeakListener {
 

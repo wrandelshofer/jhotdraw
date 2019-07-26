@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * the specified value.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ClassSelector extends SimpleSelector {
 

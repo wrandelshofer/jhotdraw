@@ -23,7 +23,6 @@ import java.util.Set;
  * AbstractSelectionInspector.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public abstract class AbstractSelectionInspector implements Inspector<DrawingView> {
     final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();

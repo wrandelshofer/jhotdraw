@@ -17,7 +17,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * LineConnectionWithMarkersFigure.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,

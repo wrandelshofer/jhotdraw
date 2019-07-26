@@ -14,7 +14,6 @@ import java.util.function.BiFunction;
  * The factory is allowed to return an already existing converter.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface ConverterFactory extends BiFunction<String, String, Converter<?>> {
 

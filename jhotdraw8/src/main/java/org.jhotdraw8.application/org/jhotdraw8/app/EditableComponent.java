@@ -11,7 +11,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
  * and have a selection.
  *
  * @author Werner Randelshofer
- * @version $Id$
  * @design.pattern EditableComponent Adapter, Adapter. Provides a common API for
  * GUI components which support editing.
  */

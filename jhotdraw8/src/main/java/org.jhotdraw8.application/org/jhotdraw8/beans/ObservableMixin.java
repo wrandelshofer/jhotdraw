@@ -13,7 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * ObservableMixin.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public interface ObservableMixin extends Observable {
 

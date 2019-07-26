@@ -18,7 +18,6 @@ import java.util.List;
  * Creates a square at each move-to and at the end of the specified path.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class FXPathPointsBuilder extends AbstractPathBuilder {
 

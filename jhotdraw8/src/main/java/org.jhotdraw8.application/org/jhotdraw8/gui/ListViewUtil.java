@@ -31,7 +31,6 @@ import static java.lang.Math.min;
  * ListViewUtil.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class ListViewUtil {
 

@@ -13,7 +13,6 @@ import javafx.util.Duration;
  * RectangleTransition performs a linear transition of the bounds of a JavaFX Rectangle.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RectangleTransition extends Transition {
     private final Rectangle rectangle;

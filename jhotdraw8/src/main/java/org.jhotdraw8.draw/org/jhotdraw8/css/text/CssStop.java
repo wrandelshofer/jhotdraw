@@ -14,7 +14,6 @@ import java.util.Objects;
  * CssStop.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class CssStop {
 

@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * PolynomialTest.
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class PolynomialTest {
 
