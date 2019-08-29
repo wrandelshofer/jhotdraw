@@ -50,7 +50,7 @@ public class AsyncFXMLLoader {
      * <pre>
      *  // Load a menu bar asynchronously and add it to the top of a border pane.
      *
-     *  BorderPane borderPane = new BordePane();
+     *  BorderPane borderPane = new BorderPane();
      *
      *  AsyncFXMLLoader.load(MainApp.class.getResource("MainMenuBar.fxml"))
      *         .whenComplete((loader, throwable) -&gt; {

@@ -221,4 +221,8 @@ public interface Key<T> extends MapAccessor<T> {
         return new KeyMapEntryProperty<>(map, this);
     }
 
+    default T cast(Object value) {
+        @SuppressWarnings("unchecked") T value1 = (T) value;
+        return value1;
+    }
 }
