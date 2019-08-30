@@ -31,9 +31,27 @@ import org.jhotdraw8.text.Converter;
 public class StyleAttributesInspector extends AbstractStyleAttributesInspector<Figure>
         implements Inspector<DrawingView> {
 
-    @Override
-    protected Iterable<Figure> getEntities() {
-        return getDrawing().breadthFirstIterable();
+    final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
+    private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
+
+        @Override
+        public void invalidated(Observable observable) {
+            textAreaInvalidated(observable);
+        }
+
+    };
+    @Nonnull
+    private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
+        if (oldValue != null) {
+            oldValue.removeListener(modelInvalidationHandler);
+        }
+        if (newValue != null) {
+            newValue.addListener(modelInvalidationHandler);
+        }
+    };
+
+    {
+        subject.addListener(this::handleDrawingViewChanged);
     }
 
     @Override
@@ -69,13 +87,53 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return null;
     }
 
+    protected Drawing getDrawing() {
+        DrawingView view = getSubject();
+        return view == null ? null : view.getDrawing();
+    }
+
+    protected DrawingModel getDrawingModel() {
+        DrawingView view = getSubject();
+        return view == null ? null : view.getModel();
+    }
+
+    @Override
+    protected Iterable<Figure> getEntities() {
+        return getDrawing().breadthFirstIterable();
+    }
+
+    @Override
+    protected Figure getRoot() {
+        DrawingView subject = getSubject();
+        return subject == null ? null : subject.getDrawing();
+    }
+
     @Override
     protected StylesheetsManager<Figure> getStyleManager() {
         Drawing d = getDrawing();
         return d == null ? null : d.getStyleManager();
     }
 
-
+    /**
+     * Can be overridden by subclasses. This implementation is empty.
+     *
+     * @param observable
+     * @param oldValue   the old drawing view
+     * @param newValue   the new drawing view
+     */
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+        if (oldValue != null) {
+            oldValue.modelProperty().removeListener(modelChangeHandler);
+            modelChangeHandler.changed(oldValue.modelProperty(), oldValue.getModel(), null);
+            selectionProperty().unbind();
+        }
+        if (newValue != null) {
+            newValue.modelProperty().addListener(modelChangeHandler);
+            modelChangeHandler.changed(newValue.modelProperty(), null, newValue.getModel());
+            textAreaInvalidated(observable);
+            selectionProperty().bind(newValue.selectedFiguresProperty());
+        }
+    }
 
     @Override
     protected void remove(Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
@@ -105,69 +163,8 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         }
     }
 
-    @Override
-    protected Figure getRoot() {
-        DrawingView subject = getSubject();
-        return subject == null ? null : subject.getDrawing();
-    }
-
-    final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
-
-    {
-        subject.addListener(this::handleDrawingViewChanged);
-    }
-
     public ObjectProperty<DrawingView> subjectProperty() {
         return subject;
-    }
-
-    protected Drawing getDrawing() {
-        DrawingView view = getSubject();
-        return view == null ? null : view.getDrawing();
-    }
-
-    protected DrawingModel getDrawingModel() {
-        DrawingView view = getSubject();
-        return view == null ? null : view.getModel();
-    }
-
-    private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
-
-        @Override
-        public void invalidated(Observable observable) {
-            textAreaInvalidated(observable);
-        }
-
-    };
-    @Nonnull
-    private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
-        if (oldValue != null) {
-            oldValue.removeListener(modelInvalidationHandler);
-        }
-        if (newValue != null) {
-            newValue.addListener(modelInvalidationHandler);
-        }
-    };
-
-    /**
-     * Can be overridden by subclasses. This implementation is empty.
-     *
-     * @param observable
-     * @param oldValue   the old drawing view
-     * @param newValue   the new drawing view
-     */
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
-        if (oldValue != null) {
-            oldValue.modelProperty().removeListener(modelChangeHandler);
-            modelChangeHandler.changed(oldValue.modelProperty(), oldValue.getModel(), null);
-            selectionProperty().unbind();
-        }
-        if (newValue != null) {
-            newValue.modelProperty().addListener(modelChangeHandler);
-            modelChangeHandler.changed(newValue.modelProperty(), null, newValue.getModel());
-            textAreaInvalidated(observable);
-            selectionProperty().bind(newValue.selectedFiguresProperty());
-        }
     }
 
 }

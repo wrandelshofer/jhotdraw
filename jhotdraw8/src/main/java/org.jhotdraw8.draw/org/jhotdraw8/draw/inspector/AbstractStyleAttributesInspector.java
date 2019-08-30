@@ -583,20 +583,21 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
 
         // handling of emptyness must be consistent with code in apply() method
-        Set<E> newValue = new LinkedHashSet<>(getSelection());
-        if (newValue.isEmpty()) {
-            newValue.add(getRoot());
+        Set<E> selectedOrRoot = new LinkedHashSet<>(getSelection());
+        if (selectedOrRoot.isEmpty()) {
+            selectedOrRoot.add(getRoot());
         }
 
         StylesheetsManager<E> styleManager = getStyleManager();
         ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
-        Set<E> fs = new LinkedHashSet<>(newValue);
+        Set<E> fs = new LinkedHashSet<>(selectedOrRoot);
         pseudoStyles.put("selected", fs);
         List<E> matchedFigures = new ArrayList<>();
         StylesheetsManager<E> sm = getStyleManager();
         SelectorModel<E> selectorModel = sm.getSelectorModel();
         selectorModel.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-        SelectorGroup selector = updateSelector(selection, selectorModel);
+        ;
+        SelectorGroup selector = updateSelector(selectedOrRoot, selectorModel);
 
         for (E entity : getEntities()) {
             if (selector.matches(selectorModel, entity)) {
@@ -605,10 +606,31 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
 
 
-        collectHelpTexts(newValue);
-        Map<QualifiedName, String> attr = new TreeMap<>();
-        Map<QualifiedName, String> description = new TreeMap<>();
+        collectHelpTexts(selectedOrRoot);
+        Map<QualifiedName, String> attr = collectAttributeValues(decompose, matchedFigures, selectorModel);
 
+        StringBuilder buf = new StringBuilder();
+        CssPrettyPrinter pp = new CssPrettyPrinter(buf);
+        selector.produceTokens(t -> pp.append(t.fromToken()));
+        pp.append(" {");
+        for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
+            pp.append("\n  ").append(a.getKey().getName()).append(": ");
+            pp.append(a.getValue());
+            pp.append(";");
+        }
+        pp.append("\n}");
+
+        textArea.setText(buf.toString());
+        int rows = 1;
+        for (int i = 0; i < buf.length(); i++) {
+            if (buf.charAt(i) == '\n') {
+                rows++;
+            }
+        }
+        textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
+    }
+
+    private Map<QualifiedName, String> collectAttributeValues(boolean decompose, List<E> matchedFigures, SelectorModel<E> selectorModel) {
         final StyleOrigin origin;
         if (showAttributeValues.isSelected()) {
             origin = StyleOrigin.USER;
@@ -619,7 +641,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         } else {
             origin = null;
         }
-
+        Map<QualifiedName, String> attr = new TreeMap<>();
         Predicate<QualifiedName> filter = getAttributeFilter();
         boolean first = true;
         for (E f : matchedFigures) {
@@ -653,26 +675,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 }
             }
         }
-
-        StringBuilder buf = new StringBuilder();
-        CssPrettyPrinter pp = new CssPrettyPrinter(buf);
-        selector.produceTokens(t -> pp.append(t.fromToken()));
-        pp.append(" {");
-        for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
-            pp.append("\n  ").append(a.getKey().getName()).append(": ");
-            pp.append(a.getValue());
-            pp.append(";");
-        }
-        pp.append("\n}");
-
-        textArea.setText(buf.toString());
-        int rows = 1;
-        for (int i = 0; i < buf.length(); i++) {
-            if (buf.charAt(i) == '\n') {
-                rows++;
-            }
-        }
-        textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
+        return attr;
     }
 
     private SelectorGroup updateSelector(Set<E> selection, SelectorModel<E> selectorModel) {
