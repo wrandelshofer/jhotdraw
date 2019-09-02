@@ -20,28 +20,28 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * FontDialog for selecting a font family and a font size.
+ * FontDialog for selecting a font family.
  *
  * @author Werner Randelshofer
  */
-public class FontDialog extends Dialog<FontFamilySize> {
+public class FontFamilyDialog extends Dialog<String> {
 
-    private FontChooserController controller;
+    private FontFamilyChooserController controller;
 
-    public FontDialog() {
+    public FontFamilyDialog() {
         final Resources labels = ApplicationLabels.getGuiResources();
         final DialogPane dialogPane = getDialogPane();
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(FontDialog.class.getResource("FontChooser.fxml"));
+            loader.setLocation(FontFamilyDialog.class.getResource("FontFamilyChooser.fxml"));
             loader.setResources(labels.asResourceBundle());
             loader.load();
             final Parent root = loader.getRoot();
             dialogPane.setContent(root);
 
-            root.getStylesheets().add(FontDialog.class.getResource("fontchooser.css").toString());
-            controller = loader.getController();
+            root.getStylesheets().add(FontFamilyDialog.class.getResource("fontchooser.css").toString());
+            controller = loader.<FontChooserController>getController();
         } catch (IOException ex) {
             dialogPane.setContent(new Label(ex.getMessage()));
             ex.printStackTrace();
@@ -74,12 +74,10 @@ public class FontDialog extends Dialog<FontFamilySize> {
         return model;
     }
 
-    private FontFamilySize handleButton(@Nullable ButtonType buttonType) {
+    private String handleButton(@Nullable ButtonType buttonType) {
         new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType != null && buttonType.getButtonData() == ButtonData.OK_DONE) {
-            String selectedFontName = controller.getSelectedFontName();
-            double fontSize = controller.getFontSize();
-            return new FontFamilySize(selectedFontName, fontSize);
+            return controller.getSelectedFontName();
         } else {
             return null;
         }
@@ -89,10 +87,9 @@ public class FontDialog extends Dialog<FontFamilySize> {
         controller.setFontName(fontName);
     }
 
-    public final Optional<FontFamilySize> showAndWait(FontFamilySize font) {
-        if (font != null) {
-            selectFontName(font.getFamily());
-            controller.setFontSize(font.getSize());
+    public final Optional<String> showAndWait(String fontFamily) {
+        if (fontFamily != null) {
+            selectFontName(fontFamily);
         }
         return showAndWait();
     }
