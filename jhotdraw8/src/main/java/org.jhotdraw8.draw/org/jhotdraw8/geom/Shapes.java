@@ -213,36 +213,83 @@ public class Shapes {
         for (PathElement pe : pathElements) {
             if (pe instanceof MoveTo) {
                 MoveTo e = (MoveTo) pe;
-                x = e.getX();
-                y = e.getY();
+                if (e.isAbsolute()) {
+                    x = e.getX();
+                    y = e.getY();
+                } else {
+                    x += e.getX();
+                    y += e.getY();
+                }
                 p.moveTo(x, y);
             } else if (pe instanceof LineTo) {
                 LineTo e = (LineTo) pe;
-                x = e.getX();
-                y = e.getY();
+                if (e.isAbsolute()) {
+                    x = e.getX();
+                    y = e.getY();
+                } else {
+                    x += e.getX();
+                    y += e.getY();
+                }
                 p.lineTo(x, y);
             } else if (pe instanceof CubicCurveTo) {
                 CubicCurveTo e = (CubicCurveTo) pe;
-                x = e.getX();
-                y = e.getY();
-                p.curveTo(e.getControlX1(), e.getControlY1(), e.getControlX2(), e.getControlY2(), x, y);
+                final double cx1, cy1, cx2, cy2;
+                if (e.isAbsolute()) {
+                    cx1 = e.getControlX1();
+                    cy1 = e.getControlY1();
+                    cx2 = e.getControlX2();
+                    cy2 = e.getControlY2();
+                    x = e.getX();
+                    y = e.getY();
+                } else {
+                    cx1 = x + e.getControlX1();
+                    cy1 = y + e.getControlY1();
+                    cx2 = x + e.getControlX2();
+                    cy2 = y + e.getControlY2();
+                    x += e.getX();
+                    y += e.getY();
+                }
+                p.curveTo(cx1, cy1, cx2, cy2, x, y);
             } else if (pe instanceof QuadCurveTo) {
                 QuadCurveTo e = (QuadCurveTo) pe;
-                x = e.getX();
-                y = e.getY();
-                p.quadTo(e.getControlX(), e.getControlY(), x, y);
+                final double cx, cy;
+                if (e.isAbsolute()) {
+                    cx = e.getControlX();
+                    cy = e.getControlY();
+                    x = e.getX();
+                    y = e.getY();
+                } else {
+                    cx = x + e.getControlX();
+                    cy = y + e.getControlY();
+                    x += e.getX();
+                    y += e.getY();
+                }
+                p.quadTo(cx, cy, x, y);
             } else if (pe instanceof ArcTo) {
                 ArcTo e = (ArcTo) pe;
-                x = e.getX();
-                y = e.getY();
+                if (e.isAbsolute()) {
+                    x = e.getX();
+                    y = e.getY();
+                } else {
+                    x += e.getX();
+                    y += e.getY();
+                }
                 p.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), e.isLargeArcFlag(), e.isSweepFlag(), x, y);
             } else if (pe instanceof HLineTo) {
                 HLineTo e = (HLineTo) pe;
-                x = e.getX();
+                if (e.isAbsolute()) {
+                    x = e.getX();
+                } else {
+                    x += e.getX();
+                }
                 p.lineTo(x, y);
             } else if (pe instanceof VLineTo) {
                 VLineTo e = (VLineTo) pe;
-                y = e.getY();
+                if (e.isAbsolute()) {
+                    y = e.getY();
+                } else {
+                    y += e.getY();
+                }
                 p.lineTo(x, y);
             } else if (pe instanceof ClosePath) {
                 p.closePath();
@@ -913,8 +960,8 @@ public class Shapes {
                             .append(nb.toString((y = coords[5]) - py));
                     break;
                 case PathIterator.SEG_CLOSE:
-                    if (next != 'Z') {
-                        buf.append(next = 'Z');
+                    if (next != 'z') {
+                        buf.append(next = 'z');
                     }
                     x = ix;
                     y = iy;

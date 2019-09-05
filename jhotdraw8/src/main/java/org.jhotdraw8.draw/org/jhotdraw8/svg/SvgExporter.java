@@ -129,6 +129,7 @@ public class SvgExporter {
     private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
     private boolean skipInvisibleNodes = true;
+    private boolean relativizePaths = false;
     private final Object skipKey;
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
     @Nullable
@@ -698,7 +699,12 @@ public class SvgExporter {
         }
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
-        String d = Shapes.doubleSvgStringFromElements(node.getElements());
+        String d;
+        if (relativizePaths) {
+            d = Shapes.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements()).getPathIterator(null));
+        } else {
+            d = Shapes.doubleSvgStringFromElements(node.getElements());
+        }
         elem.setAttribute("d", d);
         return elem;
     }
@@ -1360,5 +1366,13 @@ public class SvgExporter {
                 elem.setAttribute("transform", value);
             }
         }
+    }
+
+    public boolean isRelativizePaths() {
+        return relativizePaths;
+    }
+
+    public void setRelativizePaths(boolean relativizePaths) {
+        this.relativizePaths = relativizePaths;
     }
 }
