@@ -138,7 +138,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         final SvgExporter exporter = createExporter();
-        exporter.setSkipInvisibleNodes(false);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
