@@ -13,12 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.css.SimpleStylesheetsManager;
-import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -133,10 +128,10 @@ public class DrawingFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext v, @Nonnull Node n) {
+    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
         Group g = (Group) n;
         //applyTransformableFigureProperties(n);
-        applyStyleableFigureProperties(v, n);
+        applyStyleableFigureProperties(ctx, n);
 
         Bounds bounds = getBoundsInLocal();
         Rectangle page = (Rectangle) g.getProperties().get("background");
@@ -153,7 +148,7 @@ public class DrawingFigure extends AbstractCompositeFigure
         List<Node> nodes = new ArrayList<>(getChildren().size());
         nodes.add(page);
         for (Figure child : getChildren()) {
-            nodes.add(v.getNode(child));
+            nodes.add(ctx.getNode(child));
         }
         ObservableList<Node> group = g.getChildren();
         if (!group.equals(nodes)) {
