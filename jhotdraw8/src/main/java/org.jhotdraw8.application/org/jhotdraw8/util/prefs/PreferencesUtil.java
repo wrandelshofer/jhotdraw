@@ -9,9 +9,11 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -305,7 +307,7 @@ public class PreferencesUtil
      * @param prefs       Preferences for storing/retrieving preferences values.
      * @param name        Base name of the preference.
      * @param stage       The window for which to track preferences.
-     * @param defaultSize This size is used when no prefences are stored yet for
+     * @param defaultSize This size is used when no preferences are stored yet for
      *                    this window.
      */
     public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage, Dimension2D defaultSize) {
@@ -315,9 +317,15 @@ public class PreferencesUtil
 
         prefWidth = prefs.getDouble(name + ".width", defaultSize.getWidth());
         prefHeight = prefs.getDouble(name + ".height", defaultSize.getHeight());
+        Screen primary = Screen.getPrimary();
+        Rectangle2D screenBounds = primary == null ? null : primary.getBounds();
 
-        stage.setWidth(prefWidth);
-        stage.setHeight(prefHeight);
+        if (prefWidth > 0 && screenBounds != null && prefWidth <= screenBounds.getWidth()) {
+            stage.setWidth(prefWidth);
+        }
+        if (prefHeight > 0 && screenBounds != null && prefHeight <= screenBounds.getHeight()) {
+            stage.setHeight(prefHeight);
+        }
 
         stage.widthProperty().addListener((o, oldValue, newValue) -> {
             prefs.putDouble(name + ".width", newValue.doubleValue());
