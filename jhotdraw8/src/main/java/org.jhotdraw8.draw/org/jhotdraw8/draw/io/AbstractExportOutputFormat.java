@@ -26,11 +26,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
@@ -61,14 +57,14 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     @Override
     public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
         if (options != null) {
-            exportDrawing = EXPORT_DRAWING_KEY.get(options);
-            exportPages = EXPORT_PAGES_KEY.get(options);
-            exportSlices = EXPORT_SLICES_KEY.get(options);
-            exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.get(options);
-            exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.get(options);
-            drawingDpi = EXPORT_DRAWING_DPI_KEY.get(options);
-            pagesDpi = EXPORT_PAGES_DPI_KEY.get(options);
-            slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
+            exportDrawing = EXPORT_DRAWING_KEY.getNonnull(options);
+            exportPages = EXPORT_PAGES_KEY.getNonnull(options);
+            exportSlices = EXPORT_SLICES_KEY.getNonnull(options);
+            exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.getNonnull(options);
+            exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.getNonnull(options);
+            drawingDpi = EXPORT_DRAWING_DPI_KEY.getNonnull(options);
+            pagesDpi = EXPORT_PAGES_DPI_KEY.getNonnull(options);
+            slicesDpi = EXPORT_SLICES_DPI_KEY.getNonnull(options);
         }
     }
 
