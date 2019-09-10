@@ -14,6 +14,8 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 
@@ -134,8 +136,12 @@ public class LayerFigure extends AbstractCompositeFigure
         return (newParent instanceof Drawing);
     }
 
+    /**
+     * Layers never create handles.
+     */
     @Override
-    public @Nonnull Bounds getBoundsInLocal() {
-        return (getParent() != null) ? getParent().getBoundsInLocal() : super.getBoundsInLocal();
+    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+        // empty
     }
+
 }
