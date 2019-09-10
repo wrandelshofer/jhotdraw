@@ -39,9 +39,9 @@ public class ModelerApplicationModel extends SimpleApplicationModel {
         super("Modeler", ModelerActivityController::new,
                 ModelerApplication.class.getResource("ModelerMenuBar.fxml"),
                 "Modeler Files", GRAPHER_FORMAT, "*.xml");
-        getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
-        getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_FORMAT, "*.png"));
-        getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.ser.xml"));
+        getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_MIME_TYPE, "*.svg"));
+        getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_MIME_TYPE, "*.png"));
+        getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE, "*.ser.xml"));
     }
 
     @Override

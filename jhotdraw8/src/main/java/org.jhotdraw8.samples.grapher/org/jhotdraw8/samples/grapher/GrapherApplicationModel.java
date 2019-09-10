@@ -19,6 +19,8 @@ import org.jhotdraw8.svg.SvgExporter;
 
 import java.util.ResourceBundle;
 
+import static org.jhotdraw8.io.DataFormats.registerDataFormat;
+
 /**
  * GrapherApplicationModel.
  *
@@ -39,9 +41,9 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
         super("Grapher", GrapherActivityController::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "Grapher Files", GRAPHER_FORMAT, "*.xml");
-        getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
-        getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_FORMAT, "*.png"));
-        getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.ser.xml"));
+        getExportExtensionFilters().add(new URIExtensionFilter("SVG", registerDataFormat(SvgExporter.SVG_MIME_TYPE), "*.svg"));
+        getExportExtensionFilters().add(new URIExtensionFilter("PNG", registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE), "*.png"));
+        getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
     }
 
     @Override

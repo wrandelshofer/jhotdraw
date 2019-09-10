@@ -7,6 +7,7 @@ package org.jhotdraw8.gui;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.io.DataFormats;
 
 import java.util.List;
 
@@ -20,6 +21,11 @@ public class URIExtensionFilter {
     private final DataFormat format;
 
     private final FileChooser.ExtensionFilter extensionFilter;
+
+    public URIExtensionFilter(@Nonnull String description, String mimeType, String... extensions) {
+        extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
+        this.format = DataFormats.registerDataFormat(mimeType);
+    }
 
     public URIExtensionFilter(@Nonnull String description, DataFormat format, String... extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);

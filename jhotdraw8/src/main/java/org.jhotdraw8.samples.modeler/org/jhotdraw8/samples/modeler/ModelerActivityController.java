@@ -33,98 +33,20 @@ import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.draw.DrawStylesheets;
-import org.jhotdraw8.draw.DrawingEditor;
-import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.EditorView;
-import org.jhotdraw8.draw.SimpleDrawingEditor;
-import org.jhotdraw8.draw.SimpleDrawingView;
-import org.jhotdraw8.draw.action.AddToGroupAction;
-import org.jhotdraw8.draw.action.AlignBottomAction;
-import org.jhotdraw8.draw.action.AlignHorizontalAction;
-import org.jhotdraw8.draw.action.AlignLeftAction;
-import org.jhotdraw8.draw.action.AlignRightAction;
-import org.jhotdraw8.draw.action.AlignTopAction;
-import org.jhotdraw8.draw.action.AlignVerticalAction;
-import org.jhotdraw8.draw.action.BringForwardAction;
-import org.jhotdraw8.draw.action.BringToFrontAction;
-import org.jhotdraw8.draw.action.GroupAction;
-import org.jhotdraw8.draw.action.RemoveFromGroupAction;
-import org.jhotdraw8.draw.action.RemoveTransformationsAction;
-import org.jhotdraw8.draw.action.SelectChildrenAction;
-import org.jhotdraw8.draw.action.SelectSameAction;
-import org.jhotdraw8.draw.action.SendBackwardAction;
-import org.jhotdraw8.draw.action.SendToBackAction;
-import org.jhotdraw8.draw.action.UngroupAction;
+import org.jhotdraw8.draw.*;
+import org.jhotdraw8.draw.action.*;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.draw.figure.BezierFigure;
-import org.jhotdraw8.draw.figure.CombinedPathFigure;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.DrawingFigure;
-import org.jhotdraw8.draw.figure.EllipseFigure;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.FillableFigure;
-import org.jhotdraw8.draw.figure.GroupFigure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.figure.LabelFigure;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LayerFigure;
-import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
-import org.jhotdraw8.draw.figure.LineFigure;
-import org.jhotdraw8.draw.figure.PageFigure;
-import org.jhotdraw8.draw.figure.PageLabelFigure;
-import org.jhotdraw8.draw.figure.PolygonFigure;
-import org.jhotdraw8.draw.figure.PolylineFigure;
-import org.jhotdraw8.draw.figure.RectangleFigure;
-import org.jhotdraw8.draw.figure.SliceFigure;
-import org.jhotdraw8.draw.figure.StrokableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.figure.TextAreaFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.MultiClipboardInputFormat;
 import org.jhotdraw8.draw.input.MultiClipboardOutputFormat;
-import org.jhotdraw8.draw.inspector.DrawingInspector;
-import org.jhotdraw8.draw.inspector.GridInspector;
-import org.jhotdraw8.draw.inspector.HandlesInspector;
-import org.jhotdraw8.draw.inspector.HelpTextInspector;
-import org.jhotdraw8.draw.inspector.HierarchyInspector;
-import org.jhotdraw8.draw.inspector.Inspector;
-import org.jhotdraw8.draw.inspector.LayersInspector;
-import org.jhotdraw8.draw.inspector.StyleAttributesInspector;
-import org.jhotdraw8.draw.inspector.StyleClassesInspector;
-import org.jhotdraw8.draw.inspector.StylesheetsInspector;
-import org.jhotdraw8.draw.inspector.ToolsToolbar;
-import org.jhotdraw8.draw.inspector.ZoomToolbar;
-import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
-import org.jhotdraw8.draw.io.FigureFactory;
-import org.jhotdraw8.draw.io.PrinterExportFormat;
-import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
-import org.jhotdraw8.draw.io.SimpleXmlIO;
-import org.jhotdraw8.draw.io.SvgExportOutputFormat;
-import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
+import org.jhotdraw8.draw.inspector.*;
+import org.jhotdraw8.draw.io.*;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
-import org.jhotdraw8.draw.tool.BezierCreationTool;
-import org.jhotdraw8.draw.tool.ConnectionTool;
-import org.jhotdraw8.draw.tool.CreationTool;
-import org.jhotdraw8.draw.tool.ImageCreationTool;
-import org.jhotdraw8.draw.tool.PolyCreationTool;
-import org.jhotdraw8.draw.tool.SelectionTool;
-import org.jhotdraw8.draw.tool.TextCreationTool;
-import org.jhotdraw8.draw.tool.TextEditingTool;
-import org.jhotdraw8.draw.tool.Tool;
-import org.jhotdraw8.gui.dock.Dock;
-import org.jhotdraw8.gui.dock.DockItem;
-import org.jhotdraw8.gui.dock.DockRoot;
-import org.jhotdraw8.gui.dock.ScrollableVBoxTrack;
-import org.jhotdraw8.gui.dock.SingleItemDock;
-import org.jhotdraw8.gui.dock.SplitPaneTrack;
-import org.jhotdraw8.gui.dock.TabbedAccordionDock;
+import org.jhotdraw8.draw.tool.*;
+import org.jhotdraw8.gui.dock.*;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.modeler.figure.MLConstants;
-import org.jhotdraw8.samples.modeler.figure.MLDiagramFigure;
-import org.jhotdraw8.samples.modeler.figure.MLKeyword;
-import org.jhotdraw8.samples.modeler.figure.UMLClassifierShapeFigure;
-import org.jhotdraw8.samples.modeler.figure.UMLEdgeFigure;
+import org.jhotdraw8.samples.modeler.figure.*;
 import org.jhotdraw8.samples.modeler.io.ModelerFigureFactory;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 import org.jhotdraw8.svg.SvgExporter;
@@ -133,16 +55,13 @@ import org.jhotdraw8.util.Resources;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
+
+import static org.jhotdraw8.io.DataFormats.registerDataFormat;
 
 /**
  * ModelerActivityController.
@@ -574,15 +493,15 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
-            if (SvgExporter.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
+            if (registerDataFormat(SvgExporter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.setOptions(options);
                 io.write(uri, drawing, workState);
-            } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".png")) {
+            } else if (registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".png")) {
                 BitmapExportOutputFormat io = new BitmapExportOutputFormat();
                 io.setOptions(options);
                 io.write(uri, drawing, workState);
-            } else if (XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT.equals(format) || uri.getPath().endsWith(".ser.xml")) {
+            } else if (registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE).equals(format) || uri.getPath().endsWith(".ser.xml")) {
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
                 io.write(uri, drawing, workState);
             } else {

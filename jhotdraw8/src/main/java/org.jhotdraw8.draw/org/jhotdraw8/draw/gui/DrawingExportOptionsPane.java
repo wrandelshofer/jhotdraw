@@ -6,11 +6,7 @@ package org.jhotdraw8.draw.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.Nonnull;
@@ -25,21 +21,11 @@ import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 import java.util.prefs.Preferences;
 
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_DRAWING_DPI_KEY;
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_DRAWING_KEY;
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_PAGES_DPI_KEY;
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_PAGES_KEY;
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_DPI_KEY;
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_KEY;
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_2X_KEY;
-import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_3X_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.*;
+import static org.jhotdraw8.io.DataFormats.registerDataFormat;
 
 public class DrawingExportOptionsPane extends GridPane {
 
@@ -194,8 +180,8 @@ public class DrawingExportOptionsPane extends GridPane {
 
     static {
         dpiFormats.add(DataFormat.IMAGE);
-        dpiFormats.add(BitmapExportOutputFormat.PNG_FORMAT);
-        dpiFormats.add(BitmapExportOutputFormat.JPEG_FORMAT);
+        dpiFormats.add(registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE));
+        dpiFormats.add(registerDataFormat(BitmapExportOutputFormat.JPEG_MIME_TYPE));
     }
 
     private boolean supportsDpi(DataFormat format) {

@@ -17,21 +17,13 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.PageFigure;
-import org.jhotdraw8.draw.figure.Slice;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.Transforms;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
+import javax.imageio.*;
 import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
@@ -44,11 +36,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -62,8 +50,8 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 
     private final static double INCH_2_MM = 25.4;
-    public final static DataFormat JPEG_FORMAT = new DataFormat("image/jpeg");
-    public final static DataFormat PNG_FORMAT = new DataFormat("image/png");
+    public final static String JPEG_MIME_TYPE = "image/jpeg";
+    public final static String PNG_MIME_TYPE = "image/png";
 
     private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds, double dpi) {
         SnapshotParameters parameters = new SnapshotParameters();

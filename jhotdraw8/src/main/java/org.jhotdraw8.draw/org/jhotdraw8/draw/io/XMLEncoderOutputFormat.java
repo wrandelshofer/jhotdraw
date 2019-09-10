@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
@@ -36,15 +35,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
         this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 
-    public final static DataFormat XML_SERIALIZER_FORMAT;
-
-    static {
-        DataFormat fmt = DataFormat.lookupMimeType("application/xml+ser");
-        if (fmt == null) {
-            fmt = new DataFormat("application/xml+ser");
-        }
-        XML_SERIALIZER_FORMAT = fmt;
-    }
+    public final static String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
 
     @Override
     public void write(URI documentHome, @Nonnull OutputStream out, Drawing drawing, WorkState workState) throws IOException {
