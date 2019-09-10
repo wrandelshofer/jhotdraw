@@ -31,7 +31,7 @@ public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {
 
     @Override
-    public void reshapeInLocal(Transform transform) {
+    public void reshapeInLocal(@Nonnull Transform transform) {
         for (Figure child : getChildren()) {
             child.reshapeInLocal(transform);
         }
@@ -46,7 +46,8 @@ public class LayerFigure extends AbstractCompositeFigure
     public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
         Group n = (Group) node;
         applyHideableFigureProperties(ctx, n);
-        if (!isVisible()) {
+        RenderingIntent renderingIntent = ctx.get(RenderContext.RENDERING_INTENT);
+        if (!isVisible() && renderingIntent == RenderingIntent.EDITOR) {
             return;
         }
         applyStyleableFigureProperties(ctx, n);
@@ -54,9 +55,9 @@ public class LayerFigure extends AbstractCompositeFigure
 
         List<Node> childNodes = new ArrayList<>(getChildren().size());
 
-        int maxNodesPerLayer = ctx.get(RenderContext.MAX_NODES_PER_LAYER);
+        int maxNodesPerLayer = ctx.getNonnull(RenderContext.MAX_NODES_PER_LAYER);
         Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
-        if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
+        if (renderingIntent == RenderingIntent.EDITOR
                 && clipBounds != null /* && getChildren().size() > maxNodesPerLayer*/) {
 
             for (Figure child : getChildren()) {
