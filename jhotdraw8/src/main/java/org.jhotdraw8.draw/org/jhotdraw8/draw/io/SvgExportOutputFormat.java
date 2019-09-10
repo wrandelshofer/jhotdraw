@@ -19,12 +19,7 @@ import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.PageFigure;
-import org.jhotdraw8.draw.figure.Slice;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -138,7 +133,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         final SvgExporter exporter = createExporter();
-        exporter.setSkipInvisibleNodes(true);
+        exporter.setSkipInvisibleNodes(skipInvisibleNodes);
         exporter.setRelativizePaths(true);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
@@ -234,4 +229,11 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
                 + " " + nb.toString(b.getWidth()) + " " + nb.toString(b.getHeight()));
     }
 
+    public boolean isSkipInvisibleNodes() {
+        return skipInvisibleNodes;
+    }
+
+    public void setSkipInvisibleNodes(boolean skipInvisibleNodes) {
+        this.skipInvisibleNodes = skipInvisibleNodes;
+    }
 }
