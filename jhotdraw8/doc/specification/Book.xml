@@ -89,7 +89,7 @@
 
       <xi:include href="requirements/draw/requirement.Grouping.xml"/>
 
-      <xi:include href="requirements/draw/requirement.SelectionTool.xml"/>
+      <!--xi:include href="requirements/draw/requirement.SelectionTool.xml"/-->
 
       <xi:include href="requirements/draw/requirement.ConstructiveAreaGeometry.xml"/>
     </section>
