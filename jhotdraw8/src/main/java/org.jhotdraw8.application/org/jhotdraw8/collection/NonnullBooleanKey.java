@@ -13,10 +13,6 @@ public class NonnullBooleanKey extends ObjectKey<Boolean> implements NonnullMapA
 
     private final static long serialVersionUID = 1L;
 
-    public NonnullBooleanKey(String key) {
-        super(key, Boolean.class);
-    }
-
     public NonnullBooleanKey(String key, Boolean defaultValue) {
         super(key, Boolean.class, defaultValue);
     }
