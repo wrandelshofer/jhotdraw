@@ -102,7 +102,9 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     protected void openViewFromURI(@Nonnull final DocumentBasedActivity v, @Nonnull final URI uri, @Nonnull final URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
         Map<? super Key<?>, Object> options = getReadOptions();
-        app.removeDisabler(workState);
+        if (app != null) {
+            app.removeDisabler(workState);
+        }
         if (options == null) {
             return; // The user has decided, that he/she does not want to open a file after all.
         }
@@ -116,10 +118,9 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
             } else if (exception != null) {
-                Throwable value = exception;
-                value.printStackTrace();
+                exception.printStackTrace();
                 Resources labels = ApplicationLabels.getResources();
-                Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(value));
+                Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
                 alert.showAndWait();
