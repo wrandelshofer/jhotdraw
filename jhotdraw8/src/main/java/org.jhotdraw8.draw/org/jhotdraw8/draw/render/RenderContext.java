@@ -36,7 +36,7 @@ public interface RenderContext extends PropertyBean {
     // ---
     // keys
     // ---
-    Key<RenderingIntent> RENDERING_INTENT = new ObjectKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
+    NonnullKey<RenderingIntent> RENDERING_INTENT = new NonnullObjectKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
 
     /**
      * The dots per inch of the rendering device.

@@ -25,6 +25,7 @@ import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.RenderingIntent;
 
 /**
  * A figure which supports font attributes.
@@ -71,7 +72,8 @@ public interface NameFontableFigure extends Figure {
         if (text.isUnderline() != b) {
             text.setUnderline(b);
         }
-        final FontSmoothingType fst = FontSmoothingType.LCD;
+        final FontSmoothingType fst = ctx == null || ctx.getNonnull(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
+                ? FontSmoothingType.LCD : FontSmoothingType.GRAY;
         if (text.getFontSmoothingType() != fst) {
             text.setFontSmoothingType(fst);
         }
