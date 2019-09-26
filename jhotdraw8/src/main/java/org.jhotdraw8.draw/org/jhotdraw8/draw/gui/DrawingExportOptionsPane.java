@@ -6,7 +6,11 @@ package org.jhotdraw8.draw.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.Nonnull;
@@ -21,10 +25,21 @@ import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.prefs.Preferences;
 
-import static org.jhotdraw8.draw.io.ExportOutputFormat.*;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_DRAWING_DPI_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_DRAWING_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_PAGES_DPI_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_PAGES_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_DPI_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_2X_KEY;
+import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_3X_KEY;
 import static org.jhotdraw8.io.DataFormats.registerDataFormat;
 
 public class DrawingExportOptionsPane extends GridPane {
@@ -149,9 +164,9 @@ public class DrawingExportOptionsPane extends GridPane {
         slicesResolution2xCheckBox.selectedProperty().addListener((o, oldv, newv) -> prefs.putBoolean("exporSlicesResolution2x", newv));
         slicesResolution3xCheckBox.selectedProperty().addListener((o, oldv, newv) -> prefs.putBoolean("exporSlicesResolution3x", newv));
 
-        drawingDpiFormatter.valueProperty().addListener((o, oldv, newv) -> prefs.putDouble("exportDrawingDpi", newv.doubleValue()));
-        pagesDpiFormatter.valueProperty().addListener((o, oldv, newv) -> prefs.putDouble("exporPagesDpi", newv.doubleValue()));
-        slicesDpiFormatter.valueProperty().addListener((o, oldv, newv) -> prefs.putDouble("exportSlicesDpi", newv.doubleValue()));
+        drawingDpiFormatter.valueProperty().addListener((o, oldv, newv) -> prefs.putDouble("exportDrawingDpi", newv == null ? 72.0 : newv.doubleValue()));
+        pagesDpiFormatter.valueProperty().addListener((o, oldv, newv) -> prefs.putDouble("exporPagesDpi", newv == null ? 72.0 : newv.doubleValue()));
+        slicesDpiFormatter.valueProperty().addListener((o, oldv, newv) -> prefs.putDouble("exportSlicesDpi", newv == null ? 72.0 : newv.doubleValue()));
 
         drawingDpiLabel.disableProperty().bind(exportDrawingCheckBox.selectedProperty().not());
         drawingDpiField.disableProperty().bind(exportDrawingCheckBox.selectedProperty().not());

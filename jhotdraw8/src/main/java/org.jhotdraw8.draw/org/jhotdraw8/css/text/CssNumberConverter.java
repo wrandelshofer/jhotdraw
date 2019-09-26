@@ -37,7 +37,7 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
     @Nonnull
     @Override
     public Number parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        switch (tt.current()) {
+        switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 return tt.currentNumberNonnull().doubleValue();
             case CssTokenType.TT_IDENT: {
