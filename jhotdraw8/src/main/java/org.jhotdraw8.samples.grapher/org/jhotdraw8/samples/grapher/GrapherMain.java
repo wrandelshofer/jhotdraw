@@ -24,6 +24,7 @@ public class GrapherMain extends Application {
      */
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
+
         GrapherApplication.main(args);
     }
 

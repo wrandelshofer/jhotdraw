@@ -27,6 +27,10 @@ public class TeddyApplication extends DocumentBasedApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // The following settings improve font rendering quality (less color fringes around characters).
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("prism.lcdtext", "true");
+
         launch(args);
     }
 

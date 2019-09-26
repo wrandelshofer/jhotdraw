@@ -24,6 +24,11 @@ public class ModelerMain extends Application {
      */
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
+
+        // The following settings improve font rendering quality (less color fringes around characters).
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("prism.lcdtext", "true");
+
         ModelerApplication.main(args);
     }
 
