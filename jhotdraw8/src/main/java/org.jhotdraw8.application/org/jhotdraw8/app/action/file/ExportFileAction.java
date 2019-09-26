@@ -85,7 +85,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSucceeded(DocumentBasedActivity v, URI uri, DataFormat format) {
+    protected void handleSaveSucceeded(DocumentBasedActivity v, URI uri, DataFormat format) {
         // empty
     }
 }

@@ -181,7 +181,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
                     oldFocusOwner.requestFocus();
                 }
             } else {
-                handleSucceeded(view, uri, format);
+                handleSaveSucceeded(view, uri, format);
                 view.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
@@ -196,5 +196,5 @@ public abstract class AbstractSaveFileAction extends AbstractViewControllerActio
         return null;
     }
 
-    protected abstract void handleSucceeded(DocumentBasedActivity v, URI uri, DataFormat format);
+    protected abstract void handleSaveSucceeded(DocumentBasedActivity v, URI uri, DataFormat format);
 }

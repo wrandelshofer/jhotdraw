@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 
-import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
@@ -48,14 +48,16 @@ public abstract class AbstractApplicationAction extends AbstractAction {
     protected String createErrorMessage(@Nullable Throwable t) {
         StringBuilder buf = new StringBuilder();
         for (; t != null; t = t.getCause()) {
-            if ((t instanceof CompletionException) && t.getCause() != null) {
-                continue;
-            }
-            if ((t instanceof RuntimeException) && t.getCause() != null) {
+            if (t.getCause() != null
+                    && ((t instanceof RuntimeException)
+                    || (t instanceof ExecutionException))) {
                 continue;
             }
 
             final String msg = t.getLocalizedMessage();
+            if (buf.indexOf(msg) != -1) {
+                continue;// message is already contained
+            }
             if (buf.length() != 0) {
                 buf.append('\n');
             }
