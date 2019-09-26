@@ -161,7 +161,7 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
      *
      * @return the default value.
      */
-    @Nullable
+    @Nonnull
     @Override
     public T getDefaultValue() {
         return defaultValue;

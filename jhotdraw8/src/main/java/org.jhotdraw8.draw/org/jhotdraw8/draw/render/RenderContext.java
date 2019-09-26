@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.NonnullKey;
 import org.jhotdraw8.collection.NonnullObjectKey;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.css.DefaultUnitConverter;
@@ -40,7 +41,7 @@ public interface RenderContext extends PropertyBean {
     /**
      * The dots per inch of the rendering device.
      */
-    Key<Double> DPI = new ObjectKey<>("dpi", Double.class, 96.0);
+    NonnullKey<Double> DPI = new NonnullObjectKey<>("dpi", Double.class, 96.0);
     /**
      * Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
      */
