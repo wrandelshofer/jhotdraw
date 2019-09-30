@@ -55,13 +55,12 @@ public abstract class AbstractApplicationAction extends AbstractAction {
             }
 
             final String msg = t.getLocalizedMessage();
-            if (buf.indexOf(msg) != -1) {
-                continue;// message is already contained
+            if (buf.indexOf(msg) == -1) {
+                if (buf.length() != 0) {
+                    buf.append('\n');
+                }
+                buf.append(msg == null ? t.toString() : msg);
             }
-            if (buf.length() != 0) {
-                buf.append('\n');
-            }
-            buf.append(msg == null ? t.toString() : msg);
         }
         return buf.toString();
     }
