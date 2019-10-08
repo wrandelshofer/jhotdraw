@@ -48,17 +48,6 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
      * @param defaultValue The default value.
      */
     public WordListStyleableKey(String name, ImmutableList<String> defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param mask         The dirty mask.
-     * @param defaultValue The default value.
-     */
-    public WordListStyleableKey(String name, DirtyMask mask, ImmutableList<String> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{String.class}, defaultValue);
         Function<Styleable, StyleableProperty<ImmutableList<String>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
