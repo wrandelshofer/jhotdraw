@@ -17,6 +17,7 @@ import java.util.stream.StreamSupport;
  * @param <E> the element type
  */
 public interface ReadOnlyCollection<E> extends Iterable<E> {
+
     /**
      * Returns the size of the collection.
      *

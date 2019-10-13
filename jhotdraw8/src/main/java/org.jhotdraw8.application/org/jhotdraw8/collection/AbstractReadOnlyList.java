@@ -6,7 +6,7 @@ package org.jhotdraw8.collection;
 
 import java.util.Iterator;
 
-public abstract class AbstractReadOnlyList<E> implements ReadOnlyList<E> {
+public abstract class AbstractReadOnlyList<E> extends AbstractReadOnlyCollection<E> implements ReadOnlyList<E> {
 
     @Override
     public boolean equals(Object o) {
