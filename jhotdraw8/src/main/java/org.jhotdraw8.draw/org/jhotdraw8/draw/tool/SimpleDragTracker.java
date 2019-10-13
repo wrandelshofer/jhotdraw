@@ -15,10 +15,12 @@ import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.graph.BreadthFirstSpliterator;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.StreamSupport;
 
 import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
 
@@ -60,26 +62,34 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     public void setDraggedFigure(Figure anchor, @Nonnull DrawingView view) {
         this.anchorFigure = anchor;
 
-        // determine which figures can be reshaped together as a group
+        // Determine which figures can be reshaped together as a group.
         Set<Figure> selectedFigures = view.getSelectedFigures();
         groupReshapeableFigures = new HashSet<>();
         for (Figure f : selectedFigures) {
             if (f.isGroupReshapeableWith(selectedFigures)) {
-                groupReshapeableFigures.add(f);
-            }
-        }
-
-        // if the layout of the anchor figure does not depend on the layout of other figures,
-        // remove all figures that do depend from the group
-        if (anchor.getLayoutSubjects().isEmpty()) {
-            for (Iterator<Figure> i = groupReshapeableFigures.iterator(); i.hasNext(); ) {
-                Figure f = i.next();
-                if (!f.getLayoutSubjects().isEmpty()) {
-                    i.remove();
+                // Only add a figure if it does not depend from other figures in the group.
+                if (!dependsOn(f, selectedFigures)) {
+                    groupReshapeableFigures.add(f);
                 }
             }
         }
     }
+
+    private boolean dependsOn(final Figure f, final Set<Figure> others) {
+        return StreamSupport.stream(new BreadthFirstSpliterator<>(Figure::getLayoutSubjects, f), false)
+                .anyMatch(fg -> (fg != f) && others.contains(fg) ||
+                        (fg.getParent() != null && containsAny(others, fg.getParent().getPath())));
+    }
+
+    private <E> boolean containsAny(Collection<E> subject, Collection<E> c) {
+        for (E e : c) {
+            if (subject.contains(e)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void trackMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
