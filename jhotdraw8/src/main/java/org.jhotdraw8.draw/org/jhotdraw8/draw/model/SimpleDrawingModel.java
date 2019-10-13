@@ -649,12 +649,4 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                         + "not supported");
         }
     }
-
-    private void recursivelyInvalidateTransforms(Figure f) {
-        if (f.transformNotify()) {
-            for (Figure child : f.getChildren()) {
-                recursivelyInvalidateTransforms(child);
-            }
-        }
-    }
 }
