@@ -1,16 +1,12 @@
-/*
- * @(#)StartAndEndPointPathBuilder.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.geom;
 
-/**
- * StartAndEndPointPathBuilder gets the start and end point of a path and their tangents.
- *
- * @author Werner Randelshofer
- */
-public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
+import java.util.ArrayList;
+import java.util.List;
+
+public class StartAndEndPointsPathBuilder extends AbstractPathBuilder {
+    private final List<PointAndTangent> startPoints = new ArrayList<>();
+    private final List<PointAndTangent> endPoints = new ArrayList<>();
+
     private double startX;
     private double startY;
     private double startTangentX;
@@ -23,7 +19,16 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doClosePath() {
-        //empty
+        startDone = false;
+    }
+
+    @Override
+    protected void doPathDone() {
+        if (startDone) {
+            startPoints.add(new PointAndTangent(startX, startY, startTangentX, startTangentY));
+            endPoints.add(new PointAndTangent(endX, endY, endTangentX, endTangentY));
+        }
+        startDone = false;
     }
 
     @Override
@@ -39,11 +44,6 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
         endY = y3;
         endTangentX = x3 - x2;
         endTangentY = y3 - y2;
-    }
-
-    @Override
-    protected void doPathDone() {
-        //empty
     }
 
     @Override
@@ -63,7 +63,11 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doMoveTo(double x, double y) {
-// empty
+        if (startDone) {
+            startPoints.add(new PointAndTangent(startX, startY, startTangentX, startTangentY));
+            endPoints.add(new PointAndTangent(endX, endY, endTangentX, endTangentY));
+            startDone = false;
+        }
     }
 
     @Override
@@ -81,40 +85,11 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
         endTangentY = y2 - y1;
     }
 
-    public double getEndTangentX() {
-        return endTangentX;
+    public List<PointAndTangent> getStartPoints() {
+        return startPoints;
     }
 
-    public double getEndTangentY() {
-        return endTangentY;
+    public List<PointAndTangent> getEndPoints() {
+        return endPoints;
     }
-
-    public double getEndX() {
-        return endX;
-    }
-
-    public double getEndY() {
-        return endY;
-    }
-
-    public double getStartTangentX() {
-        return startTangentX;
-    }
-
-    public double getStartTangentY() {
-        return startTangentY;
-    }
-
-    public double getStartX() {
-        return startX;
-    }
-
-    public double getStartY() {
-        return startY;
-    }
-
-    public boolean isIsStartDone() {
-        return startDone;
-    }
-
 }
