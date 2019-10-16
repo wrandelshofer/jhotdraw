@@ -16,6 +16,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
@@ -78,6 +79,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.max;
@@ -267,14 +269,11 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * The zoom factor.
      */
-    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, ZOOM_FACTOR_PROPERTY, 1.0) {
+    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, ZOOM_FACTOR_PROPERTY, 1.0);
 
-        @Override
-        protected void fireValueChangedEvent() {
-            super.fireValueChangedEvent();
-            handleZoomFactorChanged(get());
-        }
-    };
+    {
+        zoomFactor.addListener(this::handleZoomFactorChanged);
+    }
 
     {
         margin.addListener(observable -> updateLayout());
@@ -825,7 +824,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return rect;
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public Transform getWorldToView() {
         if (worldToViewTransform == null) {
@@ -933,8 +932,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         repaint();
     }
 
-    private void handleZoomFactorChanged(double newValue) {
-        Scale st = new Scale(newValue, newValue);
+    private void handleZoomFactorChanged(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        final Bounds visibleRect = getViewToWorld().transform(getVisibleRect());
+
+        Scale st = new Scale(newValue.doubleValue(), newValue.doubleValue());
         if (drawingPane != null) {
             if (drawingPane.getTransforms().isEmpty()) {
                 drawingPane.getTransforms().add(st);
@@ -948,7 +949,11 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (constrainer.get() != null) {
             constrainer.get().updateNode(SimpleDrawingView.this);
         }
-        scrollSelectedFiguresToVisible();
+
+        // We have to wait until the scroll pane has finished layouting.
+        CompletableFuture.runAsync(() -> {
+        }, Platform::runLater)
+                .thenRunAsync(() -> scrollRectToVisible(getWorldToView().transform(visibleRect)), Platform::runLater);
     }
 
     private boolean hasNode(Figure f) {

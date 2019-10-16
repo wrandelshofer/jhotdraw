@@ -151,10 +151,12 @@ public interface DrawingView extends RenderContext {
     ObjectProperty<Layer> activeLayerProperty();
 
     default void scrollSelectedFiguresToVisible() {
+        System.err.println("DO  " + getVisibleRect());
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         if (!selectedFigures.isEmpty()) {
             scrollRectToVisible(worldToView(Figures.getBoundsInWorld(selectedFigures)));
         }
+        System.err.println("visibleRect " + getVisibleRect());
     }
 
     /**
@@ -620,7 +622,7 @@ public interface DrawingView extends RenderContext {
     void scrollRectToVisible(Bounds boundsInView);
 
     /**
-     * Returns the visible rectangle of the drawing view in view coordinates
+     * Returns the visible rectangle of the drawing view in view coordinates.
      *
      * @return the portion of the DrawingView that is visible on screen.
      */
