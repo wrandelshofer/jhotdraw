@@ -205,9 +205,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         final double startInset = getStrokeCutStart(ctx);
         final double endInset = getStrokeCutEnd(ctx);
         final String startMarkerStr = getMarkerStartShape();
-        updateMarkerNode(ctx, g, startMarkerNode, start, end, startMarkerStr, getMarkerStartScaleFactor());
         final String endMarkerStr = getMarkerEndShape();
-        updateMarkerNode(ctx, g, endMarkerNode, end, start, endMarkerStr, getMarkerEndScaleFactor());
 
         Point2D dir = end.subtract(start).normalize();
         if (startInset != 0) {
@@ -222,6 +220,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         lineNode.setEndY(end.getY());
 
         updateLineNode(ctx, lineNode);
+        updateMarkerNode(ctx, g, startMarkerNode, start, end, startMarkerStr, getMarkerStartScaleFactor());
+        updateMarkerNode(ctx, g, endMarkerNode, end, start, endMarkerStr, getMarkerEndScaleFactor());
         updateStartMarkerNode(ctx, startMarkerNode);
         updateEndMarkerNode(ctx, endMarkerNode);
     }
