@@ -16,7 +16,7 @@ import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
@@ -37,7 +37,7 @@ import java.util.concurrent.CancellationException;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSaveFileAction extends AbstractViewControllerAction<DocumentBasedActivity> {
+public abstract class AbstractSaveFileAction extends AbstractActivityAction<DocumentBasedActivity> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;

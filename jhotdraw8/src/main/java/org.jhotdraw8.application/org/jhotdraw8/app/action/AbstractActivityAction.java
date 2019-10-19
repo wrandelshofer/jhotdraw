@@ -22,7 +22,7 @@ import org.jhotdraw8.app.Application;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractViewControllerAction<V extends Activity> extends AbstractApplicationAction {
+public abstract class AbstractActivityAction<V extends Activity> extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -55,7 +55,7 @@ public abstract class AbstractViewControllerAction<V extends Activity> extends A
      *                  specified view.
      * @param viewClass the type of the view. This is used for type checks.
      */
-    public AbstractViewControllerAction(@Nonnull Application app, @Nullable V view, Class<V> viewClass) {
+    public AbstractActivityAction(@Nonnull Application app, @Nullable V view, Class<V> viewClass) {
         super(app);
         this.pClass = viewClass;
         this.view = view;

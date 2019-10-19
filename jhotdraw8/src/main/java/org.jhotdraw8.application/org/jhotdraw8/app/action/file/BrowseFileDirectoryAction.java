@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.app.action.AbstractActivityAction;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
-public class BrowseFileDirectoryAction extends AbstractViewControllerAction<DocumentBasedActivity> {
+public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBasedActivity> {
 
     private static final long serialVersionUID = 1L;
 

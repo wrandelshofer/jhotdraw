@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.util.Resources;
 
 import java.util.function.Function;
@@ -21,7 +21,7 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class ToggleViewPropertyAction extends AbstractViewControllerAction<Activity> {
+public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
 
     private static final long serialVersionUID = 1L;
     @Nullable

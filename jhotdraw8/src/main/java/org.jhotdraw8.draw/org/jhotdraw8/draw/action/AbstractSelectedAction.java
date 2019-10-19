@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.EditorView;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSelectedAction extends AbstractViewControllerAction<Activity> {
+public abstract class AbstractSelectedAction extends AbstractActivityAction<Activity> {
 
     private DrawingEditor editor;
 

@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
-import org.jhotdraw8.app.action.AbstractViewControllerAction;
+import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
@@ -26,7 +26,7 @@ import org.jhotdraw8.concurrent.WorkState;
  *
  * @author Werner Randelshofer
  */
-public class PrintFileAction extends AbstractViewControllerAction<DocumentBasedActivity> {
+public class PrintFileAction extends AbstractActivityAction<DocumentBasedActivity> {
 
     private static final long serialVersionUID = 1L;
 

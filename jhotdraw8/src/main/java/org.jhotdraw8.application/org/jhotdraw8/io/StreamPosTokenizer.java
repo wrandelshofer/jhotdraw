@@ -11,6 +11,8 @@ import org.jhotdraw8.collection.IntArrayList;
 import java.io.IOException;
 import java.io.Reader;
 
+import static java.lang.Math.max;
+
 /**
  * This extension of <code>StreamTokenizer</code> keeps track of the position of
  * the tokens in the input stream, and it can parse hexadecimal numbers and
@@ -538,8 +540,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
         if (c == SKIP_LF) {
             c = read();
             if (c < 0) {
-                // rlw
-                startpos = endpos = readpos - 1;
+                startpos = endpos = max(0,readpos);
                 return ttype = TT_EOF;
             }
             if (c == '\n') {
@@ -549,8 +550,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
         if (c == NEED_CHAR) {
             c = read();
             if (c < 0) {
-                // rlw
-                startpos = endpos = readpos - 1;
+                startpos = endpos = max(0,readpos);
                 return ttype = TT_EOF;
             }
         }
@@ -568,8 +568,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                 lineno++;
                 if (eolIsSignificantP) {
                     peekc = SKIP_LF;
-                    // rlw
-                    startpos = endpos = readpos - 1;
+                    startpos = endpos = max(0,readpos);
                     return ttype = TT_EOL;
                 }
                 c = read();
@@ -580,16 +579,14 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                 if (c == '\n') {
                     lineno++;
                     if (eolIsSignificantP) {
-                        // rlw
-                        startpos = endpos = readpos - 1;
+                        startpos = endpos = max(0,readpos);
                         return ttype = TT_EOL;
                     }
                 }
                 c = read();
             }
             if (c < 0) {
-                // rlw
-                startpos = endpos = readpos;
+                startpos = endpos = max(0,readpos);
                 return ttype = TT_EOF;
             }
             ctype = c < 256 ? ct[c] : CT_ALPHA;

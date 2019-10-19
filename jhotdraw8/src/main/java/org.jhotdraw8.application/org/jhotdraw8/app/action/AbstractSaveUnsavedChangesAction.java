@@ -48,7 +48,7 @@ import java.util.concurrent.CompletionStage;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewControllerAction<DocumentBasedActivity> {
+public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<DocumentBasedActivity> {
 
     /**
      *
