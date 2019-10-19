@@ -45,11 +45,11 @@ public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Activity view) {
+    protected void handleActionPerformed(ActionEvent event, Activity activity) {
         if (property != null) {
             property.set(!property.get());
         } else {
-            Node node = nodeGetter.apply(view);
+            Node node = nodeGetter.apply(activity);
             node.setVisible(!node.isVisible());
             this.setSelected(node.isVisible());
         }

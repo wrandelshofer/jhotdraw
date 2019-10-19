@@ -41,7 +41,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity view) {
+    protected void handleActionPerformed(ActionEvent e, Activity activity) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

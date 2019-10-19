@@ -42,7 +42,7 @@ public class SelectChildrenAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity view) {
+    protected void handleActionPerformed(ActionEvent e, Activity activity) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

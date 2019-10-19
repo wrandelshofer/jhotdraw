@@ -78,7 +78,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             // Search for an empty view
             DocumentBasedActivity emptyView;
             if (reuseEmptyViews) {
-                emptyView = (DocumentBasedActivity) app.getActiveView();//FIXME class cast exception
+                emptyView = (DocumentBasedActivity) app.getActiveActivity();//FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -89,7 +89,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createView().thenAccept(v -> {
+                app.createActivity().thenAccept(v -> {
                     app.add(v);
                     doIt((DocumentBasedActivity) v, true);
                 });

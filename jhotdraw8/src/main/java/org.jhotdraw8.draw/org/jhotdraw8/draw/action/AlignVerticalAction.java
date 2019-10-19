@@ -38,7 +38,7 @@ public class AlignVerticalAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Activity view) {
+    protected void handleActionPerformed(ActionEvent event, Activity activity) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

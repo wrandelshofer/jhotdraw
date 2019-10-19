@@ -49,7 +49,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             // Search for an empty view
             DocumentBasedActivity emptyView;
             if (isReuseEmptyViews()) {
-                emptyView = (DocumentBasedActivity) app.getActiveView(); // FIXME class cast exception
+                emptyView = (DocumentBasedActivity) app.getActiveActivity(); // FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -60,7 +60,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createView().thenAccept(v -> doIt((DocumentBasedActivity) v, true, workState));
+                app.createActivity().thenAccept(v -> doIt((DocumentBasedActivity) v, true, workState));
             } else {
                 doIt(emptyView, false, workState);
             }
@@ -76,7 +76,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                for (Activity vp : getApplication().views()) {
+                for (Activity vp : getApplication().activities()) {
                     DocumentBasedActivity v = (DocumentBasedActivity) vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {

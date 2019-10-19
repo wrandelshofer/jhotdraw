@@ -49,11 +49,11 @@ public interface Application extends Disableable, PropertyBean {
     ObjectProperty<ApplicationModel> modelProperty();
 
     /**
-     * The set of views contains all open views..
+     * The set of activities contains all open activities.
      *
-     * @return the views
+     * @return the activities
      */
-    SetProperty<Activity> viewsProperty();
+    SetProperty<Activity> activitiesProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -75,40 +75,40 @@ public interface Application extends Disableable, PropertyBean {
     IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default ObservableSet<Activity> views() {
-        return viewsProperty().get();
+    default ObservableSet<Activity> activities() {
+        return activitiesProperty().get();
     }
 
     /**
-     * Adds the view to the set of views and shows it.
+     * Adds the activity to the set of activities and shows it.
      *
-     * @param v the view
+     * @param v the activity
      */
     default void add(Activity v) {
-        viewsProperty().add(v);
+        activitiesProperty().add(v);
     }
 
     /**
-     * Removes the view from the set of visible views and hides it.
+     * Removes the activities from the set of visible views and hides it.
      *
-     * @param v the view
+     * @param v the activities
      */
     default void remove(Activity v) {
-        viewsProperty().remove(v);
+        activitiesProperty().remove(v);
     }
 
     /**
-     * Provides the currently active view. This is the last view which was
+     * Provides the currently active activities. This is the last activities which was
      * focus owner. Returns null, if the application has no views.
      *
-     * @return The active view.
+     * @return The active activities.
      */
-    ReadOnlyObjectProperty<Activity> activeViewProperty();
+    ReadOnlyObjectProperty<Activity> activeActivityProperty();
 
     // Convenience method
     @Nullable
-    default Activity getActiveView() {
-        return activeViewProperty().get();
+    default Activity getActiveActivity() {
+        return activeActivityProperty().get();
     }
 
     /**
@@ -158,16 +158,16 @@ public interface Application extends Disableable, PropertyBean {
         return null;
     }
 
-    default void addView() {
-        createView().thenAccept(this::add);
+    default void addActivity() {
+        createActivity().thenAccept(this::add);
     }
 
     /**
-     * Creates a new view, initializes it, then invokes the callback.
+     * Creates a new activity, initializes it, then invokes the callback.
      *
      * @return A callback.
      */
-    CompletionStage<Activity> createView();
+    CompletionStage<Activity> createActivity();
 
     /**
      * Adds a recent URI.

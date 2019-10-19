@@ -48,11 +48,11 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
-        final URI uri = view.getURI();
+        final URI uri = activity.getURI();
         doIt(uri);
     }
 

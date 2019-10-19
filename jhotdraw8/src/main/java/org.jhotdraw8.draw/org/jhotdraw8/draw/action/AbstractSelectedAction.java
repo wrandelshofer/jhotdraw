@@ -69,7 +69,7 @@ public abstract class AbstractSelectedAction extends AbstractActivityAction<Acti
     @Nullable
     protected DrawingView getView() {
         if (editor == null) {
-            Activity v = getActiveView();
+            Activity v = getActivity();
             if (v instanceof EditorView) {
                 EditorView ev = (EditorView) v;
                 return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;

@@ -53,17 +53,17 @@ public class PrintFileAction extends AbstractActivityAction<DocumentBasedActivit
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity activity) {
         WorkState workState = new SimpleWorkState();
-        view.addDisabler(workState);
+        activity.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();
-        if (job != null && job.showPrintDialog(view.getNode().getScene().getWindow())) {
-            view.print(job, workState).thenRun(() -> view.removeDisabler(workState));
+        if (job != null && job.showPrintDialog(activity.getNode().getScene().getWindow())) {
+            activity.print(job, workState).thenRun(() -> activity.removeDisabler(workState));
         } else {
             Alert alert = new Alert(AlertType.INFORMATION, "Sorry, no printer found");
             alert.getDialogPane().setMaxWidth(640.0);
             alert.show();
-            view.removeDisabler(workState);
+            activity.removeDisabler(workState);
         }
     }
 }

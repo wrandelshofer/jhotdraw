@@ -22,60 +22,60 @@ import org.jhotdraw8.app.Application;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractActivityAction<V extends Activity> extends AbstractApplicationAction {
+public abstract class AbstractActivityAction<A extends Activity> extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     /**
      * Set this to true if the action may create a new view if none exists.
      */
-    private boolean mayCreateView;
-    private Class<V> pClass;
+    private boolean mayCreateActivity;
+    private Class<A> pClass;
     @Nullable
     private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
-        BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeViewProperty().isNull());
+        BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeActivityProperty().isNull());
         if (newValue != null && (pClass == null || pClass.isAssignableFrom(newValue.getClass()))) {
             disabled.bind(binding.or(newValue.disabledProperty()));
-        } else if (mayCreateView) {
+        } else if (mayCreateActivity) {
             disabled.bind(binding);
         } else {
             disabled.set(true);
         }
     };
     @Nullable
-    private final Activity view;
+    private final Activity activity;
 
     /**
-     * Creates a new instance which acts on the specified view of the
+     * Creates a new instance which acts on the specified activity of the
      * application.
      *
      * @param app       The application.
-     * @param view      The view. If view is null then the action acts on
-     *                  the active view of the application. Otherwise it will act on the
-     *                  specified view.
-     * @param viewClass the type of the view. This is used for type checks.
+     * @param activity      The activity. If activity is null then the action acts on
+     *                  the active activity of the application. Otherwise it will act on the
+     *                  specified activity.
+     * @param activityClass the type of the activity. This is used for type checks.
      */
-    public AbstractActivityAction(@Nonnull Application app, @Nullable V view, Class<V> viewClass) {
+    public AbstractActivityAction(@Nonnull Application app, @Nullable A activity, Class<A> activityClass) {
         super(app);
-        this.pClass = viewClass;
-        this.view = view;
-        if (view != null) {
-            activeViewListener.changed(null, null, view);
+        this.pClass = activityClass;
+        this.activity = activity;
+        if (activity != null) {
+            activeViewListener.changed(null, null, activity);
         } else {
-            app.activeViewProperty().addListener(activeViewListener);
+            app.activeActivityProperty().addListener(activeViewListener);
         }
     }
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public V getActiveView() {
-        Activity p = (view != null) ? view : app.getActiveView();
-        return p == null || pClass == null || pClass.isAssignableFrom(p.getClass()) ? (V) p : null;
+    public A getActivity() {
+        Activity p = (activity != null) ? activity : app.getActiveActivity();
+        return p == null || pClass == null || pClass.isAssignableFrom(p.getClass()) ? (A) p : null;
     }
 
     @Override
     protected final void handleActionPerformed(ActionEvent event, Application app) {
-        handleActionPerformed(event, getActiveView());
+        handleActionPerformed(event, getActivity());
     }
 
     /**
@@ -83,27 +83,27 @@ public abstract class AbstractActivityAction<V extends Activity> extends Abstrac
      * not consumed.
      *
      * @param event the action event
-     * @param view  the view
+     * @param activity  the activity
      */
-    protected abstract void handleActionPerformed(ActionEvent event, V view);
+    protected abstract void handleActionPerformed(ActionEvent event, A activity);
 
     /**
-     * Returns to true if the action may create a new view if none exists
+     * Returns to true if the action may create a new activity if none exists
      *
      * @return true
      */
-    protected boolean isMayCreateView() {
-        return mayCreateView;
+    protected boolean isMayCreateActivity() {
+        return mayCreateActivity;
     }
 
     /**
-     * Set this to true if the action may create a new view if none exists.
-     * If this is false, the action will be disabled, if no view is
+     * Set this to true if the action may create a new activity if none exists.
+     * If this is false, the action will be disabled, if no activity is
      * available.
      *
      * @param b the new value
      */
-    protected void setMayCreateView(boolean b) {
-        mayCreateView = b;
+    protected void setMayCreateActivity(boolean b) {
+        mayCreateActivity = b;
     }
 }

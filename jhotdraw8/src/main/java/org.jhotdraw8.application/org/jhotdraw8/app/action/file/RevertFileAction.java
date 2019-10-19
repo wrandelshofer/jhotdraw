@@ -46,22 +46,22 @@ public class RevertFileAction extends AbstractActivityAction<DocumentBasedActivi
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity view) {
+    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
-        final URI uri = view.getURI();
-        final DataFormat dataFormat = view.getDataFormat();
-        if (view.isModified()) {
+        final URI uri = activity.getURI();
+        final DataFormat dataFormat = activity.getDataFormat();
+        if (activity.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
                     ApplicationLabels.getResources().getString("file.revert.doYouWantToRevert.message"), ButtonType.YES, ButtonType.CANCEL);
             alert.getDialogPane().setMaxWidth(640.0);
             Optional<ButtonType> answer = alert.showAndWait();
             if (answer.isPresent() && answer.get() == ButtonType.YES) {
-                doIt(view, uri, dataFormat);
+                doIt(activity, uri, dataFormat);
             }
         } else {
-            doIt(view, uri, dataFormat);
+            doIt(activity, uri, dataFormat);
         }
     }
 

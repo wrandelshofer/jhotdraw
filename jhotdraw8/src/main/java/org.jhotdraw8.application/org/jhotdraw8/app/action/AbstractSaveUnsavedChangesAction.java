@@ -73,12 +73,12 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     @Override
-    protected final void handleActionPerformed(ActionEvent evt, DocumentBasedActivity av) {
+    protected final void handleActionPerformed(ActionEvent evt, DocumentBasedActivity activity) {
         Application app = getApplication();
-        if (av instanceof DocumentBasedActivity) {
-            handleActionOnViewPerformed(av);
-        } else if (isMayCreateView()) {
-            app.createView().thenAccept(v -> {
+        if (activity instanceof DocumentBasedActivity) {
+            handleActionOnViewPerformed(activity);
+        } else if (isMayCreateActivity()) {
+            app.createActivity().thenAccept(v -> {
                 app.add(v);
                 handleActionOnViewPerformed((DocumentBasedActivity) v);//FIXME class cast exception
             });
@@ -188,7 +188,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                 // unless  multipe views to same URI are supported
                 if (uri != null
                         && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Activity vi : app.views()) {
+                    for (Activity vi : app.activities()) {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");

@@ -66,7 +66,7 @@ public class ExitAction extends AbstractApplicationAction {
         int disabledViewsCount = 0;
         DocumentBasedActivity documentToBeReviewed = null;
         URI unsavedURI = null;
-        for (Activity pr : app.views()) {
+        for (Activity pr : app.activities()) {
             DocumentBasedActivity p = (DocumentBasedActivity) pr;
             if (p.isDisabled()) {
                 disabledViewsCount++;
@@ -150,7 +150,7 @@ public class ExitAction extends AbstractApplicationAction {
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Activity p : app.views()) {
+                    for (Activity p : app.activities()) {
                         DocumentBasedActivity vi = (DocumentBasedActivity) p;
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
@@ -248,7 +248,7 @@ public class ExitAction extends AbstractApplicationAction {
     protected void reviewNext(WorkState workState) {
         int unsavedViewsCount = 0;
         DocumentBasedActivity documentToBeReviewed = null;
-        for (Activity pr : getApplication().views()) {
+        for (Activity pr : getApplication().activities()) {
             DocumentBasedActivity p = (DocumentBasedActivity) pr;
             if (p.isModified()) {
                 if (!p.isDisabled()) {
@@ -329,13 +329,13 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void doExit(WorkState workState) {
-        for (Activity pr : new ArrayList<>(app.views())) {
+        for (Activity pr : new ArrayList<>(app.activities())) {
             DocumentBasedActivity p = (DocumentBasedActivity) pr;
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);
             }
         }
-        if (app.views().isEmpty()) {
+        if (app.activities().isEmpty()) {
             app.exit();
         } else {
             app.removeDisabler(workState);

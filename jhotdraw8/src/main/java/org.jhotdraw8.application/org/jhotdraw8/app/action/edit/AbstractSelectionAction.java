@@ -63,14 +63,14 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
         super(app);
         this.target = target;
 
-        app.activeViewProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app.getActiveView());
+        app.activeActivityProperty().addListener(activeViewListener);
+        activeViewListener.changed(null, null, app.getActiveActivity());
 
     }
 
     @Nullable
     public EditableComponent getEditableComponent() {
-        Activity v = app.getActiveView();
+        Activity v = app.getActiveActivity();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             while (n != null) {

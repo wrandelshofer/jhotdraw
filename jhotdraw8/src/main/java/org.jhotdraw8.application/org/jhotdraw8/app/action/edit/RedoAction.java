@@ -115,7 +115,7 @@ public class RedoAction extends AbstractActivityAction<Activity> {
      */
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Activity view) {
+    protected void handleActionPerformed(ActionEvent event, Activity activity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

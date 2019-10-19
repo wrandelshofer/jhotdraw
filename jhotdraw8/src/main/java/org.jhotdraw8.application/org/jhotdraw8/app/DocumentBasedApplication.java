@@ -139,7 +139,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     @Override
-    public ReadOnlyObjectProperty<Activity> activeViewProperty() {
+    public ReadOnlyObjectProperty<Activity> activeActivityProperty() {
         return activeView.getReadOnlyProperty();
     }
 
@@ -193,7 +193,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     @Override
-    public CompletionStage<Activity> createView() {
+    public CompletionStage<Activity> createActivity() {
         return FXWorker.supply(() -> getModel().createActivity())
                 .handle((v, e) -> {
                     if (e != null) {
@@ -424,7 +424,7 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     @Nonnull
     @Override
-    public SetProperty<Activity> viewsProperty() {
+    public SetProperty<Activity> activitiesProperty() {
         return views;
     }
 
@@ -464,7 +464,7 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     private void openView(URI uri) {
         final Resources labels = ApplicationLabels.getResources();
-        createView().whenComplete((pv, ex1) -> {
+        createActivity().whenComplete((pv, ex1) -> {
             DocumentBasedActivity v = (DocumentBasedActivity) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
@@ -506,7 +506,7 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     private void openEmptyView() {
         final Resources labels = ApplicationLabels.getResources();
-        createView().whenComplete((pv, ex1) -> {
+        createActivity().whenComplete((pv, ex1) -> {
             DocumentBasedActivity v = (DocumentBasedActivity) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
@@ -564,7 +564,7 @@ public class DocumentBasedApplication extends AbstractApplication {
                 updateRecentMenuItemsMB(systemMenus);
             }
         } else {
-            for (Activity v : views()) {
+            for (Activity v : activities()) {
                 BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();
                 MenuBar mb = (MenuBar) bp.getTop();
                 if (mb != null) {

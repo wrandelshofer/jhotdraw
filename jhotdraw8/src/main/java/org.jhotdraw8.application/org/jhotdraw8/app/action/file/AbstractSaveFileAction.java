@@ -83,14 +83,14 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
     protected abstract URIChooser createChooser(DocumentBasedActivity view);
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @Nullable DocumentBasedActivity v) {
-        if (v == null) {
+    protected void handleActionPerformed(ActionEvent evt, @Nullable DocumentBasedActivity activity) {
+        if (activity == null) {
             return;
         }
-        oldFocusOwner = v.getNode().getScene().getFocusOwner();
+        oldFocusOwner = activity.getNode().getScene().getFocusOwner();
         WorkState workState = new SimpleWorkState(getLabel());
-        v.addDisabler(workState);
-        saveFileChooseUri(v, workState);
+        activity.addDisabler(workState);
+        saveFileChooseUri(activity, workState);
     }
 
     protected void saveFileChooseUri(@Nonnull final DocumentBasedActivity v, WorkState workState) {
@@ -106,7 +106,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Activity pi : app.views()) {
+                    for (Activity pi : app.activities()) {
                         DocumentBasedActivity vi = (DocumentBasedActivity) pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
