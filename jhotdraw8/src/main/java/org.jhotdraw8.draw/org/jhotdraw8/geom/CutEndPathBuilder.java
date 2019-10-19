@@ -83,16 +83,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                         break;
                     }
                     case PathIterator.SEG_MOVETO: {
-                        Intersection isect = Intersections.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
-                        if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            //            break Loop;
-                        } else if (isect.isEmpty()) {
-                            out.moveTo(seg[0], seg[1]);
-                        } else {
-                            Geom.splitLine(x, y, seg[0], seg[1], isect.getLastT(),
-                                    out::moveTo, null);
-                            //   break Loop;
-                        }
+                        out.moveTo(seg[0], seg[1]);
                         x = seg[0];
                         y = seg[1];
                         break;
