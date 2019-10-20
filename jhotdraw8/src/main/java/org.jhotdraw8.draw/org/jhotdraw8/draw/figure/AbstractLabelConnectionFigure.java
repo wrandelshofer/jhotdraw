@@ -129,7 +129,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.MOVE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new BoundsInLocalOutlineHandle(this));
             if (get(LABEL_CONNECTOR) == null) {
                 list.add(new MoveHandle(this, BoundsLocator.NORTH_EAST));
                 list.add(new MoveHandle(this, BoundsLocator.NORTH_WEST));
@@ -137,10 +137,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 list.add(new MoveHandle(this, BoundsLocator.SOUTH_WEST));
             }
         } else if (handleType == HandleType.RESIZE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new BoundsInLocalOutlineHandle(this));
             list.add(new LabelConnectorHandle(this, ORIGIN, LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
         } else if (handleType == HandleType.POINT) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new BoundsInLocalOutlineHandle(this));
             list.add(new LabelConnectorHandle(this, ORIGIN, LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
         } else {
             super.createHandles(handleType, list);

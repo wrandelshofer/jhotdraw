@@ -42,29 +42,20 @@ public class SelectionHandle extends LocatorHandle {
     private Point2D pickLocation;
     @Nonnull
     private final Region node;
-    private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, null));
 
-
     public SelectionHandle(Figure figure, Locator locator) {
-        this(figure, locator, STYLECLASS_HANDLE_MOVE);
-    }
-
-    public SelectionHandle(Figure figure, Locator locator, String styleclass) {
         super(figure, locator);
-        this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
         node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
-
-        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }

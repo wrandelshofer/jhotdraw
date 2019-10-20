@@ -50,24 +50,16 @@ public class PointHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final NonnullMapAccessor<CssPoint2D> pointKey;
-    private final String styleclass;
 
     public PointHandle(Figure figure, NonnullMapAccessor<CssPoint2D> pointKey) {
-        this(figure, STYLECLASS_HANDLE_POINT, pointKey);
-    }
-
-    public PointHandle(Figure figure, String styleclass, NonnullMapAccessor<CssPoint2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
-        this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
         node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
-
-        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }

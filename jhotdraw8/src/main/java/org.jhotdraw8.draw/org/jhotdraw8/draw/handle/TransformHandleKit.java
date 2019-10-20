@@ -208,8 +208,8 @@ public class TransformHandleKit {
 
         ImmutableList<Transform> startTransforms;
 
-        public AbstractTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Function<Color, Border> border) {
-            super(owner, styleclass, locator, shape, bg, border);
+        public AbstractTransformHandle(Figure owner, Locator locator, Shape shape, Background bg, Function<Color, Border> border) {
+            super(owner, locator, shape, bg, border);
         }
 
         @Override
@@ -258,7 +258,7 @@ public class TransformHandleKit {
     private static class NorthEastHandle extends AbstractTransformHandle {
 
         NorthEastHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.NORTH_EAST, NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.NORTH_EAST, NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -289,7 +289,7 @@ public class TransformHandleKit {
     private static class EastHandle extends AbstractTransformHandle {
 
         EastHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.EAST, EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.EAST, EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -313,7 +313,7 @@ public class TransformHandleKit {
     private static class NorthHandle extends AbstractTransformHandle {
 
         NorthHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.NORTH, NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.NORTH, NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -337,7 +337,7 @@ public class TransformHandleKit {
     private static class NorthWestHandle extends AbstractTransformHandle {
 
         NorthWestHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.NORTH_WEST, NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.NORTH_WEST, NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -367,7 +367,7 @@ public class TransformHandleKit {
     private static class SouthEastHandle extends AbstractTransformHandle {
 
         SouthEastHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.SOUTH_EAST, SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.SOUTH_EAST, SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -396,7 +396,7 @@ public class TransformHandleKit {
     private static class SouthHandle extends AbstractTransformHandle {
 
         SouthHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.SOUTH, SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.SOUTH, SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -419,7 +419,7 @@ public class TransformHandleKit {
     private static class SouthWestHandle extends AbstractTransformHandle {
 
         SouthWestHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.SOUTH_WEST, SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.SOUTH_WEST, SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -448,7 +448,7 @@ public class TransformHandleKit {
     private static class WestHandle extends AbstractTransformHandle {
 
         WestHandle(TransformableFigure owner) {
-            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, BoundsLocator.WEST, WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+            super(owner, BoundsLocator.WEST, WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override

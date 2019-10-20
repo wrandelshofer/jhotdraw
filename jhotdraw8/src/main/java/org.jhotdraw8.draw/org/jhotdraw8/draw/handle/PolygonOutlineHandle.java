@@ -47,13 +47,12 @@ public class PolygonOutlineHandle extends AbstractHandle {
     private Group node;
     private Polygon poly1;
     private Polygon poly2;
-    private String styleclass;
 
     public PolygonOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key) {
-        this(figure, key, true, STYLECLASS_HANDLE_MOVE_OUTLINE);
+        this(figure, key, true);
     }
 
-    public PolygonOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key, boolean editable, String styleclass) {
+    public PolygonOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key, boolean editable) {
         super(figure);
         this.key = key;
         this.editable = editable;
@@ -63,7 +62,6 @@ public class PolygonOutlineHandle extends AbstractHandle {
         poly1.setFill(null);
         poly2.setFill(null);
         node.getChildren().addAll(poly1, poly2);
-        this.styleclass = styleclass;
     }
 
     @Override

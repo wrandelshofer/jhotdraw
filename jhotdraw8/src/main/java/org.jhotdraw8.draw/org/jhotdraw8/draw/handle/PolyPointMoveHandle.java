@@ -55,25 +55,17 @@ public class PolyPointMoveHandle extends AbstractHandle {
     private Point2D pickLocation;
     private final int pointIndex;
     private final MapAccessor<ImmutableList<Point2D>> pointKey;
-    private final String styleclass;
 
     public PolyPointMoveHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
-        this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_MOVE);
-    }
-
-    public PolyPointMoveHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
-        this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
         node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
-
-        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

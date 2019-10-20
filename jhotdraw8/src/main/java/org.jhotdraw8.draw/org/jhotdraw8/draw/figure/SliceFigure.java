@@ -71,9 +71,9 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     @Override
     public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.POINT) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
-            list.add(new RelativePointHandle(this, Handle.STYLECLASS_HANDLE_CUSTOM, SLICE_ORIGIN));
+            list.add(new BoundsInLocalOutlineHandle(this));
+            ResizeHandleKit.addCornerResizeHandles(this, list);
+            list.add(new RelativePointHandle(this, SLICE_ORIGIN));
         } else {
             super.createHandles(handleType, list); //To change body of generated methods, choose Tools | Templates.
         }

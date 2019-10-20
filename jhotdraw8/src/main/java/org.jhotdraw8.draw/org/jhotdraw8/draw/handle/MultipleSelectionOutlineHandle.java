@@ -8,11 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
@@ -27,18 +27,12 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
 
     private Polygon node;
     private double[] points;
-    private String styleclass;
 
     public MultipleSelectionOutlineHandle() {
-        this(STYLECLASS_HANDLE_MULTI_SELECT_OUTLINE);
-    }
-
-    public MultipleSelectionOutlineHandle(String styleclass) {
         super(null);
 
         points = new double[8];
         node = new Polygon(points);
-        this.styleclass = styleclass;
         initNode(node);
     }
 
@@ -69,13 +63,13 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(DrawingView view) {
+        CssColor color = view.getEditor().getHandleColor();
+        node.setStroke(color.getColor());
         return node;
     }
 
     protected void initNode(@Nonnull Polygon r) {
         r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

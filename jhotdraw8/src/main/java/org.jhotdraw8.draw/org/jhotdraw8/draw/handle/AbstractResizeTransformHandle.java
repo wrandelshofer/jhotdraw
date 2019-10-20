@@ -51,12 +51,10 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     protected double preferredAspectRatio;
     protected CssRectangle2D startBounds;
     private Transform startWorldToLocal;
-    private final String styleclass;
     private final Function<Color, Border> borderFactory;
 
-    public AbstractResizeTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Function<Color, Border> borderFactory) {
+    public AbstractResizeTransformHandle(Figure owner, Locator locator, Shape shape, Background bg, Function<Color, Border> borderFactory) {
         super(owner, locator);
-        this.styleclass = styleclass;
         node = new Region();
         node.setShape(shape);
         node.setManaged(false);

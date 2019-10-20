@@ -13,6 +13,8 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Transforms;
@@ -27,18 +29,12 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
 
     private Polygon node;
     private double[] points;
-    private String styleclass;
 
     public BoundsInParentOutlineHandle(Figure figure) {
-        this(figure, STYLECLASS_HANDLE_SELECT_OUTLINE);
-    }
-
-    public BoundsInParentOutlineHandle(Figure figure, String styleclass) {
         super(figure);
 
         points = new double[8];
         node = new Polygon(points);
-        this.styleclass = styleclass;
         initNode(node);
     }
 
@@ -55,13 +51,14 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(DrawingView view) {
+        CssColor color = view.getEditor().getHandleColor();
+        Color color1 = (Color) Paintable.getPaint(color);
+        node.setStroke(color1);
         return node;
     }
 
     protected void initNode(@Nonnull Polygon r) {
         r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

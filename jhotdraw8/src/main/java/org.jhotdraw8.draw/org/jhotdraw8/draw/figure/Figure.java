@@ -342,31 +342,31 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         } else if (handleType == HandleType.ANCHOR) {
             list.add(new AnchorOutlineHandle(this));
         } else if (handleType == HandleType.LEAD) {
-            list.add(new AnchorOutlineHandle(this, Handle.STYLECLASS_HANDLE_LEAD_OUTLINE));
+            list.add(new AnchorOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new BoundsInLocalOutlineHandle(this));
             list.add(new MoveHandle(this, BoundsLocator.NORTH_EAST));
             list.add(new MoveHandle(this, BoundsLocator.NORTH_WEST));
             list.add(new MoveHandle(this, BoundsLocator.SOUTH_EAST));
             list.add(new MoveHandle(this, BoundsLocator.SOUTH_WEST));
         } else if (handleType == HandleType.POINT) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
+            list.add(new BoundsInLocalOutlineHandle(this));
+            ResizeHandleKit.addCornerResizeHandles(this, list);
         } else if (handleType == HandleType.RESIZE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            list.add(new BoundsInLocalOutlineHandle(this));
             if (this instanceof ResizableFigure) {
-                ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
-                ResizeHandleKit.addEdgeResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
+                ResizeHandleKit.addCornerResizeHandles(this, list);
+                ResizeHandleKit.addEdgeResizeHandles(this, list);
             } else {
-                list.add(new MoveHandle(this, BoundsLocator.NORTH_EAST, Handle.STYLECLASS_HANDLE_RESIZE));
-                list.add(new MoveHandle(this, BoundsLocator.NORTH_WEST, Handle.STYLECLASS_HANDLE_RESIZE));
-                list.add(new MoveHandle(this, BoundsLocator.SOUTH_EAST, Handle.STYLECLASS_HANDLE_RESIZE));
-                list.add(new MoveHandle(this, BoundsLocator.SOUTH_WEST, Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, BoundsLocator.NORTH_EAST));
+                list.add(new MoveHandle(this, BoundsLocator.NORTH_WEST));
+                list.add(new MoveHandle(this, BoundsLocator.SOUTH_EAST));
+                list.add(new MoveHandle(this, BoundsLocator.SOUTH_WEST));
 
             }
         } else if (handleType == HandleType.TRANSFORM) {
-            list.add(new BoundsInTranslationOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+            list.add(new BoundsInTranslationOutlineHandle(this));
+            list.add(new BoundsInLocalOutlineHandle(this));
             if (this instanceof TransformableFigure) {
                 TransformableFigure tf = (TransformableFigure) this;
                 list.add(new RotateHandle(tf));

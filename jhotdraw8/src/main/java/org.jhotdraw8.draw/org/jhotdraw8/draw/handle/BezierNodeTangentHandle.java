@@ -44,22 +44,13 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     private Point2D pickLocation;
     private final int pointIndex;
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;
-    private final String styleclass;
 
     public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
-        this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE);
-    }
-
-    public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
-        this.styleclass = styleclass;
         node = new Polyline();
         node.setManaged(false);
-        //node.getStrokeDashArray().addAll(5.0,6.0);
-
-        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

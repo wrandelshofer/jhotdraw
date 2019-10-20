@@ -67,16 +67,16 @@ public class PolylineFigure extends AbstractLeafFigure
     @Override
     public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
-            list.add(new PolylineOutlineHandle(this, POINTS, false, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
+            list.add(new PolylineOutlineHandle(this, POINTS, false));
         } else if (handleType == HandleType.MOVE) {
-            list.add(new PolylineOutlineHandle(this, POINTS, false, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new PolylineOutlineHandle(this, POINTS, false));
             for (int i = 0, n = getNonnull(POINTS).size(); i < n; i++) {
-                list.add(new PolyPointMoveHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_MOVE));
+                list.add(new PolyPointMoveHandle(this, POINTS, i));
             }
         } else if (handleType == HandleType.POINT) {
-            list.add(new PolylineOutlineHandle(this, POINTS, true, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            list.add(new PolylineOutlineHandle(this, POINTS, true));
             for (int i = 0, n = getNonnull(POINTS).size(); i < n; i++) {
-                list.add(new PolyPointEditHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_POINT));
+                list.add(new PolyPointEditHandle(this, POINTS, i));
             }
         } else {
             super.createHandles(handleType, list);

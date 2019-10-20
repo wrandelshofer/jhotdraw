@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
@@ -34,17 +33,11 @@ public class PathIterablePointsHandle extends AbstractHandle {
 
     @Nonnull
     private final Path node;
-    private final String styleclass;
     private final boolean selectable;
 
     public PathIterablePointsHandle(PathIterableFigure figure, boolean selectable) {
-        this(figure, selectable, STYLECLASS_HANDLE_MOVE);
-    }
-
-    public PathIterablePointsHandle(PathIterableFigure figure, boolean selectable, String styleclass) {
         super(figure);
         node = new Path();
-        this.styleclass = styleclass;
         initNode(node);
         this.selectable = selectable;
     }
@@ -70,8 +63,6 @@ public class PathIterablePointsHandle extends AbstractHandle {
 
     protected void initNode(@Nonnull Path r) {
         r.setFill(null);
-        r.setStroke(Color.BLUE);
-        //r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

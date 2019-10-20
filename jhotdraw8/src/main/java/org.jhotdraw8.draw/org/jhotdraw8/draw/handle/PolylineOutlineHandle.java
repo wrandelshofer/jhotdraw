@@ -47,20 +47,18 @@ public class PolylineOutlineHandle extends AbstractHandle {
     private Group node;
     private Polyline poly1;
     private Polyline poly2;
-    private String styleclass;
 
     public PolylineOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key) {
-        this(figure, key, true, STYLECLASS_HANDLE_MOVE_OUTLINE);
+        this(figure, key, true);
     }
 
-    public PolylineOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key, boolean editable, String styleclass) {
+    public PolylineOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key, boolean editable) {
         super(figure);
         this.key = key;
         node = new Group();
         poly1 = new Polyline();
         poly2 = new Polyline();
         node.getChildren().addAll(poly1, poly2);
-        this.styleclass = styleclass;
         this.editable = editable;
     }
 

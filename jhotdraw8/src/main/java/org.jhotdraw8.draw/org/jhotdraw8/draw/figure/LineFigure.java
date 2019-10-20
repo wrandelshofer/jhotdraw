@@ -130,19 +130,19 @@ public class LineFigure extends AbstractLeafFigure
     @Override
     public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
+            list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new MoveHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE));
-            list.add(new MoveHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE));
+            list.add(new LineOutlineHandle(this));
+            list.add(new MoveHandle(this, new PointLocator(START)));
+            list.add(new MoveHandle(this, new PointLocator(END)));
         } else if (handleType == HandleType.RESIZE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
-            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, START));
-            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, END));
+            list.add(new LineOutlineHandle(this));
+            list.add(new PointHandle(this, START));
+            list.add(new PointHandle(this, END));
         } else if (handleType == HandleType.POINT) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
-            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
+            list.add(new LineOutlineHandle(this));
+            list.add(new PointHandle(this, START));
+            list.add(new PointHandle(this, END));
         } else {
             super.createHandles(handleType, list);
         }

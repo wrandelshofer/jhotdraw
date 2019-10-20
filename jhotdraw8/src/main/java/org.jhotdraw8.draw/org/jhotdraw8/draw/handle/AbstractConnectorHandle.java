@@ -27,10 +27,6 @@ import java.util.List;
  * <p>
  * Pressing the alt or the control key while dragging the handle prevents
  * connecting the point.
- * <p>
- * This handle is drawn using a {@code Region}, which can be styled using
- * {@code styleclassDisconnected} and {@code styleclassConnected} given in the
- * constructor.
  *
  * @author Werner Randelshofer
  */
@@ -46,38 +42,29 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     private boolean isDragging;
     protected Point2D pickLocation;
     protected final NonnullMapAccessor<CssPoint2D> pointKey;
-    protected final String styleclassConnected;
-    protected final String styleclassDisconnected;
     protected final MapAccessor<Figure> targetKey;
     private boolean editable = true;
 
-    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, NonnullMapAccessor<CssPoint2D> pointKey,
-                                   MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
-        this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
-                connectorKey, targetKey);
-    }
-
-    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected,
+    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure,
                                    NonnullMapAccessor<CssPoint2D> pointKey,
-                                   MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
+                                   MapAccessor<Connector> connectorKey,
+                                   MapAccessor<Figure> targetKey) {
         super(figure);
         this.pointKey = pointKey;
         this.connectorKey = connectorKey;
         this.targetKey = targetKey;
-        this.styleclassDisconnected = styleclassDisconnected;
-        this.styleclassConnected = styleclassConnected;
 
         isConnected = figure.get(connectorKey) != null && figure.get(targetKey) != null;
     }
 
     @Override
-    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+    public boolean contains(DrawingView dv, double x, double y, double toleranceSquared) {
         boolean b = false;
         if (connectorLocation != null) {
-            b = Geom.length2(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance;
+            b = Geom.length2(x, y, connectorLocation.getX(), connectorLocation.getY()) <= toleranceSquared;
         }
         if (!b && pickLocation != null) {
-            b = Geom.length2(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance;
+            b = Geom.length2(x, y, pickLocation.getX(), pickLocation.getY()) <= toleranceSquared;
         }
         return b;
     }

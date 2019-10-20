@@ -43,132 +43,118 @@ public class ResizeHandleKit {
     /**
      * Creates handles for each corner of a figure and adds them to the provided
      * collection.
-     *
-     * @param f          the figure which will own the handles
+     *  @param f          the figure which will own the handles
      * @param handles    the list to which the handles should be added
-     * @param styleclass the style class that should be assigned to the handles
      */
-    static public void addCornerResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
-        handles.add(southEast(f, styleclass));
-        handles.add(southWest(f, styleclass));
-        handles.add(northEast(f, styleclass));
-        handles.add(northWest(f, styleclass));
+    static public void addCornerResizeHandles(Figure f, Collection<Handle> handles) {
+        handles.add(southEast(f));
+        handles.add(southWest(f));
+        handles.add(northEast(f));
+        handles.add(northWest(f));
     }
 
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
-     *
-     * @param f          the figure which will own the handles
+     *  @param f          the figure which will own the handles
      * @param handles    the list to which the handles should be added
-     * @param styleclass the style class that should be assigned to the handles
      */
-    static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
-        handles.add(south(f, styleclass));
-        handles.add(north(f, styleclass));
-        handles.add(east(f, styleclass));
-        handles.add(west(f, styleclass));
+    static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles) {
+        handles.add(south(f));
+        handles.add(north(f));
+        handles.add(east(f));
+        handles.add(west(f));
     }
 
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
-     *
-     * @param f          the figure which will own the handles
+     *  @param f          the figure which will own the handles
      * @param handles    the list to which the handles should be added
-     * @param styleclass the style class that should be assigned to the handles
      */
-    static public void addResizeHandles(Figure f, @Nonnull Collection<Handle> handles, String styleclass) {
-        addCornerResizeHandles(f, handles, styleclass);
-        addEdgeResizeHandles(f, handles, styleclass);
+    static public void addResizeHandles(Figure f, @Nonnull Collection<Handle> handles) {
+        addCornerResizeHandles(f, handles);
+        addEdgeResizeHandles(f, handles);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle south(Figure owner, String styleclass) {
-        return new SouthHandle(owner, styleclass);
+    static public Handle south(Figure owner) {
+        return new SouthHandle(owner);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle southEast(Figure owner, String styleclass) {
-        return new SouthEastHandle(owner, styleclass);
+    static public Handle southEast(Figure owner) {
+        return new SouthEastHandle(owner);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle southWest(Figure owner, String styleclass) {
-        return new SouthWestHandle(owner, styleclass);
+    static public Handle southWest(Figure owner) {
+        return new SouthWestHandle(owner);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle north(Figure owner, String styleclass) {
-        return new NorthHandle(owner, styleclass);
+    static public Handle north(Figure owner) {
+        return new NorthHandle(owner);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle northEast(Figure owner, String styleclass) {
-        return new NorthEastHandle(owner, styleclass);
+    static public Handle northEast(Figure owner) {
+        return new NorthEastHandle(owner);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle northWest(Figure owner, String styleclass) {
-        return new NorthWestHandle(owner, styleclass);
+    static public Handle northWest(Figure owner) {
+        return new NorthWestHandle(owner);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle east(Figure owner, String styleclass) {
-        return new EastHandle(owner, styleclass);
+    static public Handle east(Figure owner) {
+        return new EastHandle(owner);
     }
 
     /**
      * Creates a handle for the specified figure.
      *
      * @param owner      the figure which will own the handle
-     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
-    static public Handle west(Figure owner, String styleclass) {
-        return new WestHandle(owner, styleclass);
+    static public Handle west(Figure owner) {
+        return new WestHandle(owner);
     }
 
     protected static final SVGPath NORTH_SHAPE = new SVGPath();
@@ -201,8 +187,8 @@ public class ResizeHandleKit {
 
     private static class NorthEastHandle extends AbstractResizeTransformHandle {
 
-        NorthEastHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.NORTH_EAST, NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        NorthEastHandle(Figure owner) {
+            super(owner, BoundsLocator.NORTH_EAST, NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -231,8 +217,8 @@ public class ResizeHandleKit {
 
     private static class EastHandle extends AbstractResizeTransformHandle {
 
-        EastHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.EAST, EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        EastHandle(Figure owner) {
+            super(owner, BoundsLocator.EAST, EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -253,8 +239,8 @@ public class ResizeHandleKit {
 
     private static class NorthHandle extends AbstractResizeTransformHandle {
 
-        NorthHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.NORTH, NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        NorthHandle(Figure owner) {
+            super(owner, BoundsLocator.NORTH, NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -276,8 +262,8 @@ public class ResizeHandleKit {
 
     private static class NorthWestHandle extends AbstractResizeTransformHandle {
 
-        NorthWestHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.NORTH_WEST, NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        NorthWestHandle(Figure owner) {
+            super(owner, BoundsLocator.NORTH_WEST, NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -306,8 +292,8 @@ public class ResizeHandleKit {
 
     private static class SouthEastHandle extends AbstractResizeTransformHandle {
 
-        SouthEastHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.SOUTH_EAST, SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        SouthEastHandle(Figure owner) {
+            super(owner, BoundsLocator.SOUTH_EAST, SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -335,8 +321,8 @@ public class ResizeHandleKit {
 
     private static class SouthHandle extends AbstractResizeTransformHandle {
 
-        SouthHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.SOUTH, SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        SouthHandle(Figure owner) {
+            super(owner, BoundsLocator.SOUTH, SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -358,8 +344,8 @@ public class ResizeHandleKit {
 
     private static class SouthWestHandle extends AbstractResizeTransformHandle {
 
-        SouthWestHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.SOUTH_WEST, SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        SouthWestHandle(Figure owner) {
+            super(owner, BoundsLocator.SOUTH_WEST, SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -387,8 +373,8 @@ public class ResizeHandleKit {
 
     private static class WestHandle extends AbstractResizeTransformHandle {
 
-        WestHandle(Figure owner, String styleclass) {
-            super(owner, styleclass, BoundsLocator.WEST, WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        WestHandle(Figure owner) {
+            super(owner, BoundsLocator.WEST, WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override

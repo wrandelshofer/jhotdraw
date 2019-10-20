@@ -184,7 +184,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final Map<Figure, List<Handle>> handles = new HashMap<>();
+    private final Map<Figure, List<Handle>> handles = new LinkedHashMap<>();
     private boolean handlesAreValid;
     private Group handlesPane;
     /**
@@ -386,7 +386,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @param handles The provided list
      */
     protected void createHandles(@Nonnull Map<Figure, List<Handle>> handles) {
-        ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
+        List<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size() > 1) {
             if (getEditor().getAnchorHandleType() != null) {
                 Figure anchor = selection.get(0);
@@ -720,9 +720,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             if (handle.contains(this, vx, vy, getEditor().getTolerance(), getEditor().getTolerance() * getEditor().getTolerance())) {
                 return handle;
             } else {
-                if (contains(node, new Point2D(vx, vy), getEditor().getTolerance())) {
-                    return handle;
-                }
+                if (false)
+                    if (contains(node, new Point2D(vx, vy), getEditor().getTolerance())) {
+                        return handle;
+                    }
             }
         }
         return null;

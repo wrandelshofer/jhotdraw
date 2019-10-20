@@ -34,20 +34,14 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     private final Group node;
     private final Path path2;
     private final Path path1;
-    private final String styleclass;
     private final boolean selectable;
 
     public PathIterableOutlineHandle(PathIterableFigure figure, boolean selectable) {
-        this(figure, selectable, STYLECLASS_HANDLE_MOVE_OUTLINE);
-    }
-
-    public PathIterableOutlineHandle(PathIterableFigure figure, boolean selectable, String styleclass) {
         super(figure);
         node = new Group();
         path2 = new Path();
         path1 = new Path();
         node.getChildren().addAll(path1, path2);
-        this.styleclass = styleclass;
         this.selectable = selectable;
     }
 

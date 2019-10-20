@@ -58,27 +58,27 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new LineOutlineHandle(this));
             if (get(START_CONNECTOR) == null) {
-                list.add(new MoveHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE));
+                list.add(new MoveHandle(this, new PointLocator(START)));
             } else {
-                list.add(new SelectionHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
+                list.add(new SelectionHandle(this, new PointLocator(START)));
             }
             if (get(END_CONNECTOR) == null) {
-                list.add(new MoveHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE));
+                list.add(new MoveHandle(this, new PointLocator(END)));
             } else {
-                list.add(new SelectionHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
+                list.add(new SelectionHandle(this, new PointLocator(END)));
             }
         } else if (handleType == HandleType.RESIZE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            list.add(new LineOutlineHandle(this));
             list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
             list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
         } else if (handleType == HandleType.POINT) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, START, START_CONNECTOR, START_TARGET));
-            list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, END, END_CONNECTOR, END_TARGET));
+            list.add(new LineOutlineHandle(this));
+            list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
+            list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
         } else if (handleType == HandleType.TRANSFORM) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+            list.add(new LineOutlineHandle(this));
         } else {
             super.createHandles(handleType, list);
         }

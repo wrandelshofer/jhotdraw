@@ -9,7 +9,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
@@ -34,18 +33,12 @@ public class AnchorOutlineHandle extends AbstractHandle {
 
     private Polygon node;
     private double[] points;
-    private String styleclass;
 
     public AnchorOutlineHandle(Figure figure) {
-        this(figure, STYLECLASS_HANDLE_ANCHOR_OUTLINE);
-    }
-
-    public AnchorOutlineHandle(Figure figure, String styleclass) {
         super(figure);
 
         points = new double[8];
         node = new Polygon(points);
-        this.styleclass = styleclass;
         initNode(node);
     }
 
@@ -70,8 +63,6 @@ public class AnchorOutlineHandle extends AbstractHandle {
 
     protected void initNode(@Nonnull Polygon r) {
         r.setFill(null);
-        r.setStroke(Color.BLUE);
-        //r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override

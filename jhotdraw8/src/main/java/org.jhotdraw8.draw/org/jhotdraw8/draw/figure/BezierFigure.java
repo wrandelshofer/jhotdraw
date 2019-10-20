@@ -68,18 +68,18 @@ public class BezierFigure extends AbstractLeafFigure
     @Override
     public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
-            list.add(new PathIterableOutlineHandle(this, true, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
+            list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.POINT) {
             list.add(new BezierPathOutlineHandle(this, PATH));
             ImmutableList<BezierNode> nodes = get(PATH);
             for (int i = 0, n = nodes.size(); i < n; i++) {
-                list.add(new BezierNodeTangentHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE));
-                list.add(new BezierNodeEditHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_POINT));
+                list.add(new BezierNodeTangentHandle(this, PATH, i));
+                list.add(new BezierNodeEditHandle(this, PATH, i));
                 if (nodes.get(i).isC1()) {
-                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK));
                 }
                 if (nodes.get(i).isC2()) {
-                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK));
                 }
             }
         } else {

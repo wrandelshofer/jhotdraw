@@ -32,20 +32,14 @@ public class LineOutlineHandle extends AbstractHandle {
     private Polyline polyline2;
     private Polyline polyline1;
     private double[] points;
-    private String styleclass;
 
     public LineOutlineHandle(Figure figure) {
-        this(figure, STYLECLASS_HANDLE_MOVE_OUTLINE);
-    }
-
-    public LineOutlineHandle(Figure figure, String styleclass) {
         super(figure);
         node = new Group();
         points = new double[4];
         polyline1 = new Polyline(points);
         polyline2 = new Polyline(points);
         node.getChildren().addAll(polyline1, polyline2);
-        this.styleclass = styleclass;
     }
 
     @Override

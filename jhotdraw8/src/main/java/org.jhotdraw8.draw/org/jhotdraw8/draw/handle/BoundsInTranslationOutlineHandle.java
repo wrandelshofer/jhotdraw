@@ -36,13 +36,8 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     private Polygon poly1;
     private Polygon poly2;
     private double[] points;
-    private String styleclass;
 
     public BoundsInTranslationOutlineHandle(Figure figure) {
-        this(figure, STYLECLASS_HANDLE_SELECT_OUTLINE);
-    }
-
-    public BoundsInTranslationOutlineHandle(Figure figure, String styleclass) {
         super(figure);
 
         node = new Group();

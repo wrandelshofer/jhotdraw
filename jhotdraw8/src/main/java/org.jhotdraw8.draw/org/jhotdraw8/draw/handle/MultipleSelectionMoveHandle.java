@@ -47,17 +47,11 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     private Point2D pickLocation;
     private double relativeX;
     private double relativeY;
-    private final String styleclass;
 
     public MultipleSelectionMoveHandle(double relativeX, double relativeY) {
-        this(relativeX, relativeY, STYLECLASS_HANDLE_MULTI_MOVE);
-    }
-
-    public MultipleSelectionMoveHandle(double relativeX, double relativeY, String styleclass) {
         super(null);
         this.relativeX = relativeX;
         this.relativeY = relativeY;
-        this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
@@ -65,7 +59,6 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }

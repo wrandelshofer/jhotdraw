@@ -32,13 +32,8 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     private Polygon poly1;
     private Polygon poly2;
     private double[] points;
-    private String styleclass;
 
     public BoundsInLocalOutlineHandle(Figure figure) {
-        this(figure, STYLECLASS_HANDLE_SELECT_OUTLINE);
-    }
-
-    public BoundsInLocalOutlineHandle(Figure figure, String styleclass) {
         super(figure);
         node = new Group();
         points = new double[8];
@@ -48,7 +43,6 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
         poly2.setFill(null);
         node.getChildren().addAll(poly1, poly2);
 
-        this.styleclass = styleclass;
     }
 
     @Override

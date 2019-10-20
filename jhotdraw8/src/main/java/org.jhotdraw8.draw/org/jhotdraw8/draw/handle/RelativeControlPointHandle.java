@@ -62,25 +62,17 @@ public class RelativeControlPointHandle extends AbstractHandle {
     private Point2D pickLocation;
     private final MapAccessor<Point2D> pointKey;
     private final MapAccessor<Point2D> controlPointKey;
-    private final String styleclass;
 
     public RelativeControlPointHandle(Figure figure, MapAccessor<Point2D> pointKey, MapAccessor<Point2D> controlPointKey) {
-        this(figure, STYLECLASS_HANDLE_POINT, pointKey, controlPointKey);
-    }
-
-    public RelativeControlPointHandle(Figure figure, String styleclass, MapAccessor<Point2D> pointKey, MapAccessor<Point2D> controlPointKey) {
         super(figure);
         this.pointKey = pointKey;
         this.controlPointKey = controlPointKey;
-        this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-
-        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }

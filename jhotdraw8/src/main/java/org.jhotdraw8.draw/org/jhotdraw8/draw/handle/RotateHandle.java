@@ -81,10 +81,6 @@ public class RotateHandle extends AbstractHandle {
     private final Region pivotNode;
 
     public RotateHandle(TransformableFigure figure) {
-        this(figure, STYLECLASS_HANDLE_ROTATE, STYLECLASS_HANDLE_TRANSFORM_OUTLINE, STYLECLASS_HANDLE_PIVOT);
-    }
-
-    public RotateHandle(TransformableFigure figure, String handleStyleclass, String lineStyleclass, String pivotStyleclass) {
         super(figure);
         group = new Group();
         pickNode = new Region();

@@ -73,17 +73,12 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     private Point2D pickLocation;
     private final int pointIndex;
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;
-    private final String styleclass;
+
 
     public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
-        this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_MOVE);
-    }
-
-    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
-        this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE_LINEAR);
         node.setManaged(false);
@@ -91,7 +86,6 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }

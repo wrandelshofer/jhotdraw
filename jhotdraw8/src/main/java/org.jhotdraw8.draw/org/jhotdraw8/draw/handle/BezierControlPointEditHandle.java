@@ -93,17 +93,11 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     private Point2D pickLocation;
     private final int pointIndex;
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;
-    private final String styleclass;
 
     public BezierControlPointEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, int controlPointMask) {
-        this(figure, pointKey, pointIndex, controlPointMask, STYLECLASS_HANDLE_CONTROL_POINT);
-    }
-
-    public BezierControlPointEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, int controlPointMask, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
-        this.styleclass = styleclass;
         this.controlPointMask = controlPointMask;
         if (this.controlPointMask != BezierNode.C1_MASK && this.controlPointMask != BezierNode.C2_MASK) {
             throw new IllegalArgumentException("controlPoint:" + controlPointMask);
@@ -114,8 +108,6 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         node.setScaleShape(true);
         node.setCenterShape(true);
         node.resize(11, 11);
-
-        //node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }

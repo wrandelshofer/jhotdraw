@@ -19,7 +19,6 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonnullMapAccessor;
 import org.jhotdraw8.css.CssColor;
@@ -41,21 +40,15 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * <p>
  * Pressing the alt or the control key while dragging the handle prevents
  * connecting the point.
- * <p>
- * This handle is drawn using a {@code Region}, which can be styled using
- * {@code styleclassDisconnected} and {@code styleclassConnected} given in the
- * constructor.
  *
  * @author Werner Randelshofer
  */
 public class LineConnectorHandle extends AbstractConnectorHandle {
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
-    @Nullable
     private Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
-    @Nullable
     private Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nullable
+
     private static final Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(2)),
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
@@ -65,18 +58,14 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
     @Nonnull
     private final Region targetNode;
 
-    public LineConnectorHandle(@Nonnull ConnectingFigure figure, @Nonnull NonnullMapAccessor<CssPoint2D> pointKey,
+    public LineConnectorHandle(@Nonnull ConnectingFigure figure,
+                               @Nonnull NonnullMapAccessor<CssPoint2D> pointKey,
                                @Nonnull MapAccessor<Connector> connectorKey, @Nonnull MapAccessor<Figure> targetKey) {
-        this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
-                connectorKey, targetKey);
-    }
-
-    public LineConnectorHandle(@Nonnull ConnectingFigure figure, @Nonnull String styleclassDisconnected, @Nonnull String styleclassConnected, @Nonnull NonnullMapAccessor<CssPoint2D> pointKey,
-                               @Nonnull MapAccessor<Connector> connectorKey, @Nonnull MapAccessor<Figure> targetKey) {
-        super(figure, styleclassDisconnected, styleclassConnected, pointKey,
+        super(figure, pointKey,
                 connectorKey, targetKey);
         targetNode = new Region();
         targetNode.setShape(REGION_SHAPE);
+        targetNode.setMouseTransparent(true);
         targetNode.setManaged(false);
         targetNode.setScaleShape(true);
         targetNode.setCenterShape(true);
@@ -109,7 +98,6 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         Figure target = f.get(targetKey);
         boolean isConnected = connector != null && target != null;
         targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
-//        targetNode.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
         double size = targetNode.getWidth();
         targetNode.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
         // rotates the node:

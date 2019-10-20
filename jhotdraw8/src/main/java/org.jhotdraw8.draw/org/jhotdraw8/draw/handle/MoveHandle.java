@@ -45,7 +45,6 @@ public class MoveHandle extends LocatorHandle {
     private CssPoint2D oldPoint;
     @Nonnull
     private final Region node;
-    private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     @Nullable
     private static final Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
@@ -54,13 +53,9 @@ public class MoveHandle extends LocatorHandle {
     private Set<Figure> groupReshapeableFigures;
     private boolean pressed;
 
-    public MoveHandle(Figure figure, Locator locator) {
-        this(figure, locator, STYLECLASS_HANDLE_MOVE);
-    }
 
-    public MoveHandle(Figure figure, Locator locator, String styleclass) {
+    public MoveHandle(Figure figure, Locator locator) {
         super(figure, locator);
-        this.styleclass = styleclass;
         node = new Region();
 
         node.setShape(REGION_SHAPE);
