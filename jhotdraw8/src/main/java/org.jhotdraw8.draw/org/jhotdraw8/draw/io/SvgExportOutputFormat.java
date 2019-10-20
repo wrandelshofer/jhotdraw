@@ -19,7 +19,12 @@ import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.ImageFigure;
+import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.PageFigure;
+import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -60,10 +65,8 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
 
-    private final static String SKIP_KEY = "skip";
-
     public final static DataFormat SVG_FORMAT;
-
+    private final static String SKIP_KEY = "skip";
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XLINK_Q = "xlink";
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
@@ -77,19 +80,17 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     }
 
     private final String SVG_NS = "http://www.w3.org/2000/svg";
-
-    @Nonnull
-    private IdFactory idFactory = new SimpleIdFactory();
-
     @Nullable
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final CssSizeConverter sc = new CssSizeConverter(false);
     private final Converter<ImmutableList<CssSize>> nbList = new CssListConverter<>(new CssSizeConverter(false));
     private final SvgPaintConverter paint = new SvgPaintConverter(true);
-    private boolean skipInvisibleNodes = true;
     private final Converter<CssSize> sznb = new CssSizeConverter(false);
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
+    @Nonnull
+    private IdFactory idFactory = new SimpleIdFactory();
+    private boolean skipInvisibleNodes = true;
 
     @Nonnull
     private SvgExporter createExporter() {
@@ -107,6 +108,14 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     @Override
     protected boolean isResolutionIndependent() {
         return true;
+    }
+
+    public boolean isSkipInvisibleNodes() {
+        return skipInvisibleNodes;
+    }
+
+    public void setSkipInvisibleNodes(boolean skipInvisibleNodes) {
+        this.skipInvisibleNodes = skipInvisibleNodes;
     }
 
     private void markNodesOutsideBoundsWithSkip(Node node, Bounds sceneBounds) {
@@ -227,13 +236,5 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         docElement.setAttribute("viewBox", nb.
                 toString(b.getMinX() - sliceOrigin.getX()) + " " + nb.toString(b.getMinY() - sliceOrigin.getY())
                 + " " + nb.toString(b.getWidth()) + " " + nb.toString(b.getHeight()));
-    }
-
-    public boolean isSkipInvisibleNodes() {
-        return skipInvisibleNodes;
-    }
-
-    public void setSkipInvisibleNodes(boolean skipInvisibleNodes) {
-        this.skipInvisibleNodes = skipInvisibleNodes;
     }
 }

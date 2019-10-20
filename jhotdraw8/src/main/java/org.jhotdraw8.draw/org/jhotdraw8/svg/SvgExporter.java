@@ -13,9 +13,35 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
-import javafx.scene.shape.*;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BorderImage;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.FillRule;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -62,7 +88,12 @@ import java.io.Writer;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -220,7 +251,7 @@ public class SvgExporter {
     }
 
     private Element writeArc(Document doc, Element parent, Arc node) {
-        Element elem = doc.createElement("arc");
+        Element elem = doc.createElement("path");
         parent.appendChild(elem);
         StringBuilder buf = new StringBuilder();
         double centerX = node.getCenterX();
@@ -274,6 +305,7 @@ public class SvgExporter {
                 || ArcType.ROUND == node.getType()) {
             buf.append('Z');
         }
+        elem.setAttribute("d", buf.toString());
         return elem;
     }
 
@@ -933,7 +965,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-linecap", shape.getStrokeLineCap().toString().toLowerCase());
         }
         if (shape.getStrokeLineJoin() != StrokeLineJoin.MITER) {
-            elem.setAttribute("stroke-linecap", shape.getStrokeLineJoin().toString().toLowerCase());
+            elem.setAttribute("stroke-linejoin", shape.getStrokeLineJoin().toString().toLowerCase());
         }
         if (shape.getStrokeMiterLimit() != 4) {
             elem.setAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
@@ -963,8 +995,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeStrokeAttributes(@Nonnull Element elem, BorderStroke
-            shape) {
+    private void writeStrokeAttributes(@Nonnull Element elem, BorderStroke shape) {
         if (shape.getTopStroke() != null) {
             elem.setAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
         }
@@ -977,7 +1008,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-linecap", style.getLineCap().toString().toLowerCase());
         }
         if (style.getLineJoin() != StrokeLineJoin.MITER) {
-            elem.setAttribute("stroke-linecap", style.getLineJoin().toString().toLowerCase());
+            elem.setAttribute("stroke-linejoin", style.getLineJoin().toString().toLowerCase());
         }
         if (style.getMiterLimit() != 4) {
             elem.setAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
@@ -1025,7 +1056,8 @@ public class SvgExporter {
         }
 
         if (!node.isVisible()) {
-            elem.setAttribute("visibility", "hidden");
+            //elem.setAttribute("visibility", "hidden");
+            elem.setAttribute("display", "none");
         }
     }
 
