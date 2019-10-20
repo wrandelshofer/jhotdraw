@@ -39,7 +39,7 @@ public class CssPaintConverterTest {
         System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssPaintConverter instance = new CssPaintConverter();
+        CssPaintConverter instance = new CssPaintConverter(true);
         Paint actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

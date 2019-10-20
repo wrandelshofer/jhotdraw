@@ -34,9 +34,6 @@ class CssStrokeConverterTest {
     static
     public void doTestFromString(CssStroke expected, String string) throws Exception {
         System.out.println("fromString " + string);
-        if (string.equals(IDENT_NONE)) {
-            expected = null;
-        }
 
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -75,24 +72,24 @@ class CssStrokeConverterTest {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(
                         new CssStroke(CssColor.BLACK),
-                        "1 black butt miter miter-limit(4) dash-offset(0) dash-array()")),
+                        "1 black type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
                 dynamicTest("2", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK),
-                        "2 black butt miter miter-limit(4) dash-offset(0) dash-array()")),
+                        "2 black type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
                 dynamicTest("3", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
-                        "2 black round miter miter-limit(3) dash-offset(4) dash-array(5 6)")),
+                        "2 black type(centered) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("4", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
-                        "2 black butt miter miter-limit(3) dash-offset(4) dash-array(5 6)")),
+                        "2 black type(centered) linecap(butt) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("5", () -> doTest(
                         new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
-                        "2 black inside round miter miter-limit(3) dash-offset(4) dash-array(5 6)")),
+                        "2 black type(inside) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("6", () -> doTest(
-                        new CssStroke(new CssSize(1), null, StrokeType.CENTERED, StrokeLineCap.SQUARE, StrokeLineJoin.MITER, new CssSize(10)
+                        new CssStroke(new CssSize(1), null, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4)
                                 , new CssSize(0), ImmutableLists.emptyList()),
                         IDENT_NONE))
         );

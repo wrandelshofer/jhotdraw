@@ -51,7 +51,7 @@ public class CssLinearGradientConverterTest {
         System.out.println("fromString(" + string + ")");
         CharBuffer in = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssLinearGradientConverter instance = new CssLinearGradientConverter();
+        CssLinearGradientConverter instance = new CssLinearGradientConverter(true);
         CssLinearGradient actual = instance.fromString(in, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

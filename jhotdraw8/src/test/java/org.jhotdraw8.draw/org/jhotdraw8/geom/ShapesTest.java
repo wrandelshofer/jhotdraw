@@ -59,8 +59,8 @@ class ShapesTest {
     @TestFactory
     public List<DynamicTest> doubleRelativeSvgStringFromAWTFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> testRelativeSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "m0,0 1,0 0,1 -1,0 Z")),
-                dynamicTest("2", () -> testRelativeSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 Z")),
+                dynamicTest("1", () -> testRelativeSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "m0,0 1,0 0,1 -1,0 z")),
+                dynamicTest("2", () -> testRelativeSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 z")),
                 dynamicTest("3", () -> testRelativeSvgStringFromAWT(
                         "M600,350 l 50,-25 "
                                 + "a25,25 -30 0,1 50,-25 l 50,-25"
