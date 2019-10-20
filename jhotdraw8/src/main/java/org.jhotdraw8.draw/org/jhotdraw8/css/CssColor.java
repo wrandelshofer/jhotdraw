@@ -30,6 +30,7 @@ public class CssColor implements Paintable {
 
     public final static CssColor BLACK = CssColor.valueOf("black");
     public final static CssColor WHITE = CssColor.valueOf("white");
+    public final static CssColor TRANSPARENT = CssColor.valueOf("transparent");
 
     public CssColor(@Nonnull Color color) {
         this(null, color);
