@@ -4,9 +4,9 @@
  */
 package org.jhotdraw8.geom;
 
-import java.awt.geom.Path2D;
+import javafx.geometry.Point2D;
+
 import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 
 /**
  * CutEndPathBuilder.
@@ -20,12 +20,12 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     private double cx;
     private double cy;
 
-    private Path2D.Double path;
+    private PathIteratorPathBuilder path;
 
     public CutEndPathBuilder(PathBuilder out, double radius) {
         this.out = out;
         this.radius = radius;
-        path = new Path2D.Double();
+        path = new PathIteratorPathBuilder();
     }
 
     @Override
@@ -41,13 +41,13 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doPathDone() {
         if (path != null) {
-            Point2D currentPoint = path.getCurrentPoint();
+            Point2D currentPoint = getLastPoint();
             cx = currentPoint.getX();
             cy = currentPoint.getY();
             double[] seg = new double[6];
             double x = 0, y = 0;
             Loop:
-            for (PathIterator i = path.getPathIterator(null); !i.isDone(); i.next()) {
+            for (PathIterator i = path.build(); !i.isDone(); i.next()) {
                 switch (i.currentSegment(seg)) {
                     case PathIterator.SEG_CLOSE:
                         out.closePath();

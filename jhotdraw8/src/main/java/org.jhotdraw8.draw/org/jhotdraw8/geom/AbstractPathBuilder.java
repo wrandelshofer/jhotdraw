@@ -48,13 +48,13 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     protected abstract void doPathDone();
 
-    protected abstract void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3);
+    protected abstract void doCurveTo(double x1, double y1, double x2, double y2, double x, double y);
 
     protected abstract void doLineTo(double x, double y);
 
     protected abstract void doMoveTo(double x, double y);
 
-    protected abstract void doQuadTo(double x1, double y1, double x2, double y2);
+    protected abstract void doQuadTo(double x1, double y1, double x, double y);
 
     protected void doSmoothCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
         doCurveTo(x1, y1, x2, y2, x, y);
