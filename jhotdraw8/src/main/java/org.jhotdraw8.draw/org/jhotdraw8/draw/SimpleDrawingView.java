@@ -66,6 +66,7 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.graph.BreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
 import org.jhotdraw8.util.ReversedList;
 
@@ -75,12 +76,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static java.lang.Math.max;
 
@@ -411,7 +414,21 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public void deleteSelection() {
         ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
         DrawingModel model = getModel();
+
+        // Also delete dependent figures
+        Set<Figure> cascade = new LinkedHashSet<>(figures);
         for (Figure f : figures) {
+            for (Figure ff : f.preorderIterable()) {
+                StreamSupport.stream(new BreadthFirstSpliterator<Figure>(
+                                figure -> () ->
+                                        figure.getLayoutObservers().stream()
+                                                .filter(x -> x.getLayoutSubjects().size() == 1).iterator()
+                                , ff),
+                        false)
+                        .forEach(cascade::add);
+            }
+        }
+        for (Figure f : cascade) {
             if (f.isDeletable()) {
                 for (Figure d : f.preorderIterable()) {
                     model.disconnect(d);

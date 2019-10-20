@@ -1270,4 +1270,15 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         String name = getClass().getName();
         return name.substring(name.lastIndexOf('.') + 1);
     }
+
+    /**
+     * Returns true if this figure should be deleted if its last layout
+     * subject is deleted.
+     *
+     * @return if the deletion of the layout subject should lead to a cascaded
+     * delete
+     */
+    default boolean isDeletWithLastLayoutSubject() {
+        return true;
+    }
 }
