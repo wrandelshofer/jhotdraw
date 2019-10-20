@@ -28,11 +28,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
+    private final List<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArrayList<>();
+    private final List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
     private Set<E> backingSet;
-    @Nullable
-    private List<SetChangeListener<? super E>> changeListeners;
-    @Nullable
-    private List<InvalidationListener> invalidationListeners;
 
     public ModifiableObservableSet(@Nonnull Collection<E> copyMe) {
         backingSet = new LinkedHashSet<>(copyMe);
@@ -70,17 +68,11 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
 
     @Override
     public void addListener(InvalidationListener listener) {
-        if (invalidationListeners == null) {
-            invalidationListeners = new CopyOnWriteArrayList<>();
-        }
         invalidationListeners.add(listener);
     }
 
     @Override
     public void addListener(SetChangeListener<? super E> listener) {
-        if (changeListeners == null) {
-            changeListeners = new CopyOnWriteArrayList<>();
-        }
         changeListeners.add(listener);
     }
 
@@ -104,59 +96,41 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(@Nonnull Collection<?> c) {
         return backingSet.containsAll(c);
     }
 
-    public void setBackingSet(Set<E> backingSet) {
-        this.backingSet = backingSet;
-    }
-
-    private static class Change<EE> extends SetChangeListener.Change<EE> {
-
-        @Nullable
-        private final EE value;
-        private final boolean wasAdded;
-
-        public Change(ObservableSet<EE> set, @Nullable EE value, boolean wasAdded) {
-            super(set);
-            this.value = value;
-            this.wasAdded = wasAdded;
-        }
-
-        @Override
-        @Nullable
-        @SuppressWarnings("override.return.invalid")
-        public EE getElementAdded() {
-            return (wasAdded) ? value : null;
-        }
-
-        @Override
-        @Nullable
-        @SuppressWarnings("override.return.invalid")
-        public EE getElementRemoved() {
-            return (!wasAdded) ? value : null;
-        }
-
-        @Override
-        public boolean wasAdded() {
-            return wasAdded;
-        }
-
-        @Override
-        public boolean wasRemoved() {
-            return !wasAdded;
-        }
-
-    }
-
     protected void fireAdded(@Nullable E e) {
-        if (changeListeners != null) {
-            SetChangeListener.Change<E> change = new Change<>(this, e, true);
-            for (SetChangeListener<? super E> listener : changeListeners) {
-                listener.onChanged(change);
+        SetChangeListener.Change<E> change = null;
+        for (SetChangeListener<? super E> listener : changeListeners) {
+            if (change == null) {
+                change = new Change<>(this, e, true);
             }
+            listener.onChanged(change);
         }
+    }
+
+    private void fireInvalidated() {
+        invalidated();
+        for (InvalidationListener l : invalidationListeners) {
+            l.invalidated(this);
+        }
+    }
+
+    protected void fireRemoved(@Nullable E e) {
+        SetChangeListener.Change<E> change = null;
+        for (SetChangeListener<? super E> listener : changeListeners) {
+            if (change == null) {
+                change = new Change<>(this, e, false);
+            }
+            listener.onChanged(change);
+        }
+    }
+
+    public void fireUpdated(@Nullable E e) {
+        fireRemoved(e);
+        fireAdded(e);
+        fireInvalidated();
     }
 
     /**
@@ -175,30 +149,6 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     private void itemInvalidated(Observable o) {
-        fireInvalidated();
-    }
-
-    private void fireInvalidated() {
-        invalidated();
-        if (invalidationListeners != null) {
-            for (InvalidationListener l : invalidationListeners) {
-                l.invalidated(this);
-            }
-        }
-    }
-
-    protected void fireRemoved(@Nullable E e) {
-        if (changeListeners != null && !changeListeners.isEmpty()) {
-            SetChangeListener.Change<E> change = new Change<>(this, e, false);
-            for (SetChangeListener<? super E> listener : changeListeners) {
-                listener.onChanged(change);
-            }
-        }
-    }
-
-    public void fireUpdated(@Nullable E e) {
-        fireRemoved(e);
-        fireAdded(e);
         fireInvalidated();
     }
 
@@ -259,22 +209,12 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
 
     @Override
     public void removeListener(InvalidationListener listener) {
-        if (invalidationListeners != null) {
-            invalidationListeners.remove(listener);
-            if (invalidationListeners.isEmpty()) {
-                invalidationListeners = null;
-            }
-        }
+        invalidationListeners.remove(listener);
     }
 
     @Override
     public void removeListener(SetChangeListener<? super E> listener) {
-        if (changeListeners != null) {
-            changeListeners.remove(listener);
-            if (changeListeners.isEmpty()) {
-                changeListeners = null;
-            }
-        }
+        changeListeners.remove(listener);
     }
 
     @Override
@@ -295,9 +235,51 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         return modified;
     }
 
+    public void setBackingSet(Set<E> backingSet) {
+        this.backingSet = backingSet;
+    }
+
     @Override
     public int size() {
         return backingSet.size();
+    }
+
+    private static class Change<EE> extends SetChangeListener.Change<EE> {
+
+        @Nullable
+        private final EE value;
+        private final boolean wasAdded;
+
+        public Change(ObservableSet<EE> set, @Nullable EE value, boolean wasAdded) {
+            super(set);
+            this.value = value;
+            this.wasAdded = wasAdded;
+        }
+
+        @Override
+        @Nullable
+        @SuppressWarnings("override.return.invalid")
+        public EE getElementAdded() {
+            return (wasAdded) ? value : null;
+        }
+
+        @Override
+        @Nullable
+        @SuppressWarnings("override.return.invalid")
+        public EE getElementRemoved() {
+            return (!wasAdded) ? value : null;
+        }
+
+        @Override
+        public boolean wasAdded() {
+            return wasAdded;
+        }
+
+        @Override
+        public boolean wasRemoved() {
+            return !wasAdded;
+        }
+
     }
 
 }
