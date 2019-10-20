@@ -195,7 +195,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void removeFromParent(@Nonnull Figure child) {
-        Figure oldRoot = child.getRoot();
+        final Figure oldRoot = child.getRoot();
+        for (Figure f : child.preorderIterable()) {
+            fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
+        }
         Figure parent = child.getParent();
         if (parent != null) {
             int index = parent.getChildren().indexOf(child);
@@ -203,19 +206,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 parent.getChildren().remove(index);
                 fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, parent, index));
                 fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
-            }
-        }
-        Figure newRoot = child.getRoot();
-        if (oldRoot != newRoot) {
-            if (oldRoot != null) {
-                for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
-                }
-            }
-            if (newRoot != null) { // must be null!!!
-                for (Figure f : child.preorderIterable()) {
-                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree(this, newRoot, f));
-                }
             }
         }
     }
