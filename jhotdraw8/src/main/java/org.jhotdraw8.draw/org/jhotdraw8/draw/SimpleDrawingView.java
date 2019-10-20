@@ -415,7 +415,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
         DrawingModel model = getModel();
 
-        // Also delete dependent figures
+        // Also delete dependent figures.
+        // FIXME this does not work in all cases!
         Set<Figure> cascade = new LinkedHashSet<>(figures);
         for (Figure f : figures) {
             for (Figure ff : f.preorderIterable()) {
