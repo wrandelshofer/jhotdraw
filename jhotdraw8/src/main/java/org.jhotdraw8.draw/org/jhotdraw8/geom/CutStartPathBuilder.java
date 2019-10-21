@@ -12,12 +12,21 @@ import javafx.geometry.Point2D;
  * @author Werner Randelshofer
  */
 public class CutStartPathBuilder extends AbstractPathBuilder {
+    /**
+     * We need this state machine, so that we can properly
+     * handle a path which does not start with a MOVE_TO.
+     */
+    private enum State {
+        EXPECTING_INITIAL_MOVETO,
+        CUTTING_START,
+        CUT_DONE
+    }
 
     private final double radius;
     private final PathBuilder out;
     private double cx;
     private double cy;
-    private boolean done;
+    private State state = State.EXPECTING_INITIAL_MOVETO;
 
     public CutStartPathBuilder(PathBuilder out, double radius) {
         this.radius = radius;
@@ -26,13 +35,13 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doClosePath() {
-        done = true;
+        state = State.CUT_DONE;
         out.closePath();
     }
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
-        if (done) {
+        if (state == State.CUT_DONE) {
             out.curveTo(x1, y1, x2, y2, x3, y3);
             return;
         }
@@ -51,7 +60,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             case NO_INTERSECTION_TANGENT:
             default:
                 out.moveTo(getLastX(), getLastY());
-                done = true;
+                state = State.CUT_DONE;
                 out.curveTo(x1, y1, x2, y2, x3, y3);
                 break;
         }
@@ -59,13 +68,13 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doPathDone() {
-        done = true;
+        state = State.CUT_DONE;
         out.pathDone();
     }
 
     @Override
     protected void doLineTo(double x, double y) {
-        if (done) {
+        if (state != State.CUTTING_START) {
             out.lineTo(x, y);
             return;
         }
@@ -75,7 +84,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
                 Point2D p = i.getLastPoint();
                 out.moveTo(p.getX(), p.getY());
                 out.lineTo(x, y);
-                done = true;
+                state = State.CUT_DONE;
                 break;
             case NO_INTERSECTION_INSIDE:
                 // skip lineTo
@@ -84,7 +93,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             case NO_INTERSECTION_TANGENT:
             default:
                 out.moveTo(getLastX(), getLastY());
-                done = true;
+                state = State.CUT_DONE;
                 out.lineTo(x, y);
                 break;
         }
@@ -92,9 +101,11 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doMoveTo(double x, double y) {
-        if (done) {
+        if (state == State.EXPECTING_INITIAL_MOVETO) {
+            state = State.CUTTING_START;
+        }
+        if (state != State.CUTTING_START) {
             out.moveTo(x, y);
-            return;
         } else {
             cx = x;
             cy = y;
@@ -103,7 +114,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
-        if (done) {
+        if (state != State.CUTTING_START) {
             out.quadTo(x1, y1, x2, y2);
             return;
         }
@@ -113,7 +124,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
                 double t = i.getLastT();
                 out.moveTo(i.getLastPoint());
                 Beziers.splitQuadCurve(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
-
+                state = State.CUT_DONE;
                 break;
             case NO_INTERSECTION_INSIDE:
                 cx = x2;
@@ -123,7 +134,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             case NO_INTERSECTION_TANGENT:
             default:
                 out.moveTo(getLastX(), getLastY());
-                done = true;
+                state = State.CUT_DONE;
                 out.quadTo(x1, y1, x2, y2);
                 break;
         }
