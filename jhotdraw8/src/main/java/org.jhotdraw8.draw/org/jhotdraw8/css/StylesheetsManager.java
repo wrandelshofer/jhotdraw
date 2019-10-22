@@ -44,6 +44,14 @@ public interface StylesheetsManager<E> {
      * Adds a stylesheet with the specified origin.
      *
      * @param origin     the style origin
+     * @param stylesheet the stylesheet
+     */
+    void addStylesheet(StyleOrigin origin, Stylesheet stylesheet);
+
+    /**
+     * Adds a stylesheet with the specified origin.
+     *
+     * @param origin     the style origin
      * @param stylesheet the stylesheet given as a literal string
      */
     void addStylesheet(StyleOrigin origin, String stylesheet);

@@ -16,14 +16,7 @@ import org.jhotdraw8.css.ast.Stylesheet;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -105,6 +98,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
         invalidate();
         getMap(origin).put(resolvedUri, new ParsedStylesheetEntry(origin, resolvedUri));
+    }
+
+    @Override
+    public void addStylesheet(@Nonnull StyleOrigin origin, Stylesheet stylesheet) {
+        invalidate();
+        getMap(origin).put(stylesheet, new ParsedStylesheetEntry(origin, stylesheet));
     }
 
     @Override
@@ -433,6 +432,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
+        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull Stylesheet stylesheet) {
+            this.origin = origin;
+            this.stylesheet = stylesheet;
+        }
         public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull String str) {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
