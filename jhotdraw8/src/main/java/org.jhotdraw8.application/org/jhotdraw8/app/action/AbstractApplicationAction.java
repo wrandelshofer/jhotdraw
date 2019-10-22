@@ -59,7 +59,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
                 if (buf.length() != 0) {
                     buf.append('\n');
                 }
-                buf.append(msg == null ? t.toString() : msg);
+                buf.append(msg == null ? t.toString() : t.getClass().getSimpleName() + ": " + msg);
             }
         }
         return buf.toString();
