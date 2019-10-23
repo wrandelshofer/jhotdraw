@@ -15,12 +15,7 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -91,6 +86,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         final Line line = new Line();
         final Path startMarker = new Path();
         final Path endMarker = new Path();
+        startMarker.setStroke(null);
+        endMarker.setStroke(null);
         g.getChildren().addAll(line, startMarker, endMarker);
         return g;
     }
