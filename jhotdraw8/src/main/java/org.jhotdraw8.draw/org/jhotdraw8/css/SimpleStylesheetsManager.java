@@ -16,7 +16,14 @@ import org.jhotdraw8.css.ast.Stylesheet;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -40,15 +47,15 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * The key is either an URI or a literal CSS String for which we cache the
      * data. The value contains the parsed stylesheet entry.
      */
-    private LinkedHashMap<Object, ParsedStylesheetEntry> userAgentList = new LinkedHashMap<>();
+    private LinkedHashMap<Object, StylesheetEntry> userAgentList = new LinkedHashMap<>();
     /**
      * @see #userAgentList
      */
-    private LinkedHashMap<Object, ParsedStylesheetEntry> authorList = new LinkedHashMap<>();
+    private LinkedHashMap<Object, StylesheetEntry> authorList = new LinkedHashMap<>();
     /**
      * @see #userAgentList
      */
-    private LinkedHashMap<Object, ParsedStylesheetEntry> inlineList = new LinkedHashMap<>();
+    private LinkedHashMap<Object, StylesheetEntry> inlineList = new LinkedHashMap<>();
     @Nonnull
     private Executor executor = Executors.newCachedThreadPool();
     private Map<String, ImmutableList<CssToken>> cachedAuthorCustomProperties;
@@ -97,19 +104,19 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     public void addStylesheet(@Nonnull StyleOrigin origin, @Nullable URI documentHome, @Nonnull URI uri) {
         URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
         invalidate();
-        getMap(origin).put(resolvedUri, new ParsedStylesheetEntry(origin, resolvedUri));
+        getMap(origin).put(resolvedUri, new StylesheetEntry(origin, resolvedUri));
     }
 
     @Override
     public void addStylesheet(@Nonnull StyleOrigin origin, Stylesheet stylesheet) {
         invalidate();
-        getMap(origin).put(stylesheet, new ParsedStylesheetEntry(origin, stylesheet));
+        getMap(origin).put(stylesheet, new StylesheetEntry(origin, stylesheet));
     }
 
     @Override
     public void addStylesheet(@Nonnull StyleOrigin origin, @Nonnull String str) {
         invalidate();
-        getMap(origin).put(str, new ParsedStylesheetEntry(origin, str));
+        getMap(origin).put(str, new StylesheetEntry(origin, str));
     }
 
     private void invalidate() {
@@ -130,7 +137,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    private LinkedHashMap<Object, ParsedStylesheetEntry> getMap(StyleOrigin origin) {
+    private LinkedHashMap<Object, StylesheetEntry> getMap(StyleOrigin origin) {
         switch (origin) {
             case AUTHOR:
                 return authorList;
@@ -143,7 +150,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    private void setMap(StyleOrigin origin, LinkedHashMap<Object, ParsedStylesheetEntry> newValue) {
+    private void setMap(StyleOrigin origin, LinkedHashMap<Object, StylesheetEntry> newValue) {
         switch (origin) {
             case AUTHOR:
                 authorList = newValue;
@@ -162,28 +169,28 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Override
     public <T> void setStylesheets(@Nonnull StyleOrigin origin, @Nullable URI documentHome, @Nullable List<T> stylesheets) {
         invalidate();
-        LinkedHashMap<Object, ParsedStylesheetEntry> oldMap = getMap(origin);
+        LinkedHashMap<Object, StylesheetEntry> oldMap = getMap(origin);
         if (stylesheets == null) {
             oldMap.clear();
             return;
         }
-        LinkedHashMap<Object, ParsedStylesheetEntry> newMap = new LinkedHashMap<>();
+        LinkedHashMap<Object, StylesheetEntry> newMap = new LinkedHashMap<>();
         for (T t : stylesheets) {
             if (t instanceof URI) {
                 URI uri = (URI) t;
                 URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
-                ParsedStylesheetEntry old = oldMap.get(resolvedUri);
+                StylesheetEntry old = oldMap.get(resolvedUri);
                 if (false && old != null) { // XXX we always need to reload the file!
                     newMap.put(resolvedUri, old);
                 } else {
-                    newMap.put(resolvedUri, new ParsedStylesheetEntry(origin, resolvedUri));
+                    newMap.put(resolvedUri, new StylesheetEntry(origin, resolvedUri));
                 }
             } else if (t instanceof String) {
-                ParsedStylesheetEntry old = oldMap.get(t);
+                StylesheetEntry old = oldMap.get(t);
                 if (old != null) {
                     newMap.put(t, old);
                 } else {
-                    newMap.put(t, new ParsedStylesheetEntry(origin, (String) t));
+                    newMap.put(t, new StylesheetEntry(origin, (String) t));
                 }
             } else {
                 throw new IllegalArgumentException("illegal item " + t);
@@ -193,17 +200,17 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Nonnull
-    protected Collection<ParsedStylesheetEntry> getAuthorStylesheets() {
+    protected Collection<StylesheetEntry> getAuthorStylesheets() {
         return authorList.values();
     }
 
     @Nonnull
-    protected Collection<ParsedStylesheetEntry> getUserAgentStylesheets() {
+    protected Collection<StylesheetEntry> getUserAgentStylesheets() {
         return userAgentList.values();
     }
 
     @Nonnull
-    protected Collection<ParsedStylesheetEntry> getInlineStylesheets() {
+    protected Collection<StylesheetEntry> getInlineStylesheets() {
         return inlineList.values();
     }
 
@@ -215,7 +222,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         selectorModel.reset(elem);
 
         // The stylesheet is a user-agent stylesheet
-        Collection<ParsedStylesheetEntry> uaStylesheets = getUserAgentStylesheets();
+        Collection<StylesheetEntry> uaStylesheets = getUserAgentStylesheets();
         Map<String, ImmutableList<CssToken>> uaCustomProperties = getUserAgentCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, uaStylesheets)) {
             try {
@@ -305,9 +312,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * @param stylesheets the stylesheets
      * @return list of applicable declarations
      */
-    private List<Declaration> collectApplicableDeclarations(E elem, Collection<ParsedStylesheetEntry> stylesheets) {
+    private List<Declaration> collectApplicableDeclarations(E elem, Collection<StylesheetEntry> stylesheets) {
         List<Map.Entry<Integer, Declaration>> applicableDeclarations = new ArrayList<>();
-        for (ParsedStylesheetEntry e : stylesheets) {
+        for (StylesheetEntry e : stylesheets) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {
                 continue;
@@ -371,9 +378,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return functionProcessor == null ? "" : functionProcessor.getHelpText();
     }
 
-    private Map<String, ImmutableList<CssToken>> collectCustomProperties(Collection<ParsedStylesheetEntry> stylesheets) {
+    private Map<String, ImmutableList<CssToken>> collectCustomProperties(Collection<StylesheetEntry> stylesheets) {
         Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
-        for (ParsedStylesheetEntry s : stylesheets) {
+        for (StylesheetEntry s : stylesheets) {
             Stylesheet stylesheet = s.getStylesheet();
             if (stylesheet != null) {
                 collectCustomProperties(stylesheet, customProperties);
@@ -409,7 +416,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    protected class ParsedStylesheetEntry {
+    protected class StylesheetEntry {
 
         private StyleOrigin origin;
         @Nullable
@@ -417,7 +424,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         @Nullable
         private Stylesheet stylesheet;
 
-        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull URI uri) {
+        public StylesheetEntry(StyleOrigin origin, @Nonnull URI uri) {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
@@ -432,11 +439,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
-        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull Stylesheet stylesheet) {
+        public StylesheetEntry(StyleOrigin origin, @Nonnull Stylesheet stylesheet) {
             this.origin = origin;
             this.stylesheet = stylesheet;
         }
-        public ParsedStylesheetEntry(StyleOrigin origin, @Nonnull String str) {
+
+        public StylesheetEntry(StyleOrigin origin, @Nonnull String str) {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
