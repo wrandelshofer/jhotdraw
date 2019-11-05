@@ -5,43 +5,12 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.css.ast.AbstractAttributeSelector;
-import org.jhotdraw8.css.ast.AdjacentSiblingCombinator;
-import org.jhotdraw8.css.ast.AndCombinator;
-import org.jhotdraw8.css.ast.AtRule;
-import org.jhotdraw8.css.ast.ChildCombinator;
-import org.jhotdraw8.css.ast.ClassSelector;
-import org.jhotdraw8.css.ast.DashMatchSelector;
-import org.jhotdraw8.css.ast.Declaration;
-import org.jhotdraw8.css.ast.DescendantCombinator;
-import org.jhotdraw8.css.ast.EqualsMatchSelector;
-import org.jhotdraw8.css.ast.ExistsMatchSelector;
-import org.jhotdraw8.css.ast.FunctionPseudoClassSelector;
-import org.jhotdraw8.css.ast.GeneralSiblingCombinator;
-import org.jhotdraw8.css.ast.IdSelector;
-import org.jhotdraw8.css.ast.IncludeMatchSelector;
-import org.jhotdraw8.css.ast.PrefixMatchSelector;
-import org.jhotdraw8.css.ast.PseudoClassSelector;
-import org.jhotdraw8.css.ast.Rule;
-import org.jhotdraw8.css.ast.SelectNothingSelector;
-import org.jhotdraw8.css.ast.Selector;
-import org.jhotdraw8.css.ast.SelectorGroup;
-import org.jhotdraw8.css.ast.SimplePseudoClassSelector;
-import org.jhotdraw8.css.ast.SimpleSelector;
-import org.jhotdraw8.css.ast.StyleRule;
-import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.css.ast.SubstringMatchSelector;
-import org.jhotdraw8.css.ast.SuffixMatchSelector;
-import org.jhotdraw8.css.ast.TypeSelector;
-import org.jhotdraw8.css.ast.UniversalSelector;
+import org.jhotdraw8.css.ast.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +130,7 @@ public class CssParser {
 
     @Nonnull
     public Stylesheet parseStylesheet(@Nonnull URL css) throws IOException {
-        try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream()))) {
+        try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream(), StandardCharsets.UTF_8))) {
             return parseStylesheet(in);
         }
     }
