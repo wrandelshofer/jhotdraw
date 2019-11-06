@@ -2,6 +2,7 @@ package org.jhotdraw8.app.action.file;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -120,9 +121,15 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 exception.printStackTrace();
                 Resources labels = ApplicationLabels.getResources();
-                Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
+
+                TextArea textArea = new TextArea(createErrorMessage(exception));
+                textArea.setEditable(false);
+                textArea.setWrapText(true);
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
+                alert.getDialogPane().setContent(textArea);
                 alert.showAndWait();
                 v.removeDisabler(workState);
             } else {
