@@ -112,4 +112,12 @@ public class CssColor implements Paintable {
         return new CssColor(value, Color.valueOf(value));
     }
 
+    public static CssColor ofColor(Color c) {
+        return c == null ? null : new CssColor(c);
+    }
+
+    public static Color toColor(CssColor c) {
+        return c == null ? null : c.getColor();
+    }
+
 }

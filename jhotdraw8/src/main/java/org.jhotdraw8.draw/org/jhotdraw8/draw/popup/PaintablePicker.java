@@ -18,9 +18,11 @@ public class PaintablePicker extends AbstractPicker<Paintable> {
         if (dialog == null) {
             dialog = new CssColorDialog(anchor.getScene().getWindow());
         }
-        dialog.setOnUse(() -> callback.accept(true, dialog.getCustomColor()));
-        dialog.setOnSave(() -> callback.accept(true, dialog.getCustomColor()));
+
+        dialog.setOnUse(() -> callback.accept(true, dialog.getCurrentColor()));
+        dialog.setOnSave(() -> callback.accept(true, dialog.getCurrentColor()));
         dialog.setCurrentColor(initialValue);
+
     }
 
     @Override
@@ -31,5 +33,4 @@ public class PaintablePicker extends AbstractPicker<Paintable> {
         );
         dialog.show();
     }
-
 }
