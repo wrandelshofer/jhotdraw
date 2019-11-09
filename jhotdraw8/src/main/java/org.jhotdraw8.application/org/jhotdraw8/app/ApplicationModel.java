@@ -140,4 +140,5 @@ public interface ApplicationModel {
      * @return the preferences
      */
     Preferences getPreferences();
+
 }

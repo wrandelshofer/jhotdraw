@@ -103,7 +103,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     private transient ResourceBundle resource;
 
     /**
-     * Creates a new ClasspathResources object which wraps the provided resource bundle.
+     * Creates a new object which wraps the provided resource bundle.
      *
      * @param baseName the base name
      * @param locale   the locale
@@ -140,7 +140,9 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
             try {
                 potentialParent = new ModulepathResources(parentModule, parentBaseName, locale);
             } catch (MissingResourceException e) {
-                MissingResourceException ex = new MissingResourceException("Can't find parent bundle $parent=\"" + moduleAndParentBaseName + "\" specified in " + module + "," + baseName + "," + locale, baseName, "");
+                MissingResourceException ex = new MissingResourceException(
+                        "Can't find parent bundle $parent=\"" + moduleAndParentBaseName +
+                                "\" specified in " + module + "," + baseName + "," + locale, baseName, "");
                 ex.initCause(e);
                 throw ex;
             }

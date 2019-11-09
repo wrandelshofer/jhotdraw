@@ -5,7 +5,7 @@
     <content url="file://$MODULE_DIR$/src/doc">
       <sourceFolder url="file://$MODULE_DIR$/src/doc/java" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="12" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="saxon9" level="project" />
   </component>

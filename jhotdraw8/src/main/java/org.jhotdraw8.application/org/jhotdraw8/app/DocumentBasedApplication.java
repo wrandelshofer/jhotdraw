@@ -28,6 +28,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
@@ -297,19 +298,10 @@ public class DocumentBasedApplication extends AbstractApplication {
         HierarchicalMap<String, Action> map = view.getActionMap();
         map.put(CloseFileAction.ID, new CloseFileAction(DocumentBasedApplication.this, view));
 
-        Stage stage = new Stage();
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(view.getNode());
-        if (!isSystemMenuSupported) {
-            MenuBar mb = createMenuBar(stage, view.getActionMap());
-            mb.setUseSystemMenuBar(true);
-            borderPane.setTop(mb);
-        }
-        Scene scene = new Scene(borderPane);
+        Stage stage = createStage(view);
 
         PreferencesUtil.installStagePrefsHandler(model.getPreferences(), "stage", stage);
 
-        stage.setScene(scene);
         stage.setOnCloseRequest(event -> {
             event.consume();
 
@@ -379,6 +371,22 @@ public class DocumentBasedApplication extends AbstractApplication {
         }
         stage.show();
         Platform.runLater(view::start);
+    }
+
+    @Nonnull
+    protected Stage createStage(@Nonnull DocumentBasedActivity view) {
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNIFIED);
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(view.getNode());
+        if (!isSystemMenuSupported) {
+            MenuBar mb = createMenuBar(stage, view.getActionMap());
+            mb.setUseSystemMenuBar(true);
+            borderPane.setTop(mb);
+        }
+        Scene scene = new Scene(borderPane);
+        stage.setScene(scene);
+        return stage;
     }
 
     /**

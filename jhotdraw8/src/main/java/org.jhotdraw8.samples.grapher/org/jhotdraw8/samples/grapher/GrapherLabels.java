@@ -13,8 +13,9 @@ public class GrapherLabels {
 
     public final static String RESOURCE_BUNDLE = "org.jhotdraw8.samples.grapher.Labels";
 
+    private final static String MODULE_NAME = "org.jhotdraw8.samples.grapher";
     public static Resources getResources() {
-        return Resources.getResources("org.jhotdraw8.samples.grapher", RESOURCE_BUNDLE);
+        return Resources.getResources(MODULE_NAME, RESOURCE_BUNDLE);
     }
 
 }
