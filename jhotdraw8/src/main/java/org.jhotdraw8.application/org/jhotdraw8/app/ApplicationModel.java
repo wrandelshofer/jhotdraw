@@ -11,6 +11,8 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.gui.URIChooser;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletionStage;
 import java.util.prefs.Preferences;
@@ -140,5 +142,16 @@ public interface ApplicationModel {
      * @return the preferences
      */
     Preferences getPreferences();
+
+    /**
+     * Returns a list of stylesheets that are added to all scenes created
+     * by the application.
+     *
+     * @return list of scene stylesheets
+     */
+    default List<String> getSceneStylesheets() {
+        return Collections.emptyList();
+    }
+
 
 }

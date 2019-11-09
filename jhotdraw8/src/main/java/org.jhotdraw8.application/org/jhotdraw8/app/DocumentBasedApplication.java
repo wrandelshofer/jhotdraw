@@ -385,6 +385,8 @@ public class DocumentBasedApplication extends AbstractApplication {
             borderPane.setTop(mb);
         }
         Scene scene = new Scene(borderPane);
+        scene.getStylesheets().addAll(model.getSceneStylesheets());
+
         stage.setScene(scene);
         return stage;
     }

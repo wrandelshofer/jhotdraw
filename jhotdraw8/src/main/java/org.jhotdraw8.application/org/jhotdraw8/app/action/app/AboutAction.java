@@ -70,6 +70,9 @@ public class AboutAction extends AbstractApplicationAction {
                     }
                 }
         );
+        alert.getDialogPane().getScene().getStylesheets().addAll(
+                getApplication().getModel().getSceneStylesheets()
+        );
         alert.show();
     }
 }

@@ -14,6 +14,8 @@ import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -98,15 +100,13 @@ public interface Resources {
     }
 
     static Resources getResources(String moduleName, String resourceBundle) {
-        return ModulepathResources.getResources(moduleName, resourceBundle);
-        /*
         try {
             Class<?> clazz = Class.forName("org.jhotdraw8.util.ModulepathResources");
             Method method = ((Class<?>) clazz).getMethod("getResources", String.class, String.class);
             return (Resources) method.invoke(null, moduleName, resourceBundle);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
             return ClasspathResources.getResources(resourceBundle);
-        }*/
+        }
     }
 
     ResourceBundle asResourceBundle();
