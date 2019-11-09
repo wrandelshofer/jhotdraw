@@ -283,7 +283,7 @@ public class BinaryPListParser {
      * @param file A file containing a binary PList.
      * @return Returns the parsed Element.
      */
-    public Document parse(File file) throws IOException, ParserConfigurationException {
+    public Document parse(File file) throws IOException {
         RandomAccessFile raf = null;
         byte[] buf = null;
         try {
@@ -339,7 +339,12 @@ public class BinaryPListParser {
 
         // Convert the object table to XML and return it
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = dbf.newDocumentBuilder();
+        DocumentBuilder builder = null;
+        try {
+            builder = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new IOException("Cannot create document builder", e);
+        }
         Document doc = builder.newDocument();
 
         Element root = doc.createElement("plist");
@@ -394,20 +399,20 @@ public class BinaryPListParser {
             elem = doc.createElement("string");
             elem.appendChild(doc.createTextNode((String) object));
         } else if (object instanceof Integer) {
-            elem = doc.createElement("number");
+            elem = doc.createElement("integer");
             elem.appendChild(doc.createTextNode(object.toString()));
         } else if (object instanceof Long) {
-            elem = doc.createElement("number");
+            elem = doc.createElement("integer");
             elem.appendChild(doc.createTextNode(object.toString()));
         } else if (object instanceof Float) {
-            elem = doc.createElement("number");
+            elem = doc.createElement("real");
             elem.appendChild(doc.createTextNode(object.toString()));
         } else if (object instanceof Double) {
-            elem = doc.createElement("number");
+            elem = doc.createElement("real");
             elem.appendChild(doc.createTextNode(object.toString()));
         } else if (object instanceof Boolean) {
-            elem = doc.createElement("boolean");
-            elem.appendChild(doc.createTextNode(object.toString()));
+            boolean b = (Boolean) object;
+            elem = doc.createElement(b ? "true" : "false");
         } else if (object instanceof byte[]) {
             elem = doc.createElement("data");
             elem.appendChild(doc.createTextNode(Base64.getEncoder().encodeToString((byte[]) object)));

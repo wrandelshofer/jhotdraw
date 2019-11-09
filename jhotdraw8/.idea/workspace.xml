@@ -40,23 +40,12 @@
     </treeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Improves font chooser.">
-      <change afterPath="$PROJECT_DIR$/nbproject/jfx-impl_backup_18.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw7/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_openjfx_javafx_controls_12_0_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_openjfx_javafx_controls_13_ea_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Fixes startup problem of Grapher.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/UPDATED.TXT" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/UPDATED.TXT" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/jfx-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/jfx-impl.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/org.jhotdraw8.documentation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/org.jhotdraw8.documentation.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/ApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/ApplicationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/DocumentBasedApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/DocumentBasedApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ModulepathResources.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/ModulepathResources.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/Resources.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/Resources.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/Labels_de.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/Labels_de.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/GrapherLabels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/GrapherLabels.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/data/Binary Property List.plist" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/data/Binary Property List.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/data/XML Property List.plist" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/data/XML Property List.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParserTest.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="ddd23f39-e07d-4784-83ff-2528e00c82ed" name="IDEA" comment="">
@@ -78,6 +67,9 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/jhotdraw8$Ferro.ic" NAME="Ferro Coverage Results" MODIFIED="1530031161226" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="245" />
+  </component>
   <component name="DefaultGradleProjectSettings">
     <option name="testRunner" value="GRADLE" />
     <option name="delegatedBuild" value="true" />
@@ -91,9 +83,9 @@
         <option value="Singleton" />
         <option value="module-info" />
         <option value="package-info" />
-        <option value="JUnit5 Test Class" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -121,7 +113,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/org/jhotdraw8/collection" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.3218391" />
@@ -139,43 +131,44 @@
       <recent name="org.jhotdraw8.css" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.jhotdraw8.macos" />
       <recent name="org.jhotdraw8.samples.diagrammer.model" />
       <recent name="ch.systransis.arl.ferro.graph" />
       <recent name="org.jhotdraw8.graph" />
       <recent name="ch.systransis.arl.ferro.model.css" />
-      <recent name="org.jhotdraw8.css.text" />
-    </key>
-    <key name="IntroduceConstantDialog.RECENTS_KEY">
-      <recent name="ch.systransis.arl.ferro.io.TAFormatConstants" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
       <recent name="groovy.util.GroovyTestCase" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.jhotdraw8.macos" />
       <recent name="org.jhotdraw8.css.text" />
       <recent name="org.jhotdraw8.css" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/src/main/java" />
+      <recent name="$PROJECT_DIR$/lib/compile/modulepath-off" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher" />
       <recent name="$PROJECT_DIR$/doc/specification/figures" />
       <recent name="$PROJECT_DIR$/doc/specification/design/draw" />
       <recent name="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/doc/specification/design/graph" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.jhotdraw8.macos" />
       <recent name="org.jhotdraw8.draw.popup" />
       <recent name="org.jhotdraw8.samples.modeler.figure" />
       <recent name="org.jhotdraw8.samples.modeler.spi" />
       <recent name="org.jhotdraw8.samples.grapher.spi" />
-      <recent name="org.jhotdraw8.samples.grapher" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java" />
-      <recent name="$PROJECT_DIR$/lib/compile/modulepath-off" />
-      <recent name="$PROJECT_DIR$/lib/compile/modulepath" />
-      <recent name="$PROJECT_DIR$/ext/src/main/module-info" />
-      <recent name="$PROJECT_DIR$/ext/src/main" />
+    <key name="IntroduceConstantDialog.RECENTS_KEY">
+      <recent name="ch.systransis.arl.ferro.io.TAFormatConstants" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -190,35 +183,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Grapher">
-    <configuration name="DepsMain (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ch.randelshofer.sample.deps.DepsMain" />
-      <module name="org.jhotdraw8.application" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ch.randelshofer.sample.deps.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DepsMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.app.DepsMain" />
-      <module name="org.jhotdraw8.application" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.jhotdraw8.app.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.MacOSPreferencesTest.test">
     <configuration name="FontChooserMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.mini.FontChooserMain" />
       <module name="org.jhotdraw8.samples.misc" />
@@ -241,30 +206,75 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PertMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.pert.PertMain" />
-      <module name="org.jhotdraw8.samples.pert" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.jhotdraw8.samples.pert.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in org.jhotdraw8.samples.modeler" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="org.jhotdraw8.samples.modeler" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
+    <configuration name="BinaryPListParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="org.jhotdraw8.application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.macos.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.macos" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.macos.BinaryPListParserTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BinaryPListParserTest.readXmlPropertyList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="org.jhotdraw8.application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.macos.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.macos" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.macos.BinaryPListParserTest" />
+      <option name="METHOD_NAME" value="readXmlPropertyList" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BinaryPListParserTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="org.jhotdraw8.application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.macos.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.macos" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.macos.BinaryPListParserTest" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MacOSPreferencesTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="org.jhotdraw8.application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.jhotdraw8.macos.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.macos" />
+      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.macos.MacOSPreferencesTest" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -290,25 +300,25 @@
       <item itemvalue="Application.Grapher" />
       <item itemvalue="Application.Teddy" />
       <item itemvalue="Application.Modeler" />
-      <item itemvalue="Application.PertMain" />
-      <item itemvalue="Application.DepsMain" />
-      <item itemvalue="Application.DepsMain (1)" />
       <item itemvalue="Application.FontChooserMain" />
-      <item itemvalue="JUnit.All in org.jhotdraw8.samples.modeler" />
+      <item itemvalue="JUnit.BinaryPListParserTest.readXmlPropertyList" />
+      <item itemvalue="JUnit.BinaryPListParserTest.test" />
+      <item itemvalue="JUnit.MacOSPreferencesTest.test" />
+      <item itemvalue="JUnit.BinaryPListParserTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.MacOSPreferencesTest.test" />
+        <item itemvalue="JUnit.BinaryPListParserTest.test" />
+        <item itemvalue="JUnit.BinaryPListParserTest" />
+        <item itemvalue="JUnit.BinaryPListParserTest.readXmlPropertyList" />
         <item itemvalue="Application.FontChooserMain" />
-        <item itemvalue="Application.DepsMain" />
-        <item itemvalue="Application.DepsMain (1)" />
-        <item itemvalue="Application.PertMain" />
-        <item itemvalue="JUnit.All in org.jhotdraw8.samples.modeler" />
       </list>
     </recent_temporary>
   </component>
   <component name="StructureViewFactory">
     <option name="AUTOSCROLL_MODE" value="false" />
-    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR,SHOW_FIELDS" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -353,34 +363,6 @@
       <workItem from="1567065745590" duration="899000" />
       <workItem from="1568017202380" duration="685000" />
       <workItem from="1568185074285" duration="454000" />
-    </task>
-    <task id="LOCAL-00071" summary="Formats code.">
-      <created>1546684454292</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1546684454292</updated>
-    </task>
-    <task id="LOCAL-00072" summary="Formats code.">
-      <created>1546684514777</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1546684514777</updated>
-    </task>
-    <task id="LOCAL-00073" summary="Fixes compiler warnings.">
-      <created>1546684537652</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1546684537652</updated>
-    </task>
-    <task id="LOCAL-00074" summary="Fixes compiler warnings.&#10;Always copies input arrays.">
-      <created>1546684554588</created>
-      <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1546684554588</updated>
     </task>
     <task id="LOCAL-00075" summary="Fixes compiler warnings.">
       <created>1546866795845</created>
@@ -697,40 +679,36 @@
       <option name="project" value="LOCAL" />
       <updated>1571568732234</updated>
     </task>
-    <option name="localTasksCounter" value="120" />
+    <task id="LOCAL-00120" summary="Fixes startup problem of Grapher.">
+      <created>1573296014102</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1573296014102</updated>
+    </task>
+    <task id="LOCAL-00121" summary="Adds tests for reading PLIST files.&#10;Adds preliminary code for a dark-theme.">
+      <created>1573302629383</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1573302629383</updated>
+    </task>
+    <task id="LOCAL-00122" summary="Adds preliminary code for a dark theme.">
+      <created>1573302653428</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1573302653428</updated>
+    </task>
+    <task id="LOCAL-00123" summary="Adds test data.">
+      <created>1573302664158</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1573302664158</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
-  </component>
-  <component name="TestHistory">
-    <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 10m 02s.xml">
-      <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="42 - 2019.03.06 at 14h 12m 03s.xml">
-      <configuration name="42" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="42 - 2019.03.06 at 14h 16m 35s.xml">
-      <configuration name="42" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="42 - 2019.03.06 at 14h 16m 46s.xml">
-      <configuration name="42" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 16m 55s.xml">
-      <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 23m 05s.xml">
-      <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_org_jhotdraw8_draw - 2019.03.06 at 14h 24m 04s.xml">
-      <configuration name="All in org.jhotdraw8.draw" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_org_jhotdraw8_application - 2019.03.06 at 14h 24m 10s.xml">
-      <configuration name="All in org.jhotdraw8.application" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_org_jhotdraw8_samples_modeler - 2019.03.06 at 14h 24m 14s.xml">
-      <configuration name="All in org.jhotdraw8.samples.modeler" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_org_jhotdraw8_samples_modeler - 2019.03.13 at 21h 28m 52s.xml">
-      <configuration name="All in org.jhotdraw8.samples.modeler" configurationId="JUnit" />
-    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -787,10 +765,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Reduces font options." />
-    <MESSAGE value="Tweaks layout." />
-    <MESSAGE value="Renames providers." />
-    <MESSAGE value="Temporarily does not build javadoc for dist." />
     <MESSAGE value="Fixes code that broke unit tests.&#10;Updates to JUnit 5.3.2." />
     <MESSAGE value="Updates AbouutAction and supporting API in ApplicationModel." />
     <MESSAGE value="Improves documentation.&#10;&quot;Designs&quot; are now called &quot;Blocks&quot;." />
@@ -812,7 +786,11 @@
     <MESSAGE value="Fixes indentation of checkbox." />
     <MESSAGE value="Improves font chooser." />
     <MESSAGE value="Adds non-working color chooser dialog." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds non-working color chooser dialog." />
+    <MESSAGE value="Fixes startup problem of Grapher." />
+    <MESSAGE value="Adds tests for reading PLIST files.&#10;Adds preliminary code for a dark-theme." />
+    <MESSAGE value="Adds preliminary code for a dark theme." />
+    <MESSAGE value="Adds test data." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds test data." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -841,26 +819,26 @@
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/Resources.java</url>
-          <line>109</line>
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParserTest.java</url>
+          <line>102</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/util/Resources.java</url>
-          <line>107</line>
-          <option name="timeStamp" value="12" />
+          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParser.java</url>
+          <line>422</line>
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/spi/GrapherResourceBundleProvider.java</url>
-          <line>15</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/spi/DrawResourceBundleProvider.java</url>
-          <line>14</line>
-          <option name="timeStamp" value="14" />
+          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParser.java</url>
+          <line>425</line>
+          <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/jhotdraw8$MacOSPreferencesTest_test.ic" NAME="MacOSPreferencesTest.test Coverage Results" MODIFIED="1573307968126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>org.jhotdraw8.macos.*</FILTER>
+    </SUITE>
   </component>
 </project>

@@ -41,15 +41,15 @@ class BinaryPListParserTest {
     @Test
     public void test() throws Exception {
         File xmlFile = new File("../../../test/data/XML Property List.plist");
-        final Document docFromXml = parseXmlPropertyList(xmlFile);
+        final Document docFromXml = readXmlPropertyList(xmlFile);
         File binaryFile = new File("../../../test/data/Binary Property List.plist");
-        final Document docFromBinary = parseBinaryPropertyList(binaryFile);
+        final Document docFromBinary = readBinaryPropertyList(binaryFile);
         writeDocument(System.out, docFromXml, NO_INDENT_XML_PROPERTIES);
         System.out.println();
         writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
     }
 
-    private static Document parseXmlPropertyList(File file) throws Exception {
+    private static Document readXmlPropertyList(File file) throws Exception {
         InputSource inputSource = new InputSource(file.toString());
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -58,7 +58,7 @@ class BinaryPListParserTest {
         return doc;
     }
 
-    private static Document parseBinaryPropertyList(File file) throws Exception {
+    private static Document readBinaryPropertyList(File file) throws Exception {
         return new BinaryPListParser().parse(file);
     }
 
