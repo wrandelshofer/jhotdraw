@@ -71,7 +71,7 @@ public class AboutAction extends AbstractApplicationAction {
                 }
         );
         alert.getDialogPane().getScene().getStylesheets().addAll(
-                getApplication().getModel().getSceneStylesheets()
+                getApplication().getModel().getSceneStylesheets().asList()
         );
         alert.show();
     }

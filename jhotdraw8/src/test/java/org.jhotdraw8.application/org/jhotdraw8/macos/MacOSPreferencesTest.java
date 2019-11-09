@@ -1,5 +1,6 @@
 package org.jhotdraw8.macos;
 
+import org.jhotdraw8.collection.ImmutableMaps;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -8,7 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,13 +23,13 @@ class MacOSPreferencesTest {
             list.addAll(Arrays.asList(
                     dynamicTest("nonexistent key", () -> doTest(file, "key", null)),
                     dynamicTest("array", () -> doTest(file, "a array", Arrays.asList("the item 0 value", "the item 1 value"))),
-                    dynamicTest("dict", () -> doTest(file, "a dict", Map.of("a child 1", "the child 1 value", "a child 2", "the child 2 value"))),
+                    dynamicTest("dict", () -> doTest(file, "a dict", ImmutableMaps.of("a child 1", "the child 1 value", "a child 2", "the child 2 value").asMap())),
                     dynamicTest("sub-dict access", () -> doTest(file, "a dict\ta child 2", "the child 2 value")),
 
                     dynamicTest("boolean false", () -> doTest(file, "a boolean false", false)),
                     dynamicTest("boolean true", () -> doTest(file, "a boolean true", true)),
                     dynamicTest("data", () -> doTest(file, "a data", new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe})),
-                    dynamicTest("date", () -> doTest(file, "a date", DatatypeFactory.newDefaultInstance().newXMLGregorianCalendar("2019-11-09T11:39:03Z"))),
+                    dynamicTest("date", () -> doTest(file, "a date", DatatypeFactory.newInstance().newXMLGregorianCalendar("2019-11-09T11:39:03Z"))),
                     dynamicTest("float", () -> doTest(file, "a float", 0.42)),
                     dynamicTest("integer", () -> doTest(file, "a integer", 42L)),
                     dynamicTest("long", () -> doTest(file, "a long", 4294967296L)),

@@ -40,12 +40,18 @@
     </treeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Fixes startup problem of Grapher.">
+    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Implements reading of macOs preferences from PList files.">
+      <change afterPath="$PROJECT_DIR$/src/test/data/Temp.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/data/Binary Property List.plist" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/data/Binary Property List.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/data/XML Property List.plist" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/data/XML Property List.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/ApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/ApplicationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/DocumentBasedApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/DocumentBasedApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/action/app/AboutAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/app/action/app/AboutAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/MacOSPreferences.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org/jhotdraw8/macos/MacOSPreferences.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/GrapherApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/GrapherApplicationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/dark-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/dark-theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/grapher.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.grapher/org/jhotdraw8/samples/grapher/grapher.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/MacOSPreferencesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/MacOSPreferencesTest.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="ddd23f39-e07d-4784-83ff-2528e00c82ed" name="IDEA" comment="">
@@ -183,7 +189,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.MacOSPreferencesTest.test">
+  <component name="RunManager" selected="Application.Grapher">
     <configuration name="FontChooserMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.mini.FontChooserMain" />
       <module name="org.jhotdraw8.samples.misc" />
@@ -363,13 +369,6 @@
       <workItem from="1567065745590" duration="899000" />
       <workItem from="1568017202380" duration="685000" />
       <workItem from="1568185074285" duration="454000" />
-    </task>
-    <task id="LOCAL-00075" summary="Fixes compiler warnings.">
-      <created>1546866795845</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1546866795846</updated>
     </task>
     <task id="LOCAL-00076" summary="Updates documentation.">
       <created>1549203706593</created>
@@ -707,7 +706,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573302664158</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="Implements reading of macOs preferences from PList files.">
+      <created>1573311835965</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1573311835965</updated>
+    </task>
+    <option name="localTasksCounter" value="125" />
     <servers />
   </component>
   <component name="TodoView">
@@ -765,7 +771,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Fixes code that broke unit tests.&#10;Updates to JUnit 5.3.2." />
     <MESSAGE value="Updates AbouutAction and supporting API in ApplicationModel." />
     <MESSAGE value="Improves documentation.&#10;&quot;Designs&quot; are now called &quot;Blocks&quot;." />
     <MESSAGE value="Adds diagrams.&#10;Improves SVG export of italic and bold text." />
@@ -790,7 +795,8 @@
     <MESSAGE value="Adds tests for reading PLIST files.&#10;Adds preliminary code for a dark-theme." />
     <MESSAGE value="Adds preliminary code for a dark theme." />
     <MESSAGE value="Adds test data." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds test data." />
+    <MESSAGE value="Implements reading of macOs preferences from PList files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implements reading of macOs preferences from PList files." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

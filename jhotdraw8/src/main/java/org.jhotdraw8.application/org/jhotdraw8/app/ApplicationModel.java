@@ -8,11 +8,11 @@ import javafx.scene.control.MenuBar;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.gui.URIChooser;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletionStage;
 import java.util.prefs.Preferences;
@@ -149,8 +149,8 @@ public interface ApplicationModel {
      *
      * @return list of scene stylesheets
      */
-    default List<String> getSceneStylesheets() {
-        return Collections.emptyList();
+    default ReadOnlyList<String> getSceneStylesheets() {
+        return ImmutableLists.emptyList();
     }
 
 

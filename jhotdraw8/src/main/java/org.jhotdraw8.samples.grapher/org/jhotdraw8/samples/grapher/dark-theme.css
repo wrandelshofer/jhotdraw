@@ -32,5 +32,8 @@
     -fx-mid-text-color: #333;
     -fx-light-text-color: #e1e2e3;
 
+    /* Default buttons color, this is similar to accent but more subtle */
+    -fx-default-button: #1763d8;
+
 }
 

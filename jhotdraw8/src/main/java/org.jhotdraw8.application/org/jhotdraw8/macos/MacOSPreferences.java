@@ -8,6 +8,7 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -260,8 +261,8 @@ public class MacOSPreferences {
                 break;
             case "date":
                 try {
-                    parsedValue = DatatypeFactory.newDefaultInstance().newXMLGregorianCalendar(getContent(value));
-                } catch (IllegalArgumentException e) {
+                    parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
+                } catch (IllegalArgumentException | DatatypeConfigurationException e) {
                     throw new IOException(e);
                 }
                 break;

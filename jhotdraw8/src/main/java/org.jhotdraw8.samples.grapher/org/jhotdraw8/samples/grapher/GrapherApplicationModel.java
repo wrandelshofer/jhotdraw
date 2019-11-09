@@ -11,14 +11,15 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.app.action.file.PrintFileAction;
 import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.URIExtensionFilter;
+import org.jhotdraw8.macos.MacOSPreferences;
 import org.jhotdraw8.svg.SvgExporter;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static org.jhotdraw8.io.DataFormats.registerDataFormat;
@@ -62,8 +63,12 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     }
 
     @Override
-    public List<String> getSceneStylesheets() {
-        return Arrays.asList(getClass().getResource("dark-theme.css").toString()
-        );
+    public ReadOnlyList<String> getSceneStylesheets() {
+        final Object value = MacOSPreferences.get(MacOSPreferences.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
+        if ("Dark".equals(value)) {
+            return ImmutableLists.of(getClass().getResource("dark-theme.css").toString());
+        } else {
+            return ImmutableLists.emptyList();
+        }
     }
 }
