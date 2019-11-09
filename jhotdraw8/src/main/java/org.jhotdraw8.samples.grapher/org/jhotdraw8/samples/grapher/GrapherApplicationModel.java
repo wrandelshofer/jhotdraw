@@ -17,6 +17,8 @@ import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.svg.SvgExporter;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static org.jhotdraw8.io.DataFormats.registerDataFormat;
@@ -57,5 +59,11 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     @Override
     public ResourceBundle getResources() {
         return GrapherLabels.getResources().asResourceBundle();
+    }
+
+    @Override
+    public List<String> getSceneStylesheets() {
+        return Arrays.asList(getClass().getResource("dark-theme.css").toString()
+        );
     }
 }
