@@ -25,6 +25,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
@@ -103,6 +104,7 @@ import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
 import org.jhotdraw8.draw.io.SimpleXmlIO;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
+import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.draw.tool.ConnectionTool;
 import org.jhotdraw8.draw.tool.CreationTool;
@@ -126,6 +128,7 @@ import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -187,6 +190,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         LayerFigure layer = new LayerFigure();
         layer.set(StyleableFigure.ID, "layer1");
         d.addChild(layer);
+        applyUserAgentStylesheet(d);
         drawingView.setDrawing(d);
         return CompletableFuture.completedFuture(null);
     }
@@ -443,6 +447,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
             DrawingFigure drawing = (DrawingFigure) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
+            applyUserAgentStylesheet(drawing);
             return drawing;
         }).thenApply(drawing -> {
             drawingView.setDrawing(drawing);
@@ -490,4 +495,20 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         });
     }
 
+    private void applyUserAgentStylesheet(final Drawing d) {
+        try {
+            d.set(Drawing.USER_AGENT_STYLESHEETS,
+                    ImmutableLists.of(
+                            GrapherActivityController.class.getResource("user-agent.css").toURI()));
+            d.updateStyleManager();
+            final SimpleRenderContext ctx = new SimpleRenderContext();
+            for (final Figure f : d.preorderIterable()) {
+                f.updateCss();
+            }
+            d.layoutAll(ctx);
+
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException("can't load my own resources", e);
+        }
+    }
 }
