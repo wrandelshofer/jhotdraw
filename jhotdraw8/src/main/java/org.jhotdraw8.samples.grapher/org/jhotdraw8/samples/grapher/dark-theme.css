@@ -1,11 +1,9 @@
 .root {
     /* The base color for objects.
-     * This is the background color of an about box on macOS.
      */
-    -fx-base: #343941;
+    -fx-base: #1d1d1d;
 
    /* Color for highlighting/accenting objects.
-     * This is the selection color of TextEdit on macOS.
    */
     -fx-accent: #3f628a;
 
@@ -13,10 +11,8 @@
      * tables.  See also -fx-text-inner-color, which should be used as the
      * -fx-text-fill value for text painted on top of backgrounds colored
      * with -fx-control-inner-background.
-     *
-     * This is the background color of text field TextEdit on macOS.
      */
-    -fx-control-inner-background: #1e1e1e;
+    -fx-control-inner-background: #2b2b2b;
 
     /* One of these colors will be chosen based upon a ladder calculation
      * that uses the brightness of a background color.  Instead of using these
@@ -30,7 +26,7 @@
      */
     -fx-dark-text-color: black;
     -fx-mid-text-color: #333;
-    -fx-light-text-color: #e1e2e3;
+    -fx-light-text-color: #bbbbbb;
 
     /* Default buttons color, this is similar to accent but more subtle */
     -fx-default-button: #1763d8;
