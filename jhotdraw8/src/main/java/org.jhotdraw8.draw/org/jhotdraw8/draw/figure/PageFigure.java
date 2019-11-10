@@ -332,7 +332,9 @@ public class PageFigure extends AbstractCompositeFigure
     @Override
     public void layout(@Nonnull RenderContext ctx) {
         int currentPage = 0;
-        ImmutableList<Transform> transforms = ImmutableLists.of(getPageTransform(currentPage));
+        final Transform pageTransform = getPageTransform(currentPage);
+        ImmutableList<Transform> transforms = pageTransform.isIdentity()
+                ? ImmutableLists.emptyList() : ImmutableLists.of(pageTransform);
 
         for (Figure child : getChildren()) {
             child.set(TRANSFORMS, transforms);
