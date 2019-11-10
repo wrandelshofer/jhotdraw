@@ -1219,7 +1219,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Drawing d = getDrawing();
         if (d != null) {
             for (Figure layer : d.getChildren()) {
-                if (layer.isEditable()) {
+                if (layer.isEditable() && layer.isVisible()) {
                     for (Figure f : layer.getChildren()) {
                         if (f.isSelectable()) {
                             figures.add(f);
