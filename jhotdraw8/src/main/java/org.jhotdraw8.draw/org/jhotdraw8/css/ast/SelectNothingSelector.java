@@ -10,6 +10,9 @@ import org.jhotdraw8.css.SelectorModel;
 
 /**
  * A "select nothing selector" matches nothing.
+ * <p>
+ * This selector is used, when the parser does not understand the
+ * syntax of the selector.
  *
  * @author Werner Randelshofer
  */

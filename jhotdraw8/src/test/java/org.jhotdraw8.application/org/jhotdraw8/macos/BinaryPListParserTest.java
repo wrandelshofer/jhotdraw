@@ -40,9 +40,9 @@ class BinaryPListParserTest {
 
     @Test
     public void test() throws Exception {
-        File xmlFile = new File("../../../test/data/XML Property List.plist");
+        File xmlFile = new File(getClass().getResource("XML Property List.plist").toURI());
         final Document docFromXml = readXmlPropertyList(xmlFile);
-        File binaryFile = new File("../../../test/data/Binary Property List.plist");
+        File binaryFile = new File(getClass().getResource("Binary Property List.plist").toURI());
         final Document docFromBinary = readBinaryPropertyList(binaryFile);
         writeDocument(System.out, docFromXml, NO_INDENT_XML_PROPERTIES);
         System.out.println();

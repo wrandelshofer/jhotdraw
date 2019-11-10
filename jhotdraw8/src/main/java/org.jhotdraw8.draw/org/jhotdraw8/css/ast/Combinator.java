@@ -6,6 +6,8 @@ package org.jhotdraw8.css.ast;
 
 /**
  * Abstract superclass for "combinator"s.
+ * <p>
+ * A combinator combines the results of two selectors.
  *
  * @author Werner Randelshofer
  */

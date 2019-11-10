@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class CssScannerNGTest {
+public class CssScannerTest {
 
-    public CssScannerNGTest() {
+    public CssScannerTest() {
     }
 
 

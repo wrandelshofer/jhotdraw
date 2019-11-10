@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import javax.xml.datatype.DatatypeFactory;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +19,8 @@ class MacOSPreferencesTest {
     @TestFactory
     List<DynamicTest> test() {
         List<DynamicTest> list = new ArrayList<>();
-        for (String file : Arrays.asList("../../../test/data/XML Property List.plist",
-                "../../../test/data/Binary Property List.plist")) {
+        for (String file : Arrays.asList("XML Property List.plist",
+                "Binary Property List.plist")) {
             list.addAll(Arrays.asList(
                     dynamicTest("nonexistent key", () -> doTest(file, "key", null)),
                     dynamicTest("array", () -> doTest(file, "a array", Arrays.asList("the item 0 value", "the item 1 value"))),
@@ -40,9 +41,10 @@ class MacOSPreferencesTest {
 
     }
 
-    private void doTest(String filename, String key, Object expectedValue) {
+    private void doTest(String filename, String key, Object expectedValue) throws URISyntaxException {
+        File file = new File(getClass().getResource(filename).toURI());
         System.out.println(filename + ", " + key.replaceAll("\t", "→") + " = " + expectedValue);
-        final Object actualValue = MacOSPreferences.get(new File(filename), key);
+        final Object actualValue = MacOSPreferences.get(file, key);
         if (expectedValue instanceof byte[]) {
             assertArrayEquals((byte[]) expectedValue, (byte[]) actualValue, "key=" + key);
         } else {
