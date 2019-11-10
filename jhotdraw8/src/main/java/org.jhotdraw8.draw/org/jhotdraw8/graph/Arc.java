@@ -5,9 +5,11 @@
 package org.jhotdraw8.graph;
 
 /**
- * Data record for an arc in a directed graph.
+ * Data record for an arrow with associated data in a directed graph
+ * ("arrow record" is abbreviated to "arc").
  * <p>
- * Provides the start and end vertex of the arc, and the arrow data of the arc.
+ * Provides the start and end vertex of the arrow, and the data associated
+ * to the arrow.
  * <p>
  * If a vertex has no predecessor, then start is null, and
  * method {@link #isRoot} returns true.
@@ -18,16 +20,16 @@ package org.jhotdraw8.graph;
 public class Arc<V, A> {
     private final V start;
     private final V end;
-    private final A arrow;
+    private final A data;
 
-    public Arc(V start, V end, A arrow) {
+    public Arc(V start, V end, A data) {
         this.start = start;
         this.end = end;
-        this.arrow = arrow;
+        this.data = data;
     }
 
-    public A getArrow() {
-        return arrow;
+    public A getData() {
+        return data;
     }
 
     public V getEnd() {

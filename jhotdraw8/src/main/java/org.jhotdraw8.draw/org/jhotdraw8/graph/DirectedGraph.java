@@ -25,7 +25,7 @@ import java.util.stream.StreamSupport;
  * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
  *
  * @param <V> the vertex type
- * @param <A> the arrow type
+ * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
 public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
@@ -108,7 +108,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     }
 
     /**
-     * Returns the direct successor arrows of the specified vertex.
+     * Returns the direct successor arrow datas of the specified vertex.
      *
      * @param vertex a vertex
      * @return a collection view on the direct successor arrows of vertex
@@ -152,10 +152,10 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     }
 
     /**
-     * Returns the direct successor arrows of the specified vertex.
+     * Returns the direct successor arcs of the specified vertex.
      *
      * @param vertex a vertex
-     * @return a collection view on the direct successor arrows of vertex
+     * @return a collection view on the direct successor arcs of vertex
      */
     @Nonnull
     default Collection<Arc<V, A>> getNextArcs(V vertex) {
@@ -213,7 +213,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     }
 
     /**
-     * Returns all arrows between two vertices.
+     * Returns all arrow datas between two vertices.
      *
      * @param v1 vertex 1
      * @param v2 vertex 2

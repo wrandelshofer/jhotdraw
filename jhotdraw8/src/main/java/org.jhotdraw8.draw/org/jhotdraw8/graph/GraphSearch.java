@@ -149,7 +149,7 @@ public class GraphSearch {
             done.add(start);
             for (Arc<V, A> entry : graph.getNextArcs(start)) {
                 V end = entry.getEnd();
-                A arrow = entry.getArrow();
+                A arrow = entry.getData();
                 if (!done.contains(end)) {
                     edges.add(new Edge<>(start, end, arrow, costf.applyAsDouble(start, end, arrow)));
                 }

@@ -23,7 +23,7 @@ import java.util.Collection;
  * having to deal with the arrow object.
  *
  * @param <V> the vertex type
- * @param <A> the arrow type
+ * @param <A> the arrow data type
  */
 public interface BareDirectedGraph<V, A> {
     /**
@@ -39,7 +39,7 @@ public interface BareDirectedGraph<V, A> {
     V getNext(@Nonnull V vertex, int index);
 
     /**
-     * Returns the arrow associated with the specified vertex and outgoing arrow
+     * Returns the arrow data associated with the specified vertex and outgoing arrow
      * index.
      *
      * @param vertex a vertex
@@ -70,9 +70,9 @@ public interface BareDirectedGraph<V, A> {
     Collection<V> getVertices();
 
     /**
-     * Returns all arrows.
+     * Returns all arrow data objects.
      *
-     * @return a collection view on all arrows
+     * @return a collection view on all arrow data objects
      */
     @Nonnull
     Collection<A> getArrows();

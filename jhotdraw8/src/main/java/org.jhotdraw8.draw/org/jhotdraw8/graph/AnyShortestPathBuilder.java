@@ -17,12 +17,12 @@ import java.util.function.ToDoubleFunction;
 
 /**
  * This path builder can be used to find any shortest path between
- * to vertices in a directed.
+ * to vertices in a directed graph.
  * <p>
  * Uses Dijkstra's alorithm for finding the shortest path.
  * <p>
- * The provided cost function must return a value greater than zero
- * for every edge in the graph.
+ * The provided cost function must return a positive value
+ * for every arrow in the graph.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
@@ -70,12 +70,11 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
 
         // Map with known costs from start. If an entry is missing, we assume infinity.
-        Map<V, Double> cost = new HashMap<>();
-        ToDoubleFunction<V> getCost = v -> cost.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
+        Map<V, Double> costMap = new HashMap<>();
 
         // Insert start itself in priority queue and initialize its cost as 0.
         queue.add(new MyBackLink<>(start, 0.0, null, null));
-        cost.put(start, 0.0);
+        costMap.put(start, 0.0);
 
         // Loop until we have reached the goal, or queue is exhausted.
         while (!queue.isEmpty()) {
@@ -88,16 +87,15 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
 
             for (Arc<V, A> entry : nextf.apply(u)) {
                 V v = entry.getEnd();
-                A a = entry.getArrow();
-                double weight = costf.applyAsDouble(u, v, a);
-                double oldvcost = getCost.applyAsDouble(v);
-                double newvcost = ucost + weight;
+                A a = entry.getData();
+                double oldCost = costMap.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
+                double newCost = ucost + costf.applyAsDouble(u, v, a);
 
                 // If there is a shorter path to v through u.
-                if (newvcost < oldvcost && newvcost <= maxCost) {
+                if (newCost < oldCost && newCost <= maxCost) {
                     // Update cost of v.
-                    cost.put(v, newvcost);
-                    queue.add(new MyBackLink<>(v, newvcost, node, a));
+                    costMap.put(v, newCost);
+                    queue.add(new MyBackLink<>(v, newCost, node, a));
                 }
             }
         }
